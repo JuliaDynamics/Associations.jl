@@ -5,5 +5,26 @@ else
     using Test
 end
 
-# write your own tests here
-@test 1 == 2
+using DynamicalSystems
+import DynamicalSystemsBase:
+    DynamicalSystem,
+    DiscreteDynamicalSystem,
+    ContinuousDynamicalSystem,
+    Dataset
+
+##################
+# Function aliases
+##################
+logistic3 = TimeseriesCausality.Systems.logistic3
+
+
+###############
+# Discrete maps
+###############
+@test isa(logistic3(), DiscreteDynamicalSystem)
+
+
+############################################################
+# Initialise all the systems and generate trajectories
+############################################################
+@test isa(trajectory(logistic3(), 10), Dataset)
