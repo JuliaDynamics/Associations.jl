@@ -20,6 +20,7 @@ include("discretemaps/var1coupled.jl")
 
 include("continuous_systems/chuacircuits_driven.jl")
 include("continuous_systems/chuacircuit_nscroll_sine.jl")
+include("continuous_systems/mediated_link.jl")
 include("continuous_systems/rosslerrossler.jl")
 include("continuous_systems/rosslerlorenz.jl")
 
@@ -45,6 +46,7 @@ export
 ###################
 eom_chuacircuit_nscroll_sine, chuacircuit_nscroll_sine,
 eom_chuacircuits_driven, chuacircuits_driven,
+eom_mediated_link, mediated_link,
 eom_rossler_rossler, rossler_rossler,
 eom_rossler_lorenz, rossler_lorenz
 
@@ -59,6 +61,7 @@ trajectory(var1coupled(), 10)
 
 trajectory(rossler_rossler(), 10)
 trajectory(rossler_lorenz(), 10)
+trajectory(mediated_link(), 10)
 trajectory(chuacircuits_driven(), 10)
 trajectory(chuacircuit_nscroll_sine(), 10)
 
