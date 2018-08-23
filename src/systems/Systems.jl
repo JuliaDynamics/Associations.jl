@@ -17,6 +17,7 @@ include("discretemaps/logistic3.jl")
 include("discretemaps/var1.jl")
 
 include("continuous_systems/rosslerrossler.jl")
+include("continuous_systems/rosslerlorenz.jl")
 
 # We export both the equations of motion and function to generate
 # the systems for every example. The equations of motion functions
@@ -36,7 +37,8 @@ export
 ####################
 # Continuous systems
 ###################
-eom_rossler_rossler, rossler_rossler
+eom_rossler_rossler, rossler_rossler,
+eom_rossler_lorenz, rossler_lorenz
 
 # Initialise all the systems once, generating a trajectory.
 trajectory(anishchenko1(), 10)
@@ -46,6 +48,7 @@ trajectory(logistic3(), 10)
 trajectory(var1(), 10)
 
 trajectory(rossler_rossler(), 10)
+trajectory(rossler_lorenz(), 10)
 
 
 
