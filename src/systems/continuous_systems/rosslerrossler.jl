@@ -1,5 +1,5 @@
 """
-    eom_rossler_rossler(u, p, t)
+    eom_rossler_rossler(u, p, t) -> Function
 
 Equations of motions for a 6D dynamical system consisting
 of two 3D Rössler attractors.
