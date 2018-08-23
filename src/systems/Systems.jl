@@ -18,6 +18,7 @@ include("discretemaps/logistic3.jl")
 include("discretemaps/var1.jl")
 
 include("continuous_systems/chuacircuits_driven.jl")
+include("continuous_systems/chuacircuit_nscroll_sine.jl")
 include("continuous_systems/rosslerrossler.jl")
 include("continuous_systems/rosslerlorenz.jl")
 
@@ -40,6 +41,7 @@ export
 ####################
 # Continuous systems
 ###################
+eom_chuacircuit_nscroll_sine, chuacircuit_nscroll_sine,
 eom_chuacircuits_driven, chuacircuits_driven,
 eom_rossler_rossler, rossler_rossler,
 eom_rossler_lorenz, rossler_lorenz
@@ -55,7 +57,7 @@ trajectory(var1(), 10)
 trajectory(rossler_rossler(), 10)
 trajectory(rossler_lorenz(), 10)
 trajectory(chuacircuits_driven(), 10)
-
+trajectory(chuacircuit_nscroll_sine(), 10)
 
 
 end
