@@ -37,5 +37,5 @@ an independent Gaussian random processes (with standard deviations `σx` and
 `σy`) at each time step.
 
 """
-var1coupled(;uᵢ = rand(Normal(0, 1)), c = 0, σx = sqrt(0.1), σy = sqrt(0.1)) =
+var1coupled(;uᵢ = rand(2), c = 0, σx = sqrt(0.1), σy = sqrt(0.1)) =
 var1coupled(uᵢ, c, σx, σy)
