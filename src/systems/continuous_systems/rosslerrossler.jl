@@ -68,5 +68,3 @@ end
 rossler_rossler(;uᵢ = rand(6), a = 0.1, b = 0.1, c = 14.0,
             ϵ₁ = 0.0, ϵ₂ = 0.0, ω₁ = 1 + 0.015, ω₂ = 1 - 0.015) =
     rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂)
-
-rossler_rossler_birectional = rossler_rossler

@@ -17,12 +17,14 @@ import DynamicalSystemsBase:
 ###############
 
 # Function aliases
+anishchenko1 = TimeseriesCausality.Systems.anishchenko1
 henon2 = TimeseriesCausality.Systems.henon2
 logistic2 = TimeseriesCausality.Systems.logistic2
 logistic3 = TimeseriesCausality.Systems.logistic3
 var1 = TimeseriesCausality.Systems.var1
 
 # Check that initialisation happens correctly.
+@test isa(anishchenko1(), DiscreteDynamicalSystem)
 @test isa(henon2(), DiscreteDynamicalSystem)
 @test isa(logistic2(), DiscreteDynamicalSystem)
 @test isa(logistic3(), DiscreteDynamicalSystem)
@@ -30,6 +32,7 @@ var1 = TimeseriesCausality.Systems.var1
 
 
 # Initialise all the systems and generate trajectories
+@test isa(trajectory(anishchenko1(), 10), Dataset)
 @test isa(trajectory(henon2(), 10), Dataset)
 @test isa(trajectory(logistic2(), 10), Dataset)
 @test isa(trajectory(logistic3(), 10), Dataset)
