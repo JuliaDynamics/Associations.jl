@@ -28,13 +28,20 @@ eom_logistic2, logistic2
 eom_logistic3, logistic3
 eom_var1, var1
 
-
-############################################################
 # Initialise all the systems once, generating a trajectory.
-############################################################
 trajectory(henon2(), 10)
 trajectory(logistic2(), 10)
 trajectory(logistic3(), 10)
 trajectory(var1(), 10)
+
+####################
+# Continuous systems
+###################
+eom_rossler_rossler
+
+# Initialise all the systems once, generating a trajectory.
+trajectory(eom_rossler_rossler(), 10)
+
+
 
 end
