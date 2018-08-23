@@ -23,6 +23,7 @@ henon4 = TimeseriesCausality.Systems.henon4
 logistic2 = TimeseriesCausality.Systems.logistic2
 logistic3 = TimeseriesCausality.Systems.logistic3
 var1 = TimeseriesCausality.Systems.var1
+var1coupled = TimeseriesCausality.Systems.var1coupled
 
 # Check that initialisation happens correctly.
 @test isa(anishchenko1(), DiscreteDynamicalSystem)
@@ -31,6 +32,7 @@ var1 = TimeseriesCausality.Systems.var1
 @test isa(logistic2(), DiscreteDynamicalSystem)
 @test isa(logistic3(), DiscreteDynamicalSystem)
 @test isa(var1(), DiscreteDynamicalSystem)
+@test isa(var1coupled(), DiscreteDynamicalSystem)
 
 
 # Initialise all the systems and generate trajectories
@@ -40,6 +42,7 @@ var1 = TimeseriesCausality.Systems.var1
 @test isa(trajectory(logistic2(), 10), Dataset)
 @test isa(trajectory(logistic3(), 10), Dataset)
 @test isa(trajectory(var1(), 10), Dataset)
+@test isa(trajectory(var1coupled(), 10), Dataset)
 
 
 #################

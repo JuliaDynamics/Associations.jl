@@ -16,6 +16,7 @@ include("discretemaps/henon4.jl")
 include("discretemaps/logistic2.jl")
 include("discretemaps/logistic3.jl")
 include("discretemaps/var1.jl")
+include("discretemaps/var1coupled.jl")
 
 include("continuous_systems/chuacircuits_driven.jl")
 include("continuous_systems/chuacircuit_nscroll_sine.jl")
@@ -34,7 +35,8 @@ eom_henon2, henon2,
 eom_henon4, henon4,
 eom_logistic2, logistic2,
 eom_logistic3, logistic3,
-eom_var1, var1
+eom_var1, var1,
+eom_var1coupled, var1coupled
 
 
 export
@@ -53,6 +55,7 @@ trajectory(henon4(), 10)
 trajectory(logistic2(), 10)
 trajectory(logistic3(), 10)
 trajectory(var1(), 10)
+trajectory(var1coupled(), 10)
 
 trajectory(rossler_rossler(), 10)
 trajectory(rossler_lorenz(), 10)
