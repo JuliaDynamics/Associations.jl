@@ -34,3 +34,17 @@ var1 = TimeseriesCausality.Systems.var1
 @test isa(trajectory(logistic2(), 10), Dataset)
 @test isa(trajectory(logistic3(), 10), Dataset)
 @test isa(trajectory(var1(), 10), Dataset)
+
+
+#################
+# Continuous maps
+#################
+
+# Function aliases
+rossler_rossler = TimeseriesCausality.Systems.rossler_rossler
+
+# Check that initialisation happens correctly.
+@test isa(rossler_rossler(), ContinuousDynamicalSystem)
+
+# Initialise all the systems and generate trajectories
+@test isa(trajectory(rossler_rossler(), 10), Dataset)
