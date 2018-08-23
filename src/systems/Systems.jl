@@ -10,6 +10,8 @@ import DynamicalSystemsBase:
 
 import DifferentialEquations: @ode_def
 
+include("discretemaps/henon2.jl")
+include("discretemaps/logistic2.jl")
 include("discretemaps/logistic3.jl")
 
 
@@ -20,12 +22,16 @@ export
 ###############
 # Discrete maps
 ###############
+eom_henon2, henon2
+eom_logistic2, logistic2
 eom_logistic3, logistic3
 
 
 ############################################################
 # Initialise all the systems once, generating a trajectory.
 ############################################################
-trajectory(logistic3(), 1)
+trajectory(henon2(), 10)
+trajectory(logistic2(), 10)
+trajectory(logistic3(), 10)
 
 end

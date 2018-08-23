@@ -15,16 +15,22 @@ import DynamicalSystemsBase:
 ##################
 # Function aliases
 ##################
+henon2 = TimeseriesCausality.Systems.henon2
+logistic2 = TimeseriesCausality.Systems.logistic2
 logistic3 = TimeseriesCausality.Systems.logistic3
 
 
 ###############
 # Discrete maps
 ###############
+@test isa(henon2(), DiscreteDynamicalSystem)
+@test isa(logistic2(), DiscreteDynamicalSystem)
 @test isa(logistic3(), DiscreteDynamicalSystem)
 
 
 ############################################################
 # Initialise all the systems and generate trajectories
 ############################################################
+@test isa(trajectory(henon2(), 10), Dataset)
+@test isa(trajectory(logistic2(), 10), Dataset)
 @test isa(trajectory(logistic3(), 10), Dataset)
