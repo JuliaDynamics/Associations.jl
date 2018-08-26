@@ -22,6 +22,7 @@ henon2 = TimeseriesCausality.Systems.henon2
 henon4 = TimeseriesCausality.Systems.henon4
 logistic2 = TimeseriesCausality.Systems.logistic2
 logistic3 = TimeseriesCausality.Systems.logistic3
+logistic4 = TimeseriesCausality.Systems.logistic4
 var1 = TimeseriesCausality.Systems.var1
 var1coupled = TimeseriesCausality.Systems.var1coupled
 verdes = TimeseriesCausality.Systems.verdes
@@ -32,6 +33,7 @@ verdes = TimeseriesCausality.Systems.verdes
 @test isa(henon4(), DiscreteDynamicalSystem)
 @test isa(logistic2(), DiscreteDynamicalSystem)
 @test isa(logistic3(), DiscreteDynamicalSystem)
+@test isa(logistic4(), DiscreteDynamicalSystem)
 @test isa(var1(), DiscreteDynamicalSystem)
 @test isa(var1coupled(), DiscreteDynamicalSystem)
 @test isa(verdes(), DiscreteDynamicalSystem)
@@ -43,6 +45,7 @@ verdes = TimeseriesCausality.Systems.verdes
 @test isa(trajectory(henon4(), 10), Dataset)
 @test isa(trajectory(logistic2(), 10), Dataset)
 @test isa(trajectory(logistic3(), 10), Dataset)
+@test isa(trajectory(logistic4(), 10), Dataset)
 @test isa(trajectory(var1(), 10), Dataset)
 @test isa(trajectory(var1coupled(), 10), Dataset)
 @test isa(trajectory(verdes(), 10), Dataset)
