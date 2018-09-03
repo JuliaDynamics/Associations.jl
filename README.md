@@ -3,9 +3,11 @@
 This package provides tools for nonparametric detection of causal relationships between dynamical variables based on observations.
 
 ## What can I do with `CausalityTools`?
-The package features common causality detection algorithms, such as transfer entropy and related information flows. It is equally well-suited both for the study of experimental data, and for studying dynamical systems from a more formal context. The workflow integrates nicely with `DynamicalSystems.jl`.
+The package implements common causality detection algorithms, such as transfer entropy and related information flows.
 
-Check out the documentation!
+It is equally well-suited both for the study of experimental data, and for studying dynamical systems from a more formal context. The workflow integrates nicely with `DynamicalSystems.jl`.
+
+Check out the documentation for more information!
 
 
 ### Package structure
