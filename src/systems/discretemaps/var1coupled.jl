@@ -28,14 +28,13 @@ function var1coupled(uᵢ, c, σx, σy)
 end
 
 doc"""
-    eom_var1coupled(x, p, n) -> SVector{3}
+    var1coupled(;uᵢ = rand(2), c = 0, σx = sqrt(0.1), σy = sqrt(0.1))
 
 Initialise a system consisting of two mutually coupled first order
 autoregressive processes. For `c = 0`, only Y -> X. For `c > 0`, there is
 bidirectional coupling. Each subcomponent is dynamically affected by
 an independent Gaussian random processes (with standard deviations `σx` and
 `σy`) at each time step.
-
 """
 var1coupled(;uᵢ = rand(2), c = 0, σx = sqrt(0.1), σy = sqrt(0.1)) =
 var1coupled(uᵢ, c, σx, σy)

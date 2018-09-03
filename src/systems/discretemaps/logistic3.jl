@@ -38,7 +38,7 @@ function logistic3(u₀, r, σx, σy, σz)
 end
 
 """
-    logistic3(;u₀ = rand(3), r = 4, σx = 0.05, σy = 0.05, σz = 0.05)
+    logistic3(;u₀ = rand(3), r = 4, σx = 0.05, σy = 0.05, σz = 0.05) -> DiscreteDynamicalSystem
 
 Initialise a dynamical system consisting of three coupled logistic map
 representing the response of two independent dynamical variables to the
@@ -50,9 +50,7 @@ parameters `σz`, `σx` and `σz`. Default values for the parameter s
 `r₁` and `r₂` are set such that the system exhibits chaotic behaviour.
 
 # References
-1. Runge, Jakob. Causal network reconstruction from time series: From
-theoretical assumptions to practical estimation, Chaos 28, 075310 (2018);
-doi: 10.1063/1.5025050
+1. Runge, Jakob. Causal network reconstruction from time series: From theoretical assumptions to practical estimation, Chaos 28, 075310 (2018); doi: 10.1063/1.5025050
 """
 logistic3(;u₀ = rand(3), r = 4, σx = 0.05, σy = 0.05, σz = 0.05) =
     logistic3(u₀, r, σx, σy, σz)

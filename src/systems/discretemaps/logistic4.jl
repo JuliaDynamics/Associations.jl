@@ -27,18 +27,15 @@ function logistic4(u₀, r₁, r₂, r₃, r₄, c₂, c₃, c₄)
 end
 
 doc"""
-    logistic4(;u₀ = rand(3),
-            r₁ = 3.9, r₂ = 3.6, r₃ = 3.6, r₄ = 3.8,
-            c₂ = 0.4, c₃ = 0.4, c₄ = 0.35)
+    logistic4(;u₀ = rand(4), r₁ = 3.9, r₂ = 3.6, r₃ = 3.6, r₄ = 3.8,
+        c₂ = 0.4, c₃ = 0.4, c₄ = 0.35) -> DiscreteDynamicalSystem
 
-Initialise a system of four unidirectionally coupled
-logistic maps, coupling in a transitive chain, where
-X1 -> X2 -> X3 -> X4 [1]. The implementation here allows
-tuning the parameters; defaults are as in [1].
+Initialise a system of a a transitive chain of four unidirectionally coupled
+logistic maps, where X1 -> X2 -> X3 -> X4 [1]. Default parameters are as in
+Ye et al. (2015).
 
 # References
-Ye, Hao, et al. "Distinguishing time-delayed causal interactions using
-convergent cross mapping." Scientific reports 5 (2015): 14750
+Ye, Hao, et al. "Distinguishing time-delayed causal interactions using convergent cross mapping." Scientific reports 5 (2015): 14750
 """
 logistic4(;u₀ = rand(4),
             r₁ = 3.9, r₂ = 3.6, r₃ = 3.6, r₄ = 3.8,

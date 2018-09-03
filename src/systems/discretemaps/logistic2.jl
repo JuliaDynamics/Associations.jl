@@ -21,8 +21,14 @@ function eom_logistic2(dx, x, p, n)
     return
 end
 
+function logistic2(u₀, c, r₁, r₂)
+    p = [c, r₁, r₂]
+    DiscreteDynamicalSystem(eom_logistic2, u₀, p)
+end
+
 doc"""
-    logistic2(;u₀ = rand(2), c = 2.0, r₁ = 3.78, r₂ = 3.66
+    logistic2(;u₀ = rand(2), c = 2.0,
+        r₁ = 3.78, r₂ = 3.66) -> DiscreteDynamicalSystem
 
 Initialise a system consisting of two coupled logistic maps where X
 unidirectionally influences Y.
@@ -46,13 +52,7 @@ f(x,y) = \dfrac{y + \frac{cx}{2}}{1 + \frac{c}{2}}
 ```
 
 # References
-1. D Diego, KA Haaga, B Hannisdal, in prep. Transfer Entropy computation by
-Perron-Frobenius operator approximation.
+D Diego, KA Haaga, B Hannisdal, in prep. Transfer Entropy computation by Perron-Frobenius operator approximation.
 """
-function logistic2(u₀, c, r₁, r₂)
-    p = [c, r₁, r₂]
-    DiscreteDynamicalSystem(eom_logistic2, u₀, p)
-end
-
 logistic2(;u₀ = rand(2), c = 2.0, r₁ = 3.78, r₂ = 3.66) =
     logistic2(u₀, c, r₁, r₂)

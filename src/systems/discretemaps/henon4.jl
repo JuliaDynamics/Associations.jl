@@ -28,10 +28,10 @@ doc"""
     henon4(u₀, c) -> DiscreteDynamicalSystem
 
 Initialize an instance of a 4D Henon map system consisting of two identical
-Henon systems, ``$x$`` and``$y$`` [1]. The subsystems are unidirectionally
+Henon systems, ``x`` and ``y`` [1]. The subsystems are unidirectionally
 coupled . The coupling constant `c` controls the strength of the forcing.
 Synchronization occurs when the values of the coupling constant
-``$c$ > 0.7`` [2].
+``c > 0.7``.
 
 The difference equations are:
 
@@ -39,18 +39,16 @@ The difference equations are:
 \begin{aligned}
 x_1(t+1) &= a_1 - x_1^2(t) + k* x\_2(t) \\
 x_2(t+1) &= x_1(t) \\
-y_1(t+1) &= a_1 - [c*x_1(t)*y_1(t) + (1-c)*y_1^2(t)] + k*y\_2(t)\\
+y_1(t+1) &= a_1 - [c*x_1(t)*y_1(t) + (1-c)*y_1^2(t)] + k*y_2(t)\\
 y_2(t+1) &= y_1(t)
 \end{aligned}
 ```
 
-This system was studied in [1] to study the performance of different
+This system was investigated by Krakovská to study the performance of different
 causality detection algorithms.
 
 # References
-1. Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D.,
-Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of
-causality in a bivariate time series. Physical Review E, 97(4), 042207.
+Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of causality in a bivariate time series. Physical Review E, 97(4), 042207.
 """
 function henon4(u₀, a₁, a₂, b₁, b₂, c, k)
     p = [a₁, a₂, b₁, b₂, c, k]

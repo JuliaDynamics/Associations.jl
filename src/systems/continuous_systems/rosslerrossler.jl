@@ -22,9 +22,10 @@ end
 doc"""
 	rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂) -> ContinuousDynamicalSystem
 
-A coupled 6D Rossler system [1]. The system consists of two separate subsystems,
-each being a 3D Rossler attractor. The subsystems are bidirectionally coupled,
-influencung  each other through variables `x₁` and `x₂`.
+A coupled 6D Rossler system from Krakovská et al. (2018).
+The system consists of two separate subsystems, each being a 3D Rossler
+attractor. The subsystems are bidirectionally coupled, influencing each other
+through variables `x₁` and `x₂`.
 
 The parameters and default values (if calling the keyword version of `rrbi`)
 are as follows:
@@ -56,9 +57,7 @@ dz₂ = b + z₂*(x₂ - c)
 with the coupling constant ``c \geq 0``.
 
 # References
-1. Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D.,
-Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of
-causality in a bivariate time series. Physical Review E, 97(4), 042207.
+Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of causality in a bivariate time series. Physical Review E, 97(4), 042207.
 """
 function rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂)
     p = [a, b, c, ϵ₁, ϵ₂, ω₁, ω₂]

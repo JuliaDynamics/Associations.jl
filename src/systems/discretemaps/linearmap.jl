@@ -16,6 +16,8 @@ end
 doc"""
     linearmap1(u₀, c) -> DiscreteDynamicalSystem
 
+# References
+Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger causality." Physics Letters A 324.1 (2004): 26-35
 """
 function linearmap1(u₀, c)
     p = [c]
@@ -23,4 +25,10 @@ function linearmap1(u₀, c)
     return logistic_system
 end
 
-linearmap1(;u₀ = rand(2, c = 2.0) = linearmap1(u₀, c)
+doc"""
+    linearmap1(;u₀ = rand(2), c = 2.0) -> DiscreteDynamicalSystem
+
+# References
+Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger causality." Physics Letters A 324.1 (2004): 26-35
+"""
+linearmap1(;u₀ = rand(2), c = 2.0) = linearmap1(u₀, c)

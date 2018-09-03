@@ -1,8 +1,7 @@
 doc"""
     eom_var1(x, p, n) -> Function
 
-Equations of motion for a vector autoregressive system where
-``$X_1 → X_2 → X_3$``.
+Equations of motion for a vector autoregressive system where X₁ → X₂ → X₃.
 """
 function eom_var1(x, p, n)
     σ₁, σ₂, σ₃ = p[1], p[2], p[3]
@@ -26,6 +25,6 @@ end
 doc"""
     var1(x, p, n) -> DiscreteDynamicalSystem
 
-Initialise a discrete vector autoregressive system where ``$X_1 → X_2 → X_3$``.
+Initialise a discrete vector autoregressive system where X₁ → X₂ → X₃.
 """
 var1(;uᵢ = rand(3), σ₁ = 1.0, σ₂ = 0.2, σ₃ = 0.3) = var1(uᵢ, σ₁, σ₂, σ₃)

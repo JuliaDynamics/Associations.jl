@@ -1,4 +1,4 @@
-module Systems
+@reexport module Systems
 
 using Distributions
 using DynamicalSystems
@@ -22,6 +22,7 @@ include("discretemaps/verdes.jl")
 
 include("continuous_systems/chuacircuits_driven.jl")
 include("continuous_systems/chuacircuit_nscroll_sine.jl")
+include("continuous_systems/hindmarsh_rose.jl")
 include("continuous_systems/lorenztriple.jl")
 include("continuous_systems/mediated_link.jl")
 include("continuous_systems/rosslerrossler.jl")
@@ -41,7 +42,7 @@ eom_logistic2, logistic2,
 eom_logistic3, logistic3,
 eom_logistic4, logistic4,
 eom_var1, var1,
-eom_var1coupled, var1coupled
+eom_var1coupled, var1coupled,
 eom_verdes, verdes
 
 
@@ -51,27 +52,28 @@ export
 ###################
 eom_chuacircuit_nscroll_sine, chuacircuit_nscroll_sine,
 eom_chuacircuits_driven, chuacircuits_driven,
+eom_hindmarsh_rose, hindmarsh_rose,
 eom_lorenz_triple, lorenz_triple,
 eom_mediated_link, mediated_link,
 eom_rossler_rossler, rossler_rossler,
 eom_rossler_lorenz, rossler_lorenz
 
 # Initialise all the systems once, generating a trajectory.
-trajectory(anishchenko1(), 10)
-trajectory(henon2(), 10)
-trajectory(henon4(), 10)
-trajectory(logistic2(), 10)
-trajectory(logistic3(), 10)
-trajectory(logistic4(), 10)
-trajectory(var1(), 10)
-trajectory(var1coupled(), 10)
-trajectory(verdes(), 10)
+#trajectory(anishchenko1(), 10)
+#trajectory(henon2(), 10)
+#trajectory(henon4(), 10)
+#trajectory(logistic2(), 10)
+#trajectory(logistic3(), 10)
+#trajectory(logistic4(), 10)
+#trajectory(var1(), 10)
+#trajectory(var1coupled(), 10)
+#trajectory(verdes(), 10)
 
-trajectory(rossler_rossler(), 10)
-trajectory(rossler_lorenz(), 10)
-trajectory(lorenz_triple(), 10)
-trajectory(mediated_link(), 10)
-trajectory(chuacircuits_driven(), 10)
-trajectory(chuacircuit_nscroll_sine(), 10)
+#trajectory(rossler_rossler(), 10)
+#trajectory(rossler_lorenz(), 10)
+#trajectory(lorenz_triple(), 10)
+#trajectory(mediated_link(), 10)
+#trajectory(chuacircuits_driven(), 10)
+#trajectory(chuacircuit_nscroll_sine(), 10)
 
 end

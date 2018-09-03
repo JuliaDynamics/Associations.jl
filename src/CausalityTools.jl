@@ -10,11 +10,11 @@ import DynamicalSystemsBase:
     Dataset,
     trajectory
 
+@reexport using TimeseriesSurrogates
 @reexport using StateSpaceReconstruction
 @reexport using PerronFrobenius
 @reexport using TransferEntropy
-@reexport using DynamicalSystems.trajectory
-@reexport using DynamicalSystems.Dataset
+using DynamicalSystems
 
 # Example systems
 include("systems/Systems.jl")

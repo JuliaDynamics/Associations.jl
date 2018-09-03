@@ -3,3 +3,6 @@ DynamicalSystemsBase
 DynamicalSystems
 DifferentialEquations
 Documenter
+TimeseriesSurrogates
+DynamicalSystems
+Plots
