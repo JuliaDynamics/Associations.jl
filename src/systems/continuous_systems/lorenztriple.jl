@@ -10,16 +10,16 @@ where X₁ drives X₂ and X₂ drives X₃. The strength of the forcing X₁ �
 controlled by `c₁`, and the forcing from X₂ → X₃ by `c₂`.
 
 The remaining parameters are the usual parameters for the Lorenz system, where
-the subscript ``$i$`` refers to the subsystem Xᵢ.
+the subscript `i` refers to the subsystem Xᵢ.
 
-This system was studied in [1] for coupling strengths ``$c = 0, 1, 3, 5$``.
+This system was studied in [1] for coupling strengths `c = 0, 1, 3, 5`.
 
 # References
 1. Papana et al., Simulation Study of Direct Causality Measures in Multivariate
-Time Series. Entropy 2013, 15(7), 2635-2661; doi:10.3390/e15072635
+	Time Series. Entropy 2013, 15(7), 2635-2661; doi:10.3390/e15072635
 """
 function eom_lorenz_triple(u, p, t)
-    x₁, x₂, x₃, y₁, y₂, y₃, z₁, z₂, z₃ = (u...)
+    x₁, y₁, z₁, x₂, y₂, z₂, x₃, y₃, z₃ = (u...)
     σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁, c₂ = (p...)
 
     # Subsystem 1
@@ -36,7 +36,7 @@ function eom_lorenz_triple(u, p, t)
     dx₃ = σ₃*(y₃-x₃) + c₂*(x₂ - x₃)
     dy₃ = ρ₃*x₃ - y₃ - x₃*z₃
     dz₃ = x₃*y₃ - β₃*z₃
-    return SVector{9}(dx₁, dx₂, dx₃, dy₁, dy₂, dy₃, dz₁, dz₂, dz₃)
+    return SVector{9}(dx₁, dy₁, dz₁, dx₂, dy₂,dz₂, dx₃, dy₃, dz₃)
 end
 
 function lorenz_triple(uᵢ, σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁, c₂)
@@ -56,9 +56,9 @@ where X₁ drives X₂ and X₂ drives X₃. The strength of the forcing X₁ �
 controlled by `c₁`, and the forcing from X₂ → X₃ by `c₂`.
 
 The remaining parameters are the usual parameters for the Lorenz system, where
-the subscript ``$i$`` refers to the subsystem Xᵢ.
+the subscript `i` refers to the subsystem Xᵢ.
 
-This system was studied in [1] for coupling strengths ``$c = 0, 1, 3, 5$``.
+This system was studied in [1] for coupling strengths `c = 0, 1, 3, 5`.
 
 # References
 1. Papana et al., Simulation Study of Direct Causality Measures in Multivariate

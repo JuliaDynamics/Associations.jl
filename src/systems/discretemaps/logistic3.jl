@@ -2,9 +2,14 @@
 doc"""
     eom_logistic3(u, p, t)
 
-Equations of motion for a triple coupled logistic map system with a common
-driver, where `Z` -> `X` and `Z -> Y`. This is equation 36 in [1].
+Equations of motion for a system consisting of three coupled logistic map
+representing the response of two independent dynamical variables to the
+forcing from a common driver. The dynamical influence goes in the directions
+Z -> X and Z -> Y.
 
+Dynamical noise may be added to each of the dynamical variables by tuning the
+parameters `σz`, `σx` and `σz`. Default values for the parameter s
+`r₁` and `r₂` are set such that the system exhibits chaotic behaviour.
 
 # References
 1. Runge, Jakob. Causal network reconstruction from time series: From
@@ -35,12 +40,14 @@ end
 """
     logistic3(;u₀ = rand(3), r = 4, σx = 0.05, σy = 0.05, σz = 0.05)
 
-Initialise a triple coupled logistic map system with a common driver, where
-`Z` -> `X` and `Z -> Y` [1].
+Initialise a dynamical system consisting of three coupled logistic map
+representing the response of two independent dynamical variables to the
+forcing from a common driver. The dynamical influence goes in the directions
+Z -> X and Z -> Y.
 
 Dynamical noise may be added to each of the dynamical variables by tuning the
-parameters `σz`, `σx` and `σz`. The parameter `r` is set to 4 by default,
-which is in the chaotic regime.
+parameters `σz`, `σx` and `σz`. Default values for the parameter s
+`r₁` and `r₂` are set such that the system exhibits chaotic behaviour.
 
 # References
 1. Runge, Jakob. Causal network reconstruction from time series: From

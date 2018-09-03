@@ -53,7 +53,7 @@ dz₂ = b + z₂*(x₂ - c)
 \end{aligned}
 ``
 
-with the coupling constant ``$c \geq 0$``.
+with the coupling constant ``c \geq 0``.
 
 # References
 1. Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D.,

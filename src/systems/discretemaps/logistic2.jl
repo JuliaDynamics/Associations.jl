@@ -1,8 +1,11 @@
-"""
+doc"""
     _logistic2(dx, x, p, n) -> function
 
-Equations of motion for a unidirectionally coupled logistic map system where
-`x₁` drives `x₂`. This example is from [1].
+Equations of motions for a system consisting of two coupled logistic maps where
+X unidirectionally influences Y.
+
+The parameter `c` controls how strong the dynamical forcing is. Parameters `r₁`
+and `r₂` are set to the chaotic regime by default
 
 # References
 1. D Diego, KA Haaga, B Hannisdal, in prep. Transfer Entropy computation by
@@ -18,11 +21,29 @@ function eom_logistic2(dx, x, p, n)
     return
 end
 
-"""
-     logistic2(u₀, c)
+doc"""
+    logistic2(;u₀ = rand(2), c = 2.0, r₁ = 3.78, r₂ = 3.66
 
-Initialise a unidirectionally coupled logistic map system where `x₁` drives
-`x₂`. This example is from [1].
+Initialise a system consisting of two coupled logistic maps where X
+unidirectionally influences Y.
+
+The parameter `c` controls how strong the dynamical forcing is. Parameters `r₁`
+and `r₂` are set to the chaotic regime by default.
+
+The equations of motion are
+
+```math
+\begin{aligned}
+dx &= r_1x(1 - x)
+dy &= r_2f(x,y)(1 - f(x,y)),
+\end{aligned}
+```
+with
+```math
+\begin{aligned}
+f(x,y) = \dfrac{y + \frac{cx}{2}}{1 + \frac{c}{2}}
+\end{aligned}
+```
 
 # References
 1. D Diego, KA Haaga, B Hannisdal, in prep. Transfer Entropy computation by
