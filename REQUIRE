@@ -1,4 +1,4 @@
-julia 0.6
+julia 0.6 0.7-
 DynamicalSystemsBase
 DynamicalSystems
 DifferentialEquations
@@ -6,3 +6,4 @@ Documenter
 TimeseriesSurrogates
 DynamicalSystems
 Plots
+PyPlot
