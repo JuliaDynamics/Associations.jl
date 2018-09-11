@@ -17,7 +17,7 @@ theoretical assumptions to practical estimation, Chaos 28, 075310 (2018);
 doi: 10.1063/1.5025050
 """
 function eom_logistic3(u, p, t)
-    r, σx, σy, σz = (p...)
+    r₁, r₂, r₃, σx, σy, σz = (p...)
     x, y, z = (u...)
 
     # Independent dynamical noise for each variable.
@@ -25,32 +25,42 @@ function eom_logistic3(u, p, t)
     ηy = rand()
     ηz = rand()
 
-    dx = (x*(r - r*x - z + σx*ηx)) % 1
-    dy = (y*(r - r*y - z + σy*ηy)) % 1
-    dz = (z*(r - r*z + σz*ηz)) % 1
+    dx = (x*(r₁ - r₁*x - z + σx*ηx)) % 1
+    dy = (y*(r₂ - r₂*y - z + σy*ηy)) % 1
+    dz = (z*(r₃ - r₃*z + σz*ηz)) % 1
     return SVector{3}(dx, dy, dz)
 end
 
 
-function logistic3(u₀, r, σx, σy, σz)
-    p = [r, σx, σy, σz]
+function logistic3(u₀, r₁, r₂, r₃, σx, σy, σz)
+    p = [r₁, r₂, r₃, σx, σy, σz]
     DiscreteDynamicalSystem(eom_logistic3, u₀, p)
 end
 
 """
-    logistic3(;u₀ = rand(3), r = 4, σx = 0.05, σy = 0.05, σz = 0.05) -> DiscreteDynamicalSystem
+    logistic3(;u₀ = rand(3), r = 4,
+        σx = 0.05, σy = 0.05, σz = 0.05) -> DiscreteDynamicalSystem
 
 Initialise a dynamical system consisting of three coupled logistic map
 representing the response of two independent dynamical variables to the
 forcing from a common driver. The dynamical influence goes in the directions
 Z -> X and Z -> Y.
 
+The equations of motion are
+
+```math
+dx = (x(r - r_1 x - z + σ_x η_x)) \mod 1
+dy = (y(r - r_2 y - z + σ_y η_y)) \mod 1
+dz = (z(r - r_3 z + σ_z η_z)) \mod 1
+```
+
 Dynamical noise may be added to each of the dynamical variables by tuning the
-parameters `σz`, `σx` and `σz`. Default values for the parameter s
-`r₁` and `r₂` are set such that the system exhibits chaotic behaviour.
+parameters `σz`, `σx` and `σz`. Default values for the parameters
+`r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour;
+in Runge (2018), `r₁ = r₂ = r₃ = 4`.
 
 # References
 1. Runge, Jakob. Causal network reconstruction from time series: From theoretical assumptions to practical estimation, Chaos 28, 075310 (2018); doi: 10.1063/1.5025050
 """
-logistic3(;u₀ = rand(3), r = 4, σx = 0.05, σy = 0.05, σz = 0.05) =
-    logistic3(u₀, r, σx, σy, σz)
+logistic3(;u₀ = rand(3), r₁ = 4, r₂ = 4, r₃ = 4,
+    σx = 0.05, σy = 0.05, σz = 0.05) = logistic3(u₀, r₁, r₂, r₃, σx, σy, σz)

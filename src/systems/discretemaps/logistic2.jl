@@ -40,7 +40,7 @@ The equations of motion are
 
 ```math
 \begin{aligned}
-dx &= r_1x(1 - x)
+dx &= r_1x(1 - x) \\
 dy &= r_2f(x,y)(1 - f(x,y)),
 \end{aligned}
 ```
