@@ -23,4 +23,8 @@ s₃ = randomshuffle(x₃)
 timesteps = 1:size(orbit, 1)
 plot(timesteps, x₃, label = "x3")
 plot!(timesteps, s₃, label = "Random shuffle surrogate realization of x3")
+xlabel!("Timestep"); ylabel!("Value")
+savefig("surr_randomshuffle-plot.svg"); nothing #hide
 ```
+
+![](surr_randomshuffle-plot.svg)

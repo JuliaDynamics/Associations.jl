@@ -23,4 +23,8 @@ s₁ = randomamplitudes(x₁)
 timesteps = 1:size(orbit, 1)
 plot(timesteps, x₁, label = "x1")
 plot!(timesteps, s₁, label = "Random amplitude surrogate realization of x1")
+xlabel!("Timestep"); ylabel!("Value")
+savefig("surr_randomamplitude-plot.svg"); nothing #hide
 ```
+
+![](surr_randomamplitude-plot.svg)

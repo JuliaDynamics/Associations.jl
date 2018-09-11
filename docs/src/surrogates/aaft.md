@@ -1,7 +1,5 @@
 # Amplitude adjusted Fourier surrogates (AAFT)
 
-
-
 ```@setup s
 using CausalityTools
 using DynamicalSystems
@@ -25,4 +23,8 @@ s₁ = aaft(x₁)
 timesteps = 1:size(orbit, 1)
 plot(timesteps, x₁, label = "x1")
 plot!(timesteps, s₁, label = "AAFT surrogate realization of x1")
+xlabel!("Timestep"); ylabel!("Value")
+savefig("surr_aaft-plot.svg"); nothing #hide
 ```
+
+![](surr_aaft-plot.svg)

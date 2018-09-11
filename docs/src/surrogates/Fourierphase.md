@@ -24,4 +24,8 @@ s₂ = randomphases(x₂)
 timesteps = 1:size(orbit, 1)
 plot(timesteps, x₂, label = "x2")
 plot!(timesteps, s₂, label = "Random phase surrogate realization of x2")
+xlabel!("Timestep"); ylabel!("Value")
+savefig("surr_randomphase-plot.svg"); nothing #hide
 ```
+
+![](surr_randomphase-plot.svg)

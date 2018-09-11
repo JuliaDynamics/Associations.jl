@@ -24,4 +24,8 @@ s₁ = iaaft(x₁)
 timesteps = 1:size(orbit, 1)
 plot(timesteps, x₁, label = "x2")
 plot!(timesteps, s₁, label = "IAAFT surrogate realization of x2")
+xlabel!("Timestep"); ylabel!("Value")
+savefig("surr_iaaft-plot.svg"); nothing #hide
 ```
+
+![](surr_iaaft-plot.svg)
