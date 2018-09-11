@@ -1,6 +1,6 @@
 # CausalityTools.jl
 
-A Julia package for the detecting of information flow or dynamical coupling between time series.
+A Julia package for the quantification of invariant measures and the  detecting of information flow or dynamical coupling between time series.
 
 ## What can I do with `CausalityTools`?
 The package features common causality detection algorithms, such as transfer entropy and related information flows. It is equally well-suited both for the study of experimental data, and for studying dynamical systems from a more formal context. The workflow integrates nicely with `DynamicalSystems.jl`.
@@ -20,4 +20,3 @@ out one of the tutorials!
 | [`TransferEntropy.jl`](https://github.com/kahaaga/TransferEntropy.jl/) | unregistered | [![Build Status](https://travis-ci.org/kahaaga/TransferEntropy.jl.svg?branch=master)](https://travis-ci.org/kahaaga/TransferEntropy.jl) |
 | [`PerronFrobenius.jl`](https://github.com/kahaaga/PerronFrobenius.jl/) | unregistered  | [![Build Status](https://travis-ci.org/kahaaga/PerronFrobenius.jl.svg?branch=master)](https://travis-ci.org/kahaaga/PerronFrobenius.jl) |
 | [`Simplices.jl`](https://github.com/kahaaga/Simplices.jl/) | unregistered  | [![Build Status](https://travis-ci.org/kahaaga/Simplices.jl.svg?branch=master)](https://travis-ci.org/kahaaga/Simplices.jl) |
-| [`SimplexSplitting.jl`](https://github.com/kahaaga/SimplexSplitting.jl/) |unregistered  | [![Build Status](https://travis-ci.org/kahaaga/SimplexSplitting.jl.svg?branch=master)](https://travis-ci.org/kahaaga/SimplexSplitting.jl)  |
