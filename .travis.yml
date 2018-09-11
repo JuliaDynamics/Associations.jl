@@ -27,13 +27,13 @@ git:
 
 ## uncomment the following lines to override the default test script
 script:
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("TimeseriesCausality"); Pkg.test("TimeseriesCausality"; coverage=true)'
+  - julia -e 'Pkg.clone(pwd()); Pkg.build("CausalityTools"); Pkg.test("CausalityTools"; coverage=true)'
 after_success:
   # push coverage results to Coveralls
-  - julia -e 'cd(Pkg.dir("TimeseriesCausality")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+  - julia -e 'cd(Pkg.dir("CausalityTools")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
   # push coverage results to Codecov
-  - julia -e 'cd(Pkg.dir("TimeseriesCausality")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
+  - julia -e 'cd(Pkg.dir("CausalityTools")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
   # create docs
   - julia -e 'Pkg.add("Documenter")'
-  - julia -e 'cd(Pkg.dir("TimeseriesCausality"))'
+  - julia -e 'cd(Pkg.dir("CausalityTools"))'
   - julia -e 'include(joinpath("docs", "make.jl"))'
