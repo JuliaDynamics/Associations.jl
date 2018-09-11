@@ -19,4 +19,7 @@ using DynamicalSystems
 # Example systems
 include("systems/Systems.jl")
 
+# Surrogate wrappers for embeddings and Datasets
+include("surrogates/surrogates.jl")
+
 end # module
