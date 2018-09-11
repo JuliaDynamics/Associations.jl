@@ -22,19 +22,27 @@ markdown_extensions:
   - fenced_code
   - mdx_math
 
-docs_dir: 'src'
+docs_dir: 'build'
 
 pages:
   - Overview: index.md
+  - State space reconstruction:
+    - Quickstart: reconstruction/embed_quickstart.md
+  #  - Tutorial: reconstruction/embed_tutorial.md
+#    - Partitioning: reconstruction/partitioning.md
   - Transfer (Perron-Frobenius) operator: transferoperator/transferoperator.md
-  - Invariant measures/sets: invariantmeasure/invariantmeasure.md
+  - Probability estimation and invariant measures:
+    - Invariant measures: invariantmeasure/invariantmeasure.md
   - Surrogate data:
     - What is a surrogate?: surrogates/surrogates.md
-    - Random shuffle surrogates: surrogates/random_shuffle.md
-    - Random phase Fourier surrogates: surrogates/Fourierphase.md
-    - Random amplitude Fourier surrogates: surrogates/Fourieramp.md
-    - AAFT: surrogates/aaft.md
-    - IAAFT: surrogates/iaaft.md
+    - Constrained surrogate examples:
+      - Random shuffle surrogates: surrogates/random_shuffle.md
+      - AAFT: surrogates/aaft.md
+      - IAAFT: surrogates/iaaft.md
+    - Unconstrained surrogate examples:
+      - Random phase Fourier surrogates: surrogates/Fourierphase.md
+      - Random amplitude Fourier surrogates: surrogates/Fourieramp.md
+    - Function documentation: surrogates/functiondocs.md
   - Causality measures:
     - Overview: causalitytools.md
     - Transfer entropy:
@@ -42,7 +50,9 @@ pages:
       - Transfer operator estimator: transferentropy/transferoperator.md
       - Visitation frequency estimator: transferentropy/visitfreq.md
       - Quick start examples: transferentropy/quickstart.md
-  - Example systems:
+      - Reducing bias: transferentropy/reducing_bias.md
+  - Examples of coupled dynamical systems:
+      - Overview: examplesystems/examples.md
       - Discrete maps: examplesystems/discrete_maps.md
       - Continuous: examplesystems/continuous.md
   - Tutorials: tutorials/tutorialoverview.md
