@@ -33,13 +33,27 @@ xlabel!(p2, "Source simplex #")
 ylabel!(p2, "Invariant measure")
 l = @layout [a{1.0w}; b{1.0w}]
 plot(p1, p2, layout = l)
+savefig("invmeasure-short-ex.svg"); nothing #hide
 ```
+
+![](invmeasure-short-ex.svg)
 
 The heapmap visualizes the transfer matrix, which gives the transition probabilities between all pairs of states ``(s_i, s_j)``. The bar plot shows the invariant measure (i.e. the long-term visitation frequencies) over the states ``s_i``.
 
 
 ## Long time series (direct approach)
-```@example s
+
+```@setup s2
+using CausalityTools, Plots
+ts = [diff(rand(200)) for i = 1:4]
+E = invariantize(embed(ts))
+ϵ = 5
+TO = transferoperator(E, ϵ)
+invdist = left_eigenvector(TO).dist
+```
+
+
+```@example s2
 using CausalityTools, Plots
 ts = [diff(rand(5000)) for i = 1:4]
 E = invariantize(embed(ts))
@@ -49,7 +63,7 @@ invdist = left_eigenvector(TO).dist
 
 # Plot the transfer operator and the invariant distribution
 maxprob = min(1, maximum(TO.TO)*1.1) # for plotting
-p1 = heatmap(TO.TO, clims=(0, maxprob))
+p1 = heatmap(TO.TO, clims=(0, 0.001))
 xlabel!(p1, "Source partition box # (j)")
 ylabel!(p1, "Target partition box # (i)")
 
@@ -57,7 +71,10 @@ p2 = bar(invdist, legend = false)
 xlabel!(p2, "Source partition box #")
 ylabel!(p2, "Invariant measure")
 plot(p1, p2, layout = @layout [a{1.0w}; b{1.0w}])
+savefig("invmeasure-long-ex.svg"); nothing #hide
 ```
+
+![](invmeasure-long-ex.svg)
 
 Again, the heatmap shows the transition probabilities between all states ``(s_i, s_j)``, while
 the bar plot shows the invariant distribution over the states ``s_i`` of the partition.
