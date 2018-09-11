@@ -3,7 +3,32 @@
 ```@setup s
 using CausalityTools
 using DynamicalSystems
+
+# Generate data
+s = CausalityTools.Systems.logistic3()
+orbit = trajectory(s, 200)
+x1, x2 = orbit[:, 1], orbit[:, 2]
+
+# Which of the time series do we embed?
+which_ts = [x1, x2] # these are now indexed 1, 2
+
+# Which variables of the embedding will each of those
+# time series correspond to? And what are the lags?
+which_pos = [2, 2, 1, 1]
+which_lags = [1, 0, 0, -1]
+E = embed(which_ts, which_pos, which_lags)
+
+# Construct the TEVars instance.
+v = TEVars([1], [2], [3, 4], Int[])
+
+# Subdivide each axis into 15 intervals of equal size, resulting in
+# rectangular boxes.
+ϵ = 15
+
+# Estimate transfer entropy at scale `ϵ`.
+transferentropy_transferoperator_visitfreq(E, ϵ, v)
 ```
+
 There are several different TE estimators.
 
 
@@ -12,14 +37,14 @@ This method is fast, and can handle a large number of data points. For this exam
 frequency based TE estimator.
 
 ```@example s
-# Sample a 20000-point orbit from of the logistic4 system, which is
+# Sample a 20000-point orbit from of the logistic3 system, which is
 # one of the example systems in CausalityTools.jl.
-s = CausalityTools.Systems.logistic4()
+s = CausalityTools.Systems.logistic3()
 orbit = trajectory(s, 20000)
 x1, x2 = orbit[:, 1], orbit[:, 2]
 
 # Compute transfer entropy between the 1st and 2nd components.
-x1, x2 = orbit[:, 1], orbit[:, 2]
+x1, x2 = orbit[:, 1], orbit[:, 2];
 ```
 
 ### From an embedding with an associated partition at scale `ϵ`
@@ -33,7 +58,7 @@ four-dimensional embedding of the form ``E = {(x2(t+1), x2(t), x1(t), x1(t-1))}`
 
 Now, check what we need to provide the `transferentropy_visitfreq` estimator.
 
-```julia
+```
 help?> transferentropy_visitfreq
 search: transferentropy_visitfreq
 
@@ -54,7 +79,7 @@ We already know what the embedding will be, so we just need to check what goes
 into the `v`, which instructs the estimator which variables of the embedding
 goes into which marginal entropy expressions.
 
-```julia
+```
 help?> TEVars
 search: TEVars TypeVar
 
@@ -76,7 +101,7 @@ We want to measure TE(x1 -> x2), so we choose `target_future = [1]`, `target_pre
 
 ```@example s
 # Generate data
-s = CausalityTools.Systems.logistic4()
+s = CausalityTools.Systems.logistic3()
 orbit = trajectory(s, 20000)
 x1, x2 = orbit[:, 1], orbit[:, 2]
 
@@ -97,5 +122,5 @@ v = TEVars([1], [2], [3, 4], Int[])
 ϵ = 15
 
 # Estimate transfer entropy at scale `ϵ`.
-transferentropy_transferoperator(E, ϵ, v)
+transferentropy_transferoperator_visitfreq(E, ϵ, v)
 ```

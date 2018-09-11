@@ -26,7 +26,10 @@ maxprob = min(1, maximum(TO.TO)*1.1) # for plotting
 heatmap(TO.TO, clims=(0, maxprob))
 xlabel!("Target simplex # (j)")
 ylabel!("Source simplex # (i)")
+savefig("transferoperator-short-ex.svg"); nothing #hide
 ```
+
+![](transferoperator-short-ex.svg)
 
 The heapmap visualizes the transition probabilities between the elements of the partition (i.e. the simplices). Each row in the transfer matrix sums to 1, completely accounting for the possible transitions the i-th state can make. The transfer matrix is Markov, so the `(i,j)`th element of it gives the probability of the orbit going from state `i` to state `j` in the next time step.
 
@@ -34,15 +37,15 @@ The heapmap visualizes the transition probabilities between the elements of the 
 ## Long time series
 For the longer time series, we use the `transferoperator(E::AbstractEmbedding, ϵ::Union{Int, Float64, Vector{Int}, Vector{Float64}})` estimator, where the partition is constructed according to `ϵ`. It first identify which bins of the partition are visited by which points of the orbit, then uses that information to generate the transfer matrix. Computationally, the procedure is almost identical to what we would do for the triangulation approach.
 
-Embed some random long time series (n = 5000), and make sure that the embedding is invariant. Then decide on how to partition the state space. We set `ϵ = 20`,
-which divides each axis of the embedding into 20 intervals of equal length and
+Embed some random long time series (n = 10000), and make sure that the embedding is invariant. Then decide on how to partition the state space. We set `ϵ = 5`,
+which divides each axis of the embedding into 5 intervals of equal length and
 estimate the transfer matrix, from which we gain the invariant measure over
 the partition elements.
 
 ```@example s
-ts = [diff(rand(5000)) for i = 1:4]
-E = invariantize(embed(ts))
-ϵ = 20
+ts = [diff(rand(10000)) for i = 1:4]
+E = embed(ts)
+ϵ = 5
 TO = transferoperator(E, ϵ)
 
 # Plot the transfer operator and the invariant distribution
@@ -50,7 +53,10 @@ maxprob = min(1, maximum(TO.TO)*1.1) # for plotting
 heatmap(TO.TO, clims=(0, maxprob))
 xlabel!("Source partition box # (j)")
 ylabel!("Target partition box # (i)")
+savefig("transferoperator-long-ex.svg"); nothing #hide
 ```
 
-The heatmap again shows the transition probabilities between all states
+![](transferoperator-long-ex.svg)
+
+Using `ϵ = 5` as the binning scheme, the orbit visits just over 500 unique states. The heatmap again shows the transition probabilities, according to the transfer operator, between all states
 ``(s_i, s_j)``.
