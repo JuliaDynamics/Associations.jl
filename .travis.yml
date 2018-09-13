@@ -27,7 +27,9 @@ git:
 
 ## uncomment the following lines to override the default test script
 script:
-  - julia -e 'Pkg.clone("https://github.com/kahaaga/Simplices.jl"); Pkg.build("Simplices")'
+  - julia -e 'Pkg.add("PyCall")'
+  - julia -e 'ENV["PYTHON"] = ""; Pkg.build("PyCall")'
+  - julia -e 'using Conda; Conda.add("scipy")'
   - julia -e 'Pkg.clone("https://github.com/kahaaga/StateSpaceReconstruction.jl"); Pkg.build("StateSpaceReconstruction")'
   - julia -e 'Pkg.clone("https://github.com/kahaaga/PerronFrobenius.jl"); Pkg.build("PerronFrobenius")'
   - julia -e 'Pkg.clone("https://github.com/kahaaga/TransferEntropy.jl"); Pkg.build("TransferEntropy")'
