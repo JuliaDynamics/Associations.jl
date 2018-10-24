@@ -20,8 +20,8 @@ function eom_verdes(u, p, t)
     ηz = σz == 0 ? 0 : rand(Normal(0, σz))
 
     dx = y*(18y - 27y^2 + 10)/2 + z*(1-z) + ηx
-    dy = (1 - cos(2*pi/ωy * t))/2 + ηy
-    dz = (1 - sin(2*pi/50 * t))/2 + ηz
+    dy = (1 - cos((2*pi/ωy) * t))/2 + ηy
+    dz = (1 - sin((2*pi/ωz) * t))/2 + ηz
     return SVector{3}(dx, dy, dz)
 end
 
@@ -32,20 +32,30 @@ function verdes(u₀, ωy, ωz, σx, σy, σz)
 end
 
 doc"""
-    verdes(;u₀ = rand(3),
-        ωy = 315, ωz = 80,
+    verdes(;u₀ = rand(3), ωy = 315, ωz = 80,
         σx = 0.0, σy = 0.0, σz = 0.0) -> DiscreteDynamicalSystem
 
 Intitialise a 3D system where the response X is a highly nonlinear combination
-of Y and Z. The forcings Y and Z involve sines and cosines, respectively, and
-have different periods.
+of Y and Z. The forcings Y and Z involve sines and cosines, and
+have different periods, which controlled by `ωy` and `ωz`.
 
-The implementation here allows for tuning the frequency of the forcing signals.
+The equations of motion are
+
+```math
+\begin{aligned}
+x(t+1) &= \dfrac{y(t)(18y(t) - 27y(t)^2 + 10)}{2} + z(t)(1-z(t)) + ηx \\
+y(t+1) &= \dfrac{(1 - \dfrac{\cos(2\pi}{\omega y}t)}{2} + ηy \\
+z(t+1) &= \dfrac{(1 - \dfrac{\sin(2\pi}{\omega z}t)}{2} + ηz
+\end{aligned}
+```
+where ηx, ηy, ηz is gaussian noise with mean 0 and standard deviation `σx`, `σy`
+and `σz`.
 
 # References
-Verdes, P. F. "Assessing causality from multivariate time series." Physical Review E 72.2 (2005): 026222.
+Verdes, P. F. "Assessing causality from multivariate time series." Physical
+Review E 72.2 (2005): 026222.
 """
 verdes(;u₀ = rand(3),
     ωy = 315, ωz = 80,
-    σx = 0.0, σy = 0.0, σz = 0.0) =
+    σx = 0.01, σy = 0.01, σz = 0.01) =
     verdes(u₀, ωy, ωz, σx, σy, σz)
