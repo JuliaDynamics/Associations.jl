@@ -17,6 +17,7 @@ import DynamicalSystemsBase:
 ###############
 
 # Check that initialisation happens correctly.
+@test isa(ar1(), DiscreteDynamicalSystem)
 @test isa(anishchenko1(), DiscreteDynamicalSystem)
 @test isa(henon2(), DiscreteDynamicalSystem)
 @test isa(henon4(), DiscreteDynamicalSystem)
@@ -29,6 +30,7 @@ import DynamicalSystemsBase:
 
 
 # Initialise all the systems and generate trajectories
+@test isa(trajectory(ar1(), 10), Dataset)
 @test isa(trajectory(anishchenko1(), 10), Dataset)
 @test isa(trajectory(henon2(), 10), Dataset)
 @test isa(trajectory(henon4(), 10), Dataset)

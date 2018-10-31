@@ -10,6 +10,7 @@ import DynamicalSystemsBase:
 
 import DifferentialEquations: @ode_def
 
+include("discretemaps/ar1.jl")
 include("discretemaps/anishchenko1.jl")
 include("discretemaps/henon2.jl")
 include("discretemaps/henon4.jl")
@@ -35,6 +36,7 @@ export
 ###############
 # Discrete maps
 ###############
+eom_ar1, ar1,
 eom_anishchenko1, anishchenko1,
 eom_henon2, henon2,
 eom_henon4, henon4,
