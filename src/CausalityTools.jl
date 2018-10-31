@@ -11,6 +11,12 @@ import DynamicalSystemsBase:
     Dataset,
     trajectory
 
+export Dataset,
+    trajectory,
+    DynamicalSystem,
+    DiscreteDynamicalSystem,
+    ContinuousDynamicalSystem
+
 @reexport using TimeseriesSurrogates
 @reexport using StateSpaceReconstruction
 @reexport using PerronFrobenius
