@@ -2,7 +2,6 @@ module CausalityTools
 
 using DynamicalSystems
 using Distances
-using Documenter
 using Reexport
 import DynamicalSystemsBase:
     DynamicalSystem,
@@ -10,12 +9,6 @@ import DynamicalSystemsBase:
     DiscreteDynamicalSystem,
     Dataset,
     trajectory
-
-export Dataset,
-    trajectory,
-    DynamicalSystem,
-    DiscreteDynamicalSystem,
-    ContinuousDynamicalSystem
 
 @reexport using TimeseriesSurrogates
 @reexport using StateSpaceReconstruction
