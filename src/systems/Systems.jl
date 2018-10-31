@@ -15,6 +15,7 @@ include("discretemaps/anishchenko1.jl")
 include("discretemaps/henon2.jl")
 include("discretemaps/henon4.jl")
 include("discretemaps/henontriple.jl")
+include("discretemaps/nontrivial_pegiun.jl")
 include("discretemaps/logistic2.jl")
 include("discretemaps/logistic3.jl")
 include("discretemaps/logistic4.jl")
@@ -33,6 +34,9 @@ include("continuous_systems/rosslerlorenz.jl")
 # We export both the equations of motion and function to generate
 # the systems for every example. The equations of motion functions
 # are always prepended with `eom_`.
+# Some systems (involving multiple lags) do not return instances
+# of DiscreteDynamicalSystem, but a Dataset with the finished
+# iterated map.
 export
 ###############
 # Discrete maps
@@ -45,6 +49,7 @@ eom_henon4, henon4,
 eom_logistic2, logistic2,
 eom_logistic3, logistic3,
 eom_logistic4, logistic4,
+eom_nontrivial_pegiun, nontrivial_pegiun,
 eom_var1, var1,
 eom_var1coupled, var1coupled,
 eom_verdes, verdes

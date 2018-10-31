@@ -29,6 +29,7 @@ import DynamicalSystemsBase:
 @test isa(verdes(), DiscreteDynamicalSystem)
 
 # Discrete maps with lags directly return a Dataset
+@test isa(nontrivial_pegiun(n = 10), Dataset)
 @test isa(henon_triple(n = 10), Dataset)
 
 # Initialise all the systems and generate trajectories
