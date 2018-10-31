@@ -15,6 +15,7 @@ include("discretemaps/anishchenko1.jl")
 include("discretemaps/henon2.jl")
 include("discretemaps/henon4.jl")
 include("discretemaps/henontriple.jl")
+include("discretemaps/linearmap3d_nonlinearcoupling.jl")
 include("discretemaps/nontrivial_pegiun.jl")
 include("discretemaps/logistic2.jl")
 include("discretemaps/logistic3.jl")
@@ -46,6 +47,7 @@ eom_anishchenko1, anishchenko1,
 eom_henon2, henon2,
 eom_henon_triple, henon_triple,
 eom_henon4, henon4,
+eom_linear3d_nonlinearcoupling, linear3d_nonlinearcoupling,
 eom_logistic2, logistic2,
 eom_logistic3, logistic3,
 eom_logistic4, logistic4,
