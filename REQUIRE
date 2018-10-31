@@ -1,8 +1,9 @@
 julia 0.6 0.7-
+GroupSlices
+InplaceOps
 DynamicalSystemsBase
 DynamicalSystems
 DifferentialEquations
-Documenter
 TimeseriesSurrogates
 DynamicalSystems
 Plots
