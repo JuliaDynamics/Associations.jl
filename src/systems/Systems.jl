@@ -14,6 +14,7 @@ include("discretemaps/ar1.jl")
 include("discretemaps/anishchenko1.jl")
 include("discretemaps/henon2.jl")
 include("discretemaps/henon4.jl")
+include("discretemaps/henontriple.jl")
 include("discretemaps/logistic2.jl")
 include("discretemaps/logistic3.jl")
 include("discretemaps/logistic4.jl")
@@ -39,6 +40,7 @@ export
 eom_ar1, ar1,
 eom_anishchenko1, anishchenko1,
 eom_henon2, henon2,
+eom_henon_triple, henon_triple,
 eom_henon4, henon4,
 eom_logistic2, logistic2,
 eom_logistic3, logistic3,
