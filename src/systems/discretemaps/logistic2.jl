@@ -55,7 +55,7 @@ dy &= r_2f(x,y)(1 - f(x,y)),
 with
 ```math
 \begin{aligned}
-f(x,y) = \dfrac{y + \frac{c(x\xi)}{2}}{1 + \frac{c}{2}}
+f(x,y) = \dfrac{y + \frac{c(x\xi)}{2}}{1 + \frac{c}{2}(1+\sigma)}
 \end{aligned}
 ```
 
