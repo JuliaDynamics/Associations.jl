@@ -1,4 +1,4 @@
-using TimeseriesCausality
+using CausalityTools
 @static if VERSION < v"0.7.0-DEV.2005"
     using Base.Test
 else
@@ -12,19 +12,14 @@ import DynamicalSystemsBase:
     ContinuousDynamicalSystem,
     Dataset
 
-##################
-# Function aliases
-##################
-logistic3 = TimeseriesCausality.Systems.logistic3
+@testset "Discrete systems" begin
+	include("discrete_systems.jl")
+end
 
+@testset "Continuous systems" begin
+	include("continuous_systems.jl")
+end
 
-###############
-# Discrete maps
-###############
-@test isa(logistic3(), DiscreteDynamicalSystem)
-
-
-############################################################
-# Initialise all the systems and generate trajectories
-############################################################
-@test isa(trajectory(logistic3(), 10), Dataset)
+@testset "Transfer entropy wrappers" begin
+	include("wrappers_te.jl")
+end

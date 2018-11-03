@@ -1,0 +1,58 @@
+
+site_name:        CausalityTools.jl
+repo_url:         https://github.com/kahaaga/CausalityTools.jl
+site_description: A Julia package for detecting causality from time series.
+site_author:      kahaaga
+
+theme:
+  name: 'material'
+
+extra_css:
+  - assets/documenter.css
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS_HTML
+  - assets/mathjaxhelper.js
+  - assets/documenter.js
+  - assets/search.js
+
+markdown_extensions:
+  - extra
+  - tables
+  - fenced_code
+  - mdx_math
+
+docs_dir: 'build'
+
+pages:
+  - Overview: index.md
+  - State space reconstruction:
+    - Quickstart: reconstruction/embed_quickstart.md
+  #  - Tutorial: reconstruction/embed_tutorial.md
+#    - Partitioning: reconstruction/partitioning.md
+  - Transfer (Perron-Frobenius) operator: transferoperator/transferoperator.md
+  - Probability estimation and invariant measures:
+    - Invariant measures: invariantmeasure/invariantmeasure.md
+  - Surrogate data:
+    - What is a surrogate?: surrogates/surrogates.md
+    - Constrained surrogate examples:
+      - Random shuffle surrogates: surrogates/random_shuffle.md
+      - AAFT: surrogates/aaft.md
+      - IAAFT: surrogates/iaaft.md
+    - Unconstrained surrogate examples:
+      - Random phase Fourier surrogates: surrogates/Fourierphase.md
+      - Random amplitude Fourier surrogates: surrogates/Fourieramp.md
+    - Function documentation: surrogates/functiondocs.md
+  - Causality measures:
+    - Overview: causalitytools.md
+    - Transfer entropy:
+      - Which estimator to choose?: transferentropy/overview.md
+      - Transfer operator estimator: transferentropy/transferoperator.md
+      - Visitation frequency estimator: transferentropy/visitfreq.md
+      - Quick start examples: transferentropy/quickstart.md
+      - Reducing bias: transferentropy/reducing_bias.md
+  - Examples of coupled dynamical systems:
+      - Overview: examplesystems/examples.md
+      - Discrete maps: examplesystems/discrete_maps.md
+      - Continuous: examplesystems/continuous.md
+  - Tutorials: tutorials/tutorialoverview.md

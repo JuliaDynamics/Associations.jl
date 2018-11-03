@@ -1,5 +1,15 @@
-julia 0.6
+julia 0.6 0.7-
+GroupSlices
+InplaceOps
+Cubature
 DynamicalSystemsBase
 DynamicalSystems
+Distributions
+Distances
 DifferentialEquations
-Documenter
+TimeseriesSurrogates
+Simplices
+StateSpaceReconstruction
+DynamicalSystems
+Plots
+PyPlot
