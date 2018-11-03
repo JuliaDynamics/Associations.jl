@@ -1,4 +1,4 @@
-The TimeseriesCausality.jl package is licensed under the MIT "Expat" License:
+The CausalityTools.jl package is licensed under the MIT "Expat" License:
 
 > Copyright (c) 2018: Kristian Agasøster Haaga.
 >

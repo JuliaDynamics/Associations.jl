@@ -36,19 +36,18 @@ end
 
 doc"""
     chuacircuits_driven(u₀, α₁, α₂, β₁, β₂, F₁, F₂,
-                        ω₁, ω₂, σ, ϵ, m₀, m₁) -> ContinuousDynamicalSystem
+                ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ) -> ContinuousDynamicalSystem
 
 Initialize a bidirectionally coupled system consisting of two driven Chua
 circuits [1], X₁ and X₂. The subsystems are mutually coupled by a linear
 resistor, where `ϵ₁` controls the influence of X₁ on X₂, and `ϵ₂` controls the
-influence of X₂ on X₁.
-
-In the original paper, the two subsystems were identical. This implementation
-allows for tuning the parameters of the invididual subsystems.
+influence of X₂ on X₁. The parameters for the subsystems are
+set equal to each other, as in the original paper, but can be tuned
+individually for each subsystem.
 
 # References
-1. Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven
-Chua's circuit." IEEE Transactions on Circuits and Systems I Fundamental
+1. Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven Chua's
+circuit." IEEE Transactions on Circuits and Systems I Fundamental
 Theory and Applications 40.11 (1993): 836-840.
 """
 function chuacircuits_driven(u₀, α₁, α₂, β₁, β₂, F₁, F₂,
@@ -62,7 +61,7 @@ chuacircuits_driven(;u₀ = [0.1, 0.1, 0.2, 0.15, 0.15, 0.22],
                             β₁ = 14.286, β₂ = 14.286,
                             F₁ = 1.5, F₂ = 1.5,
                             ω₁ = 3.0, ω₂ = 3.0,
-                            σ = 0,
-                            ϵ₁ = 0.1, ϵ₂ = 0,
+                            σ = 0.1,
+                            ϵ₁ = 0.1, ϵ₂ = 0.1,
                             m₀ = -1/7, m₁ = 2/7) =
     chuacircuits_driven(u₀, α₁, α₂, β₁, β₂, F₁, F₂, ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ)
