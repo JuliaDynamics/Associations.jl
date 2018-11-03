@@ -151,70 +151,83 @@ function te(driver, response;
     end
 end
 
-"""
-    te_lags(driver, response, lags::Union{Vector{Int}, UnitRange{Int}};
-        method = :transferoperator_grid,
-        E = nothing, v = nothing,
-        ϵ = nothing, n_ϵ = 5, dim = 3, η = 1,
-        k1 = 4, k2 = 5, metric = Chebyshev(),
-        which_is_surr = -1, surr_type = aaft,
-        max_numbins = nothing, min_numbins = nothing)
-
-Compute transfer entropy from a `driver` time series to a `response` time
-series over a range of forward prediction `lags`.
-
-## Embedding instructions
-Specify embedding and instructions for how to compute marginal
-entropies are with `E::AbstractEmbedding` and `v::TEVars`. If either
-is missing, the data is embedded using the provided forward `lag`, embedding
-dimension `dim` and backward lag `η`.
-
-`method` sets the transfer entropy algorithm to use. There are two types of
-estimators: grid-based approaches, and nearest-neighbor based approaches.
-
-## Grid-based estimators
-
-- `:transferoperator_grid`. Grid-based transfer entropy estimator based on the
-transfer operator.
-- `:visitfreq`. Simple visitation frequency based estimator.
-
-For all grid based algorithms, `ϵ` sets the binsize. If `ϵ = nothing`, then the
-algorithm uses a bin size corresponding to a number of subdivisions `N`
-along each axis so that `N ≦ npoints^(1/(dim+1))`. Transfer entropy is then
-computed as an average over `n_ϵ` different bin sizes corresponding to
-`N-1` to `N` subdivisions along each axis.
-
-## Nearest neighbor based estimator.
-- `:kraskov`: A nearest-neighbor based estimator, which computes transfer
-entropy as the sum of two mutual information terms. `k1` and `k2` sets the
-number of nearest neighbors for those terms. `metric` sets the distance
-metric (must be valid metric from `Distances.jl`).
-
-## Surrogate analysis
-A surrogate analysis will be run if `which_is_surr` is set to 0, 1 or 2.
-- `which_is_surr = 0` will construct a surrogate for both time series.
-- `which_is_surr = 1` will construct a surrogate for the driver time series.
-- `which_is_surr = 2` will construct a surrogate for the response time series.
-"""
-te_lags(driver, response, lags::Union{Vector{Int}, UnitRange{Int}};
-       method = :transferoperator_grid,
-       E = nothing, v = nothing,
-       ϵ = nothing, n_ϵ = 5, dim = 3, η = 1,
-       k1 = 4, k2 = 5, metric = Chebyshev(),
-       which_is_surr = -1, surr_type = aaft,
-       max_numbins = nothing, min_numbins = nothing)
-
-   map(l -> te(driver, response,
-                   lag = l,
-                   method = method,
-                   E = E, v = v,
-                   ϵ = ϵ, n_ϵ = n_ϵ, dim = dim, η = η,
-                   k1 = k1, k2 = k2, metric = metric,
-                   which_is_surr = which_is_surr,
-                   surr_type = surr_type,
-                   min_numbins = min_numbins,
-                   max_numbins = max_numbins), lags)
-end
+# """
+#     te_lags(driver, response, lags::Union{Vector{Int}, UnitRange{Int}};
+#         method = :transferoperator_grid,
+#         E = nothing, v = nothing,
+#         ϵ = nothing, n_ϵ = 5, dim = 3, η = 1,
+#         k1 = 4, k2 = 5, metric = Chebyshev(),
+#         which_is_surr = -1, surr_type = aaft,
+#         max_numbins = nothing, min_numbins = nothing)
+#
+# Compute transfer entropy from a `driver` time series to a `response` time
+# series over a range of forward prediction `lags`.
+#
+# ## Embedding instructions
+# Specify embedding and instructions for how to compute marginal
+# entropies are with `E::AbstractEmbedding` and `v::TEVars`. If either
+# is missing, the data is embedded using the provided forward `lag`, embedding
+# dimension `dim` and backward lag `η`.
+#
+# `method` sets the transfer entropy algorithm to use. There are two types of
+# estimators: grid-based approaches, and nearest-neighbor based approaches.
+#
+# ## Grid-based estimators
+#
+# - `:transferoperator_grid`. Grid-based transfer entropy estimator based on the
+# transfer operator.
+# - `:visitfreq`. Simple visitation frequency based estimator.
+#
+# For all grid based algorithms, `ϵ` sets the binsize. If `ϵ = nothing`, then the
+# algorithm uses a bin size corresponding to a number of subdivisions `N`
+# along each axis so that `N ≦ npoints^(1/(dim+1))`. Transfer entropy is then
+# computed as an average over `n_ϵ` different bin sizes corresponding to
+# `N-1` to `N` subdivisions along each axis.
+#
+# ## Nearest neighbor based estimator.
+# - `:kraskov`: A nearest-neighbor based estimator, which computes transfer
+# entropy as the sum of two mutual information terms. `k1` and `k2` sets the
+# number of nearest neighbors for those terms. `metric` sets the distance
+# metric (must be valid metric from `Distances.jl`).
+#
+# ## Surrogate analysis
+# A surrogate analysis will be run if `which_is_surr` is set to 0, 1 or 2.
+# - `which_is_surr = 0` will construct a surrogate for both time series.
+# - `which_is_surr = 1` will construct a surrogate for the driver time series.
+# - `which_is_surr = 2` will construct a surrogate for the response time series.
+# """
+# te_lags(driver, response, lags::Union{Vector{Int}, UnitRange{Int}};
+#        method = :transferoperator_grid,
+#        E = nothing, v = nothing,
+#        ϵ = nothing, n_ϵ = 5, dim = 3, η = 1,
+#        k1 = 4, k2 = 5, metric = Chebyshev(),
+#        which_is_surr = -1, surr_type = aaft,
+#        max_numbins = nothing, min_numbins = nothing)
+#
+#     tes = zeros(Float64, length(lags))
+#     for i in 1:length(lags)
+#         tes[i] = te(driver, response,
+#                     lag = lags[i],
+#                     method = method,
+#                     E = E, v = v,
+#                     ϵ = ϵ, n_ϵ = n_ϵ, dim = dim, η = η,
+#                     k1 = k1, k2 = k2, metric = metric,
+#                     which_is_surr = which_is_surr,
+#                     surr_type = surr_type)
+#     end
+#
+#     return tes
+#
+#     # pmap(l -> te(driver, response,
+#     #                lag = l,
+#     #                method = method,
+#     #                ϵ = ϵ, n_ϵ = n_ϵ, dim = dim, η = η,
+#     #                k1 = k1, k2 = k2, metric = metric,
+#     #                which_is_surr = which_is_surr,
+#     #                surr_type = surr_type,
+#     #                min_numbins = min_numbins,
+#     #                max_numbins = max_numbins), lags)
+# end
 #
 # """
 #     te(E::AbstractEmbedding, v::TEVars;
@@ -324,3 +337,5 @@ end
 # end
 #
 # transferentropy = te
+
+export te, te_lags
