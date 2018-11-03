@@ -25,4 +25,8 @@ include("surrogates/surrogates.jl")
 # Wrappers of the different methods.
 include("method_wrappers/highlevel_methods.jl")
 
+export Dataset,
+    DynamicalSystem, DiscreteDynamicalSystem, ContinuousDynamicalSystem,
+    trajectory
+
 end # module
