@@ -1,5 +1,7 @@
 # CausalityTools
 
+![Build Status](https://travis-ci.org/kahaaga/CausalityTools.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CausalityTools.jl)
+
 This package provides tools for nonparametric detection of causal relationships between dynamical variables based on time series of observations.
 
 Standard wrappers for the causality detection tools are available for direct application to time
