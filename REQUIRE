@@ -10,6 +10,8 @@ DifferentialEquations
 TimeseriesSurrogates
 Simplices
 StateSpaceReconstruction
+PerronFrobenius
+TransferEntropy
 DynamicalSystems
 Plots
 PyPlot
