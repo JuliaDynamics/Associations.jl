@@ -4,6 +4,7 @@ using DynamicalSystems
 using Distances
 using Reexport
 using AbstractFFTs
+using Statistics
 import DynamicalSystemsBase:
     DynamicalSystem,
     ContinuousDynamicalSystem,

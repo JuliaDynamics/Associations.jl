@@ -1,5 +1,5 @@
 using Distances
-
+using StateSpaceReconstruction: Embeddings
 """
     te(driver, response;
         method = :transferoperator_grid,
@@ -14,17 +14,17 @@ series.
 ## Embedding instructions
 Specify embedding and instructions for how to compute marginal
 entropies are with `E::AbstractEmbedding` and `v::TEVars`. If either
-is missing, the data is embedded using the provided forward `ν`, embedding
-dimension `dim` and backward lag `η`.
+is missing, the data is embedded using the provided forward prediction lag `ν`,
+with embedding dimension `dim` and embedding lag `η`.
 
 `method` sets the transfer entropy algorithm to use. There are two types of
 estimators: grid-based approaches, and nearest-neighbor based approaches.
 
 ## Grid-based estimators
 
-- `:transferoperator_grid`. Grid-based transfer entropy estimator based on the
-    transfer operator.
-- `:visitfreq`. Simple visitation frequency based estimator.
+- `:transferentropy_transferoperator_grid`, or `:tetogrid`. Grid-based transfer entropy
+    estimator based on the transfer operator.
+- `::transferentropy_visitfreq`, or `tefreq`. Simple visitation frequency based estimator.
 
 For all grid based algorithms, `ϵ` sets the binsize. If `ϵ = nothing`, then the
 algorithm uses a bin size corresponding to a number of subdivisions `N`
@@ -34,7 +34,7 @@ computed as an average over `n_ϵ` different bin sizes corresponding to
 
 
 ## Nearest neighbor based estimator.
-- `:kraskov`: A nearest-neighbor based estimator, which computes transfer
+- `:transferentropy_kraskov`, `tekraskov`, or `tekNN`. A nearest-neighbor based estimator, which computes transfer
     entropy as the sum of two mutual information terms. `k1` and `k2` sets the
     number of nearest neighbors for those terms. `metric` sets the distance
     metric (must be valid metric from `Distances.jl`).
@@ -47,7 +47,7 @@ A surrogate analysis will be run if `which_is_surr` is set to 0, 1 or 2.
 
 """
 function te(driver, response;
-        estimator = :transferoperator_grid,
+        estimator = :tetogrid,
         E = nothing, v = nothing,
         ϵ = nothing, n_ϵ = 5, ν = 1, τ = 1, dim = 3,
         k1 = 2, k2 = 3, metric = Chebyshev(),
@@ -55,17 +55,17 @@ function te(driver, response;
         min_numbins = nothing,
         max_numbins = nothing)
 
-
-    valid_estimators = [:transferentropy_transferoperator_grid, :tetogrid,
-                    :transferentropy_kraskov, :tekraskov, :tekNN,
-                    :transferentropy_visitfreq, :tefreq]
+    estims_te_grid = [:transferentropy_transferoperator_grid, :tetogrid]
+    estims_te_kNN = [:transferentropy_kraskov, :tekraskov, :tekNN]
+    estims_te_freq = [:transferentropy_visitfreq, :tefreq]
+    valid_estimators = estims_te_grid ∪ estims_te_kNN ∪ estims_te_freq
 
     if dim < 3
         error("Dimension $dim is too low. Must be at least 3.")
     end
 
-    if !(estimator ∈ valid_methods)
-        error("Transfer entropy method $method not valid.")
+    if !(estimator ∈ valid_estimators)
+        error("Transfer entropy method $estimator not valid.")
     end
 
     if which_is_surr == 1
@@ -81,7 +81,7 @@ function te(driver, response;
 
     # Compute transfer entropy analogously to how Krakovskà et al. (2018)
     # computes conditional mutual information.
-    if !(typeof(E) == AbstractEmbedding) || !(typeof(v) == TEVars)
+    if !(typeof(E) == Embeddings.AbstractEmbedding) || !(typeof(v) == TEVars)
         if dim == 3
             E = embed([driver, response], [2, 2, 1], [ν, 0, 0])
             v = TEVars([1], [2], [3])
@@ -109,8 +109,8 @@ function te(driver, response;
         ϵs = zeros(Float64, n_ϵ, dim)
         # We a range of bin sizes along each axis.
         for d in 1:dim
-            dmin = minimum(E.points[d, :])
-            dmax = maximum(E.points[d, :])
+            dmin = Base.minimum(E.points[d, :])
+            dmax = Base.maximum(E.points[d, :])
             maxrange = dmax - dmin
 
             # If minimum and maximum number of bins are not provided,
@@ -123,7 +123,7 @@ function te(driver, response;
             max_bin_size = maxrange/max_numbins
             min_bin_size = maxrange/min_numbins
 
-            ϵs[:, d] = logspace(log(10, min_bin_size), log(10, max_bin_size), n_ϵ)
+            ϵs[:, d] = LinRange(log(10, min_bin_size), log(10, max_bin_size), n_ϵ)
         end
     end
 
@@ -139,7 +139,7 @@ function te(driver, response;
             tes[i] = transferentropy_visitfreq(E, ϵs[i, :], v)
 
         elseif estimator == :transferoperator_triang
-            warn("$method is not implemented yet.")
+            warn("$estimator is not implemented yet.")
             #warn("Invariantizing embedding before calculating transfer matrix...")
             #t = triangulate(invariantize(E))
             #TO = transferoperator_approx(t, n_pts = n_randpts, sample_randomly = sample_randomly)
@@ -148,7 +148,7 @@ function te(driver, response;
         end
     end
     # If we only use one binsize, we can't take the integral.
-    if !(ϵ == nothing) || method == :kraskov
+    if !(ϵ == nothing) || estimator ∈ estims_te_kNN
         return tes[1]
     else
         mean(tes)
@@ -279,7 +279,7 @@ end
 #             max_bin_size = maxrange/max_numbins
 #             min_bin_size = maxrange/min_numbins
 #
-#             ϵs[:, d] = logspace(log(10, min_bin_size), log(10, max_bin_size), n_ϵ)
+#             ϵs[:, d] = LinRange(log(10, min_bin_size), log(10, max_bin_size), n_ϵ)
 #         end
 #     end
 #
