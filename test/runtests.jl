@@ -9,6 +9,7 @@ import DynamicalSystemsBase:
     DiscreteDynamicalSystem,
     ContinuousDynamicalSystem,
     Dataset
+using CausalityTools
 
 @testset "Discrete systems" begin
 	include("discrete_systems.jl")
