@@ -1,10 +1,8 @@
-using CausalityTools
-@static if VERSION < v"0.7.0-DEV.2005"
-    using Base.Test
-else
-    using Test
+if lowercase(get(ENV, "CI", "false")) == "true"
+    include("install_dependencies.jl")
 end
 
+using Test
 using DynamicalSystems
 import DynamicalSystemsBase:
     DynamicalSystem,

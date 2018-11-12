@@ -1,5 +1,5 @@
 
-doc"""
+"""
     eom_logistic3(u, p, t)
 
 Equations of motion for a system consisting of three coupled logistic map

@@ -3,6 +3,7 @@ module CausalityTools
 using DynamicalSystems
 using Distances
 using Reexport
+using AbstractFFTs
 import DynamicalSystemsBase:
     DynamicalSystem,
     ContinuousDynamicalSystem,
@@ -14,7 +15,7 @@ import DynamicalSystemsBase:
 @reexport using StateSpaceReconstruction
 @reexport using PerronFrobenius
 @reexport using TransferEntropy
-
+using StateSpaceReconstruction: GroupSlices
 
 # Example systems
 include("systems/Systems.jl")

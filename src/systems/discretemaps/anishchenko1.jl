@@ -1,5 +1,5 @@
-doc"""
-    _anishchenko1(u, p, t)
+"""
+    eom_anishchenko1(u, p, t)
 
 Equations of motion for the system defined by eq. 13 in [1], which
 can give strange, nonchaotic attractors.
@@ -17,7 +17,7 @@ function eom_anishchenko1(u, p, t)
     return SVector{2}(dx, dϕ)
 end
 
-doc"""
+"""
     anishchenko1(u₀, α, s, ω)
 
 Equations of motion for the system defined by eq. 13 in [1], which
@@ -39,7 +39,7 @@ function anishchenko1(u₀, α, s, ω)
     DiscreteDynamicalSystem(eom_anishchenko1, u₀, p)
 end
 
-doc"""
+"""
     anishchenko1(;u₀ = rand(2), α =3.277, s=0.1, ω=0.5*(sqrt(5)-1))
 
 Strange, nonchaotic attractors from the following system:

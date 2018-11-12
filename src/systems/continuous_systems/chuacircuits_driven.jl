@@ -34,7 +34,7 @@ function eom_chuacircuits_driven(u, p, t)
     SVector{6}(dx₁, dy₁, dz₁, dx₂, dy₂, dz₂)
 end
 
-doc"""
+"""
     chuacircuits_driven(u₀, α₁, α₂, β₁, β₂, F₁, F₂,
                 ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ) -> ContinuousDynamicalSystem
 

@@ -1,4 +1,4 @@
-doc"""
+"""
     eom_linear3d_nonlinearcoupling(x, p, n) -> Function
 
 
@@ -45,7 +45,7 @@ function linear3d_nonlinearcoupling(uᵢ, a₁, a₂, a₃, b, c, d, σ₁, σ�
     return s
 end
 
-doc"""
+"""
     linear3d_nonlinearcoupling(;uᵢ = rand(3), σ₁ = 1.0, σ₂ = 1.0, σ₃ = 1.0,
         a₁ = 3.4, a₂ = 3.4, a₃ = 3.4, b = 0.5, c = 0.3, d = 0.5) -> DiscreteDynamicalSystem
 

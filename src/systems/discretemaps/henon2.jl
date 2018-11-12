@@ -20,7 +20,7 @@ function eom_henon2(x, p, n)
     return SVector{4}(dx₁, dx₂, dy₁, dy₂)
 end
 
-doc"""
+"""
     henon2(u₀, c) -> DiscreteDynamicalSystem
 
 Initialize a 2D Henon system consisting of two identical Henon maps with
@@ -49,7 +49,7 @@ function henon2(u₀, c)
     return logistic_system
 end
 
-doc"""
+"""
     henon2(;u₀ = rand(4), c = 2.0) -> DiscreteDynamicalSystem
 
 Initialize a 2D Henon system consisting of two identical Henon maps with

@@ -19,7 +19,7 @@ function eom_rossler_rossler(u, p, t)
     return SVector{6}(dx₁, dy₁, dz₁, dx₂, dy₂, dz₂)
 end
 
-doc"""
+"""
 	rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂) -> ContinuousDynamicalSystem
 
 A coupled 6D Rossler system from Krakovská et al. (2018).
@@ -64,7 +64,7 @@ function rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂)
     return ContinuousDynamicalSystem(eom_rossler_rossler, uᵢ, p)
 end
 
-doc"""
+"""
 	rossler_rossler(;uᵢ = rand(6), a = 0.1, b = 0.1, c = 14.0, ϵ₁ = 0.0,
 		ϵ₂ = 0.0, ω₁ = 1 + 0.015, ω₂ = 1 - 0.015) -> ContinuousDynamicalSystem
 

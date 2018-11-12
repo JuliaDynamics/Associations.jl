@@ -1,4 +1,4 @@
-doc"""
+"""
     lorenztriple(;uᵢ=rand(9),
                 σ₁ = 10.0, σ₂ = 10.0, σ₃ = 10.0,
                 ρ₁ = 28.0, ρ₂ = 28.0, ρ₃ = 28.0,
@@ -44,7 +44,7 @@ function lorenz_triple(uᵢ, σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β
     ContinuousDynamicalSystem(eom_lorenz_triple, uᵢ, p)
 end
 
-doc"""
+"""
     lorenztriple(;uᵢ=rand(9),
                 σ₁ = 10.0, σ₂ = 10.0, σ₃ = 10.0,
                 ρ₁ = 28.0, ρ₂ = 28.0, ρ₃ = 28.0,

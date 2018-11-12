@@ -1,4 +1,4 @@
-doc"""
+"""
     eom_henon_triple(x, p, n) -> Function
 
 Iterate a 3D discrete system consisting of coupled Henon maps where the coupling
@@ -80,7 +80,7 @@ function henon_triple(uᵢ, a, b, c, noise_frac, n::Int, n_transient::Int)
 end
 
 
-doc"""
+"""
     henon_triple(x, p, n) -> Function
 
 Iterate a 3D discrete system consisting of coupled Henon maps where the coupling

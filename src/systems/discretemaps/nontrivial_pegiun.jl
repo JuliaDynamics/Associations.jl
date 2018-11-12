@@ -1,4 +1,4 @@
-doc"""
+"""
     nontrivial_pegiun(x, p, n) -> Function
 
 Iterate a 2d discrete system with nonlinear, nontrivial coupling [1], which
@@ -64,7 +64,7 @@ function nontrivial_pegiun(uᵢ, p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ�
 end
 
 
-doc"""
+"""
     nontrivial_pegiun(;uᵢ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
         p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) -> Dataset
 

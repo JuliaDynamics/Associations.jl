@@ -1,4 +1,4 @@
-doc"""
+"""
     eom_rossler_lorenz() -> Function
 
 Equations of motions for a 6D unidirectionally coupled Rössler-Lorenz system.
@@ -46,7 +46,7 @@ function rossler_lorenz(u₀, a₁, a₂, a₃, b₁, b₂, b₃, c)
     ContinuousDynamicalSystem(eom_rossler_lorenz, u₀, p)
 end
 
-doc"""
+"""
     rossler_lorenz(;u₀ = rand(6), a₁ = -6, a₂ = 6, a₃ = 2.0,
         b₁ = 10, b₂ = 28, b₃ = 8/3, c = 2) -> ContinuousDynamicalSystem
 

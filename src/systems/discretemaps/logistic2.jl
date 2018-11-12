@@ -1,4 +1,4 @@
-doc"""
+"""
     eom_logistic2(dx, x, p, n) -> function
 
 Equations of motions for a system consisting of two coupled logistic maps where
@@ -27,7 +27,7 @@ function logistic2(u₀, c, r₁, r₂, σ)
     DiscreteDynamicalSystem(eom_logistic2, u₀, p)
 end
 
-doc"""
+"""
     logistic2(;u₀ = rand(2), c = 0.1, σ = 0.05,
         r₁ = 3.78, r₂ = 3.66) -> DiscreteDynamicalSystem
 

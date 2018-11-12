@@ -1,4 +1,4 @@
-doc"""
+"""
     eom_verdes(u, p, t) -> SVector{3}
 
 Equations of motion for a 3D system where the response X is a highly
@@ -31,7 +31,7 @@ function verdes(u₀, ωy, ωz, σx, σy, σz)
     DiscreteDynamicalSystem(eom_verdes, u₀, p)
 end
 
-doc"""
+"""
     verdes(;u₀ = rand(3), ωy = 315, ωz = 80,
         σx = 0.0, σy = 0.0, σz = 0.0) -> DiscreteDynamicalSystem
 

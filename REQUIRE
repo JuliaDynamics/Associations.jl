@@ -1,17 +1,15 @@
-julia 0.6 0.7-
-GroupSlices
+julia 0.7
 InplaceOps
-Cubature
 DynamicalSystemsBase
 DynamicalSystems
 Distributions
 Distances
 DifferentialEquations
-TimeseriesSurrogates
-Simplices
-StateSpaceReconstruction
-PerronFrobenius
-TransferEntropy
+TimeseriesSurrogates 0.2.0
+Simplices 0.2.1
+StateSpaceReconstruction 0.2.1
+PerronFrobenius 0.1.1
+TransferEntropy 0.2
 DynamicalSystems
 Plots
 PyPlot

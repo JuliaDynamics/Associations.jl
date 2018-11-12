@@ -24,7 +24,7 @@ function eom_henon4(x, p, n)
     return SVector{4}(dx₁, dx₂, dy₁, dy₂)
 end
 
-doc"""
+"""
     henon4(u₀, c) -> DiscreteDynamicalSystem
 
 Initialize an instance of a 4D Henon map system consisting of two identical

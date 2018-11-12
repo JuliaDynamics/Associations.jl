@@ -13,7 +13,7 @@ function eom_hindmarsh_rose(u, p, t)
     return SVector{3}(dx, dy, dz)
 end
 
-doc"""
+"""
 	hindmarsh_rose(u₀, p)
 
 Initialise a Hindmarsh-Rose system, which is a model of neuronal

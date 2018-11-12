@@ -34,7 +34,7 @@ function eom_chuacircuit_nscroll_sine(u, p, t)
     return SVector{3}(dx, dy, dz)
 end
 
-doc"""
+"""
     chua_nscroll_sinefunc(u₀, α, β, γ, a, b, c::Int)
 
 Generate n-scroll chaotic attractors from an adjusted Chua system [1].

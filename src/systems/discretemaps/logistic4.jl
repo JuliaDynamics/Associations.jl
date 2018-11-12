@@ -1,5 +1,5 @@
 
-doc"""
+"""
     eom_logistic4(u, p, t)
 
 Equations of motion for a 4D transitive causal chain of unidirectionally
@@ -26,7 +26,7 @@ function logistic4(u₀, r₁, r₂, r₃, r₄, c₂, c₃, c₄)
     DiscreteDynamicalSystem(eom_logistic4, u₀, p)
 end
 
-doc"""
+"""
     logistic4(;u₀ = rand(4), r₁ = 3.9, r₂ = 3.6, r₃ = 3.6, r₄ = 3.8,
         c₂ = 0.4, c₃ = 0.4, c₄ = 0.35) -> DiscreteDynamicalSystem
 

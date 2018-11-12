@@ -1,4 +1,4 @@
-doc"""
+"""
     eom_ar1(x, p, n) -> Function
 
 Equations of motion for a bivariate, order one autoregressive model, where
@@ -27,7 +27,7 @@ function ar1(uᵢ, a₁, b₁, c₁, σ)
     return logistic_system
 end
 
-doc"""
+"""
     ar1(uᵢ, a₁ = 0.90693, b₁ = 0.40693, c₁ = 0.5, σ = 0.40662) -> DiscreteDynamicalSystem
 
 Initialise a discrete vector autoregressive system where x → y
