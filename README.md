@@ -2,17 +2,15 @@
 
 [![Build Status](https://travis-ci.org/kahaaga/CausalityTools.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CausalityTools.jl)
 
-This package provides tools for nonparametric detection of causal relationships between dynamical variables based on time series of observations.
+`CausalityTools.jl` provides tools for nonparametric detection of causal relationships between dynamical variables based on time series of observations. In addition, we provide functions to approximate the transfer operator (Perron-Frobenius operator), and from it, invariant distributions over the discretized state space (embedding).
 
-Standard wrappers for the causality detection tools are available for direct application to time
-series. If you're starting out, these wrappers cover the most common use cases.
+## Wrappers for common use cases
+Standard wrappers for the causality detection tools are available for direct application to time series. If you're starting out, these wrappers cover the most common use cases.
 
-For more in-depth analysis, the package comes with state space reconstruction (embedding) and
-discretization routines, which can also be provided seamlessly to the causality estimators.
+For more in-depth analysis, the package comes with state space reconstruction (embedding) and discretization routines, which can also be provided seamlessly to the causality estimators.
 
-In addition, we provide functions to approximate the transfer operator
-(Perron-Frobenius operator), and from it, invariant distributions over the discretized state
-space.
+*Be careful with using the wrappers: for any real application, you should know what you're doing and utilize the underlying functions which give full control over the embeddings and analysis parameters.*
+
 
 ## What can I do with `CausalityTools`?
 The package implements common causality detection algorithms, such as transfer entropy and related information flows.
@@ -20,6 +18,7 @@ The package implements common causality detection algorithms, such as transfer e
 It is equally well-suited both for the study of experimental data, and for studying dynamical systems from a more formal context. The workflow integrates nicely with `DynamicalSystems.jl`.
 
 Check out the documentation (coming) for more information!
+
 
 
 ### Package structure

@@ -3,18 +3,21 @@ import TimeseriesSurrogates.randomphases
 import TimeseriesSurrogates.randomamplitudes
 import TimeseriesSurrogates.aaft
 import TimeseriesSurrogates.iaaft
-using DynamicalSystemsBase.Dataset
+import DynamicalSystemsBase.Dataset
+import StateSpaceReconstruction: Embeddings
 
 ##############
 # Embeddings
 ##############
 """
-    randomshuffle(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+    randomshuffle(E::Embeddings.AbstractEmbedding;
+                    cols = 1:size(E.points, 1))
 
-Random shuffle surrogate of an embedding. `cols` controls which
+Column-wise random shuffle surrogate of an embedding. `cols` controls which
 variables of the embedding are shuffled.
 """
-function randomshuffle(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+function randomshuffle(E::Embeddings.AbstractEmbedding;
+                        cols = 1:size(E.points, 1))
     n_variables = size(E.points, 1)
     E_shuffled = similar(E.points)
     for i = 1:n_variables
@@ -29,12 +32,13 @@ function randomshuffle(E::AbstractEmbedding; cols = 1:size(E.points, 1))
 end
 
 """
-    randomphases(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+    randomphases(E::Embeddings.AbstractEmbedding; cols = 1:size(E.points, 1))
 
-Random phases Fourier surrogate of an embedding. `cols` controls which
+Column-wise random phases Fourier surrogate of an embedding. `cols` controls which
 variables of the embedding are shuffled.
 """
-function randomphases(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+function randomphases(E::Embeddings.AbstractEmbedding;
+                        cols = 1:size(E.points, 1))
     n_variables = size(E.points, 1)
     E_shuffled = similar(E.points)
     for i = 1:n_variables
@@ -50,12 +54,14 @@ end
 
 
 """
-    randomamplitudes(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+    randomamplitudes(E::Embeddings.AbstractEmbedding;
+                        cols = 1:size(E.points, 1))
 
-Random amplitude Fourier surrogate of an embedding. `cols` controls which
+Column-wise random amplitude Fourier surrogate of an embedding. `cols` controls which
 variables of the embedding are shuffled.
 """
-function randomamplitudes(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+function randomamplitudes(E::Embeddings.AbstractEmbedding;
+                            cols = 1:size(E.points, 1))
     n_variables = size(E.points, 1)
     E_shuffled = similar(E.points)
     for i = 1:n_variables
@@ -71,12 +77,14 @@ end
 
 
 """
-    randomamplitudes(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+    randomamplitudes(E::Embeddings.AbstractEmbedding;
+                        cols = 1:size(E.points, 1))
 
-Amplitude-adjusted Fourier transform (AAFT) surrogate of an embedding. `cols`
+Column-wise amplitude-adjusted Fourier transform (AAFT) surrogate of an embedding. `cols`
 controls which variables of the embedding are shuffled.
 """
-function aaft(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+function aaft(E::Embeddings.AbstractEmbedding;
+                cols = 1:size(E.points, 1))
     n_variables = size(E.points, 1)
     E_shuffled = similar(E.points)
     for i = 1:n_variables
@@ -91,12 +99,14 @@ function aaft(E::AbstractEmbedding; cols = 1:size(E.points, 1))
 end
 
 """
-    randomamplitudes(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+    randomamplitudes(E::Embeddings.AbstractEmbedding;
+                        cols = 1:size(E.points, 1))
 
-Iterated amplitude-adjusted Fourier transform (IAAFT) surrogate of an embedding.
+Column-wise iterated amplitude-adjusted Fourier transform (IAAFT) surrogate of an embedding.
 `cols` controls which variables of the embedding are shuffled.
 """
-function iaaft(E::AbstractEmbedding; cols = 1:size(E.points, 1))
+function iaaft(E::Embeddings.AbstractEmbedding;
+                cols = 1:size(E.points, 1))
     n_variables = size(E.points, 1)
     E_shuffled = similar(E.points)
     for i = 1:n_variables
@@ -116,12 +126,12 @@ end
 ##############
 
 """
-    randomshuffle(d::Dataset; cols = 1:size(d, 2))
+    randomshuffle(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
 
-Random shuffle surrogate of a Dataset.
+Column-wise random shuffle surrogate of a Dataset.
 `cols` controls which variables of the embedding are shuffled.
 """
-function randomshuffle(d::Dataset; cols = 1:size(d, 2))
+function randomshuffle(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
     n_variables = size(d, 2)
     d_shuffled = zeros(eltype(d), size(d))
     for i = 1:n_variables
@@ -137,12 +147,12 @@ end
 
 
 """
-    randomphases(d::Dataset; cols = 1:size(d, 2))
+    randomphases(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
 
-Random phases Fourier surrogate of a Dataset.
+Column-wise random phases Fourier surrogate of a Dataset.
 `cols` controls which variables of the embedding are shuffled.
 """
-function randomphases(d::Dataset; cols = 1:size(d, 2))
+function randomphases(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
     n_variables = size(d, 2)
     d_shuffled = zeros(eltype(d), size(d))
     for i = 1:n_variables
@@ -158,12 +168,12 @@ end
 
 
 """
-    randomamplitudes(d::Dataset; cols = 1:size(d, 2))
+    randomamplitudes(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
 
-Random amplitude Fourier surrogate of a Dataset.
+Column-wise random amplitude Fourier surrogate of a Dataset.
 `cols` controls which variables of the embedding are shuffled.
 """
-function randomamplitudes(d::Dataset; cols = 1:size(d, 2))
+function randomamplitudes(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
     n_variables = size(d, 2)
     d_shuffled = zeros(eltype(d), size(d))
     for i = 1:n_variables
@@ -179,12 +189,12 @@ end
 
 
 """
-    aaft(d::Dataset; cols = 1:size(d, 2))
+    aaft(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
 
-Amplitude-adjusted Fourier transform (IAAFT) surrogate of a Dataset.
+Column-wise amplitude-adjusted Fourier transform (IAAFT) surrogate of a Dataset.
 `cols` controls which variables of the embedding are shuffled.
 """
-function aaft(d::Dataset; cols = 1:size(d, 2))
+function aaft(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
     n_variables = size(d, 2)
     d_shuffled = zeros(eltype(d), size(d))
     for i = 1:n_variables
@@ -199,12 +209,12 @@ function aaft(d::Dataset; cols = 1:size(d, 2))
 end
 
 """
-    iaaft(d::Dataset; cols = 1:size(d, 2))
+    iaaft(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
 
 Iterated amplitude-adjusted Fourier transform (IAAFT) surrogate of a Dataset.
 `cols` controls which variables of the embedding are shuffled.
 """
-function iaaft(d::Dataset; cols = 1:size(d, 2))
+function iaaft(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
     n_variables = size(d, 2)
     d_shuffled = zeros(eltype(d), size(d))
     for i = 1:n_variables

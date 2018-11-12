@@ -11,5 +11,3 @@ StateSpaceReconstruction 0.2.1
 PerronFrobenius 0.1.1
 TransferEntropy 0.2
 DynamicalSystems
-Plots
-PyPlot

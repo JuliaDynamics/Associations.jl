@@ -115,6 +115,12 @@ git-tree-sha1 = "b974e164358fea753ef853ce7bad97afec15bb80"
 uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
 version = "0.5.1"
 
+[[DSP]]
+deps = ["AbstractFFTs", "Compat", "FFTW", "LinearAlgebra", "Polynomials", "Random", "Reexport", "SpecialFunctions"]
+git-tree-sha1 = "c90967ff4c5e99f652b278624634dcef73b58848"
+uuid = "717857b8-e6f2-59f4-9121-6e50c889abd2"
+version = "0.5.1"
+
 [[DataStructures]]
 deps = ["InteractiveUtils", "OrderedCollections", "Random", "Serialization", "Test"]
 git-tree-sha1 = "8fc6e166e24fda04b2b648d4260cdad241788c54"
@@ -245,9 +251,9 @@ version = "0.0.7"
 
 [[DifferentialEquations]]
 deps = ["BoundaryValueDiffEq", "DelayDiffEq", "DiffEqBase", "DiffEqBiological", "DiffEqCallbacks", "DiffEqDevTools", "DiffEqFinancial", "DiffEqJump", "DiffEqMonteCarlo", "DiffEqNoiseProcess", "DiffEqPDEBase", "DiffEqParamEstim", "DiffEqPhysics", "DiffEqSensitivity", "DiffEqUncertainty", "DimensionalPlotRecipes", "LinearAlgebra", "MultiScaleArrays", "OrdinaryDiffEq", "ParameterizedFunctions", "Random", "RecursiveArrayTools", "Reexport", "SteadyStateDiffEq", "StochasticDiffEq", "Sundials", "Test"]
-git-tree-sha1 = "1f5d7977befe3265d9b7fc256d8f88d0bd9b6ffa"
+git-tree-sha1 = "4aa89a297c7cf0565d9776cf85cef966a037cf8b"
 uuid = "0c46a032-eb83-5123-abaf-570d42b7fbaa"
-version = "5.3.1"
+version = "5.2.1"
 
 [[DimensionalPlotRecipes]]
 deps = ["LinearAlgebra", "RecipesBase", "Test"]
@@ -305,6 +311,12 @@ deps = ["LinearAlgebra", "Printf", "Random", "SparseArrays", "Test"]
 git-tree-sha1 = "a25edb801ef3299b1c0fbbfe62692a074a82893b"
 uuid = "d4d017d3-3776-5f7e-afef-a10c40355c18"
 version = "1.3.0"
+
+[[FFTW]]
+deps = ["AbstractFFTs", "BinaryProvider", "Compat", "Conda", "Libdl", "LinearAlgebra", "Reexport", "Test"]
+git-tree-sha1 = "29cda58afbf62f35b1a094882ad6c745a47b2eaa"
+uuid = "7a1cc6ca-52ef-59f5-83cd-3a7055c09341"
+version = "0.2.4"
 
 [[FillArrays]]
 deps = ["LinearAlgebra", "Random", "SparseArrays", "Test"]
@@ -710,10 +722,12 @@ uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
 version = "0.7.2"
 
 [[StateSpaceReconstruction]]
-deps = ["Conda", "Distributions", "DynamicalSystems", "DynamicalSystemsBase", "LinearAlgebra", "Parameters", "Plots", "PyCall", "RecipesBase", "Reexport", "Simplices", "StaticArrays", "Statistics", "Test"]
-git-tree-sha1 = "83a2df4a3cad3e654fecfd0fa371e66af1e67986"
+deps = ["Conda", "Distributions", "DynamicalSystems", "DynamicalSystemsBase", "LinearAlgebra", "Parameters", "PyCall", "RecipesBase", "Reexport", "Simplices", "StaticArrays", "Statistics", "Test"]
+git-tree-sha1 = "b4107e9621634ed6fa2cf5e803b5a93aa1c8b1ab"
+repo-rev = "master"
+repo-url = "https://github.com/kahaaga/StateSpaceReconstruction.jl"
 uuid = "1441a9f6-6a74-5418-a591-cdf1d78a07f0"
-version = "0.2.1"
+version = "0.2.1+"
 
 [[StaticArrays]]
 deps = ["InteractiveUtils", "LinearAlgebra", "Random", "Statistics", "Test"]
@@ -775,6 +789,12 @@ version = "0.4.0"
 deps = ["Distributed", "InteractiveUtils", "Logging", "Random"]
 uuid = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
+[[TimeseriesSurrogates]]
+deps = ["AbstractFFTs", "DSP", "Distributions", "InplaceOps", "Interpolations", "Plots", "Requires", "StatsBase", "Test", "Wavelets"]
+git-tree-sha1 = "44ce272efa7bca947a2bfc6cdc08511cada390f3"
+uuid = "c804724b-8c18-5caa-8579-6025a0767c70"
+version = "0.2.0"
+
 [[TransferEntropy]]
 deps = ["Conda", "Distances", "Distributions", "Interpolations", "NearestNeighbors", "PerronFrobenius", "PyCall", "Reexport", "Simplices", "SpecialFunctions", "StateSpaceReconstruction", "Test"]
 git-tree-sha1 = "5d9306c031a57384864cc362c05c5d56c278adef"
@@ -811,6 +831,12 @@ deps = ["Compat"]
 git-tree-sha1 = "c9d5aa108588b978bd859554660c8a5c4f2f7669"
 uuid = "81def892-9a0e-5fdd-b105-ffc91e053289"
 version = "1.1.3"
+
+[[Wavelets]]
+deps = ["Compat", "DSP", "Reexport"]
+git-tree-sha1 = "4a53da1099523e7191ee5b95d6e5e32a88913b6d"
+uuid = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
+version = "0.8.0"
 
 [[WoodburyMatrices]]
 deps = ["LinearAlgebra", "Random", "SparseArrays", "Test"]

@@ -14,7 +14,7 @@ series.
 ## Embedding instructions
 Specify embedding and instructions for how to compute marginal
 entropies are with `E::AbstractEmbedding` and `v::TEVars`. If either
-is missing, the data is embedded using the provided forward `lag`, embedding
+is missing, the data is embedded using the provided forward `ν`, embedding
 dimension `dim` and backward lag `η`.
 
 `method` sets the transfer entropy algorithm to use. There are two types of
@@ -46,22 +46,25 @@ A surrogate analysis will be run if `which_is_surr` is set to 0, 1 or 2.
 - `which_is_surr = 2` will construct a surrogate for the response time series.
 
 """
-
 function te(driver, response;
-        method = :transferoperator_grid,
+        estimator = :transferoperator_grid,
         E = nothing, v = nothing,
-        ϵ = nothing, n_ϵ = 5, lag = 1, dim = 3, η = 1,
+        ϵ = nothing, n_ϵ = 5, ν = 1, τ = 1, dim = 3,
         k1 = 2, k2 = 3, metric = Chebyshev(),
         which_is_surr = -1, surr_type = aaft,
         min_numbins = nothing,
         max_numbins = nothing)
-    forward_lag = lag
-    τ = η
-    valid_methods = [:transferoperator_grid,
-                    :kraskov,
-                    :visitfreq]
 
-    if !(method ∈ valid_methods)
+
+    valid_estimators = [:transferentropy_transferoperator_grid, :tetogrid,
+                    :transferentropy_kraskov, :tekraskov, :tekNN,
+                    :transferentropy_visitfreq, :tefreq]
+
+    if dim < 3
+        error("Dimension $dim is too low. Must be at least 3.")
+    end
+
+    if !(estimator ∈ valid_methods)
         error("Transfer entropy method $method not valid.")
     end
 
@@ -80,22 +83,22 @@ function te(driver, response;
     # computes conditional mutual information.
     if !(typeof(E) == AbstractEmbedding) || !(typeof(v) == TEVars)
         if dim == 3
-            E = embed([driver, response], [2, 2, 1], [forward_lag, 0, 0])
+            E = embed([driver, response], [2, 2, 1], [ν, 0, 0])
             v = TEVars([1], [2], [3])
         elseif dim == 4
-            E = embed([driver, response], [2, 2, 2, 1], [forward_lag, 0, -τ, 0])
+            E = embed([driver, response], [2, 2, 2, 1], [ν, 0, -τ, 0])
             v = TEVars([1], [2, 3], [4])
         elseif dim == 5
-            E = embed([driver, response], [2, 2, 2, 2, 1], [forward_lag, 0, -τ, -2*τ, 0])
+            E = embed([driver, response], [2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, 0])
             v = TEVars([1], [2, 3, 4], [5])
         elseif dim == 6
-            E = embed([driver, response], [2, 2, 2, 2, 2, 1], [forward_lag, 0, -τ, -2*τ, -3*τ, 0])
+            E = embed([driver, response], [2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, 0])
             v = TEVars([1], [2, 3, 4, 5], [6])
         elseif dim == 7
-            E = embed([driver, response], [2, 2, 2, 2, 2, 2, 1], [forward_lag, 0, -τ, -2*τ, -3*τ, -4*τ, 0])
+            E = embed([driver, response], [2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, 0])
             v = TEVars([1], [2, 3, 4, 5, 6], [7])
         elseif dim == 8
-            E = embed([driver, response], [2, 2, 2, 2, 2, 2, 2, 1], [forward_lag, 0, -τ, -2*τ, -3*τ, -4*τ, -5*τ, 0])
+            E = embed([driver, response], [2, 2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, -5*τ, 0])
             v = TEVars([1], [2, 3, 4, 5, 6, 7], [8])
         end
     end
@@ -126,21 +129,22 @@ function te(driver, response;
 
     tes = zeros(Float64, n_ϵ)
     for i = 1:n_ϵ
-        if method == :transferoperator_grid
+        if estimator ∈ (:transferentropy_transferoperator_grid, :tetogrid)
             tes[i] = transferentropy_transferoperator_visitfreq(E, ϵs[i, :], v)
 
-        elseif method == :kraskov
+        elseif estimator ∈ (:transferentropy_kraskov, :tekraskov, :tekNN)
             tes[i] = transferentropy_kraskov(E, k1, k2, v, metric = metric)
 
-        elseif method == :visitfreq
+        elseif estimator ∈ (:transferentropy_visitfreq, :tefreq)
             tes[i] = transferentropy_visitfreq(E, ϵs[i, :], v)
 
-        elseif method == :transferoperator_triang
-            warn("Invariantizing embedding before calculating transfer matrix...")
-            t = triangulate(invariantize(E))
-            TO = transferoperator_approx(t, n_pts = n_randpts, sample_randomly = sample_randomly)
-            invdist = left_eigenvector(TO)
-            tes[i] = transferentropy_transferoperator_triang(t, invdist, n_ϵ, n_reps)
+        elseif estimator == :transferoperator_triang
+            warn("$method is not implemented yet.")
+            #warn("Invariantizing embedding before calculating transfer matrix...")
+            #t = triangulate(invariantize(E))
+            #TO = transferoperator_approx(t, n_pts = n_randpts, sample_randomly = sample_randomly)
+            #invdist = left_eigenvector(TO)
+            #tes[i] = transferentropy_transferoperator_triang(t, invdist, n_ϵ, n_reps)
         end
     end
     # If we only use one binsize, we can't take the integral.
@@ -166,7 +170,7 @@ end
 # ## Embedding instructions
 # Specify embedding and instructions for how to compute marginal
 # entropies are with `E::AbstractEmbedding` and `v::TEVars`. If either
-# is missing, the data is embedded using the provided forward `lag`, embedding
+# is missing, the data is embedded using the provided forward lag `ν`, embedding
 # dimension `dim` and backward lag `η`.
 #
 # `method` sets the transfer entropy algorithm to use. There are two types of
