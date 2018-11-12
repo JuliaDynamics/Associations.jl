@@ -727,7 +727,7 @@ git-tree-sha1 = "b4107e9621634ed6fa2cf5e803b5a93aa1c8b1ab"
 repo-rev = "master"
 repo-url = "https://github.com/kahaaga/StateSpaceReconstruction.jl"
 uuid = "1441a9f6-6a74-5418-a591-cdf1d78a07f0"
-version = "0.2.1+"
+version = "0.2.2+"
 
 [[StaticArrays]]
 deps = ["InteractiveUtils", "LinearAlgebra", "Random", "Statistics", "Test"]

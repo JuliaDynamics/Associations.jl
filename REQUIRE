@@ -7,7 +7,7 @@ Distances
 DifferentialEquations
 TimeseriesSurrogates 0.2.0
 Simplices 0.2.1
-StateSpaceReconstruction 0.2.1
+StateSpaceReconstruction 0.2.2
 PerronFrobenius 0.1.1
 TransferEntropy 0.2
 DynamicalSystems
