@@ -12,7 +12,7 @@ causality in a bivariate time series. Physical Review E, 97(4), 042207.
 """
 function eom_henon2(x, p, n)
     c = p[1]
-    x₁, x₂, y₁, y₂ = (x...)
+    x₁, x₂, y₁, y₂ = (x...,)
     dx₁ = 1.4 - x₁^2 + 0.3*x₂
     dx₂ = x₁
     dy₁ = 1.4 - (c * x₁ * y₁  +  (1 - c)*y₁^2) + 0.3*y₂
@@ -29,12 +29,12 @@ unidirectional forcing from `X` to`Y` [1].
 The difference equations are:
 
 ```math
-\begin{aligned}
-x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x\_2(t) \\
+\\begin{aligned}
+x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x_2(t) \\
 x_2(t+1) &= x_1(t) \\
-y_1(t+1) &= 1.4 - [c*x_1(t)*y_1(t) + (1-c)*y_1^2(t)] + 0.3*y\_2(t)\\
+y_1(t+1) &= 1.4 - [c x_1(t) y_1(t) + (1-c) y_1^2(t)] + 0.3 y_2(t) \\
 y_2(t+1) &= y_1(t)
-\end{aligned}
+\\end{aligned}
 ```
 
 This system was investigated by Krakovská to study the performance of different
@@ -59,9 +59,9 @@ The difference equations are:
 
 ```math
 \begin{aligned}
-x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x\_2(t) \\
+x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x_2(t) \\
 x_2(t+1) &= x_1(t) \\
-y_1(t+1) &= 1.4 - [c*x_1(t)*y_1(t) + (1-c)*y_1^2(t)] + 0.3*y\_2(t)\\
+y_1(t+1) &= 1.4 - [c*x_1(t)*y_1(t) + (1-c)*y_1^2(t)] + 0.3*y_2(t) \\
 y_2(t+1) &= y_1(t)
 \end{aligned}
 ```

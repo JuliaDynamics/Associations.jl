@@ -8,11 +8,11 @@ equations.
 The difference equations are:
 
 ```math
-\begin{aligned}
+\\begin{aligned}
 x_1(t+1) &= a - x_1(t)^2 + b x_1(t-2) \\
 x_2(t+1) &= a - c x_1(t) x_2(t)- (1 - c) x_2(t)^2 + b x_2(t-1) \\
 x_3(t+1) &= c x_2(t) x_3(t) - (1 - c) x_3(t)^2 + b x_3(t-1)
-\end{aligned}
+\\end{aligned}
 ```
 
 Here ``c`` is the coupling constant. The system becomes completely synchronized
@@ -24,8 +24,8 @@ direct causality measures in multivariate time series. Entropy, 15(7), 2635–26
 """
 function eom_henon_triple(u, p, n)
     O = zeros(Float64, n + 3, 3)
-    x₁, x₂, x₃ = (u...)
-    a, b, c = (p...)
+    x₁, x₂, x₃ = (u...,)
+    a, b, c = (p...,)
 
     # Propagate initial condition to the three first time steps.
     for i = 1:3
@@ -90,11 +90,11 @@ equations.
 The difference equations are:
 
 ```math
-\begin{aligned}
+\\begin{aligned}
 x_1(t+1) &= a - x_1(t)^2 + b x_1(t-2) \\
 x_2(t+1) &= a - c x_1(t) x_2(t)- (1 - c) x_2(t)^2 + b x_2(t-1) \\
 x_3(t+1) &= c x_2(t) x_3(t) - (1 - c) x_3(t)^2 + b x_3(t-1)
-\end{aligned}
+\\end{aligned}
 ```
 
 Here ``c`` is the coupling constant. The system becomes completely synchronized

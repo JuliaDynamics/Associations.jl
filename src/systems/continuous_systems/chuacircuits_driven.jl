@@ -10,9 +10,9 @@ Chua's circuit." IEEE Transactions on Circuits and Systems I Fundamental
 Theory and Applications 40.11 (1993): 836-840.
 """
 function eom_chuacircuits_driven(u, p, t)
-    α₁, α₂, β₁, β₂, F₁, F₂, ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ = (p...)
-    x₁, y₁, z₁ = (u[1:3]...)
-    x₂, y₂, z₂ = (u[4:6]...)
+    α₁, α₂, β₁, β₂, F₁, F₂, ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ = (p...,)
+    x₁, y₁, z₁ = (u[1:3]...,)
+    x₂, y₂, z₂ = (u[4:6]...,)
 
     # Dynamical noise
     if σ == 0

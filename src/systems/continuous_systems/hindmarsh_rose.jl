@@ -2,8 +2,8 @@
 Equations of motion for the Hindmarsh-Rose system.
 """
 function eom_hindmarsh_rose(u, p, t)
-    a, b, c, d, r, s, xᵣ, I = (p...)
-    x, y, z = (u...)
+    a, b, c, d, r, s, xᵣ, I = (p...,)
+    x, y, z = (u...,)
 
 	ϕ = -a*x^3 + b*x^2
 	ψ = c - d*x^2
@@ -20,19 +20,19 @@ Initialise a Hindmarsh-Rose system, which is a model of neuronal
 spiking.
 
 ```math
-\begin{aligned}
-\dfrac{dx}{dt} &= y + \phi(x) - z + I
-\dfrac{dy}{dt} &= \psi(x) - y
-\dfrac{dz}{dt} &= r[s(x - x_R) - z],
-\end{aligned}
+\\begin{aligned}
+\\dfrac{dx}{dt} &= y + \\phi(x) - z + I
+\\dfrac{dy}{dt} &= \\psi(x) - y
+\\dfrac{dz}{dt} &= r[s(x - x_R) - z],
+\\end{aligned}
 ```
 where
 
 ```math
-\begin{aligned}
-\phi(x) &= -ax^3+bx^2
-\psi(x) &= c - dx^2
-\end{aligned}
+\\begin{aligned}
+\\phi(x) &= -ax^3+bx^2
+\\psi(x) &= c - dx^2
+\\end{aligned}
 ```
 
 If parameters other than the defaults are to be used, they must be

@@ -19,8 +19,8 @@ strengths `c = 0, 1, 3, 5`.
 Papana et al., Simulation Study of Direct Causality Measures in Multivariate Time Series. Entropy 2013, 15(7), 2635-2661; doi:10.3390/e15072635
 """
 function eom_lorenz_triple(u, p, t)
-    x₁, y₁, z₁, x₂, y₂, z₂, x₃, y₃, z₃ = (u...)
-    σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁, c₂ = (p...)
+    x₁, y₁, z₁, x₂, y₂, z₂, x₃, y₃, z₃ = (u...,)
+    σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁, c₂ = (p...,)
 
     # Subsystem 1
     dx₁ = σ₁*(y₁-x₁)

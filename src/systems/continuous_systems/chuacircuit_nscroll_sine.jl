@@ -11,8 +11,8 @@ Fundamental Theory and Applications 48.11 (2001): 1369-1372.
 
 """
 function eom_chuacircuit_nscroll_sine(u, p, t)
-    α, β, γ, a, b, c, σx, σy, σz = (p...)
-    x, y, z = (u...)
+    α, β, γ, a, b, c, σx, σy, σz = (p...,)
+    x, y, z = (u...,)
 
     n::Int = c + 1
     if x >= 2*a*c

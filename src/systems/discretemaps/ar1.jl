@@ -10,8 +10,8 @@ dynamical systems and the arrow of time. Chaos: An Interdisciplinary Journal of
 Nonlinear Science, 28(7), 075307. http://doi.org/10.1063/1.5019944
 """
 function eom_ar1(x, p, n)
-    a₁, b₁, c₁, σ = (p...)
-    x, y = (x...)
+    a₁, b₁, c₁, σ = (p...,)
+    x, y = (x...,)
     ξ₁ = rand(Normal(0, σ))
     ξ₂ = rand(Normal(0, σ))
 

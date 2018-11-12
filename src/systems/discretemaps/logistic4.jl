@@ -10,8 +10,8 @@ Ye, Hao, et al. "Distinguishing time-delayed causal interactions using
 convergent cross mapping." Scientific reports 5 (2015): 14750
 """
 function eom_logistic4(u, p, t)
-    r₁, r₂, r₃, r₄, c₂, c₃, c₄  = (p...)
-    y₁, y₂, y₃, y₄ = (u...)
+    r₁, r₂, r₃, r₄, c₂, c₃, c₄  = (p...,)
+    y₁, y₂, y₃, y₄ = (u...,)
 
     dy₁ = y₁*(r₁ - r₁*y₁)
     dy₂ = y₂*(r₂ - c₂*y₁ - r₂*y₂)

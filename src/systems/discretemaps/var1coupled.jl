@@ -9,8 +9,8 @@ an independent Gaussian random processes (with standard deviations `σx` and
 
 """
 function eom_var1coupled(x, p, n)
-    c, σx, σy = (p...)
-    x, y = (x...)
+    c, σx, σy = (p...,)
+    x, y = (x...,)
 
     ϵx = rand(Normal(0, σx))
     ϵy = rand(Normal(0, σy))

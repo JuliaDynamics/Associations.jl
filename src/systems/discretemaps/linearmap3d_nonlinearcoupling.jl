@@ -6,17 +6,17 @@ Equations of motion for a 3d linear system with nonlinear coupling [1].
 The difference equations are
 
 ```math
-\begin{aligned}
-x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \xi_1(t) \\
-x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \xi_2(t) + b x_1 x_2 \\
-x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \xi_3(t) + c x_2(t) \\
-         &+ d x_1(t)^2.
-\end{aligned}
+\\begin{aligned}
+x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{1}(t) \\
+x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{2}(t) + b x_1 x_2 \\
+x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \\xi_{3}(t) + c x_{2}(t) \\
+         &+ d x_{1}(t)^2.
+\\end{aligned}
 ```
 
-Here, ``\xi_{1,2,3}(t)`` are independent normally distributed noise processes,
+Here, ``\\xi_{1,2,3}(t)`` are independent normally distributed noise processes,
 representing dynamical noise in the system, with zero mean and standard
-deviations ``\sigma_1``, ``\sigma_2``, ``\sigma_3``, respectively.
+deviations ``\\sigma_1``, ``\\sigma_2``, ``\\sigma_3``, respectively.
 
 
 # References
@@ -25,8 +25,8 @@ nonlinear causality between signals: methods, examples and neurophysiological
 applications. Biological Cybernetics, 95(4), 349–369.
 """
 function eom_linear3d_nonlinearcoupling(x, p, n)
-    x₁, x₂, x₃ = (x...)
-    a₁, a₂, a₃, b, c, d, σ₁, σ₂, σ₃ = (p...)
+    x₁, x₂, x₃ = (x...,)
+    a₁, a₂, a₃, b, c, d, σ₁, σ₂, σ₃ = (p...,)
     ξ₁ = rand(Normal(0, σ₁))
     ξ₂ = rand(Normal(0, σ₂))
     ξ₃ = rand(Normal(0, σ₃))
@@ -53,16 +53,16 @@ A 3d linear system with nonlinear coupling [1]. The difference equations are
 
 ```math
 \begin{aligned}
-x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \xi_1(t) \\
-x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \xi_2(t) + b x_1 x_2 \\
-x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \xi_3(t) + c x_2(t) \\
-         &+ d x_1(t)^2.
+x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{1}(t) \\
+x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{2}(t) + b x_1 x_2 \\
+x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \\xi_{3}(t) + c x_{2}(t) \\
+         &+ d x_{1}(t)^2.
 \end{aligned}
 ```
 
-Here, ``\xi_{1,2,3}(t)`` are independent normally distributed noise processes,
+Here, ``\\xi_{1,2,3}(t)`` are independent normally distributed noise processes,
 representing dynamical noise in the system, with zero mean and standard
-deviations ``\sigma_1``, ``\sigma_2``, ``\sigma_3``, respectively.
+deviations ``\\sigma_1``, ``\\sigma_2``, ``\\sigma_3``, respectively.
 
 
 # References
