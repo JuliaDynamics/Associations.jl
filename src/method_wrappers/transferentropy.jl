@@ -11,39 +11,46 @@ using StateSpaceReconstruction: Embeddings
 Compute transfer entropy from a `driver` time series to a `response` time
 series.
 
+
+## Method
+`method` sets the transfer entropy estimator to use. There are two types of
+estimators: grid-based approaches, and nearest-neighbor based approaches.
+
+
 ## Embedding instructions
 Specify embedding and instructions for how to compute marginal
 entropies are with `E::AbstractEmbedding` and `v::TEVars`. If either
 is missing, the data is embedded using the provided forward prediction lag `ν`,
 with embedding dimension `dim` and embedding lag `η`.
 
-`method` sets the transfer entropy algorithm to use. There are two types of
-estimators: grid-based approaches, and nearest-neighbor based approaches.
-
 ## Grid-based estimators
 
 - `:transferentropy_transferoperator_grid`, or `:tetogrid`. Grid-based transfer entropy
     estimator based on the transfer operator.
-- `::transferentropy_visitfreq`, or `tefreq`. Simple visitation frequency based estimator.
+- `::transferentropy_visitfreq`, or `:tefreq`. Simple visitation frequency based estimator.
 
-For all grid based algorithms, `ϵ` sets the binsize. If `ϵ = nothing`, then the
-algorithm uses a bin size corresponding to a number of subdivisions `N`
+For the grid based TE estimators, `ϵ` sets the bin size. If `ϵ = nothing`, then
+the algorithm uses a bin size corresponding to a number of subdivisions `N`
 along each axis so that `N ≦ npoints^(1/(dim+1))`. Transfer entropy is then
 computed as an average over `n_ϵ` different bin sizes corresponding to
 `N-1` to `N` subdivisions along each axis.
 
 
 ## Nearest neighbor based estimator.
-- `:transferentropy_kraskov`, `tekraskov`, or `tekNN`. A nearest-neighbor based estimator, which computes transfer
-    entropy as the sum of two mutual information terms. `k1` and `k2` sets the
-    number of nearest neighbors for those terms. `metric` sets the distance
-    metric (must be valid metric from `Distances.jl`).
+- `:transferentropy_kraskov`, `:tekraskov`, or `:tekNN`. A nearest-neighbor
+    based estimator that computes transfer entropy as the sum of two mutual
+    information terms. `k1` and `k2` sets the
+    number of nearest neighbors used to estimate the mutual information terms.
+    `metric` sets the distance metric (must be valid metric from `Distances.jl`).
 
 ## Surrogate analysis
 A surrogate analysis will be run if `which_is_surr` is set to 0, 1 or 2.
-- `which_is_surr = 0` will construct a surrogate for both time series.
-- `which_is_surr = 1` will construct a surrogate for the driver time series.
-- `which_is_surr = 2` will construct a surrogate for the response time series.
+- `which_is_surr = 0` will replace both time series with a surrogate.
+- `which_is_surr = 1` will replace the driver time series with a surrogate.
+- `which_is_surr = 2` will replace the response time series with a surrogate.
+
+The type of surrogate must be either `randomshuffle`, `randomphases`,
+`randomamplitudes`, `aaft` or `iaaft`.
 
 """
 function te(driver, response;
@@ -68,13 +75,20 @@ function te(driver, response;
         error("Transfer entropy method $estimator not valid.")
     end
 
+    valid_surr_types = [randomshuffle, randomphases, randomamplitudes,
+                        aaft, iaaft]
+
+    if !(surr_type ∈ valid_surr_types)
+        error("Surrogate type $surr_type is not valid.")
+    end
+
     if which_is_surr == 1
-        driver = surr_type(driver)
+        driver[:] = surr_type(driver)
     elseif which_is_surr == 2
-        response = surr_type(response)
+        response[:] = surr_type(response)
     elseif which_is_surr == 0
-        driver = surr_type(driver)
-        response = surr_type(response)
+        driver[:] = surr_type(driver)
+        response[:] = surr_type(response)
     elseif which_is_surr >= 3
         error("which_is_surr $which_is_surr is not valid.")
     end
