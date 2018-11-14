@@ -8,8 +8,10 @@ The parameter `c` controls how strong the dynamical forcing is. Parameters `r₁
 and `r₂` are set to the chaotic regime by default
 
 # References
-1. D Diego, KA Haaga, B Hannisdal, in prep. Transfer Entropy computation by
-Perron-Frobenius operator approximation.
+1. Diego, D., Agasøster Haaga, K., & Hannisdal, B. (2018, November 1).
+Transfer entropy computation using the Perron-Frobenius operator.
+Eprint ArXiv:1811.01677. Retrieved from
+https://ui.adsabs.harvard.edu/#abs/2018arXiv181101677D
 """
 function eom_logistic2(dx, x, p, n)
     c, r₁, r₂, σ = (p...,)
@@ -62,7 +64,12 @@ f(x,y) = \\dfrac{y + \\frac{c(x \\xi )}{2}}{1 + \\frac{c}{2}(1+ \\sigma )}
 where
 
 # References
-D Diego, KA Haaga, B Hannisdal, in prep. Transfer Entropy computation by Perron-Frobenius operator approximation.
+
+1. Diego, D., Agasøster Haaga, K., & Hannisdal, B. (2018, November 1).
+Transfer entropy computation using the Perron-Frobenius operator.
+Eprint ArXiv:1811.01677. Retrieved from
+https://ui.adsabs.harvard.edu/#abs/2018arXiv181101677D
+
 """
 logistic2(;u₀ = rand(2), c = 0.1, r₁ = 3.78, r₂ = 3.66, σ = 0.05) =
     logistic2(u₀, c, r₁, r₂, σ)

@@ -22,9 +22,7 @@ end
 
 function ar1(uᵢ, a₁, b₁, c₁, σ)
     p = [a₁, b₁, c₁, σ]
-    logistic_system = DiscreteDynamicalSystem(eom_ar1, uᵢ, p)
-
-    return logistic_system
+    return DiscreteDynamicalSystem(eom_ar1, uᵢ, p)
 end
 
 """

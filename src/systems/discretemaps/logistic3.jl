@@ -56,8 +56,8 @@ dz = (z(r - r_3 z + σ_z η_z)) \\mod 1
 
 Dynamical noise may be added to each of the dynamical variables by tuning the
 parameters `σz`, `σx` and `σz`. Default values for the parameters
-`r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour;
-in Runge (2018), `r₁ = r₂ = r₃ = 4`.
+`r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour,
+with `r₁ = r₂ = r₃ = 4`.
 
 # References
 1. Runge, Jakob. Causal network reconstruction from time series: From theoretical assumptions to practical estimation, Chaos 28, 075310 (2018); doi: 10.1063/1.5025050
