@@ -5,6 +5,9 @@ using Distances
 using Reexport
 using AbstractFFTs
 using Statistics
+using RecipesBase
+using Plots
+
 import DynamicalSystemsBase:
     DynamicalSystem,
     ContinuousDynamicalSystem,
