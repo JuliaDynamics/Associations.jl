@@ -1,4 +1,4 @@
-doc"""
+"""
     eom_var1(x, p, n) -> Function
 
 Equations of motion for a vector autoregressive system where X₁ → X₂ → X₃.
@@ -22,7 +22,8 @@ function var1(uᵢ, σ₁, σ₂, σ₃)
 
     return logistic_system
 end
-doc"""
+
+"""
     var1(x, p, n) -> DiscreteDynamicalSystem
 
 Initialise a discrete vector autoregressive system where X₁ → X₂ → X₃.

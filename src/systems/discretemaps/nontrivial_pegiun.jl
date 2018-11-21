@@ -1,36 +1,41 @@
-doc"""
+"""
     nontrivial_pegiun(x, p, n) -> Function
 
-Iterate a 2d discrete system with nonlinear, nontrivial coupling [1], which
-was also studied in [2]. The version implemented here allows for tweaking the
-parameters of the equations.
+Iterate a 2d discrete system with nonlinear, nontrivial coupling. This system
+is from [Péguin-Feissolle & Teräsvirta (1999)](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf), and
+was also studied in [Chávez et al. (2003)](https://www.sciencedirect.com/science/article/pii/S0165027002003679).
+The version implemented here allows for tweaking the parameters of the equations.
 
 The difference equations are
 
 ```math
-\begin{aligned}
-x(t+1) &= p_2 + p_3 x(t-2) + \dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \xi_1(t) \\
-y(t+1) &= p_1 y(t) + \xi_2(t).
-\end{aligned}
+\\begin{aligned}
+x(t+1) &= p_2 + p_3 x(t-2) + \\dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \\xi_1(t) \\
+y(t+1) &= p_1 y(t) + \\xi_2(t).
+\\end{aligned}
 ```
 
-Here, ``\xi_{1,2}(t)`` are two independent normally distributed noise processes
-with zero mean and standard deviations ``\sigma_1`` and ``\sigma_2``. The
-``\xi_{1,2}(t)`` terms represent dynamical noise.
+Here, ``\\xi_{1,2}(t)`` are two independent normally distributed noise processes
+with zero mean and standard deviations ``\\sigma_1`` and ``\\sigma_2``. The
+``\\xi_{1,2}(t)`` terms represent dynamical noise.
 
 # References
-1. Péguin-Feissolle, A., & Teräsvirta, T. (1999). A General Framework for
+
+Péguin-Feissolle, A., & Teräsvirta, T. (1999). A General Framework for
 Testing the Granger Noncausaality Hypothesis. Universites d’Aix-Marseille II
-et III.
-2. Chávez, M., Martinerie, J., & Le Van Quyen, M. (2003). Statistical
+et III. [https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf)
+
+Chávez, M., Martinerie, J., & Le Van Quyen, M. (2003). Statistical
 assessment of nonlinear causality: application to epileptic EEG signals.
-Journal of Neuroscience Methods, 124(2), 113–128. doi:10.1016/s0165-0270(02)00367-9
+Journal of Neuroscience Methods, 124(2), 113–128.
+doi:10.1016/s0165-0270(02)00367-9
+[https://www.sciencedirect.com/science/article/pii/S0165027002003679](https://www.sciencedirect.com/science/article/pii/S0165027002003679)
 """
 function eom_nontrivial_pegiun(u, p, n)
     n = n + 10
     O = zeros(Float64, n + 3, 2)
-    x, y = (u...)
-    p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂ = (p...)
+    x, y = (u...,)
+    p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂ = (p...,)
 
     # Propagate initial condition to the three first time steps.
     for i = 1:3
@@ -64,7 +69,7 @@ function nontrivial_pegiun(uᵢ, p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ�
 end
 
 
-doc"""
+"""
     nontrivial_pegiun(;uᵢ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
         p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) -> Dataset
 
@@ -75,14 +80,14 @@ are each normalised to zero mean and unit variance.
 The difference equations are
 
 ```math
-\begin{aligned}
-x(t+1) &= p_2 + p_3 x(t-2) + \dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \xi_1(t) \\
-y(t+1) &= p_1 y(t) + \xi_2(t).
-\end{aligned}
+\\begin{aligned}
+x(t+1) &= p_2 + p_3 x(t-2) + \\dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \\xi_1(t) \\
+y(t+1) &= p_1 y(t) + \\xi_2(t).
+\\end{aligned}
 ```
-Here, ``\xi_{1,2}(t)`` are two independent normally distributed noise processes
-with zero mean and standard deviations ``\sigma_1`` and ``\sigma_2``. The
-``\xi_{1,2}(t)`` terms represent dynamical noise.
+Here, ``\\xi_{1,2}(t)`` are two independent normally distributed noise processes
+with zero mean and standard deviations ``\\sigma_1`` and ``\\sigma_2``. The
+``\\xi_{1,2}(t)`` terms represent dynamical noise.
 
 # References
 1. Chávez, M., Martinerie, J., & Le Van Quyen, M. (2003). Statistical

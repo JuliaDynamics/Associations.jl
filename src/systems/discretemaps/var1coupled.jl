@@ -1,4 +1,4 @@
-doc"""
+"""
     eom_var1coupled(x, p, n) -> SVector{3}
 
 Equations of motion a system consisting of two mutually coupled first order
@@ -9,8 +9,8 @@ an independent Gaussian random processes (with standard deviations `σx` and
 
 """
 function eom_var1coupled(x, p, n)
-    c, σx, σy = (p...)
-    x, y = (x...)
+    c, σx, σy = (p...,)
+    x, y = (x...,)
 
     ϵx = rand(Normal(0, σx))
     ϵy = rand(Normal(0, σy))
@@ -27,7 +27,7 @@ function var1coupled(uᵢ, c, σx, σy)
     return logistic_system
 end
 
-doc"""
+"""
     var1coupled(;uᵢ = rand(2), c = 0, σx = sqrt(0.1), σy = sqrt(0.1))
 
 Initialise a system consisting of two mutually coupled first order

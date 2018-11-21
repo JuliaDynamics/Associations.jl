@@ -1,41 +1,15 @@
-## Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
 os:
   - linux
 julia:
-  - 0.6
-#  - nightly
-notifications:
-  email: false
-git:
-  depth: 99999999
+  - nightly
+  - 1.0
+matrix:
+allow_failures:
+- julia: nightly
 
-## uncomment the following lines to allow failures on nightly julia
-## (tests will run but not make your overall status red)
-#matrix:
-#  allow_failures:
-#  - julia: nightly
-
-## uncomment and modify the following lines to manually install system packages
-#addons:
-#  apt: # apt-get for linux
-#    packages:
-#    - gfortran
-#before_script: # homebrew for mac
-#  - if [ $TRAVIS_OS_NAME = osx ]; then brew install gcc; fi
-
-## uncomment the following lines to override the default test script
 script:
-  - julia -e 'Pkg.add("PyCall")'
-  - julia -e 'ENV["PYTHON"] = ""; Pkg.build("PyCall")'
+  - julia -e 'using Pkg; Pkg.build(); Pkg.add("PyCall")'
+  - julia -e 'ENV["PYTHON"] = ""; using Pkg; Pkg.build("PyCall")'
   - julia -e 'using Conda; Conda.add("scipy")'
-  - julia -e 'Pkg.clone(pwd()); Pkg.build("CausalityTools"); Pkg.test("CausalityTools"; coverage=true)'
-after_success:
-  # push coverage results to Coveralls
-  - julia -e 'cd(Pkg.dir("CausalityTools")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
-  # push coverage results to Codecov
-  - julia -e 'cd(Pkg.dir("CausalityTools")); Pkg.add("Coverage"); using Coverage; Codecov.submit(Codecov.process_folder())'
-  # create docs
-  #- julia -e 'Pkg.add("Documenter")'
-  #- julia -e 'cd(Pkg.dir("CausalityTools"))'
-  #- julia -e 'include(joinpath("docs", "make.jl"))'
+  - julia -e 'using Pkg; Pkg.test()'

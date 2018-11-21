@@ -14,8 +14,8 @@ Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of
 causality in a bivariate time series. Physical Review E, 97(4), 042207.
 """
 function eom_henon4(x, p, n)
-    a₁, a₂, b₁, b₂, c, k = (p...)
-    x₁, x₂, y₁, y₂ = (x...)
+    a₁, a₂, b₁, b₂, c, k = (p...,)
+    x₁, x₂, y₁, y₂ = (x...,)
 
     dx₁ = a₁ - x₁^2 + k*x₂
     dx₂ = b₁*x₁
@@ -24,7 +24,7 @@ function eom_henon4(x, p, n)
     return SVector{4}(dx₁, dx₂, dy₁, dy₂)
 end
 
-doc"""
+"""
     henon4(u₀, c) -> DiscreteDynamicalSystem
 
 Initialize an instance of a 4D Henon map system consisting of two identical
@@ -36,12 +36,12 @@ Synchronization occurs when the values of the coupling constant
 The difference equations are:
 
 ```math
-\begin{aligned}
-x_1(t+1) &= a_1 - x_1^2(t) + k* x\_2(t) \\
+\\begin{aligned}
+x_1(t+1) &= a_1 - x_1^2(t) + k x_2(t) \\
 x_2(t+1) &= x_1(t) \\
-y_1(t+1) &= a_1 - [c*x_1(t)*y_1(t) + (1-c)*y_1^2(t)] + k*y_2(t)\\
+y_1(t+1) &= a_1 - [c x_1(t) y_1(t) + (1-c) y_1^2(t)] + k y_2(t) \\
 y_2(t+1) &= y_1(t)
-\end{aligned}
+\\end{aligned}
 ```
 
 This system was investigated by Krakovská to study the performance of different

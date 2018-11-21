@@ -1,5 +1,5 @@
 
-doc"""
+"""
     eom_logistic3(u, p, t)
 
 Equations of motion for a system consisting of three coupled logistic map
@@ -17,8 +17,8 @@ theoretical assumptions to practical estimation, Chaos 28, 075310 (2018);
 doi: 10.1063/1.5025050
 """
 function eom_logistic3(u, p, t)
-    r₁, r₂, r₃, σx, σy, σz = (p...)
-    x, y, z = (u...)
+    r₁, r₂, r₃, σx, σy, σz = (p...,)
+    x, y, z = (u...,)
 
     # Independent dynamical noise for each variable.
     ηx = rand()
@@ -49,15 +49,15 @@ Z -> X and Z -> Y.
 The equations of motion are
 
 ```math
-dx = (x(r - r_1 x - z + σ_x η_x)) \mod 1
-dy = (y(r - r_2 y - z + σ_y η_y)) \mod 1
-dz = (z(r - r_3 z + σ_z η_z)) \mod 1
+dx = (x(r - r_1 x - z + σ_x η_x)) \\mod 1
+dy = (y(r - r_2 y - z + σ_y η_y)) \\mod 1
+dz = (z(r - r_3 z + σ_z η_z)) \\mod 1
 ```
 
 Dynamical noise may be added to each of the dynamical variables by tuning the
 parameters `σz`, `σx` and `σz`. Default values for the parameters
-`r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour;
-in Runge (2018), `r₁ = r₂ = r₃ = 4`.
+`r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour,
+with `r₁ = r₂ = r₃ = 4`.
 
 # References
 1. Runge, Jakob. Causal network reconstruction from time series: From theoretical assumptions to practical estimation, Chaos 28, 075310 (2018); doi: 10.1063/1.5025050
