@@ -3,34 +3,35 @@ using Test, Distances
     d1 = rand(50)
     d2 = rand(50)
     r = rand(50)
+    tol = 1e-8
 
     # Directly from time series
     te(d1, r, estimator = :tetogrid)
-    @test te(d1, r, estimator = :tetogrid) >= 0
-    @test te(d2, r, estimator = :tetogrid) >= 0
-    @test te(d1, r, estimator = :tefreq) >= 0
-    @test te(d2, r, estimator = :tefreq) >= 0
-    @test te(d1, r, estimator = :tekNN) >= 0
-    @test te(d2, r, estimator = :tekraskov) >= 0
+    @test te(d1, r, estimator = :tetogrid) >= 0 - tol
+    @test te(d2, r, estimator = :tetogrid) >= 0 - tol
+    @test te(d1, r, estimator = :tefreq) >= 0 - tol
+    @test te(d2, r, estimator = :tefreq) >= 0 - tol
+    @test te(d1, r, estimator = :tekNN) >= 0 - tol
+    @test te(d2, r, estimator = :tekraskov) >= 0 - tol
 
     #########################
     # Surrogates
     #########################
-    @test te(d1, r, which_is_surr = :driver) >= 0
-    @test te(d1, r, which_is_surr = :response) >= 0
-    @test te(d1, r, which_is_surr = :none) >= 0
+    @test te(d1, r, which_is_surr = :driver) >= 0 - tol
+    @test te(d1, r, which_is_surr = :response) >= 0 - tol
+    @test te(d1, r, which_is_surr = :none) >= 0 - tol
 
-    @test te(d1, r, which_is_surr = :both, surr_func = aaft) >= 0
-    @test te(d1, r, which_is_surr = :both, surr_func = iaaft) >= 0
-    @test te(d1, r, which_is_surr = :both, surr_func = randomphases) >= 0
-    @test te(d1, r, which_is_surr = :both, surr_func = randomamplitudes) >= 0
-    @test te(d1, r, which_is_surr = :both, surr_func = randomshuffle) >= 0
+    @test te(d1, r, which_is_surr = :both, surr_func = aaft) >= 0 - tol
+    @test te(d1, r, which_is_surr = :both, surr_func = iaaft) >= 0 - tol
+    @test te(d1, r, which_is_surr = :both, surr_func = randomphases) >= 0 - tol
+    @test te(d1, r, which_is_surr = :both, surr_func = randomamplitudes) >= 0 - tol
+    @test te(d1, r, which_is_surr = :both, surr_func = randomshuffle) >= 0 - tol
 
     #########################
     # Forward prediction lags
     #########################
-    @test te(d1, r, ν = 1) >= 0
-    @test te(d1, r, ν = 5) >= 0
+    @test te(d1, r, ν = 1) >= 0 - tol
+    @test te(d1, r, ν = 5) >= 0 - tol
 
     #########################
     # Embedding lags and dimensions
@@ -38,14 +39,14 @@ using Test, Distances
     d1 = rand(100)
     d2 = rand(100)
     r = rand(100)
-    @test te(d1, r, ν = 1, τ = 2, dim = 4) >= 0
-    @test te(d1, r, ν = 3, τ = 3, dim = 5) >= 0
+    @test te(d1, r, ν = 1, τ = 2, dim = 4) >= 0 - tol
+    @test te(d1, r, ν = 3, τ = 3, dim = 5) >= 0 - tol
 
     #########################
     # Tuning the bins
     #########################
-    @test te(d1, r, n_ϵ = 10) >= 0
-    @test te(d1, r, n_ϵ = 10, max_numbins = 5, min_numbins = 2) >= 0
+    @test te(d1, r, n_ϵ = 10) >= 0 - tol
+    @test te(d1, r, n_ϵ = 10, max_numbins = 5, min_numbins = 2) >= 0 - tol
 
 end
 # maxlag = 2
