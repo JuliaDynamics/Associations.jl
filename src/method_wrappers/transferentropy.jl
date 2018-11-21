@@ -2,11 +2,13 @@ using Distances
 using StateSpaceReconstruction: Embeddings
 """
     te(driver, response;
-        method = :transferoperator_grid,
+        estimator = :tetogrid,
         E = nothing, v = nothing,
-        ϵ = nothing, n_ϵ = 5, lag = 1, dim = 3, η = 1,
+        ϵ = nothing, n_ϵ = 5, ν = 1, τ = 1, dim = 3,
         k1 = 2, k2 = 3, metric = Chebyshev(),
-        which_is_surr = -1, surr_type = aaft)
+        which_is_surr = :none, surr_type = aaft,
+        min_numbins = nothing,
+        max_numbins = nothing)
 
 Compute transfer entropy from a `driver` time series to a `response` time
 series.
@@ -29,11 +31,14 @@ with embedding dimension `dim` and embedding lag `η`.
     estimator based on the transfer operator.
 - `::transferentropy_visitfreq`, or `:tefreq`. Simple visitation frequency based estimator.
 
-For the grid based TE estimators, `ϵ` sets the bin size. If `ϵ = nothing`, then
+For the grid based TE estimators, `ϵ` sets the bin size. If `ϵ == nothing`, then
 the algorithm uses a bin size corresponding to a number of subdivisions `N`
 along each axis so that `N ≦ npoints^(1/(dim+1))`. Transfer entropy is then
 computed as an average over `n_ϵ` different bin sizes corresponding to
-`N-1` to `N` subdivisions along each axis.
+`N-1` to `N` subdivisions along each axis. If `ϵ` is specified and consists
+of multiple bin sizes, an average
+TE estimate over the bin sizes is returened. If `ϵ` is a single value,
+then TE is estimated for that bin size only.
 
 
 ## Nearest neighbor based estimator.
@@ -44,10 +49,11 @@ computed as an average over `n_ϵ` different bin sizes corresponding to
     `metric` sets the distance metric (must be valid metric from `Distances.jl`).
 
 ## Surrogate analysis
-A surrogate analysis will be run if `which_is_surr` is set to 0, 1 or 2.
-- `which_is_surr = 0` will replace both time series with a surrogate.
-- `which_is_surr = 1` will replace the driver time series with a surrogate.
-- `which_is_surr = 2` will replace the response time series with a surrogate.
+A surrogate analysis will be run if `which_is_surr` is set to
+    `:both`, `:driver`, `:response`. Default is `:none`.
+- `which_is_surr = :both` will replace both time series with a surrogate.
+- `which_is_surr = :driver` will replace the driver time series with a surrogate.
+- `which_is_surr = :response` will replace the response time series with a surrogate.
 
 The type of surrogate must be either `randomshuffle`, `randomphases`,
 `randomamplitudes`, `aaft` or `iaaft`.
@@ -58,7 +64,7 @@ function te(driver, response;
         E = nothing, v = nothing,
         ϵ = nothing, n_ϵ = 5, ν = 1, τ = 1, dim = 3,
         k1 = 2, k2 = 3, metric = Chebyshev(),
-        which_is_surr = -1, surr_type = aaft,
+        which_is_surr = :none, surr_type = aaft,
         min_numbins = nothing,
         max_numbins = nothing)
 
@@ -82,15 +88,17 @@ function te(driver, response;
         error("Surrogate type $surr_type is not valid.")
     end
 
-    if which_is_surr == 1
+    if which_is_surr == :driver
         driver[:] = surr_type(driver)
-    elseif which_is_surr == 2
+    elseif which_is_surr == :response
         response[:] = surr_type(response)
-    elseif which_is_surr == 0
+    elseif which_is_surr == :both
         driver[:] = surr_type(driver)
         response[:] = surr_type(response)
     elseif which_is_surr >= 3
         error("which_is_surr $which_is_surr is not valid.")
+    else
+        error("$which_is_surr is not a valid surrogate choice." )
     end
 
     # Compute transfer entropy analogously to how Krakovskà et al. (2018)
@@ -117,9 +125,7 @@ function te(driver, response;
         end
     end
 
-    if !(ϵ == nothing)
-        ϵs = [ϵ for i = 1:dim]
-    else
+    if ϵ == nothing
         ϵs = zeros(Float64, n_ϵ, dim)
         # We a range of bin sizes along each axis.
         for d in 1:dim
@@ -139,17 +145,25 @@ function te(driver, response;
 
             ϵs[:, d] = LinRange(log(10, min_bin_size), log(10, max_bin_size), n_ϵ)
         end
+    else
+        if length(ϵ) == 1
+            ϵs = [ϵ]
+        end
     end
 
-    tes = zeros(Float64, n_ϵ)
-    for i = 1:n_ϵ
-        if estimator ∈ (:transferentropy_transferoperator_grid, :tetogrid)
-            tes[i] = transferentropy_transferoperator_visitfreq(E, ϵs[i, :], v)
+    tes = zeros(Float64, length(ϵs))
+    for i = 1:length(ϵs)
+        if estimator ∈ (:transferentropy_transferoperator_grid,
+                        :tetogrid)
+            tes[i] = transferentropy_transferoperator_grid(E, ϵs[i, :], v)
 
-        elseif estimator ∈ (:transferentropy_kraskov, :tekraskov, :tekNN)
+        elseif estimator ∈ (:transferentropy_kraskov,
+                            :tekraskov,
+                            :tekNN)
             tes[i] = transferentropy_kraskov(E, k1, k2, v, metric = metric)
 
-        elseif estimator ∈ (:transferentropy_visitfreq, :tefreq)
+        elseif estimator ∈ (:transferentropy_visitfreq,
+                            :tefreq)
             tes[i] = transferentropy_visitfreq(E, ϵs[i, :], v)
 
         elseif estimator == :transferoperator_triang
@@ -161,7 +175,8 @@ function te(driver, response;
             #tes[i] = transferentropy_transferoperator_triang(t, invdist, n_ϵ, n_reps)
         end
     end
-    # If we only use one binsize, we can't take the integral.
+    # If we only use one binsize, we can't take the integral. This is always
+    # the case for the kNN based estimators, because they don't use a bin size.
     if !(ϵ == nothing) || estimator ∈ estims_te_kNN
         return tes[1]
     else
