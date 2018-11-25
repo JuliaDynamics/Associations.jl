@@ -5,6 +5,7 @@ DynamicalSystems
 Distributions
 Distances
 RecipesBase
+Reexport
 Plots
 DifferentialEquations
 TimeseriesSurrogates 0.2.1
