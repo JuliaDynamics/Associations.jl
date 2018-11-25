@@ -1,3 +1,5 @@
+import StateSpaceReconstruction: embed
+
 """
     te(driver, response;
         estimator = :tetogrid,
@@ -109,22 +111,22 @@ function transferentropy(driver, response;
     # computes conditional mutual information.
     if !(typeof(E) == Embeddings.AbstractEmbedding) || !(typeof(v) == TEVars)
         if dim == 3
-            E = embed([driver, response], [2, 2, 1], [ν, 0, 0])
+            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 1], [ν, 0, 0])
             v = TEVars([1], [2], [3])
         elseif dim == 4
-            E = embed([driver, response], [2, 2, 2, 1], [ν, 0, -τ, 0])
+            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 1], [ν, 0, -τ, 0])
             v = TEVars([1], [2, 3], [4])
         elseif dim == 5
-            E = embed([driver, response], [2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, 0])
+            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, 0])
             v = TEVars([1], [2, 3, 4], [5])
         elseif dim == 6
-            E = embed([driver, response], [2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, 0])
+            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, 0])
             v = TEVars([1], [2, 3, 4, 5], [6])
         elseif dim == 7
-            E = embed([driver, response], [2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, 0])
+            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, 0])
             v = TEVars([1], [2, 3, 4, 5, 6], [7])
         elseif dim == 8
-            E = embed([driver, response], [2, 2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, -5*τ, 0])
+            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, -5*τ, 0])
             v = TEVars([1], [2, 3, 4, 5, 6, 7], [8])
         end
     end
