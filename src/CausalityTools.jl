@@ -8,18 +8,19 @@ using Statistics
 using RecipesBase
 using Plots
 
-import DynamicalSystemsBase:
-    DynamicalSystem,
-    ContinuousDynamicalSystem,
-    DiscreteDynamicalSystem,
-    Dataset,
-    trajectory
 
 @reexport using TimeseriesSurrogates
 @reexport using StateSpaceReconstruction
 @reexport using PerronFrobenius
 @reexport using TransferEntropy
 using StateSpaceReconstruction: GroupSlices
+
+import DynamicalSystemsBase:
+    DynamicalSystem,
+    ContinuousDynamicalSystem,
+    DiscreteDynamicalSystem,
+    Dataset,
+    trajectory
 
 # Example systems
 include("systems/Systems.jl")
@@ -30,8 +31,11 @@ include("surrogates/surrogates.jl")
 # Wrappers of the different methods.
 include("method_wrappers/highlevel_methods.jl")
 
-export Dataset,
-    DynamicalSystem, DiscreteDynamicalSystem, ContinuousDynamicalSystem,
-    trajectory
+export
+Dataset,
+DynamicalSystem,
+DiscreteDynamicalSystem,
+ContinuousDynamicalSystem,
+trajectory
 
 end # module
