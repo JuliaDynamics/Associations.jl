@@ -139,7 +139,7 @@ include("helperfunctions_triangulationgrid.jl")
 
     if plot_fulltriang
         for i = 1:n_simplices
-            sᵢ = getsimplex(original_pts, DT, i)
+            sᵢ = getsimplex(original_pts, fulltriang, i)
 
             @series begin
                 seriestype := :path
