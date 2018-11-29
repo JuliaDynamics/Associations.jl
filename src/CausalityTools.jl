@@ -6,7 +6,9 @@ using Reexport
 using AbstractFFTs
 using Statistics
 using RecipesBase
-using Plots
+using StaticArrays
+using LinearAlgebra
+using Measures
 
 
 @reexport using TimeseriesSurrogates
