@@ -1,4 +1,4 @@
-using Simplices: even_sampling_rules
+using Simplices: subsample_coeffs
 using Simplices: simplexintersection
 using Simplices: intersectingvertices
 
