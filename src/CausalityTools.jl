@@ -6,7 +6,9 @@ using Reexport
 using AbstractFFTs
 using Statistics
 using RecipesBase
-using Plots
+using StaticArrays
+using LinearAlgebra
+using Measures
 
 
 @reexport using TimeseriesSurrogates
@@ -30,6 +32,9 @@ include("surrogates/surrogates.jl")
 
 # Wrappers of the different methods.
 include("method_wrappers/highlevel_methods.jl")
+
+# Plot recipes, also for all sub-packages
+include("plot_recipes/recipes.jl")
 
 export
 Dataset,
