@@ -35,4 +35,29 @@ using RecipesBase
         typeof(RecipesBase.apply_recipe(d, (invm, 3, false))) == Array{RecipesBase.RecipeData,1}
     end
 
+	@testset "Vizualizing triangulation and simplices" begin
+		pts = rand(3, 15)
+		n_pts = size(pts, 2)
+
+		# Embed the point
+		E = StateSpaceReconstruction.embed(pts)
+
+		# Make sure last point is inside the convex hull of the previous points.
+		# If it is not, move it towards the center of the embedding until it is.
+		E_linearlyinvariant = invariantize(E)
+
+		# Pick out points and their images (so that they can
+		# be indexed with the same simplex index)
+		originalpts = E.points[:, 1:end-1]
+		forwardpts  = E.points[:, 2:end]
+
+		# Re-create the embedding, but exclude the last point.
+		E = StateSpaceReconstruction.embed(originalpts)
+
+		# Triangulate all points but the last point.
+		DT = delaunay(E);
+
+		typeof(RecipesBase.apply_recipe(d, (pts, E, DT))) == Array{RecipesBase.RecipeData,1}
+	end
+
 end
