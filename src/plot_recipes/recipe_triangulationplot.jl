@@ -116,8 +116,7 @@ include("helperfunctions_triangulationgrid.jl")
 
         if intvol > 0 + 1e-8
             intersecting_vertices, fillpoints = generate_fillpoints(sᵢ, sⱼ,
-                            n_fillpoints = n_fillpoints,
-                            sample_randomly = sample_randomly)
+                            n_fillpoints, sample_randomly)
 
             @series begin
                 seriestype := :scatter
