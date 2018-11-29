@@ -9,7 +9,14 @@ import DynamicalSystemsBase:
     DiscreteDynamicalSystem,
     ContinuousDynamicalSystem,
     Dataset
+
+using StateSpaceReconstruction
+using PerronFrobenius
 using CausalityTools
+
+@testset "Plot recipes" begin
+	include("plot_recipes.jl")
+end
 
 @testset "Discrete systems" begin
 	include("discrete_systems.jl")
