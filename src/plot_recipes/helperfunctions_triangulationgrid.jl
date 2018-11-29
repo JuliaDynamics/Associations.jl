@@ -84,7 +84,7 @@ function generate_fillpoints(sᵢ, sⱼ, n_fillpoints = 100, sample_randomly = t
     intvol = simplexintersection(sᵢ, sⱼ)
 
     if intvol > 0 + 1e-9
-        intersecting_vertices = Simplices.intersectingvertices(sᵢ, sⱼ)
+        intersecting_vertices = intersectingvertices(sᵢ, sⱼ)
         if size(intersecting_vertices, 1) > 4
             triang = hcat(delaunay(intersecting_vertices)...,)
         else
