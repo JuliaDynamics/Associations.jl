@@ -111,3 +111,12 @@ function generate_fillpoints(sᵢ, sⱼ, n_fillpoints = 100, sample_randomly = t
         return nothing
     end
 end
+
+export
+interiorpoints,
+connectvertices,
+splitaxes,
+preparesimplex,
+getsimplex,
+forwardmap,
+generate_fillpoints
