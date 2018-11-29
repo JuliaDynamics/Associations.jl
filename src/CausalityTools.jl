@@ -31,6 +31,9 @@ include("surrogates/surrogates.jl")
 # Wrappers of the different methods.
 include("method_wrappers/highlevel_methods.jl")
 
+# Plot recipes, also for all sub-packages
+include("plot_recipes/recipes.jl")
+
 export
 Dataset,
 DynamicalSystem,
