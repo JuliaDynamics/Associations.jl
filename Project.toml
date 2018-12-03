@@ -2,7 +2,6 @@ name = "CausalityTools"
 uuid = "33344842-e5f7-11e8-31fb-c7f2d5716edf"
 authors = ["Kristian Agasøster Haaga <kahaaga@gmail.com>"]
 repo = "https://github.com/kahaaga/CausalityTools.jl.git"
-version = "0.1.0"
 
 [deps]
 AbstractFFTs = "621f4979-c628-5d54-868e-fcf4e3e8185c"
