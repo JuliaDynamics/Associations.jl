@@ -77,11 +77,21 @@ PAGES = [
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
+    modules = [CausalityTools,
+                TransferEntropy,
+                PerronFrobenius,
+                StateSpaceReconstruction,
+                Simplices]
     format = :markdown,
     pages = PAGES
 )
 
-
-#deploydocs(
-#    repo = "github.com/kahaaga/CausalityTools.jl.git",
-#)
+if !Sys.iswindows()
+    deploydocs(
+        deps   = Deps.pip("mkdocs==0.17.5", "mkdocs-material==2.9.4",
+        "python-markdown-math", "pygments", "pymdown-extensions"),
+        repo   = "github.com/kahaaga/CausalityTools.jl.git",
+        target = "site",
+        make = () -> run(`mkdocs build`)
+    )
+end
