@@ -11,6 +11,9 @@ allow_failures:
 env:
   matrix:
     - JULIA_SPECIALFUNCTIONS_BUILD_SOURCE=true
+addons:
+  apt_packages:
+    - gfortran
 
 
 jobs:
