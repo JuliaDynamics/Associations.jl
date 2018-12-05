@@ -8,8 +8,11 @@ matrix:
 allow_failures:
 - julia: nightly
 
-script:
-  #- julia -e 'ENV["JULIA_SPECIALFUNCTIONS_BUILD_SOURCE"] = "true"; using Pkg; Pkg.build("SpecialFunctions")'
+env:
+  matrix:
+    - JULIA_SPECIALFUNCTIONS_BUILD_SOURCE=true
+
+before_script:
   - julia -e 'using Pkg; Pkg.build(); Pkg.add("PyCall");'
   - julia -e 'ENV["PYTHON"] = ""; using Pkg; Pkg.build("PyCall")'
   - julia -e 'using Conda; Conda.add("scipy")'
