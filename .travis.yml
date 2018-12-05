@@ -12,14 +12,6 @@ env:
   matrix:
     - JULIA_SPECIALFUNCTIONS_BUILD_SOURCE=true
 
-before_script:
-  - julia -e 'using Pkg; Pkg.build(); Pkg.add("PyCall");'
-  - julia -e 'ENV["PYTHON"] = ""; using Pkg; Pkg.build("PyCall")'
-  - julia -e 'using Conda; Conda.add("scipy")'
-
-script:
-- julia -e 'using Pkg; Pkg.test()'
-
 
 jobs:
   include:
