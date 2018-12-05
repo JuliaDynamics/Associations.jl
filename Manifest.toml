@@ -295,12 +295,6 @@ git-tree-sha1 = "9f2135e0e7ecb63f9c3ef73ea15a31d8cdb79bb7"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "0.20.0"
 
-[[DocumenterMarkdown]]
-deps = ["Documenter", "Test"]
-git-tree-sha1 = "dd4b07b3db2bd82a461eeee0dbc7a254c001aa8f"
-uuid = "997ab1e6-3595-5248-9280-8efb232c3433"
-version = "0.1.0"
-
 [[DynamicalSystems]]
 deps = ["ChaosTools", "DynamicalSystemsBase", "Pkg", "Reexport", "StaticArrays"]
 git-tree-sha1 = "9620cee7b56b99ee01da6fca0850fc4b14e23106"
@@ -548,9 +542,9 @@ version = "0.1.2"
 
 [[PerronFrobenius]]
 deps = ["Conda", "Distributed", "Documenter", "InplaceOps", "LinearAlgebra", "Parameters", "Printf", "PyCall", "RecipesBase", "Reexport", "SharedArrays", "Simplices", "SparseArrays", "StateSpaceReconstruction", "StaticArrays", "Test"]
-git-tree-sha1 = "7695c740e987c4d8902dfc6375810a128654393a"
+git-tree-sha1 = "93dd07f21cedca6c50d4ec04d409d04494ca42f7"
 uuid = "260eed61-d0e8-5f1e-b040-a9756a401c97"
-version = "0.2.2"
+version = "0.2.3"
 
 [[Pkg]]
 deps = ["Dates", "LibGit2", "Markdown", "Printf", "REPL", "Random", "SHA", "UUIDs"]
@@ -724,10 +718,10 @@ uuid = "276daf66-3868-5448-9aa4-cd146d93841b"
 version = "0.7.2"
 
 [[StateSpaceReconstruction]]
-deps = ["Conda", "Distances", "Distributions", "DynamicalSystemsBase", "LinearAlgebra", "NearestNeighbors", "PyCall", "Reexport", "Simplices", "StaticArrays", "Statistics", "Test"]
-git-tree-sha1 = "fe68aee28285c4dd16791384be7b20915e9a0f54"
+deps = ["Conda", "Distances", "Distributions", "LinearAlgebra", "NearestNeighbors", "PyCall", "Reexport", "Simplices", "StaticArrays", "Statistics", "Test"]
+git-tree-sha1 = "211298d65326fd109bb00c92ce0adca0f4c09435"
 uuid = "1441a9f6-6a74-5418-a591-cdf1d78a07f0"
-version = "0.3.2"
+version = "0.3.1"
 
 [[StaticArrays]]
 deps = ["InteractiveUtils", "LinearAlgebra", "Random", "Statistics", "Test"]
@@ -797,9 +791,9 @@ version = "0.2.1"
 
 [[TransferEntropy]]
 deps = ["Conda", "Distances", "Distributions", "Interpolations", "NearestNeighbors", "PerronFrobenius", "PyCall", "Reexport", "Simplices", "SpecialFunctions", "StateSpaceReconstruction", "Test"]
-git-tree-sha1 = "c335bef72a3ff612b54f30bc0df38bd8f7a51c04"
+git-tree-sha1 = "55babd8ddc5abda8cf4519683b9eff7aa70612b7"
 uuid = "ea221983-52f3-5440-99c7-13ea201cd633"
-version = "0.3.1"
+version = "0.3.2"
 
 [[TreeViews]]
 deps = ["Test"]
