@@ -10,6 +10,8 @@ using Distributions
 using StaticArrays
 using Statistics
 
+ENV["GKSwstype"] = "100"
+
 PAGES = [
     "index.md",
     "Discretization" => "discretization.md",
