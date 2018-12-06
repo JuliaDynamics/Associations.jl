@@ -24,5 +24,6 @@ jobs:
       script:
         - julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd()));
                                                Pkg.instantiate()'
+        - julia -e 'ENV["PYTHON"] = ""; Pkg.build("PyCall"); using Conda; Conda.add("scipy")'
         - julia --project=docs/ docs/make.jl
       after_success: skip
