@@ -9,7 +9,7 @@ DynamicalSystemsBase
 DynamicalSystems
 NearestNeighbors
 Interpolations
-PerronFrobenius 0.2.0
+PerronFrobenius 0.2.0 0.2.4
 PyCall
 RecipesBase
 Reexport
@@ -18,5 +18,5 @@ StaticArrays
 StateSpaceReconstruction 0.3.0 0.3.2
 SpecialFunctions
 TimeseriesSurrogates 0.2.1
-TransferEntropy 0.3.1
+TransferEntropy 0.3.1 0.3.4
 Measures
