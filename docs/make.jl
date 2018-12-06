@@ -1,9 +1,13 @@
 using CausalityTools
 using TransferEntropy, PerronFrobenius, StateSpaceReconstruction, Simplices
 using Documenter, DocumenterMarkdown
-
 using PyCall, Conda
 Conda.add("scipy")
+using Plots
+using DynamicalSystems
+using Distributions
+using StaticArrays
+using Statistics
 
 PAGES = [
     "index.md",
@@ -84,10 +88,7 @@ makedocs(
     modules = [CausalityTools,
                 TransferEntropy,
                 PerronFrobenius,
-                StateSpaceReconstruction,
-                Simplices,
-                PyCall,
-                Conda],
+                StateSpaceReconstruction],
     format = :markdown,
     pages = PAGES
 )
