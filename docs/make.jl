@@ -1,4 +1,5 @@
 using CausalityTools
+using TransferEntropy, PerronFrobenius, StateSpaceReconstruction, Simplices
 using Documenter, DocumenterMarkdown
 
 using PyCall, Conda
