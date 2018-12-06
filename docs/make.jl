@@ -86,7 +86,7 @@ makedocs(
                 StateSpaceReconstruction,
                 Simplices,
                 PyCall,
-                Conda]
+                Conda],
     format = :markdown,
     pages = PAGES
 )
