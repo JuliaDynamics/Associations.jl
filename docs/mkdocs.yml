@@ -55,7 +55,7 @@ pages:
       - Random phases: surrogates/randomphases_docs.md
       - AAFT: surrogates/aaft_docs.md
       - iAAFT: surrogates/iaaft_docs.md
-    - Examples:
+    - Examples of surrogate realizations:
       - Random shuffle: surrogates/randomshuffle_example.md
       - Random amplitudes: surrogates/randomamplitudes_example.md
       - Random phases: surrogates/randomphases_example.md
