@@ -61,9 +61,9 @@ PAGES = [
 
     #"Workflow" => "workflow.md",
 
-    "Interop with DynamicalSystems.jl" => [
-        "Example 1" => "interop_dynamicalsystems_infoflow1.md"
-    ],
+    #"Interop with DynamicalSystems.jl" => [
+    #    "Example 1" => "interop_dynamicalsystems_infoflow1.md"
+    #],
 
     #"Examples" => [
     #    "TE partitioning schemes"=> "transferentropy/examples_TE_different_partitionings.md"
