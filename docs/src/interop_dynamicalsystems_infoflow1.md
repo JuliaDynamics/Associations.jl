@@ -6,6 +6,7 @@ Here, we present an example of how one can measure the information flow
 between variables of a dynamical system using transfer entropy (TE).
 
 ## Defining a system
+
 For this example, we'll consider a unidirectionally coupled system consisting
 of two logistic maps, given by the vector field
 
@@ -26,9 +27,9 @@ f(x,y) = \dfrac{y + \frac{c(x \xi )}{2}}{1 + \frac{c}{2}(1+ \sigma )}
 
 The parameter `c` controls how strong the dynamical forcing is. If `σ > 0`,
 dynamical noise masking the influence of  ``x`` on ``y``, equivalent to
-``\sigma \cdot \\xi``, is added at each iteration. Here, ``\xi`` is a draw from
-a flat distribution on ``[0, 1]``. Thus, setting `σ = 0.05` is equivalent to
-add dynamical noise corresponding to a maximum of ``5 \%`` of the possible
+``\\sigma \cdot \\xi``, is added at each iteration. Here, ``\\xi`` is a draw from
+a flat distribution on `[0, 1]`. Thus, setting `σ = 0.05` is equivalent to
+add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
 range of values of the logistic map.
 
 ## Represent as a DiscreteDynamicalSystem
@@ -96,15 +97,17 @@ nothing #hide
 The minimum embedding dimension for this system is 4 (try to figure this out
 yourself using the machinery in DynamicalSystems.jl!).
 
-We want to measure the information flow ``x \rightarrow y``. To do this, we
+We want to measure the information flow ``x \\rightarrow y``. To do this, we
 express the transfer entropy as a conditional mutual information. For that,
 we need an embedding consisting of the following set of vectors
 
 ```math
-E = \{ (y(t + \nu), y(t), x(t), y(t-\tau) ) \},
+\begin{aligned}
+E = \{ (y(t + \nu), y(t), x(t), y(t - \tau) ) \},
+\end{aligned}
 ```
 
-where ``\nu`` is the forward prediction lag and ``\tau`` is the embedding lag.
+where ``\\nu`` is the forward prediction lag and ``\\tau`` is the embedding lag.
 If a higher dimension was needed, we would add more lagged instances of the
 target variable ``y``.
 
@@ -112,10 +115,11 @@ target variable ``y``.
 
 To construct the embedding, we use the `embed` function as follows.
 
+
 ```@example interop1
 τ = 1 # embedding lag
 ν = 1 # forward prediction lag
-E = embed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
+E = StateSpaceReconstruction.embed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
 ```
 
 This means that `y` appears in the 1st, 2nd and 3rd columns of the embedding,
@@ -142,6 +146,7 @@ Tpp = [2, 3] # target, present and past
 Spp = [4]    # source, present (and past, if we wanted)
 v = TEVars(Tf, Tpp, Spp)
 ```
+
 The last field is an empty array because we are not doing any conditioning on
 other variables.
 
@@ -169,8 +174,8 @@ x, y = orbit[:, 1], orbit[:, 2]
 # Embedding
 τ = 1 # embedding lag
 ν = 1 # forward prediction lag
-E_xtoy = embed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
-E_ytox = embed([y, x], [2, 2, 2, 1], [ν, 0, -τ, 0])
+E_xtoy = StateSpaceReconstruction.embed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
+E_ytox = StateSpaceReconstruction.embed([y, x], [2, 2, 2, 1], [ν, 0, -τ, 0])
 
 # Which variables go where?
 Tf = [1]     # target, future
@@ -191,13 +196,13 @@ scheme is controlled by `ϵ`, and the following `ϵ` will work:
 * `ϵ::Vector{Int}` divide the i-th axis into `ϵᵢ` intervals of the same size.
 * `ϵ::Vector{Float64}` divide the i-th axis into intervals of size `ϵᵢ`.
 
-Below, we demonstrate how TE may be computed using the four
- different ways of discretizing the state space.
+Below, we demonstrate how TE may be computed using the four different ways
+of discretizing the state space.
 
-### Hyper-rectangles by subdivision of axes (`ϵ::Int`)
+### Hyper-rectangles by subdivision of axes
 
 First, we use an integer number of subdivisions along each axis of the delay
-embedding when partitioning.
+embedding when partitioning (`ϵ::Int`).
 
 ```@example interop1
 ϵs = 1:2:50 # integer number of subdivisions along each axis of the embedding
@@ -224,11 +229,12 @@ is an underlying coupling) than from `y` to `x`, where there is no underlying
 coupling.
 
 
-### Hyper-cubes of fixed size (`ϵ::Float`)
-We do precisely the same, but use fixed-width hyper-cube bins. The values of the
-logistic map take values on `[0, 1]`, so using bins width edge lengths `0.1`
-should give a covering corresponding to using `10` subdivisions along
-each axis of the delay embedding. We let `ϵ` take values on `[0.05, 0.5]`
+### Hyper-cubes of fixed size
+We do precisely the same, but use fixed-width hyper-cube bins (`ϵ::Float`).
+The values of the logistic map take values on `[0, 1]`, so using bins width
+edge lengths `0.1` should give a covering corresponding to using `10`
+subdivisions along each axis of the delay embedding. We let `ϵ` take values
+on `[0.05, 0.5]`
 
 ```@example interop1
 ϵs = 0.05:0.05:0.5
@@ -252,12 +258,12 @@ nothing #hide
 ![](logistic2_transferentropy_epsilonfloat.svg)
 
 
-### Hyper-rectangles of fixed size (`ϵ::Vector{Float}`)
+### Hyper-rectangles of fixed size
 
-It is also possible to use hyper-rectangles, by specifying the edge lengths
-along each coordinate axis of the delay embedding. In our case, we use a
-four-dimensional, embedding, so we must provide a 4-element vector of edge
-lengths
+It is also possible to use hyper-rectangles  (`ϵ::Vector{Float}`), by
+specifying the edge lengths along each coordinate axis of the delay embedding.
+In our case, we use a four-dimensional, embedding, so we must provide a
+4-element vector of edge lengths.
 
 ```@example interop1
 # Define slightly different edge lengths along each axis
@@ -295,12 +301,12 @@ nothing #hide
 
 
 
-### Hyper-rectangles by variable-width subdivision of axes (`ϵ::Vector{Int}`)
+### Hyper-rectangles by variable-width subdivision of axes
 
 Another way to construct hyper-rectangles is to subdivide each
-coordinate axis into segments of equal length. In our case, we use a
-four-dimensional, embedding, so we must provide a 4-element vector providing
-the number of subdivisions we want along each axis.
+coordinate axis into segments of equal length (`ϵ::Vector{Int}`).
+In our case, we use a four-dimensional, embedding, so we must provide a
+4-element vector providing the number of subdivisions we want along each axis.
 
 ```@example interop1
 # Define different number of subdivisions along each axis.
