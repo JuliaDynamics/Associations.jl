@@ -5,7 +5,7 @@
 Here, we present an example of how one can measure the information flow
 between variables of a dynamical system using transfer entropy (TE).
 
-## Defining a system
+### Defining a system
 
 For this example, we'll consider a unidirectionally coupled system consisting
 of two logistic maps, given by the vector field
@@ -32,7 +32,7 @@ a flat distribution on `[0, 1]`. Thus, setting `σ = 0.05` is equivalent to
 add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
 range of values of the logistic map.
 
-## Represent as a DiscreteDynamicalSystem
+### Represent as a DiscreteDynamicalSystem
 
 ```@setup interop1
 using DynamicalSystems
@@ -93,7 +93,7 @@ nothing #hide
 
 
 
-## Delay embedding for TE
+### Delay embedding for TE
 The minimum embedding dimension for this system is 4 (try to figure this out
 yourself using the machinery in DynamicalSystems.jl!).
 
@@ -111,7 +111,7 @@ where ``\\nu`` is the forward prediction lag and ``\\tau`` is the embedding lag.
 If a higher dimension was needed, we would add more lagged instances of the
 target variable ``y``.
 
-## Construct the embedding
+### Construct the embedding
 
 To construct the embedding, we use the `embed` function as follows.
 
@@ -126,7 +126,7 @@ This means that `y` appears in the 1st, 2nd and 3rd columns of the embedding,
 with lags 1, 0 and -1, respectively. The 4th column is occupied by `x`, which
 is not lagged.
 
-## Keeping track of embedding information using TEVars
+### Keeping track of embedding information using TEVars
 Keeping track of how the embedding is organized is done using a `TEVars`
 instance, which has the following constructor:
 
@@ -151,7 +151,7 @@ The last field is an empty array because we are not doing any conditioning on
 other variables.
 
 
-## TE estimator
+### TE estimator
 
 We will use the transfer operator grid TE estimator, found in the
 `transferentropy_transferoperator_grid` function, or its alias `tetogrid`.
@@ -160,7 +160,7 @@ scheme, and a `TEVars instance`. We will compute TE over a range of
 bin sizes, for a slightly longer time series than we plotted before, with
 `c = 0.7`.
 
-## Embedding
+### Embedding
 
 Let's create a realization of the system, embed it and create a `TEVars`
 instance. We'll use these throughout the examples below.
@@ -184,7 +184,7 @@ Spp = [4]    # source, present (and past, if we wanted)
 v = TEVars(Tf, Tpp, Spp)
 ```
 
-## Different ways of partitioning
+### Different ways of partitioning
 The `transferentropy_transferoperator_grid` and `transferentropy_freq`
 estimators both operate on partitions on the state space.
 
@@ -199,7 +199,7 @@ scheme is controlled by `ϵ`, and the following `ϵ` will work:
 Below, we demonstrate how TE may be computed using the four different ways
 of discretizing the state space.
 
-### Hyper-rectangles by subdivision of axes
+#### Hyper-rectangles by subdivision of axes
 
 First, we use an integer number of subdivisions along each axis of the delay
 embedding when partitioning (`ϵ::Int`).
@@ -229,7 +229,7 @@ is an underlying coupling) than from `y` to `x`, where there is no underlying
 coupling.
 
 
-### Hyper-cubes of fixed size
+#### Hyper-cubes of fixed size
 We do precisely the same, but use fixed-width hyper-cube bins (`ϵ::Float`).
 The values of the logistic map take values on `[0, 1]`, so using bins width
 edge lengths `0.1` should give a covering corresponding to using `10`
@@ -258,7 +258,7 @@ nothing #hide
 ![](logistic2_transferentropy_epsilonfloat.svg)
 
 
-### Hyper-rectangles of fixed size
+#### Hyper-rectangles of fixed size
 
 It is also possible to use hyper-rectangles  (`ϵ::Vector{Float}`), by
 specifying the edge lengths along each coordinate axis of the delay embedding.
@@ -301,7 +301,7 @@ nothing #hide
 
 
 
-### Hyper-rectangles by variable-width subdivision of axes
+#### Hyper-rectangles by variable-width subdivision of axes
 
 Another way to construct hyper-rectangles is to subdivide each
 coordinate axis into segments of equal length (`ϵ::Vector{Int}`).
@@ -337,7 +337,7 @@ nothing #hide
 ![](logistic2_transferentropy_epsilonvecint.svg)
 
 
-## Conclusion
+### Conclusion
 The value of the TE depends on the system under consideration, and on the
 way one chooses to discretize the state space reconstruction.
 
