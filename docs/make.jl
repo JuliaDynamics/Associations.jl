@@ -1,5 +1,6 @@
 using CausalityTools
 using TransferEntropy, PerronFrobenius, StateSpaceReconstruction, Simplices
+using TimeseriesSurrogates
 using Documenter, DocumenterMarkdown
 using PyCall, Conda
 Conda.add("scipy")
@@ -88,7 +89,8 @@ makedocs(
     modules = [CausalityTools,
                 TransferEntropy,
                 PerronFrobenius,
-                StateSpaceReconstruction],
+                StateSpaceReconstruction,
+                TimeseriesSurrogates],
     format = :markdown,
     pages = PAGES
 )
