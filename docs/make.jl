@@ -1,5 +1,8 @@
+using CausalityTools
+using Documenter, DocumenterMarkdown
 
-using Documenter, DocumenterMarkdown, CausalityTools
+using PyCall, Conda
+Conda.add("scipy")
 
 PAGES = [
     "index.md",
@@ -81,7 +84,9 @@ makedocs(
                 TransferEntropy,
                 PerronFrobenius,
                 StateSpaceReconstruction,
-                Simplices]
+                Simplices,
+                PyCall,
+                Conda]
     format = :markdown,
     pages = PAGES
 )
