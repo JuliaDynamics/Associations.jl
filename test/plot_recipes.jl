@@ -14,25 +14,24 @@ using RecipesBase
     invm = RectangularInvariantMeasure(E, [4, 5, 6])
 
 
-    @testset "StateSpaceReconstruction.AbstractEmbedding" begin
-        @test typeof(RecipesBase.apply_recipe(d, E)) == Array{RecipesBase.RecipeData,1}
-        @test typeof(RecipesBase.apply_recipe(d, E_invariant)) == Array{RecipesBase.RecipeData,1}
-    end
+    #@testset "StateSpaceReconstruction.AbstractEmbedding" begin
+    #    @test typeof(RecipesBase.apply_recipe(d, E)) == Array{RecipesBase.RecipeData,1}
+    #end
 
-    @testset "PerronFrobenius." begin
-        typeof(RecipesBase.apply_recipe(d, invm.transfermatrix)) == Array{RecipesBase.RecipeData,1}
+    @testset "PerronFrobenius.RectangularPartitionTransferOperator" begin
+        @test typeof(RecipesBase.apply_recipe(d, invm.transfermatrix)) == Array{RecipesBase.RecipeData,1}
     end
 
     @testset "Invariant distribution" begin
-        typeof(RecipesBase.apply_recipe(d, invm.measure)) == Array{RecipesBase.RecipeData,1}
+        @test typeof(RecipesBase.apply_recipe(d, invm.measure)) == Array{RecipesBase.RecipeData,1}
     end
 
     @testset "RectangularInvariantMeasure" begin
         boxfillfactor = 3
         # Third argument is linesegment, which can be true or false. It determines
         # whether box edges around the partition elements are drawn.
-        typeof(RecipesBase.apply_recipe(d, (invm, 3, true))) == Array{RecipesBase.RecipeData,1}
-        typeof(RecipesBase.apply_recipe(d, (invm, 3, false))) == Array{RecipesBase.RecipeData,1}
+        @test typeof(RecipesBase.apply_recipe(d, (invm, 3, true))) == Array{RecipesBase.RecipeData,1}
+        @test typeof(RecipesBase.apply_recipe(d, (invm, 3, false))) == Array{RecipesBase.RecipeData,1}
     end
 
 	@testset "Vizualizing triangulation and simplices" begin
@@ -57,7 +56,7 @@ using RecipesBase
 		# Triangulate all points but the last point.
 		DT = delaunay(E);
 
-		typeof(RecipesBase.apply_recipe(d, (pts, E, DT))) == Array{RecipesBase.RecipeData,1}
+		@test typeof(RecipesBase.apply_recipe(d, (pts, E, DT))) == Array{RecipesBase.RecipeData,1}
 	end
 
 end

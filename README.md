@@ -1,6 +1,8 @@
 # CausalityTools
 
-[![Build Status](https://travis-ci.org/kahaaga/CausalityTools.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CausalityTools.jl)
+| Build status  | Documentation |
+| ------------- | ------------- |
+| [![Build Status](https://travis-ci.org/kahaaga/CausalityTools.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CausalityTools.jl)  | [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://kahaaga.github.io/CausalityTools.jl/dev)  |
 
 `CausalityTools.jl` provides tools for nonparametric detection of causal relationships between dynamical variables based on time series of observations.
 
@@ -10,7 +12,7 @@ In addition, we provide functions to approximate the transfer operator (Perron-F
 The package is equally well-suited both for the study of causal directionality
 for experimental data, and for studying dynamical systems from a more formal context. The workflow integrates nicely with `DynamicalSystems.jl`.
 
-Check out the documentation (coming) for more information!
+Check out the [documentation](https://kahaaga.github.io/CausalityTools.jl/dev) (work in progress!) for more information! Please note that the package is under active development, and that breaking changes may occur until version 1.0 is released. 
 
 ### Package structure
 `CausalityTools.jl` brings together the following packages into one environment:

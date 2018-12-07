@@ -301,12 +301,6 @@ git-tree-sha1 = "9f2135e0e7ecb63f9c3ef73ea15a31d8cdb79bb7"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 version = "0.20.0"
 
-[[DocumenterMarkdown]]
-deps = ["Documenter", "Test"]
-git-tree-sha1 = "dd4b07b3db2bd82a461eeee0dbc7a254c001aa8f"
-uuid = "997ab1e6-3595-5248-9280-8efb232c3433"
-version = "0.1.0"
-
 [[DynamicalSystems]]
 deps = ["ChaosTools", "DynamicalSystemsBase", "Pkg", "Reexport", "StaticArrays"]
 git-tree-sha1 = "9620cee7b56b99ee01da6fca0850fc4b14e23106"
