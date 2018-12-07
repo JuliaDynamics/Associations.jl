@@ -116,16 +116,16 @@ uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
 version = "0.5.1"
 
 [[CrossMappings]]
-deps = ["Conda", "Distances", "DynamicalSystems", "NearestNeighbors", "PyCall", "StateSpaceReconstruction", "Statistics", "Test", "TimeseriesSurrogates"]
-git-tree-sha1 = "4d251588c19a73a6c927b9a59f3ef24439ddfc90"
+deps = ["Conda", "Distances", "DynamicalSystems", "NearestNeighbors", "PyCall", "StateSpaceReconstruction", "Statistics", "StatsBase", "Test", "TimeseriesSurrogates"]
+git-tree-sha1 = "53417d3bb61da332dc1474e9293a46dbfda65fff"
 uuid = "7011085d-2e9b-5a7b-b0c2-f102c05e50c2"
-version = "0.2.0"
+version = "0.2.1"
 
 [[DSP]]
 deps = ["AbstractFFTs", "Compat", "FFTW", "LinearAlgebra", "Polynomials", "Random", "Reexport", "SpecialFunctions"]
-git-tree-sha1 = "c90967ff4c5e99f652b278624634dcef73b58848"
+git-tree-sha1 = "5ec38ebc4ddf6320ad50b826eb8fd7fb521993a5"
 uuid = "717857b8-e6f2-59f4-9121-6e50c889abd2"
-version = "0.5.1"
+version = "0.5.2"
 
 [[DataStructures]]
 deps = ["InteractiveUtils", "OrderedCollections", "Random", "Serialization", "Test"]
@@ -144,10 +144,10 @@ uuid = "bcd4f6db-9728-5f36-b5f7-82caef46ccdb"
 version = "4.7.0"
 
 [[DelayEmbeddings]]
-deps = ["Distances", "LinearAlgebra", "NearestNeighbors", "StaticArrays", "StatsBase", "Test"]
-git-tree-sha1 = "6d42460dc2c84058850b26da7b5174fb6fcd213e"
+deps = ["Distances", "LinearAlgebra", "NearestNeighbors", "StaticArrays", "Statistics", "StatsBase", "Test"]
+git-tree-sha1 = "0b280695686867e626b4c988c093fd5659de2641"
 uuid = "5732040d-69e3-5649-938a-b6b4f237613f"
-version = "0.1.1"
+version = "0.2.0"
 
 [[DelimitedFiles]]
 deps = ["Mmap"]
@@ -161,9 +161,9 @@ version = "0.3.2"
 
 [[DiffEqBase]]
 deps = ["Compat", "IteratorInterfaceExtensions", "LinearAlgebra", "RecipesBase", "RecursiveArrayTools", "Requires", "Roots", "SparseArrays", "StaticArrays", "Statistics", "SuiteSparse", "TableTraits", "Test", "TreeViews"]
-git-tree-sha1 = "b8c9c5a296e426d0ad978e6e7ad699dde444d3a1"
+git-tree-sha1 = "9b077135e38482dcf74daf2406b9da4dc4dcb0ca"
 uuid = "2b5f629d-d688-5b77-993f-72d75c75574e"
-version = "4.31.1"
+version = "4.31.2"
 
 [[DiffEqBiological]]
 deps = ["Compat", "DataStructures", "DiffEqBase", "DiffEqJump", "MacroTools", "Random", "Reexport", "Statistics", "SymEngine", "Test"]
@@ -368,9 +368,9 @@ version = "0.36.0"
 
 [[GenericSVD]]
 deps = ["LinearAlgebra", "Random", "Test"]
-git-tree-sha1 = "c6f411fee94d3e2f1121d635f5a7ab7eec200eea"
+git-tree-sha1 = "8aa93c3f3d81562a8962047eafcc5712af0a0f59"
 uuid = "01680d73-4ee2-5a08-a1aa-533608c188bb"
-version = "0.2.0"
+version = "0.2.1"
 
 [[InplaceOps]]
 deps = ["LinearAlgebra", "Test"]
@@ -402,9 +402,9 @@ version = "0.20.0"
 
 [[LazyArrays]]
 deps = ["FillArrays", "LinearAlgebra", "StaticArrays", "Test"]
-git-tree-sha1 = "80ae09d512afe478575cadf7e301742996d0330d"
+git-tree-sha1 = "282c4d8f504748fcf2530f1f34713c3581093ffc"
 uuid = "5078a376-72f3-5289-bfd5-ec5146d43c02"
-version = "0.4.0"
+version = "0.5.0"
 
 [[LearnBase]]
 deps = ["LinearAlgebra", "SparseArrays", "StatsBase", "Test"]
@@ -530,9 +530,9 @@ version = "4.18.1"
 
 [[PDMats]]
 deps = ["Arpack", "LinearAlgebra", "SparseArrays", "SuiteSparse", "Test"]
-git-tree-sha1 = "9e3e7a5c9b8cfdba8c01a1bcae38fe0144936fda"
+git-tree-sha1 = "b6c91fc0ab970c0563cbbe69af18d741a49ce551"
 uuid = "90014a1f-27ba-587c-ab20-58faa44d9150"
-version = "0.9.5"
+version = "0.9.6"
 
 [[ParameterizedFunctions]]
 deps = ["DataStructures", "DiffEqBase", "InteractiveUtils", "LinearAlgebra", "SimpleTraits", "SymEngine", "Test"]
@@ -803,9 +803,9 @@ version = "0.2.1"
 
 [[TransferEntropy]]
 deps = ["Conda", "Distances", "Distributions", "Interpolations", "NearestNeighbors", "PerronFrobenius", "PyCall", "Reexport", "Simplices", "SpecialFunctions", "StateSpaceReconstruction", "Test"]
-git-tree-sha1 = "55babd8ddc5abda8cf4519683b9eff7aa70612b7"
+git-tree-sha1 = "7da94c18191f95212559866ce58961fa75f84968"
 uuid = "ea221983-52f3-5440-99c7-13ea201cd633"
-version = "0.3.2"
+version = "0.3.3"
 
 [[TreeViews]]
 deps = ["Test"]
