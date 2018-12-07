@@ -1,5 +1,6 @@
 using CausalityTools
 using TransferEntropy, PerronFrobenius, StateSpaceReconstruction, Simplices
+using CrossMappings
 using TimeseriesSurrogates
 using Documenter, DocumenterMarkdown
 using PyCall, Conda
@@ -92,7 +93,8 @@ makedocs(
                 TransferEntropy,
                 PerronFrobenius,
                 StateSpaceReconstruction,
-                TimeseriesSurrogates],
+                TimeseriesSurrogates,
+                CrossMappings],
     format = :markdown,
     pages = PAGES
 )

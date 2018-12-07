@@ -115,11 +115,17 @@ git-tree-sha1 = "b974e164358fea753ef853ce7bad97afec15bb80"
 uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
 version = "0.5.1"
 
+[[CrossMappings]]
+deps = ["Conda", "Distances", "DynamicalSystems", "NearestNeighbors", "PyCall", "StateSpaceReconstruction", "Statistics", "Test", "TimeseriesSurrogates"]
+git-tree-sha1 = "53417d3bb61da332dc1474e9293a46dbfda65fff"
+uuid = "7011085d-2e9b-5a7b-b0c2-f102c05e50c2"
+version = "0.2.1"
+
 [[DSP]]
 deps = ["AbstractFFTs", "Compat", "FFTW", "LinearAlgebra", "Polynomials", "Random", "Reexport", "SpecialFunctions"]
-git-tree-sha1 = "c90967ff4c5e99f652b278624634dcef73b58848"
+git-tree-sha1 = "5ec38ebc4ddf6320ad50b826eb8fd7fb521993a5"
 uuid = "717857b8-e6f2-59f4-9121-6e50c889abd2"
-version = "0.5.1"
+version = "0.5.2"
 
 [[DataStructures]]
 deps = ["InteractiveUtils", "OrderedCollections", "Random", "Serialization", "Test"]
@@ -155,9 +161,9 @@ version = "0.3.2"
 
 [[DiffEqBase]]
 deps = ["Compat", "IteratorInterfaceExtensions", "LinearAlgebra", "RecipesBase", "RecursiveArrayTools", "Requires", "Roots", "SparseArrays", "StaticArrays", "Statistics", "SuiteSparse", "TableTraits", "Test", "TreeViews"]
-git-tree-sha1 = "b8c9c5a296e426d0ad978e6e7ad699dde444d3a1"
+git-tree-sha1 = "9b077135e38482dcf74daf2406b9da4dc4dcb0ca"
 uuid = "2b5f629d-d688-5b77-993f-72d75c75574e"
-version = "4.31.1"
+version = "4.31.2"
 
 [[DiffEqBiological]]
 deps = ["Compat", "DataStructures", "DiffEqBase", "DiffEqJump", "MacroTools", "Random", "Reexport", "Statistics", "SymEngine", "Test"]
