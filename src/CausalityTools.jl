@@ -15,6 +15,8 @@ using Measures
 @reexport using StateSpaceReconstruction
 @reexport using PerronFrobenius
 @reexport using TransferEntropy
+@reexport using CrossMappings
+
 using StateSpaceReconstruction: GroupSlices
 
 import DynamicalSystemsBase:
