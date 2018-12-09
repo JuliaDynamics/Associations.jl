@@ -116,10 +116,12 @@ uuid = "d38c429a-6771-53c6-b99e-75d170b6e991"
 version = "0.5.1"
 
 [[CrossMappings]]
-deps = ["Conda", "Distances", "DynamicalSystems", "NearestNeighbors", "PyCall", "StateSpaceReconstruction", "Statistics", "Test", "TimeseriesSurrogates"]
-git-tree-sha1 = "53417d3bb61da332dc1474e9293a46dbfda65fff"
-uuid = "7011085d-2e9b-5a7b-b0c2-f102c05e50c2"
-version = "0.2.1"
+deps = ["Conda", "DelayEmbeddings", "Distances", "DynamicalSystems", "NearestNeighbors", "PyCall", "StateSpaceReconstruction", "Statistics", "StatsBase", "Test", "TimeseriesSurrogates"]
+git-tree-sha1 = "48eaf5fe30aaf3376233499fb93c099fef545044"
+repo-rev = "master"
+repo-url = "https://github.com/kahaaga/CrossMappings.jl"
+uuid = "8e2c1068-ec32-11e8-3a10-39476e76f104"
+version = "0.0.0"
 
 [[DSP]]
 deps = ["AbstractFFTs", "Compat", "FFTW", "LinearAlgebra", "Polynomials", "Random", "Reexport", "SpecialFunctions"]
@@ -797,9 +799,9 @@ version = "0.2.1"
 
 [[TransferEntropy]]
 deps = ["Conda", "Distances", "Distributions", "Interpolations", "NearestNeighbors", "PerronFrobenius", "PyCall", "Reexport", "Simplices", "SpecialFunctions", "StateSpaceReconstruction", "Test"]
-git-tree-sha1 = "55babd8ddc5abda8cf4519683b9eff7aa70612b7"
+git-tree-sha1 = "7da94c18191f95212559866ce58961fa75f84968"
 uuid = "ea221983-52f3-5440-99c7-13ea201cd633"
-version = "0.3.2"
+version = "0.3.3"
 
 [[TreeViews]]
 deps = ["Test"]
