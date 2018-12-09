@@ -10,6 +10,7 @@ using DynamicalSystems
 using Distributions
 using StaticArrays
 using Statistics
+using StatsBase
 
 ENV["GKSwstype"] = "100"
 
