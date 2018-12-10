@@ -25,7 +25,6 @@ jobs:
         - julia --project=docs/ -e 'using Pkg;
                                     Pkg.develop(PackageSpec(path=pwd()));
                                     Pkg.instantiate();
-                                    Pkg.add("https://github.com/kahaaga/CrossMappings.jl");
                                     ENV["PYTHON"] = "";
                                     Pkg.build("PyCall");
                                     using Conda; Conda.add("scipy")'
