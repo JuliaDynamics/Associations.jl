@@ -1,5 +1,6 @@
 using CausalityTools
 using TransferEntropy, PerronFrobenius, StateSpaceReconstruction, Simplices
+using CrossMappings
 using TimeseriesSurrogates
 using Documenter, DocumenterMarkdown
 using PyCall, Conda
@@ -9,6 +10,7 @@ using DynamicalSystems
 using Distributions
 using StaticArrays
 using Statistics
+using StatsBase
 
 ENV["GKSwstype"] = "100"
 
@@ -92,7 +94,8 @@ makedocs(
                 TransferEntropy,
                 PerronFrobenius,
                 StateSpaceReconstruction,
-                TimeseriesSurrogates],
+                TimeseriesSurrogates,
+                CrossMappings],
     format = :markdown,
     pages = PAGES
 )
