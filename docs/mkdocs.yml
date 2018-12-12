@@ -39,9 +39,10 @@ pages:
     #- Common interface: transferentropy/commoninterface_TE.md
     #- Estimator documentation:
     - Common interface: transferentropy/wrapper_TE.md
-    - kNN: transferentropy/estimator_TE_kNN.md
-    - Transfer operator grid: transferentropy/estimator_TE_transferoperator_grid.md
-    - Visitation frequency: transferentropy/estimator_TE_visitfreq.md
+    - kNN estimator: transferentropy/estimator_TE_kNN.md
+    - Transfer operator grid estimator: transferentropy/estimator_TE_transferoperator_grid.md
+    - Visitation frequency estimator: transferentropy/estimator_TE_visitfreq.md
+  - Cross mappings: crossmappings/crossmapping.md
       #- Examples:
       #  - kNN: transferentropy/example_TE_kNN.md
       #  - Transfer operator grid: example_TE_transferoperator_grid.md

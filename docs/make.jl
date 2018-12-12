@@ -47,6 +47,9 @@ PAGES = [
             "Transfer operator grid estimator" => "transferentropy/estimator_TE_transferoperator_grid.md",
             "Visitation frequency estimator" => "transferentropy/estimator_TE_visitfreq.md",
             "Wrapper" => "transferentropy/wrapper_TE.md"
+        ],
+        "Cross mappings" => [
+            "Convergent cross mapping" => "crossmappings/crossmapping.md"
         ]
     ],
 
