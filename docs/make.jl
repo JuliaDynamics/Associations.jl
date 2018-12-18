@@ -1,67 +1,114 @@
-using Documenter, CausalityTools
-push!(LOAD_PATH,"../src/")
+using CausalityTools
+using TransferEntropy, PerronFrobenius, StateSpaceReconstruction, Simplices
+using CrossMappings
+using TimeseriesSurrogates
+using Documenter, DocumenterMarkdown
+using PyCall, Conda
+Conda.add("scipy")
+using Plots
+using DynamicalSystems
+using Distributions
+using StaticArrays
+using Statistics
+using StatsBase
+
 ENV["GKSwstype"] = "100"
 
 PAGES = [
-    "Overview" => "index.md",
-	"State space reconstruction" => [
-	#	"Tutorial" => "reconstruction/embed_tutorial.md",
-	"Quickstart" => "reconstruction/embed_quickstart.md"
-		#"Partitioning" => "reconstruction/partitioning.md"
-	],
-    "Transfer (Perron-Frobenius) operator" => "transferoperator/transferoperator.md",
-    "Probability estimation and invariant measures" => [
-        "Invariant measures" => "invariantmeasure/invariantmeasure.md"
+    "index.md",
+    "Discretization" => "discretization.md",
+
+    #"StateSpaceReconstruction" => [
+        #"Delay embeddings" => "embed.md",
+        #"Rectangular partitioning" => "partitioning_rectangular.md",
+        #"Triangulation partitioning" => "partitioning_triangulation.md"
+    #],
+
+    "PerronFrobenius" => [
+        "Estimator documentation" => [
+            "Transfer operator grid docs" => "transferoperator/transferoperator_grid_docs.md",
+        #    "Transfer operator triangulation docs" => "transferoperator/transferoperator_triang_docs.md"
+        ],
+        #"Examples" => [
+        #    "Transfer operator grid example" => "transferoperator/transferoperator_grid_example.md",
+        #    "Transfer operator triangulation" => "transferoperator/transferoperator_triang_example.md"
+        #],
+
+        "Invariant measure" => "invariantmeasure/invariantmeasure_docs.md",#[
+            #"Documentation" => ,
+            #"Examples" => "invariantmeasure/invariantmeasure_example.md"
+        #]
     ],
+
+    "Causality algorithms" => [
+        "TransferEntropy" => [
+            #"Common interface" => "transferentropy/commoninterface_TE.md",
+            "kNN estimator" => "transferentropy/estimator_TE_kNN.md",
+            "Transfer operator grid estimator" => "transferentropy/estimator_TE_transferoperator_grid.md",
+            "Visitation frequency estimator" => "transferentropy/estimator_TE_visitfreq.md",
+            "Wrapper" => "transferentropy/wrapper_TE.md"
+        ],
+        "Cross mappings" => [
+            "Convergent cross mapping" => "crossmappings/crossmapping.md"
+        ]
+    ],
+
     "Surrogate data" => [
-        "What is a surrogate?" => "surrogates/surrogates.md",
-        "Constrained surrogate examples" => [
-            "Random shuffle surrogates" => "surrogates/random_shuffle.md",
-            "AAFT" => "surrogates/aaft.md",
-            "IAAFT" => "surrogates/iaaft.md"
+        "The method of surrogate data" => "surrogates/surrogates_overview.md",
+        "Docs" => [
+            "randomshuffle" => "surrogates/randomshuffle_docs.md",
+            "randomamplitudes" => "surrogates/randomamplitudes_docs.md",
+            "randomphases" => "surrogates/randomphases_docs.md",
+            "aaft" => "surrogates/aaft_docs.md",
+            "iaaft" => "surrogates/iaaft_docs.md"
         ],
-        "Unconstrained surrogate examples" => [
-            "Random phase Fourier surrogates" => "surrogates/Fourierphase.md",
-            "Random amplitude Fourier surrogates" => "surrogates/Fourieramp.md"
-        ],
-        "Function documentation" => "surrogates/functiondocs.md"
+        "Examples" => [
+            "randomshuffle" => "surrogates/randomshuffle_example.md",
+            "randomamplitudes" => "surrogates/randomamplitudes_example.md",
+            "randomphases" => "surrogates/randomphases_example.md",
+            "aaft" => "surrogates/aaft_example.md",
+            "iaaft" => "surrogates/iaaft_example.md"
+        ]
     ],
-    "Causality measures" => [
-        "causalitytools.md",
-        "Transfer entropy" => [
-            "Which estimator to choose?" => "transferentropy/overview.md",
-            "Transfer operator estimator" => "transferentropy/transferoperator.md",
-            "Visitation frequency estimator" => "transferentropy/visitfreq.md",
-            "Quick start examples" => "transferentropy/quickstart.md",
-            "Reducing bias" => "transferentropy/reducing_bias.md"
-            ]
-        ],
-    "Examples of coupled dynamical systems" => [
-        "overview" => "examplesystems/examples.md",
-        "Discrete maps" => "examplesystems/discrete_maps.md",
-        "Continuous" => "examplesystems/continuous.md"
-    ],
-    "Tutorials" => "tutorials/tutorialoverview.md"
+
+    #"Workflow" => "workflow.md",
+
+    #"Interop with DynamicalSystems.jl" => [
+    #    "Example 1" => "interop_dynamicalsystems_infoflow1.md"
+    #],
+
+    #"Examples" => [
+    #    "TE partitioning schemes"=> "transferentropy/examples_TE_different_partitionings.md"
+    #],
+
+    "Example systems" => [
+		"ar1" => "example_systems/ar1.md",
+        "henon2" => "example_systems/henon2.md",
+        "logistic2" => "example_systems/logistic2.md",
+        "logistic3" => "example_systems/logistic3.md",
+		"linearmap3d_nonlinearcoupling" => "example_systems/linearmap3d_nonlinearcoupling.md",
+		"verdes" => "example_systems/verdes.md"
+    ]
 ]
 
 makedocs(
-    modules = [CausalityTools],
+    sitename = "CausalityTools.jl documentation",
+    modules = [CausalityTools,
+                TransferEntropy,
+                PerronFrobenius,
+                StateSpaceReconstruction,
+                TimeseriesSurrogates,
+                CrossMappings],
     format = :markdown,
-    sitename = "CausalityTools.jl",
-    authors = "Kristian Agasøster Haaga",
-    pages = PAGES,
-    clean = true
-    # Use clean URLs, unless built as a "local" build
-    #html_prettyurls = !("local" in ARGS),
-    #html_canonical = "https://kahaaga.github.io/CausalityTools.jl/latest/"
+    pages = PAGES
 )
 
-# deploydocs(
-#     Deps.pip("pygments", "mkdocs", "python-markdown-math")
-#     repo   = "github.com/kahaaga/CausalityTools.jl.git",
-#     julia  = "0.6",
-#     target = "build",
-#     deps = nothing,
-#     make = nothing,
-#     osname = "linux"
-# )
+if !Sys.iswindows()
+    deploydocs(
+        deps   = Deps.pip("mkdocs==0.17.5", "mkdocs-material==2.9.4",
+        "python-markdown-math", "pygments", "pymdown-extensions"),
+        repo   = "github.com/kahaaga/CausalityTools.jl.git",
+        target = "site",
+        make = () -> run(`mkdocs build`)
+    )
+end

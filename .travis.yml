@@ -8,8 +8,25 @@ matrix:
 allow_failures:
 - julia: nightly
 
-script:
-  - julia -e 'using Pkg; Pkg.build(); Pkg.add("PyCall")'
-  - julia -e 'ENV["PYTHON"] = ""; using Pkg; Pkg.build("PyCall")'
-  - julia -e 'using Conda; Conda.add("scipy")'
-  - julia -e 'using Pkg; Pkg.test()'
+env:
+  matrix:
+    - JULIA_SPECIALFUNCTIONS_BUILD_SOURCE=true
+addons:
+  apt_packages:
+    - gfortran
+
+
+jobs:
+  include:
+    - stage: "Documentation"
+      julia: 1.0
+      os: linux
+      script:
+        - julia --project=docs/ -e 'using Pkg;
+                                    Pkg.develop(PackageSpec(path=pwd()));
+                                    Pkg.instantiate();
+                                    ENV["PYTHON"] = "";
+                                    Pkg.build("PyCall");
+                                    using Conda; Conda.add("scipy")'
+        - julia --project=docs/ docs/make.jl
+      after_success: skip
