@@ -34,7 +34,7 @@ PAGES = [
         #    "Transfer operator triangulation" => "transferoperator/transferoperator_triang_example.md"
         #],
 
-        "Invariant measure" => "invariantmeasure/invariantmeasure_docs.md",#[
+        "Invariant measure" => "invariantmeasure/invariantmeasure_docs.md"#[
             #"Documentation" => ,
             #"Examples" => "invariantmeasure/invariantmeasure_example.md"
         #]
@@ -77,9 +77,15 @@ PAGES = [
     #    "Example 1" => "interop_dynamicalsystems_infoflow1.md"
     #],
 
-    #"Examples" => [
-    #    "TE partitioning schemes"=> "transferentropy/examples_TE_different_partitionings.md"
-    #],
+    "Examples" => [
+       "examples/crossmappings/ccm_gif.md",
+       "examples/crossmappings/examples_crossmappings_ar1.md",
+       "examples/crossmappings/examples_crossmappings_henon2.md",
+       "examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md",
+       "examples/crossmappings/examples_crossmappings_logistic2.md",
+       "examples/crossmappings/examples_crossmappings_logistic3.md",
+       "examples/crossmappings/examples_crossmappings_verdes.md"
+    ],
 
     "Example systems" => [
 		"ar1" => "example_systems/ar1.md",

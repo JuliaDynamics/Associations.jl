@@ -71,6 +71,14 @@ pages:
     - linearmap3d_nonlinearcoupling: example_systems/linearmap3d_nonlinearcoupling.md
     - verdes: example_systems/verdes.md
   - Worked examples:
+    - Convergent cross mapping:
+      - Animation code: examples/crossmappings/ccm_gif.md
+      - Example, ar1: examples/crossmappings/examples_crossmappings_ar1.md
+      - Example, henon2: examples/crossmappings/examples_crossmappings_henon2.md
+      - Example, logistic2: examples/crossmappings/examples_crossmappings_logistic2.md
+      - Example, logistic3: examples/crossmappings/examples_crossmappings_logistic3.md
+      - Example, linearmap3d_nonlinearcoupling: examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md
+      - Example, verdes: examples/crossmappings/examples_crossmappings_verdes.md
     - Interacting with DynamicalSystems.jl:
       - Example 1 - Information flow between coupled logistic maps: interop_dynamicalsystems_infoflow1.md
   #- Examples:
