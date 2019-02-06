@@ -1,4 +1,6 @@
-@recipe function f(riv::PerronFrobenius.RectangularInvariantMeasure;
+import PerronFrobenius.RectangularInvariantMeasure
+
+@recipe function f(riv::RectangularInvariantMeasure;
                     boxfillfactor::Int = 3, linesegments = true,
                     lw = 0.8, lc = :black, lα = 0.5, ls = :do,
                     ms = 0.2, mc = :black, mα = 0.3)

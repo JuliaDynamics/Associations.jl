@@ -10,7 +10,6 @@ using StaticArrays
 using LinearAlgebra
 using Measures
 
-
 @reexport using TimeseriesSurrogates
 @reexport using StateSpaceReconstruction
 @reexport using PerronFrobenius
@@ -36,7 +35,10 @@ include("surrogates/surrogates.jl")
 include("method_wrappers/highlevel_methods.jl")
 
 # Plot recipes, also for all sub-packages
-include("plot_recipes/recipes.jl")
+#include("plot_recipes/CausalityToolsPlotRecipes.jl")
+
+# Interop with DynamicalSystems.
+#include("interop_dynamicalsystems/interop_dynamicalsystems_infoflow1.jl")
 
 export
 Dataset,

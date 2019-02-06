@@ -5,6 +5,7 @@ repo = "https://github.com/kahaaga/CausalityTools.jl.git"
 
 [deps]
 AbstractFFTs = "621f4979-c628-5d54-868e-fcf4e3e8185c"
+CausalityToolsBase = "1d2b4f6e-f63c-11e8-22f7-97940fddd364"
 Conda = "8f4d0f93-b110-5947-807f-2305c1781a2d"
 CrossMappings = "7011085d-2e9b-5a7b-b0c2-f102c05e50c2"
 DifferentialEquations = "0c46a032-eb83-5123-abaf-570d42b7fbaa"

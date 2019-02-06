@@ -1,7 +1,7 @@
-import StateSpaceReconstruction: embed
+import StateSpaceReconstruction: customembed
 
 """
-    te(driver, response;
+    transferentropy(driver, response;
         estimator = :tetogrid,
         E = nothing, v = nothing,
         ϵ = nothing, n_ϵ = 5, ν = 1, τ = 1, dim = 3,
@@ -111,22 +111,22 @@ function transferentropy(driver, response;
     # computes conditional mutual information.
     if !(typeof(E) == Embeddings.AbstractEmbedding) || !(typeof(v) == TEVars)
         if dim == 3
-            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 1], [ν, 0, 0])
+            E = customembed([driver, response], [2, 2, 1], [ν, 0, 0])
             v = TEVars([1], [2], [3])
         elseif dim == 4
-            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 1], [ν, 0, -τ, 0])
+            E = customembed([driver, response], [2, 2, 2, 1], [ν, 0, -τ, 0])
             v = TEVars([1], [2, 3], [4])
         elseif dim == 5
-            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, 0])
+            E = customembed([driver, response], [2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, 0])
             v = TEVars([1], [2, 3, 4], [5])
         elseif dim == 6
-            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, 0])
+            E = customembed([driver, response], [2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, 0])
             v = TEVars([1], [2, 3, 4, 5], [6])
         elseif dim == 7
-            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, 0])
+            E = customembed([driver, response], [2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, 0])
             v = TEVars([1], [2, 3, 4, 5, 6], [7])
         elseif dim == 8
-            E = StateSpaceReconstruction.embed([driver, response], [2, 2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, -5*τ, 0])
+            E = customembed([driver, response], [2, 2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, -5*τ, 0])
             v = TEVars([1], [2, 3, 4, 5, 6, 7], [8])
         end
     end
@@ -183,7 +183,7 @@ function transferentropy(driver, response;
                 #warn("Invariantizing embedding before calculating transfer matrix...")
                 #t = triangulate(invariantize(E))
                 #TO = transferoperator_approx(t, n_pts = n_randpts, sample_randomly = sample_randomly)
-                #invdist = left_eigenvector(TO)
+                #invdist = invariantmeasure(TO)
                 #tes[i] = transferentropy_transferoperator_triang(t, invdist, n_ϵ, n_reps)
         end
 

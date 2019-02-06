@@ -15,39 +15,65 @@ extra_javascript:
 markdown_extensions:
   - extra
   - tables
-  - fenced_code
   - mdx_math
+  - footnotes
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
 
 docs_dir: 'build'
 
 pages:
   - Home: index.md
   - Glossary:
-    #- Delay embeddings: embed.md
-    - Discretization schemes: discretization.md
-    #  - Rectangular partitioning: partitioning_rectangular.md
-    #  - Triangulation partitioning: partitioning_triangulation.md
-  - Transfer operator:
-    - Grid estimator: transferoperator/transferoperator_grid_docs.md
-    #  - Triangulation estimator: transferoperator/transferoperator_triang_docs.md
-    #- Examples:
-    #  - Grid estimator: transferoperator/transferoperator_grid_example.md
-    #  - Triangulation estimator: transferoperator/transferoperator_triang_example.md
-  - Invariant measures: invariantmeasure/invariantmeasure_docs.md
-    #- Examples: invariantmeasure/invariantmeasure_example.md
-  - Transfer entropy (conditional mutual information):
-    #- Common interface: transferentropy/commoninterface_TE.md
-    #- Estimator documentation:
-    - Common interface: transferentropy/wrapper_TE.md
-    - kNN estimator: transferentropy/estimator_TE_kNN.md
-    - Transfer operator grid estimator: transferentropy/estimator_TE_transferoperator_grid.md
-    - Visitation frequency estimator: transferentropy/estimator_TE_visitfreq.md
-  - Cross mappings: crossmappings/crossmapping.md
-      #- Examples:
-      #  - kNN: transferentropy/example_TE_kNN.md
-      #  - Transfer operator grid: example_TE_transferoperator_grid.md
-  #- Cross mapping causality:
-  #  - Overview: cross_mappings.md
+    - Delay embeddings (SSR): glossary/embed.md
+    - Discretization schemes: glossary/discretization.md
+    - Invariantizing: glossary/invariantizing/invariantizing.md
+
+  - Dynamical invariants:
+    - Transfer operator:
+      - Overview: transferoperator/overview.md
+      - Composite types:
+        - Rectangular binning: transferoperator/composite_types/rectangular_binning.md
+        - Triangulation, exact: transferoperator/composite_types/triang_exact.md
+        - Triangulation, approximate: transferoperator/composite_types/triang_approx.md
+      - Estimators:
+        - Rectangular binning: transferoperator/transferoperator_rectangular_binning.md
+        - Triangulation, exact: transferoperator/transferoperator_triang_exact.md
+        - Triangulation, approximate: transferoperator/transferoperator_triang_approx.md
+    - Invariant measures:
+      - Overview: invariantmeasure/invariantmeasure_overview.md
+      - Invariant measure: invariantmeasure/invariantmeasure.md
+      - Rectangular estimators:
+        - Rectangular: invariantmeasure/rectangularinvariantmeasure.md
+        - Induced: invariantmeasure/inducedinvariantmeasure.md
+        - Average: invariantmeasure/averageinvariantmeasure.md
+  - Causal inference:
+
+    - Transfer entropy:
+      - Common interface: transferentropy/wrapper_TE.md
+      - kNN estimator: transferentropy/estimator_TE_kNN.md
+      - Transfer operator grid estimator: transferentropy/estimator_TE_transferoperator_grid.md
+      - Visitation frequency estimator: transferentropy/estimator_TE_visitfreq.md
+
+    - Cross mappings:
+      - CCM:
+        - Overview: crossmappings/ccm/overview.md
+        - Cross map, single time series length: crossmappings/ccm/crossmapping.md
+        - Cross map, multiple time series length: crossmappings/ccm/convergentcrossmapping.md
   - Surrogate data:
     - The method of surrogate data: surrogates/surrogates_overview.md
     - Methods:
@@ -62,24 +88,33 @@ pages:
       - Random phases: surrogates/randomphases_example.md
       - AAFT: surrogates/aaft_example.md
       - iAAFT: surrogates/iaaft_example.md
-  #- Recommended workflow: workflow.md
-  - Example systems:
+
+  - Pre-implemented coupled dynamical systems:
     - ar1: example_systems/ar1.md
     - henon2: example_systems/henon2.md
     - logistic2: example_systems/logistic2.md
     - logistic3: example_systems/logistic3.md
     - linearmap3d_nonlinearcoupling: example_systems/linearmap3d_nonlinearcoupling.md
     - verdes: example_systems/verdes.md
+
   - Worked examples:
+    - Transfer operator estimation:
+      - Triangulation, exact: examples/transferoperators/exact.md
+      - Triangulation, approximate: examples/transferoperators/approx.md
+
     - Convergent cross mapping:
       - Animation code: examples/crossmappings/ccm_gif.md
-      - Example, ar1: examples/crossmappings/examples_crossmappings_ar1.md
-      - Example, henon2: examples/crossmappings/examples_crossmappings_henon2.md
-      - Example, logistic2: examples/crossmappings/examples_crossmappings_logistic2.md
-      - Example, logistic3: examples/crossmappings/examples_crossmappings_logistic3.md
-      - Example, linearmap3d_nonlinearcoupling: examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md
-      - Example, verdes: examples/crossmappings/examples_crossmappings_verdes.md
+      - Example 1 - ar1: examples/crossmappings/examples_crossmappings_ar1.md
+      - Example 2 - henon2: examples/crossmappings/examples_crossmappings_henon2.md
+      - Example 3 - logistic2: examples/crossmappings/examples_crossmappings_logistic2.md
+      - Example 4 - logistic3: examples/crossmappings/examples_crossmappings_logistic3.md
+      - Example 5 - linearmap3d_nonlinearcoupling: examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md
+      - Example 6 - verdes: examples/crossmappings/examples_crossmappings_verdes.md
     - Interacting with DynamicalSystems.jl:
       - Example 1 - Information flow between coupled logistic maps: interop_dynamicalsystems_infoflow1.md
-  #- Examples:
-  #  - TE partitioning schemes: transferentropy/examples_TE_different_partitionings.md
+  - Plot recipes:
+    - Recipe overview: plot_recipes/overview_recipes.md
+    - Transfer operators:
+      - Triangulation, exact: plot_recipes/recipe_transferoperator_triang_exact.md
+      - Triangulation, approximate: plot_recipes/recipe_transferoperator_triang_approx.md
+      - Rectangular binning: plot_recipes/recipe_transferoperator_rectangular_binning.md

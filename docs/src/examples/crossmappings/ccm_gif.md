@@ -14,7 +14,7 @@ Use it at your own risk!
 
 The number of generated plots depends on the length of `ts_lengths`; one plot is created per element.
 
-`make_ccm_gif` accepts all `kwargs` taken by [`convergentcrossmap`](../crossmappings/crossmappings.md). Other `kwargs` taken by `make_ccm_gif` specifically:
+`make_ccm_gif` accepts all `kwargs` taken by [`convergentcrossmap`](../../crossmappings/crossmapping.md). Other `kwargs` taken by `make_ccm_gif` specifically:
 `fps::Int` sets the fps for the saved gif, defaults to `5`. `save_anim::Bool` saves the animation as a
 `.jld2` file if `true`, but defaults to `false`. `τ::Int` sets embedding lag necessary to create
 the 3D embedding plot, defaults to `1`. Once run, the function automatically saves output as `tmp.gif` in the

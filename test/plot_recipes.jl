@@ -1,6 +1,7 @@
 using CausalityTools
 using RecipesBase
-
+import StateSpaceReconstruction:
+	customembed
 
 @testset "Recipes for subpackages" begin
 
@@ -9,9 +10,9 @@ using RecipesBase
     d = Dict{Symbol,Any}()
 
     # Create an example embedding
-    E = StateSpaceReconstruction.embed([diff(rand(30)) for i = 1:3], [1, 2, 3], [1, 0, -1])
+    E = customembed([diff(rand(30)) for i = 1:3], [1, 2, 3], [1, 0, -1])
     E_invariant = invariantize(E)
-    invm = RectangularInvariantMeasure(E, [4, 5, 6])
+    invm = rectangularinvariantmeasure(E, [4, 5, 6])
 
 
     #@testset "StateSpaceReconstruction.AbstractEmbedding" begin
@@ -39,7 +40,7 @@ using RecipesBase
 		n_pts = size(pts, 2)
 
 		# Embed the point
-		E = StateSpaceReconstruction.embed(pts)
+		E = customembed(pts)
 
 		# Make sure last point is inside the convex hull of the previous points.
 		# If it is not, move it towards the center of the embedding until it is.
@@ -51,10 +52,10 @@ using RecipesBase
 		forwardpts  = E.points[:, 2:end]
 
 		# Re-create the embedding, but exclude the last point.
-		E = StateSpaceReconstruction.embed(originalpts)
+		E = customembed(originalpts)
 
 		# Triangulate all points but the last point.
-		DT = delaunay(E);
+		DT = DelaunayTriangulation(E);
 
 		@test typeof(RecipesBase.apply_recipe(d, (pts, E, DT))) == Array{RecipesBase.RecipeData,1}
 	end

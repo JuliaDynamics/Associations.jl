@@ -4,7 +4,7 @@ using CrossMappings
 using TimeseriesSurrogates
 using Documenter, DocumenterMarkdown
 using PyCall, Conda
-Conda.add("scipy")
+#Conda.add("scipy")
 using Plots
 using DynamicalSystems
 using Distributions
@@ -16,28 +16,57 @@ ENV["GKSwstype"] = "100"
 
 PAGES = [
     "index.md",
-    "Discretization" => "discretization.md",
+    "Glossary" => [
+        "Delay embeddings (SSR)" => "glossary/embed.md",
+        "Discretization" => "glossary/discretization.md",
+        "Invariantizing" => [
+            "glossary/invariantizing/invariantizing.md",
+            "glossary/invariantizing/invariantize.md",
+            "glossary/invariantizing/forwardlinearmap_invariant.md",
+        ]
 
+    ],
     #"StateSpaceReconstruction" => [
         #"Delay embeddings" => "embed.md",
         #"Rectangular partitioning" => "partitioning_rectangular.md",
         #"Triangulation partitioning" => "partitioning_triangulation.md"
     #],
 
+    "Plot recipes" => [
+        "Recipe overview" => "plot_recipes/overview_recipes.md",
+        "Transfer operator" => [
+            "plot_recipes/recipe_transferoperator_triang_exact.md",
+            "plot_recipes/recipe_transferoperator_triang_approx.md",
+            "plot_recipes/recipe_transferoperator_rectangular_binning.md"
+        ],
+        "Invariant distribution" => [
+            "plot_recipes/recipe_invariant_distribution.md"
+        ]
+    ],
+
     "PerronFrobenius" => [
-        "Estimator documentation" => [
-            "Transfer operator grid docs" => "transferoperator/transferoperator_grid_docs.md",
-        #    "Transfer operator triangulation docs" => "transferoperator/transferoperator_triang_docs.md"
+        "Transfer operator" => [
+			"transferoperator/overview.md",
+            "transferoperator/transferoperator_rectangular_binning.md",
+            "transferoperator/transferoperator_triang_exact.md",
+            "transferoperator/transferoperator_triang_approx.md",
+            "transferoperator/composite_types/triang_approx.md",
+            "transferoperator/composite_types/triang_exact.md",
+            "transferoperator/composite_types/rectangular_binning.md"
+        #    "Transfer operator triangulation docs" => "transferoperator/transferoperator_triang_approx.md"
         ],
         #"Examples" => [
         #    "Transfer operator grid example" => "transferoperator/transferoperator_grid_example.md",
         #    "Transfer operator triangulation" => "transferoperator/transferoperator_triang_example.md"
         #],
 
-        "Invariant measure" => "invariantmeasure/invariantmeasure_docs.md"#[
-            #"Documentation" => ,
-            #"Examples" => "invariantmeasure/invariantmeasure_example.md"
-        #]
+        "Invariant measure" => [
+			"invariantmeasure/invariantmeasure_overview.md",
+            "invariantmeasure/invariantmeasure.md",
+            "invariantmeasure/rectangularinvariantmeasure.md",
+            "invariantmeasure/inducedinvariantmeasure.md",
+            "invariantmeasure/averageinvariantmeasure.md"
+        ],
     ],
 
     "Causality algorithms" => [
@@ -49,7 +78,9 @@ PAGES = [
             "Wrapper" => "transferentropy/wrapper_TE.md"
         ],
         "Cross mappings" => [
-            "Convergent cross mapping" => "crossmappings/crossmapping.md"
+            "crossmappings/ccm/overview.md",
+            "crossmappings/ccm/crossmapping.md",
+            "crossmappings/ccm/convergentcrossmapping.md"
         ]
     ],
 
@@ -78,13 +109,18 @@ PAGES = [
     #],
 
     "Examples" => [
-       "examples/crossmappings/ccm_gif.md",
-       "examples/crossmappings/examples_crossmappings_ar1.md",
-       "examples/crossmappings/examples_crossmappings_henon2.md",
-       "examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md",
-       "examples/crossmappings/examples_crossmappings_logistic2.md",
-       "examples/crossmappings/examples_crossmappings_logistic3.md",
-       "examples/crossmappings/examples_crossmappings_verdes.md"
+        # Transfer operators
+        "examples/transferoperators/exact.md",
+        "examples/transferoperators/approx.md",
+
+        # Cross mappings
+        "examples/crossmappings/ccm_gif.md",
+        "examples/crossmappings/examples_crossmappings_ar1.md",
+        "examples/crossmappings/examples_crossmappings_henon2.md",
+        "examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md",
+        "examples/crossmappings/examples_crossmappings_logistic2.md",
+        "examples/crossmappings/examples_crossmappings_logistic3.md",
+        "examples/crossmappings/examples_crossmappings_verdes.md"
     ],
 
     "Example systems" => [
@@ -105,7 +141,7 @@ makedocs(
                 StateSpaceReconstruction,
                 TimeseriesSurrogates,
                 CrossMappings],
-    format = :markdown,
+    format = Markdown(),
     pages = PAGES
 )
 

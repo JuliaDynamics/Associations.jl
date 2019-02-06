@@ -119,7 +119,7 @@ To construct the embedding, we use the `embed` function as follows.
 ```@example interop1
 τ = 1 # embedding lag
 ν = 1 # forward prediction lag
-E = StateSpaceReconstruction.embed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
+E = StateSpaceReconstruction.customembed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
 ```
 
 This means that `y` appears in the 1st, 2nd and 3rd columns of the embedding,
@@ -174,8 +174,8 @@ x, y = orbit[:, 1], orbit[:, 2]
 # Embedding
 τ = 1 # embedding lag
 ν = 1 # forward prediction lag
-E_xtoy = StateSpaceReconstruction.embed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
-E_ytox = StateSpaceReconstruction.embed([y, x], [2, 2, 2, 1], [ν, 0, -τ, 0])
+E_xtoy = StateSpaceReconstruction.customembed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
+E_ytox = StateSpaceReconstruction.customembed([y, x], [2, 2, 2, 1], [ν, 0, -τ, 0])
 
 # Which variables go where?
 Tf = [1]     # target, future

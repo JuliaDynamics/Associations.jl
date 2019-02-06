@@ -1,4 +1,4 @@
-Visualise the convergent cross mapping algorithm for a realisation of the [`henon2`](../../example_systems/verdes.md) system.
+Visualise the convergent cross mapping algorithm for a realisation of the [`verdes`](../../example_systems/verdes.md) system.
 The source code for and a description of the `make_ccm_gif` function can be found [here](ccm_gif.md).
 
 
