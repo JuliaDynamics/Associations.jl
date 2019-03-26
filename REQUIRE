@@ -1,9 +1,12 @@
 julia 1.0
+CausalityToolsBase
 AbstractFFTs
+DelayEmbeddings
 Conda
 InplaceOps
 DifferentialEquations
 Distances
+HypothesisTests
 Distributions
 DynamicalSystemsBase
 DynamicalSystems

@@ -22,8 +22,8 @@ end
 	include("discrete_systems.jl")
 end
 
-@testset "Continuous systems" begin
-	include("continuous_systems.jl")
+@testset "Algorithms" begin
+	include("test_alg_jointdistancedistribution.jl")
 end
 
 @testset "Transfer entropy wrappers" begin

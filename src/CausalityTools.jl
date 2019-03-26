@@ -1,6 +1,7 @@
 module CausalityTools
 
 using DynamicalSystems
+using DelayEmbeddings
 using Distances
 using Reexport
 using AbstractFFTs
@@ -9,6 +10,7 @@ using RecipesBase
 using StaticArrays
 using LinearAlgebra
 using Measures
+using HypothesisTests
 
 
 @reexport using TimeseriesSurrogates
@@ -31,6 +33,9 @@ include("systems/Systems.jl")
 
 # Surrogate wrappers for embeddings and Datasets
 include("surrogates/surrogates.jl")
+
+# Algorithms 
+include("algorithms/jointdistancedistribution.jl")
 
 # Wrappers of the different methods.
 include("method_wrappers/highlevel_methods.jl")
