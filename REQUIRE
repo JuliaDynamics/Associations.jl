@@ -7,7 +7,7 @@ DynamicalSystems
 PerronFrobenius 0.5.3
 RecipesBase
 Reexport
-Simplices
+Simplices 0.4.1
 StateSpaceReconstruction 0.4.2
 StaticArrays
 StatsBase
