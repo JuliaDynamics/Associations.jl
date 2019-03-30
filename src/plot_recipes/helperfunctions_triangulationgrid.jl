@@ -7,8 +7,6 @@ import StateSpaceReconstruction:
     DelaunayTriangulation,
     AbstractEmbedding
 
-import DelayEmbeddings: Dataset
-
 import StaticArrays: SArray
 
 function interiorpoints(s::SArray{D, T}, n::Int) where {D, T}

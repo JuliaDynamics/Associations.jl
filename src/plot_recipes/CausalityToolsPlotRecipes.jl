@@ -2,7 +2,8 @@ using Reexport
 
 @reexport module CausalityToolsPlotRecipes
     using RecipesBase
-
+    using DynamicalSystems
+    
     # Helper functions used in the various recipes. These must be imported first.
     include("helperfunctions_rectangulargrid.jl")
     include("helperfunctions_triangulationgrid.jl")

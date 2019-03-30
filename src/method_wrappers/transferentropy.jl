@@ -1,10 +1,9 @@
-import StateSpaceReconstruction: customembed
 
 """
     transferentropy(driver, response;
         estimator = :tetogrid,
         E = nothing, v = nothing,
-        ϵ = nothing, n_ϵ = 5, ν = 1, τ = 1, dim = 3,
+        ϵ = nothing, n_ϵ = 5, η = 1, τ = 1, dim = 3,
         k1 = 2, k2 = 3, distance_metric = Chebyshev(),
         which_is_surr = :none,
         surr_func = aaft,
@@ -23,7 +22,7 @@ estimators: grid-based approaches, and nearest-neighbor based approaches.
 ## Embedding instructions
 Specify embedding and instructions for how to compute marginal
 entropies are with `E::AbstractEmbedding` and `v::TEVars`. If either
-is missing, the data is embedded using the provided forward prediction lag `ν`,
+is missing, the data is embedded using the provided forward prediction lag `η`,
 with embedding dimension `dim` and embedding lag `η`.
 
 ## Grid-based estimators
@@ -59,21 +58,21 @@ A surrogate analysis will be run if `which_is_surr` is set to
 
 The type of surrogate must be either `randomshuffle`, `randomphases`,
 `randomamplitudes`, `aaft` or `iaaft`.
-
 """
-function transferentropy(driver, response;
+function transferentropy(driver::AbstractVector{T}, response::AbstractVector{T};
         dim = 3,
         τ = 1,
-        ν = 1,
+        η = 1,
         estimator = :tetogrid,
         E = nothing, v = nothing,
         ϵ = nothing, n_ϵ = 5,
         k1 = 2, k2 = 3, distance_metric = Chebyshev(),
         which_is_surr = :none,
         surr_func = aaft,
+        nbin_range = 2,
         min_numbins = nothing,
-        max_numbins = nothing)
-
+        max_numbins = nothing) where T
+ 
     estims_te_grid = [:transferentropy_transferoperator_grid, :tetogrid]
     estims_te_kNN = [:transferentropy_kraskov, :tekraskov, :tekNN]
     estims_te_freq = [:transferentropy_visitfreq, :tefreq]
@@ -106,28 +105,28 @@ function transferentropy(driver, response;
     elseif !(which_is_surr == :none)
         error("$which_is_surr is not a valid surrogate choice." )
     end
-
+    D = Dataset(driver, response)
     # Compute transfer entropy analogously to how Krakovskà et al. (2018)
     # computes conditional mutual information.
     if !(typeof(E) == Embeddings.AbstractEmbedding) || !(typeof(v) == TEVars)
         if dim == 3
-            E = customembed([driver, response], [2, 2, 1], [ν, 0, 0])
-            v = TEVars([1], [2], [3])
+            E = customembed(D, Positions(2, 2, 1), Lags(η, 0, 0))
+            v = TEVars(Tf = [1], Tpp = [2], Spp = [3])
         elseif dim == 4
-            E = customembed([driver, response], [2, 2, 2, 1], [ν, 0, -τ, 0])
-            v = TEVars([1], [2, 3], [4])
+            E = customembed(D, Positions(2, 2, 2, 1), Lags(η, 0, -τ, 0))
+            v = TEVars(Tf = [1], Tpp = [2, 3], Spp = [4])
         elseif dim == 5
-            E = customembed([driver, response], [2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, 0])
-            v = TEVars([1], [2, 3, 4], [5])
+            E = customembed(D, Positions(2, 2, 2, 2, 1), Lags(η, 0, -τ, -2*τ, 0))
+            v = TEVars(Tf = [1], Tpp = [2, 3, 4], Spp = [5])
         elseif dim == 6
-            E = customembed([driver, response], [2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, 0])
-            v = TEVars([1], [2, 3, 4, 5], [6])
+            E = customembed(D, Positions(2, 2, 2, 2, 2, 1), Lags(η, 0, -τ, -2*τ, -3*τ, 0))
+            v = TEVars(Tf = [1], Tpp = [2, 3, 4, 5], Spp = [6])
         elseif dim == 7
-            E = customembed([driver, response], [2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, 0])
-            v = TEVars([1], [2, 3, 4, 5, 6], [7])
+            E = customembed(D, Positions(2, 2, 2, 2, 2, 2, 1), Lags(η, 0, -τ, -2*τ, -3*τ, -4*τ, 0))
+            v = TEVars(Tf = [1], Tpp = [2, 3, 4, 5, 6], Spp = [7])
         elseif dim == 8
-            E = customembed([driver, response], [2, 2, 2, 2, 2, 2, 2, 1], [ν, 0, -τ, -2*τ, -3*τ, -4*τ, -5*τ, 0])
-            v = TEVars([1], [2, 3, 4, 5, 6, 7], [8])
+            E = customembed(D, Positions(2, 2, 2, 2, 2, 2, 2, 1), Lags(η, 0, -τ, -2*τ, -3*τ, -4*τ, -5*τ, 0))
+            v = TEVars(Tf = [1], Tpp = [2, 3, 4, 5, 6, 7], Spp = [8])
         end
     end
 
@@ -135,15 +134,15 @@ function transferentropy(driver, response;
         ϵ = zeros(Float64, n_ϵ, dim)
         # We a range of bin sizes along each axis.
         for d in 1:dim
-            dmin = Base.minimum(E.points[d, :])
-            dmax = Base.maximum(E.points[d, :])
+            dmin = Base.minimum(E.reconstructed_pts[:, d])
+            dmax = Base.maximum(E.reconstructed_pts[:, d])
             maxrange = dmax - dmin
 
             # If minimum and maximum number of bins are not provided,
             # use the Palus recommendation of N^(1/dim) as a max.
             if !(typeof(min_numbins) == Int && typeof(max_numbins) == Int)
-                max_numbins = ceil(Int, npoints(E)^(1/(dim+1)))
-                min_numbins = max_numbins - 1
+                max_numbins = ceil(Int, length(E.reconstructed_pts)^(1/(dim+1)))
+                min_numbins = max_numbins - nbin_range
             end
 
             max_bin_size = maxrange/max_numbins
@@ -167,7 +166,8 @@ function transferentropy(driver, response;
     for i = 1:length(ϵs)
         if estimator ∈ (:transferentropy_transferoperator_grid,
                         :tetogrid)
-            tes[i] = transferentropy_transferoperator_grid(E, ϵs[i], v)
+            #tes[i] = transferentropy_transferoperator_grid(E, ϵs[i], v)
+            tes[i] = transferentropy(E, v, RectangularBinning(ϵs[i]), TransferOperatorGrid())
 
         elseif estimator ∈ (:transferentropy_kraskov,
                             :tekraskov,
@@ -176,15 +176,11 @@ function transferentropy(driver, response;
 
         elseif estimator ∈ (:transferentropy_visitfreq,
                             :tefreq)
-            tes[i] = transferentropy_visitfreq(E, ϵs[i], v)
+            #tes[i] = transferentropy_visitfreq(E, ϵs[i], v)
+            tes[i] = transferentropy(E, v, RectangularBinning(ϵs[i]), VisitationFreq())
 
         elseif estimator == :transferoperator_triang
-                warn("$estimator is not implemented yet.")
-                #warn("Invariantizing embedding before calculating transfer matrix...")
-                #t = triangulate(invariantize(E))
-                #TO = transferoperator_approx(t, n_pts = n_randpts, sample_randomly = sample_randomly)
-                #invdist = invariantmeasure(TO)
-                #tes[i] = transferentropy_transferoperator_triang(t, invdist, n_ϵ, n_reps)
+                warn("high level wrapper for $estimator is not implemented yet.")
         end
 
     end

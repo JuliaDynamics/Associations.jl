@@ -3,7 +3,7 @@ import TimeseriesSurrogates.randomphases
 import TimeseriesSurrogates.randomamplitudes
 import TimeseriesSurrogates.aaft
 import TimeseriesSurrogates.iaaft
-import DynamicalSystemsBase.Dataset
+import DynamicalSystems.Dataset
 import StateSpaceReconstruction: Embeddings
 
 
@@ -341,5 +341,25 @@ function iaaft(d::DynamicalSystemsBase.Dataset; cols = 1:size(d, 2))
     Dataset(d_shuffled)
 end
 
+
+
+##########################
+# CustomReconstructions
+##########################
+
+randomshuffle(d::CustomReconstruction; cols = 1:size(d, 2)) = 
+    randomshuffle(d.reconstructed_pts; cols = cols)
+
+randomphases(d::CustomReconstruction; cols = 1:size(d, 2)) = 
+    randomphases(d.reconstructed_pts; cols = cols)
+
+randomamplitudes(d::CustomReconstruction; cols = 1:size(d, 2)) = 
+    randomamplitudes(d.reconstructed_pts; cols = cols)
+
+aaft(d::CustomReconstruction; cols = 1:size(d, 2)) = 
+    aaft(d.reconstructed_pts; cols = cols)
+  
+iaaft(d::CustomReconstruction; cols = 1:size(d, 2)) = 
+    iaaft(d.reconstructed_pts; cols = cols)
 
 export randomshuffle, randomphases, randomamplitudes, aaft, iaaft

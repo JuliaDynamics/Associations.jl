@@ -2,13 +2,6 @@
 
 using Distributions
 using DynamicalSystems
-import DynamicalSystemsBase:
-    DynamicalSystem,
-    ContinuousDynamicalSystem,
-    DiscreteDynamicalSystem,
-    Dataset
-
-import DifferentialEquations: @ode_def
 
 include("discretemaps/ar1.jl")
 include("discretemaps/anishchenko1.jl")
@@ -16,13 +9,14 @@ include("discretemaps/henon2.jl")
 include("discretemaps/henon4.jl")
 include("discretemaps/henontriple.jl")
 include("discretemaps/linearmap.jl")
-include("discretemaps/linearmap3d_nonlinearcoupling.jl")
+include("discretemaps/nonlinear3D_linear_and_nonlinear_coupling.jl")
 include("discretemaps/nontrivial_pegiun.jl")
-include("discretemaps/logistic2.jl")
+include("discretemaps/logistic2_unidir.jl")
+include("discretemaps/logistic2_bidir.jl")
 include("discretemaps/logistic3.jl")
 include("discretemaps/logistic4.jl")
 include("discretemaps/var1.jl")
-include("discretemaps/var1coupled.jl")
+include("discretemaps/ar1_bidirA.jl")
 include("discretemaps/verdes.jl")
 
 include("continuous_systems/chuacircuits_driven.jl")
@@ -39,23 +33,25 @@ include("continuous_systems/rosslerlorenz.jl")
 # Some systems (involving multiple lags) do not return instances
 # of DiscreteDynamicalSystem, but a Dataset with the finished
 # iterated map.
+
 export
 ###############
 # Discrete maps
 ###############
-eom_ar1, ar1,
+eom_ar1_unidir, ar1_unidir,
 eom_anishchenko1, anishchenko1,
 eom_henon2, henon2,
 eom_henon_triple, henon_triple,
 eom_henon4, henon4,
 eom_linearmap1, linearmap1,
-eom_linear3d_nonlinearcoupling, linear3d_nonlinearcoupling,
-eom_logistic2, logistic2,
+eom_nonlinear3d, nonlinear3d,
+eom_logistic2_unidir, logistic2_unidir,
+eom_logistic2_bidir, logistic2_bidir,
 eom_logistic3, logistic3,
 eom_logistic4, logistic4,
 eom_nontrivial_pegiun, nontrivial_pegiun,
 eom_var1, var1,
-eom_var1coupled, var1coupled,
+eom_ar1_bidirA, ar1_bidirA,
 eom_verdes, verdes
 
 
@@ -79,7 +75,7 @@ eom_rossler_lorenz, rossler_lorenz
 #trajectory(logistic3(), 10)
 #trajectory(logistic4(), 10)
 #trajectory(var1(), 10)
-#trajectory(var1coupled(), 10)
+#trajectory(ar1_bidirA(), 10)
 #trajectory(verdes(), 10)
 
 #trajectory(rossler_rossler(), 10)

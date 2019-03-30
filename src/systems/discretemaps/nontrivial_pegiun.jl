@@ -21,11 +21,11 @@ with zero mean and standard deviations ``\\sigma_1`` and ``\\sigma_2``. The
 
 # References
 
-Péguin-Feissolle, A., & Teräsvirta, T. (1999). A General Framework for
+[1] Péguin-Feissolle, A., & Teräsvirta, T. (1999). A General Framework for
 Testing the Granger Noncausaality Hypothesis. Universites d’Aix-Marseille II
 et III. [https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf)
 
-Chávez, M., Martinerie, J., & Le Van Quyen, M. (2003). Statistical
+[2] Chávez, M., Martinerie, J., & Le Van Quyen, M. (2003). Statistical
 assessment of nonlinear causality: application to epileptic EEG signals.
 Journal of Neuroscience Methods, 124(2), 113–128.
 doi:10.1016/s0165-0270(02)00367-9
@@ -73,15 +73,15 @@ end
     nontrivial_pegiun(;uᵢ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
         p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) -> Dataset
 
-Create a 2d discrete systems with nonlinear, nontrivial coupling from [1] .
-This version allows for tweaking the parameters of the equations. The variables
-are each normalised to zero mean and unit variance.
-
+A 2D discrete autoregressive system with nonlinear, nontrivial coupling from [1] .
+This system is from [1](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf), and
+was also studied in [2](https://www.sciencedirect.com/science/article/pii/S0165027002003679).
+The version implemented here allows for tweaking the parameters of the equations.
 The difference equations are
 
 ```math
 \\begin{aligned}
-x(t+1) &= p_2 + p_3 x(t-2) + \\dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \\xi_1(t) \\
+x(t+1) &= p_2 + p_3 x(t-2) + c_{yx}\\dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \\xi_1(t) \\
 y(t+1) &= p_1 y(t) + \\xi_2(t).
 \\end{aligned}
 ```
@@ -90,9 +90,16 @@ with zero mean and standard deviations ``\\sigma_1`` and ``\\sigma_2``. The
 ``\\xi_{1,2}(t)`` terms represent dynamical noise.
 
 # References
-1. Chávez, M., Martinerie, J., & Le Van Quyen, M. (2003). Statistical
+
+[1] Péguin-Feissolle, A., & Teräsvirta, T. (1999). A General Framework for
+Testing the Granger Noncausaality Hypothesis. Universites d’Aix-Marseille II
+et III. [https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf)
+
+[2] Chávez, M., Martinerie, J., & Le Van Quyen, M. (2003). Statistical
 assessment of nonlinear causality: application to epileptic EEG signals.
-Journal of Neuroscience Methods, 124(2), 113–128. doi:10.1016/s0165-0270(02)00367-9
+Journal of Neuroscience Methods, 124(2), 113–128.
+doi:10.1016/s0165-0270(02)00367-9
+[https://www.sciencedirect.com/science/article/pii/S0165027002003679](https://www.sciencedirect.com/science/article/pii/S0165027002003679)
 """
 function nontrivial_pegiun(;uᵢ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
         p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100)

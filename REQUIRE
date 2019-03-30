@@ -1,24 +1,15 @@
 julia 1.0
-CausalityToolsBase
-AbstractFFTs
-Conda
-InplaceOps
-DifferentialEquations
-Distances
+CausalityToolsBase 0.3.6
+CrossMappings 0.3.4
 Distributions
-DynamicalSystemsBase
+Distances
 DynamicalSystems
-NearestNeighbors
-Interpolations
-PerronFrobenius 0.2.0 0.2.4
-PyCall
+PerronFrobenius 0.5.3
 RecipesBase
 Reexport
-Simplices 0.2.1
+Simplices
+StateSpaceReconstruction 0.4.2
 StaticArrays
-StateSpaceReconstruction 0.3.0 0.3.2
-SpecialFunctions
-TimeseriesSurrogates 0.2.1
-TransferEntropy 0.3.1 0.3.4
-Measures
-CrossMappings 0.2.3 0.2.4
+StatsBase
+TimeseriesSurrogates 0.3.0
+TransferEntropy
