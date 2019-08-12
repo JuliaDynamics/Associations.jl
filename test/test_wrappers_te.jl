@@ -51,7 +51,7 @@
 # Regular TE
 ##########################
 
-using Test
+using Test, TransferEntropy, CausalityToolsBase
 k, l, m = 1, 1, 1
 τ = 1
 η = 1

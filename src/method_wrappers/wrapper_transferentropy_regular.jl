@@ -1,4 +1,5 @@
 import StatsBase.mean
+using TransferEntropy, CausalityToolsBase
 
 """
     standard_te(driver, response;
