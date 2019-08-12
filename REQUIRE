@@ -1,11 +1,11 @@
 julia 1.0
-CausalityToolsBase 0.3.6
+CausalityToolsBase 0.4.1
 Conda
 CrossMappings 0.3.4
 Distributions
 Distances
 DynamicalSystems
-PerronFrobenius 0.5.3
+PerronFrobenius 0.6.0
 RecipesBase
 Reexport
 Simplices 0.4.1
@@ -13,4 +13,4 @@ StateSpaceReconstruction 0.4.2
 StaticArrays
 StatsBase
 TimeseriesSurrogates 0.3.0
-TransferEntropy
+TransferEntropy 0.4.1
