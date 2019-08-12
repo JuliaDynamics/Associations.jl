@@ -1,9 +1,7 @@
 using CausalityTools
-using TransferEntropy, PerronFrobenius, StateSpaceReconstruction, Simplices
-using CrossMappings
 using TimeseriesSurrogates
-using Documenter, DocumenterMarkdown
 using PyCall, Conda
+using Documenter, DocumenterMarkdown
 #Conda.add("scipy")
 using Plots
 using DynamicalSystems
@@ -16,133 +14,27 @@ ENV["GKSwstype"] = "100"
 
 PAGES = [
     "index.md",
-    "Glossary" => [
-        "Delay embeddings (SSR)" => "glossary/embed.md",
-        "Discretization" => "glossary/discretization.md",
-        "Invariantizing" => [
-            "glossary/invariantizing/invariantizing.md",
-            "glossary/invariantizing/invariantize.md",
-            "glossary/invariantizing/forwardlinearmap_invariant.md",
-        ]
-
+    "Syntax overview" => "syntax_overview.md",
+    "CausalityToolsBase" => [
+        "Discretization" => "causalitytoolsbase/discretization.md"
     ],
-    #"StateSpaceReconstruction" => [
-        #"Delay embeddings" => "embed.md",
-        #"Rectangular partitioning" => "partitioning_rectangular.md",
-        #"Triangulation partitioning" => "partitioning_triangulation.md"
-    #],
-
-    "Plot recipes" => [
-        "Recipe overview" => "plot_recipes/overview_recipes.md",
-        "Transfer operator" => [
-            "plot_recipes/recipe_transferoperator_triang_exact.md",
-            "plot_recipes/recipe_transferoperator_triang_approx.md",
-            "plot_recipes/recipe_transferoperator_rectangular_binning.md"
-        ],
-        "Invariant distribution" => [
-            "plot_recipes/recipe_invariant_distribution.md"
-        ]
+    "Transfer operator estimation" => [
+        "Transfer operator" => "perronfrobenius/transferoperator.md",
+        "Invariant measure" => "perronfrobenius/invariantmeasure.md"
     ],
-
-    "PerronFrobenius" => [
-        "Transfer operator" => [
-			"transferoperator/overview.md",
-            "transferoperator/transferoperator_rectangular_binning.md",
-            "transferoperator/transferoperator_triang_exact.md",
-            "transferoperator/transferoperator_triang_approx.md",
-            "transferoperator/composite_types/triang_approx.md",
-            "transferoperator/composite_types/triang_exact.md",
-            "transferoperator/composite_types/rectangular_binning.md"
-        #    "Transfer operator triangulation docs" => "transferoperator/transferoperator_triang_approx.md"
-        ],
-        #"Examples" => [
-        #    "Transfer operator grid example" => "transferoperator/transferoperator_grid_example.md",
-        #    "Transfer operator triangulation" => "transferoperator/transferoperator_triang_example.md"
-        #],
-
-        "Invariant measure" => [
-			"invariantmeasure/invariantmeasure_overview.md",
-            "invariantmeasure/invariantmeasure.md",
-            "invariantmeasure/rectangularinvariantmeasure.md",
-            "invariantmeasure/inducedinvariantmeasure.md",
-            "invariantmeasure/averageinvariantmeasure.md"
-        ],
-    ],
-
-    "Causality algorithms" => [
-        "TransferEntropy" => [
-            #"Common interface" => "transferentropy/commoninterface_TE.md",
-            "kNN estimator" => "transferentropy/estimator_TE_kNN.md",
-            "Transfer operator grid estimator" => "transferentropy/estimator_TE_transferoperator_grid.md",
-            "Visitation frequency estimator" => "transferentropy/estimator_TE_visitfreq.md",
-            "Wrapper" => "transferentropy/wrapper_TE.md"
-        ],
-        "Cross mappings" => [
-            "crossmappings/ccm/overview.md",
-            "crossmappings/ccm/crossmapping.md",
-            "crossmappings/ccm/convergentcrossmapping.md"
-        ]
-    ],
-
-    "Surrogate data" => [
-        "The method of surrogate data" => "surrogates/surrogates_overview.md",
-        "Docs" => [
-            "randomshuffle" => "surrogates/randomshuffle_docs.md",
-            "randomamplitudes" => "surrogates/randomamplitudes_docs.md",
-            "randomphases" => "surrogates/randomphases_docs.md",
-            "aaft" => "surrogates/aaft_docs.md",
-            "iaaft" => "surrogates/iaaft_docs.md"
-        ],
-        "Examples" => [
-            "randomshuffle" => "surrogates/randomshuffle_example.md",
-            "randomamplitudes" => "surrogates/randomamplitudes_example.md",
-            "randomphases" => "surrogates/randomphases_example.md",
-            "aaft" => "surrogates/aaft_example.md",
-            "iaaft" => "surrogates/iaaft_example.md"
-        ]
-    ],
-
-    #"Workflow" => "workflow.md",
-
-    #"Interop with DynamicalSystems.jl" => [
-    #    "Example 1" => "interop_dynamicalsystems_infoflow1.md"
-    #],
-
-    "Examples" => [
-        # Transfer operators
-        "examples/transferoperators/exact.md",
-        "examples/transferoperators/approx.md",
-
-        # Cross mappings
-        "examples/crossmappings/ccm_gif.md",
-        "examples/crossmappings/examples_crossmappings_ar1.md",
-        "examples/crossmappings/examples_crossmappings_henon2.md",
-        "examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md",
-        "examples/crossmappings/examples_crossmappings_logistic2.md",
-        "examples/crossmappings/examples_crossmappings_logistic3.md",
-        "examples/crossmappings/examples_crossmappings_verdes.md"
-    ],
-
-    "Example systems" => [
-		"ar1" => "example_systems/ar1.md",
-        "henon2" => "example_systems/henon2.md",
-        "logistic2" => "example_systems/logistic2.md",
-        "logistic3" => "example_systems/logistic3.md",
-		"linearmap3d_nonlinearcoupling" => "example_systems/linearmap3d_nonlinearcoupling.md",
-		"verdes" => "example_systems/verdes.md"
+    "Transfer entropy" => [
+        "Estimators" => "transferentropy/transferentropy_estimators.md",
+        "Convenience functions" => "transferentropy/convenience_functions_te.md"
     ]
 ]
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
-    modules = [CausalityTools,
-                TransferEntropy,
-                PerronFrobenius,
-                StateSpaceReconstruction,
-                TimeseriesSurrogates,
-                CrossMappings],
-    format = Markdown(),
-    pages = PAGES
+    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase],
+    format = DocumenterMarkdown.Markdown(),
+    linkcheck = true,
+    pages = PAGES,
+    highlightsig = true
 )
 
 if !Sys.iswindows()
