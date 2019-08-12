@@ -2,6 +2,7 @@ name = "CausalityTools"
 uuid = "33344842-e5f7-11e8-31fb-c7f2d5716edf"
 authors = ["Kristian Agasøster Haaga <kahaaga@gmail.com>", "Tor Einar Møller <temolle@gmail.com>"]
 repo = "https://github.com/kahaaga/CausalityTools.jl.git"
+version = "0.3.0"
 
 [deps]
 CausalityToolsBase = "b1f25513-c649-51ee-8a1c-0e98d01ae897"
