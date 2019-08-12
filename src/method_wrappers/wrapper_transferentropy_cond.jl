@@ -1,5 +1,5 @@
 import TransferEntropy, CausalityToolsBase
-import TransferEntropy: te_embed
+
 """
     te_cond(source::AbstractArray{<:Real, 1}, 
         response::AbstractArray{<:Real, 1},
@@ -105,7 +105,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
 
     k + l + m + n >= 4 || throw(ArgumentError("`dim = k + l + m + n` must be 4 or higher for conditional TE"))
 
-    pts, vars = TransferEntropy.te_embed(source, response, cond, k, l, m, n, η = η, τ = τ)
+    pts, vars = te_embed(source, response, cond, k, l, m, n, η = η, τ = τ)
 
     # Determine appropriate binnings from time series length (roughly according to 
     # Krakovska et al. (2018)'s recommendations)
@@ -223,7 +223,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
 
     k + l + m + n >= 4 || throw(ArgumentError("`dim = k + l + m + n` must be 4 or higher for conditional TE"))
 
-    pts, vars = TransferEntropy.te_embed(source, response, cond, k, l, m, n, η = η, τ = τ)
+    pts, vars = te_embed(source, response, cond, k, l, m, n, η = η, τ = τ)
 
     # Compute TE over the partitions constructed from the provided binning schemes
     # ====================================
@@ -244,7 +244,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
 
     k + l + m + n >= 4 || throw(ArgumentError("`dim = k + l + m + n` must be 4 or higher for conditional TE"))
 
-    pts, vars = TransferEntropy.te_embed(source, response, cond, k, l, m, n, η = η, τ = τ)
+    pts, vars = te_embed(source, response, cond, k, l, m, n, η = η, τ = τ)
 
     # Compute TE over the partitions constructed from the provided binning schemes
     # ===========================================================================

@@ -293,7 +293,7 @@ function te_reg(source::AbstractArray{<:Real, 1},
 
     k + l + m >= 3 || throw(ArgumentError("`dim = k + l + m` must be 3 or higher for regular TE"))
 
-    pts, vars = TransferEntropy.te_embed(source, response, k, l, m, η = η, τ = τ)
+    pts, vars = te_embed(source, response, k, l, m, η = η, τ = τ)
 
     # Determine appropriate binnings from time series length (roughly according to 
     # Krakovska et al. (2018)'s recommendations)
@@ -404,7 +404,7 @@ function te_reg(source::AbstractArray{<:Real, 1},
 
     k + l + m >= 3 || throw(ArgumentError("`dim = k + l + m` must be 3 or higher for regular TE"))
 
-    pts, vars = TransferEntropy.te_embed(source, response, k, l, m, η = η, τ = τ)
+    pts, vars = te_embed(source, response, k, l, m, η = η, τ = τ)
 
     # Compute TE over the partitions constructed from the provided binning schemes
     # ====================================
@@ -423,7 +423,7 @@ function te_reg(source::AbstractArray{<:Real, 1},
 
     k + l + m >= 3 || throw(ArgumentError("`dim = k + l + m` must be 3 or higher for regular TE"))
 
-    pts, vars = TransferEntropy.te_embed(source, response, k, l, m, η = η, τ = τ)
+    pts, vars = te_embed(source, response, k, l, m, η = η, τ = τ)
 
     # Compute TE over the partitions constructed from the provided binning schemes
     # ====================================
