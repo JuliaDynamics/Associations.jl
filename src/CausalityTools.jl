@@ -65,6 +65,6 @@ include("surrogates/surrogates.jl")
 include("method_wrappers/highlevel_methods.jl")
 
 # Plot recipes, also for all sub-packages
-include("plot_recipes/CausalityToolsPlotRecipes.jl")
+#include("plot_recipes/CausalityToolsPlotRecipes.jl")
 
 end # module
