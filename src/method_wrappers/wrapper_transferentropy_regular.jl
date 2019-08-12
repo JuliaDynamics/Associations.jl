@@ -1,6 +1,6 @@
 import StatsBase.mean
-using TransferEntropy, CausalityToolsBase
-
+import TransferEntropy, CausalityToolsBase
+import TransferEntropy: te_embed
 """
     standard_te(driver, response;
         estimator = :tetogrid,

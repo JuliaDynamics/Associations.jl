@@ -1,5 +1,5 @@
-using TransferEntropy, CausalityToolsBase
-
+import TransferEntropy, CausalityToolsBase
+import TransferEntropy: te_embed
 """
     te_cond(source::AbstractArray{<:Real, 1}, 
         response::AbstractArray{<:Real, 1},
