@@ -1,1 +1,2 @@
-include("transferentropy.jl")
+include("wrapper_transferentropy_regular.jl")
+include("wrapper_transferentropy_cond.jl")
