@@ -21,3 +21,13 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
 TransferEntropy = "ea221983-52f3-5440-99c7-13ea201cd633"
+
+[compat]
+julia = "1.1"
+CausalityToolsBase = "0.4.1"
+CrossMappings = "0.3.4"
+TimeseriesSurrogates = "0.3.1"
+PerronFrobenius = "0.6.0"
+TransferEntropy = "0.4.3"
+Simplices = "0.4.1"
+StateSpaceReconstruction = "0.4.2"
