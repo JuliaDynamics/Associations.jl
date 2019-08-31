@@ -64,6 +64,9 @@ include("surrogates/surrogates.jl")
 # Wrappers of the different methods.
 include("method_wrappers/highlevel_methods.jl")
 
+# Various algorithsm that are implemented here and not in subpackages 
+include("algorithms/joint_distance_distribution.jl")
+
 # Plot recipes, also for all sub-packages
 #include("plot_recipes/CausalityToolsPlotRecipes.jl")
 

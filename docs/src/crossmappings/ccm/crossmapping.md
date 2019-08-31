@@ -1,6 +1,4 @@
-# Cross mapping algorithms
-
-## Cross mapping
+# Cross mapping
 
 Given two data series,
 the putative `driver` and the putative `response`, the the `crossmap(driver, response; kwargs...)` function computes how well a delay
@@ -9,7 +7,7 @@ embedding of `response` predicts scalar values of `driver`. This is [Sugihara et
 
 To perform lagged CCM analysis ([Ye et al., 2015)](https://www.nature.com/articles/srep14750)), you can tune the `ν` parameter.
 
-### Documentation
+## Documentation
 
 ```@docs
 CrossMappings.crossmap

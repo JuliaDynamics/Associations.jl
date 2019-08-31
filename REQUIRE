@@ -2,9 +2,11 @@ julia 1.1
 CausalityToolsBase 0.4.1
 Conda
 CrossMappings 0.3.4
+DelayEmbeddings
 Distributions
 Distances
 DynamicalSystems
+HypothesisTests
 PerronFrobenius 0.6.0
 RecipesBase
 Reexport
