@@ -1,6 +1,4 @@
-# Cross mappings algorithms
-
-## Convergent cross mapping (CCM)
+# Overview: convergent cross mapping (CCM)
 
 The convergent cross mapping (CCM) algorithm [^1] measures
 how well a [delay embedding](../../glossary/embed.md) of a putative response time series
@@ -26,9 +24,7 @@ direction `x → y` converges at a higher value than in the opposite direction.
 
 ## Related software
 
-- **[CauseMap.jl](https://github.com/cyrusmaher/CauseMap.jl)** also provides
-    an implementation of the CCM algorithm, but this package has not been
-    updated since 2015.
+- **[CauseMap.jl](https://github.com/cyrusmaher/CauseMap.jl)** also provides an implementation of the CCM algorithm, but this package has not been updated since 2015.
 
 [^1]:
     Sugihara, G., May, R., Ye, H., Hsieh, C. H., Deyle, E., Fogarty, M., & Munch, S. (2012). Detecting causality in complex ecosystems. Science. [https://doi.org/10.1126/science.1227079](https://doi.org/10.1126/science.1227079)

@@ -15,3 +15,5 @@ include("test_continuous_systems.jl")
 @testset "High level wrappers" begin
 	include("test_wrappers_te.jl")
 end
+
+include("algorithms/test_joint_distance_distribution.jl")

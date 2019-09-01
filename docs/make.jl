@@ -25,6 +25,19 @@ PAGES = [
     "Transfer entropy" => [
         "Estimators" => "transferentropy/transferentropy_estimators.md",
         "Convenience functions" => "transferentropy/convenience_functions_te.md"
+    ],
+    "Distance based measures" => [
+        "CCM" => [
+            "Overview" => "crossmappings/ccm/overview.md",
+            "Cross mapping" => "crossmappings/ccm/crossmapping.md",
+            "Converent cross mapping" => "crossmappings/ccm/convergentcrossmapping.md"
+        ], 
+        "Joint distance distribution" => "algorithms/joint_distance_distribution.md"
+    ],
+    "Examples" => [
+        "CCM" => [
+            "Henon map" => "examples/crossmappings/examples_crossmappings_henon2.md"
+        ]
     ]
 ]
 
