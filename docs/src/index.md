@@ -11,21 +11,21 @@ using Plots
 ```
 
 # CausalityTools.jl
+
 `CausalityTools` is a Julia package providing algorithms for detecting causal relations in complex systems based on time series data.
-
-
-## Status
-The package and documentation is under active development. **Breaking changes may occur in CausalityTools and its dependencies until the 1.0 release**.
 
 ## Goals
 
 - **Provide a comprehensive, easy-to-use framework** for the detection of directional causal influences in complex dynamical systems from time series.
 - **Integration with UncertainDatasets.jl**, which greatly simplifies working with uncertain data.
-- **Functional and efficient implementations** of causality detection algorithm, with thorough 	documentation and references to primary literature.
+- **Functional and efficient implementations** of causality detection algorithm, with thorough documentation and references to primary literature.
 - **Extensive library of example dynamical systems** for testing algorithm performance.
 - **Worked examples** for all algorithms.
 
 
+## Status
+
+The package and documentation is under active development. **Breaking changes may occur in CausalityTools and its dependencies until the 1.0 release**.
 
 
 ### Package structure
