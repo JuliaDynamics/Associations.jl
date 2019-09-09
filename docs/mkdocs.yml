@@ -1,4 +1,4 @@
-site_name:        CausalityTools.jl docs (work in progress)
+site_name:        CausalityTools.jl
 repo_url:         https://github.com/kahaaga/CausalityTools.jl
 site_description: Causality detection from time series in Julia.
 site_author:      Kristian Agasøster Haaga
@@ -41,12 +41,15 @@ pages:
   - Syntax overview: syntax_overview.md
   - CausalityToolsBase:
     - Discretization: causalitytoolsbase/discretization.md
-  - PerronFrobenius:
+    - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
+  - Invariant properties over partitions:
     - Invariant measure: perronfrobenius/invariantmeasure.md
     - Transfer operator: perronfrobenius/transferoperator.md
-  - TransferEntropy:
-    - Estimators: transferentropy/transferentropy_estimators.md
-    - Convenience functions: transferentropy/convenience_functions_te.md
+  - Information entropy based measures:
+    - Transfer entropy:
+      - Convenience functions: transferentropy/convenience_functions_te.md
+      - Low-level estimators: transferentropy/transferentropy_estimators.md
+      - Mapping delay reconstruction to marginals (TEVars): transferentropy/TEVars.md
   - Distance based measures:
     - CCM:
       - Overview: crossmappings/ccm/overview.md

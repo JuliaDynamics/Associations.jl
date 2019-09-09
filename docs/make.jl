@@ -1,6 +1,7 @@
 using CausalityTools
 using TimeseriesSurrogates
 using PyCall, Conda
+using HypothesisTests
 using Documenter, DocumenterMarkdown
 #Conda.add("scipy")
 using Plots
@@ -16,7 +17,8 @@ PAGES = [
     "index.md",
     "Syntax overview" => "syntax_overview.md",
     "CausalityToolsBase" => [
-        "Discretization" => "causalitytoolsbase/discretization.md"
+        "Discretization" => "causalitytoolsbase/discretization.md",
+        "Delay reconstructions" => "causalitytoolsbase/delay_reconstructions.md"
     ],
     "Transfer operator estimation" => [
         "Transfer operator" => "perronfrobenius/transferoperator.md",
@@ -24,7 +26,8 @@ PAGES = [
     ],
     "Transfer entropy" => [
         "Estimators" => "transferentropy/transferentropy_estimators.md",
-        "Convenience functions" => "transferentropy/convenience_functions_te.md"
+        "Convenience functions" => "transferentropy/convenience_functions_te.md",
+        "TEVars" => "transferentropy/TEVars.md"
     ],
     "Distance based measures" => [
         "CCM" => [
@@ -45,7 +48,7 @@ makedocs(
     sitename = "CausalityTools.jl documentation",
     modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase],
     format = DocumenterMarkdown.Markdown(),
-    linkcheck = true,
+    linkcheck = false,
     pages = PAGES,
     highlightsig = true
 )
