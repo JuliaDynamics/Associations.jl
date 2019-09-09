@@ -1,6 +1,6 @@
-# Discretization
+# [Discretization](@id discretization)
 
-## Rectangular partitions
+## [Rectangular partitions](@id partition_rectangular)
 
 ```@docs
 RectangularBinning
@@ -20,7 +20,7 @@ get_edgelengths
 get_minima_and_edgelengths
 ```
 
-## Triangulated partitions
+## [Triangulated partitions](@id partition_triangulated)
 
 ```@docs
 TriangulationBinning
