@@ -67,6 +67,9 @@ include("method_wrappers/highlevel_methods.jl")
 # Various algorithsm that are implemented here and not in subpackages 
 include("algorithms/joint_distance_distribution.jl")
 
+# High-level estimators 
+include("causalitytests/causalitytests.jl")
+
 # Plot recipes, also for all sub-packages
 #include("plot_recipes/CausalityToolsPlotRecipes.jl")
 

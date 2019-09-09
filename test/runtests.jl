@@ -16,4 +16,6 @@ include("test_continuous_systems.jl")
 	include("test_wrappers_te.jl")
 end
 
-include("algorithms/test_joint_distance_distribution.jl")
+@testset "Causality tests" begin 
+    include("causality_tests/test_JointDistanceDistributionTest.jl")
+end

@@ -7,18 +7,19 @@ function normalise_minmax(x, vmin, vmax)
 end
 
 """
-    joint_distance_distribution(x, y;
+    joint_distance_distribution(test::OneSampleTTest, x, y, 
         distance_metric = SqEuclidean(), 
         B::Int = 10, 
         D::Int = 2, τ::Int = 1, 
         μ0 = 0.0) -> OneSampleTTest
 
-Return a one-sample t-test for the the joint distance distribution [1] 
-computed from data series `x` to data series `y`. 
+Perform a one sample t-test to check that the joint distance distribution [1] 
+computed from `x` to `y` is biased towards positive values, using the null 
+hypothesis that the mean of the distribution is `μ0`.
 
-The interpretation of the t-test is that if the joint distance distribution
-is biased towards positive values, then there exists an underlying coupling
-from `x` to `y`. 
+The interpretation of the t-test is that if we can reject the null, then the 
+joint distance distribution is biased towards positive values, and then there 
+exists an underlying coupling from `x` to `y`. 
 
 
 ## Example
@@ -26,7 +27,7 @@ from `x` to `y`.
 ```julia 
 x, y = rand(1000), rand(1000)
 
-jdd = joint_distance_distribution(x, y)
+jdd = joint_distance_distribution(OneSampleTTest, x, y)
 
 ```
 
@@ -62,14 +63,58 @@ p-value at 95% confidence, use `pvalue(jdd, tail = :left)`
 
 ## Keyword arguments
 
+- **`distance_metric::Metric`**: An instance of a valid distance metric from `Distances.jl`. 
+    Defaults to `SqEuclidean()`.
 - **`B`**: The number of equidistant subintervals to divide the interval `[0, 1]` into
     when comparing the normalised distances. 
 - **`D`**: Embedding dimension.
 - **`τ`**: Embedding delay.
 - **`μ0`**: The hypothetical mean value of the joint distance distribution if there 
     is no coupling between `x` and `y` (default is `μ0 = 0.0`).
+
+## References 
+[1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+"""
+function joint_distance_distribution(test::Type{OneSampleTTest}, x, y, 
+        distance_metric = SqEuclidean(), 
+        B::Int = 10, 
+        D::Int = 2, τ::Int = 1, 
+        μ0 = 0.0)
+
+    Δjdd = joint_distance_distribution(x, y, 
+        distance_metric = distance_metric, 
+        B = B, 
+        D = D, τ = τ)
+    
+    OneSampleTTest(Δjdd, μ0)
+end 
+
+"""
+    joint_distance_distribution(x, y;
+        distance_metric = SqEuclidean(), 
+        B::Int = 10, 
+        D::Int = 2, τ::Int = 1) -> Vector{Float64}
+
+Compute the joint distance distribution [1] from `x` to `y` using the provided `distance_metric`,
+with `B` controlling the number of subintervals, `D` the embedding dimension and `τ` the 
+embedding lag.
+
+## Example
+
+```julia 
+x, y = rand(1000), rand(1000)
+
+jdd = joint_distance_distribution(x, y)
+```
+
+## Keyword arguments
+
 - **`distance_metric::Metric`**: An instance of a valid distance metric from `Distances.jl`. 
     Defaults to `SqEuclidean()`.
+- **`B`**: The number of equidistant subintervals to divide the interval `[0, 1]` into
+    when comparing the normalised distances. 
+- **`D`**: Embedding dimension.
+- **`τ`**: Embedding delay.
 
 
 ## References 
@@ -79,8 +124,7 @@ function joint_distance_distribution(x, y;
         distance_metric = SqEuclidean(),
         B::Int = 10, 
         D::Int = 2, 
-        τ::Int = 1,
-        μ0 = 0.0
+        τ::Int = 1
     )
 
     Ex = DelayEmbeddings.embed(x, D, τ)
@@ -110,7 +154,6 @@ function joint_distance_distribution(x, y;
         Dy_norm[i] = normalise_minmax(Dy[i], Dy_min, Dy_max)
     end
     
-    B = 20
     mins_δ_yi_yj = fill(2.0, 2*B)
 
     for (k, b) in enumerate(1:2*B)
@@ -140,9 +183,9 @@ function joint_distance_distribution(x, y;
         mins_δ_yi_yj[k] = min_δ_yi_yj
     end
     
-    Δjdd = [mins_δ_yi_yj[B + i] - mins_δ_yi_yj[i] for i in 1:B] ;
+    Δjdd = [mins_δ_yi_yj[B + i] - mins_δ_yi_yj[i] for i in 1:B]
     
-    return OneSampleTTest(Δjdd, μ0);
+    return Δjdd
 end
 
 
