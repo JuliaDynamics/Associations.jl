@@ -32,20 +32,22 @@ end
 """
     PredictiveAsymmetryTest(predictive_test::CausalityTest)
 
-The parameters for a predictive asymmetry causality test. 
+The parameters for a predictive asymmetry causality test [1]. 
     
-`predictive_test` is an instance of some predictive causality test that explicitly 
-uses prediction lags (e.g. transfer entropy). 
+## Mandatory keywords
 
-The prediction lags must consist of `n` negative integers and `n` positive 
-integers that are symmetric around zero. In other words, negative lags 
-must exactly match the positive lags but with opposite sign. The
-zero lag can be included, but will be ignored, so it is possible to give 
+- **`predictive_test`**: An instance of a predictive causality test that explicitly 
+    uses prediction lags (e.g. [`VisitationFrequencyTest`](@ref) or 
+    [`TransferOperatorGridTest`](@ref)). 
+
+## About the prediction lags
+
+The prediction lags in the predictive causality test must consist of `n` negative 
+integers and `n` positive integers that are symmetric around zero. 
+
+In other words, negative lags  must exactly match the positive lags but with opposite 
+sign. The zero lag can be included, but will be ignored, so it is possible to give 
 ranges too.
-
-## Notes 
-
-Note that `predictive_test` is a *mandatory* keyword to the constructor.
 
 ## Examples
 
@@ -58,6 +60,10 @@ PredictiveAsymmetryTest(predictive_test = test_visitfreq)
 PredictiveAsymmetryTest(predictive_test = test_transferoperator)
 ```
 
+## References 
+
+1. Diego, David, Kristian Agasøster Haaga, Jo Brendryen, and Bjarte Hannisdal. 
+    A simple test for causal asymmetry in complex systems. In prep.
 """
 Base.@kwdef struct PredictiveAsymmetryTest{TEST} <: CausalityTest where TEST
     predictive_test::TEST
@@ -119,8 +125,30 @@ function predictive_asymmetry(source, target, p::PredictiveAsymmetryTest{T}) whe
     return return_predictive_asymmetry(p.predictive_test.ηs, As)
 end
 
-function causality(source, target, p::PredictiveAsymmetryTest{T}) where {T}
+function causality(source::Vector{<:Number}, target::Vector{<:Number}, p::PredictiveAsymmetryTest{T}) where {T}
     predictive_asymmetry(source, target, p)
+end
+
+function causality(source::T1, target::T2, p::PredictiveAsymmetryTest{T}) where {
+    T,
+    T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, 
+    T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
+causality(resample(source), resample(target), p)
+end
+
+
+function causality(source::T1, target::T2, p::PredictiveAsymmetryTest{T}) where {
+    T,
+    T1, 
+    T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
+causality(source, resample(target), p)
+end
+
+function causality(source::T1, target::T2, p::PredictiveAsymmetryTest{T}) where {
+    T,
+    T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, 
+    T2::Vector{<:Number}}
+causality(resample(source), resample(target), p)
 end
 
 export 
