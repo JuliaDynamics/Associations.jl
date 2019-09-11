@@ -190,28 +190,11 @@ Base.@kwdef struct TransferOperatorGridTest <: TransferEntropyTest
 end
 
 
-function causality(source::Vector{<:Number}, target::Vector{<:Number}, p::TransferOperatorGridTest)
+function causality(source, target, p::TransferOperatorGridTest)
     [p.binning_summary_statistic(
         transferentropy(source, target, p.binning, 
             p.k, p.l, p.m, η = η, τ = p.τ, 
             estimator = p.estimator)) for η in p.ηs]
-end
-
-function causality(source::T1, target::T2, p::TransferOperatorGridTest) where {
-        T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, 
-        T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
-    causality(resample(source), resample(target), p)
-end
-
-
-function causality(source::T1, target::T2, p::TransferOperatorGridTest) where {
-    T1, T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
-    causality(source, resample(target), p)
-end
-
-function causality(source::T1, target::T2, p::TransferOperatorGridTest) where {
-        T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, T2::Vector{<:Number}}
-    causality(resample(source), resample(target), p)
 end
 
 export TransferOperatorGridTest

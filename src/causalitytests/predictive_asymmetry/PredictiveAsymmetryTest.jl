@@ -125,31 +125,10 @@ function predictive_asymmetry(source, target, p::PredictiveAsymmetryTest{T}) whe
     return return_predictive_asymmetry(p.predictive_test.ηs, As)
 end
 
-function causality(source::Vector{<:Number}, target::Vector{<:Number}, p::PredictiveAsymmetryTest{T}) where {T}
+function causality(source, target, p::PredictiveAsymmetryTest{T}) where {T}
     predictive_asymmetry(source, target, p)
 end
 
-function causality(source::T1, target::T2, p::PredictiveAsymmetryTest{T}) where {
-    T,
-    T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, 
-    T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
-causality(resample(source), resample(target), p)
-end
-
-
-function causality(source::T1, target::T2, p::PredictiveAsymmetryTest{T}) where {
-    T,
-    T1, 
-    T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
-causality(source, resample(target), p)
-end
-
-function causality(source::T1, target::T2, p::PredictiveAsymmetryTest{T}) where {
-    T,
-    T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, 
-    T2::Vector{<:Number}}
-causality(resample(source), resample(target), p)
-end
 
 export 
     PredictiveAsymmetryTest, 
