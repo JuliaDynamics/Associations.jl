@@ -1,9 +1,6 @@
 import Distances: SqEuclidean
 import HypothesisTests: OneSampleTTest
 
-import Distances: SqEuclidean
-import HypothesisTests: OneSampleTTest
-
 """
     JointDistancesTest
 
@@ -111,12 +108,12 @@ function causality(source, target, p::JointDistanceDistributionTest)
 end
 
 function causality(source, target, p::JointDistanceDistributionTTest)
-    joint_distance_distribution(p.hypothesis_test, source, target;
-        distance_metric = p.distance_metric, 
-        B = p.B, 
-        D = p.D, 
-        τ = p.τ,
-        μ0 = p.μ0)
+    joint_distance_distribution(p.hypothesis_test, source, target,
+        p.distance_metric, 
+        p.B,
+        p.D,
+        p.τ,
+        p.μ0)
 end
 
 

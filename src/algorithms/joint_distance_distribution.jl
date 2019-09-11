@@ -7,89 +7,6 @@ function normalise_minmax(x, vmin, vmax)
 end
 
 """
-    joint_distance_distribution(test::OneSampleTTest, source, target, 
-        distance_metric = SqEuclidean(), 
-        B::Int = 10, 
-        D::Int = 2, τ::Int = 1, 
-        μ0 = 0.0) -> OneSampleTTest
-
-Perform a one sample t-test to check that the joint distance distribution [1] 
-computed from `source` to `target` is biased towards positive values, using the null 
-hypothesis that the mean of the distribution is `μ0`.
-
-The interpretation of the t-test is that if we can reject the null, then the 
-joint distance distribution is biased towards positive values, and then there 
-exists an underlying coupling from `source` to `target`. 
-
-
-## Example
-
-```julia 
-x, y = rand(1000), rand(1000)
-
-jdd = joint_distance_distribution(OneSampleTTest, x, y)
-
-```
-
-which gives 
-
-```julia
-One sample t-test
------------------
-Population details:
-    parameter of interest:   Mean
-    value under h_0:         0.0
-    point estimate:          0.06361857324022721
-    95% confidence interval: (0.0185, 0.1087)
-
-Test summary:
-    outcome with 95% confidence: reject h_0
-    two-sided p-value:           0.0082
-
-Details:
-    number of observations:   20
-    t-statistic:              2.9517208721082873
-    degrees of freedom:       19
-    empirical standard error: 0.0215530451545668
-```
-
-
-The lower bound of the confidence interval for the mean of the joint 
-distance distribution is `0.0185` at confidence level `α = 0.05`. The 
-meaning that the test falsely detected causality from `x` to `y`
-between these two random time series. To get the confidence intervals
-at confidence level `α`, use `confinf(jdd, α)`. If you just want the 
-p-value at 95% confidence, use `pvalue(jdd, tail = :left)`
-
-## Keyword arguments
-
-- **`distance_metric::Metric`**: An instance of a valid distance metric from `Distances.jl`. 
-    Defaults to `SqEuclidean()`.
-- **`B`**: The number of equidistant subintervals to divide the interval `[0, 1]` into
-    when comparing the normalised distances. 
-- **`D`**: Embedding dimension.
-- **`τ`**: Embedding delay.
-- **`μ0`**: The hypothetical mean value of the joint distance distribution if there 
-    is no coupling between `x` and `y` (default is `μ0 = 0.0`).
-
-## References 
-[1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
-"""
-function joint_distance_distribution(test::Type{OneSampleTTest}, source, target, 
-        distance_metric = SqEuclidean(), 
-        B::Int = 10, 
-        D::Int = 2, τ::Int = 1, 
-        μ0 = 0.0)
-
-    Δjdd = joint_distance_distribution(source, target, 
-        distance_metric = distance_metric, 
-        B = B, 
-        D = D, τ = τ)
-    
-    OneSampleTTest(Δjdd, μ0)
-end 
-
-"""
     joint_distance_distribution(source, target;
         distance_metric = SqEuclidean(), 
         B::Int = 10, 
@@ -187,6 +104,91 @@ function joint_distance_distribution(source, target;
     
     return Δjdd
 end
+
+
+"""
+    joint_distance_distribution(test::OneSampleTTest, source, target, 
+        distance_metric = SqEuclidean(), 
+        B::Int = 10, 
+        D::Int = 2, τ::Int = 1, 
+        μ0 = 0.0) -> OneSampleTTest
+
+Perform a one sample t-test to check that the joint distance distribution [1] 
+computed from `source` to `target` is biased towards positive values, using the null 
+hypothesis that the mean of the distribution is `μ0`.
+
+The interpretation of the t-test is that if we can reject the null, then the 
+joint distance distribution is biased towards positive values, and then there 
+exists an underlying coupling from `source` to `target`. 
+
+
+## Example
+
+```julia 
+x, y = rand(1000), rand(1000)
+
+jdd = joint_distance_distribution(OneSampleTTest, x, y)
+
+```
+
+which gives 
+
+```julia
+One sample t-test
+-----------------
+Population details:
+    parameter of interest:   Mean
+    value under h_0:         0.0
+    point estimate:          0.06361857324022721
+    95% confidence interval: (0.0185, 0.1087)
+
+Test summary:
+    outcome with 95% confidence: reject h_0
+    two-sided p-value:           0.0082
+
+Details:
+    number of observations:   20
+    t-statistic:              2.9517208721082873
+    degrees of freedom:       19
+    empirical standard error: 0.0215530451545668
+```
+
+
+The lower bound of the confidence interval for the mean of the joint 
+distance distribution is `0.0185` at confidence level `α = 0.05`. The 
+meaning that the test falsely detected causality from `x` to `y`
+between these two random time series. To get the confidence intervals
+at confidence level `α`, use `confinf(jdd, α)`. If you just want the 
+p-value at 95% confidence, use `pvalue(jdd, tail = :left)`
+
+## Keyword arguments
+
+- **`distance_metric::Metric`**: An instance of a valid distance metric from `Distances.jl`. 
+    Defaults to `SqEuclidean()`.
+- **`B`**: The number of equidistant subintervals to divide the interval `[0, 1]` into
+    when comparing the normalised distances. 
+- **`D`**: Embedding dimension.
+- **`τ`**: Embedding delay.
+- **`μ0`**: The hypothetical mean value of the joint distance distribution if there 
+    is no coupling between `x` and `y` (default is `μ0 = 0.0`).
+
+## References 
+[1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+"""
+function joint_distance_distribution(test::Type{OneSampleTTest}, source, target, 
+        distance_metric = SqEuclidean(), 
+        B::Int = 10, 
+        D::Int = 2, τ::Int = 1, 
+        μ0 = 0.0)
+
+    Δjdd = joint_distance_distribution(source, target, 
+        distance_metric = distance_metric, 
+        B = B, 
+        D = D, τ = τ)
+    
+    OneSampleTTest(Δjdd, μ0)
+end 
+
 
 
 export joint_distance_distribution
