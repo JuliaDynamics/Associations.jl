@@ -12,12 +12,13 @@ import TimeseriesSurrogates: randomshuffle
         correspondence_measure = StatsBase.cor, 
         ν::Int = 0)
 
-The parameters for a convergent cross mapping test.
+The parameters for a convergent cross mapping [1] test.
 
-## Arguments 
+## Mandatory keyword arguments 
+
 - **`timeseries_lengths`**: The time series lengths over which to cross map and check convergence.
 
-## Keyword arguments
+## Optional keyword arguments 
 
 - **`dim`**: The dimension of the state space reconstruction (delay embedding)
     constructed from the `response` series. Default is `dim = 3`.
@@ -68,6 +69,17 @@ The parameters for a convergent cross mapping test.
     [Sugihara et al. (2012)](http://science.sciencemag.org/content/early/2012/09/19/science.1227079)
     also proposes to use the root mean square deviation, for which a value of ``0`` would
     be perfect prediction.
+
+## References 
+
+1. Sugihara, George, et al. "Detecting causality in complex ecosystems." Science (2012): 1227079. 
+    [http://science.sciencemag.org/content/early/2012/09/19/science.1227079](http://science.sciencemag.org/content/early/2012/09/19/science.1227079)
+
+2. Ye, Hao, et al. "Distinguishing time-delayed causal interactions using convergent cross mapping." Scientific 
+    Reports 5 (2015): 14750. [https://www.nature.com/articles/srep14750](https://www.nature.com/articles/srep14750)
+
+3. Ye, H., et al. "rEDM: Applications of empirical dynamic modeling from time series." R Package Version 
+    0.4 7 (2016). [https://cran.r-project.org/web/packages/rEDM/index.html](https://cran.r-project.org/web/packages/rEDM/index.html)
 """
 Base.@kwdef struct ConvergentCrossMappingTest <: DistanceBasedCausalityTest
     """ 
