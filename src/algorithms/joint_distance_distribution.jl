@@ -7,19 +7,19 @@ function normalise_minmax(x, vmin, vmax)
 end
 
 """
-    joint_distance_distribution(test::OneSampleTTest, x, y, 
+    joint_distance_distribution(test::OneSampleTTest, source, target, 
         distance_metric = SqEuclidean(), 
         B::Int = 10, 
         D::Int = 2, τ::Int = 1, 
         μ0 = 0.0) -> OneSampleTTest
 
 Perform a one sample t-test to check that the joint distance distribution [1] 
-computed from `x` to `y` is biased towards positive values, using the null 
+computed from `source` to `target` is biased towards positive values, using the null 
 hypothesis that the mean of the distribution is `μ0`.
 
 The interpretation of the t-test is that if we can reject the null, then the 
 joint distance distribution is biased towards positive values, and then there 
-exists an underlying coupling from `x` to `y`. 
+exists an underlying coupling from `source` to `target`. 
 
 
 ## Example
@@ -75,13 +75,13 @@ p-value at 95% confidence, use `pvalue(jdd, tail = :left)`
 ## References 
 [1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
-function joint_distance_distribution(test::Type{OneSampleTTest}, x, y, 
+function joint_distance_distribution(test::Type{OneSampleTTest}, source, target, 
         distance_metric = SqEuclidean(), 
         B::Int = 10, 
         D::Int = 2, τ::Int = 1, 
         μ0 = 0.0)
 
-    Δjdd = joint_distance_distribution(x, y, 
+    Δjdd = joint_distance_distribution(source, target, 
         distance_metric = distance_metric, 
         B = B, 
         D = D, τ = τ)
@@ -90,14 +90,14 @@ function joint_distance_distribution(test::Type{OneSampleTTest}, x, y,
 end 
 
 """
-    joint_distance_distribution(x, y;
+    joint_distance_distribution(source, target;
         distance_metric = SqEuclidean(), 
         B::Int = 10, 
         D::Int = 2, τ::Int = 1) -> Vector{Float64}
 
-Compute the joint distance distribution [1] from `x` to `y` using the provided `distance_metric`,
-with `B` controlling the number of subintervals, `D` the embedding dimension and `τ` the 
-embedding lag.
+Compute the joint distance distribution [1] from `source` to `target` using 
+the provided `distance_metric`, with `B` controlling the number of subintervals, 
+`D` the embedding dimension and `τ` the embedding lag.
 
 ## Example
 
@@ -120,15 +120,15 @@ jdd = joint_distance_distribution(x, y)
 ## References 
 [1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
-function joint_distance_distribution(x, y;
+function joint_distance_distribution(source, target;
         distance_metric = SqEuclidean(),
         B::Int = 10, 
         D::Int = 2, 
         τ::Int = 1
     )
 
-    Ex = DelayEmbeddings.embed(x, D, τ)
-    Ey = DelayEmbeddings.embed(y, D, τ)
+    Ex = DelayEmbeddings.embed(source, D, τ)
+    Ey = DelayEmbeddings.embed(target, D, τ)
 
     Mx = transpose(Matrix(Ex))
     My = transpose(Matrix(Ey))
