@@ -110,43 +110,13 @@ function causality(source, target, p::JointDistanceDistributionTest)
         τ = p.τ)
 end
 
-
-function causality(source::T1, target::T2, p::JointDistanceDistributionTest) where {
-        T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, 
-        T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
-    causality(resample(source), resample(target), p)
-end
-
-function causality(source::T1, target::T2, p::JointDistanceDistributionTest) where {
-        T1::Vector{<:Number}, T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
-    causality(source, resample(target), p)
-end
-
-function causality(source::T1, target::T2, p::JointDistanceDistributionTest) where {
-        T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, T2::Vector{<:Number}}
-    causality(resample(source), resample(target), p)
-end
-
-
 function causality(source, target, p::JointDistanceDistributionTTest)
-    joint_distance_distribution(p.hypothesis_test, source, target,
-        p.distance_metric, p.B, p.D, p.τ, p.μ0)
-end
-
-function causality(source::T1, target::T2, p::JointDistanceDistributionTTest) where {
-        T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, 
-        T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
-    causality(resample(source), resample(target), p)
-end
-
-function causality(source::T1, target::T2, p::JointDistanceDistributionTTest) where {
-        T1::Vector{<:Number}, T2 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}}
-    causality(source, resample(target), p)
-end
-
-function causality(source::T1, target::T2, p::JointDistanceDistributionTTest) where {
-        T1 <: Union{Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset}, T2::Vector{<:Number}}
-    causality(resample(source), target, p)
+    joint_distance_distribution(p.hypothesis_test, source, target;
+        distance_metric = p.distance_metric, 
+        B = p.B, 
+        D = p.D, 
+        τ = p.τ,
+        μ0 = p.μ0)
 end
 
 
