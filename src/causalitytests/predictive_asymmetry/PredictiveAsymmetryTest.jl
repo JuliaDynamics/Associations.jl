@@ -129,6 +129,8 @@ function causality(source, target, p::PredictiveAsymmetryTest{T}) where {T}
     predictive_asymmetry(source, target, p)
 end
 
+# there is no need to define custom causality method for a uncertain data 
+# as long as the predictive tests that it uses supports them
 
 export 
     PredictiveAsymmetryTest, 
