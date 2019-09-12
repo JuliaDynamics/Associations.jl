@@ -4,6 +4,8 @@ end
 
 using Test
 using CausalityTools
+using Distributions 
+using UncertainData
 
 #@testset "Plot recipes" begin
 #	include("plot_recipes.jl")
@@ -18,9 +20,14 @@ end
 
 @testset "Causality tests" begin 
     include("causality_tests/test_JointDistanceDistributionTest.jl")
+    include("causality_tests/test_JointDistanceDistributionTTest.jl")
+
     include("causality_tests/test_CrossMappingTest.jl")
+    include("causality_tests/test_ConvergentCrossMappingTest.jl")
+
     include("causality_tests/test_TransferOperatorGridTest.jl")
     include("causality_tests/test_VisitationFrequencyTest.jl")
+    
     include("causality_tests/test_PredictiveAsymmetryTest.jl")
 end
 
