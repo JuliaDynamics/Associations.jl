@@ -69,6 +69,12 @@ The parameters for a convergent cross mapping [1] test.
     [Sugihara et al. (2012)](http://science.sciencemag.org/content/early/2012/09/19/science.1227079)
     also proposes to use the root mean square deviation, for which a value of ``0`` would
     be perfect prediction.
+- **`summarise`**: Should cross map skills be summarised for each time series length? Default is 
+    `summarise = false`. 
+- **`average_measure`**: Either `:median` or `:mean`. Default is `:median`
+- **`uncertainty_measure`**: Either `:quantile` or `:std`.
+- **`quantiles`**: Compute uncertainty over quantile(s) if `uncertainty_measure` is `:quantile`. 
+    Default is `[0.327, 0.673]`, roughly corresponding to `1s` for normally distributed data.
 
 ## References 
 
@@ -159,7 +165,7 @@ Base.@kwdef struct ConvergentCrossMappingTest <: DistanceBasedCausalityTest
     *(note the instantiation of the metric)*.
     """
     distance_metric = Distances.Euclidean()
-    
+
     """
     The function that computes the correspondence between actual values of `driver` and predicted 
     values. Can be any function returning a similarity measure between two vectors of values.
@@ -172,6 +178,20 @@ Base.@kwdef struct ConvergentCrossMappingTest <: DistanceBasedCausalityTest
     """
     correspondence_measure = StatsBase.cor
 
+    """ Should cross map skills be summarised for each time series length? Default is `summarise = false`. """
+    summarise = false 
+
+    """ Either `:median` or `:mean`. Default is `:median`. """
+    average_measure = :median
+
+    """ Either `:quantile` or `:std`. """
+    uncertainty_measure = :quantile
+
+    """ 
+    Compute uncertainty over quantile(s) if `uncertainty_measure` is `:quantile`. 
+    Default is ``, roughly corresponding to `1s` for normally distributed data. 
+    """
+    quantiles = [0.327, 0.673] 
 
     """ The time series lengths over which to cross map and check convergence """
     timeseries_lengths
@@ -192,7 +212,11 @@ function causality(source, target, p::ConvergentCrossMappingTest)
         surr_func = p.surr_func,
         tree_type = p.tree_type,
         distance_metric = p.distance_metric,
-        correspondence_measure = p.correspondence_measure)
+        correspondence_measure = p.correspondence_measure,
+        summarise = p.summarise,
+        quantiles = p.quantiles,
+        uncertainty_measure = p.uncertainty_measure,
+        average_measure = p.average_measure)
 end
 
 
