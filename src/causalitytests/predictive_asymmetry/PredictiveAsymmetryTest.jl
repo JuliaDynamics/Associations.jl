@@ -68,7 +68,7 @@ PredictiveAsymmetryTest(predictive_test = test_transferoperator)
 Base.@kwdef struct PredictiveAsymmetryTest{TEST} <: CausalityTest where TEST
     predictive_test::TEST
 
-    function PredictiveAsymmetryTest(test::T) where {T <: TransferEntropyTest}
+    function PredictiveAsymmetryTest(test::T) where {T <: TransferEntropyCausalityTest}
         # Check that prediction lags are okay
         verified_prediction_lags(test.ηs)
         return new{T}(test)
@@ -104,7 +104,8 @@ end
 return_predictive_asymmetry(ηs, As) = As
 return_predictive_asymmetry(η::Int, As) = As[1]
 
-function predictive_asymmetry(source, target, p::PredictiveAsymmetryTest{T}) where {T <: TransferEntropyTest}
+function predictive_asymmetry(source, target, 
+        p::PredictiveAsymmetryTest{T}) where {T <: TransferEntropyCausalityTest}
 
     # Update the test parameters so that we have symmetric prediction lags
     test = update_ηs(p.predictive_test)
