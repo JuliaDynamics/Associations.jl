@@ -10,6 +10,7 @@ using Distributions
 using StaticArrays
 using Statistics
 using StatsBase
+using UncertainData
 
 ENV["GKSwstype"] = "100"
 
@@ -46,7 +47,7 @@ PAGES = [
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
-    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase],
+    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
     pages = PAGES,
