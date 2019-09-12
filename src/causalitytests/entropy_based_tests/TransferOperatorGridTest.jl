@@ -150,7 +150,7 @@ TransferOperatorGridTest(k = 1, l = 2, binning = binning, ηs = ηs)
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212)
 """
-Base.@kwdef struct TransferOperatorGridTest <: TransferEntropyTest
+Base.@kwdef struct TransferOperatorGridTest <: TransferEntropyCausalityTest
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
 

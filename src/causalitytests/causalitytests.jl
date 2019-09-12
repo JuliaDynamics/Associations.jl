@@ -6,30 +6,6 @@ import UncertainData:
     AbstractUncertainIndexValueDataset,
     resample
 
-"""
-    DistanceBasedCausalityTest
-
-The supertype of all abstract and composite types representing a causality 
-test based on some sort of distance computation.
-"""
-abstract type DistanceBasedCausalityTest <: CausalityTest end
-
-
-"""
-    EntropyBasedCausalityTest
-
-The supertype of all abstract and composite types representing a causality 
-test based on some entropy based measure.
-"""
-abstract type EntropyBasedCausalityTest <: CausalityTest end
-
-"""
-TransferEntropyTest
-
-The supertype of all abstract and composite types representing a transfer 
-entropy causality test.
-"""
-abstract type TransferEntropyTest <: EntropyBasedCausalityTest end
 
 """
     directionality(source, target, params::CausalityTest)
@@ -83,22 +59,21 @@ end
 
 Base.show(io::IO, test::CausalityTest) = print(io, summarise(test))
 
-# Resample vectors
+include("distance_based_tests/DistanceBasedCausalityTest.jl")
 
-UncertainData.resample(v) = v
-UncertainData.resample(v::Vector{T}) where T = v
-
+include("distance_based_tests/JointDistancesCausalityTest.jl")
 include("distance_based_tests/JointDistanceDistributionTest.jl")
+include("distance_based_tests/JointDistanceDistributionTTest.jl")
 include("distance_based_tests/CrossMappingTest.jl")
 include("distance_based_tests/ConvergentCrossMappingTest.jl")
+
+include("entropy_based_tests/EntropyBasedCausalityTest.jl")
+
+include("entropy_based_tests/TransferEntropyCausalityTest.jl")
 include("entropy_based_tests/VisitationFrequencyTest.jl")
 include("entropy_based_tests/TransferOperatorGridTest.jl")
+
 include("predictive_asymmetry/PredictiveAsymmetryTest.jl")
 
 
-export 
-    causality,
-    DistanceBasedCausalityTest,
-    EntropyBasedCausalityTest,
-    TransferEntropyTest,
-    resample
+export causality
