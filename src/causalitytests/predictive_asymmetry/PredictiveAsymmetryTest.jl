@@ -104,7 +104,8 @@ end
 return_predictive_asymmetry(ηs, As) = As
 return_predictive_asymmetry(η::Int, As) = As[1]
 
-function predictive_asymmetry(source, target, p::PredictiveAsymmetryTest{T}) where {T <: TransferEntropyTest}
+function predictive_asymmetry(source, target, 
+        p::PredictiveAsymmetryTest{T}) where {T <: TransferEntropyCausalityTest}
 
     # Update the test parameters so that we have symmetric prediction lags
     test = update_ηs(p.predictive_test)
