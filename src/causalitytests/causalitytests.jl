@@ -59,20 +59,37 @@ end
 
 Base.show(io::IO, test::CausalityTest) = print(io, summarise(test))
 
+################################################################
+# Distance based causality tests
+################################################################
 include("distance_based_tests/DistanceBasedCausalityTest.jl")
 
+# Joint distances tests 
+# ---------------------
 include("distance_based_tests/JointDistancesCausalityTest.jl")
 include("distance_based_tests/JointDistanceDistributionTest.jl")
 include("distance_based_tests/JointDistanceDistributionTTest.jl")
+
+# Cross mapping tests 
+# ---------------------
 include("distance_based_tests/CrossMappingTest.jl")
 include("distance_based_tests/ConvergentCrossMappingTest.jl")
 
+
+################################################################
+# Entropy based causality tests
+################################################################
 include("entropy_based_tests/EntropyBasedCausalityTest.jl")
 
+# Transfer entropy causality tests
+# ---------------------------------------
 include("entropy_based_tests/TransferEntropyCausalityTest.jl")
 include("entropy_based_tests/VisitationFrequencyTest.jl")
 include("entropy_based_tests/TransferOperatorGridTest.jl")
 
+################################################################
+# Predictive asymmetry causality tests
+################################################################
 include("predictive_asymmetry/PredictiveAsymmetryTest.jl")
 
 
