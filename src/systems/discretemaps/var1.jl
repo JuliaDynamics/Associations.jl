@@ -18,9 +18,7 @@ end
 
 function var1(uᵢ, σ₁, σ₂, σ₃)
     p = [σ₁, σ₂, σ₃]
-    logistic_system = DiscreteDynamicalSystem(eom_var1, uᵢ, p)
-
-    return logistic_system
+    DiscreteDynamicalSystem(eom_var1, uᵢ, p)
 end
 
 """

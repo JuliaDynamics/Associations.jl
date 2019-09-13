@@ -52,8 +52,7 @@ Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš
 """
 function henon4(u₀, a₁, a₂, b₁, b₂, c, k)
     p = [a₁, a₂, b₁, b₂, c, k]
-    logistic_system = DiscreteDynamicalSystem(eom_henon4, u₀, p)
-    return logistic_system
+    DiscreteDynamicalSystem(eom_henon4, u₀, p)
 end
 
 henon4(;u₀ = rand(4),

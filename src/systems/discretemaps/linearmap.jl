@@ -22,8 +22,7 @@ Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended G
 """
 function linearmap1(u₀, c)
     p = [c]
-    logistic_system = DiscreteDynamicalSystem(eom_linearmap1, u₀, p)
-    return logistic_system
+    DiscreteDynamicalSystem(eom_linearmap1, u₀, p)
 end
 
 """

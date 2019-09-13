@@ -45,8 +45,7 @@ Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš
 """
 function henon2(u₀, c)
     p = [c]
-    logistic_system = DiscreteDynamicalSystem(eom_henon2, u₀, p)
-    return logistic_system
+    DiscreteDynamicalSystem(eom_henon2, u₀, p)
 end
 
 """
