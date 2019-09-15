@@ -5,6 +5,10 @@
 Equations of motion for a 4D transitive causal chain of unidirectionally
 coupled logistic maps, where ``y_1 \\to y_2 \\to y_3 \\to y_4`` [1].
 
+*Note: With the default parameters which are as in [1], for some initial conditions, 
+this system wanders off to ``\\pm \\infty`` for some of the variables. Make sure that 
+you have a good realisation before using the orbit for anything.**
+
 ## Equations of motion
 
 ```math 
@@ -45,6 +49,10 @@ end
 Initialise a system of a transitive chain of four unidirectionally coupled
 logistic maps, where ``y_1 \\to y_2 \\to y_3 \\to y_4`` [1]. Default 
 parameters are as in [1].
+
+*Note: With the default parameters which are as in [1], for some initial conditions, 
+this system wanders off to ``\\pm \\infty`` for some of the variables. Make sure that 
+you have a good realisation before using the orbit for anything.**
 
 ## Equations of motion
 
