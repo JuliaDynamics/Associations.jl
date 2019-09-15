@@ -1,32 +1,68 @@
-@inline @inbounds function eom_forced_lorenz_lorenz_bidir(u, p, t)
+
+@inline @inbounds function eom_lorenz_lorenz_lorenz_bidir_forced(u, p, t)
     c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃ = (p...,)
-    x1, x2, x3, y1, y2, y3, z1, z2, z3 = (u...,)
+    x₁, x₂, x₃, y₁, y₂, y₃, z₁, z₂, z₃ = (u...,)
+   
+    dx₁ = -a₁*(x₁ - x₂) + c_yx*(y₁ - x₁) + c_zx*(z₁ - x₁)
+    dx₂ = -x₁*x₃ + a₂*x₁ - x₂
+    dx₃ = x₁*x₂ - a₃*x₃
     
-    dx1 = a₁*(x2 - x1) + c_yx*(y1 - x1) + c_zx*(z1 - x1)
-    dx2 = a₂*x1 - x1*x3 - x2
-    dx3 = x1*x2 - a₃*x3
+    dy₁ = -b₁*(y₁ - y₂) + c_xy*(x₁ - y₁) + c_zy*(z₁ - y₁)
+    dy₂ = -y₁*y₃ + b₂*y₁ - y₂
+    dy₃ = y₁*y₂ - b₃*y₃
     
-    dy1 = b₁*(y2 - y1) + c_yx*(x1 - y1) + c_zx*(z1 - y1)
-    dy2 = b₂*y1 - y1*y3 - y2
-    dy3 = y1*y2 - b₃*y3
+    dz₁ = -c₁*(z₁ - z₂)
+    dz₂ = -z₁*z₃ + c₂*z₁ - z₂
+    dz₃ = z₁*z₂ - c₃*z₃
     
-    dz1 = c₁*(z2 - z1)
-    dz2 = c₂*z1 - z1*z3 + z2
-    dz3 = z1*z2 - c₃*z3
-    
-    return SVector{9}(dx1, dx2, dx3, dy1, dy2, dy3, dz1, dz2, dz3)
+    return SVector{9}(dx₁, dx₂, dx₃, dy₁, dy₁, dy₃, dz₁, dz₂, dz₃)
 end
 
-function forced_lorenz_lorenz_bidir(; u0 = rand(9), 
-        c_xy = 0.1, c_yx = 0.1, # mostly synchronized for c_xy or c_yx > 0.1
+""" 
+    lorenz_lorenz_lorenz_bidir_forced(; u0 = rand(9), 
+        c_xy = 0.1, c_yx = 0.1,
         c_zx = 0.05, c_zy = 0.05, 
         a₁ = 10, a₂ = 28, a₃ = 8/3,
         b₁ = 10, b₂ = 28, b₃ = 8/3,
         c₁ = 10, c₂ = 28, c₃ = 8/3)
-    ContinuousDynamicalSystem(eom_forced_lorenz_lorenz_bidir, u0, [c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃])
+
+Initialise a system consisting of two bidirectionally coupled 3D Lorenz 
+systems forced by an external 3D Lorenz system, giving a 9D system.
+
+## Equations of motion 
+
+The equations of motion are 
+
+```math 
+\\begin{aligned}
+\\dot{x_1} &= - a_1 (x_1 - x_2) + c_{yx}(y_1 - x_1) + c_{zx}(z_1 - x_1) \\\\
+\\dot{x_2} &= - x_1 x_3 + a_2 x_1 - x_2 \\\\
+\\dot{x_3} &= x_1 x_2 - a_3 x_3 \\\\
+\\dot{y_1} &= -b_1 (y_1 - y_2) + c_{xy} (x_1 - y_1) + c_{zy}(z_1 - y_1) \\\\
+\\dot{y_2} &= - y_1 y_3 + b_2 y_1 - y_2 \\\\
+\\dot{y_3} &= y_1 y_2 - b_3 y_3 \\\\
+\\dot{z_1} &= - c_1 (z_1 - z_2) \\\\
+\\dot{z_2} &= - z_1 z_3 + c_2 z_1 - z_2 \\\\
+\\dot{z_3} &= z_1 z_2 - c_3 z_3 
+\\end{aligned}
+```
+
+## References 
+
+1. Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from 
+    multivariate flows by the joint distance distribution." Chaos: An 
+    Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+"""
+function lorenz_lorenz_lorenz_bidir_forced(; u0 = rand(9), 
+        c_xy = 0.1, c_yx = 0.1,
+        c_zx = 0.05, c_zy = 0.05, 
+        a₁ = 10, a₂ = 28, a₃ = 8/3,
+        b₁ = 10, b₂ = 28, b₃ = 8/3,
+        c₁ = 10, c₂ = 28, c₃ = 8/3)
+    ContinuousDynamicalSystem(eom_lorenz_lorenz_lorenz_bidir_forced, u0, [c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃])
 end
 
-function forced_lorenz_lorenz_bidir_trajectory(npts; 
+function lorenz_lorenz_lorenz_bidir_forced_trajectory(npts; 
         n_transient = 2000, dt = 0.1, sample_dt = 1,
         u0 = rand(9),
         c_xy = 1.0, c_yx = 1.0, c_zx = 1.0, c_zy = 1.0, # beyond c = 2, systems syncronize
@@ -34,7 +70,7 @@ function forced_lorenz_lorenz_bidir_trajectory(npts;
         b₁ = 10, b₂ = 28, b₃ = 8/3,
         c₁ = 10, c₂ = 28, c₃ = 8/3)
 
-    s = forced_lorenz_lorenz_bidir(u0 = u0, 
+    s = lorenz_lorenz_lorenz_bidir_forced(u0 = u0, 
         c_xy = c_xy, c_yx = c_yx, 
         c_zx = c_zx, c_zy = c_zy,
         a₁ = a₁, a₂ = a₂, a₃ = a₃,
@@ -46,7 +82,7 @@ function forced_lorenz_lorenz_bidir_trajectory(npts;
     o = trajectory(s, T, dt = dt, Ttr = n_transient*dt, alg = SimpleDiffEq.SimpleATsit5())[1:sample_dt:end-1, :] #alg = SimpleDiffEq.SimpleATsit5()
 end
 
-function good_forced_lorenz_lorenz_bidir_trajectory(npts; 
+function good_lorenz_lorenz_lorenz_bidir_forced_trajectory(npts; 
         sample_dt = 1,  Ttr = 5000, dt = 0.1, 
         Da₁ = Uniform(9.5, 10.5),
         Da₂ = Uniform(27.5, 28.5),
@@ -84,7 +120,7 @@ function good_forced_lorenz_lorenz_bidir_trajectory(npts;
         c₁ == nothing ? c₁ = rand(Dc₁) : c₁ = c₁
         c₂ == nothing ? c₂ = rand(Dc₂) : c₂ = c₂
         c₃ == nothing ? c₃ = rand(Dc₃) : c₃ = c₃
-        pts = forced_lorenz_lorenz_bidir_trajectory(npts, 
+        pts = lorenz_lorenz_lorenz_bidir_forced(npts, 
             sample_dt = sample_dt, dt = dt, n_transient = Ttr,
             c_xy = c_xy,  c_yx = c_yx, 
             c_zx = c_zx, c_zy = c_zy,
