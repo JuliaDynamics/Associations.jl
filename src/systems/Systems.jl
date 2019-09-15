@@ -30,7 +30,7 @@ include("continuous_systems/lorenz_lorenz_lorenz_transitive.jl")
 include("continuous_systems/rossler_rossler_bidir.jl")
 include("continuous_systems/rossler_rossler_rossler_bidir_forced.jl")
 
-include("continuous_systems/rosslerlorenz.jl")
+include("continuous_systems/rossler_lorenz.jl")
 
 # We export both the equations of motion and function to generate
 # the systems for every example. The equations of motion functions

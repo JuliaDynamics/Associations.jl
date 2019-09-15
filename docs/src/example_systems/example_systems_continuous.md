@@ -59,3 +59,10 @@ rossler_rossler_rossler_bidir_forced(; u0 = rand(9),
         b₁ = 0.15, b₂ = 0.2, b₃ = 10,
         c₁ = 0.15, c₂ = 0.2, c₃ = 10)
 ```
+
+## Unidirectonal forcing from a 3D Rössler system to a 3D Lorenz system
+
+```@docs
+rossler_lorenz(;u₀ = rand(6), a₁ = -6, a₂ = 6, a₃ = 2.0,
+        b₁ = 10, b₂ = 28, b₃ = 8/3, c_xy = 1)
+```
