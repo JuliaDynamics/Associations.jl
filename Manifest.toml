@@ -71,9 +71,11 @@ version = "0.6.0"
 
 [[CausalityToolsBase]]
 deps = ["ChaosTools", "DelayEmbeddings", "Distances", "Distributions", "Interpolations", "NearestNeighbors", "StaticArrays", "Statistics", "Test"]
-git-tree-sha1 = "8aeedea12f388a8d4b1cad2f46954fcf9589be0e"
+git-tree-sha1 = "55c1e8d5d05527c3b6095e47c84a101edb7d0962"
+repo-rev = "master"
+repo-url = "https://github.com/kahaaga/CausalityToolsBase.jl"
 uuid = "b1f25513-c649-51ee-8a1c-0e98d01ae897"
-version = "0.6.0"
+version = "0.7.0"
 
 [[ChaosTools]]
 deps = ["Combinatorics", "DSP", "DiffEqBase", "Distances", "Distributions", "DynamicalSystemsBase", "ForwardDiff", "LinearAlgebra", "LombScargle", "NearestNeighbors", "Random", "Reexport", "Roots", "StaticArrays", "Statistics", "StatsBase"]
