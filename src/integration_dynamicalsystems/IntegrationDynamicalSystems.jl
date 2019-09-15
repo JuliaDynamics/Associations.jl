@@ -87,7 +87,8 @@ using Reexport
 
     ## Example 
 
-    Let's re-create the `lorenz_lorenz` system that ships with `CausalityTools` and 
+    Let's re-create the `lorenz_lorenz` system that ships with `CausalityTools` and analyse the 
+    dynamical influence between some of its components.
 
     ```julia
     function eom_lorenz_lorenz(u, p, t)
