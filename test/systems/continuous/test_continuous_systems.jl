@@ -24,13 +24,13 @@ l = 0.1
 #@test isa(trajectory(chuacircuits_driven(), l), Dataset)
 @test isa(trajectory(hindmarsh_rose(), l), Dataset)
 
-@test isa(trajectory(mediated_link(), l), Dataset)
-
-@test isa(trajectory(lorenz_lorenz_bidir_forced(), l), Dataset)
-@test isa(trajectory(lorenz_lorenz_lorenz_transitive(), l), Dataset)
+@test isa(trajectory(lorenz_lorenz_bidir(), l), Dataset)
 @test isa(trajectory(lorenz_lorenz_lorenz_bidir_forced(), l), Dataset)
+@test isa(trajectory(lorenz_lorenz_lorenz_transitive(), l), Dataset)
 
 @test isa(trajectory(rossler_rossler_bidir(), l), Dataset)
 @test isa(trajectory(rossler_rossler_rossler_bidir_forced(), l), Dataset)
+
+@test isa(trajectory(mediated_link(), l), Dataset)
 
 @test isa(trajectory(rossler_lorenz(), l), Dataset)
