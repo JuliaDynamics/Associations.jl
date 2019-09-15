@@ -6,6 +6,8 @@ using Documenter, DocumenterMarkdown
 #Conda.add("scipy")
 using Plots
 using DynamicalSystems
+using SimpleDiffEq
+using DynamicalSystems
 using Distributions
 using StaticArrays
 using Statistics
@@ -17,6 +19,23 @@ ENV["GKSwstype"] = "100"
 PAGES = [
     "index.md",
     "Syntax overview" => "syntax_overview.md",
+
+    "Causality tests" => [
+        "causalitytests/causality_from_time_series.md",
+        "causalitytests/causality_from_dynamical_systems.md",
+        "causalitytests/causality_tests.md",
+        "causalitytests/CausalityTest.md",
+        "causalitytests/ConvergentCrossMappingTest.md",
+        "causalitytests/CrossMappingTest.md",
+        "causalitytests/DistanceBasedCausalityTest.md",
+        "causalitytests/EntropyBasedCausalityTest.md",
+        "causalitytests/JointDistanceDistributionTest.md",
+        "causalitytests/PredictiveAsymmetryTest.md",
+        "causalitytests/TransferEntropyTest.md",
+        "causalitytests/TransferOperatorGridTest.md",
+        "causalitytests/VisitationFrequencyTest.md",
+        "causalitytests/ApproximateSimplexIntersectionTest.md"
+    ],
     "CausalityToolsBase" => [
         "Discretization" => "causalitytoolsbase/discretization.md",
         "Delay reconstructions" => "causalitytoolsbase/delay_reconstructions.md"
@@ -28,7 +47,11 @@ PAGES = [
     "Transfer entropy" => [
         "Estimators" => "transferentropy/transferentropy_estimators.md",
         "Convenience functions" => "transferentropy/convenience_functions_te.md",
-        "TEVars" => "transferentropy/TEVars.md"
+        "TEVars" => "transferentropy/TEVars.md",
+        "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
+        "Worked example" => [
+            "worked_examples/worked_example_transferentropy.md"
+        ]
     ],
     "Distance based measures" => [
         "CCM" => [
@@ -47,7 +70,8 @@ PAGES = [
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
-    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
+    #modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
+    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase],
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
     pages = PAGES,
