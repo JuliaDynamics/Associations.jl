@@ -22,3 +22,4 @@ The following discrete systems are implemented:
 - [`rossler_rossler_rossler_bidir_forced`](@ref)
 - [`mediated_link`](@ref)
 - [`rossler_lorenz`](@ref)
+- [`chuacircuit_nscroll_sine`](@ref)

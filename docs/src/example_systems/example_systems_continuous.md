@@ -66,3 +66,11 @@ rossler_rossler_rossler_bidir_forced(; u0 = rand(9),
 rossler_lorenz(;u₀ = rand(6), a₁ = -6, a₂ = 6, a₃ = 2.0,
         b₁ = 10, b₂ = 28, b₃ = 8/3, c_xy = 1)
 ```
+
+## N-scroll Chua attractors
+
+```@docs
+chuacircuit_nscroll_sine(;u₀ = [0.0, 0.0, 0.28695],
+        α = 10.814, β = 14, γ = 0, a = 1.3, b = 0.11, c = 2,
+        σx = 0.0, σy = 0.0, σz = 0.0)
+```
