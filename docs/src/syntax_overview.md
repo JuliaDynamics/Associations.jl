@@ -1,4 +1,6 @@
-# Syntax overview
+# [Syntax overview](@id syntax_overview)
+
+This is an overview over the low-level functionality in the CausalityTools.jl package and its subpackages.
 
 ## Discretization
 
@@ -38,3 +40,12 @@ triangulation must be precomputed, using either
 Then we can superimpose rectangular grid over the triangulation and compute the transfer entropy.
 
 - [`transferentropy(μ::AbstractTriangulationInvariantMeasure, vars::TEVars, binning_scheme::RectangularBinning; estimator = VisitationFrequency(), n::Int = 10000, b = 2)`](@ref).
+
+## Cross mappings
+
+- [`crossmap`](@ref).
+- [`convergentcrossmap`](@ref).
+
+## Joint distance distribution
+
+- [`joint_distance_distribution`](@ref)
