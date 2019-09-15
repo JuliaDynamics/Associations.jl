@@ -16,12 +16,12 @@ using Plots
 
 ## Goals
 
-- **Provide a comprehensive, easy-to-use framework** for the detection of directional causal influences in complex dynamical systems from time series.
-- **Integration with UncertainDatasets.jl**, which greatly simplifies working with uncertain data.
-- **Functional and efficient implementations** of causality detection algorithm, with thorough documentation and references to primary literature.
-- **Extensive library of example dynamical systems** for testing algorithm performance.
-- **Worked examples** for all algorithms.
-
+- **Provide a comprehensive, [easy-to-use framework](@ref causality_time_series)** for the detection of directional causal influences in complex dynamical systems from time series.
+- **Functional and efficient [implementations](@ref syntax_overview)** of causality detection algorithms, with thorough documentation and references to primary literature.
+- [**Integration with UncertainDatasets.jl**](@ref causality_time_series), which greatly simplifies working with uncertain data.
+- [**Integration with DynamicalSystems.jl**](@ref causality_dynamical_systems), for quick analysis of time series from systems where the governing equations are known.
+- **Library of example dynamical systems** for testing algorithm performance.
+- **Worked examples** for the algorithms.
 
 ## Status
 
@@ -29,11 +29,13 @@ The package and documentation is under active development. **Breaking changes ma
 
 
 ### Package structure
+
 `CausalityTools.jl` brings together the following packages into one environment:
 
 
 | package | functionality | version |  build |  
 | :---   | :--- |    :---:    |   ---: |  
+| [`CausalityToolsBase.jl`](https://github.com/kahaaga/CasusalityToolsBase.jl/) | Basic functionality for the CausalityTools ecosystem. | `0.6.0` | [![Build Status](https://travis-ci.org/kahaaga/CausalityToolsBase.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CausalityToolsBase.jl) |
 | [`StateSpaceReconstruction.jl`](https://github.com/kahaaga/StateSpaceReconstruction.jl/) | Fully flexible state space reconstructions (embeddings), partitioning routines (variable-width rectangular, and triangulations), and partition refinement (equal-volume splitting of  simplices). | `0.4.2` | [![Build Status](https://travis-ci.org/kahaaga/StateSpaceReconstruction.jl.svg?branch=master)](https://travis-ci.org/kahaaga/StateSpaceReconstruction.jl) |
 | [`TimeseriesSurrogates.jl`](https://github.com/kahaaga/TimeseriesSurrogates.jl/) | Generate surrogate data from time series. | `0.3.0` | [![Build Status](https://travis-ci.org/kahaaga/TimeseriesSurrogates.jl.svg?branch=master)](https://travis-ci.org/kahaaga/TimeseriesSurrogates.jl) |
 | [`TransferEntropy.jl`](https://github.com/kahaaga/TransferEntropy.jl/) | Transfer entropy estimators. | `0.4.0` | [![Build Status](https://travis-ci.org/kahaaga/TransferEntropy.jl.svg?branch=master)](https://travis-ci.org/kahaaga/TransferEntropy.jl) |  |
