@@ -13,9 +13,9 @@ The equations of motion are
 
 ```math
 \\begin{aligned}
-dx = (x(r - r_1 x - z + σ_x η_x)) \\mod 1 \\\\
-dy = (y(r - r_2 y - z + σ_y η_y)) \\mod 1 \\\\
-dz = (z(r - r_3 z + σ_z η_z)) \\mod 1
+x(t+1) = (x(t)(r - r_1 x(t) - z(t) + σ_x η_x)) \\mod 1 \\\\
+y(t+1) = (y(t)(r - r_2 y(t) - z(t) + σ_y η_y)) \\mod 1 \\\\
+z(t+1) = (z(t)(r - r_3 z(t) + σ_z η_z)) \\mod 1
 \\end{aligned}
 ```
 
@@ -45,39 +45,6 @@ function eom_logistic3(u, p, t)
     return SVector{3}(dx, dy, dz)
 end
 
-
-
-"""
-    logistic3(u₀, r₁, r₂, r₃, σx, σy, σz) -> DiscreteDynamicalSystem
-
-Initialise a dynamical system consisting of three coupled logistic map
-representing the response of two independent dynamical variables to the
-forcing from a common driver. The dynamical influence goes in the directions
-``Z \\to X`` and ``Z \\to Y``.
-
-## Equations of motion
-
-The equations of motion are
-
-```math
-\\begin{aligned}
-dx = (x(r - r_1 x - z + σ_x η_x)) \\mod 1 \\\\
-dy = (y(r - r_2 y - z + σ_y η_y)) \\mod 1 \\\\
-dz = (z(r - r_3 z + σ_z η_z)) \\mod 1
-\\end{aligned}
-```
-
-Dynamical noise may be added to each of the dynamical variables by tuning the
-parameters `σz`, `σx` and `σz`. Default values for the parameters
-`r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour,
-with `r₁ = r₂ = r₃ = 4`.
-
-## References
-
-1. Runge, Jakob. Causal network reconstruction from time series: From theoretical 
-    assumptions to practical estimation, Chaos 28, 075310 (2018); 
-    doi: 10.1063/1.5025050
-"""
 function logistic3(u₀, r₁, r₂, r₃, σx, σy, σz)
     p = [r₁, r₂, r₃, σx, σy, σz]
     DiscreteDynamicalSystem(eom_logistic3, u₀, p)
@@ -98,9 +65,9 @@ The equations of motion are
 
 ```math
 \\begin{aligned}
-dx = (x(r - r_1 x - z + σ_x η_x)) \\mod 1 \\\\
-dy = (y(r - r_2 y - z + σ_y η_y)) \\mod 1 \\\\
-dz = (z(r - r_3 z + σ_z η_z)) \\mod 1
+x(t+1) = (x(t)(r - r_1 x(t) - z(t) + σ_x η_x)) \\mod 1 \\\\
+y(t+1) = (y(t)(r - r_2 y(t) - z(t) + σ_y η_y)) \\mod 1 \\\\
+z(t+1) = (z(t)(r - r_3 z(t) + σ_z η_z)) \\mod 1
 \\end{aligned}
 ```
 

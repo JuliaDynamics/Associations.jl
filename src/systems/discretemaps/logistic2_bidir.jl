@@ -46,38 +46,6 @@ function eom_logistic2_bidir(dx, x, p, n)
     return
 end
 
-"""
-    logistic2_bidir(u₀, c_xy, c_yx, r₁, r₂, σ_xy, σ_yx)
-
-A bidirectional logistic model for the chaotic population dynamics of two interacting 
-species [1].
-
-## Equations of motion 
-
-The equations of motion are 
-
-
-```math
-\\begin{align}
-x(t+1) &= r_1 f_{yx}^{t}(1 - f_{yx}^{t}) \\
-y(t+1) &= r_2 f_{xy}^{t}(1 - f_{xy}^{t}) \\
-f_{xy}^t &= \\dfrac{y(t) + c_{xy}(x(t) + \\sigma_{xy} \\xi_{xy}^t )}{1 + c_{xy} (1 + \\sigma_{xy} )} \\ 
-f_{yx}^t &= \\dfrac{x(t) + c_{yx}(y(t) + \\sigma_{yx} \\xi_{yx}^t )}{1 + c_{yx} (1 + \\sigma_{yx} )},
-\\end{align}
-```
-
-where the coupling strength ``c_{xy}`` controls how strongly species ``x`` influences species 
-``y``, and vice versa for ``c_{yx}``. To simulate time-varying influence of unobserved 
-processes, we use the dynamical noise terms ``\\xi_{xy}^t`` and ``\\xi_{yx}^t``, drawn from a 
-uniform distribution with support on ``[0, 1]``. If ``\\sigma_{xy} > 0``, then the influence 
-of ``x`` on ``y`` is masked by dynamical noise equivalent to ``\\sigma_{xy} \\xi_{xy}^{t}`` at 
-the ``t``-th iteration of the map, and vice versa for ``\\sigma_{yx}``.
-
-## References 
-
-1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation 
-    using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
-"""
 function logistic2_bidir(u₀, c_xy, c_yx, r₁, r₂, σ_xy, σ_yx)
     p = [c_xy, c_yx, r₁, r₂, σ_xy, σ_yx]
     DiscreteDynamicalSystem(eom_logistic2_bidir, u₀, p)

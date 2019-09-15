@@ -46,45 +46,6 @@ function eom_logistic2_unidir(dx, x, p, n)
     return
 end
 
-
-"""
-    logistic2_unidir(u₀, c_xy, r₁, r₂, σ) -> DiscreteDynamicalSystem
-
-Initialise a system consisting of two coupled logistic maps where X
-unidirectionally influences Y. By default, the parameters `r₁` and `r₂` are set
-to values yielding chaotic behaviour.
-
-## Equations of motion
-
-The equations of motion are
-
-```math
-\\begin{aligned}
-dx &= r_1 x(1 - x) \\\\
-dy &= r_2 f(x,y)(1 - f(x,y)),
-\\end{aligned}
-```
-
-with
-
-```math
-\\begin{aligned}
-f(x,y) = \\dfrac{y + \\frac{c_{xy}(x \\xi )}{2}}{1 + \\frac{c_{xy}}{2}(1+ \\sigma )}
-\\end{aligned}
-```
-
-The parameter `c_xy` controls how strong the dynamical forcing is. If `σ > 0`,
-dynamical noise masking the influence of  `x` on `y` equivalent to
-``\\sigma \\cdot \\xi`` is added at each iteration. Here,``\\xi`` is a draw from a
-flat distribution on ``[0, 1]``. Thus, setting `σ = 0.05` is equivalent to
-add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
-range of values of the logistic map.
-
-## References
-
-1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation 
-    using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
-"""
 function logistic2_unidir(u₀, c_xy, r₁, r₂, σ)
     p = [c_xy, r₁, r₂, σ]
     DiscreteDynamicalSystem(eom_logistic2_unidir, u₀, p)

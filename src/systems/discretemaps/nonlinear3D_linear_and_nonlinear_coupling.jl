@@ -37,31 +37,6 @@ function eom_nonlinear3d(x, p, n)
     return SVector{3}(dx₁, dx₂, dx₃)
 end
 
-"""
-    nonlinear3d(uᵢ, a₁, a₂, a₃,  b₁, b₂, b₃, 
-        c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃) -> DiscreteDynamicalSystem
-
-A 3d nonlinear system with nonlinear couplings ``x_1 \\to x_2``, 
-``x_2 \\to x_3`` and ``x_1 \\to x_3``. Modified from [1]. 
-
-## Equations of motion 
-
-The equations of motion are
-
-```math
-\\begin{aligned}
-x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{1}(t) \\\\
-x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{2}(t) + b x_1 x_2 \\\\
-x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \\xi_{3}(t) + c x_{2}(t) + d x_{1}(t)^2.
-\\end{aligned}
-```
-
-## References 
-
-1. Gourévitch, B., Le Bouquin-Jeannès, R., & Faucon, G. (2006). Linear and nonlinear 
-    causality between signals: methods, examples and neurophysiological 
-    applications. Biological Cybernetics, 95(4), 349–369.
-"""
 function nonlinear3d(uᵢ, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)
     p = [a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃]
     s = DiscreteDynamicalSystem(eom_nonlinear3d, uᵢ, p)
