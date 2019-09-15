@@ -29,34 +29,3 @@ test8 = VisitationFrequencyTest(binning = multiple_binnings, ηs = 5)
 @test causality(x, y, PredictiveAsymmetryTest(test6)) |> typeof<: Real
 @test causality(x, y, PredictiveAsymmetryTest(test7)) isa Vector{<:Real}
 @test causality(x, y, PredictiveAsymmetryTest(test8)) |> typeof<: Real
-
-################################################################
-# Integration with UncertainData.jl
-################################################################
-# Vectors of uncertain values
-uvals_x = [UncertainValue(Normal, rand(Normal(0, 5)), abs(rand(Normal(0, 3)))) for i = 1:100]
-uvals_y = [UncertainValue(Normal, rand(Normal(0, 5)), abs(rand(Normal(0, 3)))) for i = 1:100];
-
-# UncertainValueDataset
-UVX = UncertainValueDataset(uvals_x)
-UVY = UncertainValueDataset(uvals_y)
-
-# UncertainIndexDataset
-UVX_idx = UncertainIndexDataset(uvals_x)
-UVY_idx = UncertainIndexDataset(uvals_y)
-
-# Real-valued vectors
-x = resample.(uvals_x);
-y = resample.(uvals_y);
-
-binnings = [RectangularBinning(i) for i = 3:6]
-vftest = TransferOperatorGridTest(binning = binnings, ηs = -5:5)
-test = PredictiveAsymmetryTest(predictive_test = vftest)
-
-@test causality(x, y, test) isa Array{T, 1} where T
-@test causality(uvals_x, uvals_y, test) isa Array{T, 1} where T
-@test causality(x, uvals_y, test) isa Array{T, 1} where T
-@test causality(uvals_x, y, test) isa Array{T, 1} where T
-@test causality(UVX, UVY, test) isa Array{T, 1} where T
-@test causality(x, UVY, test) isa Array{T, 1} where T
-@test causality(UVX, y, test) isa Array{T, 1} where T

@@ -1,19 +1,20 @@
-import NearestNeighbors, StatsBase, Distances
-import CrossMappings: crossmap
-import CausalityToolsBase: CausalityTest
-import TimeseriesSurrogates: randomshuffle
 
 """
-    CrossMappingTest(; dim::Int = 3, τ::Int = 1, libsize::Int = 10,
+    ConvergentCrossMappingTest(timeseries_lengths; 
+        dim::Int = 3, τ::Int = 1, libsize::Int = 10,
         replace::Bool = false, n_reps::Int = 100, surr_func::Function = randomshuffle,
         which_is_surr::Symbol = :none, exclusion_radius::Int = 0,
         tree_type = NearestNeighbors.KDTree, distance_metric = Distances.Euclidean(),
         correspondence_measure = StatsBase.cor, 
         ν::Int = 0)
 
-The parameters for a cross mapping [1] test.
+The parameters for a convergent cross mapping [1] test.
 
-## Optional keyword arguments
+## Mandatory keyword arguments 
+
+- **`timeseries_lengths`**: The time series lengths over which to cross map and check convergence.
+
+## Optional keyword arguments 
 
 - **`dim`**: The dimension of the state space reconstruction (delay embedding)
     constructed from the `response` series. Default is `dim = 3`.
@@ -64,6 +65,12 @@ The parameters for a cross mapping [1] test.
     [Sugihara et al. (2012)](http://science.sciencemag.org/content/early/2012/09/19/science.1227079)
     also proposes to use the root mean square deviation, for which a value of ``0`` would
     be perfect prediction.
+- **`summarise`**: Should cross map skills be summarised for each time series length? Default is 
+    `summarise = false`. 
+- **`average_measure`**: Either `:median` or `:mean`. Default is `:median`
+- **`uncertainty_measure`**: Either `:quantile` or `:std`.
+- **`quantiles`**: Compute uncertainty over quantile(s) if `uncertainty_measure` is `:quantile`. 
+    Default is `[0.327, 0.673]`, roughly corresponding to `1s` for normally distributed data.
 
 ## References 
 
@@ -76,7 +83,7 @@ The parameters for a cross mapping [1] test.
 3. Ye, H., et al. "rEDM: Applications of empirical dynamic modeling from time series." R Package Version 
     0.4 7 (2016). [https://cran.r-project.org/web/packages/rEDM/index.html](https://cran.r-project.org/web/packages/rEDM/index.html)
 """
-Base.@kwdef struct CrossMappingTest <: DistanceBasedCausalityTest
+Base.@kwdef struct ConvergentCrossMappingTest <: DistanceBasedCausalityTest
     """ 
     The dimension of the state space reconstruction (delay embedding) constructed 
     from the response series. Default is `dim = 3`. 
@@ -154,7 +161,7 @@ Base.@kwdef struct CrossMappingTest <: DistanceBasedCausalityTest
     *(note the instantiation of the metric)*.
     """
     distance_metric = Distances.Euclidean()
-    
+
     """
     The function that computes the correspondence between actual values of `driver` and predicted 
     values. Can be any function returning a similarity measure between two vectors of values.
@@ -166,11 +173,29 @@ Base.@kwdef struct CrossMappingTest <: DistanceBasedCausalityTest
     be perfect prediction.
     """
     correspondence_measure = StatsBase.cor
+
+    """ Should cross map skills be summarised for each time series length? Default is `summarise = false`. """
+    summarise = false 
+
+    """ Either `:median` or `:mean`. Default is `:median`. """
+    average_measure = :median
+
+    """ Either `:quantile` or `:std`. """
+    uncertainty_measure = :quantile
+
+    """ 
+    Compute uncertainty over quantile(s) if `uncertainty_measure` is `:quantile`. 
+    Default is ``, roughly corresponding to `1s` for normally distributed data. 
+    """
+    quantiles = [0.327, 0.673] 
+
+    """ The time series lengths over which to cross map and check convergence """
+    timeseries_lengths
 end
 
 
-function causality(source, target, p::CrossMappingTest)
-     crossmap(source, target;
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::ConvergentCrossMappingTest) where {T<:Real}
+     convergentcrossmap(source, target, p.timeseries_lengths;
         dim = p.dim,
         τ = p.τ,
         ν = p.ν,
@@ -183,42 +208,12 @@ function causality(source, target, p::CrossMappingTest)
         surr_func = p.surr_func,
         tree_type = p.tree_type,
         distance_metric = p.distance_metric,
-        correspondence_measure = p.correspondence_measure)
+        correspondence_measure = p.correspondence_measure,
+        summarise = p.summarise,
+        quantiles = p.quantiles,
+        uncertainty_measure = p.uncertainty_measure,
+        average_measure = p.average_measure)
 end
 
-################################################################
-# Integration with UncertainData.jl
-################################################################
-function causality(source::Vector{<:UVT1}, target::Vector{<:UVT2}, p::CrossMappingTest) where {
-        UVT1<:AbstractUncertainValue, 
-        UVT2<:AbstractUncertainValue}
-    causality(resample.(source), resample.(target), p)
-end
 
-function causality(source, target::Vector{<:UVT}, p::CrossMappingTest) where { 
-        UVT<:AbstractUncertainValue}
-    causality(source, resample.(target), p)
-end
-
-function causality(source::Vector{<:UVT}, target, p::CrossMappingTest) where {
-        UVT<:AbstractUncertainValue}
-    causality(resample.(source), target, p)
-end
-
-function causality(source::UVT1, target::UVT2, p::CrossMappingTest) where {
-        UVT1<:AbstractUncertainValueDataset, 
-        UVT2<:AbstractUncertainValueDataset}
-    causality(resample.(source), resample.(target), p)
-end
-
-function causality(source, target::UVT, p::CrossMappingTest) where { 
-        UVT<:AbstractUncertainValueDataset}
-    causality(source, resample.(target), p)
-end
-
-function causality(source::UVT, target, p::CrossMappingTest) where {
-        UVT<:AbstractUncertainValueDataset}
-    causality(resample.(source), target, p)
-end
-
-export CrossMappingTest
+export ConvergentCrossMappingTest

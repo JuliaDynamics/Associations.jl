@@ -1,3 +1,8 @@
+
+##################################################################################################
+# Integration with UncertainData.jl (sampling from full supports of the furnishing distributions)
+#################################################################################################
+
 uvals_x = [UncertainValue(Normal, rand(Normal(0, 5)), abs(rand(Normal(0, 3)))) for i = 1:100]
 uvals_y = [UncertainValue(Normal, rand(Normal(0, 5)), abs(rand(Normal(0, 3)))) for i = 1:100];
 
@@ -47,3 +52,20 @@ jtest = JointDistanceDistributionTest(B = 20)
 @test causality(UVX, UVY, jtest) |> length == 20
 @test causality(x, UVY, jtest) |> length == 20
 @test causality(UVX, y, jtest) |> length == 20
+
+################################################################
+# Integration with UncertainData.jl (with sampling constraints)
+################################################################
+onevar_constraints = ConstrainedResampling(TruncateStd(1))
+twovar_constraints = ConstrainedResampling(TruncateStd(2), TruncateStd(1))
+
+test_jdd = JointDistanceDistributionTest() 
+@test causality(x, y, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, uvals_y, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(x, uvals_y, test_jdd, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, y, test_jdd, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, UVY, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, UVY, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, uvals_y, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(x, UVY, test_jdd, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, y, test_jdd, onevar_constraints) isa Vector{T} where T<:Real

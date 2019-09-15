@@ -126,7 +126,7 @@ function predictive_asymmetry(source, target,
     return return_predictive_asymmetry(p.predictive_test.ηs, As)
 end
 
-function causality(source, target, p::PredictiveAsymmetryTest{T}) where {T}
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::PredictiveAsymmetryTest{CT}) where {T<:Real, CT}
     predictive_asymmetry(source, target, p)
 end
 

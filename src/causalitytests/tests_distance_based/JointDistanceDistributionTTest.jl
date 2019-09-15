@@ -3,10 +3,10 @@
 
 
 """
-JointDistanceDistributionTTest(; distance_metric = SqEuclidean(), B::Int = 10,
-    D::Int = 2, τ::Int = 1, 
-    hypothesis_test::OneSampleTTest = OneSampleTTest,
-    μ0 = 0.0)
+    JointDistanceDistributionTTest(; distance_metric = SqEuclidean(), B::Int = 10,
+        D::Int = 2, τ::Int = 1, 
+        hypothesis_test::OneSampleTTest = OneSampleTTest,
+        μ0 = 0.0)
 
 The parameters for a joint distance distribution [1] analysis.
 
@@ -54,48 +54,13 @@ Base.@kwdef struct JointDistanceDistributionTTest <: JointDistancesCausalityTest
     μ0 = 0.0
 end
 
-function causality(source, target, p::JointDistanceDistributionTTest)
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::JointDistanceDistributionTTest) where {T <: Real}
     joint_distance_distribution(p.hypothesis_test, source, target,
         p.distance_metric, 
         p.B,
         p.D,
         p.τ,
         p.μ0)
-end
-
-################################################################
-# Integration with UncertainData.jl
-################################################################
-function causality(source::Vector{<:UVT1}, target::Vector{<:UVT2}, p::JointDistanceDistributionTTest) where {
-        UVT1<:AbstractUncertainValue, 
-        UVT2<:AbstractUncertainValue}
-    causality(resample.(source), resample.(target), p)
-end
-
-function causality(source, target::Vector{<:UVT}, p::JointDistanceDistributionTTest) where { 
-        UVT<:AbstractUncertainValue}
-    causality(source, resample.(target), p)
-end
-
-function causality(source::Vector{<:UVT}, target, p::JointDistanceDistributionTTest) where {
-        UVT<:AbstractUncertainValue}
-    causality(resample.(source), target, p)
-end
-
-function causality(source::UVT1, target::UVT2, p::JointDistanceDistributionTTest) where {
-        UVT1<:AbstractUncertainValueDataset, 
-        UVT2<:AbstractUncertainValueDataset}
-    causality(resample.(source), resample.(target), p)
-end
-
-function causality(source, target::UVT, p::JointDistanceDistributionTTest) where { 
-        UVT<:AbstractUncertainValueDataset}
-    causality(source, resample.(target), p)
-end
-
-function causality(source::UVT, target, p::JointDistanceDistributionTTest) where {
-        UVT<:AbstractUncertainValueDataset}
-    causality(resample.(source), target, p)
 end
 
 export JointDistanceDistributionTTest
