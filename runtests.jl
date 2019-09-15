@@ -5,6 +5,7 @@ end
 using TransferEntropy
 using Test
 using Distances
+import UncertainData: ConstrainedResampling
 
 
 n_realizations = 50
