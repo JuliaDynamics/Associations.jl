@@ -76,3 +76,4 @@ pages:
     - Syntax overview: syntax_overview.md
   - Worked examples:
     - Transfer entropy: worked_examples/worked_example_transferentropy.md
+  - Example systems: example_systems/example_systems.md

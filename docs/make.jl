@@ -65,6 +65,10 @@ PAGES = [
         "CCM" => [
             "Henon map" => "examples/crossmappings/examples_crossmappings_henon2.md"
         ]
+    ],
+
+    "Example systems" => [
+        "example_systems" => "example_systems/example_systems.md"
     ]
 ]
 
