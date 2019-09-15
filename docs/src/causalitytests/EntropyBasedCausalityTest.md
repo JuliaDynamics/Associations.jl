@@ -7,7 +7,7 @@ EntropyBasedCausalityTest
 
 ## Tests
 
-- [`TransferEntropyTest`](@ref)
+- [`TransferEntropyCausalityTest`](@ref)
 
 - [`VisitationFrequencyTest`](@ref)
 
