@@ -1,6 +1,7 @@
 using Reexport
 
 @reexport module CausalityTests
+    import CausalityToolsBase: causality
     import NearestNeighbors
     import StatsBase
     import Distances
@@ -105,7 +106,7 @@ using Reexport
     # Joint distances tests
     # ---------------------
     import ..joint_distance_distribution
-    
+
     include("tests_distance_based/JointDistancesCausalityTest.jl")
     include("tests_distance_based/JointDistanceDistributionTest.jl")
     include("tests_distance_based/JointDistanceDistributionTTest.jl")
