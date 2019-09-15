@@ -28,6 +28,16 @@ lorenz_lorenz_lorenz_bidir_forced(; u0 = rand(9),
         c₁ = 10, c₂ = 28, c₃ = 8/3)
 ```
 
+## Three transitively connected 3D Lorenz systems
+
+```@docs
+lorenz_lorenz_lorenz_transitive(;uᵢ=rand(9),
+        σ₁ = 10.0, σ₂ = 10.0, σ₃ = 10.0,
+        ρ₁ = 28.0, ρ₂ = 28.0, ρ₃ = 28.0,
+        β₁ = 8/3,  β₂ = 8/3,  β₃ = 8.3,
+        c₁₂ = 1.0, c₂₃ = 1.0)
+```
+
 ## Two bidirectionally coupled 3D Rössler systems
 
 ```@docs
