@@ -1,8 +1,6 @@
 using Reexport
 
 @reexport module CausalityTests
-    import ..joint_distance_distribution
-
     import NearestNeighbors
     import StatsBase
     import Distances
@@ -20,7 +18,7 @@ using Reexport
         ConstrainedResampling
 
 
-        """
+    """
         causality(source, target, test)
 
     Test for a causal influence from `source` to `target` using the provided causality `test`.
@@ -106,6 +104,8 @@ using Reexport
 
     # Joint distances tests
     # ---------------------
+    import ..joint_distance_distribution
+    
     include("tests_distance_based/JointDistancesCausalityTest.jl")
     include("tests_distance_based/JointDistanceDistributionTest.jl")
     include("tests_distance_based/JointDistanceDistributionTTest.jl")
