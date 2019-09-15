@@ -72,7 +72,7 @@ PAGES = [
     ]
 ]
 
-import Pkg; Pkg.add("https://github.com/kahaaga/UncertainData.jl")
+import Pkg; Pkg.add(Pkg.PackageSpec(url="https://github.com/kahaaga/UncertainData.jl"))
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
