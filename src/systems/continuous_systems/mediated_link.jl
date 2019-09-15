@@ -1,34 +1,5 @@
-"""
-    eom_mediated_link(u, p, t) -> SVector{9}
 
-Equations of motion for a three-subsystem dynamical system where `X` and `Y` are
-driven by `Z`. At the default value of the coupling constant `c = 0`, the
-responses `X` and `Y` are already synchronized to the driver `Z`.
-
-## Equations of motion
-
-The equations of motion are 
-
-```math
-\\begin{aligned}
-dx_1 &= -\\omega_x x_2 - x_3 + c*(z_1 - x_1) \\\\
-dx_2 &= \\omega_x x_1 + k*x_2  \\\\
-dx_3 &= l + x_3(x_1 - m)  \\\\
-dy_1 &= -\\omega_y y_2 - y_3 + c*(z_1 - y_1)  \\\\
-dy_2 &= \\omega_y y_1 + k*y_2  \\\\
-dy_3 &= l + y_3(y_1 - m)  \\\\
-dz_1 &= -\\omega_z z_2 - z_3  \\\\
-dz_2 &= \\omega_z z_1 + k*z_2  \\\\
-dz_3 &= l + z_3(z_1 - m)
-\\end{aligned}
-```
-
-##  References
-
-1. Krakovská, Anna, et al. "Comparison of six methods for the detection of 
-    causality in a bivariate time series." Physical Review E 97.4 (2018): 042207
-"""
-function eom_mediated_link(u, p, t)
+@inline @inbounds function eom_mediated_link(u, p, t)
     ωx, ωy, ωz, k, l, m, c = (p...,)
     x₁, x₂, x₃, y₁, y₂, y₃, z₁, z₂, z₃ = (u...,)
 
