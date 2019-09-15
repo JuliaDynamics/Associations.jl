@@ -13,9 +13,42 @@
     return SVector{6}(dx1, dx2, dx3, dy1, dy2, dy3)
 end
 
+""" 
+    rossler_rossler_bidir(; u0 = rand(6), 
+        ω₁ = 1.015, ω₂ = 0.985, 
+        c_xy = 0.1, c_yx = 0.1, 
+        a₁ = 0.15, a₂ = 0.2, a₃ = 10,
+        b₁ = 0.15, b₂ = 0.2, b₃ = 10)
+
+Initialise a system of two bidirectionally coupled 3D Rössler systems. 
+This system has been modified from [1] to allow other parameterisations, 
+but default parameters are as in [1].
+
+The ``X`` and ``Y`` subsystems are mostly synchronized for 
+`c_xy > 0.1` or `c_yx > 0.1`.
+
+## Equations of motion 
+
+```math 
+\\begin{aligned}
+\\dot{x_1} &= -\\omega_1(x_2 + x_3) + c_{yx}(y_1 - x_1) \\\\
+\\dot{x_2} &= \\omega_1 x_1 + a_1 x_2 \\\\
+\\dot{x_3} &= a_2 + x_3 (x_1 - a_3) \\\\
+\\dot{y_1} &= -\\omega_2 (y_2 + y_3) + c_{xy}(x_1 - y_1) \\\\
+\\dot{y_2} &= \\omega_2 y_1 + b_1 y_2 \\\\
+\\dot{y_3} &= b_2 + y_3 (y_1 - b_3)
+\\end{aligned}
+```
+
+## References 
+
+1. Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from 
+    multivariate flows by the joint distance distribution." Chaos: An 
+    Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+"""
 function rossler_rossler_bidir(; u0 = rand(6), 
         ω₁ = 1.015, ω₂ = 0.985, 
-        c_xy = 0.1, c_yx = 0.1, # mostly synchronized for c_xy or c_yx > 0.1
+        c_xy = 0.1, c_yx = 0.1,
         a₁ = 0.15, a₂ = 0.2, a₃ = 10,
         b₁ = 0.15, b₂ = 0.2, b₃ = 10)
     ContinuousDynamicalSystem(eom_rossler_rossler_bidir, u0, [ω₁, ω₂, c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃])
