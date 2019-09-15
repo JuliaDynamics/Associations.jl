@@ -8,7 +8,7 @@ mediated_link(;u₀ = rand(9), ωx = 1, ωy = 1.015, ωz = 0.985,
     k = 0.15, l = 0.2, m = 10.0, c = 0.06)
 ```
 
-## Two bidirectionally coupled Lorenz-Lorenz systems
+## Two bidirectionally coupled 3D Lorenz systems
 
 ```@docs
 lorenz_lorenz_bidir(; u0 = rand(6),
