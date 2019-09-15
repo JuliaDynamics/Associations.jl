@@ -78,6 +78,6 @@ pages:
   - Worked examples:
     - Transfer entropy: worked_examples/worked_example_transferentropy.md
   - Example systems: 
-    - Overview: example_systems/example_systems.md
-    - Discrete systems: example_systems_discrete.md
+    - Overview: example_systems/example_systems_overview.md
+    - Discrete systems: example_systems/example_systems_discrete.md
     - Continuous systems: example_systems/example_systems_continuous.md
