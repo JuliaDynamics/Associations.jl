@@ -7,7 +7,6 @@ include("discretemaps/ar1.jl")
 include("discretemaps/ar1_bidir.jl")
 include("discretemaps/anishchenko1.jl")
 include("discretemaps/henon2.jl")
-include("discretemaps/henon4.jl")
 include("discretemaps/henontriple.jl")
 include("discretemaps/linearmap.jl")
 include("discretemaps/nonlinear3D_linear_and_nonlinear_coupling.jl")
@@ -43,7 +42,6 @@ eom_ar1_unidir, ar1_unidir,
 eom_anishchenko1, anishchenko1,
 eom_henon2, henon2,
 eom_henon_triple, henon_triple,
-eom_henon4, henon4,
 eom_linearmap1, linearmap1,
 eom_nonlinear3d, nonlinear3d,
 eom_logistic2_unidir, logistic2_unidir,
