@@ -30,9 +30,9 @@ The difference equations are:
 
 ```math
 \\begin{aligned}
-x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x_2(t) \\
-x_2(t+1) &= x_1(t) \\
-y_1(t+1) &= 1.4 - [c x_1(t) y_1(t) + (1-c) y_1^2(t)] + 0.3 y_2(t) \\
+x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x_2(t) \\\\
+x_2(t+1) &= x_1(t) \\\\
+y_1(t+1) &= 1.4 - [c x_1(t) y_1(t) + (1-c) y_1^2(t)] + 0.3 y_2(t) \\\\
 y_2(t+1) &= y_1(t)
 \\end{aligned}
 ```
@@ -57,12 +57,12 @@ unidirectional forcing from `X` to`Y` [1].
 The difference equations are:
 
 ```math
-\begin{aligned}
-x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x_2(t) \\
-x_2(t+1) &= x_1(t) \\
-y_1(t+1) &= 1.4 - [c*x_1(t)*y_1(t) + (1-c)*y_1^2(t)] + 0.3*y_2(t) \\
+\\begin{aligned}
+x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x_2(t) \\\\
+x_2(t+1) &= x_1(t) \\\\
+y_1(t+1) &= 1.4 - [c*x_1(t)*y_1(t) + (1-c)*y_1^2(t)] + 0.3*y_2(t) \\\\
 y_2(t+1) &= y_1(t)
-\end{aligned}
+\\end{aligned}
 ```
 
 This system was investigated by Krakovská to study the performance of different

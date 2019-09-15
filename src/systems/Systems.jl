@@ -24,6 +24,7 @@ include("continuous_systems/chuacircuit_nscroll_sine.jl")
 include("continuous_systems/hindmarsh_rose.jl")
 include("continuous_systems/lorenztriple.jl")
 include("continuous_systems/mediated_link.jl")
+include("continuous_systems/lorenz_lorenz.jl")
 include("continuous_systems/rosslerrossler.jl")
 include("continuous_systems/rosslerlorenz.jl")
 
