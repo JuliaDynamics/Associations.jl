@@ -4,6 +4,7 @@ using Distributions
 using DynamicalSystems
 
 include("discretemaps/ar1.jl")
+include("discretemaps/ar1_bidir.jl")
 include("discretemaps/anishchenko1.jl")
 include("discretemaps/henon2.jl")
 include("discretemaps/henon4.jl")
@@ -16,7 +17,6 @@ include("discretemaps/logistic2_bidir.jl")
 include("discretemaps/logistic3.jl")
 include("discretemaps/logistic4.jl")
 include("discretemaps/var1.jl")
-include("discretemaps/ar1_bidirA.jl")
 include("discretemaps/verdes.jl")
 
 include("continuous_systems/chuacircuits_driven.jl")
@@ -52,7 +52,7 @@ eom_logistic3, logistic3,
 eom_logistic4, logistic4,
 eom_nontrivial_pegiun, nontrivial_pegiun,
 eom_var1, var1,
-eom_ar1_bidirA, ar1_bidirA,
+eom_ar1_bidir, ar1_bidir,
 eom_verdes, verdes
 
 
