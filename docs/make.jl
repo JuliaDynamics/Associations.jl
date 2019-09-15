@@ -68,7 +68,9 @@ PAGES = [
     ],
 
     "Example systems" => [
-        "example_systems" => "example_systems/example_systems.md"
+        "example_systems/example_systems_overview.md",
+        "example_systems/example_systems_discrete.md",
+        "example_systems/example_systems_continuous.md"
     ]
 ]
 

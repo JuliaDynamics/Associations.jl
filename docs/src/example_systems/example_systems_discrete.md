@@ -1,5 +1,5 @@
 
-# Discrete systems
+# [Discrete coupled dynamical systems](@id discrete_systems)
 
 ## Autoregressive order one 2D system
 
