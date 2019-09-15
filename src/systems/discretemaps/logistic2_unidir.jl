@@ -2,16 +2,37 @@
     eom_logistic2(dx, x, p, n) -> function
 
 Equations of motions for a system consisting of two coupled logistic maps where
-X unidirectionally influences Y.
+X unidirectionally influences Y [1].
 
-The parameter `c` controls how strong the dynamical forcing is. Parameters `r₁`
-and `r₂` are set to the chaotic regime by default
 
-# References
-1. Diego, D., Agasøster Haaga, K., & Hannisdal, B. (2018, November 1).
-Transfer entropy computation using the Perron-Frobenius operator.
-Eprint ArXiv:1811.01677. Retrieved from
-https://ui.adsabs.harvard.edu/#abs/2018arXiv181101677D
+## Equations of motion
+
+The equations of motion are 
+
+```math
+\\begin{aligned}
+dx &= r_1 x(1 - x) \\\\
+dy &= r_2 f(x,y)(1 - f(x,y)),
+\\end{aligned}
+```
+
+with
+
+```math
+\\begin{aligned}
+f(x,y) = \\dfrac{y + \\frac{c_{xy}(x \\xi )}{2}}{1 + \\frac{c_{xy}}{2}(1+ \\sigma )}
+\\end{aligned}
+```
+
+The parameter `c_xy` controls how strong the dynamical forcing is. If `σ > 0`,
+dynamical noise masking the influence of  `x` on `y` equivalent to
+``\\sigma \\cdot \\xi`` is added at each iteration. Here,``\\xi`` is a draw from a
+flat distribution on ``[0, 1]``. Thus, setting `σ = 0.05` is equivalent to
+add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
+range of values of the logistic map.
+
+1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation 
+    using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
 """
 
 function eom_logistic2_unidir(dx, x, p, n)
@@ -25,6 +46,45 @@ function eom_logistic2_unidir(dx, x, p, n)
     return
 end
 
+
+"""
+    logistic2_unidir(u₀, c_xy, r₁, r₂, σ) -> DiscreteDynamicalSystem
+
+Initialise a system consisting of two coupled logistic maps where X
+unidirectionally influences Y. By default, the parameters `r₁` and `r₂` are set
+to values yielding chaotic behaviour.
+
+## Equations of motion
+
+The equations of motion are
+
+```math
+\\begin{aligned}
+dx &= r_1 x(1 - x) \\\\
+dy &= r_2 f(x,y)(1 - f(x,y)),
+\\end{aligned}
+```
+
+with
+
+```math
+\\begin{aligned}
+f(x,y) = \\dfrac{y + \\frac{c_{xy}(x \\xi )}{2}}{1 + \\frac{c_{xy}}{2}(1+ \\sigma )}
+\\end{aligned}
+```
+
+The parameter `c_xy` controls how strong the dynamical forcing is. If `σ > 0`,
+dynamical noise masking the influence of  `x` on `y` equivalent to
+``\\sigma \\cdot \\xi`` is added at each iteration. Here,``\\xi`` is a draw from a
+flat distribution on ``[0, 1]``. Thus, setting `σ = 0.05` is equivalent to
+add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
+range of values of the logistic map.
+
+## References
+
+1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation 
+    using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
+"""
 function logistic2_unidir(u₀, c_xy, r₁, r₂, σ)
     p = [c_xy, r₁, r₂, σ]
     DiscreteDynamicalSystem(eom_logistic2_unidir, u₀, p)
@@ -38,6 +98,25 @@ Initialise a system consisting of two coupled logistic maps where X
 unidirectionally influences Y. By default, the parameters `r₁` and `r₂` are set
 to values yielding chaotic behaviour.
 
+## Equations of motion
+
+The equations of motion are
+
+```math
+\\begin{aligned}
+dx &= r_1 x(1 - x) \\\\
+dy &= r_2 f(x,y)(1 - f(x,y)),
+\\end{aligned}
+```
+
+with
+
+```math
+\\begin{aligned}
+f(x,y) = \\dfrac{y + \\frac{c_{xy}(x \\xi )}{2}}{1 + \\frac{c_{xy}}{2}(1+ \\sigma )}
+\\end{aligned}
+```
+
 The parameter `c_xy` controls how strong the dynamical forcing is. If `σ > 0`,
 dynamical noise masking the influence of  `x` on `y` equivalent to
 ``\\sigma \\cdot \\xi`` is added at each iteration. Here,``\\xi`` is a draw from a
@@ -45,32 +124,10 @@ flat distribution on ``[0, 1]``. Thus, setting `σ = 0.05` is equivalent to
 add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
 range of values of the logistic map.
 
+## References
 
-
-The equations of motion are
-
-```math
-\\begin{aligned}
-dx &= r_1 x(1 - x) \\
-dy &= r_2 f(x,y)(1 - f(x,y)),
-\\end{aligned}
-```
-with
-```math
-\\begin{aligned}
-f(x,y) = \\dfrac{y + \\frac{c_{xy}(x \\xi )}{2}}{1 + \\frac{c_{xy}}{2}(1+ \\sigma )}
-\\end{aligned}
-```
-
-where
-
-# References
-
-1. Diego, D., Agasøster Haaga, K., & Hannisdal, B. (2018, November 1).
-Transfer entropy computation using the Perron-Frobenius operator.
-Eprint ArXiv:1811.01677. Retrieved from
-https://ui.adsabs.harvard.edu/#abs/2018arXiv181101677D
-
+1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation 
+    using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
 """
 logistic2_unidir(;u₀ = rand(2), c_xy = 0.1, r₁ = 3.78, r₂ = 3.66, σ = 0.05) =
     logistic2_unidir(u₀, c_xy, r₁, r₂, σ)
