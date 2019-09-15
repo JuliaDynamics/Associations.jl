@@ -32,22 +32,23 @@ The package and documentation is under active development. **Breaking changes ma
 
 `CausalityTools.jl` brings together the following packages into one environment:
 
-
 | package | functionality | version |  build |  
 | :---   | :--- |    :---:    |   ---: |  
-| [`CausalityToolsBase.jl`](https://github.com/kahaaga/CasusalityToolsBase.jl/) | Basic functionality for the CausalityTools ecosystem. | `0.6.0` | [![Build Status](https://travis-ci.org/kahaaga/CausalityToolsBase.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CausalityToolsBase.jl) |
+| [`CausalityToolsBase.jl`](https://github.com/kahaaga/CausalityToolsBase.jl/) | Basic functionality for the CausalityTools ecosystem. | `0.6.0` | [![Build Status](https://travis-ci.com/kahaaga/CausalityToolsBase.jl.svg?branch=master)](https://travis-ci.com/kahaaga/CausalityToolsBase.jl) |
 | [`StateSpaceReconstruction.jl`](https://github.com/kahaaga/StateSpaceReconstruction.jl/) | Fully flexible state space reconstructions (embeddings), partitioning routines (variable-width rectangular, and triangulations), and partition refinement (equal-volume splitting of  simplices). | `0.4.2` | [![Build Status](https://travis-ci.org/kahaaga/StateSpaceReconstruction.jl.svg?branch=master)](https://travis-ci.org/kahaaga/StateSpaceReconstruction.jl) |
-| [`TimeseriesSurrogates.jl`](https://github.com/kahaaga/TimeseriesSurrogates.jl/) | Generate surrogate data from time series. | `0.3.0` | [![Build Status](https://travis-ci.org/kahaaga/TimeseriesSurrogates.jl.svg?branch=master)](https://travis-ci.org/kahaaga/TimeseriesSurrogates.jl) |
-| [`TransferEntropy.jl`](https://github.com/kahaaga/TransferEntropy.jl/) | Transfer entropy estimators. | `0.4.0` | [![Build Status](https://travis-ci.org/kahaaga/TransferEntropy.jl.svg?branch=master)](https://travis-ci.org/kahaaga/TransferEntropy.jl) |  |
-| [`PerronFrobenius.jl`](https://github.com/kahaaga/PerronFrobenius.jl/) |  Transfer (Perron-Frobenius) operator estimators. | `0.5.3`  | [![Build Status](https://travis-ci.org/kahaaga/PerronFrobenius.jl.svg?branch=master)](https://travis-ci.org/kahaaga/PerronFrobenius.jl) |
+| [`TimeseriesSurrogates.jl`](https://github.com/kahaaga/TimeseriesSurrogates.jl/) | Generate surrogate data from time series. | `0.3.1` | [![Build Status](https://travis-ci.org/kahaaga/TimeseriesSurrogates.jl.svg?branch=master)](https://travis-ci.org/kahaaga/TimeseriesSurrogates.jl) |
+| [`TransferEntropy.jl`](https://github.com/kahaaga/TransferEntropy.jl/) | Transfer entropy estimators. | `0.4.3` | [![Build Status](https://travis-ci.org/kahaaga/TransferEntropy.jl.svg?branch=master)](https://travis-ci.org/kahaaga/TransferEntropy.jl) |  |
+| [`PerronFrobenius.jl`](https://github.com/kahaaga/PerronFrobenius.jl/) |  Transfer (Perron-Frobenius) operator estimators. | `0.6.0`  | [![Build Status](https://travis-ci.org/kahaaga/PerronFrobenius.jl.svg?branch=master)](https://travis-ci.org/kahaaga/PerronFrobenius.jl) |
 | [`Simplices.jl`](https://github.com/kahaaga/Simplices.jl/) | Exact simplex intersections in N dimensions. | `0.4.1` | [![Build Status](https://travis-ci.org/kahaaga/Simplices.jl.svg?branch=master)](https://travis-ci.org/kahaaga/Simplices.jl) |
 | [`CrossMappings.jl`](https://github.com/kahaaga/CrossMappings.jl/) | Exact simplex intersections in N dimensions. | `0.3.4` | [![Build Status](https://travis-ci.org/kahaaga/CrossMappings.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CrossMappings.jl) |
 
 
 ## Contributors
+
 - Kristian Agasøster Haaga ([@kahaaga](https://github.com/kahaaga))
 - David Diego ([@susydiegolas](https://github.com/susydiegolas))
 - Tor Einar Møller ([@tormolle](https://github.com/tormolle))
 
 ## Related software
+
 - [DynamicalSystems.jl](https://github.com/JuliaDynamics/DynamicalSystems.jl) provides a range of tools for exploring nonlinear dynamics and chaos, both for synthetic and observed systems. We provide seamless interaction with `Dataset` outputs from DynamicalSystems.  Most of our example systems are also implemented as `DiscreteDynamicalSystem`s or `ContinuousDynamicalSystems` from DynamicalSystems.
