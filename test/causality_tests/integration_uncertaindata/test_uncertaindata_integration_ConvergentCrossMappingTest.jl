@@ -56,8 +56,8 @@ onevar_constraints = ConstrainedResampling(TruncateStd(1))
 twovar_constraints = ConstrainedResampling(TruncateStd(2), TruncateStd(1))
 
 test_ccm = ConvergentCrossMappingTest(timeseries_lengths = [50, 60], n_reps = 5)
-@test causality(x, y, twovar_constraints) isa Vector{Vector{T}} where T<:Real
-@test causality(uvals_x, uvals_y, twovar_constraints) isa Vector{Vector{T}} where T<:Real
+@test causality(x, y, twovar_constraints, test_ccm) isa Vector{Vector{T}} where T<:Real
+@test causality(uvals_x, uvals_y, twovar_constraints, test_ccm) isa Vector{Vector{T}} where T<:Real
 @test causality(x, uvals_y, onevar_constraints, test_ccm) isa Vector{Vector{T}} where T<:Real
 @test causality(uvals_x, y, onevar_constraints, test_ccm) isa Vector{Vector{T}} where T<:Real
 @test causality(UVX, UVY, twovar_constraints, test_ccm) isa Vector{Vector{T}} where T<:Real
