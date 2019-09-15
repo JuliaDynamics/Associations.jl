@@ -45,3 +45,9 @@ logistic4(;u₀ = rand(4),
 ```@docs
 henon2(;u₀ = rand(4), c_xy = 2.0)
 ```
+
+## Strange, nonchaotic attractors
+
+```@docs 
+anishchenko1(;u₀ = rand(2), α =3.277, s=0.1, ω=0.5*(sqrt(5)-1))
+```
