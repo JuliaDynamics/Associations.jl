@@ -72,6 +72,8 @@ PAGES = [
     ]
 ]
 
+import Pkg; Pkg.add("https://github.com/kahaaga/UncertainData.jl")
+
 makedocs(
     sitename = "CausalityTools.jl documentation",
     #modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
