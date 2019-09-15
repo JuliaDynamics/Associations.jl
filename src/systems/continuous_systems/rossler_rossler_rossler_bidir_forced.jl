@@ -1,4 +1,4 @@
-@inline @inbounds function eom_forced_rossler_rossler_bidir(u, p, t)
+@inline @inbounds function eom_rossler_rossler_rossler_bidir_forced(u, p, t)
     ω₁, ω₂, ω₃, c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃ = (p...,)
     x1, x2, x3, y1, y2, y3, z1, z2, z3 = (u...,)
     
@@ -17,14 +17,54 @@
     return SVector{9}(dx1, dx2, dx3, dy1, dy2, dy3, dz1, dz2, dz3)
 end
 
-function forced_rossler_rossler_bidir(; u0 = rand(9), 
+"""
+    rossler_rossler_rossler_bidir_forced(; u0 = rand(9), 
         ω₁ = 1.015, ω₂ = 0.985, ω₃ = 0.95,
-        c_xy = 0.1, c_yx = 0.1, # mostly synchronized for c_xy or c_yx > 0.1
+        c_xy = 0.1, c_yx = 0.1,
         c_zx = 0.05, c_zy = 0.05, 
         a₁ = 0.15, a₂ = 0.2, a₃ = 10,
         b₁ = 0.15, b₂ = 0.2, b₃ = 10,
         c₁ = 0.15, c₂ = 0.2, c₃ = 10)
-    ContinuousDynamicalSystem(eom_forced_rossler_rossler_bidir, u0, [ω₁, ω₂, ω₃, c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃])
+
+Equations of motion for a system consisting of three coupled 3D Rössler systems 
+(``X``, ``Y``, ``Z``), giving a 9D system [1]. The external system 
+``Z`` influences both ``X`` and ``Y`` (controlled by `c_zx` and `c_zy`). 
+Simultaneously, the subsystems  ``X`` and ``Y`` bidirectionally 
+influences each other (controlled by `c_xy` and `c_yx`).
+    
+The ``X`` and ``Y`` subsystems are mostly synchronized for `c_xy > 0.1` or 
+`c_yx > 0.1`.
+
+## Equations of motion 
+    
+```math 
+\\begin{aligned}
+\\dot{x_1} &= -\\omega_1 (x_2 + x_3) + c_{yx}(y_1 - x_1) + c_{zx}(z_1 - x_1) \\\\
+\\dot{x_2} &= \\omega_1 x_1 + a_1 x_2 \\\\
+\\dot{x_3} &= a_2 + x_3 (x_1 - a_3) \\\\
+\\dot{y_1} &= -\\omega_1 (y_2 + y_3) + c_{xy}(x_1 - y_1) + c_{zy}(z_1 - y_1) \\\\
+\\dot{x_2} &= \\omega_2 y_1 + b_1 y_2 \\\\
+\\dot{x_3} &= b_2 + x_3 (y_1 - b_3) \\\\
+\\dot{y_1} &= -\\omega_2 (z_2  + z_3) \\\\
+\\dot{x_2} &= \\omega_2 z_1 + c_1 z_2 \\\\
+\\dot{x_3} &= c_2 + z_3 (z_1 - c_3)
+\\end{aligned}
+```
+    
+## References 
+    
+1. Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from 
+    multivariate flows by the joint distance distribution." Chaos: An 
+    Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302. 
+"""
+function rossler_rossler_rossler_bidir_forced(; u0 = rand(9), 
+        ω₁ = 1.015, ω₂ = 0.985, ω₃ = 0.95,
+        c_xy = 0.1, c_yx = 0.1,
+        c_zx = 0.05, c_zy = 0.05, 
+        a₁ = 0.15, a₂ = 0.2, a₃ = 10,
+        b₁ = 0.15, b₂ = 0.2, b₃ = 10,
+        c₁ = 0.15, c₂ = 0.2, c₃ = 10)
+    ContinuousDynamicalSystem(eom_rossler_rossler_rossler_bidir_forced, u0, [ω₁, ω₂, ω₃, c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃])
 end
 
 function forced_rossler_rossler_bidir_trajectory(npts; 
@@ -35,7 +75,7 @@ function forced_rossler_rossler_bidir_trajectory(npts;
         b₁ = 0.15, b₂ = 0.2, b₃ = 10,
         c₁ = 0.15, c₂ = 0.2, c₃ = 10)
 
-    s = forced_rossler_rossler_bidir(u0 = u0, 
+    s = rossler_rossler_rossler_bidir_forced(u0 = u0, 
         c_xy = c_xy, c_yx = c_yx, 
         c_zx = c_zx, c_zy = c_zy,
         ω₁ = ω₁, ω₂ = ω₂, ω₃ = ω₃, 
@@ -48,7 +88,7 @@ function forced_rossler_rossler_bidir_trajectory(npts;
     o = trajectory(s, T, dt = dt, Ttr = n_transient*dt, alg = SimpleDiffEq.SimpleATsit5())[1:sample_dt:end-1, :] #alg = SimpleDiffEq.SimpleATsit5()
 end
 
-function good_forced_rossler_rossler_bidir_trajectory(npts; 
+function good_rossler_rossler_rossler_bidir_forced_trajectory(npts; 
         sample_dt = 1,  Ttr = 5000, dt = 0.3, # dt = 0.6 about 10 samples per period
         Da₁ = Uniform(0.12, 0.17),
         Da₂ = Uniform(0.18, 0.22),
@@ -95,7 +135,7 @@ function good_forced_rossler_rossler_bidir_trajectory(npts;
         c₁ == nothing ? c₁ = rand(Dc₁) : c₁ = c₁
         c₂ == nothing ? c₂ = rand(Dc₂) : c₂ = c₂
         c₃ == nothing ? c₃ = rand(Dc₃) : c₃ = c₃
-        pts = forced_rossler_rossler_bidir_trajectory(npts, 
+        pts = rossler_rossler_rossler_bidir_forced(npts, 
             sample_dt = sample_dt, dt = dt, n_transient = Ttr,
             c_xy = c_xy,  c_yx = c_yx, 
             c_zx = c_zx, c_zy = c_zy,
