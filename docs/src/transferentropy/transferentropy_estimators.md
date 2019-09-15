@@ -1,7 +1,7 @@
 # Low-level transfer entropy estimators
 
 For complete control over the estimation procedure, the analyst must create a [delay 
-reconstruction](@ref delay_reconstruction) from the input data, specify a [discretization scheme](@ref discretization) which can be either [rectangular](@ref partition_rectangular) or [triangulated](@ref partition_triangulated), and [map variables of the delay reconstruction to the correct 
+reconstruction](@ref custom_delay_reconstruction) from the input data, specify a [discretization scheme](@ref discretization) which can be either [rectangular](@ref partition_rectangular) or [triangulated](@ref partition_triangulated), and [map variables of the delay reconstruction to the correct 
 marginals](@ref TEVars).
 
 The package provides some convenience methods to compute TE directly from time series, see the [wrappers](@ref wrapper_TE) for
@@ -18,21 +18,15 @@ Valid estimator types for rectangular partitions are
 
 The general workflow for estimating transfer entropy over rectangular partitions is as follows.
 
+## [Rectangular partitions](@id te_estimator_rectangular)
+
+To estimate transfer entropy over rectangular partitions, you would use the following method, providing
+either a `VisitationFrequency` or `TransferOperatorGrid` instance to the `estimator` argument.
+
 ```@docs
 transferentropy(pts, vars::TEVars, ϵ::RectangularBinning, estimator::TransferEntropyEstimator; b = 2)
 ```
 
-## [Rectangular partitions](@id te_estimator_rectangular)
-
-To estimate transfer entropy over rectangular partitions, you would use the following methods.
-
-```@docs
-transferentropy(pts, vars::TEVars, ϵ::RectangularBinning, estimator::VisitationFrequency; b = 2)
-```
-
-```@docs
-transferentropy(pts, vars::TEVars, ϵ::RectangularBinning, estimator::TransferOperatorGrid; b = 2)
-```
 
 ## [Triangulated partitions](@id te_estimator_triangulated)
 

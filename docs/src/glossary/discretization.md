@@ -1,11 +1,13 @@
 # Discretization schemes
 
 ## Rectangular
+
 Across the package, there are many functions that accept the `ϵ` argument.
 This is an indication that the underlying algorithm in some way involves a box
 discretization of a set of points or a delay embedding.  
 
 ### Controlling the partitioning
+
 Currently, there are four different ways of partitioning an embedding.
 The discretization scheme is controlled by `ϵ`, and the following `ϵ` will work:
 
@@ -16,6 +18,7 @@ The discretization scheme is controlled by `ϵ`, and the following `ϵ` will wor
 
 
 ## Triangulations
+
 Another way of discretize is to triangulate the convex hull of the points into disjoint
 simplices. This can be done using a member of the family of `triangulate` functions,
 which are listed below. Valid inputs are `AbstractArray{T, 2`} (the largest
@@ -129,6 +132,7 @@ triangulate
 ```@docs
 triangulate_m
 ```
+
 #### Full triangulation
 
 ```@docs

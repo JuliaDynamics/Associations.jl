@@ -1,11 +1,9 @@
-# Interop with DynamicalSystems.jl
+# Example: measuring transfer entropy between two unidirectionally coupled logistic maps
 
-## Example 1: Measuring information flow between two unidirectionally coupled logistic maps
-
-Here, we present an example of how one can measure the information flow
+Here, we present an example of how one can measure the influence
 between variables of a dynamical system using transfer entropy (TE).
 
-### Defining a system
+## Defining a system
 
 For this example, we'll consider a unidirectionally coupled system consisting
 of two logistic maps, given by the vector field
@@ -27,12 +25,12 @@ f(x,y) = \dfrac{y + \frac{c(x \xi )}{2}}{1 + \frac{c}{2}(1+ \sigma )}
 
 The parameter `c` controls how strong the dynamical forcing is. If `σ > 0`,
 dynamical noise masking the influence of  ``x`` on ``y``, equivalent to
-``\\sigma \cdot \\xi``, is added at each iteration. Here, ``\\xi`` is a draw from
-a flat distribution on `[0, 1]`. Thus, setting `σ = 0.05` is equivalent to
-add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
+``\sigma \cdot \xi``, is added at each iteration. Here, ``\xi`` is a draw from
+a flat distribution on `[0, 1]`. Thus, setting ``σ = 0.05`` is equivalent to
+add dynamical noise corresponding to a maximum of ``5 \%`` of the possible
 range of values of the logistic map.
 
-### Represent as a DiscreteDynamicalSystem
+### Represent the system as a DiscreteDynamicalSystem
 
 ```@setup interop1
 using DynamicalSystems
@@ -91,13 +89,12 @@ nothing #hide
 
 ![](logistic2_c0.svg)
 
+## Delay embedding for transfer entropy
 
-
-### Delay embedding for TE
 The minimum embedding dimension for this system is 4 (try to figure this out
 yourself using the machinery in DynamicalSystems.jl!).
 
-We want to measure the information flow ``x \\rightarrow y``. To do this, we
+We want to measure the information flow ``x \rightarrow y``. To do this, we
 express the transfer entropy as a conditional mutual information. For that,
 we need an embedding consisting of the following set of vectors
 
@@ -107,19 +104,20 @@ E = \{ (y(t + \nu), y(t), x(t), y(t - \tau) ) \},
 \end{aligned}
 ```
 
-where ``\\nu`` is the forward prediction lag and ``\\tau`` is the embedding lag.
+where ``\nu`` is the forward prediction lag and ``\tau`` is the embedding lag.
 If a higher dimension was needed, we would add more lagged instances of the
 target variable ``y``.
 
 ### Construct the embedding
 
-To construct the embedding, we use the `embed` function as follows.
+To construct the embedding, we use the [`customembed`](@ref) function as follows.
 
 
 ```@example interop1
 τ = 1 # embedding lag
 ν = 1 # forward prediction lag
-E = StateSpaceReconstruction.customembed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
+E = customembed(Dataset(x, y), Positions([2, 2, 2, 1]), Lags([ν, 0, -τ, 0]))
+nothing #hide
 ```
 
 This means that `y` appears in the 1st, 2nd and 3rd columns of the embedding,
@@ -127,42 +125,39 @@ with lags 1, 0 and -1, respectively. The 4th column is occupied by `x`, which
 is not lagged.
 
 ### Keeping track of embedding information using TEVars
-Keeping track of how the embedding is organized is done using a `TEVars`
-instance, which has the following constructor:
 
-`TEVars(target_future::Vector{Int},
-        target_presentpast::Vector{Int},
-        source_presentpast::Vector{Int})`
+Keeping track of how the embedding is organized is done using a [`TEVars`](@ref)
+instance.
 
 It takes requires as inputs the column indices corresponding to 1) the future
 of the target variable, 2) the present and past of the target, and 3) the
 present and past of the source variable, in that order. Let's define this
 for our system:
 
-
 ```@example interop1
 Tf = [1]     # target, future
 Tpp = [2, 3] # target, present and past
 Spp = [4]    # source, present (and past, if we wanted)
 v = TEVars(Tf, Tpp, Spp)
+nothing #hide
 ```
 
 The last field is an empty array because we are not doing any conditioning on
 other variables.
 
-
 ### TE estimator
 
 We will use the transfer operator grid TE estimator, found in the
-`transferentropy_transferoperator_grid` function, or its alias `tetogrid`.
-This estimator takes as input an embedding `E`, an `ϵ` giving the binning
-scheme, and a `TEVars instance`. We will compute TE over a range of
-bin sizes, for a slightly longer time series than we plotted before, with
-`c = 0.7`.
+`TransferOperatorGrid` transfer entropy estimator.
+This estimator takes as input an embedding, given as a set of points, 
+a [`RectangularBinning`](@ref) instance, and a [`TEVars`](@ref) instance. 
+
+We will compute TE over a range of bin sizes, for a slightly longer time series 
+than we plotted before, with `c = 0.7`.
 
 ### Embedding
 
-Let's create a realization of the system, embed it and create a `TEVars`
+Let's create a realization of the system, embed it and create a [`TEVars`](@ref)
 instance. We'll use these throughout the examples below.
 
 ```@example interop1
@@ -174,22 +169,26 @@ x, y = orbit[:, 1], orbit[:, 2]
 # Embedding
 τ = 1 # embedding lag
 ν = 1 # forward prediction lag
-E_xtoy = StateSpaceReconstruction.customembed([x, y], [2, 2, 2, 1], [ν, 0, -τ, 0])
-E_ytox = StateSpaceReconstruction.customembed([y, x], [2, 2, 2, 1], [ν, 0, -τ, 0])
+E_xtoy = customembed(Dataset(x, y), Positions([2, 2, 2, 1]), Lags([ν, 0, -τ, 0]))
+E_ytox = customembed(Dataset(y, x), Positions([2, 2, 2, 1]), Lags([ν, 0, -τ, 0]))
 
 # Which variables go where?
 Tf = [1]     # target, future
 Tpp = [2, 3] # target, present and past
 Spp = [4]    # source, present (and past, if we wanted)
-v = TEVars(Tf, Tpp, Spp)
+vars = TEVars(Tf, Tpp, Spp)
+nothing #hide
 ```
 
 ### Different ways of partitioning
-The `transferentropy_transferoperator_grid` and `transferentropy_freq`
+
+The [`TransferOperatorGrid`](@ref) and [`VisitationFrequency`](@ref) transfer entropy
 estimators both operate on partitions on the state space.
 
-There are four different ways of partitioning the state space. The partition
-scheme is controlled by `ϵ`, and the following `ϵ` will work:
+There are four different ways of partitioning the state space using a 
+[`RectangularBinning`](@ref). The partition scheme is controlled by `ϵ`, 
+and the following `ϵ` will work (check [`RectangularBinning`](@ref) documentation 
+for more binning alternatives):
 
 * `ϵ::Int` divide each axis into `ϵ` intervals of the same size.
 * `ϵ::Float` divide each axis into intervals of size `ϵ`.
@@ -209,9 +208,12 @@ embedding when partitioning (`ϵ::Int`).
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
 
+estimator = VisitationFrequency()
+
 for (i, ϵ) in enumerate(ϵs)
-    te_estimates_xtoy[i] = tetogrid(E_xtoy, ϵ, v)
-    te_estimates_ytox[i] = tetogrid(E_ytox, ϵ, v)
+    binning = RectangularBinning(ϵ)
+    te_estimates_xtoy[i] = transferentropy(E_xtoy, vars, binning, estimator)
+    te_estimates_ytox[i] = transferentropy(E_ytox, vars, binning, estimator)
 end
 
 plot(ϵs, te_estimates_xtoy, label = "TE(x -> y)", lc = :black)
@@ -228,8 +230,8 @@ As expected, there is much higher information flow from `x` to `y` (where there
 is an underlying coupling) than from `y` to `x`, where there is no underlying
 coupling.
 
-
 #### Hyper-cubes of fixed size
+
 We do precisely the same, but use fixed-width hyper-cube bins (`ϵ::Float`).
 The values of the logistic map take values on `[0, 1]`, so using bins width
 edge lengths `0.1` should give a covering corresponding to using `10`
@@ -241,9 +243,12 @@ on `[0.05, 0.5]`
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
 
+estimator = VisitationFrequency()
+
 for (i, ϵ) in enumerate(ϵs)
-    te_estimates_xtoy[i] = tetogrid(E_xtoy, ϵ, v)
-    te_estimates_ytox[i] = tetogrid(E_ytox, ϵ, v)
+    binning = RectangularBinning(ϵ)
+    te_estimates_xtoy[i] = transferentropy(E_xtoy, vars, binning, estimator)
+    te_estimates_ytox[i] = transferentropy(E_ytox, vars, binning, estimator)
 end
 
 plot(ϵs, te_estimates_xtoy, label = "TE(x -> y)", lc = :black)
@@ -256,7 +261,6 @@ nothing #hide
 ```
 
 ![](logistic2_transferentropy_epsilonfloat.svg)
-
 
 #### Hyper-rectangles of fixed size
 
@@ -274,12 +278,15 @@ In our case, we use a four-dimensional, embedding, so we must provide a
 
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
-
 mean_ϵs = zeros(10)
+
+estimator = VisitationFrequency()
+
 for i ∈ 1:10
     ϵ = [ϵs_x1[i], ϵs_x2[i], ϵs_x3[i], ϵs_x4[i]]
-    te_estimates_xtoy[i] = tetogrid(E_xtoy, ϵ, v)
-    te_estimates_ytox[i] = tetogrid(E_ytox, ϵ, v)
+    binning = RectangularBinning(ϵ)
+    te_estimates_xtoy[i] = transferentropy(E_xtoy, vars, binning, estimator)
+    te_estimates_ytox[i] = transferentropy(E_ytox, vars, binning, estimator)
 
     # Store average edge length (for plotting)
     mean_ϵs[i] = mean(ϵ)
@@ -296,11 +303,6 @@ nothing #hide
 
 ![](logistic2_transferentropy_epsilonvecfloat.svg)
 
-
-
-
-
-
 #### Hyper-rectangles by variable-width subdivision of axes
 
 Another way to construct hyper-rectangles is to subdivide each
@@ -315,11 +317,13 @@ mean_ϵs = zeros(length(ϵs))
 
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
+estimator = VisitationFrequency()
 
 for (i, ϵᵢ) ∈ enumerate(ϵs)
     ϵ = [ϵᵢ - 1, ϵᵢ, ϵᵢ, ϵᵢ + 1]
-    te_estimates_xtoy[i] = tetogrid(E_xtoy, ϵ, v)
-    te_estimates_ytox[i] = tetogrid(E_ytox, ϵ, v)
+    binning = RectangularBinning(ϵ)
+    te_estimates_xtoy[i] = transferentropy(E_xtoy, vars, binning, estimator)
+    te_estimates_ytox[i] = transferentropy(E_ytox, vars, binning, estimator)
 
     # Store average number of subdivisions for plotting
     mean_ϵs[i] = mean(ϵ)
@@ -336,8 +340,8 @@ nothing #hide
 
 ![](logistic2_transferentropy_epsilonvecint.svg)
 
-
 ### Conclusion
+
 The value of the TE depends on the system under consideration, and on the
 way one chooses to discretize the state space reconstruction.
 
