@@ -65,6 +65,7 @@ eom_lorenz_triple, lorenz_triple,
 eom_mediated_link, mediated_link,
 eom_rossler_rossler, rossler_rossler,
 eom_rossler_lorenz, rossler_lorenz
+eom_lorenz_lorenz, lorenz_lorenz
 
 # Initialise all the systems once, generating a trajectory.
 #trajectory(anishchenko1(), 10)
