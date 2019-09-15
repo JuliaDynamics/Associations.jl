@@ -21,10 +21,15 @@ include("discretemaps/verdes.jl")
 include("continuous_systems/chuacircuits_driven.jl")
 include("continuous_systems/chuacircuit_nscroll_sine.jl")
 include("continuous_systems/hindmarsh_rose.jl")
-include("continuous_systems/lorenztriple.jl")
 include("continuous_systems/mediated_link.jl")
-include("continuous_systems/lorenz_lorenz.jl")
-include("continuous_systems/rosslerrossler.jl")
+
+include("continuous_systems/lorenz_lorenz_bidir.jl")
+include("continuous_systems/lorenz_lorenz_lorenz_bidir_forced.jl")
+include("continuous_systems/lorenz_lorenz_lorenz_transitive.jl")
+
+include("continuous_systems/rossler_rossler_bidir.jl")
+include("continuous_systems/rossler_rossler_rossler_bidir_forced.jl")
+
 include("continuous_systems/rosslerlorenz.jl")
 
 # We export both the equations of motion and function to generate
@@ -61,11 +66,13 @@ export
 eom_chuacircuit_nscroll_sine, chuacircuit_nscroll_sine,
 eom_chuacircuits_driven, chuacircuits_driven,
 eom_hindmarsh_rose, hindmarsh_rose,
-eom_lorenz_triple, lorenz_triple,
+eom_lorenz_lorenz_lorenz_transitive, lorenz_lorenz_lorenz_transitive,
 eom_mediated_link, mediated_link,
-eom_rossler_rossler, rossler_rossler,
-eom_rossler_lorenz, rossler_lorenz
-eom_lorenz_lorenz, lorenz_lorenz
+eom_rossler_rossler_bidir, rossler_rossler_bidir,
+eom_rossler_rossler_rossler_bidir_forced, rossler_rossler_rossler_bidir_forced,
+eom_rossler_lorenz, rossler_lorenz,
+eom_lorenz_lorenz_bidir, lorenz_lorenz_bidir,
+eom_lorenz_lorenz_lorenz_bidir_forced, lorenz_lorenz_lorenz_bidir_forced
 
 # Initialise all the systems once, generating a trajectory.
 #trajectory(anishchenko1(), 10)
