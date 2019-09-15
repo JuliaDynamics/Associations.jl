@@ -42,20 +42,21 @@ pages:
     - Tests: causalitytests/causality_tests.md
     - Causality from time series: causalitytests/causality_from_time_series.md
     - Causality from dynamical systems: causalitytests/causality_from_dynamical_systems.md
-    - Abstract test types:
-      - CausalityTest: causalitytests/CausalityTest.md
-      - Distance based tests: causalitytests/DistanceBasedCausalityTest.md
-      - Entropy based tests: causalitytests/EntropyBasedCausalityTest.md
     - Distance based tests:
       - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
       - CrossMappingTest: causalitytests/CrossMappingTest.md
       - ConvergentCrossMappingTest: causalitytests/ConvergentCrossMappingTest.md
-    - Predictive asymmetry: causalitytests/PredictiveAsymmetryTest.md
     - Entropy based tests:
-        - TransferEntropyTest: causalitytests/TransferEntropyTest.md
         - TransferOperatorGridTest: causalitytests/TransferOperatorGridTest.md
         - VisitationFrequencyTest: causalitytests/VisitationFrequencyTest.md
         - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
+    - Predictive asymmetry test: causalitytests/PredictiveAsymmetryTest.md
+    - Abstract test types:
+      - CausalityTest: causalitytests/CausalityTest.md
+      - Distance based tests: causalitytests/DistanceBasedCausalityTest.md
+      - Entropy based tests: causalitytests/EntropyBasedCausalityTest.md
+      - TransferEntropyTest: causalitytests/TransferEntropyTest.md
+
   - Fundamentals:
     - Discretization: causalitytoolsbase/discretization.md
     - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
