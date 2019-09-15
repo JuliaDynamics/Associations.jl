@@ -1,3 +1,5 @@
+import Pkg; Pkg.add(Pkg.PackageSpec(url="https://github.com/kahaaga/UncertainData.jl"))
+
 using CausalityTools
 using TimeseriesSurrogates
 using PyCall, Conda
@@ -71,8 +73,6 @@ PAGES = [
         "example_systems" => "example_systems/example_systems.md"
     ]
 ]
-
-import Pkg; Pkg.add(Pkg.PackageSpec(url="https://github.com/kahaaga/UncertainData.jl"))
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
