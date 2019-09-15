@@ -11,8 +11,13 @@ using UncertainData
 #	include("plot_recipes.jl")
 #end
 
-# include("test_discrete_systems.jl")
-# include("test_continuous_systems.jl")
+@testset "Discrete example systems" begin 
+    include("systems/discrete/test_discrete_systems.jl")
+end
+
+@testset "Continuous example systems" begin 
+    include("systems/continuous/test_continuous_systems.jl")
+end
 
 # @testset "High level wrappers" begin
 #     include("test_wrappers_te.jl")
