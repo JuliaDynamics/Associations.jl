@@ -4,11 +4,11 @@
 Equations of motion for n-scroll chaotic attractors from an adjusted Chua
 system [1].
 
-# References
-1. Tang, Wallace KS, et al. "Generation of n-scroll attractors via
-sine function." IEEE Transactions on Circuits and Systems I:
-Fundamental Theory and Applications 48.11 (2001): 1369-1372.
+## References
 
+1. Tang, Wallace KS, et al. "Generation of n-scroll attractors via 
+    sine function." IEEE Transactions on Circuits and Systems I: 
+    Fundamental Theory and Applications 48.11 (2001): 1369-1372.
 """
 function eom_chuacircuit_nscroll_sine(u, p, t)
     α, β, γ, a, b, c, σx, σy, σz = (p...,)
@@ -40,14 +40,27 @@ end
 Generate n-scroll chaotic attractors from an adjusted Chua system [1].
 
 # References
-1. Tang, Wallace KS, et al. "Generation of n-scroll attractors via
-sine function." IEEE Transactions on Circuits and Systems I:
-Fundamental Theory and Applications 48.11 (2001): 1369-1372.
+
+1. Tang, Wallace KS, et al. "Generation of n-scroll attractors via 
+    sine function." IEEE Transactions on Circuits and Systems I: 
+    Fundamental Theory and Applications 48.11 (2001): 1369-1372.
 """
 function chuacircuit_nscroll_sine(u₀, α, β, γ, a, b, c::Int, σx, σy, σz)
     p = [α, β, γ, a, b, c, σx, σy, σz]
     ContinuousDynamicalSystem(eom_chuacircuit_nscroll_sine, u₀, p)
 end
+
+"""
+    chua_nscroll_sinefunc(; u₀, α, β, γ, a, b, c::Int)
+
+Generate n-scroll chaotic attractors from an adjusted Chua system [1].
+
+## References
+
+1. Tang, Wallace KS, et al. "Generation of n-scroll attractors via 
+    sine function." IEEE Transactions on Circuits and Systems I: 
+    Fundamental Theory and Applications 48.11 (2001): 1369-1372.
+"""
 chuacircuit_nscroll_sine(;u₀ = [0.0, 0.0, 0.28695],
         α = 10.814, β = 14, γ = 0, a = 1.3, b = 0.11, c = 2,
         σx = 0.0, σy = 0.0, σz = 0.0) =

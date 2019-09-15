@@ -30,18 +30,18 @@ A 3d nonlinear system with nonlinear couplings x₁ -> x₂, x₂ -> x₃ and x�
 Modified from [1]. The difference equations are
 
 ```math
-\begin{aligned}
-x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{1}(t) \\
-x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{2}(t) + b x_1 x_2 \\
-x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \\xi_{3}(t) + c x_{2}(t) \\
+\\begin{aligned}
+x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{1}(t) \\\\
+x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{2}(t) + b x_1 x_2 \\\\
+x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \\xi_{3}(t) + c x_{2}(t) \\\\
          &+ d x_{1}(t)^2.
-\end{aligned}
+\\end{aligned}
 ```
 
 # References 
-1. Gourévitch, B., Le Bouquin-Jeannès, R., & Faucon, G. (2006). Linear and 
-nonlinear causality between signals: methods, examples and neurophysiological 
-applications. Biological Cybernetics, 95(4), 349–369.
+1. Gourévitch, B., Le Bouquin-Jeannès, R., & Faucon, G. (2006). Linear and nonlinear 
+    causality between signals: methods, examples and neurophysiological 
+    applications. Biological Cybernetics, 95(4), 349–369.
 """
 nonlinear3d(;uᵢ = rand(3), 
         σ₁ = 1.0, σ₂ = 1.0, σ₃ = 1.0, 
