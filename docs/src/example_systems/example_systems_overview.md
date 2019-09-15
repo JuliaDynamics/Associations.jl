@@ -16,4 +16,9 @@ The following discrete systems are implemented:
 ## [Continuous systems](@id continuous_systems_overview)
 
 - [`lorenz_lorenz_bidir`](@ref)
+- [`lorenz_lorenz_lorenz_bidir_forced`](@ref)
+- [`lorenz_lorenz_lorenz_transitive`](@ref)
+- [`rossler_rossler_bidir`](@ref)
+- [`rossler_rossler_rossler_bidir_forced`](@ref)
 - [`mediated_link`](@ref)
+- [`rossler_lorenz`](@ref)
