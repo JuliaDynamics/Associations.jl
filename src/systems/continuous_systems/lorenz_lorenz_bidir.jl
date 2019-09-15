@@ -1,4 +1,6 @@
-@inline @inbounds function eom_lorenz_lorenz(u, p, t)
+import SimpleDiffEq
+
+@inline @inbounds function eom_lorenz_lorenz_bidir(u, p, t)
     c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃ = (p...,)
     x1, x2, x3, y1, y2, y3 = (u...,)
     
@@ -12,31 +14,60 @@
     return SVector{6}(dx1, dx2, dx3, dy1, dy2, dy3)
 end
 
-function lorenz_lorenz(; u0 = rand(6), 
+"""
+    lorenz_lorenz_bidir(; u0 = rand(6), 
+        c_xy = 0.2, c_yx = 0.2, 
+        a₁ = 10, a₂ = 28, a₃ = 8/3, 
+        b₁ = 10, b₂ = 28, b₃ = 9/3) -> ContinuousDynamicalSystem
+
+Initialise a bidirectionally coupled Lorenz-Lorenz system, where each 
+subsystem is a 3D Lorenz system [1]. Default values for the parameters 
+`a₁`, `a₂`, `a₃`, `b₁`, `b₂`, `b₃` are as in [1].
+
+## Equations of motion 
+
+```math 
+\\begin{aligned}
+\\dot{x_1} &= -a_1 (x_1 - x_2) + c_{yx}(y_1 - x_1) \\\\
+\\dot{x_2} &= -x_1 x_3 + a_2 x_1 - x_2 \\\\
+\\dot{x_3} &= x_1 x_2 - a_3 x_3 \\\\
+\\dot{y_1} &= -b_1 (y_1 - y_2) + c_{xy} (x_1 - y_1) \\\\
+\\dot{y_2} &= -y_1 y_3 + b_2 y_1 - y_2 \\\\
+\\dot{y_3} &= y_1 y_2 - b_3 y_3
+\\end{aligned}
+```
+
+## References 
+
+1. Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from 
+    multivariate flows by the joint distance distribution." Chaos: An 
+    Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+"""
+function lorenz_lorenz_bidir(; u0 = rand(6), 
         c_xy = 0.2, c_yx = 0.2, 
         a₁ = 10, a₂ = 28, a₃ = 8/3, 
         b₁ = 10, b₂ = 28, b₃ = 9/3)
-    ContinuousDynamicalSystem(eom_lorenz_lorenz, u0, [c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃])
+    ContinuousDynamicalSystem(eom_lorenz_lorenz_bidir, u0, [c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃])
 end
 
-function lorenzlorenz_trajectory(npts; sample_dt = 1, Ttr = 1000, dt = 0.1, 
+function lorenzlorenz_bidir_trajectory(npts; sample_dt = 1, Ttr = 1000, dt = 0.1, 
     c_xy = 0.1, c_yx = 0.1, 
     u0 = rand(6),
     a₁ = 10, a₂ = 28, a₃ = 8/3, 
     b₁ = 10, b₂ = 28, b₃ = 9/3)
 
-s = lorenz_lorenz(u0 = u0, c_xy = c_xy, c_yx = c_yx, a₁ = a₁, a₂ = a₂, a₃ = a₃, b₁ = b₁, b₂ = b₂, b₃ = b₃)
+    s = lorenz_lorenz_bidir(u0 = u0, c_xy = c_xy, c_yx = c_yx, a₁ = a₁, a₂ = a₂, a₃ = a₃, b₁ = b₁, b₂ = b₂, b₃ = b₃)
 
-# the system is recorded at times t0:dt:T
-T = npts*dt*sample_dt
+    # the system is recorded at times t0:dt:T
+    T = npts*dt*sample_dt
 
-o = trajectory(s, T, dt = dt, Ttr = Ttr*dt, alg = SimpleDiffEq.SimpleATsit5())[1:sample_dt:end-1, :]
+    o = trajectory(s, T, dt = dt, Ttr = Ttr*dt, alg = SimpleDiffEq.SimpleATsit5())[1:sample_dt:end-1, :]
 end
 
 
 
-# For some initial lconditions, the system wanders off and doesn't settle to an attractor. Create a function that loops until we get a good realization.
-function good_lorenzlorenztrajectory(npts; 
+# For some initial conditions, the system wanders off and doesn't settle to an attractor. Create a function that loops until we get a good realization.
+function good_lorenzlorenz_bidir_trajectory(npts; 
         sample_dt = 1, 
         dt = 0.1, 
         c_xy = 0.1, 
@@ -66,7 +97,7 @@ function good_lorenzlorenztrajectory(npts;
         b₂ == nothing ? b₂ = rand(Db₂) : nothing
         b₃ == nothing ? b₃ = rand(Db₃) : nothing
         
-        pts = lorenzlorenz_trajectory(npts, 
+        pts = lorenzlorenz_bidir_trajectory(npts, 
             sample_dt = sample_dt, dt = dt, 
             c_xy = c_xy, c_yx = c_yx,
             Ttr = Ttr)
