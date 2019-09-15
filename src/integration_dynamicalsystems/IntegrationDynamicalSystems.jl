@@ -2,7 +2,8 @@ using Reexport
 
 @reexport module IntegrationDynamicalSystems
     import ..CausalityTests
-    import CausalityToolsBase: CausalityTest, causality
+    import ..CausalityTests: causality
+    import CausalityToolsBase: CausalityTest#, causality
     import CausalityToolsBase
     import DynamicalSystems: DynamicalSystem, DiscreteDynamicalSystem, trajectory, ContinuousDynamicalSystem
 

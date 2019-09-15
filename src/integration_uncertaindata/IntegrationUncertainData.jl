@@ -2,8 +2,9 @@ using Reexport
 
 @reexport module IntegrationUncertainData
     import ..CausalityTests
+    import ..CausalityTests: causality
     import UncertainData: resample, AbstractUncertainValue, AbstractUncertainValueDataset, ConstrainedResampling
-    import CausalityToolsBase: CausalityTest, causality 
+    import CausalityToolsBase: CausalityTest#, causality 
     
     include("integration_with_uncertaindata.jl")
     include("integration_with_uncertaindata_constrained_resampling.jl")
