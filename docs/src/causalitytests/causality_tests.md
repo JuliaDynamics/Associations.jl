@@ -1,10 +1,4 @@
 
-# [Test for causality](@id causality_interface)
-
-```@docs
-causality
-```
-
 # [Causality tests](@id causality_tests)
 
 `causality` accepts many different causality tests. The returned values will vary depending 
@@ -25,6 +19,9 @@ on the type of test, but the syntax for performing a test is always the same.
 - [`VisitationFrequencyTest`](@ref)
 
 - [`TransferOperatorGridTest`](@ref)
+
+- [`ApproximateSimplexIntersectionTest`](@ref)
+
 
 ## Predictive asymmetry tests
 
