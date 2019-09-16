@@ -31,6 +31,7 @@ module CausalityTools
     There are some breaking changes to the transfer operator and invariant measure 
     estimators in this release. Other new features:
 
+    - Common interface for causality testing with the `causality` function and its methods.
     - Integration with UncertainData.jl. `causality` accepts uncertain datasets as inputs.
     - Integration with DynamicalSystems.jl. `causality` accepts dynamical systems as inputs.
 
@@ -38,8 +39,6 @@ module CausalityTools
 
     SYNTAX CHANGES
     --------------
-
-    CausalityTests 
       
     Valid inputs
     ------------
