@@ -1,4 +1,6 @@
-@recipe function f(r::PerronFrobenius.RectangularBinningTransferOperator)
+import PerronFrobenius.TransferOperatorRectangularBinning
+
+@recipe function f(r::TransferOperatorRectangularBinning)
     seriestype  :=  :heatmap
     xlabel --> "state #i"
     ylabel --> "state #j"

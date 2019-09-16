@@ -1,112 +1,91 @@
 using CausalityTools
-using TransferEntropy, PerronFrobenius, StateSpaceReconstruction, Simplices
-using CrossMappings
 using TimeseriesSurrogates
-using Documenter, DocumenterMarkdown
 using PyCall, Conda
-Conda.add("scipy")
+using HypothesisTests
+using Documenter, DocumenterMarkdown
+#Conda.add("scipy")
 using Plots
+using DynamicalSystems
+using SimpleDiffEq
 using DynamicalSystems
 using Distributions
 using StaticArrays
 using Statistics
 using StatsBase
+using UncertainData
 
 ENV["GKSwstype"] = "100"
 
 PAGES = [
     "index.md",
-    "Discretization" => "discretization.md",
+    "Syntax overview" => "syntax_overview.md",
 
-    #"StateSpaceReconstruction" => [
-        #"Delay embeddings" => "embed.md",
-        #"Rectangular partitioning" => "partitioning_rectangular.md",
-        #"Triangulation partitioning" => "partitioning_triangulation.md"
-    #],
-
-    "PerronFrobenius" => [
-        "Estimator documentation" => [
-            "Transfer operator grid docs" => "transferoperator/transferoperator_grid_docs.md",
-        #    "Transfer operator triangulation docs" => "transferoperator/transferoperator_triang_docs.md"
-        ],
-        #"Examples" => [
-        #    "Transfer operator grid example" => "transferoperator/transferoperator_grid_example.md",
-        #    "Transfer operator triangulation" => "transferoperator/transferoperator_triang_example.md"
-        #],
-
-        "Invariant measure" => "invariantmeasure/invariantmeasure_docs.md"#[
-            #"Documentation" => ,
-            #"Examples" => "invariantmeasure/invariantmeasure_example.md"
-        #]
+    "Causality tests" => [
+        "causalitytests/causality_from_time_series.md",
+        "causalitytests/causality_from_dynamical_systems.md",
+        "causalitytests/causality_tests.md",
+        "causalitytests/CausalityTest.md",
+        "causalitytests/ConvergentCrossMappingTest.md",
+        "causalitytests/CrossMappingTest.md",
+        "causalitytests/DistanceBasedCausalityTest.md",
+        "causalitytests/EntropyBasedCausalityTest.md",
+        "causalitytests/JointDistanceDistributionTest.md",
+        "causalitytests/PredictiveAsymmetryTest.md",
+        "causalitytests/TransferEntropyTest.md",
+        "causalitytests/TransferOperatorGridTest.md",
+        "causalitytests/VisitationFrequencyTest.md",
+        "causalitytests/ApproximateSimplexIntersectionTest.md"
     ],
-
-    "Causality algorithms" => [
-        "TransferEntropy" => [
-            #"Common interface" => "transferentropy/commoninterface_TE.md",
-            "kNN estimator" => "transferentropy/estimator_TE_kNN.md",
-            "Transfer operator grid estimator" => "transferentropy/estimator_TE_transferoperator_grid.md",
-            "Visitation frequency estimator" => "transferentropy/estimator_TE_visitfreq.md",
-            "Wrapper" => "transferentropy/wrapper_TE.md"
-        ],
-        "Cross mappings" => [
-            "Convergent cross mapping" => "crossmappings/crossmapping.md"
-        ]
+    "CausalityToolsBase" => [
+        "Discretization" => "causalitytoolsbase/discretization.md",
+        "Delay reconstructions" => "causalitytoolsbase/delay_reconstructions.md"
+    ],
+    "Transfer operator estimation" => [
+        "Transfer operator" => "perronfrobenius/transferoperator.md",
+        "Invariant measure" => "perronfrobenius/invariantmeasure.md"
+    ],
+    "Transfer entropy" => [
+        "Estimators" => "transferentropy/transferentropy_estimators.md",
+        "Convenience functions" => "transferentropy/convenience_functions_te.md",
+        "TEVars" => "transferentropy/TEVars.md",
+        "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
+    ],
+    "Distance based measures" => [
+        "CCM" => [
+            "Overview" => "crossmappings/ccm/overview.md",
+            "Cross mapping" => "crossmappings/ccm/crossmapping.md",
+            "Converent cross mapping" => "crossmappings/ccm/convergentcrossmapping.md"
+        ], 
+        "Joint distance distribution" => "algorithms/joint_distance_distribution.md"
+    ],
+    "Worked example" => [
+        "worked_examples/worked_example_transferentropy.md"
+    ],
+    
+    "Example systems" => [
+        "example_systems/example_systems_overview.md",
+        "example_systems/example_systems_discrete.md",
+        "example_systems/example_systems_continuous.md"
     ],
 
     "Surrogate data" => [
-        "The method of surrogate data" => "surrogates/surrogates_overview.md",
-        "Docs" => [
-            "randomshuffle" => "surrogates/randomshuffle_docs.md",
-            "randomamplitudes" => "surrogates/randomamplitudes_docs.md",
-            "randomphases" => "surrogates/randomphases_docs.md",
-            "aaft" => "surrogates/aaft_docs.md",
-            "iaaft" => "surrogates/iaaft_docs.md"
-        ],
-        "Examples" => [
-            "randomshuffle" => "surrogates/randomshuffle_example.md",
-            "randomamplitudes" => "surrogates/randomamplitudes_example.md",
-            "randomphases" => "surrogates/randomphases_example.md",
-            "aaft" => "surrogates/aaft_example.md",
-            "iaaft" => "surrogates/iaaft_example.md"
-        ]
-    ],
-
-    #"Workflow" => "workflow.md",
-
-    #"Interop with DynamicalSystems.jl" => [
-    #    "Example 1" => "interop_dynamicalsystems_infoflow1.md"
-    #],
-
-    "Examples" => [
-       "examples/crossmappings/ccm_gif.md",
-       "examples/crossmappings/examples_crossmappings_ar1.md",
-       "examples/crossmappings/examples_crossmappings_henon2.md",
-       "examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md",
-       "examples/crossmappings/examples_crossmappings_logistic2.md",
-       "examples/crossmappings/examples_crossmappings_logistic3.md",
-       "examples/crossmappings/examples_crossmappings_verdes.md"
-    ],
-
-    "Example systems" => [
-		"ar1" => "example_systems/ar1.md",
-        "henon2" => "example_systems/henon2.md",
-        "logistic2" => "example_systems/logistic2.md",
-        "logistic3" => "example_systems/logistic3.md",
-		"linearmap3d_nonlinearcoupling" => "example_systems/linearmap3d_nonlinearcoupling.md",
-		"verdes" => "example_systems/verdes.md"
+        "surrogates/iaaft_docs.md",
+        "surrogates/aaft_docs.md",
+        "surrogates/randomphases_docs.md",
+        "surrogates/randomamplitudes_docs.md",
+        "surrogates/randomshuffle_docs.md",
+        "surrogates/surrogates_overview.md"
     ]
 ]
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
-    modules = [CausalityTools,
-                TransferEntropy,
-                PerronFrobenius,
-                StateSpaceReconstruction,
-                TimeseriesSurrogates,
-                CrossMappings],
-    format = :markdown,
-    pages = PAGES
+    #modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
+    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
+    format = DocumenterMarkdown.Markdown(),
+    linkcheck = false,
+    pages = PAGES,
+    highlightsig = true
 )
 
 if !Sys.iswindows()

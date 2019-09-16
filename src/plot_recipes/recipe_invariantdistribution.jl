@@ -1,4 +1,6 @@
-@recipe function f(id::PerronFrobenius.InvariantDistribution)
+import PerronFrobenius.InvariantDistribution
+
+@recipe function f(id::InvariantDistribution)
     seriestype  :=  :bar
     xlabel --> "state # (i)"
     ylabel --> "invariant density"

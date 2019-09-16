@@ -1,19 +1,27 @@
 # Surrogate methods
 
-## Random shuffle surrogates 
-
-
-### Valid inputs
-Random shuffle surrogates may be generated from the following inputs:
-
-- `AbstractArray{T, 1}` instances (scalar-valued data series)
-- `AbstractArray{Number, 2}` instances (multivarate scalar-valued data series), for which surrogates are generated column-wise. 
-- `Dataset` instances from [DynamicalSystems.jl](https://github.com/JuliaDynamics/DynamicalSystems.jl), for which surrogates are generated column-wise. 
-- `Embedding` instances, for which surrogates are generated variable-wise (row-wise on the points).
-
-
-## Documentation
+## Random shuffle surrogates
 
 ```@docs
 randomshuffle
 ```
+
+### Example
+
+```@setup randomshuffle
+using Plots
+using CausalityTools
+```
+
+```@example randomshuffle
+npts = 100
+ts = sin.(diff(rand(npts + 1)))*0.5 .+ cos.(LinRange(0, 8*pi, npts))
+p1 = plot(ts, label = "ts", lc = :black)
+p2 = plot(randomshuffle(ts), label = "randomshuffle(ts)", xlabel = "Time step")
+plot(p1, p2, layout = (2, 1))
+ylabel!("Value");
+
+savefig("surr_randomshuffle.svg"); nothing #hide
+```
+
+![](surr_randomshuffle.svg)

@@ -1,3 +1,6 @@
 docs/build/
+docs/Manifest.toml
 update*
-Manifest.toml
+*.DS_Store
+#Manifest.toml
+*.info

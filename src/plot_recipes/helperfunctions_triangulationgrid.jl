@@ -1,6 +1,13 @@
-using Simplices: subsample_coeffs
-using Simplices: simplexintersection
-using Simplices: intersectingvertices
+import Simplices:
+	subsample_coeffs,
+	simplexintersection,
+	intersectingvertices
+
+import StateSpaceReconstruction:
+    DelaunayTriangulation,
+    AbstractEmbedding
+
+import StaticArrays: SArray
 
 function interiorpoints(s::SArray{D, T}, n::Int) where {D, T}
     R = rand(size(s, 2), n)
@@ -26,7 +33,7 @@ preparesimplex(s) = splitaxes(connectvertices(s))
 
 Get the vertices of the i-th simplex of the triangulation.
 """
-getsimplex(E::Embeddings.AbstractEmbedding, DT::DelaunayTriangulation, i::Int) =
+getsimplex(E::AbstractEmbedding, DT::DelaunayTriangulation, i::Int) =
     E.points[:, DT.indices[:, i]]
 
 getsimplex(d::Dataset, DT::DelaunayTriangulation, i::Int) =
@@ -43,7 +50,7 @@ getsimplex(pts, DT::DelaunayTriangulation, i::Int) =
 Get the vertices of the i-th simplex of the triangulation projected
 one step forward in time.
 """
-forwardmap(r::Embeddings.AbstractEmbedding, t::DelaunayTriangulation, i::Int) =
+forwardmap(r::AbstractEmbedding, t::DelaunayTriangulation, i::Int) =
     E.points[:, DT.indices[:, i] .+ 1]
 
 forwardmap(r::Dataset, DT::DelaunayTriangulation, i::Int) =

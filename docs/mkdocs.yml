@@ -1,4 +1,4 @@
-site_name:        CausalityTools.jl docs (work in progress)
+site_name:        CausalityTools.jl
 repo_url:         https://github.com/kahaaga/CausalityTools.jl
 site_description: Causality detection from time series in Julia.
 site_author:      Kristian Agasøster Haaga
@@ -15,71 +15,77 @@ extra_javascript:
 markdown_extensions:
   - extra
   - tables
-  - fenced_code
   - mdx_math
+  - footnotes
+  - pymdownx.arithmatex
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.inlinehilite
+  - pymdownx.magiclink
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
 
 docs_dir: 'build'
 
 pages:
   - Home: index.md
-  - Glossary:
-    #- Delay embeddings: embed.md
-    - Discretization schemes: discretization.md
-    #  - Rectangular partitioning: partitioning_rectangular.md
-    #  - Triangulation partitioning: partitioning_triangulation.md
-  - Transfer operator:
-    - Grid estimator: transferoperator/transferoperator_grid_docs.md
-    #  - Triangulation estimator: transferoperator/transferoperator_triang_docs.md
-    #- Examples:
-    #  - Grid estimator: transferoperator/transferoperator_grid_example.md
-    #  - Triangulation estimator: transferoperator/transferoperator_triang_example.md
-  - Invariant measures: invariantmeasure/invariantmeasure_docs.md
-    #- Examples: invariantmeasure/invariantmeasure_example.md
-  - Transfer entropy (conditional mutual information):
-    #- Common interface: transferentropy/commoninterface_TE.md
-    #- Estimator documentation:
-    - Common interface: transferentropy/wrapper_TE.md
-    - kNN estimator: transferentropy/estimator_TE_kNN.md
-    - Transfer operator grid estimator: transferentropy/estimator_TE_transferoperator_grid.md
-    - Visitation frequency estimator: transferentropy/estimator_TE_visitfreq.md
-  - Cross mappings: crossmappings/crossmapping.md
-      #- Examples:
-      #  - kNN: transferentropy/example_TE_kNN.md
-      #  - Transfer operator grid: example_TE_transferoperator_grid.md
-  #- Cross mapping causality:
-  #  - Overview: cross_mappings.md
+  - Causality tests:
+    - Causality from time series: causalitytests/causality_from_time_series.md
+    - Causality from dynamical systems: causalitytests/causality_from_dynamical_systems.md
+    - Tests: causalitytests/causality_tests.md
+    - Distance based tests:
+      - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
+      - CrossMappingTest: causalitytests/CrossMappingTest.md
+      - ConvergentCrossMappingTest: causalitytests/ConvergentCrossMappingTest.md
+    - Entropy based tests:
+        - TransferOperatorGridTest: causalitytests/TransferOperatorGridTest.md
+        - VisitationFrequencyTest: causalitytests/VisitationFrequencyTest.md
+        - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
+    - Predictive asymmetry test: causalitytests/PredictiveAsymmetryTest.md
+    - Abstract test types:
+      - CausalityTest: causalitytests/CausalityTest.md
+      - Distance based tests: causalitytests/DistanceBasedCausalityTest.md
+      - Entropy based tests: causalitytests/EntropyBasedCausalityTest.md
+      - TransferEntropyTest: causalitytests/TransferEntropyTest.md
+
+  - Fundamentals:
+    - Discretization: causalitytoolsbase/discretization.md
+    - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
+    - Invariant properties over partitions:
+      - Invariant measure: perronfrobenius/invariantmeasure.md
+      - Transfer operator: perronfrobenius/transferoperator.md
+  - Estimators and algorithms:
+    - Transfer entropy:
+      - Convenience functions: transferentropy/convenience_functions_te.md
+      - Low-level estimators: transferentropy/transferentropy_estimators.md
+      - Mapping delay reconstruction to marginals (TEVars): transferentropy/TEVars.md
+      - Effect of discretization scheme: transferentropy/examples_TE_different_partitionings.md
+    - CCM:
+      - Overview: crossmappings/ccm/overview.md
+      - Cross mapping: crossmappings/ccm/crossmapping.md
+      - Converent cross mapping: crossmappings/ccm/convergentcrossmapping.md
+    - Joint distance distribution: algorithms/joint_distance_distribution.md
+    - Syntax overview: syntax_overview.md
+  - Example systems: 
+    - Overview: example_systems/example_systems_overview.md
+    - Discrete systems: example_systems/example_systems_discrete.md
+    - Continuous systems: example_systems/example_systems_continuous.md
   - Surrogate data:
-    - The method of surrogate data: surrogates/surrogates_overview.md
+    - Overview: surrogates/surrogates_overview.md
     - Methods:
-      - Random shuffle: surrogates/randomshuffle_docs.md
-      - Random amplitudes: surrogates/randomamplitudes_docs.md
-      - Random phases: surrogates/randomphases_docs.md
+      - IAAFT: surrogates/iaaft_docs.md
       - AAFT: surrogates/aaft_docs.md
-      - iAAFT: surrogates/iaaft_docs.md
-    - Examples of surrogate realizations:
-      - Random shuffle: surrogates/randomshuffle_example.md
-      - Random amplitudes: surrogates/randomamplitudes_example.md
-      - Random phases: surrogates/randomphases_example.md
-      - AAFT: surrogates/aaft_example.md
-      - iAAFT: surrogates/iaaft_example.md
-  #- Recommended workflow: workflow.md
-  - Example systems:
-    - ar1: example_systems/ar1.md
-    - henon2: example_systems/henon2.md
-    - logistic2: example_systems/logistic2.md
-    - logistic3: example_systems/logistic3.md
-    - linearmap3d_nonlinearcoupling: example_systems/linearmap3d_nonlinearcoupling.md
-    - verdes: example_systems/verdes.md
+      - Fourier surrogates, random phases: surrogates/randomphases_docs.md
+      - Fourier surrogates, random amplitudes: surrogates/randomamplitudes_docs.md
+      - Random shuffle: surrogates/randomshuffle_docs.md
   - Worked examples:
-    - Convergent cross mapping:
-      - Animation code: examples/crossmappings/ccm_gif.md
-      - Example, ar1: examples/crossmappings/examples_crossmappings_ar1.md
-      - Example, henon2: examples/crossmappings/examples_crossmappings_henon2.md
-      - Example, logistic2: examples/crossmappings/examples_crossmappings_logistic2.md
-      - Example, logistic3: examples/crossmappings/examples_crossmappings_logistic3.md
-      - Example, linearmap3d_nonlinearcoupling: examples/crossmappings/examples_crossmappings_linearmap3d_nonlinearcoupling.md
-      - Example, verdes: examples/crossmappings/examples_crossmappings_verdes.md
-    - Interacting with DynamicalSystems.jl:
-      - Example 1 - Information flow between coupled logistic maps: interop_dynamicalsystems_infoflow1.md
-  #- Examples:
-  #  - TE partitioning schemes: transferentropy/examples_TE_different_partitionings.md
+    - Transfer entropy: worked_examples/worked_example_transferentropy.md

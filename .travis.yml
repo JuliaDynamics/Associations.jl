@@ -3,7 +3,7 @@ os:
   - linux
 julia:
   - nightly
-  - 1.0
+  - 1.1
 matrix:
 allow_failures:
 - julia: nightly
@@ -19,11 +19,13 @@ addons:
 jobs:
   include:
     - stage: "Documentation"
-      julia: 1.0
+      julia: 1.1
       os: linux
       script:
         - julia --project=docs/ -e 'using Pkg;
                                     Pkg.develop(PackageSpec(path=pwd()));
+                                    Pkg.add(Pkg.PackageSpec(url="https://github.com/kahaaga/UncertainData.jl"));
+                                    Pkg.add(Pkg.PackageSpec(url="https://github.com/kahaaga/CausalityToolsBase.jl"));
                                     Pkg.instantiate();
                                     ENV["PYTHON"] = "";
                                     Pkg.build("PyCall");

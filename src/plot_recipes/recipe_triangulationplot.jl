@@ -1,6 +1,7 @@
-include("helperfunctions_triangulationgrid.jl")
+import StateSpaceReconstruction:
+	DelaunayTriangulation
 
-@recipe function plot_triang(original_pts, E::Embeddings.AbstractEmbedding, DT::DelaunayTriangulation;
+@recipe function plot_triang(original_pts, DT::DelaunayTriangulation;
             plot_states = true,
             plot_simplices = true,
             evenly_subsample = true,
@@ -67,10 +68,10 @@ include("helperfunctions_triangulationgrid.jl")
             mc_fillpoints = :black,
             sample_randomly = true
     )
-    fulltriang = delaunay(StateSpaceReconstruction.embed(original_pts))
+    fulltriang = DelaunayTriangulation(customembed(original_pts).reconstructed_pts)
     n_simplices_full = size(fulltriang.indices, 2)
     n_simplices = size(DT.indices, 2)
-    n_points = size(E.points, 2)
+    n_points = maximum(size(pts))
 
     # Embedding center
     #ce = sum(r.points, 2)/size(r.points, 2)
