@@ -20,7 +20,7 @@ for experimental data, and for studying theoretical systems. Key features includ
     which allows the causality statitics to be 
     [applied to dynamical systems](https://kahaaga.github.io/CausalityTools.jl/dev/causalitytests/causality_from_dynamical_systems/).
 
-- [Library of coupled dynamical systems](https://kahaaga.github.io/CausalityTools.jl/dev/example_systems/example_systems_overview/)** 
+- [Library of coupled dynamical systems](https://kahaaga.github.io/CausalityTools.jl/dev/example_systems/example_systems_overview/) 
     for testing algorithm performance.
 
 ## Installing
