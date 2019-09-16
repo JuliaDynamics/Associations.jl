@@ -22,6 +22,8 @@ on the type of test, but the syntax for performing a test is always the same.
 
 - [`ApproximateSimplexIntersectionTest`](@ref)
 
+- [`ExactSimplexIntersectionTest`](@ref)
+
 
 ## Predictive asymmetry tests
 

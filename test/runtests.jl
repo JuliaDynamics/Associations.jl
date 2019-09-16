@@ -48,5 +48,6 @@ end
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_TransferOperatorGridTest.jl")
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_VisitationFrequencyTest.jl")
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_ApproximateSimplexIntersectionTest.jl")
+    include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_ExactSimplexIntersectionTest.jl")
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_PredictiveAsymmetryTest.jl")
 end

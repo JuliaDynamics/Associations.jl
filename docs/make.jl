@@ -34,7 +34,8 @@ PAGES = [
         "causalitytests/TransferEntropyTest.md",
         "causalitytests/TransferOperatorGridTest.md",
         "causalitytests/VisitationFrequencyTest.md",
-        "causalitytests/ApproximateSimplexIntersectionTest.md"
+        "causalitytests/ApproximateSimplexIntersectionTest.md",
+        "causalitytests/ExactimplexIntersectionTest.md"
     ],
     "CausalityToolsBase" => [
         "Discretization" => "causalitytoolsbase/discretization.md",
