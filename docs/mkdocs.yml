@@ -90,3 +90,4 @@ pages:
       - Random shuffle: surrogates/randomshuffle_docs.md
   - Worked examples:
     - Transfer entropy: worked_examples/worked_example_transferentropy.md
+  - Changelog: CHANGELOG.md

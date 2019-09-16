@@ -19,7 +19,7 @@ ENV["GKSwstype"] = "100"
 PAGES = [
     "index.md",
     "Syntax overview" => "syntax_overview.md",
-
+    "CHANGELOG.md",
     "Causality tests" => [
         "causalitytests/causality_from_time_series.md",
         "causalitytests/causality_from_dynamical_systems.md",
