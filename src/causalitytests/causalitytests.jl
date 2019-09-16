@@ -128,6 +128,7 @@ using Reexport
     include("tests_entropy_based/VisitationFrequencyTest.jl")
     include("tests_entropy_based/TransferOperatorGridTest.jl")
     include("tests_entropy_based/ApproximateSimplexIntersectionTest.jl")
+    include("tests_entropy_based/ExactSimplexIntersectionTest.jl")
 
     ################################################################
     # Predictive asymmetry causality tests

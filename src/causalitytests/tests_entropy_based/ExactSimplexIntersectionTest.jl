@@ -1,10 +1,10 @@
 import StatsBase
 import TransferEntropy: TEVars, transferentropy, te_embed
 import PerronFrobenius: AbstractTriangulationInvariantMeasure, invariantmeasure
-import CausalityToolsBase: TriangulationBinning, ApproximateIntersection
+import CausalityToolsBase: TriangulationBinning, ExactIntersection
 
 """
-    ApproximateSimplexIntersectionTest
+    ExactSimplexIntersectionTest
 
 The parameters for a transfer entropy test where the invariant measure is estimated
 using an approximation to the transfer operator over a triangulation of the delay
@@ -15,8 +15,9 @@ transfer operator.
 
 ## Notes
 
-- Compared to the rectangular estimators, the simplex intersection approach is much slower.
+- Compared to the rectangular estimators, the exact simplex intersection approach is much slower.
     However, it might be beneficial for sparse time series[1].
+    A faster triangulation estimator is the `ApproximateSimplexIntersectionTest`.
 - If you're doing any sort of sensitivity analysis over binning schemes, then use the low-level
     estimators to first construct the invariant measure over the triangulation. You can then
     estimate transfer entropy "for free" from the points you generate from the triangulation.
@@ -73,7 +74,7 @@ estimator = TransferOperatorGrid()
 ηs = 1:3
 
 # Perform causality test, both from x to y and y to x
-test = ApproximateSimplexIntersectionTest(binning = binnings, estimator = estimator, ηs = ηs)
+test = ExactSimplexIntersectionTest(binning = binnings, estimator = estimator, ηs = ηs)
 te_xtoy = causality(x, y, test)
 te_ytox = causality(y, x, test)
 ```
@@ -84,7 +85,7 @@ te_ytox = causality(y, x, test)
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212)
 """
-Base.@kwdef struct ApproximateSimplexIntersectionTest <: TransferEntropyCausalityTest
+Base.@kwdef struct ExactSimplexIntersectionTest <: TransferEntropyCausalityTest
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
 
@@ -131,7 +132,7 @@ end
 
 
 function causality(source::AbstractVector{T}, target::AbstractVector{T},
-        test::ApproximateSimplexIntersectionTest)  where {T <: Real}
+        test::ExactSimplexIntersectionTest)  where {T <: Real}
 
     k, l, m, τ, ηs = test.k, test.l, test.m, test.τ, test.ηs
     k + l + m >= 3 || throw(ArgumentError("`dim = k + l + m` must be 3 or higher for regular TE"))
@@ -149,7 +150,7 @@ function causality(source::AbstractVector{T}, target::AbstractVector{T},
         regpoints = [Vector(x) for x in pts.reconstructed_pts]
 
         # Compute invariant measure over triangulation
-        mu = invariantmeasure(regpoints, TriangulationBinning(), ApproximateIntersection())
+        mu = invariantmeasure(regpoints, TriangulationBinning(), ExactIntersection())
         invariant_measures_over_triang[i] = mu
     end
 
@@ -168,4 +169,4 @@ function causality(source::AbstractVector{T}, target::AbstractVector{T},
     return tes_over_ηs
 end
 
-export ApproximateSimplexIntersectionTest
+export ExactSimplexIntersectionTest
