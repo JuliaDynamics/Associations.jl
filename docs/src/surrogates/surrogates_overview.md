@@ -1,5 +1,5 @@
 
-# Surrogate method overview
+# [Surrogate method overview](@ref surrogate_methods)
 
 The method of surrogate data is commonly used in the analysis of dynamical systems.
 For an overview of surrogate methods, see the recent review by [^1].

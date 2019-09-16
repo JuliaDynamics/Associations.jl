@@ -1,5 +1,5 @@
 
-# Dynamical systems library
+# [Dynamical systems library](@id example_systems)
 
 ## [Discrete systems](@id discrete_systems_overview)
 

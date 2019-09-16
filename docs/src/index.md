@@ -17,16 +17,23 @@ using Plots
 ## Goals
 
 - **Provide a comprehensive, [easy-to-use framework](@ref causality_time_series)** for the detection of directional causal influences in complex dynamical systems from time series.
+
 - **Functional and efficient [implementations](@ref syntax_overview)** of causality detection algorithms, with thorough documentation and references to primary literature.
+
 - [**Integration with UncertainDatasets.jl**](@ref causality_time_series), which greatly simplifies working with uncertain data.
+
 - [**Integration with DynamicalSystems.jl**](@ref causality_dynamical_systems), for quick analysis of time series from systems where the governing equations are known.
-- **Library of example dynamical systems** for testing algorithm performance.
+
+- **[Library of example dynamical systems](@ref example_systems)** for testing algorithm performance.
+
+- **[Surrogate data methods](@ref surrogate_methods)** for null-hypothesis testing. In the future,
+    surrogate methods will be provided as part of resampling schemes.
+
 - **Worked examples** for the algorithms.
 
 ## Status
 
 The package and documentation is under active development. **Breaking changes may occur in CausalityTools and its dependencies until the 1.0 release**.
-
 
 ### Package structure
 
@@ -41,7 +48,6 @@ The package and documentation is under active development. **Breaking changes ma
 | [`PerronFrobenius.jl`](https://github.com/kahaaga/PerronFrobenius.jl/) |  Transfer (Perron-Frobenius) operator estimators. | `0.6.0`  | [![Build Status](https://travis-ci.org/kahaaga/PerronFrobenius.jl.svg?branch=master)](https://travis-ci.org/kahaaga/PerronFrobenius.jl) |
 | [`Simplices.jl`](https://github.com/kahaaga/Simplices.jl/) | Exact simplex intersections in N dimensions. | `0.4.1` | [![Build Status](https://travis-ci.org/kahaaga/Simplices.jl.svg?branch=master)](https://travis-ci.org/kahaaga/Simplices.jl) |
 | [`CrossMappings.jl`](https://github.com/kahaaga/CrossMappings.jl/) | Exact simplex intersections in N dimensions. | `0.3.4` | [![Build Status](https://travis-ci.org/kahaaga/CrossMappings.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CrossMappings.jl) |
-
 
 ## Contributors
 

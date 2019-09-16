@@ -15,7 +15,7 @@ The following cross mapping estimators are implemented.
 ## Example
 
 In the animation below, we're cross mapping for increasing time series length for a
-[undirectionally set of coupled Henon maps](../../example_systems/henon2.md) where `x`
+[undirectionally set of coupled Henon maps](@ref henon2d) where `x`
 drives `y`. As expected from the underlying coupling, the cross mapping skill in the
 direction `x → y` converges at a higher value than in the opposite direction.
 

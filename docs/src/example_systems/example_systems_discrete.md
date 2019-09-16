@@ -40,7 +40,7 @@ logistic4(;u₀ = rand(4),
             c₁₂ = 0.4, c₂₃ = 0.4, c₃₄ = 0.35)
 ```
 
-## Two unidirectionally coupled Henon maps
+## [Two unidirectionally coupled Henon maps](@id henon2d)
 
 ```@docs
 henon2(;u₀ = rand(4), c_xy = 2.0)

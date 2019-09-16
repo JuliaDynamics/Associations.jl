@@ -49,9 +49,6 @@ PAGES = [
         "Convenience functions" => "transferentropy/convenience_functions_te.md",
         "TEVars" => "transferentropy/TEVars.md",
         "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
-        "Worked example" => [
-            "worked_examples/worked_example_transferentropy.md"
-        ]
     ],
     "Distance based measures" => [
         "CCM" => [
@@ -61,12 +58,10 @@ PAGES = [
         ], 
         "Joint distance distribution" => "algorithms/joint_distance_distribution.md"
     ],
-    "Examples" => [
-        "CCM" => [
-            "Henon map" => "examples/crossmappings/examples_crossmappings_henon2.md"
-        ]
+    "Worked example" => [
+        "worked_examples/worked_example_transferentropy.md"
     ],
-
+    
     "Example systems" => [
         "example_systems/example_systems_overview.md",
         "example_systems/example_systems_discrete.md",
