@@ -20,7 +20,7 @@ using Reexport
 
 
     """
-        causality(source, target, test)
+        causality(source, target, test::CausalityTest)
 
     Test for a causal influence from `source` to `target` using the provided causality `test`.
 
