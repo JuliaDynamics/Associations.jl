@@ -1,5 +1,5 @@
 name = "CausalityTools"
-uuid = "33344842-e5f7-11e8-31fb-c7f2d5716edf"
+uuid = "5520caf5-2dd7-5c5d-bfcb-a00e56ac49f7"
 authors = ["Kristian Agasøster Haaga <kahaaga@gmail.com>", "Tor Einar Møller <temolle@gmail.com>"]
 repo = "https://github.com/kahaaga/CausalityTools.jl.git"
 version = "0.3.0"
