@@ -71,13 +71,22 @@ PAGES = [
         "example_systems/example_systems_overview.md",
         "example_systems/example_systems_discrete.md",
         "example_systems/example_systems_continuous.md"
+    ],
+
+    "Surrogate data" => [
+        "surrogates/iaaft_docs.md",
+        "surrogates/aaft_docs.md",
+        "surrogates/randomphases_docs.md",
+        "surrogates/randomamplitudes_docs.md",
+        "surrogates/randomshuffle_docs.md",
+        "surrogates/surrogates_overview.md"
     ]
 ]
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
     #modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
-    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase],
+    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
     pages = PAGES,

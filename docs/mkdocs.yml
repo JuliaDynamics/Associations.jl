@@ -81,3 +81,12 @@ pages:
     - Overview: example_systems/example_systems_overview.md
     - Discrete systems: example_systems/example_systems_discrete.md
     - Continuous systems: example_systems/example_systems_continuous.md
+
+  - Surrogate data:
+    - Overview: surrogates/surrogates_overview.md
+    - Methods:
+      - IAAFT: surrogates/iaaft_docs.md
+      - AAFT: surrogates/aaft_docs.md
+      - Fourier surrogates, random phases: surrogates/randomphases_docs.md
+      - Fourier surrogates, random amplitudes: surrogates/randomamplitudes_docs.md
+      - Random shuffle: surrogates/randomshuffle_docs.md

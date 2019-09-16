@@ -2,16 +2,30 @@
 
 ## Random amplitude Fourier surrogates
 
-### Valid inputs
-Random amplitude Fourier surrogates may be generated from the following inputs:
-
-- `AbstractArray{T, 1}` instances (scalar-valued data series)
-- `AbstractArray{Number, 2}` instances (multivarate scalar-valued data series), for which surrogates are generated column-wise. 
-- `Dataset` instances from [DynamicalSystems.jl](https://github.com/JuliaDynamics/DynamicalSystems.jl), for which surrogates are generated column-wise. 
-- `Embedding` instances, for which surrogates are generated variable-wise (row-wise on the points).
-
-## Documentation
-
 ```@docs
 randomamplitudes
 ```
+
+### Example
+
+```@setup randomamplitudes
+using CausalityTools, Plots
+```
+
+```@example randomamplitudes
+# Generate a dynamical system, create an orbit and extract a time series from
+# the first component.
+s = CausalityTools.Systems.logistic3()
+orbit = trajectory(s, 150)
+x = orbit[:, 1]
+
+# Compare original time series and random amplitude surrogate
+p1 = plot(x, label = "x", lc = :black)
+p2 = plot(randomamplitudes(x), label = "randomamplitudes(x)",
+            xlabel = "Time step")
+plot(p1, p2, layout = (2, 1))
+ylabel!("Value")
+savefig("surr_randomamplitudes.svg"); nothing #hide
+```
+
+![](surr_randomamplitudes.svg)
