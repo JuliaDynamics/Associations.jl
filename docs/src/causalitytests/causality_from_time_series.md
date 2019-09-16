@@ -1,6 +1,8 @@
 
 # [Causality from time series](@id causality_time_series)
 
+## Time series (with and without uncertainties)
+
 The `causality` function and its methods provide a common interface for testing causal hypotheses.
 For analysing time series, all you need to do is provide a `source` and a `target`. Then, choose 
 one of the [available causality tests](@ref causality_tests) to quantify the (directional)
@@ -11,11 +13,20 @@ All high-level causality test are integrated with the uncertainty handling machi
 or `AbstractUncertainValueDataset` are accepted as inputs to `causality`, making uncertainty
 quantification on the causality statistics a breeze.
 
-For more fine grained control over the analysis, check out the [syntax overview](@ref syntax_overview) for 
-low-level estimators.
-
-## Documentation
+For more fine grained control over the analysis, check out the [syntax overview](@ref syntax_overview) for low-level estimators.
 
 ```@docs
 causality
+```
+
+## Resampling uncertain time series with constraints
+
+```@docs
+causality(source, target,  resampling::ConstrainedResampling, test::CausalityTest)
+```
+
+## Resampling schemes
+
+```@docs
+ConstrainedResampling
 ```
