@@ -38,10 +38,11 @@ docs_dir: 'build'
 
 pages:
   - Home: index.md
-  - Estimating causality (common interface):
+  - Causality estimation:
     - Causality from time series: causalitytests/causality_from_time_series.md
     - Causality from dynamical systems: causalitytests/causality_from_dynamical_systems.md
-  - Causality tests: causalitytests/causality_tests.md
+  - Causality tests: 
+    - List of tests: causalitytests/causality_tests.md
     - Distance based tests:
       - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
       - CrossMappingTest: causalitytests/CrossMappingTest.md
@@ -57,7 +58,6 @@ pages:
       - Distance based tests: causalitytests/DistanceBasedCausalityTest.md
       - Entropy based tests: causalitytests/EntropyBasedCausalityTest.md
       - TransferEntropyTest: causalitytests/TransferEntropyTest.md
-
   - Fundamentals:
     - Discretization: causalitytoolsbase/discretization.md
     - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
