@@ -50,7 +50,7 @@ pages:
         - TransferOperatorGridTest: causalitytests/TransferOperatorGridTest.md
         - VisitationFrequencyTest: causalitytests/VisitationFrequencyTest.md
         - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
-        - ExactSimplexIntersectionTest: causalitytests/ExactimplexIntersectionTest.md
+        - ExactSimplexIntersectionTest: causalitytests/ExactSimplexIntersectionTest.md
     - Predictive asymmetry test: causalitytests/PredictiveAsymmetryTest.md
     - Abstract test types:
       - CausalityTest: causalitytests/CausalityTest.md
