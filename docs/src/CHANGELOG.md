@@ -2,15 +2,13 @@
 
 ## Release v0.4.0
 
+### Bug fixes
+
+- Installing the package using `Pkg.add("CausalityTools")` from the central repository caused an  installation error related to `SpecialFunctions.jl`. Building `SpecialFunctions.jl` is now added to the build step of `CausalityTools`.
+
 ### New functionality
 
 - Added [`ExactSimplexIntersectionTest`](@ref) causality test.
-
-## Release v0.4.0
-
-### Improvements
-
-- Installing the package using `Pkg.add("CausalityTools")` from the central repository caused an  installation error related to `SpecialFunctions.jl`. Building `SpecialFunctions.jl` is now added to the build step of `CausalityTools`.
 
 ## Release v0.3.0
 
