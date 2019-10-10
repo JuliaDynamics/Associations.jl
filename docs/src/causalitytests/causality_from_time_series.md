@@ -6,6 +6,8 @@ For analysing time series, all you need to do is provide a `source` and a `targe
 one of the [available causality tests](@ref causality_tests) to quantify the (directional)
 dynamical dependence between `source` and `target`.
 
+# Uncertainty handling 
+
 All high-level causality test are integrated with the uncertainty handling machinery in 
 [UncertainData.jl](https://github.com/kahaaga/UncertainData.jl). Any combination of real-valued vectors, `Vector{<:AbstractUncertainValue}`,
 or `AbstractUncertainValueDataset` are accepted as inputs to `causality`, making uncertainty
