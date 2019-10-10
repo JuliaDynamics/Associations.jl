@@ -50,4 +50,7 @@ end
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_ApproximateSimplexIntersectionTest.jl")
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_ExactSimplexIntersectionTest.jl")
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_PredictiveAsymmetryTest.jl")
+
+    include("causality_tests/integration_uncertaindata/test_UncertainIndexValueDataset.jl")
+
 end

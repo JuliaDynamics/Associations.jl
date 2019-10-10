@@ -135,6 +135,11 @@ using Reexport
     ################################################################
     include("tests_predictive_asymmetry/PredictiveAsymmetryTest.jl")
 
+    ################################################################
+    # On uncertain data with uncertainties in both index and value
+    ################################################################
+    include("causality_on_uncertaindata.jl")
+
     export causality
 end
 
