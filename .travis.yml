@@ -24,6 +24,7 @@ jobs:
       script:
         - julia --project=docs/ -e 'using Pkg;
                                     Pkg.develop(PackageSpec(path=pwd()));
+                                    Pkg.develop(PackageSpec(path="https://github.com/kahaaga/UncertainData.jl", rev = "release-0.5.1"));
                                     Pkg.instantiate();
                                     ENV["PYTHON"] = "";
                                     Pkg.build("PyCall");
