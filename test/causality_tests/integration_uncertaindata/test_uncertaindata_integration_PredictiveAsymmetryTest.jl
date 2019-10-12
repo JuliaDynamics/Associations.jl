@@ -44,12 +44,12 @@ twovar_constraints = ConstrainedResampling(TruncateStd(2), TruncateStd(1))
 test_tog = TransferOperatorGridTest(binning = RectangularBinning(5), ηs = -3:3) 
 test_pa = PredictiveAsymmetryTest(predictive_test = test_tog)
 
-@test causality(x, y, twovar_constraints, test_pa) isa Vector{T} where T<:Real
-@test causality(uvals_x, uvals_y, twovar_constraints, test_pa) isa Vector{T} where T<:Real
-@test causality(x, uvals_y, onevar_constraints, test_pa) isa Vector{T} where T<:Real
-@test causality(uvals_x, y, onevar_constraints, test_pa) isa Vector{T} where T<:Real
-@test causality(UVX, UVY, twovar_constraints, test_pa) isa Vector{T} where T<:Real
-@test causality(uvals_x, UVY, twovar_constraints, test_pa) isa Vector{T} where T<:Real
-@test causality(UVX, uvals_y, twovar_constraints, test_pa) isa Vector{T} where T<:Real
-@test causality(x, UVY, onevar_constraints, test_pa) isa Vector{T} where T<:Real
-@test causality(UVX, y, onevar_constraints, test_pa) isa Vector{T} where T<:Real
+@test causality(x, y, test_pa, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, uvals_y, test_pa, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(x, uvals_y, test_pa, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, y, test_pa, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, UVY, test_pa, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, UVY, test_pa, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, uvals_y, test_pa, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(x, UVY, test_pa, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, y, test_pa, onevar_constraints) isa Vector{T} where T<:Real

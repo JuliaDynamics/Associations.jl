@@ -54,23 +54,23 @@ onevar_constraints = ConstrainedResampling(TruncateStd(1))
 twovar_constraints = ConstrainedResampling(TruncateStd(2), TruncateStd(1))
 
 test_vf = VisitationFrequencyTest(binning = RectangularBinning(5), ηs = 1) 
-@test causality(x, y, twovar_constraints, test_vf) isa Array{<:Real, 0}
-@test causality(uvals_x, uvals_y, twovar_constraints, test_vf) isa Array{<:Real, 0}
-@test causality(x, uvals_y, onevar_constraints, test_vf) isa Array{<:Real, 0}
-@test causality(uvals_x, y, onevar_constraints, test_vf) isa Array{<:Real, 0}
-@test causality(UVX, UVY, twovar_constraints, test_vf) isa Array{<:Real, 0}
-@test causality(uvals_x, UVY, twovar_constraints, test_vf) isa Array{<:Real, 0}
-@test causality(UVX, uvals_y, twovar_constraints, test_vf) isa Array{<:Real, 0}
-@test causality(x, UVY, onevar_constraints, test_vf) isa Array{<:Real, 0}
-@test causality(UVX, y, onevar_constraints, test_vf) isa Array{<:Real, 0}
+@test causality(x, y, test_vf, twovar_constraints) isa Array{<:Real, 0}
+@test causality(uvals_x, uvals_y, test_vf, twovar_constraints) isa Array{<:Real, 0}
+@test causality(x, uvals_y, test_vf, onevar_constraints) isa Array{<:Real, 0}
+@test causality(uvals_x, y, test_vf, onevar_constraints) isa Array{<:Real, 0}
+@test causality(UVX, UVY, test_vf, twovar_constraints) isa Array{<:Real, 0}
+@test causality(uvals_x, UVY, test_vf, twovar_constraints) isa Array{<:Real, 0}
+@test causality(UVX, uvals_y, test_vf, twovar_constraints) isa Array{<:Real, 0}
+@test causality(x, UVY, test_vf, onevar_constraints) isa Array{<:Real, 0}
+@test causality(UVX, y, test_vf, onevar_constraints) isa Array{<:Real, 0}
 
-test_vf = VisitationFrequencyTest(binning = RectangularBinning(5), ηs = -3:3) 
-@test causality(x, y, twovar_constraints, test_vf) isa Array{<:Real, 1}
-@test causality(uvals_x, uvals_y, twovar_constraints, test_vf) isa Array{<:Real, 1}
-@test causality(x, uvals_y, onevar_constraints, test_vf) isa Array{<:Real, 1}
-@test causality(uvals_x, y, onevar_constraints, test_vf) isa Array{<:Real, 1}
-@test causality(UVX, UVY, twovar_constraints, test_vf) isa Array{<:Real, 1}
-@test causality(uvals_x, UVY, twovar_constraints, test_vf) isa Array{<:Real, 1}
-@test causality(UVX, uvals_y, twovar_constraints, test_vf) isa Array{<:Real, 1}
-@test causality(x, UVY, onevar_constraints, test_vf) isa Array{<:Real, 1}
-@test causality(UVX, y, onevar_constraints, test_vf) isa Array{<:Real, 1}
+test_vf = VisitationFrequencyTest(binning = RectangularBinning(5), ηs = -3:3) 
+@test causality(x, y, test_vf, twovar_constraints) isa Array{<:Real, 1}
+@test causality(uvals_x, uvals_y, test_vf, twovar_constraints) isa Array{<:Real, 1}
+@test causality(x, uvals_y, test_vf, onevar_constraints) isa Array{<:Real, 1}
+@test causality(uvals_x, y, test_vf, onevar_constraints) isa Array{<:Real, 1}
+@test causality(UVX, UVY, test_vf, twovar_constraints) isa Array{<:Real, 1}
+@test causality(uvals_x, UVY, test_vf, twovar_constraints) isa Array{<:Real, 1}
+@test causality(UVX, uvals_y, test_vf, twovar_constraints) isa Array{<:Real, 1}
+@test causality(x, UVY, test_vf, onevar_constraints) isa Array{<:Real, 1}
+@test causality(UVX, y, test_vf, onevar_constraints) isa Array{<:Real, 1}

@@ -60,12 +60,12 @@ onevar_constraints = ConstrainedResampling(TruncateStd(1))
 twovar_constraints = ConstrainedResampling(TruncateStd(2), TruncateStd(1))
 
 test_jdd = JointDistanceDistributionTest() 
-@test causality(x, y, twovar_constraints, test_jdd) isa Vector{T} where T<:Real
-@test causality(uvals_x, uvals_y, twovar_constraints, test_jdd) isa Vector{T} where T<:Real
-@test causality(x, uvals_y, onevar_constraints, test_jdd) isa Vector{T} where T<:Real
-@test causality(uvals_x, y, onevar_constraints, test_jdd) isa Vector{T} where T<:Real
-@test causality(UVX, UVY, twovar_constraints, test_jdd) isa Vector{T} where T<:Real
-@test causality(uvals_x, UVY, twovar_constraints, test_jdd) isa Vector{T} where T<:Real
-@test causality(UVX, uvals_y, twovar_constraints, test_jdd) isa Vector{T} where T<:Real
-@test causality(x, UVY, onevar_constraints, test_jdd) isa Vector{T} where T<:Real
-@test causality(UVX, y, onevar_constraints, test_jdd) isa Vector{T} where T<:Real
+@test causality(x, y, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, uvals_y, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(x, uvals_y, test_jdd, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, y, test_jdd, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, UVY, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(uvals_x, UVY, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, uvals_y, test_jdd, twovar_constraints) isa Vector{T} where T<:Real
+@test causality(x, UVY, test_jdd, onevar_constraints) isa Vector{T} where T<:Real
+@test causality(UVX, y, test_jdd, onevar_constraints) isa Vector{T} where T<:Real
