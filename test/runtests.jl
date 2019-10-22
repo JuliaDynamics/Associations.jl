@@ -52,5 +52,6 @@ end
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_PredictiveAsymmetryTest.jl")
 
     include("causality_tests/integration_uncertaindata/test_UncertainIndexValueDataset.jl")
+    include("causality_tests/integration_uncertaindata/test_uncertain_indexvalue_dataset_with_schemes.jl")
 
 end

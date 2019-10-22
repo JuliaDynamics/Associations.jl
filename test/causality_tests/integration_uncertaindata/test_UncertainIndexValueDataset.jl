@@ -55,3 +55,4 @@ grid = RegularGrid(0, length(X), tstep)
 @test causality(X, Y, test_tog, StrictlyIncreasing(), grid) isa Vector{T} where T <: Real
 @test causality(X, Y, test_jdd, StrictlyIncreasing(), grid) isa Vector{T} where T <: Real
 @test causality(X, Y, test_jddt, StrictlyIncreasing(), grid) isa OneSampleTTest
+

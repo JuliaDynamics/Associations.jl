@@ -102,7 +102,7 @@ causality(uvx, uvy, test_tog, crxy)
 causality(uvals_x, uvals_y, test_tog, crxy) 
 ```
 """
-function causality(source, target, test::CausalityTest, resampling::ConstrainedResampling) end 
+function causality(source, target, test, resampling::ConstrainedResampling) end 
 
 function causality(source, target, test::TT, resampling::ConstrainedResampling{N}) where {N, TT <: CausalityTest}
 
