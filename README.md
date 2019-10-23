@@ -23,17 +23,17 @@ for experimental data, and for studying theoretical systems. Key features includ
 - [Library of coupled dynamical systems](https://kahaaga.github.io/CausalityTools.jl/dev/example_systems/example_systems_overview/) 
     for testing algorithm performance.
 
-## Installing
-
-For the latest development version of the package, add the package by referring directly to the GitHub repository. This version is the most up-to-date, and is recommended.
-
-```julia
-import Pkg; Pkg.add("https://github.com/kahaaga/CausalityTools.jl/")
-```
+## Installation
 
 CausalityTools.jl is a registered julia package, you can therefore add the latest tagged release
- by running the following lines in the Julia console.
+by running the following lines in the Julia console.
 
 ```julia
 import Pkg; Pkg.add("CausalityTools")
+```
+
+For the latest development version of the package, add the package by referring directly to the GitHub repository.
+
+```julia
+import Pkg; Pkg.add("https://github.com/kahaaga/CausalityTools.jl/")
 ```
