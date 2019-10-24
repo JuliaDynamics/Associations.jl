@@ -1,4 +1,4 @@
-# [`PredictiveAsymmetryTest` with `BinnedMeanResampling`](@id tutorial_PredictiveAsymmetryTest_BinnedMeanResampling)
+# [`PredictiveAsymmetryTest` with `BinnedResampling`](@id tutorial_PredictiveAsymmetryTest_BinnedResampling)
 
 ## Example data
 
@@ -11,7 +11,7 @@ added using the `example_uncertain_indexvalue_datasets` function from
 the number of time steps to iterate the system, a 2-tuple of variables 
 to use (by their index) and, optionally, a time step. 
 
-```@example PredictiveAsymmetryTest_BinnedMeanResampling
+```@example PredictiveAsymmetryTest_BinnedResampling
 using CausalityTools, UncertainData, Plots
 sys = ar1_unidir(uᵢ = [0.1, 0.1], c_xy = 0.41)
 vars = (1, 2) # ar1_unidir has only two variables, X and Y, we want both
@@ -29,7 +29,7 @@ Now we have a time series with normally distributed time indices with means
 ranging from 1 to 1001 in steps of 10. Let's say we want to bin the data 
 with equally-sized bins with size 25.
 
-```@example PredictiveAsymmetryTest_BinnedMeanResampling
+```@example PredictiveAsymmetryTest_BinnedResampling
 qs = [0.1, 0.9] # quantiles to display
 
 pX = plot(X, mc = :black, ms = 2, lw = 0.5, marker = stroke(0.0, :black), qs, qs, ylabel = "X")
@@ -40,10 +40,10 @@ plot!(pY, mean.(Y.indices), mean.(Y.values), c = :red, lw = 1, α = 0.2, label =
 vline!(0:25:1000, ls = :dash, α = 0.5, lw = 0.5)
 
 plot(pX, pY, layout = (2, 1), xlabel = "Time step", ylims = (-2.5, 2.5), legend = false)
-savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y.svg"); nothing # hide
+savefig("figs/PredictiveAsymmetryTest_BinnedResampling_x_and_y.svg"); nothing # hide
 ```
 
-![](figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y.svg)
+![](figs/PredictiveAsymmetryTest_BinnedResampling_x_and_y.svg)
 
 ## How do the data look when binned?
 
@@ -52,7 +52,7 @@ Let's use a slightly finer binning and investigate what the binned data look lik
 The time uncertainty in each bin is assumed uniform, while the value uncertainty 
 is represented as a kernel density estimate to the distribution of points in each bin.
 
-```@example PredictiveAsymmetryTest_BinnedMeanResampling
+```@example PredictiveAsymmetryTest_BinnedResampling
 grid = 0:5:1000
 n_draws = 5000 # resample each point 5000 times and distribute among bins
 binned_resampling = BinnedResampling(grid, n_draws)
@@ -69,10 +69,10 @@ pY = plot(Y_binned, qs, qs, ylabel = "Y",
 vline!(binned_resampling.left_bin_edges, ls = :dash, α = 0.5, lw = 0.5)
 
 plot(pX, pY, layout = (2, 1), xlabel = "Time step", legend = false)
-savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y_binned.svg"); nothing # hide
+savefig("figs/PredictiveAsymmetryTest_BinnedResampling_x_and_y_binned.svg"); nothing # hide
 ```
 
-![](figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y_binned.svg)
+![](figs/PredictiveAsymmetryTest_BinnedResampling_x_and_y_binned.svg)
 
 ## Defining a PredictiveAsymmetryTest
 
@@ -93,7 +93,7 @@ trade-off between the dimensionality of the system (ensuring enough points in ea
 on average) and the number of points in the system. The approach below 
 roughly follows Krakovska et al. (2018).
 
-```@example PredictiveAsymmetryTest_BinnedMeanResampling
+```@example PredictiveAsymmetryTest_BinnedResampling
 k, l, m = 1, 1, 1 # embedding parameters, total dimension is k + l + m
 n_subdivisions = floor(Int, length(grid)^(1/(k + l + m + 1)))
 state_space_binning = RectangularBinning(n_subdivisions);
@@ -107,28 +107,40 @@ te_test = VisitationFrequencyTest(k = k, l = l, m = m,
 pa_test = PredictiveAsymmetryTest(predictive_test = te_test)
 
 # Now we can combine the binning from above with the predictive asymmetry 
-# test we just defined.
-test = BinnedDataCausalityTest(pa_test, resampled_binning);
-nothing; #hide
+# test we just defined. We'll apply the causality test to 50 independent 
+# draws of the binned dataset.
+n_realizations = 50
+test = BinnedDataCausalityTest(pa_test, binned_resampling, n_realizations)
+nothing #hide
 ```
 
 Finally, we can compute the predictive asymmetry in both directions for the bin means.
 
-```@example PredictiveAsymmetryTest_BinnedMeanResampling
+```@example PredictiveAsymmetryTest_BinnedResampling
 tes_xy = causality(X, Y, test)
 tes_yx = causality(Y, X, test)
 nothing; #hide
 ```
 
-`tes_xy` and `tes_yx` are now length-`5` vectors containing the predictive asymmetries for 
-prediction lags `1:5`. Let's plot the results:
+`tes_xy` and `tes_yx` are now both length-`50` vectors, where each element is a length-`5` vector containing the predictive asymmetries for prediction lags `1:5`. Let's summarise the data for each prediction lag and plot the results.
 
-```@example PredictiveAsymmetryTest_BinnedMeanResampling
+```@example PredictiveAsymmetryTest_BinnedResampling
+# Gather results in a matrix and compute means and standard deviations 
+# for the predictive asymmetries at each prediction lag
+M_xy = hcat(tes_xy...,)
+M_yx = hcat(tes_yx...,)
+
+means_xy = mean(M_xy, dims = 2)[:, 1]
+means_yx = mean(M_yx, dims = 2)[:, 1]
+stdevs_xy = std(M_yx, dims = 2)[:, 1]
+stdevs_yx = std(M_yx, dims = 2)[:, 1]
+
+# Plot the predictive asymmetry as a function of prediction lag
 plot(xlabel = "Prediction lag (eta)", ylabel = "Predictive asymmetry (bits)")
-plot!(ηs[ηs .> 0], tes_xy, label = "x -> y (binned)", c = :black)
-plot!(ηs[ηs .> 0], tes_yx, label = "y -> x (binned)", c = :red)
+plot!(ηs[ηs .> 0], means_xy, ribbon = stdevs_xy, label = "x -> y (binned)", c = :black)
+plot!(ηs[ηs .> 0], means_yx, ribbon = stdevs_yx, label = "y -> x (binned)", c = :red)
 hline!([0], lw = 2, ls = :dot, α = 0.5, label = "", c = :grey)
-savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_lag_vs_A.svg"); nothing # hide
+savefig("figs/PredictiveAsymmetryTest_BinnedResampling_lag_vs_A.svg"); nothing # hide
 ```
 
-![](figs/PredictiveAsymmetryTest_BinnedMeanResampling_lag_vs_A.svg)
+![](figs/PredictiveAsymmetryTest_BinnedResampling_lag_vs_A.svg)
