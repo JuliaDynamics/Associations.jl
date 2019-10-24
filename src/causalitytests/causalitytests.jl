@@ -370,6 +370,12 @@ using Reexport
     ################################################################
     include("causality_on_uncertaindata.jl")
 
+    ################################################################
+    # Preprocessed data + causality test
+    ################################################################
+    include("PreprocessedDataCausalityTest.jl")
+    include("BinnedDataCausalityTest.jl")
+
     export causality
 end
 
