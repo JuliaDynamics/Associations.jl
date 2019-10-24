@@ -84,7 +84,8 @@ PAGES = [
     "Tutorials" => [
         "causality" => [
             "tutorials/list_of_tutorials.md",
-            "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_BinnedMeanResampling_PredictiveAsymmetryTest.md"
+            "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md",
+            "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md"
         ]
     ]
 ]

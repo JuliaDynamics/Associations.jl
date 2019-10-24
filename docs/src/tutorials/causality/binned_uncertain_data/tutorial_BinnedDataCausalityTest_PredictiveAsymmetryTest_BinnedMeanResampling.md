@@ -14,13 +14,13 @@ to use (by their index) and, optionally, a time step.
 ```@example PredictiveAsymmetryTest_BinnedMeanResampling
 using CausalityTools, UncertainData, Plots
 sys = ar1_unidir(uᵢ = [0.1, 0.1], c_xy = 0.41)
-vars = (1, 2) # ar1_unidir has only two variables, X and Y, we want both
-n_steps = 100 # the number of points in the time series
+vars = (1, 2) # ar1_unidir has only two variables, X and Y
+n_steps = 100
 tstep = 10 # the mean of each time value is stepped by `tstep`
 
-X, Y = example_uncertain_indexvalue_datasets(sys, n_steps, vars, tstep = 10,
-    d_xind = Uniform(7.5, 15.5),
-    d_yind = Uniform(5.5, 15.5),
+X, Y = example_uncertain_indexvalue_datasets(sys, n_steps, vars, tstep = 10, 
+    d_xind = Uniform(7.5, 15.5), 
+    d_yind = Uniform(5.5, 15.5), 
     d_xval = Uniform(0.1, 0.5));
 nothing; #hide
 ```
@@ -38,7 +38,6 @@ vline!(0:25:1000, ls = :dash, α = 0.5, lw = 0.5)
 pY = plot(Y, mc = :red, ms = 2, lw = 0.5, marker = stroke(0.0, :red), qs, qs, ylabel = "Y")
 plot!(pY, mean.(Y.indices), mean.(Y.values), c = :red, lw = 1, α = 0.2, label = "")
 vline!(0:25:1000, ls = :dash, α = 0.5, lw = 0.5)
-
 plot(pX, pY, layout = (2, 1), xlabel = "Time step", ylims = (-2.5, 2.5), legend = false)
 savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y.svg"); nothing # hide
 ```
@@ -54,19 +53,21 @@ is represented as a kernel density estimate to the distribution of points in eac
 
 ```@example PredictiveAsymmetryTest_BinnedMeanResampling
 grid = 0:5:1000
-n_draws = 5000 # resample each point 5000 times and distribute among bins
-binned_resampling = BinnedResampling(grid, n_draws)
+n_draws = 10000 # resample each point 10000 times and distribute among bins
+binned_resampling = BinnedMeanResampling(grid, n_draws)
 
-X_binned = resample(X, binned_resampling)
-Y_binned = resample(Y, binned_resampling)
+# Compute bin means
+X_bin_means = resample(X, binned_resampling)
+Y_bin_means = resample(Y, binned_resampling)
 
-pX = plot(X_binned, qs, qs, ylabel = "X",
-    mc = :black, ms = 2, lw = 0.5, marker = stroke(0.0, :black))
-vline!(binned_resampling.left_bin_edges, ls = :dash, α = 0.5, lw = 0.5)
+qs = [0.1, 0.9]
+pX = plot(grid[1:end-1] .+ step(grid)/2, X_bin_means, ylabel = "X",
+    mc = :blue, ms = 2, lw = 2, marker = stroke(0.0, :blue))
+plot!(X, mc = :black, ms = 2, lw = 0.5, marker = stroke(0.0, :black), qs, qs, ylabel = "X")
 
-pY = plot(Y_binned, qs, qs, ylabel = "Y",
-    mc = :red, ms = 2, lw = 0.5, marker = stroke(0.0, :red))
-vline!(binned_resampling.left_bin_edges, ls = :dash, α = 0.5, lw = 0.5)
+pY = plot(grid[1:end-1] .+ step(grid)/2, Y_bin_means, ylabel = "Y",
+    mc = :red, ms = 1, lw = 2, marker = stroke(0.0, :red))
+plot!(Y, mc = :red, ms = 2, lw = 0.5, marker = stroke(0.0, :red), qs, qs, ylabel = "Y")
 
 plot(pX, pY, layout = (2, 1), xlabel = "Time step", legend = false)
 savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y_binned.svg"); nothing # hide
@@ -93,7 +94,8 @@ trade-off between the dimensionality of the system (ensuring enough points in ea
 on average) and the number of points in the system. The approach below 
 roughly follows Krakovska et al. (2018).
 
-```@example PredictiveAsymmetryTest_BinnedMeanResamplingk, l, m = 1, 1, 1 # embedding parameters, total dimension is k + l + m
+```@example PredictiveAsymmetryTest_BinnedMeanResampling
+k, l, m = 1, 1, 1 # embedding parameters, total dimension is k + l + m
 n_subdivisions = floor(Int, length(grid)^(1/(k + l + m + 1)))
 state_space_binning = RectangularBinning(n_subdivisions);
 

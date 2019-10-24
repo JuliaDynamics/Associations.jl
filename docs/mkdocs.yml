@@ -94,6 +94,8 @@ pages:
     - Transfer entropy: worked_examples/worked_example_transferentropy.md
   - Tutorials: 
     - List of tutorials: tutorials/list_of_tutorials.md
-    - Causality:
-      - On binned uncertain: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_BinnedMeanResampling_PredictiveAsymmetryTest.md
+    - Causality on uncertain data:
+      - PredictiveAsymmetryTest:
+        - BinnedResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md
+        - BinnedMeanResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md
   - Changelog: CHANGELOG.md

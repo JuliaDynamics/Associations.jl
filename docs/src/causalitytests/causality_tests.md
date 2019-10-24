@@ -4,7 +4,7 @@
 `causality` accepts many different causality tests. The returned values will vary depending 
 on the type of test, but the syntax for performing a test is always the same.
 
-All tests can be used in conjunction with a binning scheme with [`BinnedDataCausalityTest`](@ref) to perform the tests on data with uncertain index (e.g time) values.
+All tests can be used in conjunction with a binning scheme with [`BinnedDataCausalityTest`](@ref) to perform the tests on data with uncertain index (e.g time) values. See also [tutorials](@ref tutorials_causality_from_uncertain_data).
 
 ## Distance based causality tests
 
