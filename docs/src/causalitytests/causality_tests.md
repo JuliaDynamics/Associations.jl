@@ -4,6 +4,8 @@
 `causality` accepts many different causality tests. The returned values will vary depending 
 on the type of test, but the syntax for performing a test is always the same.
 
+All tests can be used in conjunction with a binning scheme with [`BinnedDataCausalityTest`](@ref) to perform the tests on data with uncertain index (e.g time) values.
+
 ## Distance based causality tests
 
 - [`CrossMappingTest`](@ref)

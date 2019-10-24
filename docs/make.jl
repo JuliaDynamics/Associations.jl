@@ -35,7 +35,10 @@ PAGES = [
         "causalitytests/TransferOperatorGridTest.md",
         "causalitytests/VisitationFrequencyTest.md",
         "causalitytests/ApproximateSimplexIntersectionTest.md",
-        "causalitytests/ExactSimplexIntersectionTest.md"
+        "causalitytests/ExactSimplexIntersectionTest.md",
+
+        "causalitytests/causality_from_uncertain_data.md",
+        "causalitytests/BinnedDataCausalityTest.md"
     ],
     "CausalityToolsBase" => [
         "Discretization" => "causalitytoolsbase/discretization.md",
@@ -76,6 +79,13 @@ PAGES = [
         "surrogates/randomamplitudes_docs.md",
         "surrogates/randomshuffle_docs.md",
         "surrogates/surrogates_overview.md"
+    ],
+
+    "Tutorials" => [
+        "causality" => [
+            "tutorials/list_of_tutorials.md",
+            "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_BinnedMeanResampling_PredictiveAsymmetryTest.md"
+        ]
     ]
 ]
 

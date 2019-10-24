@@ -40,9 +40,11 @@ pages:
   - Home: index.md
   - Causality estimation:
     - Causality from time series: causalitytests/causality_from_time_series.md
+    - Causality from uncertain data: causalitytests/causality_from_uncertain_data.md
     - Causality from dynamical systems: causalitytests/causality_from_dynamical_systems.md
   - Causality tests: 
     - List of tests: causalitytests/causality_tests.md
+    - BinnedDataCausalityTest: causalitytests/BinnedDataCausalityTest.md
     - Distance based tests:
       - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
       - CrossMappingTest: causalitytests/CrossMappingTest.md
@@ -90,4 +92,8 @@ pages:
       - Random shuffle: surrogates/randomshuffle_docs.md
   - Worked examples:
     - Transfer entropy: worked_examples/worked_example_transferentropy.md
+  - Tutorials: 
+    - List of tutorials: tutorials/list_of_tutorials.md
+    - Causality:
+      - On binned uncertain: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_BinnedMeanResampling_PredictiveAsymmetryTest.md
   - Changelog: CHANGELOG.md
