@@ -82,6 +82,7 @@ pages:
     - Overview: example_systems/example_systems_overview.md
     - Discrete systems: example_systems/example_systems_discrete.md
     - Continuous systems: example_systems/example_systems_continuous.md
+    - Noise processes: example_systems/noise.md
   - Surrogate data:
     - Overview: surrogates/surrogates_overview.md
     - Methods:
