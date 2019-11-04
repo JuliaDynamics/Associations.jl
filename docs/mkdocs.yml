@@ -38,10 +38,13 @@ docs_dir: 'build'
 
 pages:
   - Home: index.md
-  - Causality tests:
+  - Causality estimation:
     - Causality from time series: causalitytests/causality_from_time_series.md
+    - Causality from uncertain data: causalitytests/causality_from_uncertain_data.md
     - Causality from dynamical systems: causalitytests/causality_from_dynamical_systems.md
-    - Tests: causalitytests/causality_tests.md
+  - Causality tests: 
+    - List of tests: causalitytests/causality_tests.md
+    - BinnedDataCausalityTest: causalitytests/BinnedDataCausalityTest.md
     - Distance based tests:
       - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
       - CrossMappingTest: causalitytests/CrossMappingTest.md
@@ -50,13 +53,13 @@ pages:
         - TransferOperatorGridTest: causalitytests/TransferOperatorGridTest.md
         - VisitationFrequencyTest: causalitytests/VisitationFrequencyTest.md
         - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
+        - ExactSimplexIntersectionTest: causalitytests/ExactSimplexIntersectionTest.md
     - Predictive asymmetry test: causalitytests/PredictiveAsymmetryTest.md
     - Abstract test types:
       - CausalityTest: causalitytests/CausalityTest.md
       - Distance based tests: causalitytests/DistanceBasedCausalityTest.md
       - Entropy based tests: causalitytests/EntropyBasedCausalityTest.md
       - TransferEntropyTest: causalitytests/TransferEntropyTest.md
-
   - Fundamentals:
     - Discretization: causalitytoolsbase/discretization.md
     - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
@@ -79,6 +82,7 @@ pages:
     - Overview: example_systems/example_systems_overview.md
     - Discrete systems: example_systems/example_systems_discrete.md
     - Continuous systems: example_systems/example_systems_continuous.md
+    - Noise processes: example_systems/noise.md
   - Surrogate data:
     - Overview: surrogates/surrogates_overview.md
     - Methods:
@@ -89,3 +93,10 @@ pages:
       - Random shuffle: surrogates/randomshuffle_docs.md
   - Worked examples:
     - Transfer entropy: worked_examples/worked_example_transferentropy.md
+  - Tutorials: 
+    - List of tutorials: tutorials/list_of_tutorials.md
+    - Causality on uncertain data:
+      - PredictiveAsymmetryTest:
+        - BinnedResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md
+        - BinnedMeanResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md
+  - Changelog: CHANGELOG.md

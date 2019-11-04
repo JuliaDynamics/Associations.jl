@@ -1,6 +1,7 @@
 @reexport module Systems
 
 using Distributions
+using StatsBase
 using DynamicalSystems
 
 include("discretemaps/ar1.jl")
@@ -32,6 +33,7 @@ include("continuous_systems/rossler_rossler_rossler_bidir_forced.jl")
 
 include("continuous_systems/rossler_lorenz.jl")
 
+include("noise.jl")
 # We export both the equations of motion and function to generate
 # the systems for every example. The equations of motion functions
 # are always prepended with `eom_`.

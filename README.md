@@ -13,10 +13,10 @@ Check out the [documentation](https://kahaaga.github.io/CausalityTools.jl/dev) f
 The package is equally well-suited both for the study of causal directionality
 for experimental data, and for studying theoretical systems. Key features include:
 
-- integration with [UncertainData.jl](https://github.com/kahaaga/UncertainData.jl), which makes
+- Integration with [UncertainData.jl](https://github.com/kahaaga/UncertainData.jl), which makes
     [handling uncertainties](https://kahaaga.github.io/CausalityTools.jl/dev/causalitytests/causality_from_time_series/) in your causality analyses a breeze.
 
-- integration with [DynamicalSystems.jl](https://github.com/JuliaDynamics/DynamicalSystems.jl),
+- Integration with [DynamicalSystems.jl](https://github.com/JuliaDynamics/DynamicalSystems.jl),
     which allows the causality statitics to be 
     [applied to dynamical systems](https://kahaaga.github.io/CausalityTools.jl/dev/causalitytests/causality_from_dynamical_systems/).
 

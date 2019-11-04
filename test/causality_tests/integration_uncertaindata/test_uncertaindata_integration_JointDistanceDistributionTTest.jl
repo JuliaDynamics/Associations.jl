@@ -39,12 +39,12 @@ onevar_constraints = ConstrainedResampling(TruncateStd(1))
 twovar_constraints = ConstrainedResampling(TruncateStd(2), TruncateStd(1))
 
 test_jddt = JointDistanceDistributionTTest() 
-@test causality(x, y, twovar_constraints, test_jddt) isa OneSampleTTest 
-@test causality(uvals_x, uvals_y, twovar_constraints, test_jddt) isa OneSampleTTest 
-@test causality(x, uvals_y, onevar_constraints, test_jddt) isa OneSampleTTest 
-@test causality(uvals_x, y, onevar_constraints, test_jddt) isa OneSampleTTest 
-@test causality(UVX, UVY, twovar_constraints, test_jddt) isa OneSampleTTest 
-@test causality(uvals_x, UVY, twovar_constraints, test_jddt) isa OneSampleTTest 
-@test causality(UVX, uvals_y, twovar_constraints, test_jddt) isa OneSampleTTest 
-@test causality(x, UVY, onevar_constraints, test_jddt) isa OneSampleTTest 
-@test causality(UVX, y, onevar_constraints, test_jddt) isa OneSampleTTest 
+@test causality(x, y, test_jddt, twovar_constraints) isa OneSampleTTest 
+@test causality(uvals_x, uvals_y, test_jddt, twovar_constraints) isa OneSampleTTest 
+@test causality(x, uvals_y, test_jddt, onevar_constraints) isa OneSampleTTest 
+@test causality(uvals_x, y, test_jddt, onevar_constraints) isa OneSampleTTest 
+@test causality(UVX, UVY, test_jddt, twovar_constraints) isa OneSampleTTest 
+@test causality(uvals_x, UVY, test_jddt, twovar_constraints) isa OneSampleTTest 
+@test causality(UVX, uvals_y, test_jddt, twovar_constraints) isa OneSampleTTest 
+@test causality(x, UVY, test_jddt, onevar_constraints) isa OneSampleTTest 
+@test causality(UVX, y, test_jddt, onevar_constraints) isa OneSampleTTest 

@@ -19,7 +19,7 @@ ENV["GKSwstype"] = "100"
 PAGES = [
     "index.md",
     "Syntax overview" => "syntax_overview.md",
-
+    "CHANGELOG.md",
     "Causality tests" => [
         "causalitytests/causality_from_time_series.md",
         "causalitytests/causality_from_dynamical_systems.md",
@@ -34,7 +34,11 @@ PAGES = [
         "causalitytests/TransferEntropyTest.md",
         "causalitytests/TransferOperatorGridTest.md",
         "causalitytests/VisitationFrequencyTest.md",
-        "causalitytests/ApproximateSimplexIntersectionTest.md"
+        "causalitytests/ApproximateSimplexIntersectionTest.md",
+        "causalitytests/ExactSimplexIntersectionTest.md",
+
+        "causalitytests/causality_from_uncertain_data.md",
+        "causalitytests/BinnedDataCausalityTest.md"
     ],
     "CausalityToolsBase" => [
         "Discretization" => "causalitytoolsbase/discretization.md",
@@ -63,6 +67,7 @@ PAGES = [
     ],
     
     "Example systems" => [
+        "example_systems/noise.md",
         "example_systems/example_systems_overview.md",
         "example_systems/example_systems_discrete.md",
         "example_systems/example_systems_continuous.md"
@@ -75,6 +80,14 @@ PAGES = [
         "surrogates/randomamplitudes_docs.md",
         "surrogates/randomshuffle_docs.md",
         "surrogates/surrogates_overview.md"
+    ],
+
+    "Tutorials" => [
+        "causality" => [
+            "tutorials/list_of_tutorials.md",
+            "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md",
+            "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md"
+        ]
     ]
 ]
 

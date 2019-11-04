@@ -31,6 +31,7 @@ end
     include("causality_tests/test_scalarseries_TransferOperatorGridTest.jl")
     include("causality_tests/test_scalarseries_VisitationFrequencyTest.jl")
     include("causality_tests/test_scalarseries_ApproximateSimplexIntersectionTest.jl")
+    include("causality_tests/test_scalarseries_ExactSimplexIntersectionTest.jl")
     include("causality_tests/test_scalarseries_PredictiveAsymmetryTest.jl")
 end
 
@@ -47,5 +48,10 @@ end
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_TransferOperatorGridTest.jl")
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_VisitationFrequencyTest.jl")
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_ApproximateSimplexIntersectionTest.jl")
+    include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_ExactSimplexIntersectionTest.jl")
     include("causality_tests/integration_uncertaindata/test_uncertaindata_integration_PredictiveAsymmetryTest.jl")
+
+    include("causality_tests/integration_uncertaindata/test_UncertainIndexValueDataset.jl")
+    include("causality_tests/integration_uncertaindata/test_uncertain_indexvalue_dataset_with_schemes.jl")
+
 end

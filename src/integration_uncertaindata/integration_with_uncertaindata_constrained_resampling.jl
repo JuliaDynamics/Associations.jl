@@ -6,8 +6,7 @@
 include("validate_constraints.jl")
 
 """
-    causality(source, target, resampling::ConstrainedResampling{N}, 
-        test::CausalityTest)
+    causality(source, target, test::CausalityTest, resampling::ConstrainedResampling{N})
 
 Test for a causal influence from `source` to `target` using the provided causality `test`.
 Both `source` and `target` might be uncertain data, which is resampled according to the 
@@ -70,14 +69,14 @@ twovar_constraints = ConstrainedResampling(TruncateStd(2), TruncateStd(1))
 
 
 # Only one variable is constrained, so provide only one set of constraints
-causality(x, uvy, onevar_constraints, test_tog) 
-causality(uvx, y, onevar_constraints, test_tog)
-causality(x, uvals_y, onevar_constraints, test_tog)
-causality(uvals_x, y, onevar_constraints, test_tog)
+causality(x, uvy, test_tog, onevar_constraints) 
+causality(uvx, y, test_tog, onevar_constraints)
+causality(x, uvals_y, test_tog, onevar_constraints)
+causality(uvals_x, y, test_tog, onevar_constraints)
 
 # Both variables are constrained, so provide two sets of constraints
-causality(uvx, uvy, twovar_constraints, test_tog)
-causality(uvals_x, uvals_y, twovar_constraints, test_tog) 
+causality(uvx, uvy, test_tog, twovar_constraints)
+causality(uvals_x, uvals_y, test_tog, twovar_constraints) 
 
 # Applying different constraints on each element of the uncertain vectors
 # -----------------------------------------------------------------------
@@ -91,21 +90,21 @@ cry = ConstrainedResampling(constraints_y)
 # Compute causality statistic between one real-valued time series and an 
 # uncertain time series. Resample the uncertain values according to the 
 # `ConstrainedResampling`s we just defined.
-causality(x, uvy, cry, test_tog) 
-causality(uvx, y, crx, test_tog)
-causality(x, uvals_y, cry, test_tog)
-causality(uvals_x, y, crx, test_tog)
+causality(x, uvy, test_tog, cry) 
+causality(uvx, y, test_tog, crx)
+causality(x, uvals_y, test_tog, cry)
+causality(uvals_x, y, test_tog, crx)
 
 # Compute causality statistic between two uncertain time series. 
 # We define separately constraints for y and y
 crxy = ConstrainedResampling(constraints_x, constraints_y) 
-causality(uvx, uvy, crxy, test_tog)
-causality(uvals_x, uvals_y, crxy, test_tog) 
+causality(uvx, uvy, test_tog, crxy)
+causality(uvals_x, uvals_y, test_tog, crxy) 
 ```
 """
-function causality(source, target,  resampling::ConstrainedResampling, test::CausalityTest) end 
+function causality(source, target, test, resampling::ConstrainedResampling) end 
 
-function causality(source, target, resampling::ConstrainedResampling{N}, test::TT) where {N, TT <: CausalityTest}
+function causality(source, target, test::TT, resampling::ConstrainedResampling{N}) where {N, TT <: CausalityTest}
 
     validate_constraints(source, target, resampling)
     
@@ -113,7 +112,7 @@ function causality(source, target, resampling::ConstrainedResampling{N}, test::T
 end
 
 
-function causality(source::UVT1, target::UVT2, resampling::ConstrainedResampling{N}, test::TT) where {
+function causality(source::UVT1, target::UVT2, test::TT, resampling::ConstrainedResampling{N}) where {
             UVT1<:Union{AbstractUncertainValueDataset, Vector{<:AbstractUncertainValue}},
             UVT2<:Union{AbstractUncertainValueDataset, Vector{<:AbstractUncertainValue}},
             N,
@@ -124,7 +123,7 @@ function causality(source::UVT1, target::UVT2, resampling::ConstrainedResampling
     causality(resample(source, resampling[1]), resample(target, resampling[2]), test)
 end
 
-function causality(source, target::UVT, resampling::ConstrainedResampling{N}, test::TT) where {
+function causality(source, target::UVT, test::TT, resampling::ConstrainedResampling{N}) where {
             UVT <: Union{AbstractUncertainValueDataset, Vector{<:AbstractUncertainValue}}, 
             N,
             TT <: CausalityTest}
@@ -134,7 +133,7 @@ function causality(source, target::UVT, resampling::ConstrainedResampling{N}, te
     causality(source, resample(target, resampling[1]), test)
 end
 
-function causality(source::UVT, target, resampling::ConstrainedResampling{N}, test::TT) where {
+function causality(source::UVT, target, test::TT, resampling::ConstrainedResampling{N}) where {
             UVT <: Union{AbstractUncertainValueDataset, Vector{<:AbstractUncertainValue}}, 
             N,
             TT <: CausalityTest}
