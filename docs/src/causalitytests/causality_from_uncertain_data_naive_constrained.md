@@ -4,11 +4,13 @@ If you need to truncate the furnishing distributions of your uncertain datasets 
 applying a causality test, use the following method.
 
 ```@docs
-causality(source, target, test::CausalityTest, resampling::ConstrainedResampling)
+causality(source::AbstractUncertainIndexValueDataset, 
+    target::AbstractUncertainIndexValueDataset, 
+    test::ConstrainedTest)
 ```
 
-## ConstrainedResampling
+## ConstrainedTest
 
 ```@docs
-ConstrainedResampling
+ConstrainedTest
 ```
