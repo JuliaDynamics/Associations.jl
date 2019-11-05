@@ -12,7 +12,7 @@ the number of time steps to iterate the system, a 2-tuple of variables
 to use (by their index) and, optionally, a time step. 
 
 ```@example PredictiveAsymmetryTest_BinnedMeanResampling
-using CausalityTools, UncertainData, Plots
+using CausalityTools, UncertainData, Plots, Distributions
 sys = ar1_unidir(uᵢ = [0.1, 0.1], c_xy = 0.41)
 vars = (1, 2) # ar1_unidir has only two variables, X and Y
 n_steps = 100
@@ -34,10 +34,10 @@ qs = [0.1, 0.9] # quantiles to display
 
 pX = plot(X, mc = :black, ms = 2, lw = 0.5, marker = stroke(0.0, :black), qs, qs, ylabel = "X")
 plot!(pX, mean.(X.indices), mean.(X.values), c = :black, lw = 1, α = 0.2, label = "")
-vline!(0:25:1000, ls = :dash, α = 0.5, lw = 0.5)
+vline!(0:25:1000, ls = :dot, α = 0.5, lw = 0.5)
 pY = plot(Y, mc = :red, ms = 2, lw = 0.5, marker = stroke(0.0, :red), qs, qs, ylabel = "Y")
 plot!(pY, mean.(Y.indices), mean.(Y.values), c = :red, lw = 1, α = 0.2, label = "")
-vline!(0:25:1000, ls = :dash, α = 0.5, lw = 0.5)
+vline!(0:25:1000, ls = :dot, α = 0.5, lw = 0.5)
 plot(pX, pY, layout = (2, 1), xlabel = "Time step", ylims = (-2.5, 2.5), legend = false)
 savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y.svg"); nothing # hide
 ```

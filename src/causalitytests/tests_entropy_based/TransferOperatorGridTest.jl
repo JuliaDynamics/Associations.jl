@@ -30,7 +30,7 @@ The parameters for a transfer entropy test using the `TransferOperatorGrid` esti
 
 - **`b`**: Base of the logarithm. The default (`b = 2`) gives the TE in bits.
 
-- **`estimator::VisitationFrequency`**: A `VisitationFrequency` estimator instance.
+- **`estimator::TransferOperatorGrid`**: A `TransferOperatorGrid` estimator instance.
 
 - **`binning_summary_statistic::Function`**: A summary statistic to summarise the 
     transfer entropy values if multiple binnings are provided.
