@@ -107,8 +107,12 @@ using Reexport
     ################################################################
     # Preprocessed data + causality test
     ################################################################
-    include("PreprocessedDataCausalityTest.jl")
-    include("BinnedDataCausalityTest.jl")
+    include("highlevel_tests/PreprocessedDataCausalityTest.jl")
+    include("highlevel_tests/BinnedDataCausalityTest.jl")
+    include("highlevel_tests/ConstrainedTest.jl")
+
+    include("highlevel_tests/causality_BinnedDataCausalityTest.jl")
+    include("highlevel_tests/causality_ConstrainedTest.jl")
 
     export causality
 end

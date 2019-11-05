@@ -1,6 +1,9 @@
 using CausalityTools
+using CausalityToolsBase
 using TimeseriesSurrogates
+using PerronFrobenius
 using PyCall, Conda
+using CrossMappings
 using HypothesisTests
 using Documenter, DocumenterMarkdown
 #Conda.add("scipy")
@@ -12,6 +15,7 @@ using Distributions
 using StaticArrays
 using Statistics
 using StatsBase
+using TransferEntropy
 using UncertainData
 
 ENV["GKSwstype"] = "100"

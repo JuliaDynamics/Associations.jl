@@ -1,5 +1,15 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.4.1
+
+### New functionality
+
+- Added `ConstrainedTest`.
+
+### Improvements
+
+- Better documentation for uncertain data causality tests.
+
 ## Release v0.4.0
 
 ### Bug fixes
