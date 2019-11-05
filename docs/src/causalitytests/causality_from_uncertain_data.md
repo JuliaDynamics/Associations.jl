@@ -14,3 +14,4 @@ If both indices and values have uncertainties, use one of the following methods:
 - [Naive constrained resampling](@ref causality_uncertain_naiveconstrained_resampling)
 - [Binned resampling](@ref causality_uncertain_binneddatacausalitytest)
 - [Strictly increasing, interpolated resampling](@ref causality_uncertain_strictlyincreasing_interpolated)
+- [Interpolate-and-bin resampling](@ref causality_uncertain_interpolateandbin_resampling)
