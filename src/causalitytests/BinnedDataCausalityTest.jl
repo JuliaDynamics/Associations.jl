@@ -99,13 +99,13 @@ according to the instructions in `test.binning`.
 ## Binning methods 
 
 - If `test.binning` results in an uncertain value for each bin, then the causality 
-    test is applied `test.n_realizations` times. Examples are [`BinnedResampling`](@ref) 
-    and [`BinnedWeightedResampling`](@ref), which both return a KDE estimate to the 
+    test is applied `test.n_realizations` times. Examples are [`UncertainData.BinnedResampling`](@ref) 
+    and [`UncertainData.BinnedWeightedResampling`](@ref), which both return a KDE estimate to the 
     distribution of values in each bin.
 
 - If `test.binning` returns a summary statistic for each bin, then the causality test is 
-    applied to the summarised time series. Examples are [`BinnedMeanResampling`](@ref) 
-    and [`BinnedMeanWeightedResampling`](@ref), which both return the mean of each bin.
+    applied to the summarised time series. Examples are [`UncertainData.BinnedMeanResampling`](@ref) 
+    and [`UncertainData.BinnedMeanWeightedResampling`](@ref), which both return the mean of each bin.
 
 ## Example
 

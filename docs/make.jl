@@ -22,8 +22,18 @@ PAGES = [
     "CHANGELOG.md",
     "Causality tests" => [
         "causalitytests/causality_from_time_series.md",
+
+
+        "causalitytests/causality_from_uncertain_data_naive.md",
+        "causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md",
+        "causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md",
+        "causalitytests/causality_from_uncertain_data_naive_constrained.md",
+        "causalitytests/causality_from_uncertain_data.md",
+
         "causalitytests/causality_from_dynamical_systems.md",
+
         "causalitytests/causality_tests.md",
+
         "causalitytests/CausalityTest.md",
         "causalitytests/ConvergentCrossMappingTest.md",
         "causalitytests/CrossMappingTest.md",
@@ -35,10 +45,7 @@ PAGES = [
         "causalitytests/TransferOperatorGridTest.md",
         "causalitytests/VisitationFrequencyTest.md",
         "causalitytests/ApproximateSimplexIntersectionTest.md",
-        "causalitytests/ExactSimplexIntersectionTest.md",
-
-        "causalitytests/causality_from_uncertain_data.md",
-        "causalitytests/BinnedDataCausalityTest.md"
+        "causalitytests/ExactSimplexIntersectionTest.md"
     ],
     "CausalityToolsBase" => [
         "Discretization" => "causalitytoolsbase/discretization.md",
@@ -81,7 +88,9 @@ PAGES = [
         "surrogates/randomshuffle_docs.md",
         "surrogates/surrogates_overview.md"
     ],
-
+    "UncertainData" => [
+        "uncertaindata/BinnedDataCausalityTest.md"
+    ],
     "Tutorials" => [
         "causality" => [
             "tutorials/list_of_tutorials.md",
