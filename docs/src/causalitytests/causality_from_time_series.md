@@ -6,27 +6,8 @@ For analysing time series, all you need to do is provide a `source` and a `targe
 one of the [available causality tests](@ref causality_tests) to quantify the (directional)
 dynamical dependence between `source` and `target`.
 
-# Uncertainty handling
-
-All high-level causality test are integrated with the uncertainty handling machinery in 
-[UncertainData.jl](https://github.com/kahaaga/UncertainData.jl). Any combination of real-valued vectors, `Vector{<:AbstractUncertainValue}`,
-or `AbstractUncertainValueDataset` are accepted as inputs to `causality`, making uncertainty
-quantification on the causality statistics a breeze.
-
-For more fine grained control over the analysis, check out the [syntax overview](@ref syntax_overview) for low-level estimators.
+For data with uncertainties, see [uncertainty handling](@ref uncertainty_handling).
 
 ```@docs
-causality(source, target, test::CausalityTest)
-```
-
-## Resampling uncertain time series with constraints
-
-```@docs
-causality(source, target, test::CausalityTest, resampling::ConstrainedResampling)
-```
-
-## Resampling schemes
-
-```@docs
-ConstrainedResampling
+causality(x::AbstractVector, y::AbstractVector, test::CausalityTest)
 ```
