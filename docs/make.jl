@@ -32,6 +32,8 @@ PAGES = [
         "causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md",
         "causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md",
         "causalitytests/causality_from_uncertain_data_naive_constrained.md",
+        "causalitytests/causality_from_uncertain_data_InterpolateBinTest.md",
+        "causalitytests/causality_from_uncertain_data_RandomSequencesTest.md",
         "causalitytests/causality_from_uncertain_data.md",
 
         "causalitytests/causality_from_dynamical_systems.md",

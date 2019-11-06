@@ -55,6 +55,8 @@ end
     
     # High-level tests
     include("causality_tests/highlevel_tests/test_ConstrainedTest.jl")
+    include("causality_tests/highlevel_tests/test_InterpolateBinTest.jl")
+    include("causality_tests/highlevel_tests/test_RandomSequencesTest.jl")
 
     include("causality_tests/integration_uncertaindata/test_uncertain_indexvalue_dataset_with_schemes.jl")
 

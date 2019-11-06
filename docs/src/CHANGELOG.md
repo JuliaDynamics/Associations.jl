@@ -1,5 +1,10 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.5.0
+
+- Added `InterpolateBinTest`.
+- Added `RandomSequencesTest`.
+
 ## Release v0.4.1
 
 ### New functionality

@@ -110,9 +110,13 @@ using Reexport
     include("highlevel_tests/PreprocessedDataCausalityTest.jl")
     include("highlevel_tests/BinnedDataCausalityTest.jl")
     include("highlevel_tests/ConstrainedTest.jl")
+    include("highlevel_tests/InterpolateBinTest.jl")
+    include("highlevel_tests/RandomSequencesTest.jl")
 
     include("highlevel_tests/causality_BinnedDataCausalityTest.jl")
     include("highlevel_tests/causality_ConstrainedTest.jl")
+    include("highlevel_tests/causality_InterpolateBinTest.jl")
+    include("highlevel_tests/causality_RandomSequencesTest.jl")
 
     export causality
 end
