@@ -1,7 +1,7 @@
-import UncertainData: InterpolateAndBin
+import UncertainData
 
 # Performs the causality test for a single ensemble member
-function apply_test(source, target, test::CausalityTest, intp_and_bin::InterpolateAndBin)
+function apply_test(source, target, test::CausalityTest, intp_and_bin::UncertainData.InterpolateAndBin)
     s_vals = resample(source, intp_and_bin)
     t_vals = resample(target, intp_and_bin)
     

@@ -5,3 +5,9 @@ causality(source::AbstractUncertainIndexValueDataset,
     target::AbstractUncertainIndexValueDataset, 
     test::InterpolateBinTest)
 ```
+
+## InterpolateBinTest
+
+```@docs
+InterpolateBinTest
+```

@@ -4,3 +4,9 @@
 ```@docs
 causality(::AbstractUncertainIndexValueDataset, y::AbstractUncertainIndexValueDataset, test::BinnedDataCausalityTest)
 ```
+
+## BinnedDataCausalityTest
+
+```@docs
+BinnedDataCausalityTest
+```
