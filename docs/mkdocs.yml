@@ -46,6 +46,7 @@ pages:
       - Constrained resampling: causalitytests/causality_from_uncertain_data_naive_constrained.md
       - Binned resampling: causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md
       - Interpolate-and-bin resampling: causalitytests/causality_from_uncertain_data_InterpolateBinTest.md
+      - Random chunk resampling: causalitytests/causality_from_uncertain_data_RandomSequencesTest.md
       - Strictly increasing and interpolated resampling: causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md
     - Causality from dynamical systems: causalitytests/causality_from_dynamical_systems.md
   - Causality tests: 

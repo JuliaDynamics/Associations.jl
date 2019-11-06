@@ -1,3 +1,5 @@
+import UncertainData: InterpolateAndBin
+
 """
     InterpolateBinTest(test::CausalityTest, interpolate_bin_resampling::InterpolateAndBin)
     InterpolateBinTest(test::CausalityTest, interpolate_bin_resampling::InterpolateAndBin, n::Int)
@@ -47,3 +49,5 @@ end
 function InterpolateBinTest(test, interpolate_bin_resampling)
     InterpolateBinTest(test, interpolate_bin_resampling, 1)
 end;
+
+export InterpolateBinTest
