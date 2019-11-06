@@ -1,5 +1,6 @@
 using UncertainData 
-import Interpolations: Linear 
+import Interpolations: Linear, Flat, OnGrid
+using Interpolations
 
 # Define the InterpolateAndBin instance
 intp_bin = InterpolateAndBin(mean, 0:10:100, Linear(), 0:0.01:100, Flat(OnGrid()))
