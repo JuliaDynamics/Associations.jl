@@ -2,7 +2,13 @@
 
 ## Release v0.5.1
 
+### Tutorials
+
 - Added tutorial for `InterpolateBinTest`.
+
+### Documentation
+
+- Fixed documentation for `DiscreteSystemSetup`.
 
 ## Release v0.5.0
 
