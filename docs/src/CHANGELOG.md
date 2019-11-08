@@ -1,6 +1,14 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.5.2
+
+### Documentation
+
+- Fixed documentation for `DiscreteSystemSetup`.
+
 ## Release v0.5.1
+
+### Tutorials
 
 - Added tutorial for `InterpolateBinTest`.
 

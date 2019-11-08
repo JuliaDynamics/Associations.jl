@@ -1,7 +1,6 @@
 
 """ 
     DiscreteSystemSetup(resampling = NoResampling, dt::Int = 1, Ttr::Int = 0, 
-        diffeq = (alg = SimpleDiffEq.SimpleATsit5(), abstol = 1.0e-6, reltol = 1.0e-6),
         n_pts = 100, source, target)
 
 Setup for causality analysis of discrete dynamical systems.
