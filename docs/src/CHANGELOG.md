@@ -6,6 +6,7 @@
 
 - Fixed documentation for `DiscreteSystemSetup`.
 - Added section in README on how to deal with SpecialFunction.jl build error.
+- Added `Pkg` to dependencies, so that build script executes properly.
 
 ## Release v0.5.1
 
