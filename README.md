@@ -37,3 +37,20 @@ For the latest development version of the package, add the package by referring 
 ```julia
 import Pkg; Pkg.add("https://github.com/kahaaga/CausalityTools.jl/")
 ```
+
+### Fixing SpecialFunction.jl error
+
+During installation, you might get an error related to `SpecialFunctions.jl`. If so, just 
+run the following:
+
+```julia
+Pkg.build("SpecialFunctions")
+```
+
+The run 
+
+```julia
+using CausalityTools
+```
+
+to verify that everything works.

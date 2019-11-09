@@ -1,8 +1,22 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.5.2
+
+### Documentation
+
+- Fixed documentation for `DiscreteSystemSetup`.
+- Added section in README on how to deal with SpecialFunction.jl build error.
+- Added `Pkg` to dependencies, so that build script executes properly.
+
 ## Release v0.5.1
 
+### Tutorials
+
 - Added tutorial for `InterpolateBinTest`.
+
+### Documentation
+
+- Fixed documentation for `DiscreteSystemSetup`.
 
 ## Release v0.5.0
 
