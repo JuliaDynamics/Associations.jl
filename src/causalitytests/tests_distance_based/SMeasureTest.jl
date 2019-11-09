@@ -22,7 +22,7 @@ S-measure test [1] for the directional dependence between data series.
 R_i^{(k)}(x) = \\dfrac{1}{k} \\sum_{i=1}^{k}(x_i, x_{r_{i,j}})^2
 ```
 
-- Compute the y-condition mean squared Euclidean distance to the ``k`` nearest 
+- Compute the y-conditioned mean squared Euclidean distance to the ``k`` nearest 
     neighbors for each ``x_i``, now using the indices ``s_{i,j}``.
 
 ```math
@@ -40,16 +40,16 @@ S^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N} \\dfrac{R_i^{(k)}(x)}{R_i^{(k)}(x|y
 ## Examples
 
 ```julia
-# Initialise test, specifying embedding dimension, emebdding lag 
+# Initialise test, specifying embedding dimension, embedding lag 
 # and number of nearest neighbors
 test = SMeasureTest(m = 4, τ = 3, K = 2:10)
 ```
 
 ## References
 
-Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000]
-“Learning driver-response relationships from synchronization patterns,” 
-Phys. Rev. E61(5), 5142–5148.
+1.  Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000] “Learning 
+    driver-response relationships from synchronization patterns,” 
+    Phys. Rev. E61(5), 5142–5148.
 """
 Base.@kwdef struct SMeasureTest <: CausalityTest
     """ The embedding dimension. Defaults to 2. """

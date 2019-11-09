@@ -22,7 +22,7 @@ S-measure test [1] for the directional dependence between data series.
 R_i^{(k)}(x) = \\dfrac{1}{k} \\sum_{i=1}^{k}(x_i, x_{r_{i,j}})^2
 ```
 
-- Compute the y-condition mean squared Euclidean distance to the ``K`` nearest 
+- Compute the y-conditioned mean squared Euclidean distance to the ``K`` nearest 
     neighbors for each ``x_i``, now using the indices ``s_{i,j}``.
 
 ```math

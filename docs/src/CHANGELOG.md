@@ -2,7 +2,14 @@
 
 ## Release v0.6.0
 
+### New features
+
 - Added `SMeasureTest` causality test.
+- Added tutorial for `SMeasureTest`.
+
+### Documentation
+
+- Improved documentation.
 
 ## Release v0.5.2
 

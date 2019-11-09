@@ -12,21 +12,21 @@ The parameters for a joint distance distribution [1] analysis.
 
 ## Optional keyword arguments 
 
-- **`distance_metric`**: The distance metric used to compute distances. Has to be a instance of a 
-valid distance metric from `Distances.jl`. Defaults to `SqEuclidean()`.
+- **`distance_metric`**: The distance metric used to compute distances. Has to be a 
+    instance of a valid distance metric from `Distances.jl`. Defaults to `SqEuclidean()`.
 
-- **`B::Int`**: The number of equidistant subintervals to divide the interval `[0, 1]` into
-when comparing the normalised distances. 
+- **`B::Int`**: The number of equidistant subintervals to divide the interval `[0, 1]` 
+    into when comparing the normalised distances. 
 
 - **`D::Int`**: The dimension of the delay reconstructions.
 
 - **`τ::Int`**: The delay of the delay reconstructions.
 
 - **`μ0`**: The hypothetical mean value of the joint distance distribution if there 
-is no coupling between `x` and `y` (default is `μ0 = 0.0`).
+    is no coupling between `x` and `y` (default is `μ0 = 0.0`).
 
 - **`hypothesis_test`**: A `OneSampleTTest` to test whether the joint distance distribution 
-is skewed towards positive values.
+    is skewed towards positive values.
 
 ## References 
 
