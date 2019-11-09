@@ -67,6 +67,12 @@ using Reexport
     ################################################################
     include("tests_distance_based/DistanceBasedCausalityTest.jl")
 
+    # S-measure test
+    # ---------------------
+    import ..s_measure
+    
+    include("tests_distance_based/SMeasureTest.jl")
+    
     # Joint distances tests
     # ---------------------
     import ..joint_distance_distribution

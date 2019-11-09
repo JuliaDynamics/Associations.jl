@@ -16,6 +16,8 @@ All tests can be used in conjunction with a binning scheme with [`BinnedDataCaus
 
 - [`JointDistanceDistributionTTest`](@ref)
 
+- [`SMeasureTest`](@ref)
+
 ## Entropy based causality tests
 
 - [`VisitationFrequencyTest`](@ref)

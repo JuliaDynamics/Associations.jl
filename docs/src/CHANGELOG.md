@@ -1,5 +1,9 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.6.0
+
+- Added `SMeasureTest` causality test.
+
 ## Release v0.5.2
 
 ### Documentation
