@@ -3,16 +3,22 @@
 
 To create delay embeddings from sequential data, use `customembed`. This function returns allows for more flexibility than `embed` in DynamicalSystems.jl[^1], but also returns a `Dataset`, so these embedding methods may be used interchangeably.
 
-## Documentation
-```@docs 
+
+## Delay reconstruction
+
+```@docs
 customembed
 ```
 
-```@docs 
+## Variable mapping
+
+```@docs
 Positions
 ```
 
-```@docs 
+## Reconstruction lag mapping
+
+```@docs
 Lags
 ```
 
