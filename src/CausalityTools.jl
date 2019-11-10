@@ -75,9 +75,10 @@ module CausalityTools
 
     # Various algorithsm that are implemented here and not in subpackages 
     include("algorithms/joint_distance_distribution.jl")
-    
+    include("algorithms/smeasure.jl")
+
     # High-level estimators 
-    include("causalitytests/causalitytests.jl")
+    include("causalitytests/causality_tests.jl")
 
     ################################################################
     # Integration with DynamicalSystems.jl (for all causality tests)

@@ -25,9 +25,10 @@ PAGES = [
     "Syntax overview" => "syntax_overview.md",
     "CHANGELOG.md",
     "Causality tests" => [
+        # From time series
         "causalitytests/causality_from_time_series.md",
 
-
+        # From uncertain data
         "causalitytests/causality_from_uncertain_data_naive.md",
         "causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md",
         "causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md",
@@ -36,22 +37,23 @@ PAGES = [
         "causalitytests/causality_from_uncertain_data_RandomSequencesTest.md",
         "causalitytests/causality_from_uncertain_data.md",
 
+        # From dynamical systems
         "causalitytests/causality_from_dynamical_systems.md",
 
+        # Tests
         "causalitytests/causality_tests.md",
 
-        "causalitytests/CausalityTest.md",
         "causalitytests/ConvergentCrossMappingTest.md",
         "causalitytests/CrossMappingTest.md",
-        "causalitytests/DistanceBasedCausalityTest.md",
-        "causalitytests/EntropyBasedCausalityTest.md",
         "causalitytests/JointDistanceDistributionTest.md",
-        "causalitytests/PredictiveAsymmetryTest.md",
-        "causalitytests/TransferEntropyTest.md",
+        "causalitytests/SMeasureTest.md",
+
         "causalitytests/TransferOperatorGridTest.md",
         "causalitytests/VisitationFrequencyTest.md",
         "causalitytests/ApproximateSimplexIntersectionTest.md",
-        "causalitytests/ExactSimplexIntersectionTest.md"
+        "causalitytests/ExactSimplexIntersectionTest.md",
+
+        "causalitytests/PredictiveAsymmetryTest.md"
     ],
     "CausalityToolsBase" => [
         "Discretization" => "causalitytoolsbase/discretization.md",
@@ -102,7 +104,8 @@ PAGES = [
             "tutorials/list_of_tutorials.md",
             "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md",
             "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md"
-        ]
+        ],
+        "tutorials/tutorial_SMeasureTest.md"
     ]
 ]
 

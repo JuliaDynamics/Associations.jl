@@ -50,22 +50,16 @@ pages:
       - Strictly increasing and interpolated resampling: causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md
     - Causality from dynamical systems: causalitytests/causality_from_dynamical_systems.md
   - Causality tests: 
-    - List of tests: causalitytests/causality_tests.md
-    - Distance based tests:
-      - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
-      - CrossMappingTest: causalitytests/CrossMappingTest.md
-      - ConvergentCrossMappingTest: causalitytests/ConvergentCrossMappingTest.md
-    - Entropy based tests:
-        - TransferOperatorGridTest: causalitytests/TransferOperatorGridTest.md
-        - VisitationFrequencyTest: causalitytests/VisitationFrequencyTest.md
-        - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
-        - ExactSimplexIntersectionTest: causalitytests/ExactSimplexIntersectionTest.md
+    - Overview: causalitytests/causality_tests.md
+    - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
+    - CrossMappingTest: causalitytests/CrossMappingTest.md
+    - ConvergentCrossMappingTest: causalitytests/ConvergentCrossMappingTest.md
+    - SMeasureTest: causalitytests/SMeasureTest.md
+    - TransferOperatorGridTest: causalitytests/TransferOperatorGridTest.md
+    - VisitationFrequencyTest: causalitytests/VisitationFrequencyTest.md
+    - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
+    - ExactSimplexIntersectionTest: causalitytests/ExactSimplexIntersectionTest.md
     - Predictive asymmetry test: causalitytests/PredictiveAsymmetryTest.md
-    - Abstract test types:
-      - CausalityTest: causalitytests/CausalityTest.md
-      - Distance based tests: causalitytests/DistanceBasedCausalityTest.md
-      - Entropy based tests: causalitytests/EntropyBasedCausalityTest.md
-      - TransferEntropyTest: causalitytests/TransferEntropyTest.md
   - Fundamentals:
     - Discretization: causalitytoolsbase/discretization.md
     - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
@@ -101,7 +95,9 @@ pages:
     - BinnedDataCausalityTest: uncertaindata/BinnedDataCausalityTest.md
   - Tutorials/examples: 
     - List of tutorials: tutorials/list_of_tutorials.md
-    - Causality test on uncertain data:
+    - Causality from scalar data:
+      - SMeasureTest: tutorials/tutorial_SMeasureTest.md
+    - Causality from uncertain data:
       - PredictiveAsymmetryTest:
         - BinnedResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md
         - BinnedMeanResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md

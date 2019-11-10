@@ -33,7 +33,9 @@ end
     include("causality_tests/test_scalarseries_ApproximateSimplexIntersectionTest.jl")
     include("causality_tests/test_scalarseries_ExactSimplexIntersectionTest.jl")
     include("causality_tests/test_scalarseries_PredictiveAsymmetryTest.jl")
+    include("causality_tests/test_scalarseries_SMeasure.jl")
 end
+
 
 @testset "DynamicalSystems.jl integration" begin
     include("causality_tests/integration_dynamicalsystems/test_integration_discrete_system.jl")
