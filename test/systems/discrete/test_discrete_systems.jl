@@ -7,6 +7,7 @@
 @test isa(ar1_bidir(), DiscreteDynamicalSystem)
 @test isa(anishchenko1(), DiscreteDynamicalSystem)
 @test isa(henon2(), DiscreteDynamicalSystem)
+@test isa(ikeda(), DiscreteDynamicalSystem)
 @test isa(nonlinear3d(), DiscreteDynamicalSystem)
 @test isa(logistic2_unidir(), DiscreteDynamicalSystem)
 @test isa(logistic2_bidir(), DiscreteDynamicalSystem)
@@ -25,6 +26,7 @@
 
 @test isa(trajectory(anishchenko1(), 10), Dataset)
 @test isa(trajectory(henon2(), 10), Dataset)
+@test isa(trajectory(ikeda(), 10), Dataset)
 @test isa(trajectory(nonlinear3d(), 10), Dataset)
 @test isa(trajectory(logistic2_unidir(), 10), Dataset)
 @test isa(trajectory(logistic2_bidir(), 10), Dataset)

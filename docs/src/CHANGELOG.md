@@ -1,5 +1,12 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.6.1
+
+### Documentation
+
+- Improved documentation on binning schems.
+- Improved documentation on delay reconstructions.
+
 ## Release v0.6.0
 
 ### New features

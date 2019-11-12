@@ -6,16 +6,25 @@
 RectangularBinning
 ```
 
-## Generating grid points from a rectangular binning
+## Generating grid points from rectangular binnings
+
 ```@docs
 generate_gridpoints
 ```
 
-## Properties of a rectangular binning
+## Properties of rectangular binnings
+
+### Minima/maxima
+
 ```@docs
 get_minmaxes
 get_minima
 get_maxima
+```
+
+### Edge lengths
+
+```@docs
 get_edgelengths
 get_minima_and_edgelengths
 ```
