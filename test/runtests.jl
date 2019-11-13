@@ -7,9 +7,9 @@ using CausalityTools
 using Distributions
 using UncertainData
 
-#@testset "Plot recipes" begin
-#	include("plot_recipes.jl")
-#end
+# @testset "Plot recipes" begin
+# 	include("plot_recipes.jl")
+# end
 
 @testset "Discrete example systems" begin 
     include("systems/discrete/test_discrete_systems.jl")
