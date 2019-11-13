@@ -24,9 +24,9 @@ the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonline
 Science 28.7 (2018): 075302.
 
 """
-Base.@kwdef struct JointDistanceDistributionTest <: JointDistancesCausalityTest
+Base.@kwdef struct JointDistanceDistributionTest{N, M} <: JointDistancesCausalityTest{N} where M
     """ The distance metric. """
-    distance_metric = SqEuclidean() 
+    distance_metric::M = SqEuclidean() 
     
     """ The number of subintervals. """
     B::Int = 10
@@ -36,6 +36,14 @@ Base.@kwdef struct JointDistanceDistributionTest <: JointDistancesCausalityTest
     
     """ The delay reconstruction lag. """
     τ::Int = 1
+
+    function JointDistanceDistributionTest(distance_metric::M, B::Int, D::Int, τ::Int) where M
+        # The number of returned elements. The test itself returns a distribution of 
+        # `B` different numbers, but we're applying the hypothesis test to that, so 
+        # only a single element is returned.
+        N = B
+        new{N, M}(distance_metric, B, D, τ)
+    end
 end
 
 

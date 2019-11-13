@@ -16,7 +16,7 @@ module CausalityTools
 
 
     display_update = true
-    version = "v0.4.0"
+    version = "v0.7.0"
     update_name = "update_$version"
 
     if display_update
@@ -28,7 +28,10 @@ module CausalityTools
     BREAKING CHANGES! 
     ----------------
     
-    There are some breaking changes to the transfer operator and invariant measure 
+    - The `ν` keyword for the `ConvergentCrossMappingTest` and `CrossMappingTest` has changed to 
+        `η`, to conform with the convention for the transfer entropy tests.
+    
+    There are also some breaking changes to the transfer operator and invariant measure 
     estimators in this release. Other new features:
 
     - Common interface for causality testing with the `causality` function and its methods.

@@ -150,7 +150,7 @@ TransferOperatorGridTest(k = 1, l = 2, binning = binning, ηs = ηs)
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212)
 """
-Base.@kwdef struct TransferOperatorGridTest <: TransferEntropyCausalityTest
+Base.@kwdef struct TransferOperatorGridTest{N} <: TransferEntropyCausalityTest{N}
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
 
@@ -167,7 +167,7 @@ Base.@kwdef struct TransferOperatorGridTest <: TransferEntropyCausalityTest
     τ::Int = 1
 
     """ The base of the logarithm for computing TE. """
-    b = 2
+    b::Number = 2
 
     """ The transfer entropy estimator. """
     estimator::TransferOperatorGrid = TransferOperatorGrid()
@@ -187,6 +187,16 @@ Base.@kwdef struct TransferOperatorGridTest <: TransferEntropyCausalityTest
 
     """ The prediction lags"""
     ηs
+
+    function TransferOperatorGridTest(k::Int, l::Int, m::Int, n::Int, τ::Int, b::Number, 
+            estimator::TransferOperatorGrid, 
+            binning_summary_statistic::Function, 
+            binning::Union{RectangularBinning, Vector{RectangularBinning}}, 
+            ηs)
+
+        N = length(ηs) # length of return vector when used with `causality`
+        return new{N}(k, l, m, n, τ, b, estimator, binning_summary_statistic, binning, ηs)
+    end
 end
 
 

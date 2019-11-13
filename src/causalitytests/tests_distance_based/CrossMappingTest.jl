@@ -6,7 +6,7 @@
         which_is_surr::Symbol = :none, exclusion_radius::Int = 0,
         tree_type = NearestNeighbors.KDTree, distance_metric = Distances.Euclidean(),
         correspondence_measure = StatsBase.cor, 
-        ν::Int = 0)
+        η::Int = 0)
 
 The parameters for a cross mapping [1] test.
 
@@ -16,16 +16,16 @@ The parameters for a cross mapping [1] test.
     constructed from the `response` series. Default is `dim = 3`.
 - **`τ`**: The embedding lag for the delay embedding constructed from `response`.
     Default is `τ = 1`.
-- **`ν`**: The prediction lag to use when predicting scalar values of `driver`
+- **`η`**: The prediction lag to use when predicting scalar values of `driver`
     fromthe delay embedding of `response`.
-    `ν > 0` are forward lags (causal; `driver`'s past influences `response`'s future),
-    and `ν < 0` are backwards lags (non-causal; `driver`'s' future influences
+    `η > 0` are forward lags (causal; `driver`'s past influences `response`'s future),
+    and `η < 0` are backwards lags (non-causal; `driver`'s' future influences
     `response`'s past). Adjust the prediction lag if you
     want to performed lagged ccm
     [(Ye et al., 2015)](https://www.nature.com/articles/srep14750).
-    Default is `ν = 0`, as in
+    Default is `η = 0`, as in
     [Sugihara et al. (2012)](http://science.sciencemag.org/content/early/2012/09/19/science.1227079).
-    *Note: The sign of the lag `ν` is organized to conform with the conventions in
+    *Note: The sign of the lag `η` is organized to conform with the conventions in
     [TransferEntropy.jl](), and is opposite to the convention used in the
     [`rEDM`](https://cran.r-project.org/web/packages/rEDM/index.html) package
     ([Ye et al., 2016](https://cran.r-project.org/web/packages/rEDM/index.html)).*
@@ -39,7 +39,7 @@ The parameters for a cross mapping [1] test.
 - **`replace`**: Sample delay embedding points with replacement? Default is `replace = true`.
 - **`exclusion_radius`**: How many temporal neighbors of the delay embedding
     point `response_embedding(t)` to exclude when searching for neighbors to
-    determine weights for predicting the scalar point `driver(t + ν)`.
+    determine weights for predicting the scalar point `driver(t + η)`.
     Default is `exclusion_radius = 0`.
 - **`which_is_surr`**: Which data series should be replaced by a surrogate
     realization of the type given by `surr_type`? Must be one of the
@@ -73,32 +73,32 @@ The parameters for a cross mapping [1] test.
 3. Ye, H., et al. "rEDM: Applications of empirical dynamic modeling from time series." R Package Version 
     0.4 7 (2016). [https://cran.r-project.org/web/packages/rEDM/index.html](https://cran.r-project.org/web/packages/rEDM/index.html)
 """
-Base.@kwdef struct CrossMappingTest <: DistanceBasedCausalityTest
+Base.@kwdef struct CrossMappingTest{N} <: DistanceBasedCausalityTest{N}
     """ 
     The dimension of the state space reconstruction (delay embedding) constructed 
     from the response series. Default is `dim = 3`. 
     """
     dim::Int = 3
     
-    """ The embedding lag for the delay embedding constructed from response. Default is τ = 1. """
+    """ The embedding lag for the delay embedding constructed from response. Default is `τ = 1`. """
     τ::Int = 1
     
     """ 
     The prediction lag to use when predicting scalar values of `driver`
     from the delay embedding of `response`.
-    `ν > 0` are forward lags (causal; `driver`'s past influences `response`'s future),
-    and `ν < 0` are backwards lags (non-causal; `driver`'s' future influences
+    `η > 0` are forward lags (causal; `driver`'s past influences `response`'s future),
+    and `η < 0` are backwards lags (non-causal; `driver`'s' future influences
     `response`'s past). Adjust the prediction lag if you
     want to performed lagged ccm
     [(Ye et al., 2015)](https://www.nature.com/articles/srep14750).
-    Default is `ν = 0`, as in
+    Default is `η = 0`, as in
     [Sugihara et al. (2012)](http://science.sciencemag.org/content/early/2012/09/19/science.1227079).
-    *Note: The sign of the lag `ν` is organized to conform with the conventions in
+    *Note: The sign of the lag `η` is organized to conform with the conventions in
     [TransferEntropy.jl](), and is opposite to the convention used in the
     [`rEDM`](https://cran.r-project.org/web/packages/rEDM/index.html) package
     ([Ye et al., 2016](https://cran.r-project.org/web/packages/rEDM/index.html)).*
     """ 
-    ν::Int = 0
+    η::Int = 0
 
     """ 
     Among how many delay embedding points should we sample time indices
@@ -132,7 +132,7 @@ Base.@kwdef struct CrossMappingTest <: DistanceBasedCausalityTest
     """ 
     How many temporal neighbors of the delay embedding
     point `response_embedding(t)` to exclude when searching for neighbors to
-    determine weights for predicting the scalar point `driver(t + ν)`.
+    determine weights for predicting the scalar point `driver(t + η)`.
     Default is `exclusion_radius = 0`.
     """
     exclusion_radius::Int = 0
@@ -163,6 +163,18 @@ Base.@kwdef struct CrossMappingTest <: DistanceBasedCausalityTest
     be perfect prediction.
     """
     correspondence_measure = StatsBase.cor
+
+
+    function CrossMappingTest(dim::Int, τ::Int, η::Int, libsize::Int, replace::Bool, 
+        n_reps::Int, surr_func::Function, which_is_surr::Symbol, 
+        exclusion_radius::Int, tree_type, distance_metric, correspondence_measure)
+        
+        # The number of returned elements. We're performing the test for `n_reps` 
+        # different randomly selected point libraries, so `N = n_reps`.
+        N = n_reps
+        new{N}(dim, τ, η, libsize, replace, n_reps, surr_func, which_is_surr, 
+            exclusion_radius, tree_type, distance_metric, correspondence_measure)
+    end
 end
 
 
@@ -170,7 +182,7 @@ function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::Cros
      crossmap(source, target;
         dim = p.dim,
         τ = p.τ,
-        ν = p.ν,
+        ν = p.η,
         libsize = p.libsize,
         n_reps = p.n_reps,
         replace = p.replace,

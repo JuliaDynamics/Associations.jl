@@ -1,9 +1,9 @@
 
 """
-    TransferEntropyCausalityTest
+    TransferEntropyCausalityTest{N}
 
 The supertype of all abstract and composite types representing a transfer 
-entropy causality test.
+entropy causality test applied to `N` different prediction lags.
 
 Concrete subtypes are 
 
@@ -12,6 +12,6 @@ Concrete subtypes are
 - [`ApproximateSimplexIntersectionTest`](@ref)
 - [`ExactSimplexIntersectionTest`](@ref)
 """
-abstract type TransferEntropyCausalityTest <: EntropyBasedCausalityTest end
+abstract type TransferEntropyCausalityTest{N} <: EntropyBasedCausalityTest end
 
 export TransferEntropyCausalityTest

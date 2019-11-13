@@ -1,5 +1,5 @@
 import StatsBase
-import TransferEntropy: TEVars, transferentropy, te_embed
+import TransferEntropy: TEVars, transferentropy, te_embed, TransferEntropyEstimator
 import PerronFrobenius: AbstractTriangulationInvariantMeasure, invariantmeasure
 import CausalityToolsBase: TriangulationBinning, ApproximateIntersection
 
@@ -84,7 +84,7 @@ te_ytox = causality(y, x, test)
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212)
 """
-Base.@kwdef struct ApproximateSimplexIntersectionTest <: TransferEntropyCausalityTest
+Base.@kwdef struct ApproximateSimplexIntersectionTest{N} <: TransferEntropyCausalityTest{N}
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
 
@@ -101,13 +101,13 @@ Base.@kwdef struct ApproximateSimplexIntersectionTest <: TransferEntropyCausalit
     τ::Int = 1
 
     """ The base of the logarithm for computing TE. """
-    b = 2
+    b::Number = 2
 
     """
     The transfer entropy estimator used to estimate transfer entropy *after* the invariant measure
     over the triangulated delay reconstruction has been estimated.
     """
-    estimator::TransferOperatorGrid = TransferOperatorGrid()
+    estimator::TransferEntropyEstimator = TransferOperatorGrid()
 
     """ The number of points to generate from the invariant distribution over the triangulation. """
     n_pts::Int = 10000
@@ -127,6 +127,17 @@ Base.@kwdef struct ApproximateSimplexIntersectionTest <: TransferEntropyCausalit
 
     """ The prediction lags"""
     ηs
+
+    function ApproximateSimplexIntersectionTest(k::Int, l::Int, m::Int, n::Int, τ::Int, b::Number, 
+            estimator::E, n_pts::Int, 
+            binning_summary_statistic::Function, 
+            binning::Union{RectangularBinning, Vector{RectangularBinning}}, 
+            ηs) where {E <: TransferEntropyEstimator}
+
+        N = length(ηs) # length of return vector when used with `causality`
+        return new{N}(k, l, m, n, τ, b, estimator, n_pts, 
+            binning_summary_statistic, binning, ηs)
+    end
 end
 
 

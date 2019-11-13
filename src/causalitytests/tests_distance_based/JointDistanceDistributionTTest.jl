@@ -34,9 +34,9 @@ The parameters for a joint distance distribution [1] analysis.
 the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear 
 Science 28.7 (2018): 075302.
 """
-Base.@kwdef struct JointDistanceDistributionTTest <: JointDistancesCausalityTest
+Base.@kwdef struct JointDistanceDistributionTTest{N, M} <: JointDistancesCausalityTest{N} where M
     """ The distance metric. """
-    distance_metric = SqEuclidean() 
+    distance_metric::M = SqEuclidean() 
 
     """ The number of subintervals. """
     B::Int = 10
@@ -52,6 +52,16 @@ Base.@kwdef struct JointDistanceDistributionTTest <: JointDistancesCausalityTest
 
     """ The default `μ0` value for the default `OneSampleTTest` hypothesis test. """
     μ0 = 0.0
+
+    function JointDistanceDistributionTTest(distance_metric::M, B::Int, D::Int, τ::Int, 
+        hypothesis_test::Type{OneSampleTTest}, μ0) where M
+
+        # The number of returned elements. The test itself returns a distribution of 
+        # `B` different numbers, but we're applying the hypothesis test to that, so 
+        # only a single element is returned.
+        N = 1 
+        new{N, M}(distance_metric, B, D, τ, hypothesis_test, μ0)
+    end
 end
 
 function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::JointDistanceDistributionTTest) where {T <: Real}
