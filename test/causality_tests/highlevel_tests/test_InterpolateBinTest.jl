@@ -24,6 +24,8 @@ k, l, m = 1, 1, 1 # embedding parameters
 n_subdivisions = floor(Int, N^(1/(k + l + m + 1)))
 state_space_binning = RectangularBinning(n_subdivisions)
 
+ηmax = 3
+ηs = -ηmax:ηmax
 te_test = VisitationFrequencyTest(k = k, l = l, m = m,
             binning = state_space_binning, 
             ηs = ηs, b = 2) # use base-2 logarithms
@@ -45,5 +47,5 @@ ib_test = InterpolateBinTest(pa_test, intp_bin, 2)
 
 res_xy = causality(X, Y, ib_test)
 
-@test res_xy isa Vector{Vector{T}} where T
+@test res_xy isa Vector{SVector{ηmax, T}} where T
 @test length(res_xy) == ib_test.n
