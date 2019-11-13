@@ -11,7 +11,7 @@ using UncertainData
 #	include("plot_recipes.jl")
 #end
 
-#= @testset "Discrete example systems" begin 
+@testset "Discrete example systems" begin 
     include("systems/discrete/test_discrete_systems.jl")
 end
 
@@ -21,7 +21,7 @@ end
 
 @testset "High level wrappers" begin
     include("test_wrappers_te.jl")
-end =#
+end
 
 @testset "Causality tests on scalar time series" begin
     include("causality_tests/test_scalarseries_CrossMappingTest.jl")
@@ -36,7 +36,7 @@ end =#
     include("causality_tests/test_scalarseries_SMeasure.jl")
 end
 
-#= 
+
 @testset "DynamicalSystems.jl integration" begin
     include("causality_tests/integration_dynamicalsystems/test_integration_discrete_system.jl")
     include("causality_tests/integration_dynamicalsystems/test_integration_continuous_system.jl")
@@ -62,4 +62,4 @@ end
 
     include("causality_tests/integration_uncertaindata/test_uncertain_indexvalue_dataset_with_schemes.jl")
 
-end =#
+end

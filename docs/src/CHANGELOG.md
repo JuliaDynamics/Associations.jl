@@ -6,6 +6,8 @@
 
 - All subtypes of `CausalityTest` now have a type parameter `N` indicating
     the number of elements that are returned when applying the tests.
+- The `ν` parameter for the `ConvergentCrossMappingTest` and `CrossMappingTest` 
+    has been changed to `η`.
 
 ## Release v0.6.1
 
