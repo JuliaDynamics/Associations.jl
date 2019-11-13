@@ -83,7 +83,7 @@ The parameters for a convergent cross mapping [1] test.
 3. Ye, H., et al. "rEDM: Applications of empirical dynamic modeling from time series." R Package Version 
     0.4 7 (2016). [https://cran.r-project.org/web/packages/rEDM/index.html](https://cran.r-project.org/web/packages/rEDM/index.html)
 """
-Base.@kwdef struct ConvergentCrossMappingTest{N, NL} <: DistanceBasedCausalityTest{N}
+Base.@kwdef mutable struct ConvergentCrossMappingTest{N, NL} <: DistanceBasedCausalityTest{N}
     """ 
     The dimension of the state space reconstruction (delay embedding) constructed 
     from the response series. Default is `dim = 3`. 

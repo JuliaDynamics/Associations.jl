@@ -1,5 +1,16 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.8.0
+
+### Breaking changes
+
+- All subtypes of `CausalityTest` are now mutable. This allows adjusting test 
+    parameters during sensitivity analyses without creating a new test every time.
+
+## Release v0.7.1
+
+- Small documentation fix for causality on time series.
+
 ## Release v0.7.0
 
 ### Breaking changes

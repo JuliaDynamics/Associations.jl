@@ -19,9 +19,6 @@ Setup for causality analysis of discrete dynamical systems.
 
 - **`Ttr::Int`**: The number of transient iterations before starting sampling.
 
-- **`diffeq`**: Arguments propagated to init DifferentialEquations.jl. Defaults to
-    `diffeq = (alg = SimpleDiffEq.SimpleATsit5(), abstol = 1.0e-6, reltol = 1.0e-6)`.
-
 - **`n_pts::Int`**: The number of points in the orbit. 
 """
 Base.@kwdef struct DiscreteSystemSetup{R} <: DynamicalSystemSetup where R

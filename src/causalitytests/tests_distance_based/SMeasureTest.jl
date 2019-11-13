@@ -51,7 +51,7 @@ test = SMeasureTest(m = 4, τ = 3, K = 2:10)
     driver-response relationships from synchronization patterns,” 
     Phys. Rev. E61(5), 5142–5148.
 """
-Base.@kwdef struct SMeasureTest{N, M, TM} <: DistanceBasedCausalityTest{N} where {M, TM}
+Base.@kwdef mutable struct SMeasureTest{N, M, TM} <: DistanceBasedCausalityTest{N} where {M, TM}
     """ The embedding dimension. Defaults to 2. """
     m::Int = 2
     

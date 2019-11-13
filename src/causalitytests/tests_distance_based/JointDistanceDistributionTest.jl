@@ -24,7 +24,7 @@ the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonline
 Science 28.7 (2018): 075302.
 
 """
-Base.@kwdef struct JointDistanceDistributionTest{N, M} <: JointDistancesCausalityTest{N} where M
+Base.@kwdef mutable struct JointDistanceDistributionTest{N, M} <: JointDistancesCausalityTest{N} where M
     """ The distance metric. """
     distance_metric::M = SqEuclidean() 
     

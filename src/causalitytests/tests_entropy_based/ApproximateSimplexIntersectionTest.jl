@@ -84,7 +84,7 @@ te_ytox = causality(y, x, test)
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212)
 """
-Base.@kwdef struct ApproximateSimplexIntersectionTest{N} <: TransferEntropyCausalityTest{N}
+Base.@kwdef mutable struct ApproximateSimplexIntersectionTest{N} <: TransferEntropyCausalityTest{N}
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
 
@@ -126,7 +126,7 @@ Base.@kwdef struct ApproximateSimplexIntersectionTest{N} <: TransferEntropyCausa
 
 
     """ The prediction lags"""
-    ηs
+    ηs::Union{AbstractVector{Int}}
 
     function ApproximateSimplexIntersectionTest(k::Int, l::Int, m::Int, n::Int, τ::Int, b::Number, 
             estimator::E, n_pts::Int, 

@@ -156,7 +156,7 @@ VisitationFrequencyTest(k = 1, l = 2, binning = binning, ηs = ηs)
 
 4.  Deyle, Ethan R., and George Sugihara. "Generalized theorems for nonlinear state space reconstruction." PLoS One 6.3 (2011): e18295.
 """
-Base.@kwdef struct VisitationFrequencyTest{N} <: TransferEntropyCausalityTest{N}
+Base.@kwdef mutable struct VisitationFrequencyTest{N} <: TransferEntropyCausalityTest{N}
     
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
@@ -189,7 +189,7 @@ Base.@kwdef struct VisitationFrequencyTest{N} <: TransferEntropyCausalityTest{N}
     binning::Union{RectangularBinning, Vector{RectangularBinning}}
 
     """ The prediction lags"""
-    ηs
+    ηs::Union{Int, AbstractVector{Int}}
 
     function VisitationFrequencyTest(k::Int, l::Int, m::Int, n::Int, τ::Int, b, 
             estimator::VisitationFrequency, 
