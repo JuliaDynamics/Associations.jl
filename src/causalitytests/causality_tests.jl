@@ -22,7 +22,7 @@ using Reexport
     resample(v::Vector{Real}) = v
 
     """
-        causality(source::AbstractVector, AbstractVector, test::CausalityTest)
+        causality(source::AbstractVector, target::AbstractVector, test::CausalityTest)
 
     Test for a causal influence from `source` to `target` using the provided causality `test`.
         
