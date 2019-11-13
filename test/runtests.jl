@@ -24,16 +24,16 @@ end
 end =#
 
 @testset "Causality tests on scalar time series" begin
-    # include("causality_tests/test_scalarseries_CrossMappingTest.jl")
-    # include("causality_tests/test_scalarseries_ConvergentCrossMappingTest.jl")
-    # include("causality_tests/test_scalarseries_JointDistanceDistributionTest.jl")
-    # include("causality_tests/test_scalarseries_JointDistanceDistributionTTest.jl")
+    include("causality_tests/test_scalarseries_CrossMappingTest.jl")
+    include("causality_tests/test_scalarseries_ConvergentCrossMappingTest.jl")
+    include("causality_tests/test_scalarseries_JointDistanceDistributionTest.jl")
+    include("causality_tests/test_scalarseries_JointDistanceDistributionTTest.jl")
     include("causality_tests/test_scalarseries_TransferOperatorGridTest.jl")
     include("causality_tests/test_scalarseries_VisitationFrequencyTest.jl")
-    # include("causality_tests/test_scalarseries_ApproximateSimplexIntersectionTest.jl")
-    # include("causality_tests/test_scalarseries_ExactSimplexIntersectionTest.jl")
+    include("causality_tests/test_scalarseries_ApproximateSimplexIntersectionTest.jl")
+    include("causality_tests/test_scalarseries_ExactSimplexIntersectionTest.jl")
     include("causality_tests/test_scalarseries_PredictiveAsymmetryTest.jl")
-    # include("causality_tests/test_scalarseries_SMeasure.jl")
+    include("causality_tests/test_scalarseries_SMeasure.jl")
 end
 
 #= 

@@ -1,5 +1,12 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.7.0
+
+### New features
+
+- All subtypes of `CausalityTest` now have a type parameter `N` indicating
+    the number of elements that are returned when applying the tests.
+
 ## Release v0.6.1
 
 ### Documentation

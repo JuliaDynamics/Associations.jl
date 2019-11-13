@@ -6,6 +6,6 @@ import HypothesisTests: OneSampleTTest
 
 The supertype of all joint distance distribution tests.
 """
-abstract type JointDistancesCausalityTest <: DistanceBasedCausalityTest end
+abstract type JointDistancesCausalityTest{N} <: DistanceBasedCausalityTest{N} end
 
 export JointDistancesCausalityTest

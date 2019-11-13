@@ -83,7 +83,7 @@ The parameters for a convergent cross mapping [1] test.
 3. Ye, H., et al. "rEDM: Applications of empirical dynamic modeling from time series." R Package Version 
     0.4 7 (2016). [https://cran.r-project.org/web/packages/rEDM/index.html](https://cran.r-project.org/web/packages/rEDM/index.html)
 """
-Base.@kwdef struct ConvergentCrossMappingTest <: DistanceBasedCausalityTest
+Base.@kwdef struct ConvergentCrossMappingTest{N, NL} <: DistanceBasedCausalityTest{N}
     """ 
     The dimension of the state space reconstruction (delay embedding) constructed 
     from the response series. Default is `dim = 3`. 
@@ -175,7 +175,7 @@ Base.@kwdef struct ConvergentCrossMappingTest <: DistanceBasedCausalityTest
     correspondence_measure = StatsBase.cor
 
     """ Should cross map skills be summarised for each time series length? Default is `summarise = false`. """
-    summarise = false 
+    summarise::Bool = false 
 
     """ Either `:median` or `:mean`. Default is `:median`. """
     average_measure = :median
@@ -191,6 +191,25 @@ Base.@kwdef struct ConvergentCrossMappingTest <: DistanceBasedCausalityTest
 
     """ The time series lengths over which to cross map and check convergence """
     timeseries_lengths
+
+    function ConvergentCrossMappingTest(dim::Int, τ::Int, ν::Int, libsize::Int, replace::Bool, 
+        n_reps::Int, surr_func::Function, which_is_surr::Symbol, 
+        exclusion_radius::Int, tree_type, distance_metric, correspondence_measure,
+        summarise::Bool, average_measure, uncertainty_measure, quantiles, 
+        timeseries_lengths)
+        
+        # The number of returned elements. We're performing the test for `n_reps` 
+        # different randomly selected point libraries, so `N = n_reps`.
+        N = n_reps
+
+        # The number of different time series lengths 
+        NL = length(timeseries_lengths)
+
+        new{N, NL}(dim, τ, ν, libsize, replace, n_reps, surr_func, which_is_surr, 
+            exclusion_radius, tree_type, distance_metric, correspondence_measure,
+            summarise, average_measure, uncertainty_measure, quantiles, 
+            timeseries_lengths)
+    end
 end
 
 

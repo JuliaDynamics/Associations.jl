@@ -51,7 +51,7 @@ test = SMeasureTest(m = 4, τ = 3, K = 2:10)
     driver-response relationships from synchronization patterns,” 
     Phys. Rev. E61(5), 5142–5148.
 """
-Base.@kwdef struct SMeasureTest <: CausalityTest
+Base.@kwdef struct SMeasureTest{N, M, TM} <: DistanceBasedCausalityTest{N} where {M, TM}
     """ The embedding dimension. Defaults to 2. """
     m::Int = 2
     
@@ -62,13 +62,18 @@ Base.@kwdef struct SMeasureTest <: CausalityTest
     K = 2:10
     
     """ The distance metric used when computing distances. Defaults to `SqEuclidean()`"""
-    metric = SqEuclidean()
+    metric::M = SqEuclidean()
     
     """ 
     The distance metric used when computing `KDTree` for nearest neighbor searches. 
     Defaults to `Euclidean()`.
     """
-    tree_metric = Euclidean()
+    tree_metric::TM = Euclidean()
+
+    function SMeasureTest(m, τ, K, metric::M, tree_metric::TM) where {M, TM}
+        N = length(K)
+        new{N, M, TM}(m, τ, K, metric, tree_metric)
+    end
 end
 
 function SMeasureTest(m, τ, K; metric::Metric = SqEuclidean(), tree_metric::Metric = Euclidean())

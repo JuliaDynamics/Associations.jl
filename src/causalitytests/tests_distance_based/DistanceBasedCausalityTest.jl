@@ -1,9 +1,12 @@
 
 """
-    DistanceBasedCausalityTest
+    DistanceBasedCausalityTest{N}
 
 The supertype of all abstract and composite types representing a causality 
-test based on some sort of distance computation.
+test based on some sort of distance computation. 
+
+The type parameter `N` indicates the number of returned elements when 
+applying the test.
 
 Concrete subtypes are 
 
@@ -14,6 +17,6 @@ Concrete subtypes are
 - [`SMeasureTest`](@ref)
 
 """
-abstract type DistanceBasedCausalityTest <: CausalityTest end
+abstract type DistanceBasedCausalityTest{N} <: CausalityTest end
 
 export DistanceBasedCausalityTest

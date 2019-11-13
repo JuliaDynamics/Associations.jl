@@ -65,13 +65,14 @@ PredictiveAsymmetryTest(predictive_test = test_transferoperator)
 1. Diego, David, Kristian Agasøster Haaga, Jo Brendryen, and Bjarte Hannisdal. 
     A simple test for causal asymmetry in complex systems. In prep.
 """
-Base.@kwdef struct PredictiveAsymmetryTest{TEST} <: CausalityTest where TEST
+Base.@kwdef struct PredictiveAsymmetryTest{TEST, N} <: CausalityTest where TEST
     predictive_test::TEST
 
     function PredictiveAsymmetryTest(test::T) where {T <: TransferEntropyCausalityTest}
         # Check that prediction lags are okay
         verified_prediction_lags(test.ηs)
-        return new{T}(test)
+        N = length(test.ηs[test.ηs .> 0])
+        return new{T, N}(test)
     end
 end
 
@@ -105,7 +106,7 @@ return_predictive_asymmetry(ηs, As) = As
 return_predictive_asymmetry(η::Int, As) = As[1]
 
 function predictive_asymmetry(source, target, 
-        p::PredictiveAsymmetryTest{T}) where {T <: TransferEntropyCausalityTest}
+        p::PredictiveAsymmetryTest{T, N}) where {T <: TransferEntropyCausalityTest, N}
 
     # Update the test parameters so that we have symmetric prediction lags
     test = update_ηs(p.predictive_test)
@@ -113,10 +114,10 @@ function predictive_asymmetry(source, target,
     # Predictions from source to target. 
     preds = causality(source, target, test)
 
-    # Compute predictive asymmetries. The number of predictive asymmetries is half the 
-    # number of prediction lags)
+    # The number of predictive asymmetries is half the number of prediction lags,
+    # which is encoded in the type parameter `N`
     ηs = test.ηs
-    As = zeros(Float64, round(Int, length(ηs)/2))
+    As = zeros(Float64, N)
 
     for (i, η) in enumerate(ηs[ηs .> 0])
         lag_idxs = findfirst(ηs .== -η):findfirst(ηs .== η)

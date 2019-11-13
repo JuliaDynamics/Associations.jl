@@ -73,7 +73,7 @@ The parameters for a cross mapping [1] test.
 3. Ye, H., et al. "rEDM: Applications of empirical dynamic modeling from time series." R Package Version 
     0.4 7 (2016). [https://cran.r-project.org/web/packages/rEDM/index.html](https://cran.r-project.org/web/packages/rEDM/index.html)
 """
-Base.@kwdef struct CrossMappingTest <: DistanceBasedCausalityTest
+Base.@kwdef struct CrossMappingTest{N} <: DistanceBasedCausalityTest{N}
     """ 
     The dimension of the state space reconstruction (delay embedding) constructed 
     from the response series. Default is `dim = 3`. 
@@ -163,6 +163,18 @@ Base.@kwdef struct CrossMappingTest <: DistanceBasedCausalityTest
     be perfect prediction.
     """
     correspondence_measure = StatsBase.cor
+
+
+    function CrossMappingTest(dim::Int, τ::Int, ν::Int, libsize::Int, replace::Bool, 
+        n_reps::Int, surr_func::Function, which_is_surr::Symbol, 
+        exclusion_radius::Int, tree_type, distance_metric, correspondence_measure)
+        
+        # The number of returned elements. We're performing the test for `n_reps` 
+        # different randomly selected point libraries, so `N = n_reps`.
+        N = n_reps
+        new{N}(dim, τ, ν, libsize, replace, n_reps, surr_func, which_is_surr, 
+            exclusion_radius, tree_type, distance_metric, correspondence_measure)
+    end
 end
 
 

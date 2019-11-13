@@ -156,7 +156,8 @@ VisitationFrequencyTest(k = 1, l = 2, binning = binning, ηs = ηs)
 
 4.  Deyle, Ethan R., and George Sugihara. "Generalized theorems for nonlinear state space reconstruction." PLoS One 6.3 (2011): e18295.
 """
-Base.@kwdef struct VisitationFrequencyTest <: TransferEntropyCausalityTest
+Base.@kwdef struct VisitationFrequencyTest{N} <: TransferEntropyCausalityTest{N}
+    
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
 
@@ -175,20 +176,30 @@ Base.@kwdef struct VisitationFrequencyTest <: TransferEntropyCausalityTest
     """ The base of the logarithm for computing TE. """
     b = 2
 
+    """ The transfer entropy estimator. """
+    estimator::VisitationFrequency = VisitationFrequency()
+
     """ 
     If there are several binnings provided, what is the statistic used to summarise the 
     transfer entropy values to a single value?
     """
     binning_summary_statistic::Function = StatsBase.mean
 
-    """ The transfer entropy estimator. """
-    estimator::VisitationFrequency = VisitationFrequency()
-
     """ The binning scheme. """
     binning::Union{RectangularBinning, Vector{RectangularBinning}}
 
     """ The prediction lags"""
     ηs
+
+    function VisitationFrequencyTest(k::Int, l::Int, m::Int, n::Int, τ::Int, b, 
+            estimator::VisitationFrequency, 
+            binning_summary_statistic::Function, 
+            binning::Union{RectangularBinning, Vector{RectangularBinning}}, 
+            ηs)
+            
+        N = length(ηs) # length of return vector when used with `causality`
+        return new{N}(k, l, m, n, τ, b, estimator, binning_summary_statistic, binning, ηs)
+    end
 end
 
 
