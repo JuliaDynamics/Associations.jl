@@ -6,6 +6,12 @@
 
 - All subtypes of `CausalityTest` are now mutable. This allows adjusting test 
     parameters during sensitivity analyses without creating a new test every time.
+- The return type for `PredictiveAsymmetryTest` is an `N`-element `SVector` where
+    `N` is the number of prediction lags.
+
+### Documentation
+
+- Fixed small error in documentation for `DiscreteSystemSetup`.
 
 ## Release v0.7.1
 

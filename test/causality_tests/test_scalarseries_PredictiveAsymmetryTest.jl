@@ -1,4 +1,5 @@
 import CausalityToolsBase: RectangularBinning
+using StaticArrays 
 
 t1 = TransferOperatorGridTest(binning = RectangularBinning(5), ηs = [-4, -3, 3, 5])
 t2 = TransferOperatorGridTest(binning = RectangularBinning(5), ηs = 1:5)
@@ -20,12 +21,13 @@ test7 = VisitationFrequencyTest(binning = multiple_binnings, ηs = -10:10)
 test8 = VisitationFrequencyTest(binning = multiple_binnings, ηs = 5)
 
 
-@test causality(x, y, PredictiveAsymmetryTest(test1)) isa Vector{<:Real}
+
+@test causality(x, y, PredictiveAsymmetryTest(test1)) isa SVector{10, T} where T
 @test causality(x, y, PredictiveAsymmetryTest(test2)) |> typeof <: Real
-@test causality(x, y, PredictiveAsymmetryTest(test3)) isa Vector{<:Real}
+@test causality(x, y, PredictiveAsymmetryTest(test3)) isa SVector{10, T} where T
 @test causality(x, y, PredictiveAsymmetryTest(test4)) |> typeof<: Real
 
-@test causality(x, y, PredictiveAsymmetryTest(test5)) isa Vector{<:Real}
+@test causality(x, y, PredictiveAsymmetryTest(test5)) isa SVector{10, T} where T
 @test causality(x, y, PredictiveAsymmetryTest(test6)) |> typeof<: Real
-@test causality(x, y, PredictiveAsymmetryTest(test7)) isa Vector{<:Real}
+@test causality(x, y, PredictiveAsymmetryTest(test7)) isa SVector{10, T} where T
 @test causality(x, y, PredictiveAsymmetryTest(test8)) |> typeof<: Real
