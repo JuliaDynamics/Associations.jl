@@ -3,14 +3,16 @@
 If you need to truncate the furnishing distributions of your uncertain datasets before 
 applying a causality test, use the following method.
 
-```@docs
-causality(source::AbstractUncertainIndexValueDataset, 
-    target::AbstractUncertainIndexValueDataset, 
-    test::ConstrainedTest)
-```
-
 ## ConstrainedTest
 
 ```@docs
 ConstrainedTest
+```
+
+## Call signature
+
+```@docs
+causality(source::AbstractUncertainIndexValueDataset, 
+    target::AbstractUncertainIndexValueDataset, 
+    test::ConstrainedTest)
 ```
