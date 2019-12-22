@@ -7,7 +7,7 @@
 BinnedDataCausalityTest
 ```
 
-## Call signature 
+## Call signature
 
 ```@docs
 causality(::AbstractUncertainIndexValueDataset, y::AbstractUncertainIndexValueDataset, test::BinnedDataCausalityTest)
