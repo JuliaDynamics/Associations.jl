@@ -4,6 +4,10 @@
 
 ### Breaking changes
 
+- Transfer entropy estimators now contain a field `b` which gives the base of the logarithm
+    used during transfer entropy computations, and hence dictates the unit of the transfer 
+    entropy. By default, `b = 2`, which gives the transfer entropy in bits. The keyword `b` 
+    is thus obsolete in all transfer entropy methods that used it before.
 - All subtypes of `CausalityTest` are now mutable. This allows adjusting test 
     parameters during sensitivity analyses without creating a new test every time.
 - The return type for `PredictiveAsymmetryTest` is an `N`-element `SVector` where
