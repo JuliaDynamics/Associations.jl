@@ -85,7 +85,7 @@ end
 function update_ηs(test::VisitationFrequencyTest)
 
     VisitationFrequencyTest(
-        k = test.k, l = test.l, m = test.m, n = test.n, b = test.b, 
+        k = test.k, l = test.l, m = test.m, n = test.n, 
         τ = test.τ,
         binning_summary_statistic = test.binning_summary_statistic,
         binning = test.binning,
@@ -95,7 +95,7 @@ end
 function update_ηs(test::TransferOperatorGridTest)
     
     TransferOperatorGridTest(
-        k = test.k, l = test.l, m = test.m, n = test.n, b = test.b, 
+        k = test.k, l = test.l, m = test.m, n = test.n, 
         τ = test.τ,
         binning_summary_statistic = test.binning_summary_statistic,
         binning = test.binning,

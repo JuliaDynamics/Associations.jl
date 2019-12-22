@@ -28,7 +28,7 @@ state_space_binning = RectangularBinning(n_subdivisions)
 ηs = -ηmax:ηmax
 te_test = VisitationFrequencyTest(k = k, l = l, m = m,
             binning = state_space_binning, 
-            ηs = ηs, b = 2) # use base-2 logarithms
+            ηs = ηs, estimator = VisitationFrequency(b = 2)) # use base-2 logarithms
 pa_test = PredictiveAsymmetryTest(predictive_test = te_test)
 
 # Define interpolation grid over the range of available index values

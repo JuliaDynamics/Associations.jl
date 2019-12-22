@@ -5,9 +5,8 @@
         cond::AbstractArray{<:Real, 1},
         k::Int, l::Int, m::Int, n::Int; 
         η = 1, τ = 1, 
-        estimator = VisitationFrequency(), 
-        n_subdivs = 1,
-        b = 2)
+        estimator = VisitationFrequency(b = 2), 
+        n_subdivs = 2)
 
 # Conditional TE with default discretization scheme(s)
 
@@ -18,6 +17,7 @@ delay embedding of the input data, using an embedding delay of `τ` across
 all embedding components. `η` is the prediction lag. 
 
 ## Arguments
+
 - **`source`**: The source data series.
 - **`target`**: The target data series.
 - **`cond`**: The conditional data series.
@@ -37,7 +37,6 @@ all embedding components. `η` is the prediction lag.
     (this way, TE is computed over two separate partitions). Unless `n_subdivs = 0`,
     make sure that `n_subdivs` is the same across analyses if they 
     are to be compared. T TE 
-- **`b`**: Base of the logarithm. The default (`b = 2`) gives the TE in bits.
 
 ## More about the embedding
 
@@ -98,9 +97,8 @@ function te_cond(source::AbstractArray{<:Real, 1},
         cond::AbstractArray{<:Real, 1}, 
         k::Int, l::Int, m::Int, n::Int; 
         η = 1, τ = 1, 
-        estimator::TransferEntropyEstimator = VisitationFrequency(), 
-        n_subdivs = 2,
-        b = 2)
+        estimator::TransferEntropyEstimator = VisitationFrequency(b = 2), 
+        n_subdivs = 2)
 
     k + l + m + n >= 4 || throw(ArgumentError("`dim = k + l + m + n` must be 4 or higher for conditional TE"))
 
@@ -120,7 +118,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
     
     # Compute TE over different partitions
     # ====================================
-    tes = map(binscheme -> transferentropy(pts, vars, binscheme, estimator, b = b), binning_scheme)
+    tes = map(binscheme -> transferentropy(pts, vars, binscheme, estimator), binning_scheme)
 
     return tes
 end
@@ -132,8 +130,7 @@ end
         k::Int, l::Int, m::Int, n::Int,
         binning_scheme::Vector{RectangularBinning}; 
         η = 1, τ = 1, 
-        estimator = VisitationFrequency(), 
-        b = 2)
+        estimator = VisitationFrequency(b = 2))
 
 # Conditional TE with default discretization scheme(s
 
@@ -162,7 +159,6 @@ all embedding components. `η` is the prediction lag.
 - **`η`**: The prediction lag. Default is `η = 1`.
 - **`estimator`**: The transfer entropy estimator to use. The default 
     is `VisitationFrequency()`.
-- **`b`**: Base of the logarithm. The default (`b = 2`) gives the TE in bits.
 
 ## More about the embedding
 
@@ -217,8 +213,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
         k::Int, l::Int, m::Int, n::Int,
         binning_scheme::Vector{RectangularBinning}; 
         η = 1, τ = 1, 
-        estimator = VisitationFrequency(), 
-        b = 2)
+        estimator = VisitationFrequency(b = 2))
 
     k + l + m + n >= 4 || throw(ArgumentError("`dim = k + l + m + n` must be 4 or higher for conditional TE"))
 
@@ -226,7 +221,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
 
     # Compute TE over the partitions constructed from the provided binning schemes
     # ====================================
-    tes = [transferentropy(pts, vars, bs, estimator, b = b) for bs in binning_scheme]
+    tes = [transferentropy(pts, vars, bs, estimator) for bs in binning_scheme]
 
     return tes
 end
@@ -238,8 +233,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
         k::Int, l::Int, m::Int, n::Int,
         binning_scheme::RectangularBinning; 
         η = 1, τ = 1, 
-        estimator = VisitationFrequency(), 
-        b = 2)
+        estimator = VisitationFrequency(b = 2))
 
     k + l + m + n >= 4 || throw(ArgumentError("`dim = k + l + m + n` must be 4 or higher for conditional TE"))
 
@@ -247,7 +241,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
 
     # Compute TE over the partitions constructed from the provided binning schemes
     # ===========================================================================
-    te = transferentropy(pts, vars, binning_scheme, estimator, b = b)
+    te = transferentropy(pts, vars, binning_scheme, estimator)
 
     return te
 end

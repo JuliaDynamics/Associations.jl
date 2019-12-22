@@ -3,7 +3,7 @@ import StatsBase
 
 """
     VisitationFrequencyTest(k::Int = 1, l::Int = 1, m::Int = 1, n::Int = 1, 
-        τ::Int = 1, b = 2, estimator::VisitationFrequency = VisitationFrequency(), 
+        τ::Int = 1, estimator::VisitationFrequency = VisitationFrequency(b = 2), 
         binning_summary_statistic::Function = StatsBase.mean,
         binning::RectangularBinning, ηs)
 
@@ -29,8 +29,6 @@ This is the original transfer entropy estimator from [1], as implemented in [2].
 - **`n::Int`**: The dimension of the ``C_{pp}`` component of the embedding. 
 
 - **`τ::Int`**: The embedding lag. Default is `τ = 1`.
-
-- **`b`**: Base of the logarithm. The default (`b = 2`) gives the TE in bits.
 
 - **`estimator::VisitationFrequency`**: A `VisitationFrequency` estimator instance.
 
@@ -173,11 +171,8 @@ Base.@kwdef mutable struct VisitationFrequencyTest{N} <: TransferEntropyCausalit
     """ The delay reconstruction lag for the ``T_{pp}`` component of the embedding. """
     τ::Int = 1
 
-    """ The base of the logarithm for computing TE. """
-    b = 2
-
     """ The transfer entropy estimator. """
-    estimator::VisitationFrequency = VisitationFrequency()
+    estimator::VisitationFrequency = VisitationFrequency(b = 2)
 
     """ 
     If there are several binnings provided, what is the statistic used to summarise the 
@@ -191,14 +186,14 @@ Base.@kwdef mutable struct VisitationFrequencyTest{N} <: TransferEntropyCausalit
     """ The prediction lags"""
     ηs::Union{Int, AbstractVector{Int}}
 
-    function VisitationFrequencyTest(k::Int, l::Int, m::Int, n::Int, τ::Int, b, 
+    function VisitationFrequencyTest(k::Int, l::Int, m::Int, n::Int, τ::Int, 
             estimator::VisitationFrequency, 
             binning_summary_statistic::Function, 
             binning::Union{RectangularBinning, Vector{RectangularBinning}}, 
             ηs)
             
         N = length(ηs) # length of return vector when used with `causality`
-        return new{N}(k, l, m, n, τ, b, estimator, binning_summary_statistic, binning, ηs)
+        return new{N}(k, l, m, n, τ, estimator, binning_summary_statistic, binning, ηs)
     end
 end
 
