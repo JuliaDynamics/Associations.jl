@@ -16,7 +16,7 @@ module CausalityTools
 
 
     display_update = true
-    version = "v0.7.0"
+    version = "v0.8.0"
     update_name = "update_$version"
 
     if display_update
@@ -28,6 +28,11 @@ module CausalityTools
     BREAKING CHANGES! 
     ----------------
     
+    - Transfer entropy estimators now contain a field `b` which gives the base of the logarithm
+        used during transfer entropy computations, and hence dictates the unit of the transfer 
+        entropy. By default, `b = 2`, which gives the transfer entropy in bits. The keyword `b` 
+        is thus obsolete in all transfer entropy methods that used it before.
+
     - The `ν` keyword for the `ConvergentCrossMappingTest` and `CrossMappingTest` has changed to 
         `η`, to conform with the convention for the transfer entropy tests.
     

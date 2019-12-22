@@ -4,7 +4,11 @@ import PerronFrobenius: AbstractTriangulationInvariantMeasure, invariantmeasure
 import CausalityToolsBase: TriangulationBinning, ApproximateIntersection
 
 """
-    ApproximateSimplexIntersectionTest
+    ApproximateSimplexIntersectionTest(k::Int = 1, l::Int = 1, m::Int = 1, n::Int = 1,
+        τ::Int = 1, estimator::TransferEntropyEstimator = TransferOperatorGrid(b = 2),
+        n_pts::Int = 10000, binning_summary_statistic::Function = StatsBase.mean,
+        binning::Union{RectangularBinning, Vector{RectangularBinning}},
+        ηs::Union{AbstractVector{Int}})
 
 The parameters for a transfer entropy test where the invariant measure is estimated
 using an approximation to the transfer operator over a triangulation of the delay
@@ -42,8 +46,6 @@ transfer operator.
 - **`n::Int`**: The dimension of the ``C_{pp}`` component of the embedding.
 
 - **`τ::Int`**: The embedding lag. Default is `τ = 1`.
-
-- **`b`**: Base of the logarithm. The default (`b = 2`) gives the TE in bits.
 
 - **`estimator::Union{VisitationFrequency, TransferOperatorGrid}`**: A `VisitationFrequency`
     or a `TransferOperatorGrid` estimator instance.
@@ -84,7 +86,7 @@ te_ytox = causality(y, x, test)
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212)
 """
-Base.@kwdef struct ApproximateSimplexIntersectionTest{N} <: TransferEntropyCausalityTest{N}
+Base.@kwdef mutable struct ApproximateSimplexIntersectionTest{N} <: TransferEntropyCausalityTest{N}
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
 
@@ -100,14 +102,11 @@ Base.@kwdef struct ApproximateSimplexIntersectionTest{N} <: TransferEntropyCausa
     """ The delay reconstruction lag for the ``T_{pp}`` component of the embedding. """
     τ::Int = 1
 
-    """ The base of the logarithm for computing TE. """
-    b::Number = 2
-
     """
     The transfer entropy estimator used to estimate transfer entropy *after* the invariant measure
     over the triangulated delay reconstruction has been estimated.
     """
-    estimator::TransferEntropyEstimator = TransferOperatorGrid()
+    estimator::TransferEntropyEstimator = TransferOperatorGrid(b = 2)
 
     """ The number of points to generate from the invariant distribution over the triangulation. """
     n_pts::Int = 10000
@@ -126,16 +125,16 @@ Base.@kwdef struct ApproximateSimplexIntersectionTest{N} <: TransferEntropyCausa
 
 
     """ The prediction lags"""
-    ηs
+    ηs::Union{AbstractVector{Int}}
 
-    function ApproximateSimplexIntersectionTest(k::Int, l::Int, m::Int, n::Int, τ::Int, b::Number, 
+    function ApproximateSimplexIntersectionTest(k::Int, l::Int, m::Int, n::Int, τ::Int, 
             estimator::E, n_pts::Int, 
             binning_summary_statistic::Function, 
             binning::Union{RectangularBinning, Vector{RectangularBinning}}, 
             ηs) where {E <: TransferEntropyEstimator}
 
         N = length(ηs) # length of return vector when used with `causality`
-        return new{N}(k, l, m, n, τ, b, estimator, n_pts, 
+        return new{N}(k, l, m, n, τ, estimator, n_pts, 
             binning_summary_statistic, binning, ηs)
     end
 end
@@ -171,7 +170,7 @@ function causality(source::AbstractVector{T}, target::AbstractVector{T},
 
     for i = 1:length(ηs)
         mu = invariant_measures_over_triang[i]
-        tes_over_binnings = [transferentropy(mu, te_vars[i], binning, estimator = test.estimator, n = test.n_pts, b = test.b)
+        tes_over_binnings = [transferentropy(mu, te_vars[i], binning, estimator = test.estimator, n = test.n_pts)
                 for binning in test.binning]
         tes_over_ηs[i] = test.binning_summary_statistic(tes_over_binnings)
     end

@@ -1,4 +1,4 @@
-
+import StaticArrays: SVector
 
 function verified_prediction_lags(lags)
     ηs = sort(lags[lags .!= 0])
@@ -65,7 +65,7 @@ PredictiveAsymmetryTest(predictive_test = test_transferoperator)
 1. Diego, David, Kristian Agasøster Haaga, Jo Brendryen, and Bjarte Hannisdal. 
     A simple test for causal asymmetry in complex systems. In prep.
 """
-Base.@kwdef struct PredictiveAsymmetryTest{TEST, N} <: CausalityTest where TEST
+Base.@kwdef mutable struct PredictiveAsymmetryTest{TEST, N} <: CausalityTest where TEST
     predictive_test::TEST
 
     function PredictiveAsymmetryTest(test::T) where {T <: TransferEntropyCausalityTest}
@@ -85,7 +85,7 @@ end
 function update_ηs(test::VisitationFrequencyTest)
 
     VisitationFrequencyTest(
-        k = test.k, l = test.l, m = test.m, n = test.n, b = test.b, 
+        k = test.k, l = test.l, m = test.m, n = test.n, 
         τ = test.τ,
         binning_summary_statistic = test.binning_summary_statistic,
         binning = test.binning,
@@ -95,15 +95,19 @@ end
 function update_ηs(test::TransferOperatorGridTest)
     
     TransferOperatorGridTest(
-        k = test.k, l = test.l, m = test.m, n = test.n, b = test.b, 
+        k = test.k, l = test.l, m = test.m, n = test.n, 
         τ = test.τ,
         binning_summary_statistic = test.binning_summary_statistic,
         binning = test.binning,
         ηs = verified_prediction_lags(test.ηs))
 end
 
-return_predictive_asymmetry(ηs, As) = As
-return_predictive_asymmetry(η::Int, As) = As[1]
+function return_predictive_asymmetry(ηs, As, N)
+    T = typeof(As[1])
+    SVector{N, T}(As)
+end
+
+return_predictive_asymmetry(η::Int, As, N) = As[1]
 
 function predictive_asymmetry(source, target, 
         p::PredictiveAsymmetryTest{T, N}) where {T <: TransferEntropyCausalityTest, N}
@@ -124,7 +128,7 @@ function predictive_asymmetry(source, target,
         As[i] = causalbalance(ηs[lag_idxs], preds[lag_idxs])
     end
 
-    return return_predictive_asymmetry(p.predictive_test.ηs, As)
+    return return_predictive_asymmetry(p.predictive_test.ηs, As, N)
 end
 
 function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::PredictiveAsymmetryTest{CT}) where {T<:Real, CT}

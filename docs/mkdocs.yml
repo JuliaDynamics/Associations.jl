@@ -39,16 +39,10 @@ docs_dir: 'build'
 pages:
   - Home: index.md
   - Causality estimation:
-    - Causality from time series: causalitytests/causality_from_time_series.md
-    - Causality from uncertain data: 
+    - From time series: causalitytests/causality_from_time_series.md
+    - From uncertain time series: 
       - Methods: causalitytests/causality_from_uncertain_data.md
-      - Naive resampling: causalitytests/causality_from_uncertain_data_naive.md
-      - Constrained resampling: causalitytests/causality_from_uncertain_data_naive_constrained.md
-      - Binned resampling: causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md
-      - Interpolate-and-bin resampling: causalitytests/causality_from_uncertain_data_InterpolateBinTest.md
-      - Random chunk resampling: causalitytests/causality_from_uncertain_data_RandomSequencesTest.md
-      - Strictly increasing and interpolated resampling: causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md
-    - Causality from dynamical systems: causalitytests/causality_from_dynamical_systems.md
+    - From dynamical systems: causalitytests/causality_from_dynamical_systems.md
   - Causality tests: 
     - Overview: causalitytests/causality_tests.md
     - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
@@ -60,6 +54,15 @@ pages:
     - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
     - ExactSimplexIntersectionTest: causalitytests/ExactSimplexIntersectionTest.md
     - Predictive asymmetry test: causalitytests/PredictiveAsymmetryTest.md
+  
+  - Uncertainty handling and subsampling:
+      - Naive resampling: causalitytests/causality_from_uncertain_data_naive.md
+      - ConstrainedTest: causalitytests/causality_from_uncertain_data_naive_constrained.md
+      - BinnedDataCausalityTest: causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md
+      - InterpolateBinTest: causalitytests/causality_from_uncertain_data_InterpolateBinTest.md
+      - RandomSequencesTest: causalitytests/causality_from_uncertain_data_RandomSequencesTest.md
+      - Strictly increasing and interpolated resampling: causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md
+  #  - BinnedDataCausalityTest: uncertaindata/BinnedDataCausalityTest.md
   - Fundamentals:
     - Discretization: causalitytoolsbase/discretization.md
     - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
@@ -91,16 +94,14 @@ pages:
       - Fourier surrogates, random phases: surrogates/randomphases_docs.md
       - Fourier surrogates, random amplitudes: surrogates/randomamplitudes_docs.md
       - Random shuffle: surrogates/randomshuffle_docs.md
-  - Uncertain data handling:
-    - BinnedDataCausalityTest: uncertaindata/BinnedDataCausalityTest.md
   - Tutorials/examples: 
     - List of tutorials: tutorials/list_of_tutorials.md
     - Causality from scalar data:
-      - SMeasureTest: tutorials/tutorial_SMeasureTest.md
+      - SMeasureTest: tutorials/causality/tutorial_SMeasureTest.md
     - Causality from uncertain data:
-      - PredictiveAsymmetryTest:
-        - BinnedResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md
-        - BinnedMeanResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md
+      - BinnedResampling + RandomSequencesTest: tutorials/causality/Tutorial_BinnedResampling_RandomSequencesTest_PredictiveAsymmetryTest_ar1_unidir.md
+      - BinnedResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md
+      - BinnedMeanResampling: tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md
     - Worked examples:
       - Transfer entropy: worked_examples/worked_example_transferentropy.md
   - Changelog: CHANGELOG.md

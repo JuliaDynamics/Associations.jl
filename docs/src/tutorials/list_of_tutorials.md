@@ -18,3 +18,7 @@ by using a [binned resampling scheme](https://kahaaga.github.io/UncertainData.jl
 
 - [`PredictiveAsymmetryTest` with `BinnedResampling`](@ref tutorial_PredictiveAsymmetryTest_BinnedResampling) [[notebook](https://github.com/kahaaga/CausalityTools.jl/blob/master/tutorials/CausalityTools_tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.ipynb)]
 - [`PredictiveAsymmetryTest` with `BinnedMeanResampling`](@ref tutorial_PredictiveAsymmetryTest_BinnedMeanResampling) [[notebook](https://github.com/kahaaga/CausalityTools.jl/blob/master/tutorials/CausalityTools_tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.ipynb)]
+
+## Combining binning and subsampling
+
+- [`BinnedResampling`, then `RandomSequencesTest` with `PredictiveAsymmetryTest` on `ar1_unidir` system](@ref tutorial_BinnedResampling_RandomSequencesTest_PredictiveAsymmetryTest_ar1_unidir).

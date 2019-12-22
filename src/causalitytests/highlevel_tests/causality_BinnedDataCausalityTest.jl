@@ -130,8 +130,8 @@ tes_yx = causality(Y, X, test)
 
 # Gather results in a matrix and compute means and standard deviations 
 # for the predictive asymmetries at each prediction lag
-M_xy = hcat(tes_xy...,)
-M_yx = hcat(tes_yx...,)
+M_xy = Array(hcat(tes_xy...,))
+M_yx = Array(hcat(tes_yx...,))
 
 means_xy = mean(M_xy, dims = 2)[:, 1]
 means_yx = mean(M_yx, dims = 2)[:, 1]

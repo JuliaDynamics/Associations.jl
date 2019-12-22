@@ -36,7 +36,7 @@ only once.
 
 ### Binned convergent cross mapping test
 
-Let's say we want to bin the data by drawing n_draws = 5000 realiastions of 
+Let's say we want to bin the data by drawing n_draws = 5000 realisations of 
 each uncertain data point, then assign the draws to the correct bins, and
 finally get a kernel density estimate to the distribution of values in each bin.
 
@@ -53,7 +53,7 @@ test = BinnedDataCausalityTest(ccm_test, binning, n_realizations)
 
 ### Binned transfer entropy test
 
-Let's say we want to bin the data by drawing n_draws = 7500 realiastions of 
+Let's say we want to bin the data by drawing n_draws = 7500 realisations of 
 each uncertain data point, then assign the draws to the correct bins, and
 finally get a kernel density estimate to the distribution of values in each bin.
 
@@ -84,3 +84,4 @@ function BinnedDataCausalityTest(test::CR, binning::BR) where {
     BinnedDataCausalityTest(test, binning, 1) 
 end
 
+export BinnedDataCausalityTest

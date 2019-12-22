@@ -34,7 +34,7 @@ The parameters for a joint distance distribution [1] analysis.
 the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear 
 Science 28.7 (2018): 075302.
 """
-Base.@kwdef struct JointDistanceDistributionTTest{N, M} <: JointDistancesCausalityTest{N} where M
+Base.@kwdef mutable struct JointDistanceDistributionTTest{N, M} <: JointDistancesCausalityTest{N} where M
     """ The distance metric. """
     distance_metric::M = SqEuclidean() 
 

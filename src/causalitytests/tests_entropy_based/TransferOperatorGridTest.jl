@@ -3,7 +3,7 @@ import StatsBase
 
 """
     TransferOperatorGridTest(k::Int = 1, l::Int = 1, m::Int = 1, n::Int = 1, 
-        τ::Int = 1, b = 2, estimator::TransferOperatorGrid = TransferOperatorGrid(), 
+        τ::Int = 1, estimator::TransferOperatorGrid = TransferOperatorGrid(b = 2), 
         binning_summary_statistic::Function = StatsBase.mean,
         binning::RectangularBinning, ηs)
 
@@ -27,8 +27,6 @@ The parameters for a transfer entropy test using the `TransferOperatorGrid` esti
 - **`n::Int`**: The dimension of the ``C_{pp}`` component of the embedding. 
 
 - **`τ::Int`**: The embedding lag. Default is `τ = 1`.
-
-- **`b`**: Base of the logarithm. The default (`b = 2`) gives the TE in bits.
 
 - **`estimator::TransferOperatorGrid`**: A `TransferOperatorGrid` estimator instance.
 
@@ -150,7 +148,7 @@ TransferOperatorGridTest(k = 1, l = 2, binning = binning, ηs = ηs)
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.99.042212)
 """
-Base.@kwdef struct TransferOperatorGridTest{N} <: TransferEntropyCausalityTest{N}
+Base.@kwdef mutable struct TransferOperatorGridTest{N} <: TransferEntropyCausalityTest{N}
     """ The delay reconstruction parameter k (controls dimension of ``T_{f}`` component of embedding). """
     k::Int = 1
 
@@ -166,11 +164,8 @@ Base.@kwdef struct TransferOperatorGridTest{N} <: TransferEntropyCausalityTest{N
     """ The delay reconstruction lag for the ``T_{pp}`` component of the embedding. """
     τ::Int = 1
 
-    """ The base of the logarithm for computing TE. """
-    b::Number = 2
-
     """ The transfer entropy estimator. """
-    estimator::TransferOperatorGrid = TransferOperatorGrid()
+    estimator::TransferOperatorGrid = TransferOperatorGrid(b = 2)
 
     """ 
     If there are several binnings provided, what is the statistic used to summarise the 
@@ -186,16 +181,16 @@ Base.@kwdef struct TransferOperatorGridTest{N} <: TransferEntropyCausalityTest{N
 
 
     """ The prediction lags"""
-    ηs
+    ηs::Union{Int, AbstractVector{Int}}
 
-    function TransferOperatorGridTest(k::Int, l::Int, m::Int, n::Int, τ::Int, b::Number, 
+    function TransferOperatorGridTest(k::Int, l::Int, m::Int, n::Int, τ::Int, 
             estimator::TransferOperatorGrid, 
             binning_summary_statistic::Function, 
             binning::Union{RectangularBinning, Vector{RectangularBinning}}, 
             ηs)
 
         N = length(ηs) # length of return vector when used with `causality`
-        return new{N}(k, l, m, n, τ, b, estimator, binning_summary_statistic, binning, ηs)
+        return new{N}(k, l, m, n, τ, estimator, binning_summary_statistic, binning, ηs)
     end
 end
 

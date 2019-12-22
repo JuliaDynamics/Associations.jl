@@ -1,12 +1,14 @@
 
 # [Binned resampling](@id causality_uncertain_binneddatacausalitytest)
 
-```@docs
-causality(::AbstractUncertainIndexValueDataset, y::AbstractUncertainIndexValueDataset, test::BinnedDataCausalityTest)
-```
-
 ## BinnedDataCausalityTest
 
 ```@docs
 BinnedDataCausalityTest
+```
+
+## Call signature
+
+```@docs
+causality(::AbstractUncertainIndexValueDataset, y::AbstractUncertainIndexValueDataset, test::BinnedDataCausalityTest)
 ```
