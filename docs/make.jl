@@ -64,9 +64,11 @@ PAGES = [
         "Invariant measure" => "perronfrobenius/invariantmeasure.md"
     ],
     "Transfer entropy" => [
-        "Estimators" => "transferentropy/transferentropy_estimators.md",
-        "Convenience functions" => "transferentropy/convenience_functions_te.md",
-        "TEVars" => "transferentropy/TEVars.md",
+        "Estimators" => "transferentropy/TE_estimators.md",
+        "Estimating TE" => "transferentropy/estimating_TE.md",
+        #"Estimators" => "transferentropy/transferentropy_estimators.md",
+        #"Convenience functions" => "transferentropy/convenience_functions_te.md",
+        #"TEVars" => "transferentropy/TEVars.md",
         "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
     ],
     "Distance based measures" => [
@@ -116,6 +118,7 @@ makedocs(
     modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
+    clean = true,
     pages = PAGES,
     highlightsig = true
 )

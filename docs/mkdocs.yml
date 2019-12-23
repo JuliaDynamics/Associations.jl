@@ -63,24 +63,26 @@ pages:
       - RandomSequencesTest: causalitytests/causality_from_uncertain_data_RandomSequencesTest.md
       - Strictly increasing and interpolated resampling: causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md
   #  - BinnedDataCausalityTest: uncertaindata/BinnedDataCausalityTest.md
-  - Fundamentals:
+  - CausalityToolsBase:
     - Discretization: causalitytoolsbase/discretization.md
     - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
-    - Invariant properties over partitions:
+  #  Invariant properties over partitions:
+  - PerronFrobenius:
       - Invariant measure: perronfrobenius/invariantmeasure.md
       - Transfer operator: perronfrobenius/transferoperator.md
-  - Estimators and algorithms:
-    - Transfer entropy:
-      - Convenience functions: transferentropy/convenience_functions_te.md
-      - Low-level estimators: transferentropy/transferentropy_estimators.md
-      - Mapping delay reconstruction to marginals (TEVars): transferentropy/TEVars.md
-      - Effect of discretization scheme: transferentropy/examples_TE_different_partitionings.md
-    - CCM:
-      - Overview: crossmappings/ccm/overview.md
-      - Cross mapping: crossmappings/ccm/crossmapping.md
-      - Converent cross mapping: crossmappings/ccm/convergentcrossmapping.md
-    - Joint distance distribution: algorithms/joint_distance_distribution.md
-    - Syntax overview: syntax_overview.md
+  - Transfer entropy:
+    - Estimators: transferentropy/TE_estimators.md
+    - Estimation procedure: transferentropy/estimating_TE.md
+  #  - Convenience functions: transferentropy/convenience_functions_te.md
+  #  - Low-level estimators: transferentropy/transferentropy_estimators.md
+  #  - Mapping delay reconstruction to marginals (TEVars): transferentropy/TEVars.md
+  #  - Effect of discretization scheme: transferentropy/examples_TE_different_partitionings.md
+  - CrossMappings:
+    - Overview: crossmappings/ccm/overview.md
+    - Cross mapping: crossmappings/ccm/crossmapping.md
+    - Converent cross mapping: crossmappings/ccm/convergentcrossmapping.md
+  - Joint distance distribution: algorithms/joint_distance_distribution.md
+  - Syntax overview: syntax_overview.md
   - Example systems: 
     - Overview: example_systems/example_systems_overview.md
     - Discrete systems: example_systems/example_systems_discrete.md
