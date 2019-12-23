@@ -50,9 +50,9 @@ resampling_constraints = ConstrainedIndexValueResampling(n_draws, cs_x, cs_y);
 resampling_sequential = SequentialResampling(seq_type)
 resampling_sequential_intp = SequentialInterpolatedResampling(seq_type, grid)
 
-@test causality(X, Y, test_pa, resampling_constraints) isa Vector{SVector{η_max, T}} where T <: Real
-@test causality(X, Y, test_pa, resampling_constraints, resampling_sequential) isa Vector{SVector{η_max, T}} where T <: Real
-@test causality(X, Y, test_pa, resampling_constraints, resampling_sequential_intp) isa Vector{SVector{η_max, T}} where T <: Real
+@test causality(X, Y, test_pa, resampling_constraints) isa Vector{Vector{T}} where T <: Real
+@test causality(X, Y, test_pa, resampling_constraints, resampling_sequential) isa Vector{Vector{T}} where T <: Real
+@test causality(X, Y, test_pa, resampling_constraints, resampling_sequential_intp) isa Vector{Vector{T}} where T <: Real
 
 @test causality(X, Y, test_vf, resampling_constraints) isa Vector{Vector{T}} where T <: Real
 @test causality(X, Y, test_vf, resampling_constraints, resampling_sequential) isa Vector{Vector{T}} where T <: Real

@@ -22,12 +22,12 @@ test8 = VisitationFrequencyTest(binning = multiple_binnings, ηs = 5)
 
 
 
-@test causality(x, y, PredictiveAsymmetryTest(test1)) isa SVector{10, T} where T
+@test causality(x, y, PredictiveAsymmetryTest(test1)) isa Vector{T} where T
 @test causality(x, y, PredictiveAsymmetryTest(test2)) |> typeof <: Real
-@test causality(x, y, PredictiveAsymmetryTest(test3)) isa SVector{10, T} where T
+@test causality(x, y, PredictiveAsymmetryTest(test3)) isa Vector{T} where T
 @test causality(x, y, PredictiveAsymmetryTest(test4)) |> typeof<: Real
 
-@test causality(x, y, PredictiveAsymmetryTest(test5)) isa SVector{10, T} where T
+@test causality(x, y, PredictiveAsymmetryTest(test5)) isa Vector{T} where T
 @test causality(x, y, PredictiveAsymmetryTest(test6)) |> typeof<: Real
-@test causality(x, y, PredictiveAsymmetryTest(test7)) isa SVector{10, T} where T
+@test causality(x, y, PredictiveAsymmetryTest(test7)) isa Vector{T} where T
 @test causality(x, y, PredictiveAsymmetryTest(test8)) |> typeof<: Real

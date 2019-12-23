@@ -5,7 +5,8 @@ import CausalityToolsBase: TriangulationBinning, ApproximateIntersection
 
 """
     ApproximateSimplexIntersectionTest(k::Int = 1, l::Int = 1, m::Int = 1, n::Int = 1,
-        τ::Int = 1, estimator::TransferEntropyEstimator = TransferOperatorGrid(b = 2),
+        τ::Int = 1, 
+        estimator::BinningTransferEntropyEstimator = TransferOperatorGrid(b = 2),
         n_pts::Int = 10000, binning_summary_statistic::Function = StatsBase.mean,
         binning::Union{RectangularBinning, Vector{RectangularBinning}},
         ηs::Union{AbstractVector{Int}})
@@ -106,7 +107,7 @@ Base.@kwdef mutable struct ApproximateSimplexIntersectionTest{N} <: TransferEntr
     The transfer entropy estimator used to estimate transfer entropy *after* the invariant measure
     over the triangulated delay reconstruction has been estimated.
     """
-    estimator::TransferEntropyEstimator = TransferOperatorGrid(b = 2)
+    estimator::BinningTransferEntropyEstimator = TransferOperatorGrid(b = 2)
 
     """ The number of points to generate from the invariant distribution over the triangulation. """
     n_pts::Int = 10000
@@ -131,7 +132,7 @@ Base.@kwdef mutable struct ApproximateSimplexIntersectionTest{N} <: TransferEntr
             estimator::E, n_pts::Int, 
             binning_summary_statistic::Function, 
             binning::Union{RectangularBinning, Vector{RectangularBinning}}, 
-            ηs) where {E <: TransferEntropyEstimator}
+            ηs) where {E <: BinningTransferEntropyEstimator}
 
         N = length(ηs) # length of return vector when used with `causality`
         return new{N}(k, l, m, n, τ, estimator, n_pts, 

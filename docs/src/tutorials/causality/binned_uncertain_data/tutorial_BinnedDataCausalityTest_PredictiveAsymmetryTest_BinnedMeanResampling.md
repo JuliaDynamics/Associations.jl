@@ -103,7 +103,8 @@ state_space_binning = RectangularBinning(n_subdivisions);
 # using base-2 logarithms
 ηs = -5:5 # we're predicting five steps forwards and backwards in time
 te_test = VisitationFrequencyTest(k = k, l = l, m = m,
-    binning = state_space_binning, b = 2, ηs = ηs)
+    binning = state_space_binning,
+    estimator = VisitationFrequency(b = 2), ηs = ηs)
 
 pa_test = PredictiveAsymmetryTest(predictive_test = te_test)
 

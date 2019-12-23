@@ -1,3 +1,4 @@
+import TransferEntropy: BinningTransferEntropyEstimator
 
 """
     te_cond(source::AbstractArray{<:Real, 1}, 
@@ -97,7 +98,7 @@ function te_cond(source::AbstractArray{<:Real, 1},
         cond::AbstractArray{<:Real, 1}, 
         k::Int, l::Int, m::Int, n::Int; 
         η = 1, τ = 1, 
-        estimator::TransferEntropyEstimator = VisitationFrequency(b = 2), 
+        estimator::BinningTransferEntropyEstimator = VisitationFrequency(b = 2), 
         n_subdivs = 2)
 
     k + l + m + n >= 4 || throw(ArgumentError("`dim = k + l + m + n` must be 4 or higher for conditional TE"))

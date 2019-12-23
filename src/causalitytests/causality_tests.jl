@@ -5,11 +5,14 @@ using Reexport
     import NearestNeighbors
     import StatsBase
     import Distances
+    import Distances: Chebyshev
     import CausalityToolsBase
     import CausalityToolsBase: CausalityTest, RectangularBinning
     import CrossMappings: crossmap, convergentcrossmap
     import TimeseriesSurrogates: randomshuffle
-    import TransferEntropy: transferentropy, TransferOperatorGrid, VisitationFrequency
+    import TransferEntropy: transferentropy, 
+        TransferOperatorGrid, VisitationFrequency, NearestNeighbourMI, 
+        BinningTransferEntropyEstimator
     import UncertainData
     import UncertainData:
         AbstractUncertainValue,
@@ -96,6 +99,7 @@ using Reexport
     # ---------------------------------------
     include("tests_entropy_based/TransferEntropyCausalityTest.jl")
     include("tests_entropy_based/VisitationFrequencyTest.jl")
+    include("tests_entropy_based/NearestNeighbourMITest.jl")
     include("tests_entropy_based/TransferOperatorGridTest.jl")
     include("tests_entropy_based/ApproximateSimplexIntersectionTest.jl")
     include("tests_entropy_based/ExactSimplexIntersectionTest.jl")
@@ -104,6 +108,7 @@ using Reexport
     # Predictive asymmetry causality tests
     ################################################################
     include("tests_predictive_asymmetry/PredictiveAsymmetryTest.jl")
+    include("tests_predictive_asymmetry/NormalisedPredictiveAsymmetryTest.jl")
 
     ################################################################
     # On uncertain data with uncertainties in both index and value

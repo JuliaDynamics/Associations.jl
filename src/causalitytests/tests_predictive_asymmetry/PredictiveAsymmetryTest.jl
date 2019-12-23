@@ -52,8 +52,11 @@ ranges too.
 ## Examples
 
 ```julia 
-test_visitfreq = VisitationFrequencyTest(ηs = [-5, -4, -2, -1, 0, 1, 2, 4, 5])
-test_transferoperator = TransferOperatorGridTest(ηs = -3:3)
+bin = RectangularBinning(5) # divide each axis into 5 equal-length intervals
+ηs = [-10:-1; 1:10] # exclude the zero lag (it is irrelevant for the asymmetry)
+
+test_visitfreq = VisitationFrequencyTest(ηs = ηs)
+test_transferoperator = TransferOperatorGridTest(ηs = ηs)
 
 # Note that `predictive_test` is a *mandatory* keyword.
 PredictiveAsymmetryTest(predictive_test = test_visitfreq)
@@ -102,9 +105,18 @@ function update_ηs(test::TransferOperatorGridTest)
         ηs = verified_prediction_lags(test.ηs))
 end
 
+function update_ηs(test::NearestNeighbourMITest{N}) where N
+
+    NearestNeighbourMITest(
+        k = test.k, l = test.l, m = test.m, n = test.n, 
+        τ = test.τ,
+        ηs = verified_prediction_lags(test.ηs))
+end
+
 function return_predictive_asymmetry(ηs, As, N)
-    T = typeof(As[1])
-    SVector{N, T}(As)
+    #T = typeof(As[1])
+    #SVector{N, T}(As)
+    As
 end
 
 return_predictive_asymmetry(η::Int, As, N) = As[1]

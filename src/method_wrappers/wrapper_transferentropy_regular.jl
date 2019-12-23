@@ -1,4 +1,5 @@
 import StatsBase.mean
+import TransferEntropy: BinningTransferEntropyEstimator
 
 """
     standard_te(driver, response;
@@ -394,7 +395,7 @@ function te_reg(source::AbstractArray{<:Real, 1},
         k::Int, l::Int, m::Int,
         binning_scheme::Vector{RectangularBinning},
         η = 1, τ = 1, 
-        estimator::TransferEntropyEstimator = VisitationFrequency(b = 2))
+        estimator::BinningTransferEntropyEstimator = VisitationFrequency(b = 2))
 
     k + l + m >= 3 || throw(ArgumentError("`dim = k + l + m` must be 3 or higher for regular TE"))
 
@@ -412,7 +413,7 @@ function te_reg(source::AbstractArray{<:Real, 1},
         k::Int, l::Int, m::Int,
         binning_scheme::RectangularBinning,
         η = 1, τ = 1, 
-        estimator::TransferEntropyEstimator = VisitationFrequency(b = 2))
+        estimator::BinningTransferEntropyEstimator = VisitationFrequency(b = 2))
 
     k + l + m >= 3 || throw(ArgumentError("`dim = k + l + m` must be 3 or higher for regular TE"))
 

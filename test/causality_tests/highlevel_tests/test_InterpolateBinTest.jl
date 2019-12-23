@@ -39,7 +39,7 @@ intp_grid = tmin:0.01:tmax
 # Define binning grid
 left_bin_edges = tmin:1.5:tmax
 
-# Define the InterpolateAndBin instance
+# Define the Interpolate AndBin instance
 intp_bin = InterpolateAndBin(mean, left_bin_edges, Linear(), intp_grid, Flat(OnGrid()))
 
 # Define interpolate-and-bin test
@@ -47,5 +47,5 @@ ib_test = InterpolateBinTest(pa_test, intp_bin, 2)
 
 res_xy = causality(X, Y, ib_test)
 
-@test res_xy isa Vector{SVector{ηmax, T}} where T
+@test res_xy isa Vector{Vector{T}} where T
 @test length(res_xy) == ib_test.n
