@@ -1,6 +1,8 @@
 # Changelog for CausalityTools.jl
 
-## Release v0.8.0
+## Release v0.9.0
+
+Release v0.9.0 introduces some new functionality and significant documentation improvements.
 
 ### New functionality
 
@@ -8,6 +10,10 @@
 
 - Added [`NearestNeighbourMI`](@ref) transfer entropy estimator.
 - Added [`transferentropy(::Any, ::TEVars, ::NearestNeighbourMI)`](@ref) method.
+- Transfer entropy estimators now contain a field `b` which gives the base of the logarithm
+    used during transfer entropy computations, and hence dictates the unit of the transfer 
+    entropy. By default, `b = 2`, which gives the transfer entropy in bits. The keyword `b` 
+    is thus obsolete in all transfer entropy methods that used it before.
 
 #### CausalityTools.jl
 
@@ -21,13 +27,6 @@
 
 - Plotting functionality is behind a Requires-block. To use the plotting functionality, you 
     now need to do `using Plots` beforehand.
-
-### Breaking changes
-
-- Transfer entropy estimators now contain a field `b` which gives the base of the logarithm
-    used during transfer entropy computations, and hence dictates the unit of the transfer 
-    entropy. By default, `b = 2`, which gives the transfer entropy in bits. The keyword `b` 
-    is thus obsolete in all transfer entropy methods that used it before.
 
 ### Documentation
 
