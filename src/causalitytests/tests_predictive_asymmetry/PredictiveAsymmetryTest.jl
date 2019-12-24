@@ -144,8 +144,35 @@ function predictive_asymmetry(source, target,
     return return_predictive_asymmetry(p.predictive_test.ηs, As, N)
 end
 
+function predictive_asymmetry(source, target, cond,
+    p::PredictiveAsymmetryTest{T, N}) where {T <: TransferEntropyCausalityTest, N}
+
+    # Update the test parameters so that we have symmetric prediction lags
+    test = update_ηs(p.predictive_test)
+
+    # Predictions from source to target. 
+    preds = causality(source, target, cond, test)
+
+    # The number of predictive asymmetries is half the number of prediction lags,
+    # which is encoded in the type parameter `N`
+    ηs = test.ηs
+    As = zeros(Float64, N)
+
+    for (i, η) in enumerate(ηs[ηs .> 0])
+        lag_idxs = findfirst(ηs .== -η):findfirst(ηs .== η)
+        As[i] = causalbalance(ηs[lag_idxs], preds[lag_idxs])
+    end
+
+    return return_predictive_asymmetry(p.predictive_test.ηs, As, N)
+end
+
 function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::PredictiveAsymmetryTest{CT}) where {T<:Real, CT}
     predictive_asymmetry(source, target, p)
+end
+
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}, 
+        p::PredictiveAsymmetryTest{CT}) where {T<:Real, CT}
+    predictive_asymmetry(source, target, cond, p)
 end
 
 # there is no need to define custom causality method for a uncertain data 
