@@ -47,5 +47,5 @@ ib_test = InterpolateBinTest(pa_test, intp_bin, 2)
 
 res_xy = causality(X, Y, ib_test)
 
-@test res_xy isa Vector{SVector{ηmax, T}} where T
+@test res_xy isa Vector{Vector{T}} where T
 @test length(res_xy) == ib_test.n
