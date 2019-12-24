@@ -33,8 +33,6 @@ test = PredictiveAsymmetryTest(predictive_test = vftest)
 @test causality(x, UVY, test) isa Vector{T} where T
 @test causality(UVX, y, test) isa Vector{T} where T
 
-
-
 ################################################################
 # Integration with UncertainData.jl (with sampling constraints)
 ################################################################
