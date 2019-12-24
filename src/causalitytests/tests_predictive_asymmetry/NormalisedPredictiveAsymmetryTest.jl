@@ -1,3 +1,5 @@
+import StatsBase: mean
+
 """
     NormalisedPredictiveAsymmetryTest(predictive_test::CausalityTest, f::Number = 1.0)
 
@@ -67,20 +69,20 @@ end
 In a cumulative manner, normalise the `values` for the statistic 
 to some fraction `f` of their mean over prediction lags `ηs`.
 """
-function lagnormalised_statistic(vals, ηs, f)
+function lagnormalised_statistic(values, ηs, f)
     length(values) == length(ηs) || error("length(vals) must equal length(ηs)")
     avg_vals = zeros(Float64, length(ηs[ηs .> 0]))
     
-    for η in ηs[ηs .> 0]
+    for (i, η) in enumerate(ηs[ηs .> 0])
         startidx = findfirst(ηs .== -η)
         stopidx  = findlast(ηs .== η)
-        avg_vals[η] = mean(values[startidx:stopidx])*f
+        avg_vals[i] = mean(values[startidx:stopidx])*f
     end
     
     return avg_vals
 end
 
-function predictive_asymmetry(source, target, 
+function normalised_predictive_asymmetry(source, target, 
         p::NormalisedPredictiveAsymmetryTest{T, N}) where {T <: TransferEntropyCausalityTest, N}
 
     # Update the test parameters so that we have symmetric prediction lags
@@ -103,6 +105,41 @@ function predictive_asymmetry(source, target,
     end
     
     return return_predictive_asymmetry(p.predictive_test.ηs, As, N)
+end
+
+function normalised_predictive_asymmetry(source, target, cond,
+    p::NormalisedPredictiveAsymmetryTest{T, N}) where {T <: TransferEntropyCausalityTest, N}
+
+    # Update the test parameters so that we have symmetric prediction lags
+    test = update_ηs(p.predictive_test)
+
+    # Predictions from source to target 
+    preds = causality(source, target, cond, test)
+
+    # Normalised predictions
+    normalised_preds = lagnormalised_statistic(preds, test.ηs, p.f)
+
+    # The number of predictive asymmetries is half the number of prediction lags,
+    # which is encoded in the type parameter `N`
+    ηs = test.ηs
+    As = zeros(Float64, N)
+
+    for (i, η) in enumerate(ηs[ηs .> 0])
+        lag_idxs = findfirst(ηs .== -η):findfirst(ηs .== η)
+        As[i] = causalbalance(ηs[lag_idxs], preds[lag_idxs]) ./ normalised_preds[i]
+    end
+
+    return return_predictive_asymmetry(p.predictive_test.ηs, As, N)
+end
+
+
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::NormalisedPredictiveAsymmetryTest{CT}) where {T<:Real, CT}
+    normalised_predictive_asymmetry(source, target, p)
+end
+
+
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}, p::NormalisedPredictiveAsymmetryTest{CT}) where {T<:Real, CT}
+    normalised_predictive_asymmetry(source, target, cond, p)
 end
 
 export NormalisedPredictiveAsymmetryTest
