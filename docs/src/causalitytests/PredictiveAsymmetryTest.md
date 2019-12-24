@@ -35,7 +35,7 @@ npts = 200
 sys = CausalityTools.Systems.logistic2_unidir(c_xy = 0.5)
 x, y = columns(trajectory(sys, npts, Ttr = 500)) # discard first 500 points
 
-plot(xlabel = "Time step", ylabel = "Value", size = (382, 150),
+plot(xlabel = "Time step", ylabel = "Value", size = (382*2, 250),
     tickfont = font(14), guidefont = font(14), legendfont = font(14))
 plot!(x, label = "x", c = :black)
 plot!(y, label = "y", c = :red, ls = :dot)
@@ -109,7 +109,7 @@ plot!(ηs[ηs .> 0], pas_xy, marker = stroke(:black), c = :black, label = L"x \t
 plot!(ηs[ηs .> 0], pas_yx, marker = stroke(:red), c = :red, label = L"y \to x")
 hline!([0], ls = :dash, α = 0.6, label = "", c = :grey)
 
-pcomb = plot(p_te, p_pa, layout = (1, 2), size = (382, 200),
+pcomb = plot(p_te, p_pa, layout = (1, 2), size = (382*2, 300),
     tickfont = font(12), guidefont = font(12), legendfont = font(12))
 savefig(pcomb, "logistic2_te_and_pas.png"); # hide
 nothing # hide

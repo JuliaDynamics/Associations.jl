@@ -116,7 +116,7 @@ plot!(Ks, Ss_henon_xy, marker = stroke(2), label = "henon unidir (x -> y)")
 plot!(Ks, Ss_henon_yx, marker = stroke(2), label = "henon unidir (y -> x)")
 ```
 """
-function causality(x::AbstractVector, y::AbstractVector, test::SMeasureTest)
+function causality(source::AbstractVector, target::AbstractVector, test::SMeasureTest)
     Ss = zeros(Float64, length(test.K))
     
     for (i, k) in enumerate(test.K)
