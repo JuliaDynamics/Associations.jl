@@ -120,7 +120,7 @@ function causality(source::AbstractVector, target::AbstractVector, test::SMeasur
     Ss = zeros(Float64, length(test.K))
     
     for (i, k) in enumerate(test.K)
-        Ss[i] = s_measure(x, y,test.m, test.τ, k, test.metric, test.tree_metric)
+        Ss[i] = s_measure(source, target,test.m, test.τ, k, test.metric, test.tree_metric)
     end
     
     return Ss

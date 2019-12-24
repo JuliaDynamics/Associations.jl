@@ -1,7 +1,7 @@
 
 """
-    causality(x::AbstractUncertainIndexValueDataset,
-        y::AbstractUncertainIndexValueDataset,
+    causality(source::AbstractUncertainIndexValueDataset,
+        target::AbstractUncertainIndexValueDataset,
         test::BinnedDataCausalityTest)
 
 Apply a causality test to `x` and `y`, which are both data series 
@@ -185,31 +185,31 @@ ribbon = std(M_yx, dims = 2)[:, 1],
 label = "y -> x (binned)")
 ```
 """
-function causality(x::AbstractUncertainIndexValueDataset,
-    y::AbstractUncertainIndexValueDataset,
+function causality(source::AbstractUncertainIndexValueDataset,
+    target::AbstractUncertainIndexValueDataset,
     test::BinnedDataCausalityTest)
 end
 
 
-function causality(x::AbstractUncertainIndexValueDataset,
-    y::AbstractUncertainIndexValueDataset,
+function causality(source::AbstractUncertainIndexValueDataset,
+    target::AbstractUncertainIndexValueDataset,
     test::BinnedDataCausalityTest{CT, BR}) where {
         CT <: CausalityTest, BR <: AbstractBinnedUncertainValueResampling}
 
-    binned_x = resample(x, test.binning)
-    binned_y = resample(y, test.binning)
+    binned_source = resample(source, test.binning)
+    binned_target = resample(target, test.binning)
 
-    [causality(resample(binned_x.values), resample(binned_y.values), 
+    [causality(resample(binned_source.values), resample(binned_target.values), 
             test.test) for i = 1:test.n_realizations]
 end
 
-function causality(x::AbstractUncertainIndexValueDataset,
-    y::AbstractUncertainIndexValueDataset,
+function causality(source::AbstractUncertainIndexValueDataset,
+    target::AbstractUncertainIndexValueDataset,
     test::BinnedDataCausalityTest{CT, BR}) where {
         CT <: CausalityTest, BR <: AbstractBinnedSummarisedResampling}
 
-    binned_and_summarised_x = resample(x, test.binning)
-    binned_and_summarised_y = resample(y, test.binning)
+    binned_and_summarised_source = resample(source, test.binning)
+    binned_and_summarised_target = resample(target, test.binning)
 
-    causality(binned_and_summarised_x, binned_and_summarised_y, test.test) 
+    causality(binned_and_summarised_source, binned_and_summarised_target, test.test) 
 end

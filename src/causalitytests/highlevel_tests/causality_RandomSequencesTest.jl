@@ -25,7 +25,7 @@ function resample_and_subset(x, r::AbstractVector{Int})
 end
 
 """
-    causality(x, y, test::RandomSequencesTest)
+    causality(source, target, test::RandomSequencesTest)
 
 Apply a causality test on random, consecutive chunks of `x` and `y`.
 
@@ -76,13 +76,13 @@ causality(X, Y, rs_test)
 ```
 """
 function causality(
-        x::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset, AbstractUncertainIndexValueDataset}, 
-        y::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset, AbstractUncertainIndexValueDataset},
+        source::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset, AbstractUncertainIndexValueDataset}, 
+        target::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset, AbstractUncertainIndexValueDataset},
         test::RandomSequencesTest)
     
     seq_length = test.sequences_resampling.sequence_length
     n = test.sequences_resampling.n
-    N = length(x)
+    N = length(source)
     results = [Vector{Float64}(undef, 0) for i = 1:n]
     
     for i = 1:n
@@ -97,9 +97,9 @@ function causality(
         else
             throw(ArgumentError("`resampling.sequence_length`must be an integer or a collection of integers"))
         end
-        xs = resample_and_subset(x, r)
-        ys = resample_and_subset(y, r)
-        res = causality(xs, ys, test.test)
+        ss = resample_and_subset(source, r)
+        ts = resample_and_subset(target, r)
+        res = causality(ss, ts, test.test)
         
         append!(results[i], res)
     end
