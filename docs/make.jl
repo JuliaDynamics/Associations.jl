@@ -48,12 +48,14 @@ PAGES = [
         "causalitytests/JointDistanceDistributionTest.md",
         "causalitytests/SMeasureTest.md",
 
+        "causalitytests/NearestNeighbourMITest.md",
         "causalitytests/TransferOperatorGridTest.md",
         "causalitytests/VisitationFrequencyTest.md",
         "causalitytests/ApproximateSimplexIntersectionTest.md",
         "causalitytests/ExactSimplexIntersectionTest.md",
 
-        "causalitytests/PredictiveAsymmetryTest.md"
+        "causalitytests/PredictiveAsymmetryTest.md",
+        "causalitytests/NormalisedPredictiveAsymmetryTest.md"
     ],
     "CausalityToolsBase" => [
         "Discretization" => "causalitytoolsbase/discretization.md",
@@ -64,9 +66,9 @@ PAGES = [
         "Invariant measure" => "perronfrobenius/invariantmeasure.md"
     ],
     "Transfer entropy" => [
-        "Estimators" => "transferentropy/transferentropy_estimators.md",
-        "Convenience functions" => "transferentropy/convenience_functions_te.md",
-        "TEVars" => "transferentropy/TEVars.md",
+        "Estimators" => "transferentropy/TE_estimators.md",
+        "Estimating TE" => "transferentropy/estimating_TE.md",
+        "Convenience methods" => "transferentropy/convenience_methods_te.md",
         "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
     ],
     "Distance based measures" => [
@@ -116,6 +118,7 @@ makedocs(
     modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
+    clean = true,
     pages = PAGES,
     highlightsig = true
 )

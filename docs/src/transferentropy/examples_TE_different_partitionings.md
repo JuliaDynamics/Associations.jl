@@ -10,22 +10,41 @@ the four different ways of discretizing the state space.
 using CausalityTools, Plots, Statistics, TimeseriesSurrogates
 ```
 
-First, let's create some example time series, embed them and organize the
+First, let's load necessary packages and create some example time series.
+
+```@example TE_partitioning_schemes
+using CausalityTools, Plots, Statistics
+
+x = rand(300)
+y = sin.(cumsum(rand(300)))*0.3 .+ 0.05*x*rand([-1.0, 1.0])
+```
+
+Now, create a [generalised delay reconstruction](@ref custom_delay_reconstruction).
+For computing the transfer entropy from ``x`` to ``y``, we will create the generalised 
+embedding vectors ``\{(y_{t+η}, y_{t}, y_{t-τ}, x_{t}) \}``. In the 
+opposite direction, we will have embedding vectors of the form 
+``\{(x_{t+η}, x_{t}, x_{t-τ}, y_{t})\}``.
+
+```@example TE_partitioning_schemes
+τ = 1 # embedding lag
+η = 1 # forward prediction lag
+E_xtoy = customembed(Dataset(x, y), Positions([2, 2, 2, 1]), Lags([η, 0, -τ, 0]))
+E_ytox = customembed(Dataset(y, x), Positions([2, 2, 2, 1]), Lags([η, 0, -τ, 0]));
+```
+
+Now `E_xtoy` and `E_ytox` stores the lagged time series as a `DynamicalSystems.Dataset`,
+so that we can index the lagged variables by columns.
+
+Okay, so we know which variables are in which columns and what lags they have. 
+But the transfer entropy estimators don't have this information yet, so we need
+to provide it using a [`TEVars`](@ref) instance. This is necessary to organize the 
 computation of marginal probabilities.
 
 ```@example TE_partitioning_schemes
-x = cumsum(rand(300))
-y = sin.(cumsum(rand(300)))*0.3 .+ x
-
-τ = 1 # embedding lag
-ν = 1 # forward prediction lag
-E_xtoy = customembed(Dataset(x, y), Positions([2, 2, 2, 1]), Lags([ν, 0, -τ, 0]))
-E_ytox = customembed(Dataset(y, x), Positions([2, 2, 2, 1]), Lags([ν, 0, -τ, 0]))
-
 # Organize marginals
-Tf = [1]     # target, future
-Tpp = [2, 3] # target, present and past
-Spp = [4]    # source, present (and past, if we wanted)
+Tf = [1]     # future of target variable is in first column
+Tpp = [2, 3] # present and past of target variable are in second and third columns
+Spp = [4]    # the present of the source is in the fourth column.
 v = TEVars(Tf, Tpp, Spp)
 ```
 
@@ -39,14 +58,15 @@ embedding when partitioning.
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
 vars = TEVars([1], [2, 3], [4])
-estimator = VisitationFrequency()
+estimator = VisitationFrequency(b = 2) # logarithm to base 2 gives units of bits
 
 for (i, ϵ) in enumerate(ϵs)
     te_estimates_xtoy[i] = transferentropy(E_xtoy, vars, RectangularBinning(ϵ), estimator)
     te_estimates_ytox[i] = transferentropy(E_ytox, vars, RectangularBinning(ϵ), estimator)
 end
 
-p = plot(ϵs, te_estimates_xtoy, label = "TE(x -> y)", lc = :black)
+p = plot()
+plot!(p, ϵs, te_estimates_xtoy, label = "TE(x -> y)", lc = :black)
 plot!(p, ϵs, te_estimates_ytox, label = "TE(y -> x)", lc = :red)
 xlabel!(p, "# subdivisions along each axis")
 ylabel!(p, "Transfer entropy (bits)")
@@ -64,7 +84,7 @@ each axis of the delay embedding. We let `ϵ` take values on `[0.05, 0.5]`.
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
 vars = TEVars([1], [2, 3], [4])
-estimator = VisitationFrequency()
+estimator = VisitationFrequency(b = 2)
 
 for (i, ϵ) in enumerate(ϵs)
     te_estimates_xtoy[i] = transferentropy(E_xtoy, vars, RectangularBinning(ϵ), estimator)
@@ -95,8 +115,7 @@ lengths
 te_estimates_xtoy = zeros(length(ϵs_x1))
 te_estimates_ytox = zeros(length(ϵs_x1))
 vars = TEVars([1], [2, 3], [4])
-estimator = VisitationFrequency()
-
+estimator = VisitationFrequency(b = 2)
 
 mean_ϵs = zeros(10)
 
@@ -127,6 +146,7 @@ the number of subdivisions we want along each axis.
 # Define different number of subdivisions along each axis.
 ϵs = 3:50
 mean_ϵs = zeros(length(ϵs))
+estimator = VisitationFrequency(b = 2)
 
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))

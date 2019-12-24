@@ -48,7 +48,7 @@ test_jddt = JointDistanceDistributionTTest()
 tstep = 2
 grid = RegularGrid(0, length(X), tstep)
 
-@test causality(X, Y, test_pa, StrictlyIncreasing(), grid) isa SVector{η_max, T} where T <: Real
+@test causality(X, Y, test_pa, StrictlyIncreasing(), grid) isa Vector{T} where T <: Real
 @test causality(X, Y, test_ccm, StrictlyIncreasing(), grid) isa Vector{Vector{T}} where T <: Real
 @test causality(X, Y, test_cm, StrictlyIncreasing(), grid) isa Vector{T} where T <: Real
 @test causality(X, Y, test_vf, StrictlyIncreasing(), grid) isa Vector{T} where T <: Real

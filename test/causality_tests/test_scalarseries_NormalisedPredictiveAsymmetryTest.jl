@@ -20,14 +20,13 @@ test6 = VisitationFrequencyTest(binning = single_binning, ηs = 5)
 test7 = VisitationFrequencyTest(binning = multiple_binnings, ηs = -10:10)
 test8 = VisitationFrequencyTest(binning = multiple_binnings, ηs = 5)
 
+f = 1.0
+@test causality(x, y, NormalisedPredictiveAsymmetryTest(test1, f = f)) isa Vector{T} where T
+@test causality(x, y, NormalisedPredictiveAsymmetryTest(test2, f = f)) |> typeof <: Real
+@test causality(x, y, NormalisedPredictiveAsymmetryTest(test3, f = f)) isa Vector{T} where T
+@test causality(x, y, NormalisedPredictiveAsymmetryTest(test4, f = f)) |> typeof<: Real
 
-
-@test causality(x, y, PredictiveAsymmetryTest(test1)) isa Vector{T} where T
-@test causality(x, y, PredictiveAsymmetryTest(test2)) |> typeof <: Real
-@test causality(x, y, PredictiveAsymmetryTest(test3)) isa Vector{T} where T
-@test causality(x, y, PredictiveAsymmetryTest(test4)) |> typeof<: Real
-
-@test causality(x, y, PredictiveAsymmetryTest(test5)) isa Vector{T} where T
-@test causality(x, y, PredictiveAsymmetryTest(test6)) |> typeof<: Real
-@test causality(x, y, PredictiveAsymmetryTest(test7)) isa Vector{T} where T
-@test causality(x, y, PredictiveAsymmetryTest(test8)) |> typeof<: Real
+@test causality(x, y, NormalisedPredictiveAsymmetryTest(test5, f = f)) isa Vector{T} where T
+@test causality(x, y, NormalisedPredictiveAsymmetryTest(test6, f = f)) |> typeof<: Real
+@test causality(x, y, NormalisedPredictiveAsymmetryTest(test7, f = f)) isa Vector{T} where T
+@test causality(x, y, NormalisedPredictiveAsymmetryTest(test8, f = f)) |> typeof<: Real

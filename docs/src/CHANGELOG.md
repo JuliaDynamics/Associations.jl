@@ -1,21 +1,38 @@
 # Changelog for CausalityTools.jl
 
-## Release v0.8.0
+## Release v0.9.0
 
-### Breaking changes
+Release v0.9.0 introduces some new functionality and significant documentation improvements.
 
+### New functionality
+
+#### TransferEntropy.jl
+
+- Added [`NearestNeighbourMI`](@ref) transfer entropy estimator.
+- Added [`transferentropy(::Any, ::TEVars, ::NearestNeighbourMI)`](@ref) method.
 - Transfer entropy estimators now contain a field `b` which gives the base of the logarithm
     used during transfer entropy computations, and hence dictates the unit of the transfer 
     entropy. By default, `b = 2`, which gives the transfer entropy in bits. The keyword `b` 
     is thus obsolete in all transfer entropy methods that used it before.
+
+#### CausalityTools.jl
+
+- Added [`NearestNeighbourMITest`](@ref) transfer entropy test.
+- Added [`NormalisedPredictiveAsymmetryTest`](@ref), for which the predictive asymmetry 
+    is normalised to some fraction of the mean of the raw values of the predictive statistic.
 - All subtypes of `CausalityTest` are now mutable. This allows adjusting test 
     parameters during sensitivity analyses without creating a new test every time.
-- The return type for `PredictiveAsymmetryTest` is an `N`-element `SVector` where
-    `N` is the number of prediction lags.
+
+#### TimeseriesSurrogates.jl
+
+- Plotting functionality is behind a Requires-block. To use the plotting functionality, you 
+    now need to do `using Plots` beforehand.
 
 ### Documentation
 
 - Fixed small error in documentation for `DiscreteSystemSetup`.
+- Created high-level pages for transfer entropy. Re-did documentation.
+- Created high-level pages for cross mappings.
 
 ## Release v0.7.1
 

@@ -32,7 +32,8 @@ end
 """
     PredictiveAsymmetryTest(predictive_test::CausalityTest)
 
-The parameters for a predictive asymmetry causality test [1]. 
+The parameters for a predictive asymmetry causality test [1]. For a 
+normalised version, see [`NormalisedPredictiveAsymmetryTest`](@ref).
     
 ## Mandatory keywords
 
@@ -52,8 +53,11 @@ ranges too.
 ## Examples
 
 ```julia 
-test_visitfreq = VisitationFrequencyTest(ηs = [-5, -4, -2, -1, 0, 1, 2, 4, 5])
-test_transferoperator = TransferOperatorGridTest(ηs = -3:3)
+bin = RectangularBinning(5) # divide each axis into 5 equal-length intervals
+ηs = [-10:-1; 1:10] # exclude the zero lag (it is irrelevant for the asymmetry)
+
+test_visitfreq = VisitationFrequencyTest(ηs = ηs)
+test_transferoperator = TransferOperatorGridTest(ηs = ηs)
 
 # Note that `predictive_test` is a *mandatory* keyword.
 PredictiveAsymmetryTest(predictive_test = test_visitfreq)
@@ -102,9 +106,18 @@ function update_ηs(test::TransferOperatorGridTest)
         ηs = verified_prediction_lags(test.ηs))
 end
 
+function update_ηs(test::NearestNeighbourMITest{N}) where N
+
+    NearestNeighbourMITest(
+        k = test.k, l = test.l, m = test.m, n = test.n, 
+        τ = test.τ,
+        ηs = verified_prediction_lags(test.ηs))
+end
+
 function return_predictive_asymmetry(ηs, As, N)
-    T = typeof(As[1])
-    SVector{N, T}(As)
+    #T = typeof(As[1])
+    #SVector{N, T}(As)
+    As
 end
 
 return_predictive_asymmetry(η::Int, As, N) = As[1]
@@ -131,8 +144,35 @@ function predictive_asymmetry(source, target,
     return return_predictive_asymmetry(p.predictive_test.ηs, As, N)
 end
 
+function predictive_asymmetry(source, target, cond,
+    p::PredictiveAsymmetryTest{T, N}) where {T <: TransferEntropyCausalityTest, N}
+
+    # Update the test parameters so that we have symmetric prediction lags
+    test = update_ηs(p.predictive_test)
+
+    # Predictions from source to target. 
+    preds = causality(source, target, cond, test)
+
+    # The number of predictive asymmetries is half the number of prediction lags,
+    # which is encoded in the type parameter `N`
+    ηs = test.ηs
+    As = zeros(Float64, N)
+
+    for (i, η) in enumerate(ηs[ηs .> 0])
+        lag_idxs = findfirst(ηs .== -η):findfirst(ηs .== η)
+        As[i] = causalbalance(ηs[lag_idxs], preds[lag_idxs])
+    end
+
+    return return_predictive_asymmetry(p.predictive_test.ηs, As, N)
+end
+
 function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::PredictiveAsymmetryTest{CT}) where {T<:Real, CT}
     predictive_asymmetry(source, target, p)
+end
+
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}, 
+        p::PredictiveAsymmetryTest{CT}) where {T<:Real, CT}
+    predictive_asymmetry(source, target, cond, p)
 end
 
 # there is no need to define custom causality method for a uncertain data 

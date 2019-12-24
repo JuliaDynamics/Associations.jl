@@ -45,16 +45,21 @@ pages:
     - From dynamical systems: causalitytests/causality_from_dynamical_systems.md
   - Causality tests: 
     - Overview: causalitytests/causality_tests.md
-    - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
-    - CrossMappingTest: causalitytests/CrossMappingTest.md
-    - ConvergentCrossMappingTest: causalitytests/ConvergentCrossMappingTest.md
-    - SMeasureTest: causalitytests/SMeasureTest.md
-    - TransferOperatorGridTest: causalitytests/TransferOperatorGridTest.md
-    - VisitationFrequencyTest: causalitytests/VisitationFrequencyTest.md
-    - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
-    - ExactSimplexIntersectionTest: causalitytests/ExactSimplexIntersectionTest.md
-    - Predictive asymmetry test: causalitytests/PredictiveAsymmetryTest.md
-  
+    - Cross mappings:
+      - CrossMappingTest: causalitytests/CrossMappingTest.md
+      - ConvergentCrossMappingTest: causalitytests/ConvergentCrossMappingTest.md
+    - Distance based:
+      - JointDistanceDistributionTest: causalitytests/JointDistanceDistributionTest.md
+      - SMeasureTest: causalitytests/SMeasureTest.md
+    - Transfer entropy:
+      - TransferOperatorGridTest: causalitytests/TransferOperatorGridTest.md
+      - VisitationFrequencyTest: causalitytests/VisitationFrequencyTest.md
+      - NearestNeighbourMITest: causalitytests/NearestNeighbourMITest.md
+      - ApproximateSimplexIntersectionTest: causalitytests/ApproximateSimplexIntersectionTest.md
+      - ExactSimplexIntersectionTest: causalitytests/ExactSimplexIntersectionTest.md
+    - Predictive asymmetry:
+      - PredictiveAsymmetryTest: causalitytests/PredictiveAsymmetryTest.md
+      - NormalisedPredictiveAsymmetryTest: causalitytests/NormalisedPredictiveAsymmetryTest.md
   - Uncertainty handling and subsampling:
       - Naive resampling: causalitytests/causality_from_uncertain_data_naive.md
       - ConstrainedTest: causalitytests/causality_from_uncertain_data_naive_constrained.md
@@ -62,25 +67,24 @@ pages:
       - InterpolateBinTest: causalitytests/causality_from_uncertain_data_InterpolateBinTest.md
       - RandomSequencesTest: causalitytests/causality_from_uncertain_data_RandomSequencesTest.md
       - Strictly increasing and interpolated resampling: causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md
-  #  - BinnedDataCausalityTest: uncertaindata/BinnedDataCausalityTest.md
-  - Fundamentals:
+  - CausalityToolsBase:
     - Discretization: causalitytoolsbase/discretization.md
     - Delay reconstruction: causalitytoolsbase/delay_reconstructions.md
-    - Invariant properties over partitions:
+  - PerronFrobenius:
       - Invariant measure: perronfrobenius/invariantmeasure.md
       - Transfer operator: perronfrobenius/transferoperator.md
-  - Estimators and algorithms:
-    - Transfer entropy:
-      - Convenience functions: transferentropy/convenience_functions_te.md
-      - Low-level estimators: transferentropy/transferentropy_estimators.md
-      - Mapping delay reconstruction to marginals (TEVars): transferentropy/TEVars.md
+  - Transfer entropy:
+    - Estimators: transferentropy/TE_estimators.md
+    - Methods: transferentropy/estimating_TE.md
+    - Convenience methods: transferentropy/convenience_methods_te.md
+    - Examples: 
       - Effect of discretization scheme: transferentropy/examples_TE_different_partitionings.md
-    - CCM:
-      - Overview: crossmappings/ccm/overview.md
-      - Cross mapping: crossmappings/ccm/crossmapping.md
-      - Converent cross mapping: crossmappings/ccm/convergentcrossmapping.md
-    - Joint distance distribution: algorithms/joint_distance_distribution.md
-    - Syntax overview: syntax_overview.md
+  - CrossMappings:
+    - Overview: crossmappings/ccm/overview.md
+    - Cross mapping: crossmappings/ccm/crossmapping.md
+    - Converent cross mapping: crossmappings/ccm/convergentcrossmapping.md
+  - Joint distance distribution: algorithms/joint_distance_distribution.md
+  - Syntax overview: syntax_overview.md
   - Example systems: 
     - Overview: example_systems/example_systems_overview.md
     - Discrete systems: example_systems/example_systems_discrete.md

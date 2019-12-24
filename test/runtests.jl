@@ -33,6 +33,7 @@ end
     include("causality_tests/test_scalarseries_ApproximateSimplexIntersectionTest.jl")
     include("causality_tests/test_scalarseries_ExactSimplexIntersectionTest.jl")
     include("causality_tests/test_scalarseries_PredictiveAsymmetryTest.jl")
+    include("causality_tests/test_scalarseries_NormalisedPredictiveAsymmetryTest.jl")
     include("causality_tests/test_scalarseries_SMeasure.jl")
 end
 
