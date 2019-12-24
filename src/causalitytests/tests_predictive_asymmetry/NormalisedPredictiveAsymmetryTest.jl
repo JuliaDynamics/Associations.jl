@@ -1,7 +1,8 @@
 """
-    NormalisedPredictiveAsymmetryTest(predictive_test::CausalityTest)
+    NormalisedPredictiveAsymmetryTest(predictive_test::CausalityTest, f::Number = 1.0)
 
-The parameters for a predictive asymmetry causality test [1]. 
+The parameters for a normalised predictive asymmetry causality test [1]. For the 
+non-normalised version, see [`PredictiveAsymmetryTest`](@ref).
     
 ## Mandatory keywords
 
@@ -52,14 +53,7 @@ Base.@kwdef mutable struct NormalisedPredictiveAsymmetryTest{TEST, N} <: Causali
     end
     
     # If a threshold is given, use it.
-    function NormalisedPredictiveAsymmetryTest(test::T, f::Number) where {T <: TransferEntropyCausalityTest}
-        # Check that prediction lags are okay
-        verified_prediction_lags(test.ηs)
-        N = length(test.ηs[test.ηs .> 0])
-        return new{T, N}(test, f)
-    end
-    
-    function NormalisedPredictiveAsymmetryTest(test::T; f::Number = 1.0) where {T <: TransferEntropyCausalityTest}
+    function NormalisedPredictiveAsymmetryTest(test::T; f::Number) where {T <: TransferEntropyCausalityTest}
         # Check that prediction lags are okay
         verified_prediction_lags(test.ηs)
         N = length(test.ηs[test.ηs .> 0])
@@ -67,17 +61,20 @@ Base.@kwdef mutable struct NormalisedPredictiveAsymmetryTest{TEST, N} <: Causali
     end
 end
 
-using StatsBase
-import CausalityTools.CausalityTests: causalbalance
+""" 
+    lagnormalised_statistic(values, ηs, f)
 
+In a cumulative manner, normalise the `values` for the statistic 
+to some fraction `f` of their mean over prediction lags `ηs`.
+"""
 function lagnormalised_statistic(vals, ηs, f)
-    length(vals) == length(ηs) || error("length(vals) must equal length(ηs)")
+    length(values) == length(ηs) || error("length(vals) must equal length(ηs)")
     avg_vals = zeros(Float64, length(ηs[ηs .> 0]))
     
     for η in ηs[ηs .> 0]
         startidx = findfirst(ηs .== -η)
         stopidx  = findlast(ηs .== η)
-        avg_vals[η] = mean(vals[startidx:stopidx])*f
+        avg_vals[η] = mean(values[startidx:stopidx])*f
     end
     
     return avg_vals
@@ -108,4 +105,4 @@ function predictive_asymmetry(source, target,
     return return_predictive_asymmetry(p.predictive_test.ηs, As, N)
 end
 
-export NormalisedPredictiveAsymmetry
+export NormalisedPredictiveAsymmetryTest

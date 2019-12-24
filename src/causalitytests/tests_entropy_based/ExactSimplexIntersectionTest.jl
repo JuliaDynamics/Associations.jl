@@ -6,7 +6,7 @@ import CausalityToolsBase: TriangulationBinning, ExactIntersection
 """
     ExactSimplexIntersectionTest(k::Int = 1, l::Int = 1, m::Int = 1, n::Int = 1,
         τ::Int = 1, 
-        estimator::BinnedTransferEntropyEstimator = TransferOperatorGrid(b = 2),
+        estimator::BinningTransferEntropyEstimator = TransferOperatorGrid(b = 2),
         n_pts::Int = 10000, binning_summary_statistic::Function = StatsBase.mean,
         binning::Union{RectangularBinning, Vector{RectangularBinning}},
         ηs::Union{AbstractVector{Int}})

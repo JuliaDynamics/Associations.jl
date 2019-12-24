@@ -63,6 +63,7 @@ module CausalityTools
 
     # Wrappers of the different methods.
     include("method_wrappers/highlevel_methods.jl")
+    include("method_wrappers/transferentropy_from_timeseries.jl")
 
     # Various algorithsm that are implemented here and not in subpackages 
     include("algorithms/joint_distance_distribution.jl")

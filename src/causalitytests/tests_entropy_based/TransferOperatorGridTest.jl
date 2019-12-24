@@ -195,11 +195,17 @@ Base.@kwdef mutable struct TransferOperatorGridTest{N} <: TransferEntropyCausali
 end
 
 
-function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::TransferOperatorGridTest)  where {T <: Real}
-    [p.binning_summary_statistic(
-        transferentropy(source, target, p.binning, 
-            p.k, p.l, p.m, η = η, τ = p.τ, 
-            estimator = p.estimator)) for η in p.ηs]
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, p::TransferOperatorGridTest) where {T <: Real}
+    [transferentropy(source, target, p.k, p.l, p.m, p.binning, η = η, τ = p.τ, 
+        summary_statistic = p.binning_summary_statistic, 
+            estimator = p.estimator) for η in p.ηs]
+end
+
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}, 
+        p::TransferOperatorGridTest) where {T <: Real}
+    [transferentropy(source, target, cond, p.k, p.l, p.m, p.n, p.binning, η = η, τ = p.τ, 
+        summary_statistic = p.binning_summary_statistic, 
+            estimator = p.estimator) for η in p.ηs]
 end
 
 export TransferOperatorGridTest

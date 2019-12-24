@@ -21,6 +21,8 @@ using Reexport
         resample,
         ConstrainedResampling
 
+    import ..transferentropy
+
 
     resample(v::Vector{Real}) = v
 

@@ -48,12 +48,14 @@ PAGES = [
         "causalitytests/JointDistanceDistributionTest.md",
         "causalitytests/SMeasureTest.md",
 
+        "causalitytests/NearestNeighbourMITest.md",
         "causalitytests/TransferOperatorGridTest.md",
         "causalitytests/VisitationFrequencyTest.md",
         "causalitytests/ApproximateSimplexIntersectionTest.md",
         "causalitytests/ExactSimplexIntersectionTest.md",
 
-        "causalitytests/PredictiveAsymmetryTest.md"
+        "causalitytests/PredictiveAsymmetryTest.md",
+        "causalitytests/NormalisedPredictiveAsymmetryTest.md"
     ],
     "CausalityToolsBase" => [
         "Discretization" => "causalitytoolsbase/discretization.md",
@@ -66,9 +68,7 @@ PAGES = [
     "Transfer entropy" => [
         "Estimators" => "transferentropy/TE_estimators.md",
         "Estimating TE" => "transferentropy/estimating_TE.md",
-        #"Estimators" => "transferentropy/transferentropy_estimators.md",
-        #"Convenience functions" => "transferentropy/convenience_functions_te.md",
-        #"TEVars" => "transferentropy/TEVars.md",
+        "Convenience methods" => "transferentropy/convenience_methods_te.md",
         "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
     ],
     "Distance based measures" => [

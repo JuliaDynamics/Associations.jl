@@ -32,7 +32,8 @@ end
 """
     PredictiveAsymmetryTest(predictive_test::CausalityTest)
 
-The parameters for a predictive asymmetry causality test [1]. 
+The parameters for a predictive asymmetry causality test [1]. For a 
+normalised version, see [`NormalisedPredictiveAsymmetryTest`](@ref).
     
 ## Mandatory keywords
 
