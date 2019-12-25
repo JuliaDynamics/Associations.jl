@@ -10,7 +10,7 @@ causality(source::AbstractVector, target::AbstractVector, test::CausalityTest)
 Returned values from `causality` depend on the `test` type - see the documentation
 for specific tests for details.
 
-### [Uncertainty handling](@id uncertainty_handling)
+## [Uncertainty handling](@id uncertainty_handling)
 
 - All high-level causality tests are integrated with the uncertainty handling 
     machinery in [UncertainData.jl](https://github.com/kahaaga/UncertainData.jl). See the list of 
