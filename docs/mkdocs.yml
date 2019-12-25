@@ -4,6 +4,9 @@ site_description: Causality detection from time series in Julia.
 site_author:      Kristian Agasøster Haaga
 
 theme: material
+  font:
+    text: 'Segoe UI'
+    code: 'Source Code Pro'
 
 extra_css:
   - assets/Documenter.css
