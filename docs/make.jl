@@ -138,9 +138,8 @@ expandfirst = [
     "causalitytests/causality_tests_overview.md",
     "perronfrobenius/transferoperator.md",
     "perronfrobenius/invariantmeasure.md",
-    "causalitytests/NearestNeighbourMITest.md"
-    "crossmappings/ccm/overview.md",
-
+    "causalitytests/NearestNeighbourMITest.md",
+    "crossmappings/ccm/overview.md"
 ]
 
 makedocs(
