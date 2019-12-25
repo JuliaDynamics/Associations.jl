@@ -11,7 +11,7 @@
 ### Documentation
 
 - Figures in `PredictiveAsymmetryTest` example are now larger.
-- [`NearestNeighbourMITest`])(@ref) and [`NormalisedPredictiveAsymmetryTest`](@ref) added to documentation
+- [`NearestNeighbourMITest`](@ref) and [`NormalisedPredictiveAsymmetryTest`](@ref) added to documentation
     for [`EntropyBasedCausalityTest`](@ref).
 - Documentation for transfer entropy estimators updated with references to where they are applicable.
 - Enlarged some figures.
