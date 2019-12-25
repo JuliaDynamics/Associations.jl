@@ -11,7 +11,9 @@ whose fields are the parameters of the test. A causality test is therefore uniqu
 by its parameters. Available causality tests are listed below.
 
 The advantage of this type-based approach is that we can have a unified syntax to 
-estimate time series causality statistics, using the [`causality(source::AbstractVector, target::AbstractVector, test::CausalityTest)`](@ref) method.
+estimate time series causality statistics, using the [`causality(source::AbstractVector, target::AbstractVector, test::CausalityTest)`](@ref) method, which is all a beginner-user
+needs to learn. Low-level methods can also be used directly, and are available from 
+the method-specific pages in the menu (see below).
 
 ## Distance based tests
 
@@ -41,9 +43,13 @@ All tests can be used to compute causality statistics on empirical
 [uncertain time series](@ref causality_uncertain_naiveresampling) and directly 
 [from dynamical systems](@ref causality_dynamical_systems) through the `causality` method.
 
-It is recommended to use the `causality` methods to estimate causality statistics from 
-your time series. However, if you wish to use the low-level methods directly, then these
-are available from the method-specific pages in the menu.
+Low-level causality statistics and their different methods/estimators are described on the following pages:
+
+- [Predictive asymmetry](@ref predictive_asymmetry_overview)
+- [Transfer entropy](@ref transferentropy_overview)
+- [Cross mapping](@ref crossmapping_overview)
+- [S-Measure](@ref SMeasureTest_overview)
+- [Joint distance distribution](@ref joint_distance_distribution_overview)
 
 ## Schemes for uncertainty handling
 

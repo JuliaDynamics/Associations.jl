@@ -14,9 +14,9 @@ theme:
     text: 'Segoe UI'
     code: 'Source Code Pro'
 
-plugins:
-  - git-revision-date-localized:
-      type: datetime
+# plugins:
+#   - git-revision-date-localized:
+#       type: datetime
 
 extra:
   social:

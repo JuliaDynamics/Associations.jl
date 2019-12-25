@@ -14,10 +14,22 @@ using Plots
 
 `CausalityTools` is a Julia package providing algorithms for detecting causal relations in complex systems based on time series data.
 
+## Getting started
+
+Causality statistics and their different methods/estimators are described on method-specific pages. These can be accessed from the 'Package ecosystem' tab in the top menu.
+
+- [Predictive asymmetry](@ref predictive_asymmetry_overview)
+- [Transfer entropy](@ref transferentropy_overview)
+- [Cross mapping](@ref crossmapping_overview)
+- [S-Measure](@ref SMeasureTest_overview)
+- [Joint distance distribution](@ref joint_distance_distribution_overview)
+
+For more flexibility, however, check out the [`causality` interface](@ref causality_tests_overview),
+which provides a unified syntax for applying all the tests, even on uncertain data!
+
 ## Contents
 
-The `CausalityTools` umbrella module provides set of high-level functionality aimed at causality testing from time series. The functionality required for these to work are organised in different packages, whose 
-purpose is summarised below. Simpler algorithms are implemented directly as submodules in `CausalityTools`. 
+The `CausalityTools` module provides set of tools for time series causality testing. Much of the machinery required for these to work are organised in different packages/submodules. Simpler algorithms are implemented directly as submodules in `CausalityTools`.  Relevant types and methods are all re-exported by `CausalityTools`. The functionality and purpose of these modules are summarised below.
 
 ### [CausalityTests](@ref causality_tests_overview)
 

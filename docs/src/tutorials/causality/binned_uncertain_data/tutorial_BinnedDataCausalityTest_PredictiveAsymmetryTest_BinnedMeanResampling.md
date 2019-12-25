@@ -75,7 +75,9 @@ savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y_binned.svg");
 
 ![](figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y_binned.svg)
 
-## Test setup: a `PredictiveAsymmetryTest`
+## Test setup
+
+### Defining a `PredictiveAsymmetryTest`
 
 A `PredictiveAsymmetryTest` takes as input a causality test that uses lagged 
 prediction. Here, we'll use a transfer entropy test, using a visitation 
@@ -140,3 +142,22 @@ savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_lag_vs_A.svg"); nothi
 ```
 
 ![](figs/PredictiveAsymmetryTest_BinnedMeanResampling_lag_vs_A.svg)
+
+## Discussion
+
+Although not all realisations of time series pairs `x` and `y` we draw from within the 
+uncertainties of the data yield the correct directionality, the mean predictive 
+asymmetries over the ensemble are positive for the causal direction and negative 
+for the non-causal direction. This is indicative of unidirectional causality from 
+`x` to `y`, which is the ground truth.
+
+In this example, we were very eager when assigning timing uncertainties. In some cases,
+this is realistic. In paleoclimate science, for example, one can determine past 
+oceanic ``\delta^{18}O`` values from marine microfossils, which can be measured quite 
+precisely.  The ages of the microfossils, however, has to be determined by carbon-14 dating,
+which can introduce quite age uncertainties. The nice thing about the predictive asymmetry
+test is that using this uncertainty-ensemble approach gives mean asymmetries that are 
+still diagnostic of the underlying coupling, even faced with larger timing errors. 
+
+For systems with less timing uncertainties, one would expect the predictive asymmetry 
+to give "cleaner" signals (asymmetries) that are indicative of the correct directionality.

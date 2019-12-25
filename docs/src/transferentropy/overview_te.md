@@ -1,5 +1,4 @@
-# [Overview](@ref overview_transferentropy)
-
+# [Overview](@id transferentropy_overview)
 
 Assume we want to compute transfer entropy from a source variable ``S`` 
 to a target variable ``T``, potentially conditioned on variable(s) ``C``.  

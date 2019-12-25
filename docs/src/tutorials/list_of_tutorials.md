@@ -2,9 +2,9 @@
 
 The following tutorials are also available as [Juputer notebooks](https://github.com/kahaaga/CausalityTools.jl/tree/master/tutorials).
 
-## Bivariate causality analyses on scalar time series
+<!-- ## Bivariate causality analyses on scalar time series
 
-- [`SMeasureTest` on scalar time series](@ref tutorial_smeasuretest).
+- [`SMeasureTest` on scalar time series](@ref tutorial_SMeasureMest). -->
 
 ## [Causality from uncertain data](@id tutorials_causality_from_uncertain_data)
 

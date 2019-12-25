@@ -12,6 +12,8 @@ Load necessary packages.
 using UncertainData, Plots, CausalityTools, DynamicalSystemsBase
 ```
 
+### Example time series
+
 Generate some points with uncertainties.
 
 ```julia
@@ -45,8 +47,8 @@ Plot the original data, the binned data and the bin grid.
 
 ```julia
 plot(xlabel = "Time", ylabel = "Value")
-plot!(x, marker = stroke(0.01, :black), ms = 1, c = :black, label = "")
-plot!(x_binned,  marker = stroke(0.01, :red), ms = 4, c = :red, label = "")
+plot!(x, marker = stroke(0.01, :red), ms = 1, c = :red, label = "x")
+plot!(x_binned,  marker = stroke(0.01, :red), ls = :dash, ms = 4, c = :red, label = "")
 plot!(median.(x_binned.indices), median.(x_binned.values), lw = 2, c = :red, label = "")
 
 vline!(left_bin_edges, c = :grey, lw = 0.5, lα = 0.5, ls = :dash, label = "")
@@ -54,12 +56,16 @@ vline!(left_bin_edges, c = :grey, lw = 0.5, lα = 0.5, ls = :dash, label = "")
 
 ![](figs/BinnedResampling_RandomSequencesTest_PredictiveAsymmetryTest_ar1_unidir_timeseries_binned.svg)
 
+## Test setup
+
 Define some causality tests.
 
 ```julia
 te_test = VisitationFrequencyTest(ηs = -5:5, binning = RectangularBinning(4))
 pa_test = PredictiveAsymmetryTest(te_test)
 ```
+
+## Analysis
 
 Now, run the causality test on random subsampled time-consecutive chunks of the binned data.
 
@@ -77,6 +83,8 @@ pa_xy = causality(x_binned, y_binned, ra_test)
 pa_yx = causality(y_binned, x_binned, ra_test)
 ```
 
+## Results
+
 Plot the results.
 
 ```julia
@@ -93,5 +101,7 @@ hline!([0], lw = 1.5, ls = :dash, c = :black, label = "")
 ```
 
 ![](figs/BinnedResampling_RandomSequencesTest_PredictiveAsymmetryTest_ar1_results.svg)
+
+## Discussion
 
 As expected, we get nice separation into positive values for the causal direction (x to y) and separation to negative values for the non-causal direction (y to x).

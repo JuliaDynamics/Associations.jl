@@ -47,7 +47,7 @@ run the following:
 Pkg.build("SpecialFunctions")
 ```
 
-The run 
+Then run
 
 ```julia
 using CausalityTools

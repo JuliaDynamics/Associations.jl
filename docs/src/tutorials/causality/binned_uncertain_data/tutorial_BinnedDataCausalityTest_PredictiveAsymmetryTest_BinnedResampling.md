@@ -74,7 +74,9 @@ savefig("figs/PredictiveAsymmetryTest_BinnedResampling_x_and_y_binned.svg"); not
 
 ![](figs/PredictiveAsymmetryTest_BinnedResampling_x_and_y_binned.svg)
 
-## Test setup: a `PredictiveAsymmetryTest`
+## Test setup
+
+### Defining a `PredictiveAsymmetryTest`
 
 A `PredictiveAsymmetryTest` takes as input a causality test that uses lagged 
 prediction. Here, we'll use a transfer entropy test, using a visitation 
@@ -149,3 +151,12 @@ savefig("figs/PredictiveAsymmetryTest_BinnedResampling_lag_vs_A.svg"); nothing #
 ```
 
 ![](figs/PredictiveAsymmetryTest_BinnedResampling_lag_vs_A.svg)
+
+## Discussion
+
+The mean predictive asymmetries over the ensemble are positive for the causal 
+direction and negative for the non-causal direction. This is indicative of unidirectional 
+causality from `x` to `y`, which is the ground truth. 
+
+Even though we introduced large timing errors, the predicitive asymmetry still picks up on the 
+correct directionality.

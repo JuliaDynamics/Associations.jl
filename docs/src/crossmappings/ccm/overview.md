@@ -1,4 +1,4 @@
-# [Overview: convergent cross mapping (CCM)](@id ccm)
+# [Overview: convergent cross mapping (CCM)](@id crossmapping_overview)
 
 The convergent cross mapping (CCM) algorithm [^1] measures
 how well a [delay embedding](../../glossary/embed.md) of a putative response time series
