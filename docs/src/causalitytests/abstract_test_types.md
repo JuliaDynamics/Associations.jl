@@ -13,7 +13,7 @@ CausalityTest
 DistanceBasedCausalityTest
 ```
 
-### `EntropyBasedCausalityTest`
+## Entropy based causality tests
 
 ```@docs
 EntropyBasedCausalityTest

@@ -74,7 +74,6 @@ PAGES = [
         "Convenience methods" => "transferentropy/convenience_methods_te.md",
         "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
     ],
-
     "PredictiveAsymmetry" => [
         "Predictive asymmetry" => "PredictiveAsymmetry/predictive_asymmetry.md"
     ],

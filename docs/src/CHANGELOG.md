@@ -5,6 +5,7 @@
 ### Documentation
 
 - Fixed formatting for equations of motion for the Ikeda system.
+- Improvements to the documentation for causality tests.
 
 ### Non-breaking internals
 
