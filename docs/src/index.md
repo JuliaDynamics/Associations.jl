@@ -141,7 +141,7 @@ in a separate package.
 
 - **Provide a comprehensive, [easy-to-use framework](@ref causality_time_series)** for the detection of directional causal influences in complex dynamical systems from time series.
 
-- **Functional and efficient [implementations](@ref syntax_overview)** of causality detection algorithms, with thorough documentation and references to primary literature.
+- **Functional and efficient [implementations](@ref causality_time_series)** of causality detection algorithms, with thorough documentation and references to primary literature.
 
 - [**Integration with UncertainDatasets.jl**](@ref causality_time_series), which greatly simplifies working with uncertain data.
 

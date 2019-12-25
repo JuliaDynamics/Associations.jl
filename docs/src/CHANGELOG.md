@@ -1,5 +1,13 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.4
+
+- Fixed broken links on introduction page.
+
+## Release v0.9.3
+
+- Documentation fixes.
+
 ## Release v0.9.2
 
 ### Documentation
