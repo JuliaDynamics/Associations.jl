@@ -1,6 +1,6 @@
 # [Package overview](@id package_overview)
 
-## [High-level causality tests](@id causality_tests_overview)
+## [High-level causality tests](@id causality_tests_overview_2)
 
 ### Transfer entropy tests
 

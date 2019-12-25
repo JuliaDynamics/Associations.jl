@@ -14,10 +14,22 @@ using Plots
 
 `CausalityTools` is a Julia package providing algorithms for detecting causal relations in complex systems based on time series data.
 
+## Getting started
+
+Causality statistics and their different methods/estimators are described on method-specific pages. These can be accessed from the 'Package ecosystem' tab in the top menu.
+
+- [Predictive asymmetry](@ref predictive_asymmetry_overview)
+- [Transfer entropy](@ref transferentropy_overview)
+- [Cross mapping](@ref crossmapping_overview)
+- [S-Measure](@ref Smeasure_overview)
+- [Joint distance distribution](@ref joint_distance_distribution_overview)
+
+For more flexibility, however, check out the [`causality` interface](@ref causality_tests_overview),
+which provides a unified syntax for applying all the tests, even on uncertain data!
+
 ## Contents
 
-The `CausalityTools` umbrella module provides set of high-level functionality aimed at causality testing from time series. The functionality required for these to work are organised in different packages, whose 
-purpose is summarised below. Simpler algorithms are implemented directly as submodules in `CausalityTools`. 
+The `CausalityTools` module provides set of tools for time series causality testing. Much of the machinery required for these to work are organised in different packages/submodules. Simpler algorithms are implemented directly as submodules in `CausalityTools`.  Relevant types and methods are all re-exported by `CausalityTools`. The functionality and purpose of these modules are summarised below.
 
 ### [CausalityTests](@ref causality_tests_overview)
 
@@ -48,12 +60,13 @@ For time series, the syntax is [`causality(source, target, test::CausalityTest)`
 - [`JointDistanceDistributionTTest`](@ref)
 - [`SMeasureTest`](@ref)
 
-For those interested, low-level methods are available individual method pages in the menu on the left.
-These also provide a bit more information on each of the causality statistics.
+For those interested, low-level methods are available individual method 
+pages under `Package ecosystem` in the menu. These also provide a bit more 
+information on each of the causality statistics.
 
 ### [CausalityToolsBase](@ref custom_delay_reconstructions)
 
-- [Generalised delay reconstructions](@ref custom_delay_reconstruction) for the computation of, designed to assist with transfer entropy computations and related methods.
+- [Generalised delay reconstructions](@ref custom_delay_reconstruction) designed to assist with transfer entropy computations and related methods.
 - [Discretization routines](@ref discretization) for partitioning state space reconstructions, or multidimensional datasets in general.
 
 ### [Simplices](@ref exact_simplex_intersection)
@@ -98,7 +111,7 @@ Selected features:
 
 ### [UncertainData](@ref uncertainty_handling)
 
-[`UncertainData`](https://github.com/kahaaga/UncertainData.jl) is a package generic 
+[`UncertainData`](https://github.com/kahaaga/UncertainData.jl) is a package for generic 
 uncertain data handling. It was originally developed for handling uncertainties in proxy 
 data when doing causal analyses, but provides functionality useful elsewhere, so is kept 
 in a separate package.

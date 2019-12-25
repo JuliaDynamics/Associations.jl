@@ -1,11 +1,13 @@
 
 # Abstract causality test types
 
+## `CausalityTest`
+
 ```@docs
 CausalityTest
 ```
 
-# Distance based casuality tests
+### `DistanceBasedCausalityTest`
 
 ```@docs
 DistanceBasedCausalityTest
@@ -16,6 +18,8 @@ DistanceBasedCausalityTest
 ```@docs
 EntropyBasedCausalityTest
 ```
+
+#### `TransferEntropyCausalityTest`
 
 ```@docs
 TransferEntropyCausalityTest

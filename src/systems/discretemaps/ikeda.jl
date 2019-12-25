@@ -6,12 +6,12 @@ import DynamicalSystems: DiscreteDynamicalSystem
     eom_ikeda(u, p, t)
 
 Equations of motion for a discrete two-dimensional Ikeda map system, adapted from [1]
-by adding a noise term and allowing the influences from `x \\to y` (``c_{xy}``) and 
-from `y \\to x` (``c_{yx}``) to be adjusted. The difference equations are
+by adding a noise term and allowing the influences from ``x \\to y`` (``c_{xy}``) and 
+from ``y \\to x`` (``c_{yx}``) to be adjusted. The difference equations are
 
 ```math
 \\begin{aligned}
-x(t+1) = 1 + \\mu(x(t) \\cos{(\\theta)} - c_{yx} y(t) \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\xi_{t}^{(1)})}{(1-x)}, \\xi_{t}^{(2)} \\
+x(t+1) = 1 + \\mu(x(t) \\cos{(\\theta)} - c_{yx} y(t) \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\xi_{t}^{(1)})}{(1-x)}, \\xi_{t}^{(2)} \\\\
 y(t+1) = \\mu(y(t) \\cos{(\\theta)} - c_{xy} x(t) \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\zeta_{t}^{(1)})}{(1-y)}, \\zeta_{t}^{(2)}
 \\end{aligned}
 ```
@@ -41,8 +41,8 @@ end
         r₁ = rand(Uniform(0.01, 0.3)), r₂ = rand(Uniform(0.01, 0.3)), σ = 0.05)
 
 Initialise a discrete two-dimensional Ikeda map system, adapted from [1]
-by adding a noise term and allowing the influences from `x \\to y` (``c_{xy}``) and 
-from `y \\to x` (``c_{yx}``) to be adjusted.
+by adding a noise term and allowing the influences from ``x \\to y`` (``c_{xy}``) and 
+from ``y \\to x`` (``c_{yx}``) to be adjusted.
 
 As a rule-of-thumb, if parameters `a`, `b`, and `c` are drawn from uniform 
 distributions on `[0.8, 1.5]`, `[10, 14]` and `[0.1, 0.9]`.
@@ -51,7 +51,7 @@ The difference equations are
 
 ```math
 \\begin{aligned}
-x(t+1) = 1 + \\mu(x \\cos{(\\theta)} - c_{yx} y \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\xi_{t}^{(1)})}{(1-x)}, \\xi_{t}^{(2)} \\
+x(t+1) = 1 + \\mu(x \\cos{(\\theta)} - c_{yx} y \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\xi_{t}^{(1)})}{(1-x)}, \\xi_{t}^{(2)} \\\\
 y(t+1) = \\mu(y \\cos{(\\theta)} - c_{xy} x \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\zeta_{t}^{(1)})}{(1-y)}, \\zeta_{t}^{(2)}
 \\end{aligned}
 ```

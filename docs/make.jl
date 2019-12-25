@@ -66,10 +66,16 @@ PAGES = [
         "Invariant measure" => "perronfrobenius/invariantmeasure.md"
     ],
     "Transfer entropy" => [
+        "Overview" => "transferentropy/overview_te.md",
         "Estimators" => "transferentropy/TE_estimators.md",
         "Estimating TE" => "transferentropy/estimating_TE.md",
+        "Assigning marginals" => "transferentropy/assigning_marginals.md",
+        "Generalised delay embedding" => "transferentropy/generalised_delay_reconstructions.md",
         "Convenience methods" => "transferentropy/convenience_methods_te.md",
         "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
+    ],
+    "PredictiveAsymmetry" => [
+        "Predictive asymmetry" => "PredictiveAsymmetry/predictive_asymmetry.md"
     ],
     "Distance based statistics" => [
         "CCM" => [
@@ -123,6 +129,18 @@ PAGES = [
     ]
 ]
 
+
+# Some things need to be expanded before index.md for headers to work properly.
+expandfirst = [
+    "causalitytoolsbase/discretization.md",
+    "causalitytoolsbase/delay_reconstructions.md",
+    "simplices/Simplices.md",
+    "causalitytests/causality_tests_overview.md",
+    "perronfrobenius/transferoperator.md",
+    "perronfrobenius/invariantmeasure.md",
+    "causalitytests/NearestNeighbourMITest.md"
+]
+
 makedocs(
     sitename = "CausalityTools.jl documentation",
     #modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
@@ -130,6 +148,7 @@ makedocs(
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
     clean = true,
+    expandfirst = expandfirst,
     pages = PAGES,
     highlightsig = true
 )

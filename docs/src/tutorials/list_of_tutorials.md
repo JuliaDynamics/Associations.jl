@@ -2,10 +2,6 @@
 
 The following tutorials are also available as [Juputer notebooks](https://github.com/kahaaga/CausalityTools.jl/tree/master/tutorials).
 
-## Bivariate causality analyses on scalar time series
-
-- [`SMeasureTest` on scalar time series](@ref tutorial_smeasuretest).
-
 ## [Causality from uncertain data](@id tutorials_causality_from_uncertain_data)
 
 - [`PredictiveAsymmetryTest` with naive resampling](https://github.com/kahaaga/CausalityTools.jl/blob/master/tutorials/CausalityTools_tutorial_causality_test_on_uncertain_data_predictive_asymmetry.ipynb)

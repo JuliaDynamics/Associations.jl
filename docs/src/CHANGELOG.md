@@ -1,11 +1,22 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.2
+
+### Documentation
+
+- Fixed formatting for equations of motion for the Ikeda system.
+- Improvements to the documentation for causality tests.
+
+### Non-breaking internals
+
+- Removed unneccessary constructor for `NormalisedPredictiveAsymmetryTest`.
+
 ## Release v0.9.1
 
 ### Documentation
 
 - Figures in `PredictiveAsymmetryTest` example are now larger.
-- [`NearestNeighbourMITest`])(@ref) and [`NormalisedPredictiveAsymmetryTest`](@ref) added to documentation
+- [`NearestNeighbourMITest`](@ref) and [`NormalisedPredictiveAsymmetryTest`](@ref) added to documentation
     for [`EntropyBasedCausalityTest`](@ref).
 - Documentation for transfer entropy estimators updated with references to where they are applicable.
 - Enlarged some figures.

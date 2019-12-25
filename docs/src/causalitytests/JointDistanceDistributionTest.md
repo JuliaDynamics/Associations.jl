@@ -1,13 +1,13 @@
 
-# Joint distance distribution tests
+# [Joint distance distribution tests](@id JointDistanceDistributionTest_overview)
 
-## JointDistanceDistributionTest
+## `JointDistanceDistributionTest`
 
 ```@docs
 JointDistanceDistributionTest
 ```
 
-## JointDistanceDistributionTTest
+## `JointDistanceDistributionTTest`
 
 ```@docs
 JointDistanceDistributionTTest
