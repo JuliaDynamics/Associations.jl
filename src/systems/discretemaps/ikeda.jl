@@ -11,7 +11,7 @@ from `y \\to x` (``c_{yx}``) to be adjusted. The difference equations are
 
 ```math
 \\begin{aligned}
-x(t+1) = 1 + \\mu(x(t) \\cos{(\\theta)} - c_{yx} y(t) \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\xi_{t}^{(1)})}{(1-x)}, \\xi_{t}^{(2)} \\
+x(t+1) = 1 + \\mu(x(t) \\cos{(\\theta)} - c_{yx} y(t) \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\xi_{t}^{(1)})}{(1-x)}, \\xi_{t}^{(2)} \\\\
 y(t+1) = \\mu(y(t) \\cos{(\\theta)} - c_{xy} x(t) \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\zeta_{t}^{(1)})}{(1-y)}, \\zeta_{t}^{(2)}
 \\end{aligned}
 ```
