@@ -8,6 +8,11 @@ theme: material
     text: 'Segoe UI'
     code: 'Source Code Pro'
 
+extra:
+  social:
+    - type: 'github'
+      link: 'https://github.com/kahaaga/CausalityTools.jl'
+
 extra_css:
   - assets/Documenter.css
 
