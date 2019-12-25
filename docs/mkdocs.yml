@@ -61,12 +61,11 @@ pages:
   #- Package overview: overview.md
   #- Syntax overview: syntax_overview.md
   - Estimating causality:
+    - Overview: causalitytests/causality_tests_overview.md
     - From scalar time series: causalitytests/causality_tests.md
     - From uncertain time series: causalitytests/causality_from_uncertain_data_naive.md
     - From dynamical systems: causalitytests/causality_from_dynamical_systems.md
-  - Causality tests: 
-    - Overview: causalitytests/causality_tests_overview.md
-    - Tests:
+    - Causality tests:
       - Cross mappings:
         - CrossMappingTest: causalitytests/CrossMappingTest.md
         - ConvergentCrossMappingTest: causalitytests/ConvergentCrossMappingTest.md
@@ -114,7 +113,7 @@ pages:
       - Converent cross mapping: crossmappings/ccm/convergentcrossmapping.md
     - S-measure: SMeasure/s_measure.md
     - Joint distance distribution: JointDistanceDistribution/joint_distance_distribution.md
-  - TimeseriesSurrogates:
+  - Surrogate data:
     - Overview: surrogates/surrogates_overview.md
     - IAAFT: surrogates/iaaft_docs.md
     - AAFT: surrogates/aaft_docs.md

@@ -6,8 +6,8 @@ import DynamicalSystems: DiscreteDynamicalSystem
     eom_ikeda(u, p, t)
 
 Equations of motion for a discrete two-dimensional Ikeda map system, adapted from [1]
-by adding a noise term and allowing the influences from `x \\to y` (``c_{xy}``) and 
-from `y \\to x` (``c_{yx}``) to be adjusted. The difference equations are
+by adding a noise term and allowing the influences from ``x \\to y`` (``c_{xy}``) and 
+from ``y \\to x`` (``c_{yx}``) to be adjusted. The difference equations are
 
 ```math
 \\begin{aligned}

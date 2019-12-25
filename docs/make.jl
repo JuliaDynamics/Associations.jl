@@ -129,6 +129,18 @@ PAGES = [
     ]
 ]
 
+
+# Some things need to be expanded before index.md for headers to work properly.
+expandfirst = [
+    "causalitytoolsbase/discretization.md",
+    "causalitytoolsbase/delay_reconstructions.md",
+    "simplices/Simplices.md",
+    "causalitytests/causality_tests_overview.md",
+    "perronfrobenius/transferoperator.md",
+    "perronfrobenius/invariantmeasure.md",
+    "causalitytests/NearestNeighbourMITest.md"
+]
+
 makedocs(
     sitename = "CausalityTools.jl documentation",
     #modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
@@ -136,6 +148,7 @@ makedocs(
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
     clean = true,
+    expandfirst = expandfirst,
     pages = PAGES,
     highlightsig = true
 )

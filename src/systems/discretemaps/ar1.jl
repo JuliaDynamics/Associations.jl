@@ -39,7 +39,7 @@ function ar1_unidir(uᵢ, a₁, b₁, c_xy, σ)
 end
 
 """
-    ar1(uᵢ, a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, 
+    ar1_unidir(uᵢ, a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, 
         σ = 0.40662) -> DiscreteDynamicalSystem
 
 A bivariate, order one autoregressive model, where ``x \\to y`` [1].

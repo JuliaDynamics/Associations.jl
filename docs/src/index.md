@@ -54,7 +54,7 @@ information on each of the causality statistics.
 
 ### [CausalityToolsBase](@ref custom_delay_reconstructions)
 
-- [Generalised delay reconstructions](@ref custom_delay_reconstruction) for the computation of, designed to assist with transfer entropy computations and related methods.
+- [Generalised delay reconstructions](@ref custom_delay_reconstruction) designed to assist with transfer entropy computations and related methods.
 - [Discretization routines](@ref discretization) for partitioning state space reconstructions, or multidimensional datasets in general.
 
 ### [Simplices](@ref exact_simplex_intersection)
@@ -99,7 +99,7 @@ Selected features:
 
 ### [UncertainData](@ref uncertainty_handling)
 
-[`UncertainData`](https://github.com/kahaaga/UncertainData.jl) is a package generic 
+[`UncertainData`](https://github.com/kahaaga/UncertainData.jl) is a package for generic 
 uncertain data handling. It was originally developed for handling uncertainties in proxy 
 data when doing causal analyses, but provides functionality useful elsewhere, so is kept 
 in a separate package.
