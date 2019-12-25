@@ -6,7 +6,7 @@ may be vastly different based on the parameters chosen for a test.
 
 To systematically deal with this fact, we create estimator-specific
 [composite types](https://docs.julialang.org/en/v1/manual/types/#Composite-Types-1) for 
-the different causality statistics. Every estimator is represented by a compositite types
+the different causality statistics. Every estimator is represented by a composite types
 whose fields are the parameters of the test. A causality test is therefore uniquely defined 
 by its parameters. Available causality tests are listed below.
 

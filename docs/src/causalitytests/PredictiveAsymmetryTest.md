@@ -1,4 +1,4 @@
-# [Predictive asymmetry](@id predictive_asymmetry)
+# [`PredictiveAsymmetryTest`](@id PredictiveAsymmetryTest_overview)
 
 ```@docs
 PredictiveAsymmetryTest

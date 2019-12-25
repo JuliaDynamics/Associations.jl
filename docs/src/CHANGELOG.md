@@ -6,6 +6,10 @@
 
 - Fixed formatting for equations of motion for the Ikeda system.
 
+### Non-breaking internals
+
+- Removed unneccessary constructor for `NormalisedPredictiveAsymmetryTest`.
+
 ## Release v0.9.1
 
 ### Documentation

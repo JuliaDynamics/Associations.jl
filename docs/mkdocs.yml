@@ -3,7 +3,13 @@ repo_url:         https://github.com/kahaaga/CausalityTools.jl
 site_description: Causality detection from time series in Julia.
 site_author:      Kristian Agasøster Haaga
 
-theme: material
+theme: 
+  name: material
+  feature:
+    tabs: true
+  palette:
+    primary: 'black' # check https://material.io/resources/color/ 
+    accent: 'light blue' # https://www.materialpalette.com/
   font:
     text: 'Segoe UI'
     code: 'Source Code Pro'
@@ -84,25 +90,30 @@ pages:
         - InterpolateBinTest: causalitytests/causality_from_uncertain_data_InterpolateBinTest.md
         - RandomSequencesTest: causalitytests/causality_from_uncertain_data_RandomSequencesTest.md
         - Strictly increasing and interpolated resampling: causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md
-  - CausalityToolsBase:
-    - Generalised delay reconstructions: causalitytoolsbase/delay_reconstructions.md
-    - Discretization: causalitytoolsbase/discretization.md
-  - Simplices: simplices/Simplices.md
-  - PerronFrobenius:
-      - Invariant measure: perronfrobenius/invariantmeasure.md
-      - Transfer operator: perronfrobenius/transferoperator.md
-  - Transfer entropy:
-    - Estimators: transferentropy/TE_estimators.md
-    - Methods: transferentropy/estimating_TE.md
-    - Convenience methods: transferentropy/convenience_methods_te.md
-    - Examples: 
-      - Effect of discretization scheme: transferentropy/examples_TE_different_partitionings.md
-  - CrossMappings:
-    - Overview: crossmappings/ccm/overview.md
-    - Cross mapping: crossmappings/ccm/crossmapping.md
-    - Converent cross mapping: crossmappings/ccm/convergentcrossmapping.md
-  - S-measure: SMeasure/s_measure.md
-  - Joint distance distribution: JointDistanceDistribution/joint_distance_distribution.md
+  - Package ecosystem:
+    - CausalityToolsBase:
+      - Generalised delay reconstructions: causalitytoolsbase/delay_reconstructions.md
+      - Discretization: causalitytoolsbase/discretization.md
+    - Simplices: simplices/Simplices.md
+    - PerronFrobenius:
+        - Invariant measure: perronfrobenius/invariantmeasure.md
+        - Transfer operator: perronfrobenius/transferoperator.md
+    - Transfer entropy:
+      - Overview: transferentropy/overview_te.md
+      - Estimators: transferentropy/TE_estimators.md
+      - Generalised delay embedding: transferentropy/generalised_delay_reconstructions.md
+      - Assigning marginals: transferentropy/assigning_marginals.md
+      - Methods: transferentropy/estimating_TE.md
+      - Convenience methods: transferentropy/convenience_methods_te.md
+      - Examples: 
+        - Effect of discretization scheme: transferentropy/examples_TE_different_partitionings.md
+    - Predictive asymmetry: PredictiveAsymmetry/predictive_asymmetry.md
+    - CrossMappings:
+      - Overview: crossmappings/ccm/overview.md
+      - Cross mapping: crossmappings/ccm/crossmapping.md
+      - Converent cross mapping: crossmappings/ccm/convergentcrossmapping.md
+    - S-measure: SMeasure/s_measure.md
+    - Joint distance distribution: JointDistanceDistribution/joint_distance_distribution.md
   - TimeseriesSurrogates:
     - Overview: surrogates/surrogates_overview.md
     - IAAFT: surrogates/iaaft_docs.md

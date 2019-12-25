@@ -1,4 +1,4 @@
-# [S-measure](@id SMeasureTest)
+# [`SMeasureTest`](@id SMeasureTest)
 
 ```@docs
 SMeasureTest

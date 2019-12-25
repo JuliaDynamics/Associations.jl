@@ -1,7 +1,7 @@
 import StatsBase: mean
 
 """
-    NormalisedPredictiveAsymmetryTest(predictive_test::CausalityTest, f::Number = 1.0)
+    NormalisedPredictiveAsymmetryTest(predictive_test::CausalityTest; f::Number = 1.0)
 
 The parameters for a normalised predictive asymmetry causality test [1]. For the 
 non-normalised version, see [`PredictiveAsymmetryTest`](@ref).
@@ -46,14 +46,6 @@ Base.@kwdef mutable struct NormalisedPredictiveAsymmetryTest{TEST, N} <: Causali
     predictive_test::TEST
     f::Number 
     
-    # If no threshold is given, use f = 1.0 as default.
-    function NormalisedPredictiveAsymmetryTest(test::T) where {T <: TransferEntropyCausalityTest}
-        # Check that prediction lags are okay
-        verified_prediction_lags(test.ηs)
-        N = length(test.ηs[test.ηs .> 0])
-        return new{T, N}(test, 1.0)
-    end
-    
     # If a threshold is given, use it.
     function NormalisedPredictiveAsymmetryTest(test::T; f::Number) where {T <: TransferEntropyCausalityTest}
         # Check that prediction lags are okay
@@ -82,6 +74,48 @@ function lagnormalised_statistic(values, ηs, f)
     return avg_vals
 end
 
+
+"""
+    normalised_predictive_asymmetry(source, target, test::PredictiveAsymmetryTest{T, N}) where {T <: TransferEntropyCausalityTest, N}
+
+Compute the predictive asymmetry from `source` to `target` using the provided predictive test `p`.
+The test can be a [`VisitationFrequencyTest`](@ref), [`TransferOperatorGridTest`](@ref) or 
+[`NearestNeighbourMITest`](@ref) and has to be defined for prediction lags symmetrically 
+around zero.
+
+## Example 
+
+We'll use the [`logistic4`](@ref) system, which consists of three variables 
+and is unidirectionally coupled x -> y -> z.
+
+```julia
+# Example data
+sys = logistic()
+npts = 300
+orbit = trajectory(sys, npts, Ttr = 300);
+x, y, z = columns(orbit);
+
+# Test setup
+η_max = 10
+ηs = [-η_max:-1; 1:η_max]
+bin = RectangularBinning(floor(Int, npts^(1/4)))
+test = VisitationFrequencyTest(ηs = ηs, binning = bin)
+pa_test = PredictiveAsymmetryTest(test)
+
+# Analysis
+pas_xy = causality(x, y, pa_test)
+pas_yx = causality(y, x, pa_test)
+pas_yz = causality(y, z, pa_test)
+pas_zy = causality(z, y, pa_test)
+
+[pas_xy pas_yx pas_yz pas_zy]
+````
+
+If the test correctly picked up the correct directionality, then the values of
+of `asymmetries` corresponding to the causal interactions (1st and 3rd column)
+should be mostly positive, and those corresponding to non-causal interactions 
+should be mostly negative.
+"""
 function normalised_predictive_asymmetry(source, target, 
         p::NormalisedPredictiveAsymmetryTest{T, N}) where {T <: TransferEntropyCausalityTest, N}
 

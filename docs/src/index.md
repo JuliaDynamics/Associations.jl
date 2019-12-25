@@ -48,8 +48,9 @@ For time series, the syntax is [`causality(source, target, test::CausalityTest)`
 - [`JointDistanceDistributionTTest`](@ref)
 - [`SMeasureTest`](@ref)
 
-For those interested, low-level methods are available individual method pages in the menu on the left.
-These also provide a bit more information on each of the causality statistics.
+For those interested, low-level methods are available individual method 
+pages under `Package ecosystem` in the menu. These also provide a bit more 
+information on each of the causality statistics.
 
 ### [CausalityToolsBase](@ref custom_delay_reconstructions)
 

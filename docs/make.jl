@@ -66,10 +66,17 @@ PAGES = [
         "Invariant measure" => "perronfrobenius/invariantmeasure.md"
     ],
     "Transfer entropy" => [
+        "Overview" => "transferentropy/overview_te.md",
         "Estimators" => "transferentropy/TE_estimators.md",
         "Estimating TE" => "transferentropy/estimating_TE.md",
+        "Assigning marginals" => "transferentropy/assigning_marginals.md",
+        "Generalised delay embedding" => "transferentropy/generalised_delay_reconstructions.md",
         "Convenience methods" => "transferentropy/convenience_methods_te.md",
         "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
+    ],
+
+    "PredictiveAsymmetry" => [
+        "Predictive asymmetry" => "PredictiveAsymmetry/predictive_asymmetry.md"
     ],
     "Distance based statistics" => [
         "CCM" => [
