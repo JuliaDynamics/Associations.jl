@@ -21,13 +21,12 @@ using UncertainData
 ENV["GKSwstype"] = "100"
 
 PAGES = [
-    "index.md",
+    #"index.md",
+    #"FAQ.md",
+    "overview.md",
     "Syntax overview" => "syntax_overview.md",
     "CHANGELOG.md",
     "Causality tests" => [
-        # From time series
-        "causalitytests/causality_from_time_series.md",
-
         # From uncertain data
         "causalitytests/causality_from_uncertain_data_naive.md",
         "causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md",
@@ -42,7 +41,8 @@ PAGES = [
 
         # Tests
         "causalitytests/causality_tests.md",
-
+        "causalitytests/abstract_test_types.md",
+        "causalitytests/causality_tests_overview.md",
         "causalitytests/ConvergentCrossMappingTest.md",
         "causalitytests/CrossMappingTest.md",
         "causalitytests/JointDistanceDistributionTest.md",
@@ -71,16 +71,27 @@ PAGES = [
         "Convenience methods" => "transferentropy/convenience_methods_te.md",
         "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
     ],
-    "Distance based measures" => [
+    "Distance based statistics" => [
         "CCM" => [
             "Overview" => "crossmappings/ccm/overview.md",
             "Cross mapping" => "crossmappings/ccm/crossmapping.md",
             "Converent cross mapping" => "crossmappings/ccm/convergentcrossmapping.md"
-        ], 
-        "Joint distance distribution" => "algorithms/joint_distance_distribution.md"
+        ]
+    ],
+
+    "Joint distance distribution" => [
+        "JointDistanceDistribution/joint_distance_distribution.md"
+    ],
+
+    "SMeasure" => [
+        "S-measure" => "SMeasure/s_measure.md"
     ],
     "Worked example" => [
         "worked_examples/worked_example_transferentropy.md"
+    ],
+
+    "Simplices" => [
+        "simplices/Simplices.md"
     ],
     
     "Example systems" => [
@@ -115,7 +126,7 @@ PAGES = [
 makedocs(
     sitename = "CausalityTools.jl documentation",
     #modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
-    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
+    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData, Simplices],
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
     clean = true,

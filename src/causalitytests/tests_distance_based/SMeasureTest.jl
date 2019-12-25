@@ -116,11 +116,11 @@ plot!(Ks, Ss_henon_xy, marker = stroke(2), label = "henon unidir (x -> y)")
 plot!(Ks, Ss_henon_yx, marker = stroke(2), label = "henon unidir (y -> x)")
 ```
 """
-function causality(x::AbstractVector, y::AbstractVector, test::SMeasureTest)
+function causality(source::AbstractVector, target::AbstractVector, test::SMeasureTest)
     Ss = zeros(Float64, length(test.K))
     
     for (i, k) in enumerate(test.K)
-        Ss[i] = s_measure(x, y,test.m, test.τ, k, test.metric, test.tree_metric)
+        Ss[i] = s_measure(source, target,test.m, test.τ, k, test.metric, test.tree_metric)
     end
     
     return Ss

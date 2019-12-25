@@ -1,7 +1,7 @@
 
 """
-    causality(x::AbstractUncertainIndexValueDataset,
-        y::AbstractUncertainIndexValueDataset,
+    causality(source::AbstractUncertainIndexValueDataset,
+        target::AbstractUncertainIndexValueDataset,
         test::BinnedDataCausalityTest)
 
 Apply a causality test to `x` and `y`, which are both data series 
@@ -12,13 +12,14 @@ according to the instructions in `test.binning`.
 ## Binning methods 
 
 - If `test.binning` results in an uncertain value for each bin, then the causality 
-test is applied `test.n_realizations` times. Examples are [`UncertainData.BinnedResampling`](@ref) 
-and [`UncertainData.BinnedWeightedResampling`](@ref), which both return a KDE estimate to the 
-distribution of values in each bin.
+    test is applied `test.n_realizations` times. Examples are 
+    [`UncertainData.BinnedResampling`](@ref) and 
+    [`UncertainData.BinnedWeightedResampling`](@ref), which both return a KDE 
+    estimate to the distribution of values in each bin.
 
-- If `test.binning` returns a summary statistic for each bin, then the causality test is 
-applied to the summarised time series. Examples are [`UncertainData.BinnedMeanResampling`](@ref) 
-and [`UncertainData.BinnedMeanWeightedResampling`](@ref), which both return the mean of each bin.
+- If `test.binning` returns a summary statistic for each bin, then the causality test is applied 
+    to the summarised time series. Examples are [`UncertainData.BinnedMeanResampling`](@ref) 
+    and [`UncertainData.BinnedMeanWeightedResampling`](@ref), which both return the mean of each bin.
 
 ## Example
 
@@ -185,31 +186,31 @@ ribbon = std(M_yx, dims = 2)[:, 1],
 label = "y -> x (binned)")
 ```
 """
-function causality(x::AbstractUncertainIndexValueDataset,
-    y::AbstractUncertainIndexValueDataset,
+function causality(source::AbstractUncertainIndexValueDataset,
+    target::AbstractUncertainIndexValueDataset,
     test::BinnedDataCausalityTest)
 end
 
 
-function causality(x::AbstractUncertainIndexValueDataset,
-    y::AbstractUncertainIndexValueDataset,
+function causality(source::AbstractUncertainIndexValueDataset,
+    target::AbstractUncertainIndexValueDataset,
     test::BinnedDataCausalityTest{CT, BR}) where {
         CT <: CausalityTest, BR <: AbstractBinnedUncertainValueResampling}
 
-    binned_x = resample(x, test.binning)
-    binned_y = resample(y, test.binning)
+    binned_source = resample(source, test.binning)
+    binned_target = resample(target, test.binning)
 
-    [causality(resample(binned_x.values), resample(binned_y.values), 
+    [causality(resample(binned_source.values), resample(binned_target.values), 
             test.test) for i = 1:test.n_realizations]
 end
 
-function causality(x::AbstractUncertainIndexValueDataset,
-    y::AbstractUncertainIndexValueDataset,
+function causality(source::AbstractUncertainIndexValueDataset,
+    target::AbstractUncertainIndexValueDataset,
     test::BinnedDataCausalityTest{CT, BR}) where {
         CT <: CausalityTest, BR <: AbstractBinnedSummarisedResampling}
 
-    binned_and_summarised_x = resample(x, test.binning)
-    binned_and_summarised_y = resample(y, test.binning)
+    binned_and_summarised_source = resample(source, test.binning)
+    binned_and_summarised_target = resample(target, test.binning)
 
-    causality(binned_and_summarised_x, binned_and_summarised_y, test.test) 
+    causality(binned_and_summarised_source, binned_and_summarised_target, test.test) 
 end

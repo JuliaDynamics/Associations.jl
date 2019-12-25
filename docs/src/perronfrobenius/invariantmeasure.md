@@ -1,12 +1,12 @@
-# Invariant measure estimation
+# [Invariant measure estimation](@id invariant_measure_estimation)
 
-## Rectangular partitions
+## [Rectangular partitions](@id invariant_measure_estimation_rectangular)
 
 ```@docs
 invariantmeasure(data, binning_scheme::RectangularBinning)
 ```
 
-## Triangulated partitions
+## [Triangulated partitions](@id invariant_measure_estimation_triang)
 
 Say we have a 3D delay reconstruction that we have partioned into simplices.
 

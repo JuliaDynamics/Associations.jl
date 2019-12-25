@@ -1,7 +1,7 @@
 
-# [Causality in dynamical systems](@id causality_dynamical_systems)
+# [Testing for causality in dynamical systems](@id causality_dynamical_systems)
 
-## General syntax
+## Syntax
 
 The syntax for quantifying directional causality between variables of dynamical systems is 
 

@@ -11,11 +11,13 @@ Concrete subtypes are those based on transfer entropy
 - [`TransferOperatorGridTest`](@ref)
 - [`ExactSimplexIntersectionTest`](@ref)
 - [`ApproximateSimplexIntersectionTest`](@ref)
+- [`NearestNeighbourMITest`](@ref)
 
 and those that in some manner utilise transfer entropy or other 
 information theoretic approaches :
 
 - [`PredictiveAsymmetryTest`](@ref)
+- [`NormalisedPredictiveAsymmetryTest`](@ref)
 """
 abstract type EntropyBasedCausalityTest <: CausalityTest end
 

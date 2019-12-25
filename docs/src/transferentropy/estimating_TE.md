@@ -1,4 +1,4 @@
-# [Transfer entropy estimation procedure](@id te_estimators)
+# [Transfer entropy estimation procedure](@id te_estimation_procedure)
 
 ## [Assigning marginals](@id te_assigning_marginals)
 
@@ -23,33 +23,38 @@ To control the transfer entropy, the analyst must
         then conditional transfer entropy will be computed. Otherwise, non-conditioned transfer 
         entropy is computed.
 
-This is achieved by creating a [`TEVars`](@ref) instance, which refers to the columns of the 
+The latter is achieved by creating a [`TEVars`](@ref) instance, which refers to the columns of the 
 input data by their indices.
 
 ```@docs
 TEVars(; )
 ```
 
-## [Computing transfer entropy from rectangular partitions](@id te_estimation_rect)
+## [Generalised delay reconstructions (convenience function)](@id te_embed_funcs)
+
+```@docs
+te_embed
+```
+
+## [Computing transfer entropy from rectangular partitions](@id te_estimator_rectangular)
 
 ```@docs
 transferentropy(::Any, ::TEVars, ::RectangularBinning, ::BinningTransferEntropyEstimator)
 ```
 
-## [Computing transfer entropy by counting nearest neighbors](@id te_estimation_nn)
+## [Computing transfer entropy by counting nearest neighbors](@id te_estimator_nn)
 
 ```@docs
 transferentropy(::Any, ::TEVars, ::NearestNeighbourMI)
 ```
 
-## [Computing transfer entropy from triangulated partitions](@id te_estimation_triang)
+## [Computing transfer entropy from triangulated partitions](@id te_estimator_triang)
 
 Estimators for computing transfer entropy on triangulated partitions, whose invariant distribution is obtained through the transfer operator, was introduced in Diego et al. (2019)[^2].
 
 ```@docs
 transferentropy(μ::AbstractTriangulationInvariantMeasure, vars::TEVars, binning_scheme::RectangularBinning)
 ```
-
 
 [^2]:
     Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.

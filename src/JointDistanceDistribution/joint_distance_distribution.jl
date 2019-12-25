@@ -47,8 +47,8 @@ function joint_distance_distribution(source, target;
     Ex = DelayEmbeddings.embed(source, D, τ)
     Ey = DelayEmbeddings.embed(target, D, τ)
 
-    Mx = transpose(Matrix(Ex))
-    My = transpose(Matrix(Ey))
+    Mx = transpose(DelayEmbeddings.Matrix(Ex))
+    My = transpose(DelayEmbeddings.Matrix(Ey))
     
     npts = length(Ex)
     Dx = pairwise(distance_metric, Mx, Mx, dims = 2)

@@ -54,8 +54,6 @@ intp_bin = InterpolateAndBin(mean, left_bin_edges, Linear(), intp_grid, Flat(OnG
 
 # Define interpolate-and-bin test
 ib_test = InterpolateBinTest(pa_test, intp_bin, 2)
-
-
 ```
 """
 function causality(source::AbstractUncertainIndexValueDataset, 

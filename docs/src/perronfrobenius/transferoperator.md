@@ -1,12 +1,12 @@
-# Transfer operator estimation
+# [Transfer operator estimation](@id transferoperator_estimation)
 
-## Rectangular partitions
+## [Rectangular partitions](@id transferoperator_estimation_rectangular)
 
 ```@docs
 transferoperator(points, binning_scheme::RectangularBinning; kwargs...)
 ```
 
-## Triangulated partitions
+## [Triangulated partitions](@id transferoperator_estimation_triang)
 
 Say we have a 3D delay reconstruction that we have partioned into simplices.
 

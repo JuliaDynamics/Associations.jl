@@ -1,5 +1,21 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.1
+
+### Documentation
+
+- Figures in `PredictiveAsymmetryTest` example are now larger.
+- [`NearestNeighbourMITest`])(@ref) and [`NormalisedPredictiveAsymmetryTest`](@ref) added to documentation
+    for [`EntropyBasedCausalityTest`](@ref).
+- Documentation for transfer entropy estimators updated with references to where they are applicable.
+- Enlarged some figures.
+- Improved tutorial for `SMeasureTest`.
+
+### Non-breaking changes
+
+- Make sure all methods use `source`, `target` and `cond` internally (instead of `x`, `y`, and `z`). 
+    These have clearer meanings.
+
 ## Release v0.9.0
 
 Release v0.9.0 introduces some new functionality and significant documentation improvements.

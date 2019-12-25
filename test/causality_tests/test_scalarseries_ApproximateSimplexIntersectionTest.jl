@@ -9,7 +9,7 @@ x, y = columns(trajectory(sys, npts, Ttr = 200))
 # prediction lags and use the transfer operator grid estimator on the point
 # cloud generated from the invariant measure over the triangulation.
 binnings = [RectangularBinning(i) for i = 2:3]
-estimator = TransferOperatorGrid()
+estimator = TransferOperatorGrid(b = 2)
 ηs = 1:3
 
 # Perform causality test, both from x to y and y to x

@@ -6,4 +6,4 @@ SMeasureTest
 
 # Tutorials
 
-- [`SMeasureTest` on scalar time series](@ref tutorial_smeasuretest).
+- [`SMeasureTest` on scalar time series](@ref tutorial_SMeasureMest).

@@ -38,7 +38,7 @@ Base.@kwdef mutable struct NearestNeighbourMITest{N} <: TransferEntropyCausality
     end
 end
 
-function causality(x::AbstractVector{T}, y::AbstractVector{T}, test::NearestNeighbourMITest{N}) where {N, T}
+function causality(source::AbstractVector{T}, target::AbstractVector{T}, test::NearestNeighbourMITest{N}) where {N, T}
     
     length(x) == length(y) || error("Input vectors must be of same length")
     
@@ -50,7 +50,7 @@ function causality(x::AbstractVector{T}, y::AbstractVector{T}, test::NearestNeig
     tes = zeros(eltype(x), N)
     
     for (i, η) in enumerate(test.ηs)
-        pts, vars = te_embed(x, y, k, l, m; η = η, τ = τ);
+        pts, vars = te_embed(source, target, k, l, m; η = η, τ = τ);
         tes[i] = transferentropy(pts, vars, test.estimator)
     end
     

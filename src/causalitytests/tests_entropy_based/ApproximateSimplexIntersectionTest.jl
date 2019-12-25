@@ -48,7 +48,7 @@ transfer operator.
 
 - **`τ::Int`**: The embedding lag. Default is `τ = 1`.
 
-- **`estimator::Union{VisitationFrequency, TransferOperatorGrid}`**: A `VisitationFrequency`
+- **`estimator::BinningTransferEntropyEstimator`**: A `VisitationFrequency`
     or a `TransferOperatorGrid` estimator instance.
 
 - **`n_pts::Int`**: The number of points to generate from the invariant distribution
