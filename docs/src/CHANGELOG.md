@@ -1,5 +1,11 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.2
+
+### Documentation
+
+- Fixed formatting for equations of motion for the Ikeda system.
+
 ## Release v0.9.1
 
 ### Documentation
