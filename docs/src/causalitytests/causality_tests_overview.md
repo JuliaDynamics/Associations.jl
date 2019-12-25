@@ -12,8 +12,8 @@ by its parameters. Available causality tests are listed below.
 
 The advantage of this type-based approach is that we can have a unified syntax to 
 estimate time series causality statistics, using the [`causality(source::AbstractVector, target::AbstractVector, test::CausalityTest)`](@ref) method, which is all a beginner-user
-needs to learn. Low-level methods can also be used directly, and are available from 
-the method-specific pages in the menu (see below).
+needs to learn. The output of a call to `causality` depends on which `test` is provided, 
+but the input format is always the same: your time series, plus a causality test.
 
 ## Distance based tests
 
@@ -48,7 +48,7 @@ Low-level causality statistics and their different methods/estimators are descri
 - [Predictive asymmetry](@ref predictive_asymmetry_overview)
 - [Transfer entropy](@ref transferentropy_overview)
 - [Cross mapping](@ref crossmapping_overview)
-- [S-Measure](@ref SMeasureTest_overview)
+- [S-Measure](@ref Smeasure_overview)
 - [Joint distance distribution](@ref joint_distance_distribution_overview)
 
 ## Schemes for uncertainty handling

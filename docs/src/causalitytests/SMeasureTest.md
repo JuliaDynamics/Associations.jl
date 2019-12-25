@@ -73,7 +73,6 @@ plot!(ks, Ss_r_xy,  label = "random uncoupled system (x -> y)", marker = stroke(
 plot!(ks, Ss_r_yx,  label = "random uncoupled system (y -> x)", marker = stroke(2), c = :red)
 plot!(ks, Ss_henon_xy, marker = stroke(2), label = "henon unidir (x -> y)")
 plot!(ks, Ss_henon_yx, marker = stroke(2), label = "henon unidir (y -> x)")
-#savefig("figs/SMeasure_random_plus_henon.svg"); nothing # hide
 ```
 
 <!-- ![](figs/SMeasure_random_plus_henon.svg) -->

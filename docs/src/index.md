@@ -21,7 +21,7 @@ Causality statistics and their different methods/estimators are described on met
 - [Predictive asymmetry](@ref predictive_asymmetry_overview)
 - [Transfer entropy](@ref transferentropy_overview)
 - [Cross mapping](@ref crossmapping_overview)
-- [S-Measure](@ref SMeasureTest_overview)
+- [S-Measure](@ref Smeasure_overview)
 - [Joint distance distribution](@ref joint_distance_distribution_overview)
 
 For more flexibility, however, check out the [`causality` interface](@ref causality_tests_overview),
