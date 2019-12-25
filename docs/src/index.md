@@ -64,7 +64,7 @@ For those interested, low-level methods are available individual method
 pages under `Package ecosystem` in the menu. These also provide a bit more 
 information on each of the causality statistics.
 
-### [CausalityToolsBase](@ref custom_delay_reconstructions)
+### [CausalityToolsBase](@ref custom_delay_reconstruction)
 
 - [Generalised delay reconstructions](@ref custom_delay_reconstruction) designed to assist with transfer entropy computations and related methods.
 - [Discretization routines](@ref discretization) for partitioning state space reconstructions, or multidimensional datasets in general.
@@ -78,7 +78,7 @@ information on each of the causality statistics.
 - [Transfer operator approximation](@ref transferoperator_estimation) over [rectangular](@ref transferoperator_estimation_rectangular) or [triangulated](@ref transferoperator_estimation_triang) partitions.
 - [Estimating invariant measures](@ref invariant_measure_estimation) over [rectangular](@ref invariant_measure_estimation_rectangular) or [triangulated](@ref invariant_measure_estimation_triang) partitions, by using the transfer operator approximations.
 
-### [CrossMappings](@ref ccm)
+### [CrossMappings](@ref crossmapping_overview)
 
 - Implementations of the (convergent) cross mapping routines from Sugihara et al. (2012).
 
