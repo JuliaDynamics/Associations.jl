@@ -14,6 +14,9 @@ module CausalityTools
     @reexport using TransferEntropy
     @reexport using CrossMappings
 
+    # Modules defined in CausalityTools
+    include("JointDistanceDistribution/JointDistanceDistribution.jl")
+
     display_update = true
     version = "v0.9.0"
     update_name = "update_$version"
@@ -66,7 +69,6 @@ module CausalityTools
     include("method_wrappers/transferentropy_from_timeseries.jl")
 
     # Various algorithsm that are implemented here and not in subpackages 
-    include("algorithms/joint_distance_distribution.jl")
     include("algorithms/smeasure.jl")
 
     # High-level estimators 

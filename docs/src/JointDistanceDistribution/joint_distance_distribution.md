@@ -1,5 +1,5 @@
 
-## Distribution of joint distances
+# [Distribution of joint distances](@id joint_distance_distribution_overview)
 
 ```@docs
 joint_distance_distribution(::Any, ::Any)

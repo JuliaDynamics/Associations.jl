@@ -1,8 +1,11 @@
 
-# [Surrogate method overview](@ref surrogate_methods)
+# [Surrogate method overview](@id surrogate_methods)
 
-The method of surrogate data is commonly used in the analysis of dynamical systems.
-For an overview of surrogate methods, see the recent review by [^1].
+The method of surrogate data is commonly used in the analysis of dynamical systems, 
+and for null hypothesis testing for time series causality analysis.
+For an overview of surrogate methods, see the recent review by [^1], and for more 
+details and demonstrations, visit the dedicated 
+[`TimeseriesSurrogates.jl documentation`](https://kahaaga.github.io/TimeseriesSurrogates.jl/latest/).
 
 ## What is a surrogate realization?
 
@@ -30,8 +33,7 @@ amplitudes of the original data, but shuffles the phases.
 ## Implemented algorithms
 
 The following surrogate methods are implemented. Function documentation and
-basic examples are available from the menu. For more details and demonstrations,
-visit the [`TimeseriesSurrogates.jl documentation`](https://kahaaga.github.io/TimeseriesSurrogates.jl/latest/).
+basic examples are available from the menu. 
 
 | Algorithm  | Function  | Type  | Reference  |
 |---|---|---|---|

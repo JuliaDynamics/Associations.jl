@@ -9,6 +9,8 @@
     for [`EntropyBasedCausalityTest`](@ref).
 - Documentation for transfer entropy estimators updated with references to where they are applicable.
 - Enlarged some figures.
+- Improved tutorial for `SMeasureTest`.
+
 ### Non-breaking changes
 
 - Make sure all methods use `source`, `target` and `cond` internally (instead of `x`, `y`, and `z`). 

@@ -1,7 +1,9 @@
 
-# [Naive resampling](@id causality_uncertain_naiveresampling)
+# [Testing for causality from uncertain time series](@id causality_uncertain_naiveresampling)
 
-## Uncertainties only in values
+## Syntax
+
+### Uncertainties only in values
 
 ```@docs
 causality(source::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset},
@@ -9,7 +11,7 @@ causality(source::Union{AbstractVector, Vector{<:AbstractUncertainValue}, Abstra
         test::CausalityTest)
 ```
 
-## Uncertainties in both indices and values
+### Uncertainties in both indices and values
 
 ```@docs
 causality(source::AbstractUncertainIndexValueDataset, 

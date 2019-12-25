@@ -1,4 +1,4 @@
-# Overview: convergent cross mapping (CCM)
+# [Overview: convergent cross mapping (CCM)](@id ccm)
 
 The convergent cross mapping (CCM) algorithm [^1] measures
 how well a [delay embedding](../../glossary/embed.md) of a putative response time series
@@ -11,7 +11,6 @@ The following cross mapping estimators are implemented.
 - [`crossmap`](crossmapping.md). Cross map for time series of fixed length. This algorithm can implicitly say something about convergence by adjusting the library size.
 - [`convergentcrossmap`](convergentcrossmapping.md). Explicitly cross map over multiple time series lengths. This is the approach introduced in [^1].
 
-
 ## Example
 
 In the animation below, we're cross mapping for increasing time series length for a
@@ -20,7 +19,6 @@ drives `y`. As expected from the underlying coupling, the cross mapping skill in
 direction `x → y` converges at a higher value than in the opposite direction.
 
 ![](henon2.gif)
-
 
 ## Related software
 

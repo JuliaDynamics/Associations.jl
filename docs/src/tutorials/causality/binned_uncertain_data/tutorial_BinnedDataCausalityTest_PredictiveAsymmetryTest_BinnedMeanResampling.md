@@ -1,6 +1,6 @@
 # [`PredictiveAsymmetryTest` with `BinnedMeanResampling`](@id tutorial_PredictiveAsymmetryTest_BinnedMeanResampling)
 
-## Example data
+## Example data with uncertainties
 
 First, we'll generate some example data from an AR1 system. We'll use the
 `ar1_unidir1` system that ships with `CausalityTools`. 
@@ -44,7 +44,7 @@ savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y.svg"); nothin
 
 ![](figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y.svg)
 
-## How do the data look when binned?
+### How do the data look when binned?
 
 Let's use a slightly finer binning and investigate what the binned data look like.
 
@@ -75,7 +75,7 @@ savefig("figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y_binned.svg");
 
 ![](figs/PredictiveAsymmetryTest_BinnedMeanResampling_x_and_y_binned.svg)
 
-## Defining a PredictiveAsymmetryTest
+## Test setup: a `PredictiveAsymmetryTest`
 
 A `PredictiveAsymmetryTest` takes as input a causality test that uses lagged 
 prediction. Here, we'll use a transfer entropy test, using a visitation 
@@ -116,6 +116,8 @@ test = BinnedDataCausalityTest(pa_test, binned_resampling);
 nothing #hide
 ```
 
+## Analysis
+
 Finally, we can compute the predictive asymmetry in both directions for the bin means.
 
 ```@example PredictiveAsymmetryTest_BinnedMeanResampling
@@ -123,6 +125,8 @@ tes_xy = causality(X, Y, test)
 tes_yx = causality(Y, X, test)
 nothing; #hide
 ```
+
+## Results
 
 `tes_xy` and `tes_yx` are now both length-`5` vectors containing the predictive asymmetries for prediction lags `1:5`. Let's summarise the data for each prediction lag and plot the results.
 

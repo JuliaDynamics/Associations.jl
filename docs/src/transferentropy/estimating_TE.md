@@ -1,4 +1,4 @@
-# [Transfer entropy estimation procedure](@id te_estimators)
+# [Transfer entropy estimation procedure](@id te_estimation_procedure)
 
 ## [Assigning marginals](@id te_assigning_marginals)
 
@@ -23,11 +23,17 @@ To control the transfer entropy, the analyst must
         then conditional transfer entropy will be computed. Otherwise, non-conditioned transfer 
         entropy is computed.
 
-This is achieved by creating a [`TEVars`](@ref) instance, which refers to the columns of the 
+The latter is achieved by creating a [`TEVars`](@ref) instance, which refers to the columns of the 
 input data by their indices.
 
 ```@docs
 TEVars(; )
+```
+
+## [Generalised delay reconstructions (convenience function)](@id te_embed_funcs)
+
+```@docs
+te_embed
 ```
 
 ## [Computing transfer entropy from rectangular partitions](@id te_estimator_rectangular)
