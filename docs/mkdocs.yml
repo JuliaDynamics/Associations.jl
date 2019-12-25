@@ -8,6 +8,10 @@ theme: material
     text: 'Segoe UI'
     code: 'Source Code Pro'
 
+plugins:
+  - git-revision-date-localized:
+      type: datetime
+
 extra:
   social:
     - type: 'github'
