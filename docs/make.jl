@@ -138,12 +138,12 @@ expandfirst = [
     "causalitytests/causality_tests_overview.md",
     "perronfrobenius/transferoperator.md",
     "perronfrobenius/invariantmeasure.md",
-    "causalitytests/NearestNeighbourMITest.md"
+    "causalitytests/NearestNeighbourMITest.md",
+    "crossmappings/ccm/overview.md"
 ]
 
 makedocs(
     sitename = "CausalityTools.jl documentation",
-    #modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData],
     modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData, Simplices],
     format = DocumenterMarkdown.Markdown(),
     linkcheck = false,
