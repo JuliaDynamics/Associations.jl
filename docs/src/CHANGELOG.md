@@ -1,5 +1,11 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.5
+
+### Bug fixes
+
+- Fixed bug for `causality(source, target, test::NearestNeighbourMITest`.
+
 ## Release v0.9.4
 
 - Fixed broken links on introduction page.
