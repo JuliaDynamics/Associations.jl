@@ -40,7 +40,7 @@ end
 
 function causality(source::AbstractVector{T}, target::AbstractVector{T}, test::NearestNeighbourMITest{N}) where {N, T}
     
-    length(x) == length(y) || error("Input vectors must be of same length")
+    length(source) == length(target) || error("Input vectors must be of same length")
     
     τ = test.τ
     k = test.k
