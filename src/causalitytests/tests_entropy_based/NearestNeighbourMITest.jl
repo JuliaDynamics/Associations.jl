@@ -47,7 +47,7 @@ function causality(source::AbstractVector{T}, target::AbstractVector{T}, test::N
     l = test.l
     m = test.l
     
-    tes = zeros(eltype(x), N)
+    tes = zeros(T, N)
     
     for (i, η) in enumerate(test.ηs)
         pts, vars = te_embed(source, target, k, l, m; η = η, τ = τ);

@@ -30,6 +30,8 @@ end
     include("causality_tests/test_scalarseries_JointDistanceDistributionTTest.jl")
     include("causality_tests/test_scalarseries_TransferOperatorGridTest.jl")
     include("causality_tests/test_scalarseries_VisitationFrequencyTest.jl")
+    include("causality_tests/test_scalarseries_NearestNeighbourMITest.jl")
+
     include("causality_tests/test_scalarseries_ApproximateSimplexIntersectionTest.jl")
     include("causality_tests/test_scalarseries_ExactSimplexIntersectionTest.jl")
     include("causality_tests/test_scalarseries_PredictiveAsymmetryTest.jl")
