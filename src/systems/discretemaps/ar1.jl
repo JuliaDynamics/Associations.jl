@@ -8,8 +8,8 @@ x -> y [1].
 
 ```math
 \\begin{aligned}
-dx &= a_1 x + \\xi_{1} \\\\
-dy &= b_1 y - c_{xy} x + \\xi_{2},
+x(t+1) &= a_1 x(t) + \\xi_{1} \\\\
+y(t+1) &= b_1 y(t) - c_{xy} x + \\xi_{2},
 \\end{aligned}
 ```
 
@@ -48,8 +48,8 @@ A bivariate, order one autoregressive model, where ``x \\to y`` [1].
 
 ```math
 \\begin{aligned}
-dx &= a_1 x + \\xi_{1} \\\\
-dy &= b_1 y - c_{xy} x + \\xi_{2},
+x(t+1) &= a_1 x(t) + \\xi_{1} \\\\
+y(t+1) &= b_1 y(t) - c_{xy} x + \\xi_{2},
 \\end{aligned}
 ```
 

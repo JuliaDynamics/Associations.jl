@@ -11,8 +11,8 @@ The equations of motion are
 
 ```math
 \\begin{aligned}
-dx &= r_1 x(1 - x) \\\\
-dy &= r_2 f(x,y)(1 - f(x,y)),
+x(t+1) &= r_1 x(t)(1 - x(t)) \\\\
+y(t+1) &= r_2 f(x,y)(1 - f(x,y)),
 \\end{aligned}
 ```
 
@@ -65,8 +65,8 @@ The equations of motion are
 
 ```math
 \\begin{aligned}
-dx &= r_1 x(1 - x) \\\\
-dy &= r_2 f(x,y)(1 - f(x,y)),
+x(t+1) &= r_1 x(t)(1 - x(t)) \\\\
+y(t+1) &= r_2 f(x,y)(1 - f(x,y)),
 \\end{aligned}
 ```
 
