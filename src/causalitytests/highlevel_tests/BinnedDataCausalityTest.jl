@@ -18,6 +18,11 @@ applied `n_realizations` times. If `binning` returns a single value for each bin
 (e.g. `BinnedMeanResampling` or `BinnedMeanWeightedResampling`, the `test` is applied
 only once.
 
+!!! note 
+
+    This method uses [`UncertainData.jl`](https://github.com/kahaaga/UncertainData.jl) for 
+    uncertainty handling. To use it, first run `using UncertainData` in the Julia console.
+
 ## Fields
 
 - **`test::CausalityTest`**. An instance of a causality test, e.g. `VisitationFrequencyTest`, 
@@ -41,6 +46,8 @@ each uncertain data point, then assign the draws to the correct bins, and
 finally get a kernel density estimate to the distribution of values in each bin.
 
 ```julia 
+using UncertainData, CausalityTools
+
 grid = 0:10:1000 # left bin edges
 n_draw = 5000 # sample each point 5000 times and distribute among bins
 binning = BinnedResampling(grid, 5000)

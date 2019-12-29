@@ -208,7 +208,7 @@ embedding when partitioning (`ϵ::Int`).
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
 
-estimator = VisitationFrequency()
+estimator = VisitationFrequency(b = 2) # Base-2 logarithm
 
 for (i, ϵ) in enumerate(ϵs)
     binning = RectangularBinning(ϵ)
@@ -243,7 +243,7 @@ on `[0.05, 0.5]`
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
 
-estimator = VisitationFrequency()
+estimator = VisitationFrequency(b = 2) # Base-2 logarithm
 
 for (i, ϵ) in enumerate(ϵs)
     binning = RectangularBinning(ϵ)
@@ -280,7 +280,7 @@ te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
 mean_ϵs = zeros(10)
 
-estimator = VisitationFrequency()
+estimator = VisitationFrequency(b = 2)  # Base-2 logarithm
 
 for i ∈ 1:10
     ϵ = [ϵs_x1[i], ϵs_x2[i], ϵs_x3[i], ϵs_x4[i]]
@@ -317,7 +317,7 @@ mean_ϵs = zeros(length(ϵs))
 
 te_estimates_xtoy = zeros(length(ϵs))
 te_estimates_ytox = zeros(length(ϵs))
-estimator = VisitationFrequency()
+estimator = VisitationFrequency(b = 2) # Base-2 logarithm
 
 for (i, ϵᵢ) ∈ enumerate(ϵs)
     ϵ = [ϵᵢ - 1, ϵᵢ, ϵᵢ, ϵᵢ + 1]

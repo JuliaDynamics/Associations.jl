@@ -17,14 +17,14 @@ First, let's load the necessary packages.
 using CausalityTools, DynamicalSystems, Plots, Statistics, LaTeXStrings
 
 # Use the pyplot backend, so we can use LaTeX formatted strings. To do this,
-# you need the PyPlotinstalled
+# you need the PyPlot package installed
 pyplot()
 ```
 
 ### Time series
 
 Our example time series will be generated from a system of unidirectionally coupled 
-logistic maps, [`logistic2_unidir`](@ref). This system consists of two variables 
+logistic maps, [`logistic2_unidir`](@ref system_nonlinear3d). This system consists of two variables 
 `x` and `y`, where `x` influences `y` unidirectionally.
 
 Let's generate time series consisting of 300 observations. We'll let the 
@@ -39,10 +39,7 @@ plot(xlabel = "Time step", ylabel = "Value", size = (382*2, 250),
     tickfont = font(14), guidefont = font(14), legendfont = font(14))
 plot!(x, label = "x", c = :black)
 plot!(y, label = "y", c = :red, ls = :dot)
-savefig("logistic2_timeseries.png"); # hide
 ```
-
-![](logistic2_timeseries.png)
 
 ### Computing predictive asymmetry
 
@@ -101,7 +98,7 @@ p_te = plot(xlabel = L"$\eta$ [time steps]", ylabel = L"TE (\eta)\,[bits]",
 plot!(ηs, tes_xy, marker = stroke(:black), c = :black, label = L"x \to y")
 plot!(ηs, tes_yx, marker = stroke(:red), c = :red, label = L"y \to x")
 
-ymax = maximum([pas_xy; pas_yx])*1.05
+ymax = maximum(abs.([pas_xy; pas_yx]))*1.05
 p_pa = plot(xlabel = L"$\eta$ [time  steps]", ylabel = L"\mathbb{A} (\eta)\,[bits]",
     fg_legend = :transparent, bg_legend = :transparent, legend = :bottomleft,
     ylims = (-ymax, ymax))
@@ -111,11 +108,7 @@ hline!([0], ls = :dash, α = 0.6, label = "", c = :grey)
 
 pcomb = plot(p_te, p_pa, layout = (1, 2), size = (382*2, 300),
     tickfont = font(12), guidefont = font(12), legendfont = font(12))
-savefig(pcomb, "logistic2_te_and_pas.png"); # hide
-nothing # hide
 ```
-
-![](logistic2_te_and_pas.png)
 
 ### Interpretation
 

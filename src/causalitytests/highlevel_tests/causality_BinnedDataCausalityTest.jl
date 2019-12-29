@@ -9,6 +9,11 @@ with uncertainties in both indices and values. To get the data
 on an equally-spaced temporal grid, the data are first binned
 according to the instructions in `test.binning`. 
 
+!!! note 
+
+    This method uses [`UncertainData.jl`](https://github.com/kahaaga/UncertainData.jl) for 
+    uncertainty handling. To use it, first run `using UncertainData` in the Julia console.
+
 ## Binning methods 
 
 - If `test.binning` results in an uncertain value for each bin, then the causality 
@@ -28,7 +33,7 @@ according to the instructions in `test.binning`.
 Let's say we have the following datasets `X` and `Y`: 
 
 ```julia
-using CausalityTools, UncertainData 
+using CausalityTools, UncertainData, Distributions
 
 sys = ar1_unidir(uᵢ = [0.1, 0.1], c_xy = 0.41)
 vars = (1, 2) # ar1_unidir has only two variables, X and Y
@@ -53,6 +58,8 @@ If the binning method returns a summary statistic (e.g. the mean) for each bin,
 then the causality test is applied exactly once to the bin summaries.
 
 ```julia
+using UncertainData, CausalityTools 
+
 # Bin the data by drawing n_draws = 5000 realizations of each uncertain data 
 # point, then assign the draws to the correct bins and get a distribution 
 # of values in each bin.
@@ -67,9 +74,8 @@ k, l, m = 1, 1, 1 # embedding parameters
 n_subdivisions = floor(Int, length(0:10:1000)^(1/(k + l + m + 1)))
 state_space_binning = RectangularBinning(n_subdivisions)
 ηs = -5:5
-te_test = VisitationFrequencyTest(k = k, l = l, m = m,
-binning = state_space_binning, 
-ηs = ηs, b = 2) # use base-2 logarithms
+te_test = VisitationFrequencyTest(k = k, l = l, m = m, binning = state_space_binning, 
+    ηs = ηs, estimator = VisitationFrequency(2)) # use base-2 logarithms
 pa_test = PredictiveAsymmetryTest(predictive_test = te_test)
 
 # Compute transfer entropy in both directions for the bin means.
@@ -98,6 +104,8 @@ of the binned dataset.
 #### Predictive asymmetry test
 
 ```julia
+using CausalityTools, UncertainData 
+
 # Bin the data by drawing n_draws = 5000 realizations of each uncertain data 
 # point, then assign the draws to the correct bins and get a distribution 
 # of values in each bin.
@@ -114,8 +122,8 @@ n_subdivisions = floor(Int, length(0:10:1000)^(1/(k + l + m + 1)))
 state_space_binning = RectangularBinning(n_subdivisions)
 ηs = -5:5
 te_test = VisitationFrequencyTest(k = k, l = l, m = m,
-binning = state_space_binning, 
-ηs = ηs, b = 2) # use base-2 logarithms
+    binning = state_space_binning, 
+    ηs = ηs, estimator = VisitationFrequency(2)) # use base-2 logarithms
 pa_test = PredictiveAsymmetryTest(predictive_test = te_test)
 
 # Compute transfer entropy in both directions over 50 independent realizations 
@@ -149,7 +157,7 @@ hline!([0], lw = 2, ls = :dot, α = 0.5, label = "", c = :grey)
 #### Convergent cross mapping test
 
 ```julia
-using Plots 
+using Plots, CausalityTools, UncertainData
 
 # Bin the data by drawing n_draws = 5000 realizations of each uncertain data 
 # point, then assign the draws to the correct bins and get a distribution 

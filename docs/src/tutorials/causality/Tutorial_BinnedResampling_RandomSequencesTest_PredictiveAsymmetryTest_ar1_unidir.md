@@ -9,7 +9,7 @@ My data are uncertain and not equally spaced in time. I must convert my data to 
 Load necessary packages.
 
 ```julia
-using UncertainData, Plots, CausalityTools, DynamicalSystemsBase
+using UncertainData, Plots, CausalityTools, DynamicalSystems
 ```
 
 ### Example time series
