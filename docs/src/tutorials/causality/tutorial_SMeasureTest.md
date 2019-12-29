@@ -8,7 +8,7 @@ First, create an orbit of the built-in unidirectionally coupled [`henon2`](@ref)
 and a set of random time series for comparison.
 
 ```@example SMeasureTest_henon2_rand
-using CausalityTools, DynamicalSystemsBase, Plots, Distributions
+using CausalityTools, DynamicalSystems, Plots, Distributions
 npts, Ttr = 5000, 500
 x, y = columns(trajectory(henon2(c_xy = 1.0), npts - 1, Ttr = Ttr))
 xr, yr = rand(Uniform(-1, 1), npts), rand(Uniform(-1, 1), npts)
@@ -21,7 +21,7 @@ Let's plot the first 100 points of each time series.
 p_det = plot(xlabel = "", ylabel = "Value", title = "Coupled Henon maps")
 plot!(x[1:100], label = "x", marker = stroke(:black), c = :black)
 plot!(y[1:100], label = "y", marker = stroke(:red), c = :red)
-p_rand = plot(xlabel = "Time step", ylabel = "Value", title = "Random time series")
+p_rand = plot(xlabel = "Time step",a ylabel = "Value", title = "Random time series")
 plot!(xr[1:100], label = "xr", c = :blue)
 plot!(yr[1:100], label = "yr", c = :purple)
 

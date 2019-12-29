@@ -1,6 +1,12 @@
 
 # [Testing for causality from uncertain time series](@id causality_uncertain_naiveresampling)
 
+!!! note
+
+    The use the causality tests with uncertain data, first load the 
+    [UncertainData](https://github.com/kahaaga/UncertainData.jl) package by running 
+    `using UncertainData` in the Julia console.
+
 ## Syntax
 
 ### Uncertainties only in values

@@ -24,6 +24,8 @@ See also [`UncertainData.InterpolateAndBin`](@ref).
 ## Examples 
 
 ```
+using CausalityTools, UncertainData
+
 # Some test data
 N = 100
 sys = ar1_unidir(c_xy = 0.2)

@@ -2,7 +2,7 @@ name = "CausalityTools"
 uuid = "5520caf5-2dd7-5c5d-bfcb-a00e56ac49f7"
 authors = ["Kristian Agasøster Haaga <kahaaga@gmail.com>", "Tor Einar Møller <temolle@gmail.com>"]
 repo = "https://github.com/kahaaga/CausalityTools.jl.git"
-version = "0.9.6"
+version = "0.9.7"
 
 [deps]
 CausalityToolsBase = "b1f25513-c649-51ee-8a1c-0e98d01ae897"
@@ -21,6 +21,7 @@ PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
 RecipesBase = "3cdcf5f2-1ef4-517c-9805-6587b60abb01"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
 Requires = "ae029012-a4dd-5104-9daa-d747884805df"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 SimpleDiffEq = "05bca326-078c-5bf0-a5bf-ce7c7982d7fd"
 Simplices = "d5428e67-3037-59ba-9ab1-57a04f0a3b6a"
 StateSpaceReconstruction = "1441a9f6-6a74-5418-a591-cdf1d78a07f0"

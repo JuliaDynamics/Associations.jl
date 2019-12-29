@@ -1,25 +1,25 @@
 
 # [Discrete coupled dynamical systems](@id discrete_systems)
 
-## Autoregressive order one 2D system
+## [Autoregressive order one 2D system](@id system_ar1)
 
 ```@docs
 ar1_unidir(;uᵢ = rand(2), a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, σ = 0.40662)
 ```
 
-## Nonlinear 3D system with nonlinear coupling
+## [Nonlinear 3D system with nonlinear coupling](@id system_nonlinear3d)
 
 ```@docs
 nonlinear3d
 ```
 
-## Unidirectionally coupled 2D logistic maps
+## [Unidirectionally coupled 2D logistic maps](@id system_logistic2_unidir)
 
 ```@docs
 logistic2_unidir(;u₀ = rand(2), c_xy = 0.1, r₁ = 3.78, r₂ = 3.66, σ = 0.05)
 ```
 
-## Bidirectionally coupled 2D logistic maps
+## [Bidirectionally coupled 2D logistic maps](@id system_logistic2_bidir)
 
 ```@docs
 logistic2_bidir(;u₀ = rand(2), c_xy = 0.1, c_yx = 0.1,

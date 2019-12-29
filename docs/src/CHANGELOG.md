@@ -1,5 +1,18 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.7
+
+### Bug fixes
+
+- Fixed bug in error message.
+
+### Documentation
+
+- Improved documentation for [`NearestNeighbourMITest`](@ref).
+- Improved example for [`PredictiveAsymmetryTest`](@ref).
+- Improved example for [`NormalisedPredictiveAsymmetryTest`](@ref).
+- Improved example for [`SMeasureAsymmetryTest`](@ref).
+
 ## Release v0.9.5
 
 ### Bug fixes

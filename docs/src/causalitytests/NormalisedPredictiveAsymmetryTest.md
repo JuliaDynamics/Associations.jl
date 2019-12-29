@@ -8,15 +8,22 @@ NormalisedPredictiveAsymmetryTest
 
 ### Preparations
 
+First we load necessary packages.
+
+```@example NormalisedPredictiveAsymmetryTest_logistic4
+using CausalityTools, DynamicalSystems, Plots
+
+# Use the pyplot backend, so we can use LaTeX formatted strings. To do this,
+# you need the PyPlot package installed
+using LaTeXStrings; pyplot()
+```
+
 For this example, we'll use the built-in `logistic4` system, which consists of 
 four unidirectionally coupled logistic maps coupled ``x \to y \to z \to w``.
 With default values, the system blows up for some initial conditions, so we'll 
 start by just making a thin wrapper that finds us a good orbit.
 
 ```@example NormalisedPredictiveAsymmetryTest_logistic4
-using CausalityTools, DynamicalSystems
-using Plots, LaTeXStrings; gr()
-
 """
     good_orbit(f::Function, npts::Int; Ttr::Int = 100, max_attempts = 1000)
 
@@ -78,7 +85,8 @@ used for the transfer entropy analyses.
 k = 1; l = 1; m = 1 # embedding parameters, total dim = k + l + m
 ηs = [-η_max:-1; 1:η_max]
 bin = RectangularBinning(floor(Int, npts^(1/(k + l + m + 1))))
-test = VisitationFrequencyTest(ηs = ηs, binning = bin)
+test = VisitationFrequencyTest(ηs = ηs, binning = bin,
+    estimator = VisitationFrequency(b = 2)) # use base-2 logarithm
 pa_test = NormalisedPredictiveAsymmetryTest(test, f = 1.0)
 ```
 
@@ -101,18 +109,18 @@ Let's plot the results.
 
 ```@example NormalisedPredictiveAsymmetryTest_logistic4
 ymax = maximum(abs.(asymmetries)) * 1.05
-p_pa = plot(xlabel = "\$ \\eta \$", ylabel = "\$ \\mathcal{A}(\\eta) \$",
+p_pa = plot(xlabel = L"\eta \,\, [bits]", ylabel = L"\mathcal{A}(\eta) \,\, [bits]",
     ylims = (-ymax, ymax),  size = (382*2, 550), legend = :topleft,
     fg_legend = :transparent, bg_legend = :transparent,
     guidefont = font(13), tickfont = font(13), legendfont = font(12),
     xlims = (0.9, η_max+0.1))
 hline!([1], ls = :dash, lc = :grey, label = "")
-plot!(ηs[ηs .> 0], pas_xy, c = :black, label = "\$ x \\to y \$")
-plot!(ηs[ηs .> 0], pas_yz, c = :red, label = "\$ y \\to z \$")
-plot!(ηs[ηs .> 0], pas_zw, c = :blue, label = "\$ z \\to w \$")
-plot!(ηs[ηs .> 0], pas_yx, c = :black, ls = :dash, label = "\$ y \\to x \$")
-plot!(ηs[ηs .> 0], pas_zy, c = :red, ls = :dash, label = "\$ z \\to y \$")
-plot!(ηs[ηs .> 0], pas_wz, c = :blue, ls = :dash, label = "\$ w \\to z \$")
+plot!(ηs[ηs .> 0], pas_xy, c = :black, label = L"x \to y")
+plot!(ηs[ηs .> 0], pas_yz, c = :red, label = L"y \to z")
+plot!(ηs[ηs .> 0], pas_zw, c = :blue, label = L"z \to w")
+plot!(ηs[ηs .> 0], pas_yx, c = :black, ls = :dash, label = L"y \to x")
+plot!(ηs[ηs .> 0], pas_zy, c = :red, ls = :dash, label = L"z \to y")
+plot!(ηs[ηs .> 0], pas_wz, c = :blue, ls = :dash, label = L"w \to z")
 ```
 
 ### Discussion
@@ -122,6 +130,8 @@ for the directions we know to be causal and negative in the directions that are 
 be non-causal. Running this example for multiple initial conditions of the system, we 
 find that this is very consistently the case!
 
-[^1]: 
+For more information on about this method, wait patiently for our upcoming paper, which should be out as a preprint soon. Keep tuned for more!
+
+[^1]:
     Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of causality in a bivariate time series. Physical Review E, 97(4), 042207.
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.97.042207](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.97.042207)

@@ -18,11 +18,17 @@ the ordering resulting from resampling, but respecting the order of the points i
 *Note: if the uncertain values furnishing the indices have overlapping supports, you might 
 mess up the index-ordering (e.g. time-ordering) of the data points*.
 
+!!! note 
+
+    This method uses [`UncertainData.jl`](https://github.com/kahaaga/UncertainData.jl) for 
+    uncertainty handling. To use it, first run `using UncertainData` in the Julia console.
+
 ## Example 
 
 Generate some example data series x and y, where x influences y:
 
 ```julia 
+using UncertainData, CausalityTools, Distributions
 n_pts = 300
 a₁, a₂, b₁, b₂, ξ₁, ξ₂, C₁₂ = 0.7, 0.1, 0.75, 0.2, 0.3, 0.3, 0.5
 
@@ -109,11 +115,17 @@ single draws of `source` and `target` that have been generated according to the 
 `sequential` sampling constraint. After interpolating both `source` and `target` 
 to the provided regular `grid`, the causality test is performed on the interpolated data.
 
+!!! note 
+
+    This method uses [`UncertainData.jl`](https://github.com/kahaaga/UncertainData.jl) for 
+    uncertainty handling. To use it, first run `using UncertainData` in the Julia console.
+
 ## Example 
 
 First, generate some example data. 
 
 ```julia
+using UncertainData, CausalityTools, Distributions
 N = 300
 a₁, a₂, b₁, b₂, ξ₁, ξ₂, C₁₂ = 0.7, 0.1, 0.75, 0.2, 0.3, 0.3, 0.5
 

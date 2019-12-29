@@ -12,10 +12,13 @@ Test for a causal influence from `source` to `target` using the provided causali
 Both `source` and `target` might be uncertain data, which is resampled according to the 
 `resampling` scheme.
 
-This method uses the machinery from 
-[`UncertainData.jl`](https://github.com/kahaaga/UncertainData.jl) to constrain the 
-furnishing distributions of the uncertain data during resampling, which offers complete 
-control over the resampling procedure.
+!!! note 
+
+    This method uses the machinery from 
+    [`UncertainData.jl`](https://github.com/kahaaga/UncertainData.jl) to constrain the 
+    furnishing distributions of the uncertain data during resampling, which offers complete 
+    control over the resampling procedure. The use the causality tests with uncertain data, 
+    first run `using UncertainData` in the Julia console.
 
 ## Arguments 
 

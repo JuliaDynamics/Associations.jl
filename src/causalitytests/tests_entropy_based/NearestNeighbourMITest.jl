@@ -5,7 +5,38 @@ import TransferEntropy: te_embed
         estimator::NearestNeighbourMI = NearestNeighbourMI(b = 2, k1 = 2, k2 = 3, metric = Chebyshev()),
         ηs::Union{Int, AbstractVector{Int}})
 
-A transfer entropy test that estimates mutual information terms by counting nearest neighbours. 
+The parameters for a transfer entropy test using the `NearestNeighbourMI` estimator that estimates 
+mutual information terms using the counting of nearest neighbours.
+
+## Mandatory keyword arguments
+
+- **`ηs`**: The prediction lags (that gos into the ``T_{f}`` component of the embedding).
+
+## Optional keyword arguments
+
+- **`k::Int`**: The dimension of the ``T_{f}`` component of the embedding. 
+
+- **`l::Int`**: The dimension of the ``T_{pp}`` component of the embedding. 
+
+- **`m::Int`**: The dimension of the ``S_{pp}`` component of the embedding. 
+
+- **`n::Int`**: The dimension of the ``C_{pp}`` component of the embedding. 
+
+- **`τ::Int`**: The embedding lag. Default is `τ = 1`.
+
+- **`metric`**: The distance metric to use for mutual information estimation.
+
+- **`k1`**: The number of nearest neighbours for the highest-dimensional mutual
+    information estimate. To minimize bias, choose ``k_1 < k_2`` if
+    ``min(k_1, k_2) < 10`` (see fig. 16 in [1]). Beyond dimension 5, choosing
+    ``k_1 = k_2`` results in fairly low bias, and a low number of nearest
+    neighbours, say `k1 = k2 = 4`, will suffice.
+
+- **`k2`**: The number of nearest neighbours for the lowest-dimensional mutual
+    information estimate. To minimize bias, choose ``k_1 < k_2`` if
+    if ``min(k_1, k_2) < 10`` (see fig. 16 in [1]). Beyond dimension 5, choosing
+    ``k_1 = k_2`` results in fairly low bias, and a low number of nearest
+    neighbours, say `k1 = k2 = 4`, will suffice.
 """
 Base.@kwdef mutable struct NearestNeighbourMITest{N} <: TransferEntropyCausalityTest{N}
     
