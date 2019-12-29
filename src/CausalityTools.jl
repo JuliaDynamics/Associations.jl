@@ -64,6 +64,9 @@ module CausalityTools
     # Example systems
     include("systems/Systems.jl")
 
+    # SystemModels module
+    include("SystemModels/SystemModels.jl")
+
     # Wrappers of the different methods.
     include("method_wrappers/highlevel_methods.jl")
     include("method_wrappers/transferentropy_from_timeseries.jl")
