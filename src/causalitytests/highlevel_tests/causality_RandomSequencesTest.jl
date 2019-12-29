@@ -40,6 +40,8 @@ uncertain datasets.
 For scalar valued vectors:
 
 ```julia 
+using CausalityTools, UncertainData
+
 x, y = rand(100), rand(100)
 
 # Use a cross-mapping test with default parameters (not recommended,
@@ -62,6 +64,8 @@ This also works on uncertain data, or any combination of scalar vectors
 and uncertain data:
 
 ```julia
+using CausalityTools, UncertainData
+
 # Some example data
 N = 300
 sys = ar1_unidir(c_xy = 0.8)
