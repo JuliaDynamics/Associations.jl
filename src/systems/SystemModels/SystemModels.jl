@@ -81,6 +81,16 @@ function randomised(::Type{SM}) where SM <: ASM where ASM <: AbstractSystemModel
     @error "`randomised` not implemented for system model of type `SM`. Consider defining `randomised(::Type{$(SM)})`"
 end
 
+function display_string(x::AbstractSystemModel{T, N}) where {T, N}
+    tp = typeof(x)
+    fn = fieldnames(typeof(x))
+    
+    "$tp" * "(" * join(["\n  $(fd) = $(getfield(x, fd))" for fd in fn]) * ")"
+end
+
+function Base.show(io::IO, x::AbstractSystemModel{T, N}) where {T, N}
+    print(io, display_string(x))
+end
 
 export 
 AbstractSystemModel, 
