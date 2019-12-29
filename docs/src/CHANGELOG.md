@@ -1,5 +1,9 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.7
+
+- Fixed bug in error message.
+
 ## Release v0.9.5
 
 ### Bug fixes

@@ -62,7 +62,7 @@ In a cumulative manner, normalise the `values` for the statistic
 to some fraction `f` of their mean over prediction lags `ηs`.
 """
 function lagnormalised_statistic(values, ηs, f)
-    length(values) == length(ηs) || error("length(vals) must equal length(ηs)")
+    length(values) == length(ηs) || error("length(values) must equal length(ηs)")
     avg_vals = zeros(Float64, length(ηs[ηs .> 0]))
     
     for (i, η) in enumerate(ηs[ηs .> 0])

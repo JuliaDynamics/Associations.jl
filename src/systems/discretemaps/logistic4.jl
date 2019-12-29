@@ -52,7 +52,7 @@ parameters are as in [1].
 
 *Note: With the default parameters which are as in [1], for some initial conditions, 
 this system wanders off to ``\\pm \\infty`` for some of the variables. Make sure that 
-you have a good realisation before using the orbit for anything.**
+you have a good realisation before using the orbit for anything.*
 
 ## Equations of motion
 
