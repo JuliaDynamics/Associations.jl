@@ -1,5 +1,11 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.9
+
+### Documentation
+
+- Fixed bug in documentation example for [`RandomSequencesTest`](@ref).
+
 ## Release v0.9.8
 
 ### Bug fixes

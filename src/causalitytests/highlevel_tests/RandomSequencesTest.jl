@@ -19,7 +19,7 @@ on 150 randomly selected chunks of the time series with lengths ranging from
 cm_test = CrossMappingTest()
 
 # Combine with the random sequence subsamling
-rtest = RandomSequencesTest(, RandomSequences(150, N-30:N-1))
+rtest = RandomSequencesTest(cm_test, RandomSequences(150, N-30:N-1))
 ```
 """
 struct RandomSequencesTest{CT <: CausalityTest, RS <: RandomSequences}
