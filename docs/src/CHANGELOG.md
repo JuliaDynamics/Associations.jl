@@ -1,5 +1,11 @@
 # Changelog for CausalityTools.jl
 
+## Release v0.9.8
+
+### Bug fixes
+
+- Fixed bug in [`RandomSequencesTest`](@ref) when providing a single sequence length (failed) instead of a range of sequence lengths (worked).
+
 ## Release v0.9.7
 
 ### Bug fixes
