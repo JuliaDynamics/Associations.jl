@@ -11,9 +11,13 @@ condition). Hence, we define a discrete model system by (1) its parameters, (2) 
 
 Concrete subtypes must implement the following methods:
 
+- **[`DiscreteDynamicalSystem(x::DiscreteSystemModel)`](@ref)**: Create a 
+    `DiscreteDynamicalSystem` from the model.
 - **[`get_dt`](@ref)**: Returns the time step.
 - **[`get_ui`](@ref)**: Returns the initial condition.
 - **[`get_nvars`](@ref)**: Returns the number of variables.
+- **[`interaction_matrix`](@ref)**: Returns the interaction matrix for the model (respecting the 
+    coupling parameter for that particular model).
 
 Concrete subtypes *may* implement the following methods:
 

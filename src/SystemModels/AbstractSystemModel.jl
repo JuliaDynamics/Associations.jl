@@ -9,6 +9,8 @@ Concrete subtypes must implement the following methods:
 - **[`get_dt`](@ref)**: Returns the time step.
 - **[`get_ui`](@ref)**: Returns the initial condition.
 - **[`get_nvars`](@ref)**: Returns the number of variables.
+- **[`interaction_matrix`](@ref)**: Returns the interaction matrix for the model (respecting the 
+    coupling parameter for that particular model).
 
 Concrete subtypes *may* implement the following methods:
 
@@ -28,13 +30,21 @@ get_ui(x::AbstractSystemModel) = x.ui
 get_nvars(x::AbstractSystemModel{T, N}) where {T, N} = N
 
 """ 
-    randomised(::Type{AbstractSystemModel{T, N}}) where {T, N}
+    ContinuousDynamicalSystem(x::AbstractSystemModel) -> ContinuousDynamicalSystem
 
-If implemented for the type of system model, return a instance of the model with 
-randomised parameters.
+Convert a system model to a `ContinuousDynamicalSystem` by connecting 
+its equations of motion to it parameters.
 """
-function randomised(::Type{SM}) where SM <: ASM where ASM <: AbstractSystemModel
-    @error "`randomised` not implemented for system model of type `SM`. Consider defining `randomised(::Type{$(SM)})`"
+ContinuousDynamicalSystem(x::AbstractSystemModel{T, N}) where {T, N}
+
+""" 
+    rand(::Type{AbstractSystemModel{T, N}}) where {T, N}
+
+Return a instance of the model with randomised parameters. Optionally implemented for 
+some systems. 
+"""
+function rand(::Type{SM}) where SM <: ASM where ASM <: AbstractSystemModel
+    @error "`rand` not implemented for system model of type `SM`. Consider defining `rand(::Type{$(SM)})`"
 end
 
 function display_string(x::AbstractSystemModel{T, N}) where {T, N}
