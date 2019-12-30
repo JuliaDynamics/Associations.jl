@@ -87,7 +87,7 @@ function causality(
     
     for i = 1:n
         if seq_length isa Int
-            idx_start = rand(1:(length(x) - seq_length))
+            idx_start = rand(1:(length(source) - seq_length))
             r = idx_start:(idx_start + seq_length)
         elseif seq_length isa AbstractVector{Int}
             # seq_length is now something we can sample directly from
