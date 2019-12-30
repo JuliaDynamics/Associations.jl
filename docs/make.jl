@@ -26,6 +26,13 @@ PAGES = [
     "overview.md",
     "Syntax overview" => "syntax_overview.md",
     "CHANGELOG.md",
+    "System models" => [
+        "SystemModels/SystemModels_overview.md",
+        "SystemModels/ContinuousModels.md",
+        "SystemModels/randomising.md",
+        "SystemModels/abstract_types.md"
+    ],
+
     "Causality tests" => [
         # From uncertain data
         "causalitytests/causality_from_uncertain_data_naive.md",

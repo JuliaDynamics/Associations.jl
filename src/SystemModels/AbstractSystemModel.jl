@@ -4,14 +4,16 @@
 An abstract type that represents a set of parameters of type `T` for a dynamical system consisting 
 of `N` variables.
 
-Concrete subtypes should implement the following methods:
+Concrete subtypes must implement the following methods:
 
 - **[`get_dt`](@ref)**: Returns the time step.
 - **[`get_ui`](@ref)**: Returns the initial condition.
-- **[`get_nvars`](@ref)**: Returns the initial condition.
-- **[`randomised(::Type{SM}) where SM <: ContiniousSystemModel`](@ref)**. If implemented 
-    for a continous system model of type `SM`, returns an instance of the model 
-    with randomised parameters.
+- **[`get_nvars`](@ref)**: Returns the number of variables.
+
+Concrete subtypes *may* implement the following methods:
+
+- **[`rand`](@ref)**. If implemented for a discrete system model of type `SM`, 
+    returns an instance of the model with randomised parameters.
 """
 abstract type AbstractSystemModel{T, N} end 
 
@@ -48,3 +50,24 @@ end
 
 
 export get_dt, get_ui, get_nvars, randomised
+
+
+"""
+    rand(::Type{SM}) where {SM <: AbstractSystemModel} -> SM
+
+Generate an instance of a model of type `SM` with randomised parameters.
+
+Parameters are provided as keyword arguments, and must be either as scalars,
+distributions or more complicated uncertain values defined as in the 
+[UncertainData](https://github.com/kahaaga/UncertainData.jl) package. 
+
+## See also 
+
+Concrete instructions to randomise the different systems are found in the 
+following docstrings.
+
+- [`rand(::Type{RosslerLorenzUnidir}`].
+"""
+function rand(x::AbstractSystemModel) end 
+
+const PT = Union{Number, Distribution, AbstractUncertainValue}

@@ -8,13 +8,15 @@ As a minimum, such types always include a field `dt` (giving the sampling time s
 `dt` argument to `DynamicalSystems.trajectory`) and a field `ui` (giving the initial condition). Hence, 
 define a continous model system by (1) its parameters, (2) its initial condition, (3) its sampling rate.
 
-Concrete subtypes should implement the following methods:
+Concrete subtypes must implement the following methods:
 
 - **[`get_dt`](@ref)**: Returns the time step.
 - **[`get_ui`](@ref)**: Returns the initial condition.
-- **[`get_nvars`](@ref)**: Returns the initial condition.
-- **[`randomised(::Type{SM}) where SM <: ContinuousSystemModel`](@ref)**. If implemented 
-    for a continuous system model of type `SM`, returns an instance of the model 
-    with randomised parameters.
+- **[`get_nvars`](@ref)**: Returns the number of variables.
+
+Concrete subtypes *may* implement the following methods:
+
+- **[`rand`](@ref)**. If implemented for a continuous system model of type `SM`, 
+    returns an instance of the model with randomised parameters.
 """
 abstract type ContinuousSystemModel{T, N} <: AbstractSystemModel{T, N} end 
