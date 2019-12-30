@@ -29,13 +29,6 @@ get_ui(x::AbstractSystemModel) = x.ui
 """ Return the number of variables for a system model. """
 get_nvars(x::AbstractSystemModel{T, N}) where {T, N} = N
 
-""" 
-    ContinuousDynamicalSystem(x::AbstractSystemModel) -> ContinuousDynamicalSystem
-
-Convert a system model to a `ContinuousDynamicalSystem` by connecting 
-its equations of motion to it parameters.
-"""
-ContinuousDynamicalSystem(x::AbstractSystemModel{T, N}) where {T, N}
 
 """ 
     rand(::Type{AbstractSystemModel{T, N}}) where {T, N}

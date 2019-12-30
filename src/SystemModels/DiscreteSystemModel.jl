@@ -25,3 +25,12 @@ Concrete subtypes *may* implement the following methods:
     returns an instance of the model with randomised parameters.
 """
 abstract type DiscreteSystemModel{T, N} <: AbstractSystemModel{T, N} end 
+
+
+""" 
+    DiscreteDynamicalSystem(x::ContinuousSystemModel) -> DiscreteDynamicalSystem
+
+Convert a system model to a `ContinuousDynamicalSystem` by connecting 
+its equations of motion to it parameters.
+"""
+DiscreteDynamicalSystem(x::DiscreteSystemModel)

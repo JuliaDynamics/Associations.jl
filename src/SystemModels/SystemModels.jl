@@ -4,7 +4,7 @@ using Reexport
 
     import DynamicalSystems: 
         ContinuousDynamicalSystem, 
-        DiscreteSystemModel,
+        DiscreteDynamicalSystem,
         AbstractDataset, 
         Dataset, 
         trajectory,
