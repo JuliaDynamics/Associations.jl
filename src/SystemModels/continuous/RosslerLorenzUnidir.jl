@@ -40,9 +40,10 @@ with the coupling constant ``c_{xy} \\geq 0``.
 - **`b₂::T`**: The parameter `b₂` controlling the Lorenz subsystem.
 - **`b₃::T`**: The parameter `b₃` controlling the Lorenz subsystem.
 - **`observational_noise_level`**: The magnitude of observational noise to add after sampling 
-    orbits of the system. If `observational_noise_level = 0.3`, then noise equivalent to 
-    0.3 times the empirical standard deviation will be added to each variable of the system
-    (taking the standard deviation for that variable only).
+    orbits of the system (given as percentage of empirical standard deviation). If 
+    `observational_noise_level = 30`, then noise equivalent to 0.3 times the empirical standard 
+    deviation will be added to each variable of the system (taking the standard deviation for 
+    that variable only).
 
 ## Implements 
 
@@ -110,7 +111,11 @@ function trajectory(x::RosslerLorenzUnidir, npts::Int; sample_dt::Int = 1, Ttr =
     o = trajectory(sys, T, dt = x.dt, Ttr = Ttr*x.dt, alg = alg)[1:sample_dt:end-1, :]
     
     percent_noise = x.observational_noise_level
-    (x.observational_noise_level > 0) ? add_observational_noise!(o, percent_noise) : o
+    if x.observational_noise_level > 0
+        o = add_observational_noise!(o, percent_noise)
+    end
+
+    return o
 end
 
 
@@ -148,10 +153,11 @@ Let `const PT = Union{Number, Distribution, AbstractUncertainValue}`. Then
 - **`b₁::PT = Uniform(9.5, 10.5)`**: The parameter `b₁`.
 - **`b₂::PT = Uniform(27, 29)`**: The parameter `b₂`.
 - **`b₃::PT = Uniform(7.5/3, 8.5/3)`**: The parameter `b₃`.
-- **`observational_noise_level::PT = 20`**: The magnitude of observational noise to add after sampling 
-    orbits of the system. If `observational_noise_level = 0.3`, then noise equivalent to 
-    0.3 times the empirical standard deviation will be added to each variable of the system
-    (taking the standard deviation for that variable only).
+- **`observational_noise_level`** = 20: The magnitude of observational noise to add after sampling 
+    orbits of the system (given as percentage of empirical standard deviation). If 
+    `observational_noise_level = 30`, then noise equivalent to 0.3 times the empirical standard 
+    deviation will be added to each variable of the system (taking the standard deviation for 
+    that variable only).
 - **`n_maxtries`**: The number of draws to try until the quest of finding a system yielding 
     a good orbit comes to an end.
 
