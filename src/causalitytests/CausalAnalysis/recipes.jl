@@ -15,11 +15,7 @@
     xlabel --> L"$\eta$"
     ylabel --> L"$\mathbb{A}(\eta)$"
     label --> ""
-    marker --> stroke(1.0)
     size --> (382, 300)
-    guidefont --> font(13)
-    tickfont --> font(13)
-    legendfont --> font(13)
     fg_legend --> :transparent
     bg_legend --> :transparent
        
