@@ -34,7 +34,7 @@ ctest = ConstrainedTest(CrossMappingTest(), cs, 100)
 struct ConstrainedTest{
         CT <: CausalityTest, 
         CR <: ConstrainedIndexValueResampling{N_VARIABLES, N_DATASETS} 
-            where {N_VARIABLES, N_DATASETS}} <: PreprocessedDataCausalityTest
+            where {N_VARIABLES, N_DATASETS}} <: PreprocessedDataCausalityTest{CT}
     test::CT
     constrained_resampling::CR
     n::Int

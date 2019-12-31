@@ -63,6 +63,7 @@ pages:
   #- Syntax overview: syntax_overview.md
   - Estimating causality:
     - Overview: causalitytests/causality_tests_overview.md
+    - Causal analyses: causalitytests/CausalAnalysis.md
     - From scalar time series: causalitytests/causality_tests.md
     - From uncertain time series: causalitytests/causality_from_uncertain_data_naive.md
     - From dynamical systems: causalitytests/causality_from_dynamical_systems.md
@@ -121,6 +122,11 @@ pages:
     - Fourier surrogates, random phases: surrogates/randomphases_docs.md
     - Fourier surrogates, random amplitudes: surrogates/randomamplitudes_docs.md
     - Random shuffle: surrogates/randomshuffle_docs.md
+  - SystemModels: 
+    - Overview: SystemModels/SystemModels_overview.md
+    - Continuous models: SystemModels/ContinuousModels.md
+    - Parameter-randomisation: SystemModels/randomising.md
+    - Internals: SystemModels/abstract_types.md
   - Example systems: 
     - Overview: example_systems/example_systems_overview.md
     - Discrete systems: example_systems/example_systems_discrete.md

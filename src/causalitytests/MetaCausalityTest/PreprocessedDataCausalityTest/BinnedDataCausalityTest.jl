@@ -78,7 +78,7 @@ test = BinnedDataCausalityTest(te_test, binning, n_realizations)
 """
 struct BinnedDataCausalityTest{
     CT <: CausalityTest, 
-    BR <: AbstractBinnedResampling} <: PreprocessedDataCausalityTest
+    BR <: AbstractBinnedResampling} <: PreprocessedDataCausalityTest{CT}
 
     test::CT
     binning::BR

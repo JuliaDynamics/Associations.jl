@@ -4,6 +4,25 @@ import UncertainData:
     AbstractUncertainIndexValueDataset,
     resample
 
+
+function get_random_segment(source, target, seq::RandomSequences)
+    seq_length = seq.sequence_length
+    N = length(source)
+    if seq_length isa Int
+        idx_start = rand(1:(length(source) - seq_length))
+        r = idx_start:(idx_start + seq_length)
+    elseif seq_length isa AbstractVector{Int}
+        # seq_length is now something we can sample directly from
+        seqlen = rand(seq_length)
+        idx_start = rand(1:(N + 1 - seqlen))
+        r = idx_start:(idx_start + seqlen - 1)
+    else
+        throw(ArgumentError("`resampling.sequence_length`must be an integer or a collection of integers"))
+    end
+
+    return r
+end
+
 """
     resample_and_subset(x, r::AbstractVector{Int})
 
@@ -40,8 +59,6 @@ uncertain datasets.
 For scalar valued vectors:
 
 ```julia 
-using CausalityTools, UncertainData
-
 x, y = rand(100), rand(100)
 
 # Use a cross-mapping test with default parameters (not recommended,
@@ -64,8 +81,6 @@ This also works on uncertain data, or any combination of scalar vectors
 and uncertain data:
 
 ```julia
-using CausalityTools, UncertainData
-
 # Some example data
 N = 300
 sys = ar1_unidir(c_xy = 0.8)
@@ -84,30 +99,48 @@ function causality(
         target::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset, AbstractUncertainIndexValueDataset},
         test::RandomSequencesTest)
     
-    seq_length = test.sequences_resampling.sequence_length
-    n = test.sequences_resampling.n
-    N = length(source)
-    results = [Vector{Float64}(undef, 0) for i = 1:n]
+    n_sequences = test.sequences_resampling.n
     
-    for i = 1:n
-        if seq_length isa Int
-            idx_start = rand(1:(length(source) - seq_length))
-            r = idx_start:(idx_start + seq_length)
-        elseif seq_length isa AbstractVector{Int}
-            # seq_length is now something we can sample directly from
-            seqlen = rand(seq_length)
-            idx_start = rand(1:(N + 1 - seqlen))
-            r = idx_start:(idx_start + seqlen - 1)
-        else
-            throw(ArgumentError("`resampling.sequence_length`must be an integer or a collection of integers"))
-        end
-        ss = resample_and_subset(source, r)
-        ts = resample_and_subset(target, r)
-        res = causality(ss, ts, test.test)
-        
-        append!(results[i], res)
+    # Get the return type of the causality test
+    causality_test = test.test
+    RT = get_return_type(causality_test)
+
+    results = Vector{RT}(undef, n_sequences)
+
+    for i = 1:n_sequences
+        r = get_random_segment(source, target, test.sequences_resampling)
+        source_segment = resample_and_subset(source, r)
+        target_segment = resample_and_subset(target, r)
+
+        results[i] = causality(source_segment, target_segment, causality_test)
     end
     
+    return results
+end
+
+function causality(
+        source::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset, AbstractUncertainIndexValueDataset}, 
+        target::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset, AbstractUncertainIndexValueDataset},
+        cond::Union{AbstractVector, Vector{<:AbstractUncertainValue}, AbstractUncertainValueDataset, AbstractUncertainIndexValueDataset},
+        test::RandomSequencesTest)
+
+    n_sequences = test.sequences_resampling.n
+    
+    # Get the return type of the causality test
+    causality_test = test.test
+    RT = get_return_type(causality_test)
+
+    results = Vector{RT}(undef, n_sequences)
+
+    for i = 1:n_sequences
+        r = get_random_segment(source, target, test.sequences_resampling)
+        source_segment = resample_and_subset(source, r)
+        target_segment = resample_and_subset(target, r)
+        cond_segment = resample_and_subset(cond, r)
+
+        results[i] = causality(source_segment, target_segment, cond_segment, causality_test)
+    end
+
     return results
 end
 

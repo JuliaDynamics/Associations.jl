@@ -69,7 +69,7 @@ PredictiveAsymmetryTest(predictive_test = test_transferoperator)
 1. Diego, David, Kristian Agasøster Haaga, Jo Brendryen, and Bjarte Hannisdal. 
     A simple test for causal asymmetry in complex systems. In prep.
 """
-Base.@kwdef mutable struct PredictiveAsymmetryTest{TEST, N} <: CausalityTest where TEST
+Base.@kwdef mutable struct PredictiveAsymmetryTest{TEST, N} <: AbstractPredictiveAsymmetryTest where TEST
     predictive_test::TEST
 
     function PredictiveAsymmetryTest(test::T) where {T <: TransferEntropyCausalityTest}

@@ -64,6 +64,9 @@ module CausalityTools
     # Example systems
     include("systems/Systems.jl")
 
+    # SystemModels module
+    include("SystemModels/SystemModels.jl")
+
     # Wrappers of the different methods.
     include("method_wrappers/highlevel_methods.jl")
     include("method_wrappers/transferentropy_from_timeseries.jl")
@@ -72,7 +75,7 @@ module CausalityTools
     include("algorithms/smeasure.jl")
 
     # High-level estimators 
-    include("causalitytests/causality_tests.jl")
+    include("CausalityTests/CausalityTests.jl")
 
     ################################################################
     # Integration with DynamicalSystems.jl (for all causality tests)
