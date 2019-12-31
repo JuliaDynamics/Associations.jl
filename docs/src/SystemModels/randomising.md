@@ -3,8 +3,6 @@
 To simplify sensitivity analyses of causality statistics on dynamical systems, the following
 convenience methods for creating model systems with randomised parameters are available.
 
-## [`RosslerLorenzUnidir`](@id rand_RosslerLorenzUnidir)
-
 ```@docs
-rand(::Type{RosslerLorenzUnidir})
+rand(x::AbstractSystemModel)
 ```
