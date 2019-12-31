@@ -34,6 +34,10 @@ PAGES = [
     ],
 
     "Causality tests" => [
+
+        # Causal analysis 
+        "causalitytests/CausalAnalysis.md",
+        
         # From uncertain data
         "causalitytests/causality_from_uncertain_data_naive.md",
         "causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md",

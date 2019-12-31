@@ -42,11 +42,18 @@ NormalisedPredictiveAsymmetryTest(predictive_test = test_visitfreq, f = 1.0)
 1. Diego, David, Kristian Agasøster Haaga, Jo Brendryen, and Bjarte Hannisdal. 
     A simple test for causal asymmetry in complex systems. In prep.
 """
-Base.@kwdef mutable struct NormalisedPredictiveAsymmetryTest{TEST, N} <: CausalityTest where TEST
+Base.@kwdef mutable struct NormalisedPredictiveAsymmetryTest{TEST, N} <: AbstractPredictiveAsymmetryTest where TEST
     predictive_test::TEST
     f::Number 
     
     # If a threshold is given, use it.
+    function NormalisedPredictiveAsymmetryTest(test::T; f::Number) where {T <: TransferEntropyCausalityTest}
+        # Check that prediction lags are okay
+        verified_prediction_lags(test.ηs)
+        N = length(test.ηs[test.ηs .> 0])
+        return new{T, N}(test, f)
+    end
+
     function NormalisedPredictiveAsymmetryTest(test::T; f::Number) where {T <: TransferEntropyCausalityTest}
         # Check that prediction lags are okay
         verified_prediction_lags(test.ηs)

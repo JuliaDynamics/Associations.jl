@@ -62,6 +62,7 @@ pages:
   #- Syntax overview: syntax_overview.md
   - Estimating causality:
     - Overview: causalitytests/causality_tests_overview.md
+    - Causal analyses: causalitytests/CausalAnalysis.md
     - From scalar time series: causalitytests/causality_tests.md
     - From uncertain time series: causalitytests/causality_from_uncertain_data_naive.md
     - From dynamical systems: causalitytests/causality_from_dynamical_systems.md

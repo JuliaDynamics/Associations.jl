@@ -75,7 +75,7 @@ module CausalityTools
     include("algorithms/smeasure.jl")
 
     # High-level estimators 
-    include("causalitytests/causality_tests.jl")
+    include("CausalityTests/CausalityTests.jl")
 
     ################################################################
     # Integration with DynamicalSystems.jl (for all causality tests)

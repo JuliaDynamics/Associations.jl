@@ -1,7 +1,7 @@
 import UncertainData: RandomSequences
 
 """
-    RandomSequencesTest(test::CausalityTest, sequences_resampling::RandomSequences)
+    RandomSequencesTest(test::CausalityTest, sequences_resampling::RandomSequences) <: MetaCausalityTest
 
 A causality test where the `test` is applied to multiple independent draws of 
 the datasets, where each draw from a randomly selected consecutive chunk of 
@@ -21,8 +21,14 @@ cm_test = CrossMappingTest()
 # Combine with the random sequence subsamling
 rtest = RandomSequencesTest(, RandomSequences(150, N-30:N-1))
 ```
+
+## Fields 
+
+- **`test::CausalityTest`**. The causality test.
+- **`sequences_resampling`**. A `RandomSequences` instance dictating how random sequences 
+    should be drawn.
 """
-struct RandomSequencesTest{CT <: CausalityTest, RS <: RandomSequences}
+struct RandomSequencesTest{CT, RS <: RandomSequences} <: SubsampledDataCausalityTest{CT}
     test::CT
     sequences_resampling::RS
 end

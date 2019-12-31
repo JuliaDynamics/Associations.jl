@@ -37,27 +37,12 @@ rtest_NNmi = RandomSequencesTest(test_NNmi, RandomSequences(nchunks, Nseq))
 @test rtest_npa isa RandomSequencesTest
 @test rtest_NNmi isa RandomSequencesTest
 
-import CausalityTools.CausalityTests.get_return_type
-import HypothesisTests: OneSampleTTest
-
-T = typeof(1.0)
-
-@test causality(x, y, rtest_cm) isa Vector{Vector{T}}
-@test causality(x, y, rtest_ccm) isa Vector{Vector{Vector{T}}}
-@test causality(x, y, rtest_vf) isa Vector{Vector{T}}
-@test causality(x, y, rtest_tog) isa Vector{Vector{T}}
-@test causality(x, y, rtest_jdd) isa Vector{Vector{T}}
-@test causality(x, y, rtest_jddt) isa Vector{OneSampleTTest}
-@test causality(x, y, rtest_pa) isa Vector{Vector{T}}
-@test causality(x, y, rtest_npa) isa Vector{Vector{T}}
-@test causality(x, y, rtest_NNmi) isa Vector{Vector{T}}
-
-@test causality(x, y, rtest_cm) |> length == 3
-@test causality(x, y, rtest_ccm) |> length == 3
-@test causality(x, y, rtest_vf) |> length == 3
-@test causality(x, y, rtest_tog) |> length == 3
-@test causality(x, y, rtest_jdd) |> length == 3
-@test causality(x, y, rtest_jddt) |> length == 3
-@test causality(x, y, rtest_pa) |> length == 3
-@test causality(x, y, rtest_npa) |> length == 3
-@test causality(x, y, rtest_NNmi) |> length == 3
+@test causality(rtest_cm, x, y) isa CausalAnalysis
+@test causality(rtest_ccm, x, y) isa CausalAnalysis
+@test causality(rtest_vf, x, y) isa CausalAnalysis
+@test causality(rtest_tog, x, y) isa CausalAnalysis
+@test causality(rtest_jdd, x, y) isa CausalAnalysis
+@test causality(rtest_jddt, x, y) isa CausalAnalysis
+@test causality(rtest_pa, x, y) isa CausalAnalysis
+@test causality(rtest_npa, x, y) isa CausalAnalysis
+@test causality(rtest_NNmi, x, y) isa CausalAnalysis

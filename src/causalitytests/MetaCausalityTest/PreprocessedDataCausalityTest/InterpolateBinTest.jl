@@ -40,7 +40,7 @@ intp_bin = InterpolateAndBin(mean, left_bin_edges, Linear(), intp_grid, Flat(OnG
 """
 struct InterpolateBinTest{
         CT <: CausalityTest, 
-        IB <: InterpolateAndBin{L} where L} <: PreprocessedDataCausalityTest
+        IB <: InterpolateAndBin{L} where L} <: PreprocessedDataCausalityTest{CT}
     test::CT
     interpolate_bin_resampling::IB
     n::Int
