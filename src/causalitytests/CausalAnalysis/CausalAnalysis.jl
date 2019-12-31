@@ -14,7 +14,7 @@ the parameters in `test` to `data`.
 
 ## Implements 
 
-- [`summarise(f::Function, analysis::CausalAnalysis, args...; kwargs...)`]. Summarise 
+- [`summarise(f::Function, analysis::CausalAnalysis, args...; kwargs...)`](@ref). Summarise 
 a causal analysis using some summary statistic.
 """
 struct CausalAnalysis{CT <: Union{CausalityTest, MetaCausalityTest}, DT, RT} <: AbstractCausalAnalysis{CT, DT, RT}
