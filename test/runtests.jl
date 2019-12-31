@@ -15,6 +15,11 @@ using UncertainData
     include("SystemModels/test_SystemModels.jl")
 end
 
+@testset "CausalAnalysis" begin
+    include("causality_tests/CausalAnalysis/test_CausalAnalysis.jl")
+    include("causality_tests/CausalAnalysis/test_CausalAnalysis_meta.jl")
+end
+
 # @testset "Discrete example systems" begin 
 #     include("systems/discrete/test_discrete_systems.jl")
 # end
