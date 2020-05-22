@@ -1,6 +1,6 @@
-if lowercase(get(ENV, "CI", "false")) == "true"
-    include("install_dependencies.jl")
-end
+#if lowercase(get(ENV, "CI", "false")) == "true"
+#    include("install_dependencies.jl")
+#end
 
 using Test
 using CausalityTools

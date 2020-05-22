@@ -6,7 +6,7 @@ end
 
 # Let PyCall.jl use Python interpreter from Conda.jl
 # See: https://github.com/JuliaPy/PyCall.jl
-import Pkg; Pkg.add("Pkg")
+import Pkg; 
 ENV["PYTHON"] = ""
 Pkg.build("PyCall")
 
