@@ -1,175 +1,60 @@
-using CausalityTools
+cd(@__DIR__)
+using Pkg
+CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== nothing
+CI && Pkg.activate(@__DIR__)
+CI && Pkg.instantiate()
+CI && (ENV["GKSwstype"] = "100")
 using CausalityToolsBase
-using TimeseriesSurrogates
+using Simplices
 using PerronFrobenius
-using PyCall, Conda
-using CrossMappings
-using HypothesisTests
-using Documenter, DocumenterMarkdown
-#Conda.add("scipy")
-using Plots
-using DynamicalSystems
-using SimpleDiffEq
-using DynamicalSystems
-using Distributions
-using StaticArrays
-using Statistics
-using StatsBase
-using TransferEntropy
-using UncertainData
+using Documenter
+using DocumenterTools: Themes
 
-ENV["GKSwstype"] = "100"
+# %% JuliaDynamics theme.
+# download the themes
+using DocumenterTools: Themes
+for file in ("juliadynamics-lightdefs.scss", "juliadynamics-darkdefs.scss", "juliadynamics-style.scss")
+    download("https://raw.githubusercontent.com/JuliaDynamics/doctheme/master/$file", joinpath(@__DIR__, file))
+end
+# create the themes
+for w in ("light", "dark")
+    header = read(joinpath(@__DIR__, "juliadynamics-style.scss"), String)
+    theme = read(joinpath(@__DIR__, "juliadynamics-$(w)defs.scss"), String)
+    write(joinpath(@__DIR__, "juliadynamics-$(w).scss"), header*"\n"*theme)
+end
+# compile the themes
+Themes.compile(joinpath(@__DIR__, "juliadynamics-light.scss"), joinpath(@__DIR__, "src/assets/themes/documenter-light.css"))
+Themes.compile(joinpath(@__DIR__, "juliadynamics-dark.scss"), joinpath(@__DIR__, "src/assets/themes/documenter-dark.css"))
+
+# %% Build docs
+cd(@__DIR__)
+ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
-    #"index.md",
-    #"FAQ.md",
-    "overview.md",
-    "Syntax overview" => "syntax_overview.md",
-    "CHANGELOG.md",
-    "System models" => [
-        "SystemModels/SystemModels_overview.md",
-        "SystemModels/ContinuousModels.md",
-        "SystemModels/randomising.md",
-        "SystemModels/abstract_types.md"
-    ],
-
-    "Causality tests" => [
-
-        # Causal analysis 
-        "causalitytests/CausalAnalysis.md",
-        
-        # From uncertain data
-        "causalitytests/causality_from_uncertain_data_naive.md",
-        "causalitytests/causality_from_uncertain_data_binneddatacausalitytest.md",
-        "causalitytests/causality_from_uncertain_data_strictlyincreasing_interpolated.md",
-        "causalitytests/causality_from_uncertain_data_naive_constrained.md",
-        "causalitytests/causality_from_uncertain_data_InterpolateBinTest.md",
-        "causalitytests/causality_from_uncertain_data_RandomSequencesTest.md",
-        "causalitytests/causality_from_uncertain_data.md",
-
-        # From dynamical systems
-        "causalitytests/causality_from_dynamical_systems.md",
-
-        # Tests
-        "causalitytests/causality_tests.md",
-        "causalitytests/abstract_test_types.md",
-        "causalitytests/causality_tests_overview.md",
-        "causalitytests/ConvergentCrossMappingTest.md",
-        "causalitytests/CrossMappingTest.md",
-        "causalitytests/JointDistanceDistributionTest.md",
-        "causalitytests/SMeasureTest.md",
-
-        "causalitytests/NearestNeighbourMITest.md",
-        "causalitytests/TransferOperatorGridTest.md",
-        "causalitytests/VisitationFrequencyTest.md",
-        "causalitytests/ApproximateSimplexIntersectionTest.md",
-        "causalitytests/ExactSimplexIntersectionTest.md",
-
-        "causalitytests/PredictiveAsymmetryTest.md",
-        "causalitytests/NormalisedPredictiveAsymmetryTest.md"
-    ],
-    "CausalityToolsBase" => [
-        "Discretization" => "causalitytoolsbase/discretization.md",
-        "Delay reconstructions" => "causalitytoolsbase/delay_reconstructions.md"
-    ],
-    "Transfer operator estimation" => [
-        "Transfer operator" => "perronfrobenius/transferoperator.md",
-        "Invariant measure" => "perronfrobenius/invariantmeasure.md"
-    ],
-    "Transfer entropy" => [
-        "Overview" => "transferentropy/overview_te.md",
-        "Estimators" => "transferentropy/TE_estimators.md",
-        "Estimating TE" => "transferentropy/estimating_TE.md",
-        "Assigning marginals" => "transferentropy/assigning_marginals.md",
-        "Generalised delay embedding" => "transferentropy/generalised_delay_reconstructions.md",
-        "Convenience methods" => "transferentropy/convenience_methods_te.md",
-        "Effect of discretization scheme" => "transferentropy/examples_TE_different_partitionings.md",
-    ],
-    "PredictiveAsymmetry" => [
-        "Predictive asymmetry" => "PredictiveAsymmetry/predictive_asymmetry.md"
-    ],
-    "Distance based statistics" => [
-        "CCM" => [
-            "Overview" => "crossmappings/ccm/overview.md",
-            "Cross mapping" => "crossmappings/ccm/crossmapping.md",
-            "Converent cross mapping" => "crossmappings/ccm/convergentcrossmapping.md"
-        ]
-    ],
-
-    "Joint distance distribution" => [
-        "JointDistanceDistribution/joint_distance_distribution.md"
-    ],
-
-    "SMeasure" => [
-        "S-measure" => "SMeasure/s_measure.md"
-    ],
-    "Worked example" => [
-        "worked_examples/worked_example_transferentropy.md"
-    ],
-
-    "Simplices" => [
-        "simplices/Simplices.md"
-    ],
-    
-    "Example systems" => [
-        "example_systems/noise.md",
-        "example_systems/example_systems_overview.md",
-        "example_systems/example_systems_discrete.md",
-        "example_systems/example_systems_continuous.md"
-    ],
-
-    "Surrogate data" => [
-        "surrogates/iaaft_docs.md",
-        "surrogates/aaft_docs.md",
-        "surrogates/randomphases_docs.md",
-        "surrogates/randomamplitudes_docs.md",
-        "surrogates/randomshuffle_docs.md",
-        "surrogates/surrogates_overview.md"
-    ],
-    "UncertainData" => [
-        "uncertaindata/BinnedDataCausalityTest.md"
-    ],
-    "Tutorials" => [
-        "causality" => [
-            "tutorials/list_of_tutorials.md",
-            "tutorials/causality/Tutorial_BinnedResampling_RandomSequencesTest_PredictiveAsymmetryTest_ar1_unidir.md",
-            "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedResampling.md",
-            "tutorials/causality/binned_uncertain_data/tutorial_BinnedDataCausalityTest_PredictiveAsymmetryTest_BinnedMeanResampling.md"
-        ],
-        "tutorials/causality/tutorial_SMeasureTest.md"
+    "Overview" => "index.md",
+    "Tools" => [
+        "CausalityToolsBase" => "CausalityToolsBase.md",
+        "PerronFrobenius" => "PerronFrobenius.md"
     ]
 ]
 
-
-# Some things need to be expanded before index.md for headers to work properly.
-expandfirst = [
-    "causalitytoolsbase/discretization.md",
-    "causalitytoolsbase/delay_reconstructions.md",
-    "simplices/Simplices.md",
-    "causalitytests/causality_tests_overview.md",
-    "perronfrobenius/transferoperator.md",
-    "perronfrobenius/invariantmeasure.md",
-    "causalitytests/NearestNeighbourMITest.md",
-    "crossmappings/ccm/overview.md"
-]
-
 makedocs(
-    sitename = "CausalityTools.jl documentation",
-    modules = [CausalityTools, TransferEntropy, PerronFrobenius, CrossMappings, CausalityToolsBase, UncertainData, Simplices],
-    format = DocumenterMarkdown.Markdown(),
-    linkcheck = false,
-    clean = true,
-    expandfirst = expandfirst,
-    pages = PAGES,
-    highlightsig = true
+    modules = [CausalityToolsBase, PerronFrobenius],
+    format = Documenter.HTML(
+        prettyurls = CI,
+        assets = [
+            asset("https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap", class=:css),
+        ],
+        ),
+    sitename = "CausalityTools.jl",
+    authors = "Kristian Agasøster Haaga, David Diego, Tor Einar Møller, Bjarte Hannisdal, George Datseris",
+    pages = PAGES
 )
 
-if !Sys.iswindows()
+if CI
     deploydocs(
-        deps   = Deps.pip("mkdocs==0.17.5", "mkdocs-material==2.9.4",
-        "python-markdown-math", "pygments", "pymdown-extensions"),
-        repo   = "github.com/kahaaga/CausalityTools.jl.git",
-        target = "site",
-        make = () -> run(`mkdocs build`)
+        repo = "github.com/JuliaDynamics/CausalityTools.jl.git",
+        target = "build",
+        push_preview = true
     )
 end
