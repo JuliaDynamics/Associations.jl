@@ -8,3 +8,12 @@ partition should be used.
 ```@docs 
 RectangularBinning
 ```
+
+## Embedding optimization
+
+These convenience types are accepted by some algorithms that use delay embeddings.
+
+```@docs
+OptimiseDim
+OptimiseDelay
+```

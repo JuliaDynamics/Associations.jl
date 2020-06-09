@@ -1,12 +1,20 @@
-cd(@__DIR__)
 using Pkg
+# cd(@__DIR__)
 CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== nothing
-CI && Pkg.activate(@__DIR__)
-CI && Pkg.instantiate()
-CI && (ENV["GKSwstype"] = "100")
+# CI && Pkg.activate(@__DIR__)
+# CI && Pkg.instantiate()
+# CI && (ENV["GKSwstype"] = "100")
 using CausalityToolsBase
-using Simplices
 using PerronFrobenius
+using TransferEntropy
+using CrossMappings
+using CausalityTools
+using DynamicalSystems
+using Plots
+using LaTeXStrings
+using StaticArrays
+
+using Simplices
 using Documenter
 using DocumenterTools: Themes
 
@@ -27,19 +35,29 @@ Themes.compile(joinpath(@__DIR__, "juliadynamics-light.scss"), joinpath(@__DIR__
 Themes.compile(joinpath(@__DIR__, "juliadynamics-dark.scss"), joinpath(@__DIR__, "src/assets/themes/documenter-dark.css"))
 
 # %% Build docs
-cd(@__DIR__)
-ENV["JULIA_DEBUG"] = "Documenter"
+#cd(@__DIR__)
+#ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "Tools" => [
+    "Transfer entropy" => "TransferEntropy.md",
+    "PredictiveAsymmetry" => "PredictiveAsymmetry.md",
+    "Joint distance distribution" => "JointDistanceDistribution.md",
+    "S-measure" => "SMeasure.md",
+    "Cross mapping" => "CrossMapping.md",
+    "Example applications" => [
+        "Transfer entropy" => "example_applications/example_transferentropy.md",
+        "Predictive asymmetry" => "example_applications/example_predictive_asymmetry.md"
+    ],
+    "Pre-defined coupled systems" => "CoupledSystems.md",
+    "Utility tools" => [
         "CausalityToolsBase" => "CausalityToolsBase.md",
         "PerronFrobenius" => "PerronFrobenius.md"
     ]
 ]
 
 makedocs(
-    modules = [CausalityToolsBase, PerronFrobenius],
+    modules = [CausalityToolsBase, PerronFrobenius, TransferEntropy, CrossMappings, CausalityTools],
     format = Documenter.HTML(
         prettyurls = CI,
         assets = [
