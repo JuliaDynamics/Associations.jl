@@ -1,21 +1,28 @@
 module CausalityTools
-    export 
-        RectangularBinning, 
-        BinningScheme
-    export 
-        SingleGrid, 
-        transferoperator,
-        invariantmeasure
-
-    import CausalityToolsBase:
-        RectangularBinning,
-        BinningScheme
-    import PerronFrobenius: 
-        SingleGrid,
-        transferoperator,
-        invariantmeasure
+    using Reexport 
+    @reexport using CausalityToolsBase
+    @reexport using PerronFrobenius
+    @reexport using TransferEntropy
+    @reexport using CrossMappings
 
     include("v1/JointDistanceDistribution/JointDistanceDistribution.jl")
+    include("v1/SMeasure/smeasure.jl")
+    include("v1/PredictiveAsymmetry/PredictiveAsymmetry.jl")
+
+    # Example systems
+    include("v1/CoupledSystems/CoupledSystems.jl")
+
+    using Requires 
+    function __init__()
+        @require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin
+            include("v1/uncertaindata.jl")
+        end
+
+        #@require Simplices="d5428e67-3037-59ba-9ab1-57a04f0a3b6a" begin
+        # #   import PerronFrobenius: SimplexExact, SimplexPoint
+        #    export SimplexExact, SimplexPoint
+        #end
+    end
     #using DynamicalSystems
     #using StaticArrays
 
