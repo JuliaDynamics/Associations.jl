@@ -7,7 +7,7 @@ function normalise_minmax(x, vmin, vmax)
 end
 
 """
-    joint_distance_distribution(source, target; distance_metric = SqEuclidean(), 
+    jdd(source, target; distance_metric = SqEuclidean(), 
         B::Int = 10, D::Int = 2, τ::Int = 1) → Vector{Float64}
 
 Compute the joint distance distribution [1] from `source` to `target` using 
@@ -16,10 +16,11 @@ the provided `distance_metric`, with `B` controlling the number of subintervals,
 
 ## Example
 
-```julia 
+```julia
+using CausalityTools
 x, y = rand(1000), rand(1000)
 
-jdd = joint_distance_distribution(x, y)
+jdd(x, y)
 ```
 
 ## Keyword arguments
@@ -35,12 +36,12 @@ jdd = joint_distance_distribution(x, y)
 ## References 
 [1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
-function joint_distance_distribution(source, target;
+function jdd(source, target;
         distance_metric = SqEuclidean(),
         B::Int = 10, 
         D::Int = 2, 
-        τ::Int = 1
-    )
+        τ::Int = 1)
+    
     js = ([1 for i = 1:D]...,)
     τs = (collect(0:-τ:-(D-1)*τ)...,)
     Ex = DelayEmbeddings.genembed(source, τs, js)
@@ -106,7 +107,7 @@ end
 
 
 """
-    joint_distance_distribution(test::OneSampleTTest, source, target, 
+    jdd(test::OneSampleTTest, source, target;
         distance_metric = SqEuclidean(), B::Int = 10, D::Int = 2, τ::Int = 1, 
         μ0 = 0.0) → OneSampleTTest
 
@@ -122,10 +123,10 @@ exists an underlying coupling from `source` to `target`.
 ## Example
 
 ```julia 
+using CausalityTools, HypothesisTests
 x, y = rand(1000), rand(1000)
 
-jdd = joint_distance_distribution(OneSampleTTest, x, y)
-
+jdd(OneSampleTTest, x, y)
 ```
 
 which gives 
@@ -172,13 +173,13 @@ p-value at 95% confidence, use `pvalue(jdd, tail = :left)`
 ## References 
 [1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
-function joint_distance_distribution(test::Type{OneSampleTTest}, source, target, 
+function jdd(test::Type{OneSampleTTest}, source, target; 
         distance_metric = SqEuclidean(), 
         B::Int = 10, 
         D::Int = 2, τ::Int = 1, 
         μ0 = 0.0)
 
-    Δjdd = joint_distance_distribution(source, target, 
+    Δjdd = jdd(source, target, 
         distance_metric = distance_metric, 
         B = B, 
         D = D, τ = τ)
@@ -186,6 +187,4 @@ function joint_distance_distribution(test::Type{OneSampleTTest}, source, target,
     OneSampleTTest(Δjdd, μ0)
 end 
 
-
-
-export joint_distance_distribution
+export jdd
