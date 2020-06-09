@@ -29,7 +29,7 @@ tr = trajectory(ds, n; Ttr = 1000);
 # Compute transfer entropy between variables x1 and x2 for different values
 # of the parameter ε
 estimator = VisitationFrequency(b = 2)
-E = EmbeddingTE()
+E = EmbeddingTE() # defaults to lowest-dimensional possible embedding
 
 εs = 0.0:0.01:1.0
 te_x1x2 = zero(εs); te_x2x1 = zero(εs)
@@ -43,7 +43,8 @@ for (i, ε) in enumerate(εs)
     te_x2x1[i] = transferentropy(X2, X1, E, estimator)
 end
 
-plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright)
+ymax = maximum([te_x1x2; te_x2x1])*1.1
+plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright, ylims = (-0.05, ymax))
 plot!(εs, te_x1x2, label = L"x_1 \to x_2")
 plot!(εs, te_x2x1, ls = :dash, label = L"x_2 \to x_1")
 ```
@@ -72,7 +73,7 @@ tr = trajectory(ds, n; Ttr = 1000);
 # Compute transfer entropy between variables x1 and x2 for different values
 # of the parameter ε
 estimator = TransferOperatorGrid(b = 2)
-E = EmbeddingTE()
+E = EmbeddingTE() # defaults to lowest-dimensional possible embedding
 
 εs = 0.0:0.01:1.0
 te_x1x2 = zero(εs); te_x2x1 = zero(εs)
@@ -86,9 +87,10 @@ for (i, ε) in enumerate(εs)
     te_x2x1[i] = transferentropy(X2, X1, E, estimator)
 end
 
-plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright)
+ymax = maximum([te_x1x2; te_x2x1])*1.1
+plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright, ylims = (-0.05, ymax))
 plot!(εs, te_x1x2, label = L"x_1 \to x_2")
-plot!(εs, te_x2x1, ls = :dash, label = L"x_2 \to x_1")1)")
+plot!(εs, te_x2x1, ls = :dash, label = L"x_2 \to x_1")
 ```
 
 ## `NearestNeighborMI` estimator 
@@ -116,7 +118,7 @@ tr = trajectory(ds, n; Ttr = 1000);
 # Compute transfer entropy between variables x1 and x2 for different values
 # of the parameter ε
 estimator = NearestNeighborMI(b = 2)
-E = EmbeddingTE()
+E = EmbeddingTE() # defaults to lowest-dimensional possible embedding
 
 εs = 0.0:0.01:1.0
 te_x1x2 = zero(εs); te_x2x1 = zero(εs)
@@ -130,7 +132,8 @@ for (i, ε) in enumerate(εs)
     te_x2x1[i] = transferentropy(X2, X1, E, estimator)
 end
 
-plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright)
+ymax = maximum([te_x1x2; te_x2x1])*1.1
+plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright, ylims = (-0.05, ymax))
 plot!(εs, te_x1x2, label = L"x_1 \to x_2")
 plot!(εs, te_x2x1, ls = :dash, label = L"x_2 \to x_1")
 ```
@@ -165,7 +168,8 @@ tr = trajectory(ds, n; Ttr = 1000);
 # Use motifs of length 2.
 estimator = SymbolicPerm(b = 2, m = 2)
 
-# Use default embedding settings (embedding delays -m+1, -m+2, ..., 0 , and prediction lags 1, ..., m)
+# Use default embedding settings (embedding delays -m+1, -m+2, ..., 0 , and prediction lags 1, ..., m
+# for symbolic estimators)
 E = EmbeddingTE()
 
 εs = 0.0:0.01:1.0
@@ -180,7 +184,8 @@ for (i, ε) in enumerate(εs)
     te_x2x1[i] = transferentropy(X2, X1, E, estimator)
 end
 
-plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright)
+ymax = maximum([te_x1x2; te_x2x1])*1.1
+plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright, ylims = (-0.05, ymax))
 plot!(εs, te_x1x2, label = L"x_1 \to x_2")
 plot!(εs, te_x2x1, ls = :dash, label = L"x_2 \to x_1")
 ```
@@ -217,7 +222,8 @@ tr = trajectory(ds, n; Ttr = 1000);
 # equally.
 estimator = SymbolicAmplitudeAware(b = 2, m = 2, A = 0.5)
 
-# Use default embedding settings (embedding delays -m+1, -m+2, ..., 0 , and prediction lags 1, ..., m)
+# Use default embedding settings (embedding delays -m+1, -m+2, ..., 0 , and prediction lags 1, ..., m
+# for symbolic estimators)
 E = EmbeddingTE()
 
 εs = 0.0:0.01:1.0
@@ -232,7 +238,8 @@ for (i, ε) in enumerate(εs)
     te_x2x1[i] = transferentropy(X2, X1, E, estimator)
 end
 
-plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright)
+ymax = maximum([te_x1x2; te_x2x1])*1.1
+plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright, ylims = (-0.05, ymax))
 plot!(εs, te_x1x2, label = L"x_1 \to x_2")
 plot!(εs, te_x2x1, ls = :dash, label = L"x_2 \to x_1")
 ```
