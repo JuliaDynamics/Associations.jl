@@ -1,7 +1,10 @@
 docs/build/
 docs/Manifest.toml
+
 update*
 *.DS_Store
 Manifest.toml
 *.info
 *.ipynb_checkpoints
+*.scss
+*.css
