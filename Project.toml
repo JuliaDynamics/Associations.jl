@@ -6,12 +6,20 @@ version = "1.0.0"
 
 [deps]
 CausalityToolsBase = "b1f25513-c649-51ee-8a1c-0e98d01ae897"
+ChaosTools = "608a59af-f2a3-5ad4-90b4-758bdf3122a7"
+CrossMappings = "7011085d-2e9b-5a7b-b0c2-f102c05e50c2"
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
+DynamicalSystemsBase = "6e36e845-645a-534a-86f2-f5d4aa5a06b4"
 HypothesisTests = "09f84164-cd44-5f33-b23f-e6b0d136a0d5"
+NearestNeighbors = "b8a86587-4115-5ab1-83bc-aa920d37bbce"
 PerronFrobenius = "260eed61-d0e8-5f1e-b040-a9756a401c97"
 Reexport = "189a3867-3050-52da-a836-e630ba90ab69"
+Requires = "ae029012-a4dd-5104-9daa-d747884805df"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+StaticArrays = "90137ffa-7385-5640-81b9-e52037218182"
+TransferEntropy = "ea221983-52f3-5440-99c7-13ea201cd633"
+UncertainData = "dcd9ba68-c27b-5cea-ae21-829cd07325bf"
 
 [compat]
 julia = "^1.1"
