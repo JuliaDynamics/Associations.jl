@@ -132,8 +132,9 @@ for (i, ε) in enumerate(εs)
     te_x2x1[i] = transferentropy(X2, X1, E, estimator)
 end
 
-ymax = maximum([te_x1x2; te_x2x1])*1.1
-plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright, ylims = (-0.05, ymax))
+# The NearestNeighborMI estimator can attain negative values 
+ymin, ymax = minimum([te_x1x2; te_x2x1])*1.1, maximum([te_x1x2; te_x2x1])*1.1
+plot(xlabel = L"\epsilon", ylabel = "TE (bits)", legend = :bottomright, ylims = (ymin, ymax))
 plot!(εs, te_x1x2, label = L"x_1 \to x_2")
 plot!(εs, te_x2x1, ls = :dash, label = L"x_2 \to x_1")
 ```

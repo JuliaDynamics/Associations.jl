@@ -13,6 +13,7 @@ using DynamicalSystems
 using Plots
 using LaTeXStrings
 using StaticArrays
+using DelayEmbeddings
 
 using Simplices
 using Documenter
@@ -40,6 +41,7 @@ Themes.compile(joinpath(@__DIR__, "juliadynamics-dark.scss"), joinpath(@__DIR__,
 
 PAGES = [
     "Overview" => "index.md",
+    "Generalized embedding" => "generalized_embedding.md",
     "Transfer entropy" => "TransferEntropy.md",
     "PredictiveAsymmetry" => "PredictiveAsymmetry.md",
     "Joint distance distribution" => "JointDistanceDistribution.md",
@@ -57,7 +59,7 @@ PAGES = [
 ]
 
 makedocs(
-    modules = [CausalityToolsBase, PerronFrobenius, TransferEntropy, CrossMappings, CausalityTools],
+    modules = [CausalityToolsBase, PerronFrobenius, TransferEntropy, CrossMappings, CausalityTools, DelayEmbeddings],
     format = Documenter.HTML(
         prettyurls = CI,
         assets = [

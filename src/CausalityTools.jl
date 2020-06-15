@@ -1,10 +1,13 @@
 module CausalityTools
     using Reexport 
+    import DynamicalSystemsBase: trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
+    export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
+    
     @reexport using CausalityToolsBase
     @reexport using PerronFrobenius
     @reexport using TransferEntropy
     @reexport using CrossMappings
-
+    
     include("v1/JointDistanceDistribution/JointDistanceDistribution.jl")
     include("v1/SMeasure/smeasure.jl")
     include("v1/PredictiveAsymmetry/PredictiveAsymmetry.jl")
