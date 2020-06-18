@@ -25,16 +25,16 @@ matrix:
                                     Pkg.instantiate();
                                     ENV["PYTHON"] = "";
                                     Pkg.build("PyCall");
-                                    using Conda; Conda.add("scipy")'
+                                    Pkg.add("Conda"); using Conda; Conda.add("scipy")'
         - julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd()));
                                     Pkg.instantiate();
                                     ENV["PYTHON"] = "";
                                     Pkg.build("PyCall");
-                                    using Conda; Conda.add("scipy")'
+                                    Pkg.add("Conda"); using Conda; Conda.add("scipy")'
         - julia --project=docs/ docs/make.jl
       after_success: skip
-after_success:
-  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
+#after_success:
+#  - julia -e 'using Pkg; Pkg.add("Coverage"); using Coverage; Codecov.submit(process_folder())'
 
 notifications:
   email: false
