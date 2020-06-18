@@ -6,6 +6,7 @@ CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== 
 # CI && (ENV["GKSwstype"] = "100")
 using CausalityToolsBase
 using PerronFrobenius
+using Simplices
 using TransferEntropy
 using CrossMappings
 using CausalityTools
@@ -15,7 +16,6 @@ using LaTeXStrings
 using StaticArrays
 using DelayEmbeddings
 
-using Simplices
 using Documenter
 using DocumenterTools: Themes
 
