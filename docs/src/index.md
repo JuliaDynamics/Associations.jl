@@ -9,28 +9,21 @@ University of Bergen, Norway.
 
 ## Installation 
 
-CausalityTools.jl is a registered Julia package. Install the latest stable version by running the following in the Julia repl:
+Install the latest stable version by running the following in the Julia repl:
 
 ```julia
 using Pkg; Pkg.add("CausalityTools")
 ```
 
-For the latest development version, you can also add the master branch directly (but on this branch, breaking changes may occur).
+## Citing
 
-```julia 
-using Pkg; Pkg.add("https://github.com/JuliaDynamics/CausalityTools.jl")
-```
+If using any of the algorithms for scientific research, please cite the original research paper(s) referenced in the docstrings. 
 
 
 ## Utilities 
 
-Utility methods are also provided for:
+n addition to causal inference methods, we also provide algorithms for:
 
 - transfer operator approximation 
 - invariant distribution estimation
 - time series surrogate generation.
-
-## Citing
-
-If using any of the methods for scientific research, please cite the original research referenced in the docstrings. 
-Some implementations may be based on more than one paper.

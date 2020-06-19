@@ -15,7 +15,6 @@ TransferOperatorGrid
 NearestNeighborMI
 SimplexEstimator
 SymbolicPerm
-SymbolicAmplitudeAware
 ```
 
 ## Generalized embedding
