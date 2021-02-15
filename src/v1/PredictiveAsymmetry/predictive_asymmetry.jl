@@ -38,11 +38,15 @@ function verified_prediction_lags(lags)
 end
 
 """
-    predictive_asymmetry(source, target, [cond], ηs, estimator::TransferEntropyEstimator;
-        d𝒯 = 1, dT = 1, dS = 1, τT = -1, τS = -1, normalize = true, f::Real = 1.0)
+    predictive_asymmetry(source, target, [cond], 
+        estimator::TransferEntropyEstimator, ηs; 
+        d𝒯 = 1, dT = 1, dS = 1, τT = -1, τS = -1, 
+        [dC = 1, τC = -1,],
+        normalize::Bool = false, f::Real = 1.0)
 
-Compute the predictive asymmetry[^Haaga2020] 𝔸(`source` → `target`) over prediction lags `ηs`, using the 
-given transfer entropy `estimator` and embedding parameters `d𝒯`, `dT`, `dS`, `τT`, `τS`. 
+Compute the predictive asymmetry[^Haaga2020] 𝔸(`source` → `target`) over prediction lags 
+`ηs`, using the given transfer entropy `estimator` and embedding parameters `d𝒯`, `dT`, 
+`dS`, `τT`, `τS`.
 
 If `cond` is provided, compute 𝔸(`source` → `target` | `cond`). Then, `dC` and `τC` controls 
 the embedding dimension and embedding lag for the conditional variable.
@@ -67,12 +71,12 @@ for the fastest computations.
 x, y, z = rand(100), rand(100), rand(100)
 
 # Define prediction lags and estimation method
-ηs = 1:10
-method = VisitationFrequency()
+ηs = 1:5
+method = VisitationFrequency(RectangularBinning(5))
 
 # 𝔸(x → y) and  𝔸(x → y | z)
-𝔸reg  = predictive_asymmetry(x, y, ηs, method, normalize = false)
-𝔸cond = predictive_asymmetry(x, y, z, ηs, method, normalize = false)
+𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
+𝔸cond = predictive_asymmetry(x, y, z, method, ηs, normalize = false)
 
 # 𝒜(x → y) and 𝒜(x → y | z), using different normalization factors
 predictive_asymmetry(x, y, ηs, method, f = 1.0) # normalize == true by default
@@ -91,19 +95,21 @@ x, y, z = rand(100), rand(100), rand(100)
 
 # Define prediction lags and estimation method
 ηs = 1:3 # small prediction lags
-method = SymbolicAmplitudeAware(m = 3)
+estimator = VisitationFrequency(RectangularBinning(4))
 
 # 𝒜(x → y)
-predictive_asymmetry(x, y, ηs, method) 
+predictive_asymmetry(x, y, estimator, ηs, normalize = true) 
+
+# 𝒜(x → y | z)
+predictive_asymmetry(x, y, z, estimator, ηs, normalize = true) 
 ```
 
 [^Haaga2020]: Haaga, Kristian Agasøster, David Diego, Jo Brendryen, and Bjarte Hannisdal. "A simple test for causality in complex systems." arXiv preprint arXiv:2005.01860 (2020).
 """
 function predictive_asymmetry end
 
-
-function predictive_asymmetry(source, target, ηs, estimator::TransferEntropyEstimator; 
-        normalize = true, f::Real = 1.0,
+function predictive_asymmetry(source, target, estimator, ηs; 
+        normalize = false, f::Real = 1.0,
         d𝒯 = 1, dT = 1, dS = 1, τT = -1, τS = -1)
     
     Nη = length(ηs)
@@ -112,10 +118,8 @@ function predictive_asymmetry(source, target, ηs, estimator::TransferEntropyEst
     𝔸s = zeros(Nη)
 
     for (i, η) in enumerate(ηs)
-        emb_fw = EmbeddingTE(d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, η𝒯 = η)
-        emb_bw = EmbeddingTE(d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, η𝒯 = -η)
-        te_fws[i] = transferentropy(source, target, emb_fw, estimator)
-        te_bws[i] = transferentropy(source, target, emb_bw, estimator)
+        te_fws[i] = transferentropy(source, target, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, η𝒯 = η)
+        te_bws[i] = transferentropy(source, target, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, η𝒯 = -η)
         
         𝔸s[i] = sum(te_fws[1:i]) - sum(te_bws[1:i])
     end
@@ -131,7 +135,7 @@ function predictive_asymmetry(source, target, ηs, estimator::TransferEntropyEst
     return 𝔸s
 end
 
-function predictive_asymmetry(source, target, cond, ηs, estimator::TransferEntropyEstimator; 
+function predictive_asymmetry(source, target, cond, estimator, ηs; 
         normalize = true, f::Real = 1.0,
         d𝒯 = 1, dT = 1, dS = 1, dC = 1, τT = -1, τS = -1, τC = -1)
     
@@ -144,10 +148,8 @@ function predictive_asymmetry(source, target, cond, ηs, estimator::TransferEntr
     𝔸s = zeros(Nη)
     
     for (i, η) in enumerate(ηs)
-        emb_fw = EmbeddingTE(d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, dC = dC, τC = τC, η𝒯 = η)
-        emb_bw = EmbeddingTE(d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, dC = dC, τC = τC, η𝒯 = -η)
-        te_fws[i] = transferentropy(source, target, cond, emb_fw, estimator)
-        te_bws[i] = transferentropy(source, target, cond, emb_bw, estimator)
+        te_fws[i] = transferentropy(source, target, cond, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, dC = dC, τC = τC, η𝒯 = η)
+        te_bws[i] = transferentropy(source, target, cond, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, dC = dC, τC = τC, η𝒯 = -η)
         
         𝔸s[i] = sum(te_fws[1:i]) - sum(te_bws[1:i])
 

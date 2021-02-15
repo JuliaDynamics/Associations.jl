@@ -1,19 +1,24 @@
 module CausalityTools
-    using Reexport 
+    #using Reexport 
     import DynamicalSystemsBase: trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
     export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
     
-    @reexport using CausalityToolsBase
-    @reexport using PerronFrobenius
-    @reexport using TransferEntropy
-    @reexport using CrossMappings
+    import TransferEntropy
+    import TransferEntropy: transferentropy, mutualinfo
+    export transferentropy, mutualinfo
+    @reexport using Entropies
+    #@reexport using CausalityToolsBase
+    #@reexport using PerronFrobenius
+    #@reexport using TransferEntropy
+    #@reexport using CrossMappings
     
     include("v1/JointDistanceDistribution/JointDistanceDistribution.jl")
     include("v1/SMeasure/smeasure.jl")
-    include("v1/PredictiveAsymmetry/PredictiveAsymmetry.jl")
+    include("v1/PredictiveAsymmetry/predictive_asymmetry.jl")
+    #include("v1/PredictiveAsymmetry/PredictiveAsymmetry.jl")
 
     # Example systems
-    include("v1/CoupledSystems/CoupledSystems.jl")
+    #include("v1/CoupledSystems/CoupledSystems.jl")
 
     using Requires 
     function __init__()
