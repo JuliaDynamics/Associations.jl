@@ -5,6 +5,22 @@
 using Test
 using CausalityTools
 
+x, y, z = rand(100), rand(100), rand(100)
+
+# Define prediction lags and estimation method
+ηs = 1:5
+method = VisitationFrequency(RectangularBinning(5))
+
+# 𝔸(x → y) and  𝔸(x → y | z)
+𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
+𝔸cond = predictive_asymmetry(x, y, z, method, ηs, normalize = false)
+𝒜reg = predictive_asymmetry(x, y, method, ηs,  f = 1.0) # normalize == true by default
+𝒜cond = predictive_asymmetry(x, y, z, method, ηs, f = 1.5) # normalize == true by default
+
+@test 𝔸reg isa Vector{<:Real}
+@test 𝔸cond isa Vector{<:Real}
+@test 𝒜reg isa Vector{<:Real}
+@test 𝒜cond isa Vector{<:Real}
 
 #using Distributions
 #using UncertainData#

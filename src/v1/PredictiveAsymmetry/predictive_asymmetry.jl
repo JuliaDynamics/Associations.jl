@@ -79,8 +79,8 @@ method = VisitationFrequency(RectangularBinning(5))
 𝔸cond = predictive_asymmetry(x, y, z, method, ηs, normalize = false)
 
 # 𝒜(x → y) and 𝒜(x → y | z), using different normalization factors
-predictive_asymmetry(x, y, ηs, method, f = 1.0) # normalize == true by default
-predictive_asymmetry(x, y, z, ηs, method, f = 1.5) # normalize == true by default
+𝒜reg = predictive_asymmetry(x, y, ηs, method, f = 1.0) # normalize == true by default
+𝒜cond = predictive_asymmetry(x, y, z, ηs, method, f = 1.5) # normalize == true by default
 ```
 
 For the symbolic estimators, make sure that the maximum prediction lag η stays 
