@@ -12,7 +12,8 @@ Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
 TransferEntropy = "ea221983-52f3-5440-99c7-13ea201cd633"
+UncertainData = "dcd9ba68-c27b-5cea-ae21-829cd07325bf"
 Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 
 [compat]
-julia = ">= 1.2"
+julia = "^1.2"
