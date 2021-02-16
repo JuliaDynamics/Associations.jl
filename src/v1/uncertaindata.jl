@@ -11,6 +11,10 @@ function jdd(source::UT, target::UT, m::Int, τ, K::Int; kwargs...)
     jdd(resample(source), resample(target), m, τ, K; kwargs...)
 end
 
+function mutualinfo(source::UT, target::UT, estimator; kwargs...)
+    mutualinfo(resample(source), resample(target), estimator; kwargs...)
+end
+
 function transferentropy(source::UT, target::UT, estimator; kwargs...)
     transferentropy(resample(source), resample(target), estimator; kwargs...)
 end
