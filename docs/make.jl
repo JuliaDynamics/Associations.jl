@@ -44,7 +44,7 @@ PAGES = [
     "mutualinfo.md",
     "predictive_asymmetry.md",
     "joint_distance_distribution.md",
-    "smeasure.md",
+    "s_measure.md",
     "crossmapping.md",
     "surrogate.md",
     "example_systems.md",

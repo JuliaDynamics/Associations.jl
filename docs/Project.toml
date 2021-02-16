@@ -3,7 +3,6 @@ Conda = "8f4d0f93-b110-5947-807f-2305c1781a2d"
 CrossMappings = "7011085d-2e9b-5a7b-b0c2-f102c05e50c2"
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-DocumenterMarkdown = "997ab1e6-3595-5248-9280-8efb232c3433"
 DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
 DynamicalSystems = "61744808-ddfa-5f27-97ff-6e42cc95d634"
 Entropies = "ed8fcbec-b94c-44b6-89df-898894ad9591"
@@ -16,4 +15,4 @@ TransferEntropy = "ea221983-52f3-5440-99c7-13ea201cd633"
 Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 
 [compat]
-julia = ">= 1.1"
+julia = ">= 1.2"
