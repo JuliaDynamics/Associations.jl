@@ -47,6 +47,7 @@ PAGES = [
     "smeasure.md",
     "crossmapping.md",
     "surrogate.md",
+    "example_systems.md",
  ]
 
 makedocs(
