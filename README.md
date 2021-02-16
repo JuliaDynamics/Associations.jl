@@ -1,8 +1,9 @@
 # CausalityTools
 
-| Build status  | Documentation |
-| ------------- | ------------- |
-| [![Build Status](https://travis-ci.org/kahaaga/CausalityTools.jl.svg?branch=master)](https://travis-ci.org/kahaaga/CausalityTools.jl)  | [![](https://img.shields.io/badge/docs-dev-blue.svg)](https://kahaaga.github.io/CausalityTools.jl/dev)  |
+| Build status  | Documentation (stable) | Documentation (dev) |
+| ------------- | ------------- | ------------- |
+| [![CI](https://github.com/juliadynamics/TransferEntropy.jl/workflows/CI/badge.svg)](https://github.com/JuliaDynamics/TransferEntropy.jl/actions) | [![](https://img.shields.io/badge/docs-latest_tagged-blue.svg)](https://juliadynamics.github.io/TransferEntropy.jl/stable/) | 
+[![](https://img.shields.io/badge/docs-dev_(master)-blue.svg)](https://juliadynamics.github.io/TransferEntropy.jl/dev/) |
 
 `CausalityTools.jl` provides tools for nonparametric detection of causal relationships between dynamical variables based on time series of observations.
 
