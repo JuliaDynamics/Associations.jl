@@ -15,6 +15,7 @@ module CausalityTools
     include("v1/JointDistanceDistribution/JointDistanceDistribution.jl")
     include("v1/SMeasure/smeasure.jl")
     include("v1/PredictiveAsymmetry/predictive_asymmetry.jl")
+    inclide("v1/systems/ExampleSystems.jl")
     #include("v1/PredictiveAsymmetry/PredictiveAsymmetry.jl")
 
     # Example systems

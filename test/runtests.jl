@@ -5,22 +5,33 @@
 using Test
 using CausalityTools
 
-x, y, z = rand(100), rand(100), rand(100)
 
-# Define prediction lags and estimation method
-ηs = 1:5
-method = VisitationFrequency(RectangularBinning(5))
+@testset "PredictiveAsymmetry" begin 
+    x, y, z = rand(100), rand(100), rand(100)
 
-# 𝔸(x → y) and  𝔸(x → y | z)
-𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
-𝔸cond = predictive_asymmetry(x, y, z, method, ηs, normalize = false)
-𝒜reg = predictive_asymmetry(x, y, method, ηs,  f = 1.0) # normalize == true by default
-𝒜cond = predictive_asymmetry(x, y, z, method, ηs, f = 1.5) # normalize == true by default
+    # Define prediction lags and estimation method
+    ηs = 1:5
+    method = VisitationFrequency(RectangularBinning(5))
 
-@test 𝔸reg isa Vector{<:Real}
-@test 𝔸cond isa Vector{<:Real}
-@test 𝒜reg isa Vector{<:Real}
-@test 𝒜cond isa Vector{<:Real}
+    # 𝔸(x → y) and  𝔸(x → y | z)
+    𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
+    𝔸cond = predictive_asymmetry(x, y, z, method, ηs, normalize = false)
+    𝒜reg = predictive_asymmetry(x, y, method, ηs,  f = 1.0) # normalize == true by default
+    𝒜cond = predictive_asymmetry(x, y, z, method, ηs, f = 1.5) # normalize == true by default
+
+    @test 𝔸reg isa Vector{<:Real}
+    @test 𝔸cond isa Vector{<:Real}
+    @test 𝒜reg isa Vector{<:Real}
+    @test 𝒜cond isa Vector{<:Real}
+end
+
+@testset "Discrete example systems" begin 
+    include("systems/discrete/test_discrete_systems.jl")
+end
+
+@testset "Continuous example systems" begin 
+    include("systems/continuous/test_continuous_systems.jl")
+end
 
 #using Distributions
 #using UncertainData#
@@ -38,13 +49,7 @@ method = VisitationFrequency(RectangularBinning(5))
 #     include("causality_tests/CausalAnalysis/test_CausalAnalysis_meta.jl")
 # end
 
-# @testset "Discrete example systems" begin 
-#     include("systems/discrete/test_discrete_systems.jl")
-# end
 
-# @testset "Continuous example systems" begin 
-#     include("systems/continuous/test_continuous_systems.jl")
-# end
 
 # @testset "High level wrappers" begin
 #     include("test_wrappers_te.jl")
