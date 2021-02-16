@@ -87,6 +87,7 @@ jobs:
       - name: Doctests
         run: |
           julia --project=docs -e '
+            using Pkg
             using Documenter: doctest
             using CausalityTools
             doctest(CausalityTools)'
