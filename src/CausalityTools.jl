@@ -1,5 +1,5 @@
 module CausalityTools
-    #using Reexport 
+    using Reexport 
     import DynamicalSystemsBase: trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
     export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
     
