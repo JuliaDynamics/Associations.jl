@@ -1,23 +1,20 @@
+cd(@__DIR__)
 using Pkg
-# cd(@__DIR__)
 CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== nothing
-# CI && Pkg.activate(@__DIR__)
-# CI && Pkg.instantiate()
-# CI && (ENV["GKSwstype"] = "100")
-using CausalityToolsBase
-using PerronFrobenius
-using Simplices
-using TransferEntropy
-using CrossMappings
-using CausalityTools
-using DynamicalSystems
-using Plots
-using LaTeXStrings
-using StaticArrays
+CI && Pkg.activate(@__DIR__)
+CI && Pkg.instantiate()
+CI && (ENV["GKSwstype"] = "100")
 using DelayEmbeddings
-
+using TransferEntropy
 using Documenter
 using DocumenterTools: Themes
+using CausalityTools
+using PyPlot
+using DynamicalSystems
+using Wavelets
+using TimeseriesSurrogates
+using CrossMappings
+using HypothesisTests
 
 # %% JuliaDynamics theme.
 # download the themes
@@ -36,30 +33,25 @@ Themes.compile(joinpath(@__DIR__, "juliadynamics-light.scss"), joinpath(@__DIR__
 Themes.compile(joinpath(@__DIR__, "juliadynamics-dark.scss"), joinpath(@__DIR__, "src/assets/themes/documenter-dark.css"))
 
 # %% Build docs
-#cd(@__DIR__)
-#ENV["JULIA_DEBUG"] = "Documenter"
+PyPlot.ioff()
+cd(@__DIR__)
+ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "Generalized embedding" => "generalized_embedding.md",
-    "Transfer entropy" => "TransferEntropy.md",
-    "PredictiveAsymmetry" => "PredictiveAsymmetry.md",
-    "Joint distance distribution" => "JointDistanceDistribution.md",
-    "S-measure" => "SMeasure.md",
-    "Cross mapping" => "CrossMapping.md",
-    "Example applications" => [
-        "Transfer entropy" => "example_applications/example_transferentropy.md",
-        "Predictive asymmetry" => "example_applications/example_predictive_asymmetry.md"
-    ],
-    "Pre-defined coupled systems" => "CoupledSystems.md",
-    "Utility tools" => [
-        "CausalityToolsBase" => "CausalityToolsBase.md",
-        "PerronFrobenius" => "PerronFrobenius.md"
-    ]
-]
+    "Entropies.md",
+    "TransferEntropy.md",
+    "mutualinfo.md",
+    "predictive_asymmetry.md",
+    "joint_distance_distribution.md",
+    "smeasure.md",
+    "crossmapping.md",
+    "surrogate.md",
+ ]
 
 makedocs(
-    modules = [CausalityToolsBase, PerronFrobenius, TransferEntropy, CrossMappings, CausalityTools, DelayEmbeddings],
+    modules = [CausalityTools, Entropies, TransferEntropy, DelayEmbeddings, CrossMappings,
+    TimeseriesSurrogates],
     format = Documenter.HTML(
         prettyurls = CI,
         assets = [
@@ -67,7 +59,7 @@ makedocs(
         ],
         ),
     sitename = "CausalityTools.jl",
-    authors = "Kristian Agasøster Haaga, David Diego, Tor Einar Møller, Bjarte Hannisdal, George Datseris",
+    authors = "Kristian Agasøster Haaga, Tor Einar Møller",
     pages = PAGES
 )
 
@@ -78,3 +70,5 @@ if CI
         push_preview = true
     )
 end
+PyPlot.close("all")
+PyPlot.ion()

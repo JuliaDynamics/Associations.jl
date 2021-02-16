@@ -1,7 +1,0 @@
-# Invariantizing
-
-## Documentation
-
-```@docs
-invariantize
-```

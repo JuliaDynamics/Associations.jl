@@ -1,5 +1,0 @@
-# JointDistanceDistribution
-
-```@docs 
-jdd
-```

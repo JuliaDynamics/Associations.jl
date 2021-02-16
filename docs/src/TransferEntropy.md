@@ -1,39 +1,60 @@
-# TransferEntropy.jl 
+# [Transfer entropy](@ref transferentropy)
 
-CausalityTools provides the following interface for computing transfer entropy. The `transferentropy` method 
-dispatches on different `TransferEntropyEstimator`s (listed below).
+The [`transferentropy`](@ref) and [`mutualinfo`](@ref) functions uses estimators from the
+[Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl) to compute transfer entropy
+and mutual information, respectively.
 
 ```@docs
 transferentropy
 ```
 
-## [Estimators](@id te_estimators)
+## [Estimators](@id estimators)
+
+### Binning based
+
+#### Visitation frequency
 
 ```@docs
 VisitationFrequency
-TransferOperatorGrid
-NearestNeighborMI
-SimplexEstimator
-SymbolicPerm
+RectangularBinning
 ```
 
-## Generalized embedding
-
-Information about the dimensions and lags of the marginals used for 
-transfer entropy computation are given by an `EmbeddingTE` instance.
+#### Transfer operator
 
 ```@docs
-EmbeddingTE
+TransferOperator
+invariantmeasure
+InvariantMeasure
+transfermatrix
 ```
 
-## Binning heuristics
-
-The binning-based estimators rely on a coarse-graining of the reconstructed 
-state space to compute relevant marginal entropies. The folllowing heuristic
-methods compute a suitable coarse-graining based on the number of available 
-points and the dimension of the reconstructed phase space. 
+### Kernel density based
 
 ```@docs
-PalusLimit
-ExtendedPalusLimit
+NaiveKernel
+TreeDistance
+DirectDistance
+```
+
+### Nearest neighbor based
+
+```@docs
+KozachenkoLeonenko
+Kraskov
+Kraskov1
+Kraskov2
+```
+
+### Permutation based
+
+```@docs
+SymbolicPermutation
+```
+
+### Hilbert
+
+```@docs
+Hilbert
+Amplitude
+Phase
 ```
