@@ -11,19 +11,19 @@ function jdd(source::UT, target::UT, m::Int, τ, K::Int; kwargs...)
     jdd(resample(source), resample(target), m, τ, K; kwargs...)
 end
 
-function transferentropy(source::UT, target::UT, emb, estimator)
-    transferentropy(resample(source), resample(target), emb, estimator)
+function transferentropy(source::UT, target::UT, estimator; kwargs...)
+    transferentropy(resample(source), resample(target), estimator; kwargs...)
 end
 
-function transferentropy(source::UT, target::UT, cond::UT, emb, estimator)
-    transferentropy(resample(source), resample(target), resample(cond), emb, estimator)
+function transferentropy(source::UT, target::UT, cond::UT; kwargs...)
+    transferentropy(resample(source), resample(target), resample(cond), estimator; kwargs...)
 end
 
-function predictive_asymmetry(source::UT, target::UT, ηs, estimator; kwargs...)
-    predictive_asymmetry(resample(source), resample(target), ηs, estimator; kwargs...)
+function predictive_asymmetry(source::UT, target::UT, estimator; kwargs...)
+    predictive_asymmetry(resample(source), resample(target), estimator; kwargs...)
 end
 
-function predictive_asymmetry(source::UT, target::UT, cond::UT, ηs, estimator; kwargs...)
-    predictive_asymmetry(resample(source), resample(target), resample(cond), ηs, estimator; kwargs...)
+function predictive_asymmetry(source::UT, target::UT, cond::UT, estimator; kwargs...)
+    predictive_asymmetry(resample(source), resample(target), resample(cond), estimator; kwargs...)
 end
 
