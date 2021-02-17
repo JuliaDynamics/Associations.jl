@@ -5,6 +5,10 @@
 using Test
 using CausalityTools
 
+@testset "SMeasure" begin 
+    x, y = rand(100), rand(100)
+    @test s_measure(x, y)
+end
 
 @testset "PredictiveAsymmetry" begin 
     x, y, z = rand(100), rand(100), rand(100)

@@ -14,16 +14,16 @@ using DelayEmbeddings
 
 """
     s_measure(x::AbstractDataset, y::AbstractDataset; 
-        K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean())
+        K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean()) → Float64
     s_measure(x::AbstractVector, y::AbstractVector; 
         K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
-        mx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1)
+        mx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1) → Float64
     s_measure(x::AbstractDataset, y::AbstractVector; 
         K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
-        mx::Int = 2, τx::Int = 1)
+        mx::Int = 2, τx::Int = 1) → Float64
     s_measure(x::AbstractDataset, y::AbstractVector; 
         K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
-        my::Int = 2, τy::Int = 1)
+        my::Int = 2, τy::Int = 1) → Float64
 
 S-measure test [1] for the directional dependence between time series `x` and `y`, which 
 may be univariate or multivariate.
@@ -87,14 +87,15 @@ function s_measure(x::AbstractDataset{D, T}, y::AbstractDataset{D, T}; K::Int = 
     # Mean squared distances in X conditioned on Y
     Rx_cond_y = Vector{T}(undef, N)
 
-    # one more neighbor, because we need to excluded the first (itself) afterwards
+    # use one more neighbor, because we need to excluded the first 
+    # (itself) afterwards (distance to itself is zero)
     neighborhoodtype = NeighborNumber(K + 1) 
         
     idxs_X = bulkisearch(treeX, x, neighborhoodtype)
     idxs_Y = bulkisearch(treeY, y, neighborhoodtype)
     
     @inbounds for i in 1:N
-        pxᵢ, pyᵢ = x[i], y[i]
+        @views pxᵢ, pyᵢ = x[i], y[i]
     
         for j = 2:K
             dists_x[j] = @views evaluate(metric, pxᵢ, x[idxs_X[i][j]])
