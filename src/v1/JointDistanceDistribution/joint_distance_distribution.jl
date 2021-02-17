@@ -1,6 +1,6 @@
-import HypothesisTests: OneSampleTTest
-import Distances: Metric, SqEuclidean, pairwise
-import DelayEmbeddings
+using HypothesisTests
+using Distances
+using DelayEmbeddings
 
 function normalise_minmax(x, vmin, vmax)
     (x - vmin)/(vmax - vmin)
@@ -37,7 +37,7 @@ jdd(x, y)
 [1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
 function jdd(source, target;
-        distance_metric = SqEuclidean(),
+        distance_metric = Euclidean(),
         B::Int = 10, 
         D::Int = 2, 
         τ::Int = 1)
@@ -46,13 +46,12 @@ function jdd(source, target;
     τs = (collect(0:-τ:-(D-1)*τ)...,)
     Ex = DelayEmbeddings.genembed(source, τs, js)
     Ey = DelayEmbeddings.genembed(target, τs, js)
-
-    Mx = transpose(DelayEmbeddings.Matrix(Ex))
-    My = transpose(DelayEmbeddings.Matrix(Ey))
+    Mx = DelayEmbeddings.Matrix(Ex)
+    My = DelayEmbeddings.Matrix(Ey)
     
     npts = length(Ex)
-    Dx = pairwise(distance_metric, Mx, Mx, dims = 2)
-    Dy = pairwise(distance_metric, My, My, dims = 2)
+    Dx = pairwise(distance_metric, Mx, Mx, dims = 1)
+    Dy = pairwise(distance_metric, My, My, dims = 1)
     
     # Normalise the distances to the interval [0, 1]
     Dx_min = minimum(Dx[Dx .> 0])
@@ -104,7 +103,6 @@ function jdd(source, target;
     
     return Δjdd
 end
-
 
 """
     jdd(test::OneSampleTTest, source, target;
