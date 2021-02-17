@@ -7,16 +7,32 @@ export s_measure
 import Distances: Metric, SqEuclidean, evaluate, Euclidean
 import NearestNeighbors: KDTree
 import ChaosTools: FixedMassNeighborhood, neighborhood
+using Neighborhood
+using ChaosTools
+using DelayEmbeddings
+
 
 """
-    s_measure(x, y, m::Int, τ, K::Int; distance_metric::Metric = SqEuclidean())
+    s_measure(x::AbstractDataset, y::AbstractDataset; 
+        K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean())
+    s_measure(x::AbstractVector, y::AbstractVector; 
+        K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
+        mx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1)
+    s_measure(x::AbstractDataset, y::AbstractVector; 
+        K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
+        mx::Int = 2, τx::Int = 1)
+    s_measure(x::AbstractDataset, y::AbstractVector; 
+        K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
+        my::Int = 2, τy::Int = 1)
 
-S-measure test [1] for the directional dependence between data series.
+S-measure test [1] for the directional dependence between time series `x` and `y`, which 
+may be univariate or multivariate.
 
 ## Algorithm
 
-1. Create an `m-`dimensional embeddings of both `x` and `y`, resulting in 
-    `N` different `m`-dimensional embedding points
+1. If `x` and `y` are `m`-dimensional datasets, then use `x` and `y` as is. If `x` and `y` 
+    are time series, then create an `m-`dimensional embeddings of both `x` and `y`, 
+    resulting in `N` different `m`-dimensional embedding points
     ``X = \\{x_1, x_2, \\ldots, x_N \\}`` and ``X = \\{y_1, y_2, \\ldots, y_N \\}``.
     `τ` controls the embedding lag.
 2. Let ``r_{i,j}`` and ``s_{i,j}`` be the indices of the `K`-th nearest neighbors 
@@ -49,49 +65,76 @@ Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000]
 “Learning driver-response relationships from synchronization patterns,” 
 Phys. Rev. E61(5), 5142–5148.
 """
-function s_measure(x, y, m::Int, τ, K::Int, metric = SqEuclidean(),
-        tree_metric = Euclidean())
-    
+function s_measure(x::AbstractDataset{D, T}, y::AbstractDataset{D, T}; K::Int = 3, 
+        metric = SqEuclidean(),
+        tree_metric = Euclidean(),
+        theiler_window::Int = 0 # only point itself excluded
+        ) where {D, T}
+
     length(x) == length(y) ? nothing : error("`x` and `y` must be same length")
-    T = eltype(x)
-    X = embed(x, m, τ)
-    Y = embed(y, m, τ)
-    N = length(X)
-    
-    treeX = KDTree(X, tree_metric)
-    treeY = KDTree(Y, tree_metric)
-    
+    N = length(x)
+
+    treeX = searchstructure(KDTree, x, tree_metric)
+    treeY = searchstructure(KDTree, y, tree_metric)
+
     # Pre-allocate vectors to hold indices and distances during loops
-    idxs_x = Vector{Int}(undef, K)
-    idxs_y = Vector{Int}(undef, K)
     dists_x = Vector{T}(undef, K)
     dists_x_cond_y = Vector{T}(undef, K)
-    
+
     # Mean squared distances in X
     Rx = Vector{T}(undef, N)
-    
+
     # Mean squared distances in X conditioned on Y
     Rx_cond_y = Vector{T}(undef, N)
-    
-    neighborhoodtype = FixedMassNeighborhood(K)
+
+    # one more neighbor, because we need to excluded the first (itself) afterwards
+    neighborhoodtype = NeighborNumber(K + 1) 
+        
+    idxs_X = bulkisearch(treeX, x, neighborhoodtype)
+    idxs_Y = bulkisearch(treeY, y, neighborhoodtype)
     
     @inbounds for i in 1:N
-        pxᵢ, pyᵢ = X[i], Y[i]
-        
-        idxs_x[:] = neighborhood(pxᵢ, treeX, neighborhoodtype, 1)
-        idxs_y[:] = neighborhood(pyᵢ, treeY, neighborhoodtype, 1)
-        
-        for j = 1:K
-            dists_x[j] = evaluate(metric, pxᵢ, X[idxs_x[j]])
-            dists_x_cond_y[j] = evaluate(metric, pxᵢ, X[idxs_y[j]])
+        pxᵢ, pyᵢ = x[i], y[i]
+    
+        for j = 2:K
+            dists_x[j] = @views evaluate(metric, pxᵢ, x[idxs_X[i][j]])
+            dists_x_cond_y[j] = @views evaluate(metric, pxᵢ, x[idxs_Y[i][j]])
         end
         
         Rx[i] = sum(dists_x) / K
         Rx_cond_y[i] = sum(dists_x_cond_y) / K
     end
-    
+
     S = sum(Rx ./ Rx_cond_y) / N
     return S
+end
+
+function s_measure(x::AbstractVector{T}, y::AbstractVector{T}; K::Int = 3,
+    mx::Int = 2, my::Int = 2, τx = 1, τy = 1, metric = SqEuclidean(),
+    tree_metric = Euclidean()) where T
+
+    X = embed(x, mx, τx)
+    Y = embed(y, my, τy)
+
+    s_measure(X, Y, K = K, metric = metric, tree_metric = tree_metric)
+end
+
+function s_measure(x::AbstractDataset, y::AbstractVector{T}; K::Int = 3,
+    my::Int = 2, τy = 1, 
+    metric = SqEuclidean(), tree_metric = Euclidean()) where T
+
+    Y = embed(y, my, τy)
+
+    s_measure(x, Y, K = K, metric = metric, tree_metric = tree_metric)
+end
+
+function s_measure(x::AbstractVector{T}, y::AbstractDataset; K::Int = 3,
+    mx::Int = 2, τx = 1, metric = SqEuclidean(),
+    tree_metric = Euclidean()) where T
+
+    X = embed(X, mx, τx)
+
+    s_measure(X, y, K = K, metric = metric, tree_metric = tree_metric)
 end
 
 
