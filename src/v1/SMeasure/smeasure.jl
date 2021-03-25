@@ -35,11 +35,16 @@ using Reexport
     for time series `x`) or `my`/`τy` (dimension/lag for time series `y`). For custom embeddings,
     do the embedding yourself and input `Dataset`s as both `x` and `y`.
 
-    1. If `x` and `y` are multi-dimensional [`Dataset`](@ref)s, then use `x` and `y` as is. 
-        If `x` and `y` are scalar time series, then create an `m-`dimensional embeddings of 
-        both `x` and `y`, resulting in `N` different `m`-dimensional embedding points
-        ``X = \\{x_1, x_2, \\ldots, x_N \\}`` and ``X = \\{y_1, y_2, \\ldots, y_N \\}``.
-        `τ` controls the embedding lag. If only `x` or only `y` is 
+    1a. If `x` and `y` are `dx` and `dy`-dimensional [`Dataset`](@ref)s, respectively, 
+        then use `x` and `y` as is. 
+    1b. If `x` and `y` are scalar time series, then create `dx` and `dy` dimensional embeddings,
+        respectively, of both `x` and `y`, resulting in `N` different `m`-dimensional embedding points
+        ``X = \\{x_1, x_2, \\ldots, x_N \\}`` and ``Y = \\{y_1, y_2, \\ldots, y_N \\}``.
+        `τx` and `τy` control the embedding lags for `x` and `y`. 
+        Datasets will be length-matched by eliminating points at the end of the longest dataset.
+    1c. If `x` is a scalar-valued vector and `y` is a [`Dataset`](@ref), or vice versa, 
+        then create an embedding of the scalar time series using parameters `dx`/`τx` or `dy`/`τy`.
+        Datasets will be length-matched by eliminating points at the end of the longest dataset.
     2. Let ``r_{i,j}`` and ``s_{i,j}`` be the indices of the `K`-th nearest neighbors 
         of ``x_i`` and ``y_i``, respectively.
     3. Compute the the mean squared Euclidean distance to the ``K`` nearest neighbors 
