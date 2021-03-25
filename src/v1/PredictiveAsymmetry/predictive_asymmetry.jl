@@ -103,7 +103,7 @@ Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`)
 using naive nearest neighbor estimators.
 
 *Note: only Shannon entropy is possible to use for nearest neighbor estimators, so the 
-keyword `q` cannot be provided; it is hardcoded as `q = 1`.
+keyword `q` cannot be provided; it is hardcoded as `q = 1`.*
 
 See also [`Kraskov`](@ref), [`KozachenckoLeonenko`](@ref).
 
