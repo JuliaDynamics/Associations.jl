@@ -4,8 +4,8 @@ module CausalityTools
     export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
     
     import TransferEntropy
-    import TransferEntropy: transferentropy, mutualinfo
-    export transferentropy, mutualinfo
+    import TransferEntropy: transferentropy, mutualinfo, Hilbert
+    export transferentropy, mutualinfo, Hilbert
     @reexport using Entropies
 
     include("v1/JointDistanceDistribution/JointDistanceDistribution.jl")
