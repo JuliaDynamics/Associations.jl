@@ -41,7 +41,7 @@
     @testset "Nearest neighbor based" begin 
         @testset "Kraskov" begin 
             # Define prediction lags and estimation method
-            method = Kraskov(m = 3)
+            method = Kraskov()
 
             # 𝔸(x → y) and  𝔸(x → y | z)
             𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
@@ -57,7 +57,7 @@
 
         @testset "KozachenkoLeonenko" begin 
             # Define prediction lags and estimation method
-            method = KozachenkoLeonenko(m = 3)
+            method = KozachenkoLeonenko()
 
             # 𝔸(x → y) and  𝔸(x → y | z)
             𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
@@ -75,7 +75,7 @@
     @testset "Kernel density based" begin 
         @testset "NaiveKernel" begin 
             # Define prediction lags and estimation method
-            method = NaiveKernel(m = 3)
+            method = NaiveKernel(0.2)
 
             # 𝔸(x → y) and  𝔸(x → y | z)
             𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
@@ -93,7 +93,7 @@
 
     @testset "Hilbert" begin
         # Define prediction lags and estimation method
-        method = Hilbert(VisitationFrequency(RectangularBinning(3)))
+        method = Entropies.Hilbert(VisitationFrequency(RectangularBinning(3)))
 
         # 𝔸(x → y) and  𝔸(x → y | z)
         𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
