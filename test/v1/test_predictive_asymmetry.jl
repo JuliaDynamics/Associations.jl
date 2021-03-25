@@ -93,7 +93,7 @@
 
     @testset "Hilbert" begin
         # Define prediction lags and estimation method
-        method = Entropies.Hilbert(VisitationFrequency(RectangularBinning(3)))
+        method = Hilbert(VisitationFrequency(RectangularBinning(3)))
 
         # 𝔸(x → y) and  𝔸(x → y | z)
         𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
