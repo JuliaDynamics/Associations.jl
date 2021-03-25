@@ -126,8 +126,13 @@ using Reexport
 
         X = embed(x, dx, τx)
         Y = embed(y, dy, τy)
+        lX, lY = length(X), length(Y)
 
-        s_measure(X, Y, K = K, metric = metric, tree_metric = tree_metric)
+        s_measure(
+            # TODO: cut the last points of the shortest resulting embedding.
+            lX > lY ? X[1:lY, :] : X, 
+            lY > lX ? Y[1:lX, :] : Y, 
+            K = K, metric = metric, tree_metric = tree_metric)
     end
 
     function s_measure(X::AbstractDataset{D}, y::AbstractVector{T}; K::Int = 3,
