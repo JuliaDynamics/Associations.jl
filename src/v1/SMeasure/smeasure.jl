@@ -17,13 +17,13 @@ using Reexport
             K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean()) → Float64
         s_measure(x::AbstractVector, y::AbstractVector; 
             K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
-            mx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1) → Float64
+            dx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1) → Float64
         s_measure(x::AbstractDataset, y::AbstractVector; 
             K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
-            mx::Int = 2, τx::Int = 1) → Float64
+            dx::Int = 2, τx::Int = 1) → Float64
         s_measure(x::AbstractDataset, y::AbstractVector; 
             K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
-            my::Int = 2, τy::Int = 1) → Float64
+            dy::Int = 2, τy::Int = 1) → Float64
 
     S-measure test [1] for the directional dependence between univariate/multivariate time 
     series `x` and `y`.
