@@ -81,6 +81,6 @@ predictive_asymmetry(s::UIVD, t::UIVD, c::UIVD, args...; kwargs...) =
 crossmap(s::UIVD, t::UIVD, args...; kwargs...) = 
     crossmap(resample(s.values), resample(t.values), args...; kwargs...)
 
-ccm(s::UIVD, t::UIVD, args..., kwargs...) = 
+ccm(s::UIVD, t::UIVD, args...; kwargs...) = 
     ccm(resample(s.values), resample(t.values), args...; kwargs...)
 
