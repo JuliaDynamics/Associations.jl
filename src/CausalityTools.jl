@@ -12,7 +12,7 @@ module CausalityTools
     include("JointDistanceDistribution/JointDistanceDistribution.jl")
     include("SMeasure/smeasure.jl")
     include("PredictiveAsymmetry/PredictiveAsymmetry.jl")
-    include("systems/ExampleSystems.jl")
+    include("example_systems/ExampleSystems.jl")
 
     using Requires 
     function __init__()
