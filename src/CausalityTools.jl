@@ -4,19 +4,20 @@ module CausalityTools
     export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
     
     import TransferEntropy
-    import TransferEntropy: transferentropy, mutualinfo, Hilbert
-    export transferentropy, mutualinfo, Hilbert
+    #import TransferEntropy: transferentropy, mutualinfo, Hilbert
+    #export transferentropy, mutualinfo, Hilbert
     @reexport using Entropies
+    @reexport using TransferEntropy
 
-    include("v1/JointDistanceDistribution/JointDistanceDistribution.jl")
-    include("v1/SMeasure/smeasure.jl")
-    include("v1/PredictiveAsymmetry/PredictiveAsymmetry.jl")
-    include("v1/systems/ExampleSystems.jl")
+    include("JointDistanceDistribution/JointDistanceDistribution.jl")
+    include("SMeasure/smeasure.jl")
+    include("PredictiveAsymmetry/PredictiveAsymmetry.jl")
+    include("systems/ExampleSystems.jl")
 
     using Requires 
     function __init__()
         @require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin
-            include("v1/uncertaindata.jl")
+            include("uncertaindata.jl")
         end
 
         #@require Simplices="d5428e67-3037-59ba-9ab1-57a04f0a3b6a" begin
