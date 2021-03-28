@@ -44,54 +44,35 @@ export
 ###############
 # Discrete maps
 ###############
-eom_ar1_unidir, ar1_unidir,
-eom_anishchenko1, anishchenko1,
-eom_henon2, henon2,
-eom_henon_triple, henon_triple,
-eom_linearmap1, linearmap1,
-eom_nonlinear3d, nonlinear3d,
-eom_latticeunidir, latticeunidir,
-eom_logistic2_unidir, logistic2_unidir,
-eom_logistic2_bidir, logistic2_bidir,
-eom_logistic3, logistic3,
-eom_logistic4, logistic4,
-eom_nontrivial_pegiun, nontrivial_pegiun,
-eom_var1, var1,
-eom_ar1_bidir, ar1_bidir,
-eom_verdes, verdes
-
+ar1_unidir,
+anishchenko1,
+henon2,
+henon_triple,
+linearmap1,
+nonlinear3d,
+latticeunidir,
+logistic2_unidir,
+logistic2_bidir,
+logistic3,
+logistic4,
+nontrivial_pegiun,
+var1,
+ar1_bidir,
+verdes
 
 export
 ####################
 # Continuous systems
 ###################
-eom_chuacircuit_nscroll_sine, chuacircuit_nscroll_sine,
-eom_chuacircuits_driven, chuacircuits_driven,
-eom_hindmarsh_rose, hindmarsh_rose,
-eom_lorenz_lorenz_lorenz_transitive, lorenz_lorenz_lorenz_transitive,
-eom_mediated_link, mediated_link,
-eom_rossler_rossler_bidir, rossler_rossler_bidir,
-eom_rossler_rossler_rossler_bidir_forced, rossler_rossler_rossler_bidir_forced,
-eom_rossler_lorenz, rossler_lorenz,
-eom_lorenz_lorenz_bidir, lorenz_lorenz_bidir,
-eom_lorenz_lorenz_lorenz_bidir_forced, lorenz_lorenz_lorenz_bidir_forced
-
-# Initialise all the systems once, generating a trajectory.
-#trajectory(anishchenko1(), 10)
-#trajectory(henon2(), 10)
-#trajectory(henon4(), 10)
-#trajectory(logistic2(), 10)
-#trajectory(logistic3(), 10)
-#trajectory(logistic4(), 10)
-#trajectory(var1(), 10)
-#trajectory(ar1_bidirA(), 10)
-#trajectory(verdes(), 10)
-
-#trajectory(rossler_rossler(), 10)
-#trajectory(rossler_lorenz(), 10)
-#trajectory(lorenz_triple(), 10)
-#trajectory(mediated_link(), 10)
-#trajectory(chuacircuits_driven(), 10)
-#trajectory(chuacircuit_nscroll_sine(), 10)
+chuacircuit_nscroll_sine,
+chuacircuits_driven,
+hindmarsh_rose,
+lorenz_lorenz_lorenz_transitive,
+mediated_link,
+rossler_rossler_bidir,
+rossler_rossler_rossler_bidir_forced,
+rossler_lorenz,
+lorenz_lorenz_bidir,
+lorenz_lorenz_lorenz_bidir_forced
 
 end
