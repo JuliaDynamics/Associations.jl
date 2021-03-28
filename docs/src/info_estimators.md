@@ -1,6 +1,6 @@
-## [Entropy/probability estimators](@id estimators)
+# [Entropy/probability estimators](@id estimators)
 
-An exhaustive list of estimators used by either [`transferentropy`](@ref), [`predictive_asymmetry`](@ref), [`mutualinfo`](@ref) or [`genentropy`](@ref). 
+An exhaustive list of estimators used by either [`transferentropy`](@ref), [`predictive_asymmetry`](@ref), [`mutualinfo`](@ref) or [`genentropy`](@ref).
 
 *Note: Not all estimators are valid for all methods. Check individual method docstrings for more information.*
 
