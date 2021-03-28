@@ -23,7 +23,7 @@
 
         @testset "TransferOperator" begin 
             # Define prediction lags and estimation method
-            method = TransferOperator(RectangularBinning(3))
+            method = TransferOperator(RectangularBinning(2))
 
             # 𝔸(x → y) and  𝔸(x → y | z)
             𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
