@@ -10,7 +10,7 @@
     @test isa(henon2(), DiscreteDynamicalSystem)
     @test isa(ikeda(), DiscreteDynamicalSystem)
     @test isa(nonlinear3d(), DiscreteDynamicalSystem)
-    @test isa(latticeunidir(), DiscreteDynamicalSystem)
+    @test isa(latticeunidir(2), DiscreteDynamicalSystem)
     @test isa(logistic2_unidir(), DiscreteDynamicalSystem)
     @test isa(logistic2_bidir(), DiscreteDynamicalSystem)
     @test isa(logistic3(), DiscreteDynamicalSystem)
