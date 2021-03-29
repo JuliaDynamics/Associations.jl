@@ -32,9 +32,9 @@ function eom_henon_triple(u, p, n)
 end
 
 
-function henon_triple(uᵢ, a, b, c, n::Int, n_transient::Int)
+function henon_triple(u₀, a, b, c, n::Int, n_transient::Int)
     p = @LArray [a, b, c] (:a, :b, :c)
-    o = eom_henon_triple(uᵢ, p, n + n_transient)
+    o = eom_henon_triple(u₀, p, n + n_transient)
     x, y, z = o[n_transient+1:end, 1], o[n_transient+1:end, 2], o[n_transient+1:end, 3]
     return Dataset(x, y, z)
 end
@@ -64,6 +64,6 @@ for ``c >= 0.7``.
 1. Papana, A., Kyrtsou, C., Kugiumtzis, D., & Diks, C. (2013). Simulation study of
 direct causality measures in multivariate time series. Entropy, 15(7), 2635–2661.
 """
-function henon_triple(;uᵢ = rand(3), a = 1.4, b = 0.3, c = 0.0,  n::Int = 100, n_transient::Int = 100)
-    henon_triple(uᵢ, a, b, c, n, n_transient)
+function henon_triple(;u₀ = rand(3), a = 1.4, b = 0.3, c = 0.0,  n::Int = 100, n_transient::Int = 100)
+    henon_triple(u₀, a, b, c, n, n_transient)
 end

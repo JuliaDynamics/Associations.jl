@@ -31,15 +31,15 @@ function eom_ar1_bidir(x, p, n)
     return SVector{2}(dx, dy)
 end
 
-function ar1_bidir(uᵢ,a₁, b₁, c_xy, c_yx, σx, σy)
+function ar1_bidir(u₀,a₁, b₁, c_xy, c_yx, σx, σy)
     p = @LArray [a₁, b₁, c_xy, c_yx, σx, σy] (:a₁, :b₁, :c_xy, :c_yx, :σx, :σy)
-    logistic_system = DiscreteDynamicalSystem(eom_ar1_bidir, uᵢ, p)
+    logistic_system = DiscreteDynamicalSystem(eom_ar1_bidir, u₀, p)
 
     return logistic_system
 end
 
 """
-    ar1_bidir(;uᵢ = rand(2), 
+    ar1_bidir(;u₀ = rand(2), 
         a₁ = 0.5, b₁ = 0.7, 
         c_xy = 0, c_yx = 0.2, 
         σx = 0.3, σy = 0.3) -> DiscreteDynamicalSystem
@@ -59,5 +59,5 @@ where ``\\epsilon_{x}`` and ``\\epsilon_{y}`` are drawn independently
 at each time step from normal distributions with zero mean and standard 
 deviations `σx` and `σy`.
 """
-ar1_bidir(;a₁ = 0.5, b₁ = 0.7, uᵢ = rand(2), c_xy = 0, c_yx = 0.2, σx = 0.3, σy = 0.3) =
-    ar1_bidir(uᵢ, a₁, b₁, c_xy, c_yx, σx, σy)
+ar1_bidir(;a₁ = 0.5, b₁ = 0.7, u₀ = rand(2), c_xy = 0, c_yx = 0.2, σx = 0.3, σy = 0.3) =
+    ar1_bidir(u₀, a₁, b₁, c_xy, c_yx, σx, σy)

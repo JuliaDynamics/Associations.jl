@@ -1,7 +1,7 @@
 using LabelledArrays
 
 """
-    eom_nonlinear3d(uᵢ, a₁, a₂, a₃,  b₁, b₂, b₃, 
+    eom_nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃, 
         c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃) -> DiscreteDynamicalSystem
 
 Equations of motion for a 3d nonlinear system with nonlinear couplings 
@@ -39,14 +39,14 @@ function eom_nonlinear3d(x, p, n)
     return SVector{3}(dx₁, dx₂, dx₃)
 end
 
-function nonlinear3d(uᵢ, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)
+function nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)
     p = @LArray [a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃] (:a₁, :a₂, :a₃,  :b₁, :b₂, :b₃, :c₁₂, :c₂₃, :c₁₃, :σ₁, :σ₂, :σ₃)
-    s = DiscreteDynamicalSystem(eom_nonlinear3d, uᵢ, p)
+    s = DiscreteDynamicalSystem(eom_nonlinear3d, u₀, p)
     return s
 end
 
 """
-    nonlinear3d(;uᵢ = rand(3), 
+    nonlinear3d(;u₀ = rand(3), 
         σ₁ = 1.0, σ₂ = 1.0, σ₃ = 1.0, 
         a₁ = 3.4, a₂ = 3.4, a₃ = 3.4, 
         b₁ = 0.4, b₂ = 0.4, b₃ = 0.4, 
@@ -73,9 +73,9 @@ x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \\xi_{3}(t) + c x_{2}(t) +
     causality between signals: methods, examples and neurophysiological 
     applications. Biological Cybernetics, 95(4), 349–369.
 """
-nonlinear3d(;uᵢ = rand(3), 
+nonlinear3d(;u₀ = rand(3), 
         σ₁ = 1.0, σ₂ = 1.0, σ₃ = 1.0, 
         a₁ = 3.4, a₂ = 3.4, a₃ = 3.4, 
         b₁ = 0.4, b₂ = 0.4, b₃ = 0.4, 
         c₁₂ = 0.5, c₂₃ = 0.3, c₁₃ = 0.5) = 
-    nonlinear3d(uᵢ, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)
+    nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)

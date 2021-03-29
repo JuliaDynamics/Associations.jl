@@ -21,13 +21,13 @@ using LabelledArrays
     return SVector{9}(dx₁, dy₁, dz₁, dx₂, dy₂,dz₂, dx₃, dy₃, dz₃)
 end
 
-function lorenz_lorenz_lorenz_transitive(uᵢ, σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁₂, c₂₃)
+function lorenz_lorenz_lorenz_transitive(u₀, σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁₂, c₂₃)
     p = @LArray [σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁₂, c₂₃] (:σ₁, :σ₂, :σ₃, :ρ₁, :ρ₂, :ρ₃, :β₁, :β₂, :β₃, :c₁₂, :c₂₃)
-    ContinuousDynamicalSystem(eom_lorenz_lorenz_lorenz_transitive, uᵢ, p)
+    ContinuousDynamicalSystem(eom_lorenz_lorenz_lorenz_transitive, u₀, p)
 end
 
 """
-    lorenz_lorenz_lorenz_transitive(;uᵢ=rand(9),
+    lorenz_lorenz_lorenz_transitive(;u₀=rand(9),
                 σ₁ = 10.0, σ₂ = 10.0, σ₃ = 10.0,
                 ρ₁ = 28.0, ρ₂ = 28.0, ρ₃ = 28.0,
                 β₁ = 8/3,  β₂ = 8/3,  β₃ = 8.3,
@@ -70,9 +70,9 @@ This system was studied by Papana et al. (2013) for coupling strengths
 1. Papana et al., Simulation Study of Direct Causality Measures in Multivariate 
     Time Series. Entropy 2013, 15(7), 2635-2661; doi:10.3390/e15072635
 """
-lorenz_lorenz_lorenz_transitive(;uᵢ=rand(9),
+lorenz_lorenz_lorenz_transitive(;u₀=rand(9),
             σ₁ = 10.0, σ₂ = 10.0, σ₃ = 10.0,
             ρ₁ = 28.0, ρ₂ = 28.0, ρ₃ = 28.0,
             β₁ = 8/3,  β₂ = 8/3,  β₃ = 8.3,
             c₁₂ = 1.0, c₂₃ = 1.0) =
-    lorenz_lorenz_lorenz_transitive(uᵢ, σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁₂, c₂₃)
+    lorenz_lorenz_lorenz_transitive(u₀, σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁₂, c₂₃)

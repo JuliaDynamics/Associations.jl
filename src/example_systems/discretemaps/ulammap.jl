@@ -10,7 +10,7 @@ function eom_ulam(dx, x, p, t)
 end
 
 """
-    ulam(D::Int; uᵢ = rand(D), ε::Real = 0.10) → DiscreteDynamicalSystem
+    ulam(D::Int; u₀ = rand(D), ε::Real = 0.10) → DiscreteDynamicalSystem
 
 A lattice of `D` unidirectionally coupled ulam maps[^Schreiber2000] defined as 
 
@@ -23,9 +23,9 @@ happens only in the direction of increasing ``m``.
 
 [^Schreiber2000]: Schreiber, Thomas. "Measuring information transfer." Physical review letters 85.2 (2000): 461.
 """
-function ulam(D::Int; uᵢ = rand(D), ε::Real = 0.10)
+function ulam(D::Int; u₀ = rand(D), ε::Real = 0.10)
 
     p = LVector(ε = ε)
 
-    DiscreteDynamicalSystem(eom_ulam, uᵢ, p)
+    DiscreteDynamicalSystem(eom_ulam, u₀, p)
 end
