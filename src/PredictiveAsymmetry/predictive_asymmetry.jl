@@ -38,11 +38,6 @@ function verified_prediction_lags(lags)
 end
 
 """
-
-## Predictive asymmetry
-
-The predictive asymmetry method is from Haaga et al. (2020) [^Haaga2020].
-
 ## General interface
 
     predictive_asymmetry(s, t, [c], 
@@ -167,6 +162,11 @@ predictive_asymmetry(x, y, method, ηs, normalize = true)
 # 𝒜(x → y | z)
 predictive_asymmetry(x, y, z, method, ηs, normalize = true) 
 ```
+
+## Description
+
+The predictive asymmetry method is from Haaga et al. (2020) [^Haaga2020].
+
 
 [^Haaga2020]: Haaga, Kristian Agasøster, David Diego, Jo Brendryen, and Bjarte Hannisdal. "A simple test for causality in complex systems." arXiv preprint arXiv:2005.01860 (2020).
 """
