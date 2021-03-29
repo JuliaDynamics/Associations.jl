@@ -43,7 +43,7 @@ PAGES = [
         "info_estimators.md",
         "generalized_entropy.md",
         "mutualinfo.md",
-        "transferentropy.md",
+        "TransferEntropy.md",
         "predictive_asymmetry.md"
     ],
 
