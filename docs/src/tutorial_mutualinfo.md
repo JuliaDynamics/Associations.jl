@@ -65,7 +65,7 @@ Plots.plot!(c, mi[:, 2, 2], label = "2D order-1 autoregressive", lc = "red",
 Plots.xlabel!("Coupling strength")
 Plots.ylabel!("Mutual information")
 
-Plots.savefig("./mutualinfo_example.png") # hide
+Plots.savefig("./mutualinfo_example.png")
 ```
 
 ![png](./mutualinfo_example.png)
