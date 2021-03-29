@@ -33,9 +33,8 @@ include("continuous_systems/rossler_rossler_rossler_bidir_forced.jl")
 include("continuous_systems/rossler_lorenz.jl")
 
 include("noise.jl")
-# We export both the equations of motion and function to generate
-# the systems for every example. The equations of motion functions
-# are always prepended with `eom_`.
+# We export functions to generate
+# the systems for every example. 
 # Some systems (involving multiple lags) do not return instances
 # of DiscreteDynamicalSystem, but a Dataset with the finished
 # iterated map.
