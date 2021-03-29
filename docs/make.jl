@@ -40,10 +40,10 @@ ENV["JULIA_DEBUG"] = "Documenter"
 PAGES = [
     "Overview" => "index.md",
     "Information/entropy based" => [
-        "Estimators" => "info_estimators.md",
-        "Entropies.md",
+        "info_estimators.md",
+        "generalized_entropy.md",
         "mutualinfo.md",
-        "TransferEntropy.md",
+        "transferentropy.md",
         "predictive_asymmetry.md"
     ],
 
