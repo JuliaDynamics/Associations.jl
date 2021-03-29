@@ -54,6 +54,7 @@ PAGES = [
     ],
     "Utilities" => [
         "invariant_measure.md",
+        "dataset.md",
         "surrogate.md",
     ],
     "example_systems.md",
