@@ -8,6 +8,7 @@ module CausalityTools
     #export transferentropy, mutualinfo, Hilbert
     @reexport using Entropies
     @reexport using TransferEntropy
+    @reexport using TimeseriesSurrogates
 
     include("JointDistanceDistribution/JointDistanceDistribution.jl")
     include("SMeasure/smeasure.jl")
