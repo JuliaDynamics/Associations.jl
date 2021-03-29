@@ -1,3 +1,4 @@
+using LabelledArrays
 
 @inline @inbounds function eom_chuacircuit_nscroll_sine(u, p, t)
     α, β, γ, a, b, c, σx, σy, σz = (p...,)
@@ -24,7 +25,7 @@
 end
 
 function chuacircuit_nscroll_sine(u₀, α, β, γ, a, b, c::Int, σx, σy, σz)
-    p = [α, β, γ, a, b, c, σx, σy, σz]
+    p = @LArray [α, β, γ, a, b, c, σx, σy, σz] (:α, :β, :γ, :a, :b, :c, :σx, :σy, :σz)
     ContinuousDynamicalSystem(eom_chuacircuit_nscroll_sine, u₀, p)
 end
 

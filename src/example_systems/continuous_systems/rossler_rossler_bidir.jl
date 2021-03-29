@@ -1,3 +1,5 @@
+using LabelledArrays
+
 @inline @inbounds function eom_rossler_rossler_bidir(u, p, t)
     ω₁, ω₂, c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃ = (p...,)
     x1, x2, x3, y1, y2, y3 = (u...,)
@@ -53,7 +55,9 @@ function rossler_rossler_bidir(; u0 = rand(6),
         c_xy = 0.1, c_yx = 0.1,
         a₁ = 0.15, a₂ = 0.2, a₃ = 10,
         b₁ = 0.15, b₂ = 0.2, b₃ = 10)
-    ContinuousDynamicalSystem(eom_rossler_rossler_bidir, u0, [ω₁, ω₂, c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃])
+
+    p = @LArray [ω₁, ω₂, c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃] (:ω₁, :ω₂, :c_xy, :c_yx, :a₁, :a₂, :a₃, :b₁, :b₂, :b₃)
+    ContinuousDynamicalSystem(eom_rossler_rossler_bidir, u0, p)
 end
 
 

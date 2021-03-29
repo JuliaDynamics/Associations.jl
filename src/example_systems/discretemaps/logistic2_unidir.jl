@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_logistic2(dx, x, p, n) -> function
 
@@ -47,7 +49,7 @@ function eom_logistic2_unidir(dx, x, p, n)
 end
 
 function logistic2_unidir(u₀, c_xy, r₁, r₂, σ)
-    p = [c_xy, r₁, r₂, σ]
+    p = @LArray [c_xy, r₁, r₂, σ] (:c_xy, :r₁, :r₂, :σ)
     DiscreteDynamicalSystem(eom_logistic2_unidir, u₀, p)
 end
 

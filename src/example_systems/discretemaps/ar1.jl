@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_ar1(x, p, n) -> Function
 
@@ -34,7 +36,7 @@ function eom_ar1_unidir(x, p, n)
 end
 
 function ar1_unidir(uᵢ, a₁, b₁, c_xy, σ)
-    p = [a₁, b₁, c_xy, σ]
+    p = @LArray [a₁, b₁, c_xy, σ] (:a₁, :b₁, :c_xy, :σ)
     DiscreteDynamicalSystem(eom_ar1_unidir, uᵢ, p)
 end
 

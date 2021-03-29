@@ -1,3 +1,4 @@
+using LabelledArrays
 
 @inline @inbounds function eom_lorenz_lorenz_lorenz_bidir_forced(u, p, t)
     c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃ = (p...,)
@@ -59,7 +60,9 @@ function lorenz_lorenz_lorenz_bidir_forced(; u0 = rand(9),
         a₁ = 10, a₂ = 28, a₃ = 8/3,
         b₁ = 10, b₂ = 28, b₃ = 8/3,
         c₁ = 10, c₂ = 28, c₃ = 8/3)
-    ContinuousDynamicalSystem(eom_lorenz_lorenz_lorenz_bidir_forced, u0, [c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃])
+
+    p = @LArray [c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃] (:c_xy, :c_yx, :c_zx, :c_zy, :a₁, :a₂, :a₃, :b₁, :b₂, :b₃, :a₃, :c₁, :c₂, :c₃)
+    ContinuousDynamicalSystem(eom_lorenz_lorenz_lorenz_bidir_forced, u0, p)
 end
 
 function lorenz_lorenz_lorenz_bidir_forced_trajectory(npts; 

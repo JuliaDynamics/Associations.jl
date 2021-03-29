@@ -1,3 +1,5 @@
+using LabelledArrays
+
 @inline @inbounds function eom_rossler_rossler_rossler_bidir_forced(u, p, t)
     ω₁, ω₂, ω₃, c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃ = (p...,)
     x1, x2, x3, y1, y2, y3, z1, z2, z3 = (u...,)
@@ -66,7 +68,9 @@ function rossler_rossler_rossler_bidir_forced(; u0 = rand(9),
         a₁ = 0.15, a₂ = 0.2, a₃ = 10,
         b₁ = 0.15, b₂ = 0.2, b₃ = 10,
         c₁ = 0.15, c₂ = 0.2, c₃ = 10)
-    ContinuousDynamicalSystem(eom_rossler_rossler_rossler_bidir_forced, u0, [ω₁, ω₂, ω₃, c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃])
+
+    p = @LArray [ω₁, ω₂, ω₃, c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃] (:ω₁, :ω₂, :ω₃, :c_xy, :c_yx, :c_zx, :c_zy, :a₁, :a₂, :a₃, :b₁, :b₂, :b₃, :a₃, :c₁, :c₂, :c₃)
+    ContinuousDynamicalSystem(eom_rossler_rossler_rossler_bidir_forced, u0, p)
 end
 
 function forced_rossler_rossler_bidir_trajectory(npts; 

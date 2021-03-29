@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_anishchenko1(u, p, t)
 
@@ -30,7 +32,7 @@ function eom_anishchenko1(u, p, t)
 end
 
 function anishchenko1(u₀, α, s, ω)
-    p = [α, s, ω]
+    p = @LArray [α, s, ω] (:α, :s, :ω)
     DiscreteDynamicalSystem(eom_anishchenko1, u₀, p)
 end
 

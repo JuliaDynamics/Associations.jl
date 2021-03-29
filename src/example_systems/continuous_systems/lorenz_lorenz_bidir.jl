@@ -1,4 +1,5 @@
 import SimpleDiffEq
+using LabelledArrays
 
 @inline @inbounds function eom_lorenz_lorenz_bidir(u, p, t)
     c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃ = (p...,)
@@ -49,7 +50,8 @@ function lorenz_lorenz_bidir(; u0 = rand(6),
         c_xy = 0.2, c_yx = 0.2, 
         a₁ = 10, a₂ = 28, a₃ = 8/3, 
         b₁ = 10, b₂ = 28, b₃ = 9/3)
-    ContinuousDynamicalSystem(eom_lorenz_lorenz_bidir, u0, [c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃])
+    p = @LArray [c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃] (:c_xy, :c_yx, :a₁, :a₂, :a₃, :b₁, :b₂, :b₃)
+    ContinuousDynamicalSystem(eom_lorenz_lorenz_bidir, u0, p)
 end
 
 function lorenzlorenz_bidir_trajectory(npts; sample_dt = 1, Ttr = 1000, dt = 0.1, 

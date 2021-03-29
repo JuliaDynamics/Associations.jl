@@ -1,3 +1,5 @@
+using LabelledArrays
+
 @inline @inbounds function eom_rossler_lorenz(u, p, t)
     c_xy, a₁, a₂, a₃, b₁, b₂, b₃ = (p...,)
     x1, x2, x3, y1, y2, y3 = u[1], u[2], u[3], u[4], u[5], u[6] 
@@ -49,6 +51,9 @@ with the coupling constant ``c_{xy} \\geq 0``.
     bivariate time series." Physical Review E 97.4 (2018):042207. 
     [https://journals.aps.org/pre/abstract/10.1103/PhysRevE.97.042207](https://journals.aps.org/pre/abstract/10.1103/PhysRevE.97.042207)
 """
-rossler_lorenz(;u₀ = rand(6), a₁ = -6, a₂ = 6, a₃ = 2.0, 
-    b₁ = 10, b₂ = 28, b₃ = 8/3, c_xy = 1) = 
-    ContinuousDynamicalSystem(eom_rossler_lorenz, u₀, [c_xy, a₁, a₂, a₃, b₁, b₂, b₃])
+function rossler_lorenz(;u₀ = rand(6), a₁ = -6, a₂ = 6, a₃ = 2.0, 
+    b₁ = 10, b₂ = 28, b₃ = 8/3, c_xy = 1)
+
+    p = @LArray [c_xy, a₁, a₂, a₃, b₁, b₂, b₃] (:c_xy, :a₁, :a₂, :a₃, :b₁, :b₂, :b₃)
+    ContinuousDynamicalSystem(eom_rossler_lorenz, u₀, p)
+end

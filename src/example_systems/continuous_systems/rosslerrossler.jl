@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_rossler_rossler(u, p, t) -> Function
 
@@ -60,7 +62,7 @@ with the coupling constant ``c \\geq 0``.
 Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of causality in a bivariate time series. Physical Review E, 97(4), 042207.
 """
 function rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂)
-    p = [a, b, c, ϵ₁, ϵ₂, ω₁, ω₂]
+    p = @LArray [a, b, c, ϵ₁, ϵ₂, ω₁, ω₂] (:a, :b, :c, :ϵ₁, :ϵ₂, :ω₁, :ω₂)
     return ContinuousDynamicalSystem(eom_rossler_rossler, uᵢ, p)
 end
 

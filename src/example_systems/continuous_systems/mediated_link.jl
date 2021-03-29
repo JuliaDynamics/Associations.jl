@@ -1,3 +1,4 @@
+using LabelledArrays
 
 @inline @inbounds function eom_mediated_link(u, p, t)
     ωx, ωy, ωz, k, l, m, c = (p...,)
@@ -19,7 +20,7 @@
 end
 
 function mediated_link(u₀, ωx, ωy, ωz, k, l, m, c)
-    p = [ωx, ωy, ωz, k, l, m, c]
+    p = @LArray [ωx, ωy, ωz, k, l, m, c] (:ωx, :ωy, :ωz, :k, :l, :m, :c)
     ContinuousDynamicalSystem(eom_mediated_link, u₀, p)
 end
 

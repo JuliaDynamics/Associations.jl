@@ -1,3 +1,4 @@
+using LabelledArrays
 
 """
     eom_logistic3(u, p, t)
@@ -46,7 +47,7 @@ function eom_logistic3(u, p, t)
 end
 
 function logistic3(u₀, r₁, r₂, r₃, σx, σy, σz)
-    p = [r₁, r₂, r₃, σx, σy, σz]
+    p = @LArray [r₁, r₂, r₃, σx, σy, σz] (:r₁, :r₂, :r₃, :σx, :σy, :σz)
     DiscreteDynamicalSystem(eom_logistic3, u₀, p)
 end
 

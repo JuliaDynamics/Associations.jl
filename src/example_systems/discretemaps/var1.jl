@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_var1(x, p, n) -> Function
 
@@ -17,7 +19,8 @@ function eom_var1(x, p, n)
 end
 
 function var1(uᵢ, σ₁, σ₂, σ₃)
-    p = [σ₁, σ₂, σ₃]
+    p = @LArray [σ₁, σ₂, σ₃] (:σ₁, :σ₂, :σ₃)
+
     DiscreteDynamicalSystem(eom_var1, uᵢ, p)
 end
 

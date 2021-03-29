@@ -1,3 +1,5 @@
+using LabelledArrays
+
 function eom_henon_triple(u, p, n)
     O = zeros(Float64, n + 3, 3)
     x₁, x₂, x₃ = (u...,)
@@ -31,7 +33,7 @@ end
 
 
 function henon_triple(uᵢ, a, b, c, n::Int, n_transient::Int)
-    p = [a, b, c]
+    p = @LArray [a, b, c] (:a, :b, :c)
     o = eom_henon_triple(uᵢ, p, n + n_transient)
     x, y, z = o[n_transient+1:end, 1], o[n_transient+1:end, 2], o[n_transient+1:end, 3]
     return Dataset(x, y, z)

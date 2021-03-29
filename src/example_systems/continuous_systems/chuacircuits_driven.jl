@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_chuacircuits_driven(u, p, t) -> SVector{6}
 
@@ -54,7 +56,7 @@ individually for each subsystem.
 """
 function chuacircuits_driven(u₀, α₁, α₂, β₁, β₂, F₁, F₂,
                                       ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ)
-    p = [α₁, α₂, β₁, β₂, F₁, F₂, ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ]
+    p = @LArray [α₁, α₂, β₁, β₂, F₁, F₂, ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ] (:α₁, :α₂, :β₁, :β₂, :F₁, :F₂, :ω₁, :ω₂, :ϵ₁, :ϵ₂, :m₀, :m₁, :σ)
     ContinuousDynamicalSystem(eom_chuacircuits_driven, u₀, p)
 end
 

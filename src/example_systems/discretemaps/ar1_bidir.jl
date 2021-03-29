@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_ar1_bidir(x, p, n) -> SVector{2}
 
@@ -30,7 +32,7 @@ function eom_ar1_bidir(x, p, n)
 end
 
 function ar1_bidir(uᵢ,a₁, b₁, c_xy, c_yx, σx, σy)
-    p = [a₁, b₁, c_xy, c_yx, σx, σy]
+    p = @LArray [a₁, b₁, c_xy, c_yx, σx, σy] (:a₁, :b₁, :c_xy, :c_yx, :σx, :σy)
     logistic_system = DiscreteDynamicalSystem(eom_ar1_bidir, uᵢ, p)
 
     return logistic_system

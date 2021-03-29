@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_linearmap1(x, p, n) -> SVector{2}
 
@@ -21,7 +23,7 @@ end
 Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger causality." Physics Letters A 324.1 (2004): 26-35
 """
 function linearmap1(u₀, c)
-    p = [c]
+    p = @LArray [c] (:c)
     DiscreteDynamicalSystem(eom_linearmap1, u₀, p)
 end
 

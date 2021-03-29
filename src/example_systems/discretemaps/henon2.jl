@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_henon2(dx, x, p, n)
 
@@ -34,7 +36,7 @@ function eom_henon2(x, p, n)
 end
 
 function henon2(u₀, c_xy)
-    p = [c_xy]
+    p = @LArray [c_xy] (:c_xy)
     DiscreteDynamicalSystem(eom_henon2, u₀, p)
 end
 

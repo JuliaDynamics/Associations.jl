@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_verdes(u, p, t) -> SVector{3}
 
@@ -27,7 +29,8 @@ end
 
 
 function verdes(u₀, ωy, ωz, σx, σy, σz)
-    p = [ωy, ωz, σx, σy, σz]
+    p = LVector(ωy = ωy, ωz = ωz, σx = σx, σy = σy, σz = σz)
+
     DiscreteDynamicalSystem(eom_verdes, u₀, p)
 end
 

@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     eom_nonlinear3d(uᵢ, a₁, a₂, a₃,  b₁, b₂, b₃, 
         c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃) -> DiscreteDynamicalSystem
@@ -38,7 +40,7 @@ function eom_nonlinear3d(x, p, n)
 end
 
 function nonlinear3d(uᵢ, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)
-    p = [a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃]
+    p = @LArray [a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃] (:a₁, :a₂, :a₃,  :b₁, :b₂, :b₃, :c₁₂, :c₂₃, :c₁₃, :σ₁, :σ₂, :σ₃)
     s = DiscreteDynamicalSystem(eom_nonlinear3d, uᵢ, p)
     return s
 end

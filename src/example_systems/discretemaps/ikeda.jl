@@ -1,6 +1,7 @@
 import Distributions: Uniform
 import StaticArrays: SVector
 import DynamicalSystems: DiscreteDynamicalSystem
+using LabelledArrays
 
 """
     eom_ikeda(u, p, t)
@@ -63,7 +64,7 @@ y(t+1) = \\mu(y \\cos{(\\theta)} - c_{xy} x \\sin{(\\theta)}) - min(\\dfrac{\\si
     Chaos 7.08 (1997): 1823-1831.
 """
 function ikeda(u₀, c_xy, c_yx, a, b, c, r₁, r₂, σ)
-    p = [c_xy, c_yx, a, b, c, r₁, r₂, σ]
+    p = @LArray [c_xy, c_yx, a, b, c, r₁, r₂, σ] (:c_xy, :c_yx, :a, :b, :c, :r₁, :r₂, :σ)
     DiscreteDynamicalSystem(eom_ikeda, u₀, p)
 end
 

@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     logistic2_bidir(u₀, c_xy, c_yx, r₁, r₂, σ_xy, σ_yx)
 
@@ -47,7 +49,7 @@ function eom_logistic2_bidir(dx, x, p, n)
 end
 
 function logistic2_bidir(u₀, c_xy, c_yx, r₁, r₂, σ_xy, σ_yx)
-    p = [c_xy, c_yx, r₁, r₂, σ_xy, σ_yx]
+    p = @LArray [c_xy, c_yx, r₁, r₂, σ_xy, σ_yx] (:c_xy, :c_yx, :r₁, :r₂, :σ_xy, :σ_yx)
     DiscreteDynamicalSystem(eom_logistic2_bidir, u₀, p)
 end
 

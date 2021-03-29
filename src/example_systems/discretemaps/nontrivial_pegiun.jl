@@ -1,3 +1,5 @@
+using LabelledArrays
+
 """
     nontrivial_pegiun(x, p, n) -> Function
 
@@ -64,7 +66,8 @@ end
 
 
 function nontrivial_pegiun(uᵢ, p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂, n::Int)
-    p = [p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂]
+    p = @LArray [p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂] (:p₁, :p₂, :p₃, :p₄, :p₅, :p₆, :σ₁, :σ₂)
+
     eom_nontrivial_pegiun(uᵢ, p, n)
 end
 
