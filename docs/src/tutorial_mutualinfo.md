@@ -44,7 +44,7 @@ for i in 1 : length(c)
         # Obtain time series realizations of the two 2D systems 
         # for a given coupling strength and random initial conditions
         lmap = trajectory(logistic2_unidir(u₀ = rand(2), c_xy = c[i]), npts - 1, Ttr = 1000)
-        ar1 = trajectory(ar1_unidir(uᵢ = rand(2), c_xy = c[i]), npts - 1)
+        ar1 = trajectory(ar1_unidir(u₀ = rand(2), c_xy = c[i]), npts - 1)
         
         # Compute the MI between the two coupled components of each system
         tmp[k, 1] = mutualinfo(lmap[:, 1], lmap[:, 2], mi_estimator)
