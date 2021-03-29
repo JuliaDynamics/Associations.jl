@@ -59,6 +59,10 @@ PAGES = [
     ],
     "example_systems.md",
 
+    "Tutorials" => [
+        "tutorial_mutualinfo.md",
+    ],
+
  ]
 
 makedocs(
