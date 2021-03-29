@@ -1,6 +1,6 @@
 # Generalized entropy
 
-The following two functionss are used for probability and entropy estimation:
+The following two functions are used for probability and entropy estimation:
 
 * [`probabilities`](@ref) which computes probability distributions of given datasets
 * [`genentropy`](@ref) which uses the output of [`probabilities`](@ref), or a set of
