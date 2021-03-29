@@ -1,6 +1,6 @@
 # Example systems
 
-## [Continuous coupled dynamical systems](@id continuous_systems)
+## [Continuous](@id continuous_systems)
 
 ### Mediated link
 
@@ -51,7 +51,7 @@ rossler_lorenz
 chuacircuit_nscroll_sine
 ```
 
-## [Discrete coupled dynamical systems](@id discrete_systems)
+## [Discrete](@id discrete_systems)
 
 ### [Ulam map](@id ulam)
 
@@ -113,7 +113,7 @@ anishchenko1
 ikeda
 ```
 
-## Noise
+### Noise
 
 ```@docs
 noise_uu
