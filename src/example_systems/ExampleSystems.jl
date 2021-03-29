@@ -10,7 +10,6 @@ include("discretemaps/anishchenko1.jl")
 include("discretemaps/henon2.jl")
 include("discretemaps/henontriple.jl")
 include("discretemaps/ikeda.jl")
-include("discretemaps/latticemap.jl")
 include("discretemaps/linearmap.jl")
 include("discretemaps/nonlinear3D_linear_and_nonlinear_coupling.jl")
 include("discretemaps/nontrivial_pegiun.jl")
@@ -18,6 +17,7 @@ include("discretemaps/logistic2_unidir.jl")
 include("discretemaps/logistic2_bidir.jl")
 include("discretemaps/logistic3.jl")
 include("discretemaps/logistic4.jl")
+include("discretemaps/ulammap.jl")
 include("discretemaps/var1.jl")
 include("discretemaps/verdes.jl")
 
@@ -50,7 +50,7 @@ henon2,
 henon_triple,
 linearmap1,
 nonlinear3d,
-latticeunidir,
+ulam,
 logistic2_unidir,
 logistic2_bidir,
 logistic3,

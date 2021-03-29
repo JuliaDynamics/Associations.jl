@@ -78,10 +78,10 @@ chuacircuit_nscroll_sine(;u₀ = [0.0, 0.0, 0.28695],
 
 ## [Discrete coupled dynamical systems](@id discrete_systems)
 
-### [Lattice map](@id latticeunidir)
+### [Ulam map](@id ulam)
 
 ```@docs
-latticeunidir
+ulam
 ```
 
 ### [Autoregressive order one 2D system](@id system_ar1)
