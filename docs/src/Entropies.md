@@ -1,21 +1,11 @@
-# Entropies
+# Generalized entropy / probabilities
 
-The [Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl) package provides a unified interface for entropy estimation, using for example counting-based, nearest neighbor based, kernel density based or wavelet-based approaches. Some of these entropy estimators are also used to calculate mutual information and transfer entropy. Estimators relevant for 
-mutual information and transfer entropy estimation are also documented here.
+The [Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl) package provides a unified interface for estimation for entropies and probabilities, using for example counting-based, nearest neighbor based, kernel density based or wavelet-based approaches.
 
-## Data format
+Information theoretic causality measures are calculated using entropy estimation, so many
+estimators are shared. Relevant functions are therefore reexported here for convencience.
 
-Most of the code in this package assumes that your data is represented by the `Dataset`-type from [`DelayEmbeddings.jl`](https://github.com/JuliaDynamics/DelayEmbeddings.jl), where each observation is a D-dimensional data point represented by a static vector. See the [`DynamicalSystems.jl` documentation](https://juliadynamics.github.io/DynamicalSystems.jl/dev/) for more info. Univariate timeseries given as
-`AbstractVector{<:Real}` also work with some estimators, but are treated differently
-based on which method for probability/entropy estimation is applied.
-
-```@docs
-Dataset
-```
-
-## API
-
-The main **API** of this package is contained in two functions:
+The main **API** of Entropies.jl is contained in two functions:
 
 * [`probabilities`](@ref) which computes probability distributions of given datasets
 * [`genentropy`](@ref) which uses the output of [`probabilities`](@ref), or a set of
@@ -28,6 +18,12 @@ using Entropies, InteractiveUtils
 subtypes(ProbabilitiesEstimator)
 ```
 
+## Generalized entropy
+
+```@docs
+Entropies.genentropy
+```
+
 ## Probabilities
 
 ```@docs
@@ -35,12 +31,6 @@ Probabilities
 probabilities
 probabilities!
 ProbabilitiesEstimator
-```
-
-## Generalized entropy
-
-```@docs
-Entropies.genentropy
 ```
 
 ## Fast histograms

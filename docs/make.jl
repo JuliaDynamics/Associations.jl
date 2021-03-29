@@ -39,16 +39,25 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "Entropies.md",
-    "Estimators" => "info_estimators.md",
-    "TransferEntropy.md",
-    "predictive_asymmetry.md",
-    "mutualinfo.md",
-    "joint_distance_distribution.md",
-    "s_measure.md",
-    "cross_mapping.md",
-    "surrogate.md",
+    "Information/entropy based" => [
+        "Estimators" => "info_estimators.md",
+        "Entropies.md",
+        "mutualinfo.md",
+        "TransferEntropy.md",
+        "predictive_asymmetry.md"
+    ],
+
+    "Distance based" => [
+        "joint_distance_distribution.md",
+        "s_measure.md",
+        "cross_mapping.md",
+    ],
+    "Utilities" => [
+        "invariant_measure.md",
+        "surrogate.md",
+    ],
     "example_systems.md",
+
  ]
 
 makedocs(

@@ -5,28 +5,20 @@
 ### Mediated link
 
 ```@docs
-mediated_link(;u₀ = rand(9), ωx = 1, ωy = 1.015, ωz = 0.985,
+ExampleSystems.mediated_link(;u₀ = rand(9), ωx = 1, ωy = 1.015, ωz = 0.985,
     k = 0.15, l = 0.2, m = 10.0, c = 0.06)
 ```
 
 ### Two bidirectionally coupled 3D Lorenz systems
 
 ```@docs
-lorenz_lorenz_bidir(; u0 = rand(6),
-        c_xy = 0.2, c_yx = 0.2,
-        a₁ = 10, a₂ = 28, a₃ = 8/3,
-        b₁ = 10, b₂ = 28, b₃ = 9/3)
+ExampleSystems.lorenz_lorenz_bidir
 ```
 
 ### Two bidirectionally coupled 3D Lorenz systems forced by another 3D Lorenz system
 
 ```@docs
-lorenz_lorenz_lorenz_bidir_forced(; u0 = rand(9),
-        c_xy = 0.1, c_yx = 0.1,
-        c_zx = 0.05, c_zy = 0.05,
-        a₁ = 10, a₂ = 28, a₃ = 8/3,
-        b₁ = 10, b₂ = 28, b₃ = 8/3,
-        c₁ = 10, c₂ = 28, c₃ = 8/3)
+lorenz_lorenz_lorenz_bidir_forced
 ```
 
 ### Three transitively connected 3D Lorenz systems
