@@ -35,13 +35,13 @@ function eom_ar1_unidir(x, p, n)
     return SVector{2}(dx, dy)
 end
 
-function ar1_unidir(uᵢ, a₁, b₁, c_xy, σ)
+function ar1_unidir(u₀, a₁, b₁, c_xy, σ)
     p = @LArray [a₁, b₁, c_xy, σ] (:a₁, :b₁, :c_xy, :σ)
-    DiscreteDynamicalSystem(eom_ar1_unidir, uᵢ, p)
+    DiscreteDynamicalSystem(eom_ar1_unidir, u₀, p)
 end
 
 """
-    ar1_unidir(uᵢ, a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, 
+    ar1_unidir(u₀, a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, 
         σ = 0.40662) -> DiscreteDynamicalSystem
 
 A bivariate, order one autoregressive model, where ``x \\to y`` [1].
@@ -64,5 +64,5 @@ with zero mean and standard deviation `σ` at each iteration.
     dynamical systems and the arrow of time. Chaos: An Interdisciplinary Journal of
     Nonlinear Science, 28(7), 075307. http://doi.org/10.1063/1.5019944
 """
-ar1_unidir(;uᵢ = rand(2), a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, σ = 0.40662) = 
-    ar1_unidir(uᵢ, a₁, b₁, c_xy, σ)
+ar1_unidir(;u₀ = rand(2), a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, σ = 0.40662) = 
+    ar1_unidir(u₀, a₁, b₁, c_xy, σ)

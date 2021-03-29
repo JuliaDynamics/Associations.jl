@@ -18,10 +18,10 @@ function eom_var1(x, p, n)
     return SVector{3}(dx₁, dx₂, dx₃)
 end
 
-function var1(uᵢ, σ₁, σ₂, σ₃)
+function var1(u₀, σ₁, σ₂, σ₃)
     p = @LArray [σ₁, σ₂, σ₃] (:σ₁, :σ₂, :σ₃)
 
-    DiscreteDynamicalSystem(eom_var1, uᵢ, p)
+    DiscreteDynamicalSystem(eom_var1, u₀, p)
 end
 
 """
@@ -29,4 +29,4 @@ end
 
 Initialise a discrete vector autoregressive system where X₁ → X₂ → X₃.
 """
-var1(;uᵢ = rand(3), σ₁ = 1.0, σ₂ = 0.2, σ₃ = 0.3) = var1(uᵢ, σ₁, σ₂, σ₃)
+var1(;u₀ = rand(3), σ₁ = 1.0, σ₂ = 0.2, σ₃ = 0.3) = var1(u₀, σ₁, σ₂, σ₃)

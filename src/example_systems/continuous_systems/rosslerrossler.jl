@@ -22,7 +22,7 @@ function eom_rossler_rossler(u, p, t)
 end
 
 """
-	rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂) -> ContinuousDynamicalSystem
+	rossler_rossler(u₀, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂) -> ContinuousDynamicalSystem
 
 A coupled 6D Rossler system from Krakovská et al. (2018).
 The system consists of two separate subsystems, each being a 3D Rossler
@@ -61,13 +61,13 @@ with the coupling constant ``c \\geq 0``.
 # References
 Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of causality in a bivariate time series. Physical Review E, 97(4), 042207.
 """
-function rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂)
+function rossler_rossler(u₀, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂)
     p = @LArray [a, b, c, ϵ₁, ϵ₂, ω₁, ω₂] (:a, :b, :c, :ϵ₁, :ϵ₂, :ω₁, :ω₂)
-    return ContinuousDynamicalSystem(eom_rossler_rossler, uᵢ, p)
+    return ContinuousDynamicalSystem(eom_rossler_rossler, u₀, p)
 end
 
 """
-	rossler_rossler(;uᵢ = rand(6), a = 0.1, b = 0.1, c = 14.0, ϵ₁ = 0.0,
+	rossler_rossler(;u₀ = rand(6), a = 0.1, b = 0.1, c = 14.0, ϵ₁ = 0.0,
 		ϵ₂ = 0.0, ω₁ = 1 + 0.015, ω₂ = 1 - 0.015) -> ContinuousDynamicalSystem
 
 A coupled 6D Rossler system from Krakovská et al. (2018).
@@ -107,6 +107,6 @@ with the coupling constant ``c \\geq 0``.
 # References
 Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018). Comparison of six methods for the detection of causality in a bivariate time series. Physical Review E, 97(4), 042207.
 """
-rossler_rossler(;uᵢ = rand(6), a = 0.1, b = 0.1, c = 14.0,
+rossler_rossler(;u₀ = rand(6), a = 0.1, b = 0.1, c = 14.0,
             ϵ₁ = 0.0, ϵ₂ = 0.0, ω₁ = 1 + 0.015, ω₂ = 1 - 0.015) =
-    rossler_rossler(uᵢ, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂)
+    rossler_rossler(u₀, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂)

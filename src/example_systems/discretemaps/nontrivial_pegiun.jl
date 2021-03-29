@@ -65,15 +65,15 @@ function eom_nontrivial_pegiun(u, p, n)
 end
 
 
-function nontrivial_pegiun(uᵢ, p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂, n::Int)
+function nontrivial_pegiun(u₀, p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂, n::Int)
     p = @LArray [p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂] (:p₁, :p₂, :p₃, :p₄, :p₅, :p₆, :σ₁, :σ₂)
 
-    eom_nontrivial_pegiun(uᵢ, p, n)
+    eom_nontrivial_pegiun(u₀, p, n)
 end
 
 
 """
-    nontrivial_pegiun(;uᵢ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
+    nontrivial_pegiun(;u₀ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
         p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) -> Dataset
 
 A 2D discrete autoregressive system with nonlinear, nontrivial coupling from [1] .
@@ -104,7 +104,7 @@ Journal of Neuroscience Methods, 124(2), 113–128.
 doi:10.1016/s0165-0270(02)00367-9
 [https://www.sciencedirect.com/science/article/pii/S0165027002003679](https://www.sciencedirect.com/science/article/pii/S0165027002003679)
 """
-function nontrivial_pegiun(;uᵢ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
+function nontrivial_pegiun(;u₀ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
         p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100)
-    eom_nontrivial_pegiun(uᵢ, [p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂], n)
+    eom_nontrivial_pegiun(u₀, [p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂], n)
 end
