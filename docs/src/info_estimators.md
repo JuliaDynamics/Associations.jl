@@ -1,10 +1,23 @@
-# [Entropy/probability estimators](@id estimators)
+# [Estimators](@id estimators)
 
 Information theoretic causality measures in this package are calculated using entropy estimation. To do so, it uses estimators and [`genentropy`](@ref) from the [Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl) package. However, additional estimators are also available for some of the higher-level methods.
 
-An exhaustive list of estimators used by either [`transferentropy`](@ref), [`predictive_asymmetry`](@ref), [`mutualinfo`](@ref) or [`genentropy`](@ref) is given below.
+The following method-estimator combinations are possible.
 
-*Note: Not all estimators are valid for all methods. Check individual method docstrings for more information.*
+| Estimator                       | [`genentropy`](@ref) | [`mutualinfo`](@ref) | [`transferentropy`](@ref) | [`predictive_asymmetry`](@ref) |
+|:------------------------------- | :-: |:-: |:-: |:-: |
+| [`VisitationFrequency`](@ref)                        | ✓ | ✓ | ✓ | ✓ |
+| [`TransferOperator`](@ref)                           | ✓ | ✓ | ✓ | ✓ |
+| [`NaiveKernel`](@ref)                                | ✓ | ✓ | ✓ | ✓ |
+| [`SymbolicPermutation`](@ref)                        | ✓ | ✓ | ✓ | ✓ |
+| [`SymbolicAmplitudeAwarePermutation`](@ref symbolic) | ✓ |   |   |   |
+| [`SymbolicWeightedPermutation`](@ref symbolic)       | ✓ |   |   |   |
+| [`KozachenkoLeonenko`](@ref)                         | ✓ | ✓ | ✓ | ✓ |
+| [`Kraskov`](@ref)                                    | ✓ | ✓ | ✓ | ✓ |
+| [`Kraskov1`](@ref)                                   | ✓ | ✓ |   |   |
+| [`Kraskov2`](@ref)                                   | ✓ | ✓ |   |   |
+| [`Hilbert`](@ref)                                    | ✓ |   | ✓ | ✓ |
+| [`TimeScaleMODWT`](@ref)                             | ✓ |   |   |   |
 
 ## Binning based
 
@@ -38,10 +51,16 @@ Kraskov1
 Kraskov2
 ```
 
-## Permutation based
+## [Permutation based](@id symbolic)
 
 ```@docs
 SymbolicPermutation
+```
+
+## Wavelet based
+
+```@docs
+TimeScaleMODWT
 ```
 
 ## Hilbert
