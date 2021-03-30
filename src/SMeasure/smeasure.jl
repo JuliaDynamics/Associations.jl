@@ -28,28 +28,31 @@ using DelayEmbeddings
 S-measure test [1] for the directional dependence between univariate/multivariate time 
 series `x` and `y`.
 
-## Description
+## Input data 
 
 The algorithm is slightly modified from [1] to allow univariate time series as input.
 In that case, these time series are embedded using the parameters `mx`/`τx` (dimension/lag 
 for time series `x`) or `my`/`τy` (dimension/lag for time series `y`). For custom embeddings,
 do the embedding yourself and input `Dataset`s as both `x` and `y`.
 
-1. If `x` and `y` are `dx` and `dy`-dimensional [`Dataset`](@ref)s, respectively, 
-    then use `x` and `y` as is. If the number of points in `x` and `y` does not match,
-    end points are excluded from the dataset with the largest number of points until 
-    the number of points is matched in `x` and `y`.
-2. If `x` and `y` are scalar time series, then create `dx` and `dy` dimensional embeddings,
+- If `x` and `y` are `dx` and `dy`-dimensional [`Dataset`](@ref)s, respectively, 
+    then use `x` and `y` as is. 
+- If `x` and `y` are scalar time series, then create `dx` and `dy` dimensional embeddings,
     respectively, of both `x` and `y`, resulting in `N` different `m`-dimensional embedding points
     ``X = \\{x_1, x_2, \\ldots, x_N \\}`` and ``Y = \\{y_1, y_2, \\ldots, y_N \\}``.
     `τx` and `τy` control the embedding lags for `x` and `y`. 
-    Datasets will be length-matched by eliminating points at the end of the longest dataset.
-3. If `x` is a scalar-valued vector and `y` is a [`Dataset`](@ref), or vice versa, 
+- If `x` is a scalar-valued vector and `y` is a [`Dataset`](@ref), or vice versa, 
     then create an embedding of the scalar time series using parameters `dx`/`τx` or `dy`/`τy`.
-    Datasets will be length-matched by eliminating points at the end of the longest dataset.
-4. Let ``r_{i,j}`` and ``s_{i,j}`` be the indices of the `K`-th nearest neighbors 
+
+In all three cases, input datasets are length-matched by eliminating points at the end of 
+the longest dataset (after the embedding step, if relevant) before analysis.
+
+## Description
+
+1. Let ``r_{i,j}`` and ``s_{i,j}`` be the indices of the `K`-th nearest neighbors 
     of ``x_i`` and ``y_i``, respectively.
-5. Compute the the mean squared Euclidean distance to the ``K`` nearest neighbors 
+
+2. Compute the the mean squared Euclidean distance to the ``K`` nearest neighbors 
     for each ``x_i``, using the indices ``r_{i, j}``.
 
 ```math
