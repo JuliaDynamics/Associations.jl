@@ -99,19 +99,14 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
         theiler_window::Int = 0 # only point itself excluded
         ) where {D1, D2, T}
     
+    # # Match length of datasets by excluding end points.
+    lx = length(x); ly = length(y)
+    lx > ly ? X = x[1:ly, :] : X = x
+    ly > lx ? Y = y[1:lx, :] : Y = y
+    N = length(X)
 
-    # Match length of datasets by excluding end points.
-    lx, ly = length(x), length(y)
-    if lx > ly
-        x = x[1:ly, :]
-    elseif ly < lx
-        y = y[1:lx, :]
-    end
-
-    N = length(x)
-
-    treeX = searchstructure(KDTree, x, tree_metric)
-    treeY = searchstructure(KDTree, y, tree_metric)
+    treeX = searchstructure(KDTree, X, tree_metric)
+    treeY = searchstructure(KDTree, Y, tree_metric)
 
     # Pre-allocate vectors to hold indices and distances during loops
     dists_x = Vector{T}(undef, K)
@@ -127,15 +122,15 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
     # (itself) afterwards (distance to itself is zero)
     neighborhoodtype = NeighborNumber(K + 1) 
         
-    idxs_X = bulkisearch(treeX, x, neighborhoodtype)
-    idxs_Y = bulkisearch(treeY, y, neighborhoodtype)
+    idxs_X = bulkisearch(treeX, X, neighborhoodtype)
+    idxs_Y = bulkisearch(treeY, Y, neighborhoodtype)
     
     @inbounds for i in 1:N
-        @views pxᵢ, pyᵢ = x[i], y[i]
+        @views pxᵢ, pyᵢ = X[i], Y[i]
     
         for j = 2:K
-            dists_x[j] = @views evaluate(metric, pxᵢ, x[idxs_X[i][j]])
-            dists_x_cond_y[j] = @views evaluate(metric, pxᵢ, x[idxs_Y[i][j]])
+            dists_x[j] = @views evaluate(metric, pxᵢ, X[idxs_X[i][j]])
+            dists_x_cond_y[j] = @views evaluate(metric, pxᵢ, X[idxs_Y[i][j]])
         end
         
         Rx[i] = sum(dists_x) / K
