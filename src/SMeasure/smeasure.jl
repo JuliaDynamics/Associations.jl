@@ -99,7 +99,15 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
         theiler_window::Int = 0 # only point itself excluded
         ) where {D1, D2, T}
     
-        size(x, 1) == size(y, 1) ? nothing : error("`x` and `y` must be same length")
+
+    # Match length of datasets by excluding end points.
+    lx, ly = length(x), length(y)
+    if lx > ly
+        x = x[1:ly, :]
+    elseif ly < lx
+        y = y[1:lx, :]
+    end
+
     N = length(x)
 
     treeX = searchstructure(KDTree, x, tree_metric)
