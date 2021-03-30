@@ -44,7 +44,7 @@ end
         estimator::TransferEntropyEstimator, ηs; 
         d𝒯 = 1, dT = 1, dS = 1, τT = -1, τS = -1, 
         [dC = 1, τC = -1,],
-        normalize::Bool = false, f::Real = 1.0)
+        normalize::Bool = false, f::Real = 1.0) → Vector{Float64}
 
 Compute the predictive asymmetry[^Haaga2020] 𝔸(`s` → `t`) for source time series `s` and 
 target time series `t` over prediction lags `ηs`, using the given `estimator` and embedding 
@@ -52,6 +52,10 @@ parameters `d𝒯`, `dT`, `dS`, `τT`, `τS`.
 
 If a conditional time series `c` is provided, compute 𝔸(`s` → `t` | `c`). Then, `dC` and 
 `τC` controls the embedding dimension and embedding lag for the conditional variable.
+
+## Returns
+
+Returns a vector containing the predictive asymmetry for each value of `ηs`.
 
 ## Normalization (hypothesis test)
 
@@ -74,13 +78,13 @@ binning-based methods or the symbolic estimators for the fastest computations.
 ### [`VisitationFrequency`](@ref)
 
     predictive_asymmetry(s, t, [c],
-        estimator::VisitationFrequency{RectangularBinning}, ηs; kwargs...)
+        estimator::VisitationFrequency{RectangularBinning}, ηs; kwargs...) → Vector{Float64}
 
 Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`) 
 using visitation frequencies over a rectangular binning. 
 
     predictive_asymmetry(s, t, [c],
-        estimator::TransferOperator{RectangularBinning}, ηs; kwargs...)
+        estimator::TransferOperator{RectangularBinning}, ηs; kwargs...) → Vector{Float64}
 
 Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`) 
 using an approximation to the transfer operator over a rectangular binning.
@@ -92,7 +96,7 @@ See also: [`VisitationFrequency`](@ref), [`RectangularBinning`](@ref).
     predictive_asymmetry(s, t, [c],
         estimator::Kraskov, ηs; kwargs...)
     predictive_asymmetry(s, t, [c],
-        estimator::KozachenkoLeonenko, ηs; kwargs...)
+        estimator::KozachenkoLeonenko, ηs; kwargs...) → Vector{Float64}
 
 Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`)
 using naive nearest neighbor estimators.
@@ -105,7 +109,8 @@ See also [`Kraskov`](@ref), [`KozachenckoLeonenko`](@ref).
 ### Kernel density based
 
     predictive_asymmetry(s, t, [c],
-        estimator::NaiveKernel{Union{TreeDistance, DirectDistance}}, ηs; kwargs...)
+        estimator::NaiveKernel{Union{TreeDistance, DirectDistance}}, ηs; 
+        kwargs...) → Vector{Float64}
 
 Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`)
 using a naive kernel density estimator.
@@ -113,6 +118,10 @@ using a naive kernel density estimator.
 See also [`NaiveKernel`](@ref), [`TreeDistance`](@ref), [`DirectDistance`](@ref).
 
 ### Hilbert
+
+    predictive_asymmetry(s, t, [c],
+        estimator::Hilbert{VisitationFrequency{RectangularBinning}}, ηs; 
+        kwargs...) → Vector{Float64}
 
 Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`) by first 
 applying the Hilbert transform to `s`, `t` (`c`) and then estimating transfer entropy.
