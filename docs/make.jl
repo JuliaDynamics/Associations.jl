@@ -52,13 +52,12 @@ PAGES = [
         "s_measure.md",
         "cross_mapping.md",
     ],
+    "surrogate.md",
+    "example_systems.md",
     "Utilities" => [
         "invariant_measure.md",
         "dataset.md",
-        "surrogate.md",
     ],
-    "example_systems.md",
-
     "Tutorials" => [
         "Mutual information" => [
             "tutorial_mutualinfo.md",
