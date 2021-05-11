@@ -8,7 +8,7 @@ between variables of complex systems based on time series data.
 ### Information theoretic measures
 
 - Generalized entropy ([`genentropy`](@ref)) and fast histograms ([`binhist`](@ref))
-- Mutual information ([`mutual_info`](@ref))
+- Mutual information ([`mutualinfo`](@ref))
 - Transfer entropy ([`transferentropy`](@ref))
 - Predictive asymmetry ([`predictive_asymmetry`](@ref))
 
