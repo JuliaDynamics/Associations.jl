@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export rossler_rossler
+
 """
     eom_rossler_rossler(u, p, t) → Function
 

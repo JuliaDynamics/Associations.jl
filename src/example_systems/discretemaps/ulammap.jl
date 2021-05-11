@@ -1,5 +1,7 @@
 using LabelledArrays 
 
+export ulam
+
 function eom_ulam(dx, x, p, t)
     ε = p[:ε]
     f = x → 2 - x^2

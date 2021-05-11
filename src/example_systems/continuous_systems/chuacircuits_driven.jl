@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export chuacircuits_driven
+
 """
     eom_chuacircuits_driven(u, p, t) → SVector{6}
 

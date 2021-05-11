@@ -3,6 +3,8 @@ export lorenzdiffusive
 import StaticArrays: SVector
 import DynamicalSystemsBase: ContinuousDynamicalSystem
 
+export lorenzdiffusive
+
 @inline @inbounds function eom_lorenzdiffusive(u, p, t)
     
     C₁₂, C₂₁, R, ϵ₁, ϵ₂ = p[1], p[2], p[3], p[4], p[5]

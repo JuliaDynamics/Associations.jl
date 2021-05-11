@@ -39,7 +39,7 @@ function anishchenko1(u₀, α, s, ω)
 end
 
 """
-    anishchenko1(;u₀ = rand(2), α =3.277, s=0.1, ω=0.5*(sqrt(5)-1))
+    anishchenko1(;u₀ = rand(2), α =3.277, s=0.1, ω=0.5*(sqrt(5)-1)) → DiscreteDynamicalSystem
 
 Initialise the system defined by eq. 13 in [1], which can give strange, 
 nonchaotic attractors.

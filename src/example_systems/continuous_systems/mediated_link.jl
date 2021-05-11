@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export mediated_link
+
 @inline @inbounds function eom_mediated_link(u, p, t)
     ωx, ωy, ωz, k, l, m, c = (p...,)
     x₁, x₂, x₃, y₁, y₂, y₃, z₁, z₂, z₃ = (u...,)

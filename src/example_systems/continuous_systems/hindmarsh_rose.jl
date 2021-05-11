@@ -1,3 +1,5 @@
+export hindmarsh_rose
+
 """
 Equations of motion for the Hindmarsh-Rose system.
 """

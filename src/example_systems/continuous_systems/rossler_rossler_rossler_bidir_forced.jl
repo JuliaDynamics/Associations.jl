@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export rossler_rossler_rossler_bidir_forced
+
 @inline @inbounds function eom_rossler_rossler_rossler_bidir_forced(u, p, t)
     ω₁, ω₂, ω₃, c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃ = (p...,)
     x1, x2, x3, y1, y2, y3, z1, z2, z3 = (u...,)

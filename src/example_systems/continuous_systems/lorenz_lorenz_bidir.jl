@@ -1,6 +1,8 @@
 import SimpleDiffEq
 using LabelledArrays
 
+export lorenz_lorenz_bidir
+
 @inline @inbounds function eom_lorenz_lorenz_bidir(u, p, t)
     c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃ = (p...,)
     x1, x2, x3, y1, y2, y3 = (u...,)

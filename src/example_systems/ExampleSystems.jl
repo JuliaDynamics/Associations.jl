@@ -33,45 +33,5 @@ include("continuous_systems/rossler_rossler_rossler_bidir_forced.jl")
 include("continuous_systems/rossler_lorenz.jl")
 
 include("noise.jl")
-# We export functions to generate
-# the systems for every example. 
-# Some systems (involving multiple lags) do not return instances
-# of DiscreteDynamicalSystem, but a Dataset with the finished
-# iterated map.
-
-export
-###############
-# Discrete maps
-###############
-ar1_unidir,
-anishchenko1,
-henon2,
-henon_triple,
-linearmap1,
-nonlinear3d,
-ulam,
-logistic2_unidir,
-logistic2_bidir,
-logistic3,
-logistic4,
-nontrivial_pegiun,
-var1,
-ar1_bidir,
-verdes
-
-export
-####################
-# Continuous systems
-###################
-chuacircuit_nscroll_sine,
-chuacircuits_driven,
-hindmarsh_rose,
-lorenz_lorenz_lorenz_transitive,
-mediated_link,
-rossler_rossler_bidir,
-rossler_rossler_rossler_bidir_forced,
-rossler_lorenz,
-lorenz_lorenz_bidir,
-lorenz_lorenz_lorenz_bidir_forced
 
 end

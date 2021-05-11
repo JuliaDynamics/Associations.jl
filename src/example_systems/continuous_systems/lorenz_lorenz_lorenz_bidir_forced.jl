@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export lorenz_lorenz_lorenz_bidir_forced
+
 @inline @inbounds function eom_lorenz_lorenz_lorenz_bidir_forced(u, p, t)
     c_xy, c_yx, c_zx, c_zy, a₁, a₂, a₃, b₁, b₂, b₃, a₃, c₁, c₂, c₃ = (p...,)
     x₁, x₂, x₃, y₁, y₂, y₃, z₁, z₂, z₃ = (u...,)

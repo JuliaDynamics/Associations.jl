@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export lorenz_lorenz_lorenz_transitive
+
 @inline @inbounds function eom_lorenz_lorenz_lorenz_transitive(u, p, t)
     x₁, y₁, z₁, x₂, y₂, z₂, x₃, y₃, z₃ = (u...,)
     σ₁, σ₂, σ₃, ρ₁, ρ₂, ρ₃, β₁, β₂, β₃, c₁₂, c₂₃ = (p...,)

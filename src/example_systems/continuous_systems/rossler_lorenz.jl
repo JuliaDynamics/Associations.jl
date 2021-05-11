@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export rossler_lorenz
+
 @inline @inbounds function eom_rossler_lorenz(u, p, t)
     c_xy, a₁, a₂, a₃, b₁, b₂, b₃ = (p...,)
     x1, x2, x3, y1, y2, y3 = u[1], u[2], u[3], u[4], u[5], u[6] 

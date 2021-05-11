@@ -1,5 +1,7 @@
 using LabelledArrays
 
+#export ar1_bidir
+
 """
     eom_ar1_bidir(x, p, n) → SVector{2}
 
@@ -39,9 +41,7 @@ function ar1_bidir(u₀,a₁, b₁, c_xy, c_yx, σx, σy)
 end
 
 """
-    ar1_bidir(;u₀ = rand(2), 
-        a₁ = 0.5, b₁ = 0.7, 
-        c_xy = 0, c_yx = 0.2, 
+    ar1_bidir(;u₀ = rand(2), a₁ = 0.5, b₁ = 0.7, c_xy = 0, c_yx = 0.2, 
         σx = 0.3, σy = 0.3) → DiscreteDynamicalSystem
 
 A system consisting of two mutually coupled first order autoregressive processes. 

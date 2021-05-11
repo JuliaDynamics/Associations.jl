@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export chuacircuit_nscroll_sine
+
 @inline @inbounds function eom_chuacircuit_nscroll_sine(u, p, t)
     α, β, γ, a, b, c, σx, σy, σz = (p...,)
     x, y, z = (u...,)
