@@ -1,7 +1,7 @@
 using LabelledArrays
 
 """
-    eom_chuacircuits_driven(u, p, t) -> SVector{6}
+    eom_chuacircuits_driven(u, p, t) → SVector{6}
 
 Equations of motion for a bidirectionally coupled system consisting of two
 driven Chua circuits [1].
@@ -39,7 +39,7 @@ end
 
 """
     chuacircuits_driven(u₀, α₁, α₂, β₁, β₂, F₁, F₂,
-                ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ) -> ContinuousDynamicalSystem
+                ω₁, ω₂, ϵ₁, ϵ₂, m₀, m₁, σ) → ContinuousDynamicalSystem
 
 Initialize a bidirectionally coupled system consisting of two driven Chua
 circuits [1], X₁ and X₂. The subsystems are mutually coupled by a linear
@@ -64,7 +64,7 @@ end
     chuacircuits_driven(;u₀ = [0.1, 0.1, 0.2, 0.15, 0.15, 0.22],
         α₁ = 7.0, α₂ = 7.0, β₁ = 14.286, β₂ = 14.286,
         F₁ = 1.5, F₂ = 1.5, ω₁ = 3.0, ω₂ = 3.0,
-        σ = 0.1, ϵ₁ = 0.1, ϵ₂ = 0.1, m₀ = -1/7, m₁ = 2/7) -> ContinuousDynamicalSystem
+        σ = 0.1, ϵ₁ = 0.1, ϵ₂ = 0.1, m₀ = -1/7, m₁ = 2/7) → ContinuousDynamicalSystem
 
 Initialize a bidirectionally coupled system consisting of two driven Chua
 circuits [1], X₁ and X₂. The subsystems are mutually coupled by a linear

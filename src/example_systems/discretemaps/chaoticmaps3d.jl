@@ -1,7 +1,9 @@
 using LabelledArrays
 
+export linearmap1, linearmap2
+
 """
-    eom_linearmap1(x, p, n) -> SVector{2}
+    eom_linearmap1(x, p, n) → SVector{2}
 
 # References
 Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended
@@ -16,7 +18,7 @@ function eom_linearmap1(x, p, t)
 end
 
 """
-    linearmap1(u₀, c) -> DiscreteDynamicalSystem
+    linearmap1(u₀, c) → DiscreteDynamicalSystem
 
 # References
 Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger causality." Physics Letters A 324.1 (2004): 26-35
@@ -28,7 +30,7 @@ function linearmap1(u₀, c)
 end
 
 """
-    linearmap1(;u₀ = [1, rand(2)], c = 2.0) -> DiscreteDynamicalSystem
+    linearmap1(;u₀ = [1, rand(2)], c = 2.0) → DiscreteDynamicalSystem
 
 # References
 Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger causality." Physics Letters A 324.1 (2004): 26-35
@@ -38,7 +40,7 @@ linearmap1(;u₀ = rand(2), c = 0.5) = linearmap1(u₀, c)
 
 
 """
-    eom_linearmap2(x, p, n) -> SVector{2}
+    eom_linearmap2(x, p, n) → SVector{2}
 
 # References
 Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended
@@ -55,8 +57,8 @@ function eom_chaoticmaps(x, p, t)
     return SVector{3}(dx, dy, dz)
 end
 
-doc"""
-    linearmap2(u₀, c) -> DiscreteDynamicalSystem
+"""
+    linearmap2(u₀, c) → DiscreteDynamicalSystem
 
 # References
 Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger causality." Physics Letters A 324.1 (2004): 26-35
@@ -67,8 +69,8 @@ function chaoticmaps(u₀, c)
     return cmap
 end
 
-doc"""
-    linearmap2(;u₀ = rand(3), c = 2.0) -> DiscreteDynamicalSystem
+"""
+    linearmap2(;u₀ = rand(3), c = 2.0) → DiscreteDynamicalSystem
 
 # References
 Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger causality." Physics Letters A 324.1 (2004): 26-35

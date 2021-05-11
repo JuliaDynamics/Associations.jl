@@ -31,7 +31,7 @@ end
                 σ₁ = 10.0, σ₂ = 10.0, σ₃ = 10.0,
                 ρ₁ = 28.0, ρ₂ = 28.0, ρ₃ = 28.0,
                 β₁ = 8/3,  β₂ = 8/3,  β₃ = 8.3,
-                c₁₂ = 1.0, c₂₃ = 1.0) -> ContinuousDynamicalSystem
+                c₁₂ = 1.0, c₂₃ = 1.0) → ContinuousDynamicalSystem
 
 Initalise a dynamical system consisting of three coupled Lorenz attractors with
 a transitive causality chain where X₁ → X₂ and X₂ → X₃. In total, the three

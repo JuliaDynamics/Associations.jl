@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export anishchenko1
+
 """
     eom_anishchenko1(u, p, t)
 

@@ -1,7 +1,9 @@
 using LabelledArrays
 
+export nontrivial_pegiun
+
 """
-    nontrivial_pegiun(x, p, n) -> Function
+    nontrivial_pegiun(x, p, n) → Function
 
 Iterate a 2d discrete system with nonlinear, nontrivial coupling. This system
 is from [Péguin-Feissolle & Teräsvirta (1999)](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf), and
@@ -74,7 +76,7 @@ end
 
 """
     nontrivial_pegiun(;u₀ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
-        p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) -> Dataset
+        p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) → Dataset
 
 A 2D discrete autoregressive system with nonlinear, nontrivial coupling from [1] .
 This system is from [1](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf), and

@@ -3,6 +3,8 @@ import StaticArrays: SVector
 import DynamicalSystems: DiscreteDynamicalSystem
 using LabelledArrays
 
+export ikeda
+
 """
     eom_ikeda(u, p, t)
 

@@ -16,7 +16,7 @@ end
 
 """
     rossler_lorenz(;u₀ = rand(6), a₁ = -6, a₂ = 6, a₃ = 2.0, 
-        b₁ = 10, b₂ = 28, b₃ = 8/3, c_xy = 1) -> ContinuousDynamicalSystem
+        b₁ = 10, b₂ = 28, b₃ = 8/3, c_xy = 1) → ContinuousDynamicalSystem
 
 Initialise a Rössler-Lorenz system consisting of two independent 3D subsystems:
 one Rössler system and one Lorenz system. They are coupled such that the

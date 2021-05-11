@@ -27,7 +27,7 @@ end
 """
     mediated_link(;u₀ = rand(9), ωx = 1, ωy = 1.015, ωz = 0.985,
         k = 0.15, l = 0.2, m = 10.0, 
-        c = 0.06) -> ContinuousDynamicalSystem
+        c = 0.06) → ContinuousDynamicalSystem
 
 Initialise a three-subsystem dynamical system where `X` and `Y` are
 driven by `Z`. At the default value of the coupling constant `c = 0.06`, the

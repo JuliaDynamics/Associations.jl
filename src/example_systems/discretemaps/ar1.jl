@@ -1,10 +1,12 @@
 using LabelledArrays
 
+export ar1_unidir
+
 """
-    eom_ar1(x, p, n) -> Function
+    eom_ar1(x, p, n) → Function
 
 Equations of motion for a bivariate, order one autoregressive model, where
-x -> y [1].
+x → y [1].
 
 ## Equations of motion
 
@@ -42,7 +44,7 @@ end
 
 """
     ar1_unidir(u₀, a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, 
-        σ = 0.40662) -> DiscreteDynamicalSystem
+        σ = 0.40662) → DiscreteDynamicalSystem
 
 A bivariate, order one autoregressive model, where ``x \\to y`` [1].
 

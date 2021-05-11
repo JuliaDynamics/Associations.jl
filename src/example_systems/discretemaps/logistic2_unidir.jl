@@ -1,7 +1,9 @@
 using LabelledArrays
 
+export logistic2_unidir
+
 """
-    eom_logistic2(dx, x, p, n) -> function
+    eom_logistic2(dx, x, p, n) → function
 
 Equations of motions for a system consisting of two coupled logistic maps where
 X unidirectionally influences Y [1].
@@ -55,7 +57,7 @@ end
 
 """
     logistic2(;u₀ = rand(2), c_xy = 0.1, σ = 0.05,
-        r₁ = 3.78, r₂ = 3.66) -> DiscreteDynamicalSystem
+        r₁ = 3.78, r₂ = 3.66) → DiscreteDynamicalSystem
 
 Initialise a system consisting of two coupled logistic maps where X
 unidirectionally influences Y. By default, the parameters `r₁` and `r₂` are set

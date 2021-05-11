@@ -2,7 +2,7 @@ using LabelledArrays
 
 function eom_ulam(dx, x, p, t)
     ε = p[:ε]
-    f = x -> 2 - x^2
+    f = x → 2 - x^2
     dx[1] = f(ε*x[length(dx)] + (1-ε)*x[1])
     for i in 2:length(dx)
         dx[i] = f(ε*x[i-1] + (1-ε)*x[i])

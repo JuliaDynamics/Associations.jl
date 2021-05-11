@@ -19,7 +19,7 @@ end
     lorenz_lorenz_bidir(; u0 = rand(6), 
         c_xy = 0.2, c_yx = 0.2, 
         a₁ = 10, a₂ = 28, a₃ = 8/3, 
-        b₁ = 10, b₂ = 28, b₃ = 9/3) -> ContinuousDynamicalSystem
+        b₁ = 10, b₂ = 28, b₃ = 9/3) → ContinuousDynamicalSystem
 
 Initialise a bidirectionally coupled Lorenz-Lorenz system, where each 
 subsystem is a 3D Lorenz system [1]. Default values for the parameters 

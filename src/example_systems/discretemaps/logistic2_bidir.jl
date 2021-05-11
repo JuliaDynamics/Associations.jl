@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export logistic2_bidir
+
 """
     logistic2_bidir(u₀, c_xy, c_yx, r₁, r₂, σ_xy, σ_yx)
 

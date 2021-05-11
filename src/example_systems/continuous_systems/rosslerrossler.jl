@@ -1,7 +1,7 @@
 using LabelledArrays
 
 """
-    eom_rossler_rossler(u, p, t) -> Function
+    eom_rossler_rossler(u, p, t) → Function
 
 Equations of motions for a 6D dynamical system consisting
 of two 3D Rössler attractors.
@@ -22,7 +22,7 @@ function eom_rossler_rossler(u, p, t)
 end
 
 """
-	rossler_rossler(u₀, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂) -> ContinuousDynamicalSystem
+	rossler_rossler(u₀, a, b, c, ϵ₁, ϵ₂, ω₁, ω₂) → ContinuousDynamicalSystem
 
 A coupled 6D Rossler system from Krakovská et al. (2018).
 The system consists of two separate subsystems, each being a 3D Rossler
@@ -68,7 +68,7 @@ end
 
 """
 	rossler_rossler(;u₀ = rand(6), a = 0.1, b = 0.1, c = 14.0, ϵ₁ = 0.0,
-		ϵ₂ = 0.0, ω₁ = 1 + 0.015, ω₂ = 1 - 0.015) -> ContinuousDynamicalSystem
+		ϵ₂ = 0.0, ω₁ = 1 + 0.015, ω₂ = 1 - 0.015) → ContinuousDynamicalSystem
 
 A coupled 6D Rossler system from Krakovská et al. (2018).
 The system consists of two separate subsystems, each being a 3D Rossler

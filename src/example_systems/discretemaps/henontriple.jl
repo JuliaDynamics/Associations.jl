@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export henon_triple
+
 function eom_henon_triple(u, p, n)
     O = zeros(Float64, n + 3, 3)
     x₁, x₂, x₃ = (u...,)
@@ -41,10 +43,10 @@ end
 
 
 """
-    henon_triple(x, p, n) -> Function
+    henon_triple(x, p, n) → Function
 
 Iterate a 3D discrete system consisting of coupled Henon maps where the coupling
-is x1 -> x2 -> x3 [1]. This version allows for tweaking the parameters of the
+is x1 → x2 → x3 [1]. This version allows for tweaking the parameters of the
 equations.
 
 The difference equations are:

@@ -1,12 +1,14 @@
 using LabelledArrays
 
+export logistic3
+
 """
     eom_logistic3(u, p, t)
 
 Equations of motion for a system consisting of three coupled logistic map
 representing the response of two independent dynamical variables to the
 forcing from a common driver. The dynamical influence goes in the directions
-Z -> X and Z -> Y.
+Z → X and Z → Y.
 
 ## Equations of motion
 
@@ -53,7 +55,7 @@ end
 
 """
     logistic3(;u₀ = rand(3), r = 4,
-        σx = 0.05, σy = 0.05, σz = 0.05) -> DiscreteDynamicalSystem
+        σx = 0.05, σy = 0.05, σz = 0.05) → DiscreteDynamicalSystem
 
 Initialise a dynamical system consisting of three coupled logistic map
 representing the response of two independent dynamical variables to the

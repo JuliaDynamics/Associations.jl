@@ -1,8 +1,10 @@
 using LabelledArrays
 
+export nonlinear3d
+
 """
     eom_nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃, 
-        c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃) -> DiscreteDynamicalSystem
+        c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃) → DiscreteDynamicalSystem
 
 Equations of motion for a 3d nonlinear system with nonlinear couplings 
 ``x_1 \\to x_2``, ``x_2 \\to x_3`` and ``x_1 \\to x_3``. Modified from [1]. 
@@ -50,7 +52,7 @@ end
         σ₁ = 1.0, σ₂ = 1.0, σ₃ = 1.0, 
         a₁ = 3.4, a₂ = 3.4, a₃ = 3.4, 
         b₁ = 0.4, b₂ = 0.4, b₃ = 0.4, 
-        c₁₂ = 0.5, c₂₃ = 0.3, c₁₃ = 0.5) -> DiscreteDynamicalSystem
+        c₁₂ = 0.5, c₂₃ = 0.3, c₁₃ = 0.5) → DiscreteDynamicalSystem
 
 A 3d nonlinear system with nonlinear couplings ``x_1 \\to x_2``, 
 ``x_2 \\to x_3`` and ``x_1 \\to x_3``. Modified from [1]. 

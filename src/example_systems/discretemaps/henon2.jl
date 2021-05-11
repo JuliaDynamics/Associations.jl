@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export henon2
+
 """
     eom_henon2(dx, x, p, n)
 
@@ -41,7 +43,7 @@ function henon2(u₀, c_xy)
 end
 
 """
-    henon2(;u₀ = rand(4), c_xy = 2.0) -> DiscreteDynamicalSystem
+    henon2(;u₀ = rand(4), c_xy = 2.0) → DiscreteDynamicalSystem
 
 Initialize a 2D Henon system consisting of two identical Henon maps with
 unidirectional forcing ``X \\to Y `` [1].

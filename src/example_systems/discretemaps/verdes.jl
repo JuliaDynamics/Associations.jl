@@ -1,7 +1,9 @@
 using LabelledArrays
 
+export verdes
+
 """
-    eom_verdes(u, p, t) -> SVector{3}
+    eom_verdes(u, p, t) → SVector{3}
 
 Equations of motion for a 3D system where the response X is a highly
 nonlinear combination of Y and Z [1]. The forcings Y and Z involve
@@ -36,7 +38,7 @@ end
 
 """
     verdes(;u₀ = rand(3), ωy = 315, ωz = 80,
-        σx = 0.0, σy = 0.0, σz = 0.0) -> DiscreteDynamicalSystem
+        σx = 0.0, σy = 0.0, σz = 0.0) → DiscreteDynamicalSystem
 
 Intitialise a 3D system where the response X is a highly nonlinear combination
 of Y and Z. The forcings Y and Z involve sines and cosines, and

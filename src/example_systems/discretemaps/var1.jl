@@ -1,7 +1,9 @@
 using LabelledArrays
 
+export var1
+
 """
-    eom_var1(x, p, n) -> Function
+    eom_var1(x, p, n) → Function
 
 Equations of motion for a vector autoregressive system where X₁ → X₂ → X₃.
 """
@@ -25,7 +27,7 @@ function var1(u₀, σ₁, σ₂, σ₃)
 end
 
 """
-    var1(x, p, n) -> DiscreteDynamicalSystem
+    var1(x, p, n) → DiscreteDynamicalSystem
 
 Initialise a discrete vector autoregressive system where X₁ → X₂ → X₃.
 """

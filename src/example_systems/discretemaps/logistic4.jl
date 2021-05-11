@@ -1,5 +1,7 @@
 using LabelledArrays
 
+export logistic4
+
 """
     eom_logistic4(u, p, t)
 
@@ -45,7 +47,7 @@ end
 
 """
     logistic4(;u₀ = rand(4), r₁ = 3.9, r₂ = 3.6, r₃ = 3.6, r₄ = 3.8,
-        c₁₂ = 0.4, c₂₃ = 0.4, c₃₄ = 0.35) -> DiscreteDynamicalSystem
+        c₁₂ = 0.4, c₂₃ = 0.4, c₃₄ = 0.35) → DiscreteDynamicalSystem
 
 Initialise a system of a transitive chain of four unidirectionally coupled
 logistic maps, where ``y_1 \\to y_2 \\to y_3 \\to y_4`` [1]. Default 

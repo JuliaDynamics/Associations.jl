@@ -1,7 +1,7 @@
 using LabelledArrays
 
 """
-    eom_ar1_bidir(x, p, n) -> SVector{2}
+    eom_ar1_bidir(x, p, n) → SVector{2}
 
 Equations of motion for a system consisting of two mutually 
 coupled first order autoregressive processes. 
@@ -42,7 +42,7 @@ end
     ar1_bidir(;u₀ = rand(2), 
         a₁ = 0.5, b₁ = 0.7, 
         c_xy = 0, c_yx = 0.2, 
-        σx = 0.3, σy = 0.3) -> DiscreteDynamicalSystem
+        σx = 0.3, σy = 0.3) → DiscreteDynamicalSystem
 
 A system consisting of two mutually coupled first order autoregressive processes. 
 
