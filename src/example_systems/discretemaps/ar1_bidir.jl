@@ -1,6 +1,6 @@
 using LabelledArrays
 
-#export ar1_bidir
+export ar1_bidir
 
 """
     eom_ar1_bidir(x, p, n) → SVector{2}
