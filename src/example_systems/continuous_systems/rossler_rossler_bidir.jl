@@ -1,6 +1,6 @@
 using LabelledArrays
 
-export rossler_lorenz_bidir
+export rossler_rossler_bidir
 
 @inline @inbounds function eom_rossler_rossler_bidir(u, p, t)
     ω₁, ω₂, c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃ = (p...,)
