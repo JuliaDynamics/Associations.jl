@@ -1,8 +1,9 @@
-name: TagBot
+name: Julia TagBot
 on:
-  issue_comment:  # THIS BIT IS NEW
+  issue_comment:
     types:
       - created
+  workflow_dispatch:
 jobs:
   TagBot:
     if: github.event_name == 'workflow_dispatch' || github.actor == 'JuliaTagBot'
