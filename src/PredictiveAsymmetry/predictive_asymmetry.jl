@@ -231,10 +231,13 @@ function predictive_asymmetry(source, target, cond, estimator, ηs;
         te_bws[i] = transferentropy(source, target, cond, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, dC = dC, τC = τC, η𝒯 = -η)
         
         𝔸s[i] = sum(te_fws[1:i]) - sum(te_bws[1:i])
+    end
 
-        if normalize 
+    if normalize
+        for (i, η) in enumerate(ηs)
+            𝔸ᵢ = sum(te_fws[1:i]) - sum(te_bws[1:i])
             avg_te = 1/(2*η) * (sum(te_fws[1:i]) + sum(te_bws[1:i]))
-            𝔸s[i] = 𝔸s[i]/(f*avg_te) # after normalization, this is now 𝒜s(i)
+            𝔸s[i] = 𝔸ᵢ/(f*avg_te)
         end
     end
     
