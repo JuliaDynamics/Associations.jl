@@ -181,11 +181,18 @@ The predictive asymmetry method is from Haaga et al. (2020) [^Haaga2020].
 """
 function predictive_asymmetry end
 
+function check_ηs(ηs)
+    all(ηs .> 0) || throw(ArgumentError("all ηs must be >= 1, got $(ηs)"))
+    issorted(ηs) || throw(ArgumentError("ηs must be provided in increasing order, got $(ηs)"))
+end
+
 function predictive_asymmetry(source, target, estimator, ηs; 
         normalize = false, f::Real = 1.0,
         d𝒯 = 1, dT = 1, dS = 1, τT = -1, τS = -1)
     
+    check_ηs(ηs)
     Nη = length(ηs)
+
     te_fws = zeros(Nη)
     te_bws = zeros(Nη)
     𝔸s = zeros(Nη)
@@ -212,9 +219,8 @@ function predictive_asymmetry(source, target, cond, estimator, ηs;
         normalize = false, f::Real = 1.0,
         d𝒯 = 1, dT = 1, dS = 1, dC = 1, τT = -1, τS = -1, τC = -1)
     
+    check_ηs(ηs)
     Nη = length(ηs)
-    all(ηs .> 0) || throw(ArgumentError("all ηs must be >= 1, got $(ηs)"))
-    issorted(ηs) || throw(ArgumentError("ηs must be provided in increasing order, got $(ηs)"))
 
     te_fws = zeros(Nη)
     te_bws = zeros(Nη)
