@@ -145,8 +145,8 @@ method = VisitationFrequency(RectangularBinning(5))
 𝔸cond = predictive_asymmetry(x, y, z, method, ηs, normalize = false)
 
 # 𝒜(x → y) and 𝒜(x → y | z), using different normalization factors
-𝒜reg = predictive_asymmetry(x, y, method, ηs, f = 1.0) # normalize == true by default
-𝒜cond = predictive_asymmetry(x, y, z, method, ηs, f = 1.5) # normalize == true by default
+𝒜reg = predictive_asymmetry(x, y, method, ηs, normalize = true, f = 1.0)
+𝒜cond = predictive_asymmetry(x, y, z, method, ηs, normalize = true, f = 1.5)
 ```
 
 ### [`SymbolicPermutation`](@ref)
@@ -209,7 +209,7 @@ function predictive_asymmetry(source, target, estimator, ηs;
 end
 
 function predictive_asymmetry(source, target, cond, estimator, ηs; 
-        normalize = true, f::Real = 1.0,
+        normalize = false, f::Real = 1.0,
         d𝒯 = 1, dT = 1, dS = 1, dC = 1, τT = -1, τS = -1, τC = -1)
     
     Nη = length(ηs)
