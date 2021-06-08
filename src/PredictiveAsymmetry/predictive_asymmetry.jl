@@ -201,14 +201,13 @@ function predictive_asymmetry(source, target, estimator, ηs;
         te_fws[i] = transferentropy(source, target, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, η𝒯 = η)
         te_bws[i] = transferentropy(source, target, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, η𝒯 = -η)
         
-        𝔸s[i] = sum(te_fws[1:i]) - sum(te_bws[1:i])
-    end
-    
-    if normalize
-        for (i, η) in enumerate(ηs)
-            𝔸ᵢ = sum(te_fws[1:i]) - sum(te_bws[1:i])
-            avg_te = 1/(2*η) * (sum(te_fws[1:i]) + sum(te_bws[1:i]))
-            𝔸s[i] = 𝔸ᵢ/(f*avg_te)
+        if normalize
+            𝔸ᵢ = (sum(te_fws[1:i]) - sum(te_bws[1:i])) / η
+            avg_te = (sum(te_fws[1:i]) + sum(te_bws[1:i])) / (2*η)
+            𝔸s[i] = 𝔸ᵢ / (f*avg_te)
+        else
+            𝔸ᵢ = (sum(te_fws[1:i]) - sum(te_bws[1:i])) / η
+            𝔸s[i] = 𝔸ᵢ
         end
     end
     
@@ -229,15 +228,13 @@ function predictive_asymmetry(source, target, cond, estimator, ηs;
     for (i, η) in enumerate(ηs)
         te_fws[i] = transferentropy(source, target, cond, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, dC = dC, τC = τC, η𝒯 = η)
         te_bws[i] = transferentropy(source, target, cond, estimator, d𝒯 = d𝒯, dT = dT, dS = dS, τT = τT, τS = τS, dC = dC, τC = τC, η𝒯 = -η)
-        
-        𝔸s[i] = sum(te_fws[1:i]) - sum(te_bws[1:i])
-    end
-
-    if normalize
-        for (i, η) in enumerate(ηs)
-            𝔸ᵢ = sum(te_fws[1:i]) - sum(te_bws[1:i])
-            avg_te = 1/(2*η) * (sum(te_fws[1:i]) + sum(te_bws[1:i]))
-            𝔸s[i] = 𝔸ᵢ/(f*avg_te)
+        if normalize
+            𝔸ᵢ = (sum(te_fws[1:i]) - sum(te_bws[1:i])) / η
+            avg_te = (sum(te_fws[1:i]) + sum(te_bws[1:i])) / (2*η)
+            𝔸s[i] = 𝔸ᵢ / (f*avg_te)
+        else
+            𝔸ᵢ = (sum(te_fws[1:i]) - sum(te_bws[1:i])) / η
+            𝔸s[i] = 𝔸ᵢ
         end
     end
     
