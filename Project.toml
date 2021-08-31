@@ -33,7 +33,7 @@ Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 [compat]
 ChaosTools = "^1.24"
 CrossMappings = "^0.7"
-DelayEmbeddings = "^1.9"
+DelayEmbeddings = "^2.0"
 Distances = "^0.10"
 Distributions = "^0.24"
 DynamicalSystemsBase = "^1.8"
