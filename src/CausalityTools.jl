@@ -9,9 +9,9 @@ module CausalityTools
     @reexport using Entropies
     @reexport using TransferEntropy
     @reexport using TimeseriesSurrogates
-    @reexport using CrossMappings
 
     include("JointDistanceDistribution/JointDistanceDistribution.jl")
+    include("CrossMappings/CrossMappings.jl")
     include("SMeasure/smeasure.jl")
     include("PredictiveAsymmetry/PredictiveAsymmetry.jl")
     include("example_systems/ExampleSystems.jl")
