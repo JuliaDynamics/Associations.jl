@@ -11,9 +11,6 @@ using DocumenterTools: Themes
 using CausalityTools
 using PyPlot
 using DynamicalSystems
-using Wavelets
-using TimeseriesSurrogates
-using CrossMappings
 using HypothesisTests
 
 # %% JuliaDynamics theme.
@@ -67,8 +64,7 @@ PAGES = [
  ]
 
 makedocs(
-    modules = [CausalityTools, Entropies, TransferEntropy, DelayEmbeddings, CrossMappings,
-    TimeseriesSurrogates],
+    modules = [CausalityTools, Entropies, TransferEntropy, DelayEmbeddings],
     format = Documenter.HTML(
         prettyurls = CI,
         assets = [
