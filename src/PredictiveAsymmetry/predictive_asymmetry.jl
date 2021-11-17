@@ -69,64 +69,9 @@ avoiding more computationally costly surrogate testing.
 
 ## Estimators
 
-Any estimator that works for [`transferentropy`](@ref) will work with 
+Any [estimator](@ref) that works for [`transferentropy`](@ref) will also work with 
 `predictive_asymmetry`. It is recommended to use either the rectangular 
 binning-based methods or the symbolic estimators for the fastest computations. 
-
-### Binning based
-
-### [`VisitationFrequency`](@ref)
-
-    predictive_asymmetry(s, t, [c],
-        estimator::VisitationFrequency{RectangularBinning}, ηs; kwargs...) → Vector{Float64}
-
-Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`) 
-using visitation frequencies over a rectangular binning. 
-
-    predictive_asymmetry(s, t, [c],
-        estimator::TransferOperator{RectangularBinning}, ηs; kwargs...) → Vector{Float64}
-
-Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`) 
-using an approximation to the transfer operator over a rectangular binning.
-
-See also: [`VisitationFrequency`](@ref), [`RectangularBinning`](@ref).
-
-### Nearest neighbor based
-
-    predictive_asymmetry(s, t, [c],
-        estimator::Kraskov, ηs; kwargs...)
-    predictive_asymmetry(s, t, [c],
-        estimator::KozachenkoLeonenko, ηs; kwargs...) → Vector{Float64}
-
-Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`)
-using naive nearest neighbor estimators.
-
-*Note: only Shannon entropy is possible to use for nearest neighbor estimators, so the 
-keyword `q` cannot be provided; it is hardcoded as `q = 1`.*
-
-See also [`Kraskov`](@ref), [`KozachenckoLeonenko`](@ref).
-
-### Kernel density based
-
-    predictive_asymmetry(s, t, [c],
-        estimator::NaiveKernel{Union{TreeDistance, DirectDistance}}, ηs; 
-        kwargs...) → Vector{Float64}
-
-Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`)
-using a naive kernel density estimator.
-
-See also [`NaiveKernel`](@ref), [`TreeDistance`](@ref), [`DirectDistance`](@ref).
-
-### Hilbert
-
-    predictive_asymmetry(s, t, [c],
-        estimator::Hilbert{VisitationFrequency{RectangularBinning}}, ηs; 
-        kwargs...) → Vector{Float64}
-
-Estimate (normalized) 𝔸(`s` → `t`) or 𝔸(`s` → `t` | `c`) by first 
-applying the Hilbert transform to `s`, `t` (`c`) and then estimating transfer entropy.
-
-See also [`Hilbert`](@ref), [`Amplitude`](@ref), [`Phase`](@ref).
 
 ## Examples
 
@@ -141,41 +86,9 @@ x, y, z = rand(100), rand(100), rand(100)
 method = VisitationFrequency(RectangularBinning(5))
 
 # 𝔸(x → y) and  𝔸(x → y | z)
-𝔸reg  = predictive_asymmetry(x, y, method, ηs, normalize = false)
-𝔸cond = predictive_asymmetry(x, y, z, method, ηs, normalize = false)
-
-# 𝒜(x → y) and 𝒜(x → y | z), using different normalization factors
+𝔸reg  = predictive_asymmetry(x, y, method, ηs) 
 𝒜reg = predictive_asymmetry(x, y, method, ηs, normalize = true, f = 1.0)
-𝒜cond = predictive_asymmetry(x, y, z, method, ηs, normalize = true, f = 1.5)
 ```
-
-### [`SymbolicPermutation`](@ref)
-
-For the symbolic estimators, make sure that the maximum prediction lag η stays 
-small. This is because the symbolization procedure uses delay embedding vectors 
-of dimension `m` if the motif length is `m` (so the actual maximum prediction lag 
-used is `maximum(ηs)*m`, which may be too large if `maximum(ηs)` is too large).
-
-
-```julia
-# Some example time series
-x, y, z = rand(100), rand(100), rand(100)
-
-# Define prediction lags and estimation method
-ηs = 1:3 # small prediction lags
-method = SymbolicPermutation()
-
-# 𝒜(x → y)
-predictive_asymmetry(x, y, method, ηs, normalize = true) 
-
-# 𝒜(x → y | z)
-predictive_asymmetry(x, y, z, method, ηs, normalize = true) 
-```
-
-## Description
-
-The predictive asymmetry method is from Haaga et al. (2020) [^Haaga2020].
-
 
 [^Haaga2020]: Haaga, Kristian Agasøster, David Diego, Jo Brendryen, and Bjarte Hannisdal. "A simple test for causality in complex systems." arXiv preprint arXiv:2005.01860 (2020).
 """
