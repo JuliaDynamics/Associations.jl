@@ -1,6 +1,6 @@
 import Distributions: Uniform
 import StaticArrays: SVector
-import DynamicalSystems: DiscreteDynamicalSystem
+import DynamicalSystemsBase: DiscreteDynamicalSystem
 using LabelledArrays
 
 export ikeda

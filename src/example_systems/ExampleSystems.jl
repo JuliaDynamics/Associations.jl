@@ -2,7 +2,7 @@
 
 using Distributions
 using StatsBase
-using DynamicalSystems
+using DynamicalSystemsBase
 
 include("discretemaps/ar1.jl")
 include("discretemaps/ar1_bidir.jl")
