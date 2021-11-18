@@ -79,15 +79,10 @@ binning-based methods or the symbolic estimators for the fastest computations.
 using CausalityTools 
 
 # Some example time series
-x, y, z = rand(100), rand(100), rand(100)
+x, y = rand(100), rand(100)
 
-# Define prediction lags and estimation method
-ηs = 1:5
-method = VisitationFrequency(RectangularBinning(5))
-
-# 𝔸(x → y) and  𝔸(x → y | z)
-𝔸reg  = predictive_asymmetry(x, y, method, ηs) 
-𝒜reg = predictive_asymmetry(x, y, method, ηs, normalize = true, f = 1.0)
+# 𝔸(x → y) over prediction lags 1:5
+𝔸reg  = predictive_asymmetry(x, y, VisitationFrequency(RectangularBinning(5)), 1:5) 
 ```
 
 [^Haaga2020]: Haaga, Kristian Agasøster, David Diego, Jo Brendryen, and Bjarte Hannisdal. "A simple test for causality in complex systems." arXiv preprint arXiv:2005.01860 (2020).
