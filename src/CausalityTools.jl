@@ -1,7 +1,8 @@
 module CausalityTools
     using Reexport 
     import DynamicalSystemsBase: trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
-    export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
+    import DelayEmbeddings: Dataset
+    export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem, Dataset
     
     import TransferEntropy
     import TransferEntropy: transferentropy, mutualinfo, Hilbert
