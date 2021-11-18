@@ -38,4 +38,6 @@ ylabel!("Predictive asymmetry (bits)")
 savefig("random-pa.svg"); nothing # hide
 ```
 
-![](random-pa.svg.svg)
+![](random-pa.svg)
+
+As expected, because there is no dynamical coupling between the variables, the predictive asymmetry is around zero for all prediction lags.
