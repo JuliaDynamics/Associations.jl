@@ -55,11 +55,11 @@ PAGES = [
         "invariant_measure.md",
         "dataset.md",
     ],
-    "Tutorials" => [
-        "Mutual information" => [
-            "tutorial_mutualinfo.md",
-        ]
-    ],
+    #"Tutorials" => [
+    #    "Mutual information" => [
+    #        "tutorial_mutualinfo.md",
+    #    ]
+    #],
 
  ]
 
