@@ -6,11 +6,9 @@ mutualinfo
 
 ## Synthetic systems example
 
-# Mutual information on synthetic systems
-
 In this example we generate realizations of two different systems where we know the strength of coupling between the variables. Our aim is to compute mutual information $I(X; Y)$ between time series of each variable and assess how the magnitude of $I(X; Y)$ changes as we change the strength of coupling between $X$ and $Y$.
 
-## Defining the systems
+### Defining the systems
 
 Here we implement two of the example systems that come with the [CausalityTools.jl](https://github.com/JuliaDynamics/CausalityTools.jl) package:
 
@@ -19,7 +17,7 @@ Here we implement two of the example systems that come with the [CausalityTools.
 
 We use the default input parameter values (see [`ar1_unidir`](@ref) and [`logistic2_unidir`](@ref) for details) and below we toggle only the random initial conditions and the coupling strength parameter `c_xy`. For each value of `c_xy` we generate 1,000 unique realizations of the system and obtain 500-point time series of the coupled variables.
 
-## Estimating mutual information
+### Estimating mutual information
 
 Here we use the binning-based [`VisitationFrequency`](@ref) estimator. We summarize the distribution of $I(X; Y)$ values across all realizations using the median and quantiles encompassing 95 % of the values.
 
@@ -72,10 +70,9 @@ plot!(c, mi[:, 2, 2], label = "2D order-1 autoregressive", lc = "red",
     ribbon = (mi[:, 2, 2] - mi[:, 1, 2], mi[:, 3, 2] - mi[:, 2, 2]), c = "red", fillalpha = 0.3)
 xlabel!("Coupling strength")
 ylabel!("Mutual information")
-
-savefig("./mutualinfo_example.svg")
+savefig("./mutualinfo_example.svg") # hide
 ```
 
-![png](./mutualinfo_example.svg)
+![](./mutualinfo_example.svg)
 
 As expected, $I(X; Y)$ increases with coupling strength in a system-specific manner.
