@@ -1,6 +1,8 @@
 using Test
 using CausalityTools
-using DelayEmbeddings
+import DelayEmbeddings: Dataset
+import DynamicalSystemsBase: DiscreteDynamicalSystem, ContinuousDynamicalSystem
+
 
 include("methods/test_smeasure.jl")
 include("methods/test_joint_distance_distribution.jl")

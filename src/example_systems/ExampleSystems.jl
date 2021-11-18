@@ -2,7 +2,7 @@
 
 using Distributions
 using StatsBase
-using DynamicalSystemsBase
+using DynamicalSystemsBase, DelayEmbeddings
 
 include("discretemaps/ar1.jl")
 include("discretemaps/ar1_bidir.jl")
