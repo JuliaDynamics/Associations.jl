@@ -38,8 +38,6 @@ TransferOperator
 
 ```@docs
 NaiveKernel
-TreeDistance
-DirectDistance
 ```
 
 ## Nearest neighbor based
