@@ -15,7 +15,7 @@ those based on geometric measures.
 
 Geometrically based methods rely on delay reconstructions of the time series, and numerical 
 properties of these delay reconstructions, to infer causal/dynamical relationships. They take as input the
-time series and the embedding parameters.
+time series, and the embedding parameters are given as keyword arguments.
 
 - Cross mapping ([`crossmap`](@ref), [`convergentcrossmap`](@ref))
 - Joint distance distribution ([`jdd`](@ref))
