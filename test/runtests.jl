@@ -1,5 +1,6 @@
 using Test
 using CausalityTools
+using DelayEmbeddings, DynamicalSystemsBase
 
 include("methods/test_smeasure.jl")
 include("methods/test_joint_distance_distribution.jl")
