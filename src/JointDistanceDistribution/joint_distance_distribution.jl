@@ -109,7 +109,7 @@ end
         distance_metric = SqEuclidean(), B::Int = 10, D::Int = 2, τ::Int = 1, 
         μ0 = 0.0) → OneSampleTTest
 
-Perform a one sample t-test to check that the joint distance distribution [1] 
+Perform a one sample t-test to check that the joint distance distribution[^Amigo]
 computed from `source` to `target` is biased towards positive values, using the null 
 hypothesis that the mean of the distribution is `μ0`.
 
@@ -173,7 +173,7 @@ If you just want the p-value at 95% confidence, run
     is no coupling between `x` and `y` (default is `μ0 = 0.0`).
 
 ## References 
-[1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+[^Amigo]: Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
 function jdd(test::Type{OneSampleTTest}, source, target; 
         distance_metric = SqEuclidean(), 
