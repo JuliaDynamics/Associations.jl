@@ -10,7 +10,7 @@ end
     jdd(source, target; distance_metric = SqEuclidean(), 
         B::Int = 10, D::Int = 2, τ::Int = 1) → Vector{Float64}
 
-Compute the joint distance distribution [1] from `source` to `target` using 
+Compute the joint distance distribution [^1] from `source` to `target` using 
 the provided `distance_metric`, with `B` controlling the number of subintervals, 
 `D` the embedding dimension and `τ` the embedding lag.
 
@@ -34,7 +34,7 @@ jdd(x, y)
 
 
 ## References 
-[1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+[^1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
 function jdd(source, target;
         distance_metric = Euclidean(),
