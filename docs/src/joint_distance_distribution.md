@@ -119,7 +119,9 @@ savefig("jdd_heatmap.svg") # hide
 
 ![](jdd_heatmap.svg)
 
-The colorbar indicates the p-value. For sufficiently high coupling strengths, the test successfully identifies the couplings both from `x` to `y` and vice versa. For lower coupling strengths, we cannot reject the null hypothesis. 
+Values on the x-axis are the coupling strengths from `x` to `y`, and those on the y-axis are the coupling strengths from `y` to `x`. The colorbar indicates the p-value. 
+
+For sufficiently high coupling strengths, the test successfully identifies the couplings both from `x` to `y` and vice versa. For lower coupling strengths, we cannot reject the null hypothesis. 
 
 Note that using longer time series and more carefully tuned embeddings would likely lead to better performance.
 
