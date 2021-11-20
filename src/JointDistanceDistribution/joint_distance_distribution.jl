@@ -117,7 +117,6 @@ The interpretation of the t-test is that if we can reject the null, then the
 joint distance distribution is biased towards positive values, and then there 
 exists an underlying coupling from `source` to `target`. 
 
-
 ## Example
 
 ```julia 
@@ -149,13 +148,18 @@ Details:
     empirical standard error: 0.0215530451545668
 ```
 
-
 The lower bound of the confidence interval for the mean of the joint 
 distance distribution is `0.0185` at confidence level `α = 0.05`. The 
 meaning that the test falsely detected causality from `x` to `y`
-between these two random time series. To get the confidence intervals
-at confidence level `α`, use `confinf(jdd, α)`. If you just want the 
-p-value at 95% confidence, use `pvalue(jdd, tail = :right)`
+between these two random time series. 
+
+To get the confidence intervals at confidence level `α`, run 
+
+```confinf(jdd(OneSampleTTest, x, y), α)```. 
+
+If you just want the p-value at 95% confidence, run 
+
+```pvalue(jdd(OneSampleTTest, x, y), tail = :right)```
 
 ## Keyword arguments
 
