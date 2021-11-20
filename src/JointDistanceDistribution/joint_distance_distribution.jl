@@ -155,7 +155,7 @@ distance distribution is `0.0185` at confidence level `α = 0.05`. The
 meaning that the test falsely detected causality from `x` to `y`
 between these two random time series. To get the confidence intervals
 at confidence level `α`, use `confinf(jdd, α)`. If you just want the 
-p-value at 95% confidence, use `pvalue(jdd, tail = :left)`
+p-value at 95% confidence, use `pvalue(jdd, tail = :right)`
 
 ## Keyword arguments
 
