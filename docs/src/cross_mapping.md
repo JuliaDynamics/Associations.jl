@@ -81,8 +81,8 @@ savefig("ccm_naive.svg") # hide
 ![](ccm_naive.svg)
 
 As in the original CCM paper, we observe that the correlation between observed and 
-cross-map estimated values is stronger and converges faster when using ``M_x`` to 
-estimate ``\\tilde{y}(t)`` (green), than when using ``M_y`` to estimate ``\\tilde{x}(t)`` (black). 
+cross-map estimated values is stronger and converges faster when using ``M_y`` to 
+estimate ``x̃(t)`` (green), than when using ``M_x`` to estimate ``ỹ(t)`` (black). 
 Why? In this example, we set `c_xy = 0.1` and `c_yx = 0.02`. Therefore, *"... the much stronger effect of species X on Y implies faster convergence for predicting X than for Y"* (Sugihara et al., 2012)[^Sugihara2012].
 
 
@@ -134,6 +134,6 @@ savefig("ccm_bootstrap.svg") # hide
 ![](ccm_bootstrap.svg)
 
 When using bootstrapping, we get the same results as when contiguous segments of the 
-original time series: using ``M_y`` to estimate ``\\tilde{x}(t)``
+original time series: using ``M_y`` to estimate ``x̃(t)``
 converges faster than in the opposite direction due to the stronger influence from 
 `x` to `y` than vice versa. 
