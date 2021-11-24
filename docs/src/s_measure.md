@@ -21,14 +21,14 @@ xr, yr = rand(Uniform(-1, 1), npts), rand(Uniform(-1, 1), npts)
 Let's plot the time series.
 
 ```@example smeasure_random_henon
-p_det = plot(xlabel = "", ylabel = "Value", title = "Coupled Henon maps")
-plot!(x[1:100], label = "x", marker = stroke(:black), c = :black)
-plot!(y[1:100], label = "y", marker = stroke(:red), c = :red)
-p_rand = plot(xlabel = "Time step", ylabel = "Value", title = "Random time series")
-plot!(xr[1:100], label = "xr", c = :blue)
-plot!(yr[1:100], label = "yr", c = :purple)
+p_det = Plots.plot(xlabel = "", ylabel = "Value", title = "Coupled Henon maps")
+Plots.plot!(x[1:100], label = "x", marker = stroke(:black), c = :black)
+Plots.plot!(y[1:100], label = "y", marker = stroke(:red), c = :red)
+p_rand = Plots.plot(xlabel = "Time step", ylabel = "Value", title = "Random time series")
+Plots.plot!(xr[1:100], label = "xr", c = :blue)
+Plots.plot!(yr[1:100], label = "yr", c = :purple)
 
-plot(p_det, p_rand, layout = grid(2, 1), size = (382*2, 400), legend = :bottomright, 
+Plots.plot(p_det, p_rand, layout = Plots.grid(2, 1), size = (382*2, 400), legend = :bottomright, 
     tickfont = font(13), guidefont = font(13), legendfont = font(13))
 savefig("henon_random_timeseries.svg"); nothing # hide
 ```
@@ -52,11 +52,11 @@ ss_henon_xy = [s_measure(x, y, dx = 4, τx = 3, dy = 5, τy = 1, K = k) for k in
 ss_henon_yx = [s_measure(y, x, dx = 4, τx = 3, dy = 5, τy = 1, K = k) for k in ks]
 [ss_r_xy ss_r_yx ss_henon_xy ss_henon_yx]
 
-plot(xlabel = "# nearest neighbors (k)", ylabel = "S", ylims = (-0.05, 1.05))
-plot!(ks, ss_r_xy,  label = "random uncoupled system (x -> y)", marker = stroke(2), c = :black)
-plot!(ks, ss_r_yx,  label = "random uncoupled system (y -> x)", marker = stroke(2), c = :red)
-plot!(ks, ss_henon_xy, marker = stroke(2), label = "henon unidir (x -> y)")
-plot!(ks, ss_henon_yx, marker = stroke(2), label = "henon unidir (y -> x)")
+Plots.plot(xlabel = "# nearest neighbors (k)", ylabel = "S", ylims = (-0.05, 1.05))
+Plots.plot!(ks, ss_r_xy,  label = "random uncoupled system (x -> y)", marker = stroke(2), c = :black)
+Plots.plot!(ks, ss_r_yx,  label = "random uncoupled system (y -> x)", marker = stroke(2), c = :red)
+Plots.plot!(ks, ss_henon_xy, marker = stroke(2), label = "henon unidir (x -> y)")
+Plots.plot!(ks, ss_henon_yx, marker = stroke(2), label = "henon unidir (y -> x)")
 savefig("smeasure_random_henon.svg"); nothing # hide
 ```
 
