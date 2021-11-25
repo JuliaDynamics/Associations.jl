@@ -15,7 +15,7 @@ using DynamicalSystems, CausalityTools, Plots, Random, StatsBase
 
 Random.seed!(12234)
 
-function ulam(dx, x, p, t)
+function ulam_system(dx, x, p, t)
     f(x) = 2 - x^2
     ε = p[1]
     dx[1] = f(ε*x[length(dx)] + (1-ε)*x[1])
@@ -24,7 +24,7 @@ function ulam(dx, x, p, t)
     end
 end
 
-ds = DiscreteDynamicalSystem(ulam, rand(100) .- 0.5, [0.04])
+ds = DiscreteDynamicalSystem(ulam_system, rand(100) .- 0.5, [0.04])
 trajectory(ds, 1000; Ttr = 1000)
 
 εs = 0.02:0.02:1.0
