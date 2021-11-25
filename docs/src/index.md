@@ -7,7 +7,7 @@ For an updated overview of the field of causal inference, see for example Runge 
 
 ## Getting started
 
-Examples showcasing how to use the different methods work are provided under the respective documentation packages.
+Examples showing how to use the causal inference methods are provided in their respective documentation pages.
 Currently, this package provides two types of causal inference methods: those based on *entropy estimation*, and 
 those based on geometric measures.  
 
@@ -15,7 +15,7 @@ those based on geometric measures.
 
 Geometrically based methods rely on delay reconstructions of the time series, and numerical 
 properties of these delay reconstructions, to infer causal/dynamical relationships. They take as input the
-time series, and the embedding parameters are given as keyword arguments.
+time series, and embedding parameters (given as keyword arguments).
 
 - Cross mapping ([`crossmap`](@ref))
 - Joint distance distribution ([`jdd`](@ref))
@@ -25,14 +25,17 @@ time series, and the embedding parameters are given as keyword arguments.
 
 *Entropy* based methods for causal inference take as inputs the time series in question, and an entropy estimator of choice. Additional parameters are given as keyword arguments. 
 
-- Generalized entropy ([`genentropy`](@ref)) and fast histograms ([`binhist`](@ref))
-- Mutual information ([`mutualinfo`](@ref))
 - Transfer entropy ([`transferentropy`](@ref))
 - Predictive asymmetry ([`predictive_asymmetry`](@ref))
 
 We use entropy estimators from [Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl). 
 Which estimator should you use? See the [list of estimators](@ref estimators). 
 A good choice is to start with a [`VisitationFrequency`](@ref) estimator.
+
+We also provide estimators for generalized entropy and mutual information, though these are not causal inference methods per se.
+
+- Generalized entropy ([`genentropy`](@ref)) and fast histograms ([`binhist`](@ref))
+- Mutual information ([`mutualinfo`](@ref))
 
 ## Contributions/issues
 
