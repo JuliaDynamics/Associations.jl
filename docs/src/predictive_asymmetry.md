@@ -106,8 +106,8 @@ savefig("predasym.svg") # hide
 
 ![](predasym.svg)
 
-As expected, predictive asymmetry is positive in the direction ``X_1 \to X_2``, and 
-negative in the direction ``X_2 \to X_1``.
+As expected, predictive asymmetry is positive in the direction ``X_1 \\to X_2``, and 
+negative in the direction ``X_2 \\to X_1``.
 
 Are the results significant? We can test that using a surrogate test. We'll use random
 shuffle surrogates from the `TimeseriesSurrogates.jl` package. 
@@ -118,7 +118,7 @@ series. For each of those surrogate time series, we compute the predictive asymm
 and pick the value at `η = 10`
 
 ```@example predasym_ulam
-n_surr = 10
+n_surr = 100
 pas_x1x2_surr = zeros(length(εs), n_surr); 
 pas_x2x1_surr = zeros(length(εs), n_surr)
 
@@ -158,6 +158,6 @@ savefig("predasym_withsurr.svg") # hide
 
 ![](predasym_withsurr.svg)
 
-The predictive asymmetry in the direction ``X_1 \to X_2`` is above the 95th percentile of the surrogates for most parameters. Thus, we reject the null hypothesis that ``X_1`` does not influence ``X_2`` and accept the alternative hypothesis that ``X_1`` does in fact influence ``X_2``. In the context of causal inference, this means that there is evidence of directional dynamical coupling from ``X_1`` to ``X_2`` and that ``X_1`` is causally coupled to ``X_2``. 
+The predictive asymmetry in the direction ``X_1 \\to X_2`` is above the 95th percentile of the surrogates for most parameters. Thus, we reject the null hypothesis that ``X_1`` does not influence ``X_2`` and accept the alternative hypothesis that ``X_1`` does in fact influence ``X_2``. In the context of causal inference, this means that there is evidence of directional dynamical coupling from ``X_1`` to ``X_2`` and that ``X_1`` is causally coupled to ``X_2``. 
 
-In the oppposite direction, ``X_2 \to X_1``, where there should not be any directional coupling (by definition), the predictive asymmetries are below the surrogates, so we cannot reject the null hypothesis that ``X_2`` does not influence ``X_1``. Hence, there is no evidence of directional dynamical coupling from ``X_2`` to  ``X_1``.
+In the oppposite direction, ``X_2 \\to X_1``, where there should not be any directional coupling (by definition), the predictive asymmetries are below the surrogates, so we cannot reject the null hypothesis that ``X_2`` does not influence ``X_1``. Hence, there is no evidence of directional dynamical coupling from ``X_2`` to  ``X_1``.
