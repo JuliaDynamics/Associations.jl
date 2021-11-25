@@ -31,10 +31,10 @@ sys = logistic_bidir_sugihara(u₀ = [0.4, 0.2], c_xy = 0.1, c_yx = 0.02, rx = 3
 npts = 5000
 orbit = trajectory(sys, npts, Ttr = 10000)
 x, y = columns(orbit);
-Plots.plot(xlabel = "Time step", ylabel = "Value")
-Plots.plot!(x[1:200], label = "x")
-Plots.plot!(y[1:200], label = "y")
-Plots.savefig("ccm_sugihara_ts.svg") # hide
+plot(xlabel = "Time step", ylabel = "Value")
+plot!(x[1:200], label = "x")
+plot!(y[1:200], label = "y")
+savefig("ccm_sugihara_ts.svg") # hide
 ```
 
 ![](ccm_sugihara_ts.svg)
@@ -71,10 +71,10 @@ Ls = [10:10:100; 120:20:300; 350:50:1000]
 cs_xy_increasing_segments = [crossmap(x[1:L], y[1:L], d, τ) for L in Ls]
 cs_yx_increasing_segments = [crossmap(y[1:L], x[1:L], d, τ) for L in Ls]
 
-p_naive_segments = Plots.plot(legend = :bottomright, ylabel = "Correlation (ρ)", xlabel = "Library size (L)")
-Plots.plot!(Ls, cs_xy_increasing_segments, c = :black, lw = 2, ls = :dot, label = "cor(Y(t), Ỹ(t) | Mx), segments from start to L")
-Plots.plot!(Ls, cs_yx_increasing_segments, c = :green, lw = 2, ls = :dash, label = "cor(X(t), X̃(t) | My), segments from start to L")
-Plots.ylims!((-0.05, 1.05))
+p_naive_segments = plot(legend = :bottomright, ylabel = "Correlation (ρ)", xlabel = "Library size (L)")
+plot!(Ls, cs_xy_increasing_segments, c = :black, lw = 2, ls = :dot, label = "cor(Y(t), Ỹ(t) | Mx), segments from start to L")
+plot!(Ls, cs_yx_increasing_segments, c = :green, lw = 2, ls = :dash, label = "cor(X(t), X̃(t) | My), segments from start to L")
+ylims!((-0.05, 1.05))
 savefig("ccm_naive.svg") # hide
 ```
 
@@ -114,20 +114,20 @@ cs_xy_seg_upper = [quantile(cs_xy_seg[i], 0.975) for i = 1:length(Ls)] .- median
 cs_yx_seg_lower = median.(cs_yx_seg) .- [quantile(cs_yx_seg[i], 0.025) for i = 1:length(Ls)]
 cs_yx_seg_upper = [quantile(cs_yx_seg[i], 0.975) for i = 1:length(Ls)] .- median.(cs_yx_seg)
 
-p_random = Plots.plot(legend = :bottomright, ylabel = "Correlation (ρ)", xlabel = "Library size (L)")
-Plots.plot!(Ls, median.(cs_xy), ribbon = (cs_xy_lower, cs_xy_upper),
+p_random = plot(legend = :bottomright, ylabel = "Correlation (ρ)", xlabel = "Library size (L)")
+plot!(Ls, median.(cs_xy), ribbon = (cs_xy_lower, cs_xy_upper),
     label = "cor(Y(t), Ỹ(t)|Mx), libraries: random points", c = :black)
     plot!(Ls, median.(cs_xy_seg), ribbon = (cs_xy_seg_lower, cs_xy_seg_upper),
     label = "cor(Y(t), Ỹ(t)|Mx), libraries: random segments", c = :black, ls = :dash)
-Plots.ylims!((-0.05, 1.05))
+ylims!((-0.05, 1.05))
 
-Plots.plot!(Ls, median.(cs_yx), ribbon = (cs_yx_lower, cs_yx_upper),
+plot!(Ls, median.(cs_yx), ribbon = (cs_yx_lower, cs_yx_upper),
     label = "cor(X(t), X̃(t)|My), libraries: random points", c = :green)
-Plots.plot!(Ls, median.(cs_yx_seg), ribbon = (cs_yx_seg_lower, cs_yx_seg_upper), 
+plot!(Ls, median.(cs_yx_seg), ribbon = (cs_yx_seg_lower, cs_yx_seg_upper), 
     label = "cor(X(t), X̃(t)|My), libraries: random segments", c = :green, ls = :dot)
-Plots.ylims!((-0.05, 1.05))
+ylims!((-0.05, 1.05))
 
-#Plots.plot(p_random, p_segments, layout = Plots.grid(1, 2), size = (800, 350))
+#plot(p_random, p_segments, layout = grid(1, 2), size = (800, 350))
 savefig("ccm_bootstrap.svg") # hide
 ```
 
