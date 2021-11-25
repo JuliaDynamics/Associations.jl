@@ -8,8 +8,6 @@ For an updated overview of the field of causal inference, see for example Runge 
 ## Getting started
 
 Examples showing how to use the causal inference methods are provided in their respective documentation pages.
-Currently, this package provides two types of causal inference methods: those based on *entropy estimation*, and 
-those based on geometric measures.  
 
 ### Geometric methods
 
