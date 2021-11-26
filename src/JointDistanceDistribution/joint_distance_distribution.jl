@@ -1,27 +1,26 @@
-import HypothesisTests: OneSampleTTest
-import Distances: Metric, SqEuclidean, pairwise
-import DelayEmbeddings
+using HypothesisTests
+using Distances
+using DelayEmbeddings
 
 function normalise_minmax(x, vmin, vmax)
     (x - vmin)/(vmax - vmin)
 end
 
 """
-    joint_distance_distribution(source, target;
-        distance_metric = SqEuclidean(), 
-        B::Int = 10, 
-        D::Int = 2, τ::Int = 1) -> Vector{Float64}
+    jdd(source, target; distance_metric = SqEuclidean(), 
+        B::Int = 10, D::Int = 2, τ::Int = 1) → Vector{Float64}
 
-Compute the joint distance distribution [1] from `source` to `target` using 
+Compute the joint distance distribution [^1] from `source` to `target` using 
 the provided `distance_metric`, with `B` controlling the number of subintervals, 
 `D` the embedding dimension and `τ` the embedding lag.
 
 ## Example
 
-```julia 
+```julia
+using CausalityTools
 x, y = rand(1000), rand(1000)
 
-jdd = joint_distance_distribution(x, y)
+jdd(x, y)
 ```
 
 ## Keyword arguments
@@ -35,24 +34,24 @@ jdd = joint_distance_distribution(x, y)
 
 
 ## References 
-[1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+[^1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
-function joint_distance_distribution(source, target;
-        distance_metric = SqEuclidean(),
+function jdd(source, target;
+        distance_metric = Euclidean(),
         B::Int = 10, 
         D::Int = 2, 
-        τ::Int = 1
-    )
-
-    Ex = DelayEmbeddings.embed(source, D, τ)
-    Ey = DelayEmbeddings.embed(target, D, τ)
-
-    Mx = transpose(DelayEmbeddings.Matrix(Ex))
-    My = transpose(DelayEmbeddings.Matrix(Ey))
+        τ::Int = 1)
+    
+    js = ([1 for i = 1:D]...,)
+    τs = (collect(0:-τ:-(D-1)*τ)...,)
+    Ex = DelayEmbeddings.genembed(source, τs, js)
+    Ey = DelayEmbeddings.genembed(target, τs, js)
+    Mx = DelayEmbeddings.Matrix(Ex)
+    My = DelayEmbeddings.Matrix(Ey)
     
     npts = length(Ex)
-    Dx = pairwise(distance_metric, Mx, Mx, dims = 2)
-    Dy = pairwise(distance_metric, My, My, dims = 2)
+    Dx = pairwise(distance_metric, Mx, Mx, dims = 1)
+    Dy = pairwise(distance_metric, My, My, dims = 1)
     
     # Normalise the distances to the interval [0, 1]
     Dx_min = minimum(Dx[Dx .> 0])
@@ -105,15 +104,12 @@ function joint_distance_distribution(source, target;
     return Δjdd
 end
 
-
 """
-    joint_distance_distribution(test::OneSampleTTest, source, target, 
-        distance_metric = SqEuclidean(), 
-        B::Int = 10, 
-        D::Int = 2, τ::Int = 1, 
-        μ0 = 0.0) -> OneSampleTTest
+    jdd(test::OneSampleTTest, source, target;
+        distance_metric = SqEuclidean(), B::Int = 10, D::Int = 2, τ::Int = 1, 
+        μ0 = 0.0) → OneSampleTTest
 
-Perform a one sample t-test to check that the joint distance distribution [1] 
+Perform a one sample t-test to check that the joint distance distribution[^Amigo]
 computed from `source` to `target` is biased towards positive values, using the null 
 hypothesis that the mean of the distribution is `μ0`.
 
@@ -121,14 +117,13 @@ The interpretation of the t-test is that if we can reject the null, then the
 joint distance distribution is biased towards positive values, and then there 
 exists an underlying coupling from `source` to `target`. 
 
-
 ## Example
 
 ```julia 
+using CausalityTools, HypothesisTests
 x, y = rand(1000), rand(1000)
 
-jdd = joint_distance_distribution(OneSampleTTest, x, y)
-
+jdd(OneSampleTTest, x, y)
 ```
 
 which gives 
@@ -153,13 +148,18 @@ Details:
     empirical standard error: 0.0215530451545668
 ```
 
-
 The lower bound of the confidence interval for the mean of the joint 
 distance distribution is `0.0185` at confidence level `α = 0.05`. The 
 meaning that the test falsely detected causality from `x` to `y`
-between these two random time series. To get the confidence intervals
-at confidence level `α`, use `confinf(jdd, α)`. If you just want the 
-p-value at 95% confidence, use `pvalue(jdd, tail = :left)`
+between these two random time series. 
+
+To get the confidence intervals at confidence level `α`, run 
+
+```confinf(jdd(OneSampleTTest, x, y), α)```. 
+
+If you just want the p-value at 95% confidence, run 
+
+```pvalue(jdd(OneSampleTTest, x, y), tail = :right)```
 
 ## Keyword arguments
 
@@ -173,15 +173,15 @@ p-value at 95% confidence, use `pvalue(jdd, tail = :left)`
     is no coupling between `x` and `y` (default is `μ0 = 0.0`).
 
 ## References 
-[1] Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
+[^Amigo]: Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of Nonlinear Science 28.7 (2018): 075302.
 """
-function joint_distance_distribution(test::Type{OneSampleTTest}, source, target, 
+function jdd(test::Type{OneSampleTTest}, source, target; 
         distance_metric = SqEuclidean(), 
         B::Int = 10, 
         D::Int = 2, τ::Int = 1, 
         μ0 = 0.0)
 
-    Δjdd = joint_distance_distribution(source, target, 
+    Δjdd = jdd(source, target, 
         distance_metric = distance_metric, 
         B = B, 
         D = D, τ = τ)
@@ -189,6 +189,4 @@ function joint_distance_distribution(test::Type{OneSampleTTest}, source, target,
     OneSampleTTest(Δjdd, μ0)
 end 
 
-
-
-export joint_distance_distribution
+export jdd

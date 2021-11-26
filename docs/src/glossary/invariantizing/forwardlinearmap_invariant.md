@@ -1,4 +1,0 @@
-
-```@docs
-forwardlinearmap_invariant
-```
