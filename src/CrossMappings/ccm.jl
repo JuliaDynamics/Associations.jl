@@ -4,8 +4,8 @@ import DelayEmbeddings.Neighborhood: Theiler, bulkisearch, NeighborNumber
 export crossmap
 
 """
-    crossmap(x, y, d, τ; w = 0, correspondence_measure = Statistics.cor) → Float64
-    crossmap(x, y, d, τ, bootstrap_method::Symbol; w = 0, correspondence_measure = Statistics.cor,
+    crossmap(x, y, d, τ; r = 0, correspondence_measure = Statistics.cor) → Float64
+    crossmap(x, y, d, τ, bootstrap_method::Symbol; r = 0, correspondence_measure = Statistics.cor,
         method = :segment, L = ceil(Int, (length(x)-d*τ)*0.2), nreps = 100) → Vector{Float64}
 
 Compute the cross mapping [^Sugihara2012] between `x` and `y`, which is the correspondence (computed using 
@@ -17,9 +17,9 @@ Here, ``y(t)`` are the raw values of the time series `y`, and ``ỹ(t)`` are the
 computed from the out-of-sample embedding ``M_X`` constructed from the time series `x` with 
 embedding dimension `d` and embedding lag `τ`.
 
-The Theiler window `w` indicates how many temporal neighbors of the predictee is to be excluded 
-during the nearest neighbors search (the default `w = 0` excludes only the predictee itself, while 
-`w = 2` excludes the point itself plus its two nearest neighbors in time).
+The Theiler window `r` indicates how many temporal neighbors of the predictee is to be excluded 
+during the nearest neighbors search (the default `r = 0` excludes only the predictee itself, while 
+`r = 2` excludes the point itself plus its two nearest neighbors in time).
 
 If `bootstrap_method` is specified, then `nreps` different bootstrapped estimates of 
 `correspondence_measure(y(t), ỹ(t) | M_x)` are returned. The following bootstrap methods are available:
@@ -34,40 +34,39 @@ If `bootstrap_method` is specified, then `nreps` different bootstrapped estimate
 [^Sugihara2012]: Sugihara, George, et al. "Detecting causality in complex ecosystems." Science (2012): 1227079.[http://science.sciencemag.org/content/early/2012/09/19/science.1227079](http://science.sciencemag.org/content/early/2012/09/19/science.1227079)
 [^Luo2015]: "Questionable causality: Cosmic rays to temperature." Proceedings of the National Academy of Sciences Aug 2015, 112 (34) E4638-E4639; DOI: 10.1073/pnas.1510571112 Ming Luo, Holger Kantz, Ngar-Cheung Lau, Wenwen Huang, Yu Zhou
 """
-function crossmap(x, y, d, τ; correspondence_measure = Statistics.cor, w = 0) 
+function crossmap(x, y, d, τ; correspondence_measure = Statistics.cor, r = 0) 
     Mₓ = embed(x, d, τ); 
-    theiler = Theiler(w); 
+    theiler = Theiler(r); 
     tree = KDTree(Mₓ)
     idxs = bulkisearch(tree, Mₓ, NeighborNumber(d+1), theiler)
-    ỹ = copy(y)
-
+    ỹ = zeros(length(y))
+    
     for i in 1:length(Mₓ)
         J = idxs[i]
         xᵢ = Mₓ[i]
         n1 = norm(xᵢ - Mₓ[J[1]])
+   
         # If distance to nearest neighor is zero, then we get division by zero.
-        # If that is the case, set all weights all to zero.
-        if n1 == 0.0
-            w .= 0.0
-        else
-            w = [exp(-norm(xᵢ - Mₓ[j])/n1) for j in J]
-            w ./= sum(w)
-        end
+        # If that is the case, set all weights all to zero (or just skip 
+        # computing ỹᵢ, because it is already set to 0).
+        n1 > 0.0 || continue
+        w = [exp(-norm(xᵢ - Mₓ[j])/n1) for j in J]
+        w ./= sum(w)
         ỹ[i] = sum(w[k]*y[j] for (k, j) in enumerate(J))
     end
-
+    
     return correspondence_measure(y, ỹ)
 end
 
 function crossmap(x, y, d, τ, bootstrap_method::Symbol;
         L = ceil(Int, (length(x) - d * τ) * 0.2), nreps = 100, 
-        w = 0, correspondence_measure = Statistics.cor)
+        r = 0, correspondence_measure = Statistics.cor)
     
-        @assert length(x) == length(y)
+    @assert length(x) == length(y)
     @assert length(x) - d * τ > 0
 
     Mₓ = embed(x, d, τ); 
-    theiler = Theiler(w);
+    theiler = Theiler(r);
 
     # Compute correlations between out-of-sample target and embedding for `nreps` 
     # different training sets
@@ -113,21 +112,20 @@ function crossmap(x, y, d, τ, bootstrap_method::Symbol;
 
             # Depending on the input data, we might encounter a case where the distance from xᵢ
             # to its closest neighbor is indistinguishable from zero. In that case, we encounter
-            # division by zero when computing weights. In that case, we set all weights to zero.
+            # division by zero when computing weights. In that case, set weights to zero (but in
+            # practice, just continue to the next step, because ỹᵢ will is already initialized to 0)
             dist₁ = norm(xᵢ - nns[1])
+            dist₁ > 0.0 || continue
 
-            if dist₁ == 0.0
-                w .= 0.0
-            else 
-                for j = 1:d+1
-                    distⱼ = norm(xᵢ - nns[j])
-                    u[j] = exp(-distⱼ / dist₁)
-                end
-                for j = 1:d+1
-                    w[j] = u[j] / sum(u)
-                end
+            for j = 1:d+1
+                distⱼ = norm(xᵢ - nns[j])
+                u[j] = exp(-distⱼ / dist₁)
             end
-
+            s = sum(u)
+            for j = 1:d+1
+                w[j] = u[j] / s
+            end
+            
             # For each weight
             for j = 1:d+1
                 # Find the scalar value corresponding to this weight
