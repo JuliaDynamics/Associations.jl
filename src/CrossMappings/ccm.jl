@@ -35,7 +35,7 @@ If `bootstrap_method` is specified, then `nreps` different bootstrapped estimate
 [^Luo2015]: "Questionable causality: Cosmic rays to temperature." Proceedings of the National Academy of Sciences Aug 2015, 112 (34) E4638-E4639; DOI: 10.1073/pnas.1510571112 Ming Luo, Holger Kantz, Ngar-Cheung Lau, Wenwen Huang, Yu Zhou
 """
 function crossmap(x, y, d, τ; correspondence_measure = Statistics.cor, w = 0) 
-    Mₓ = embed(x, d, τ); 
+    Mₓ = crossmapembed(x, d, τ, CCMEmbedding()) 
     theiler = Theiler(w); 
     tree = KDTree(Mₓ)
     idxs = bulkisearch(tree, Mₓ, NeighborNumber(d+1), theiler)
@@ -63,10 +63,10 @@ function crossmap(x, y, d, τ, bootstrap_method::Symbol;
         L = ceil(Int, (length(x) - d * τ) * 0.2), nreps = 100, 
         w = 0, correspondence_measure = Statistics.cor)
     
-        @assert length(x) == length(y)
+    @assert length(x) == length(y)
     @assert length(x) - d * τ > 0
 
-    Mₓ = embed(x, d, τ); 
+    Mₓ = crossmapembed(x, d, τ, CCMEmbedding()) 
     theiler = Theiler(w);
 
     # Compute correlations between out-of-sample target and embedding for `nreps` 
