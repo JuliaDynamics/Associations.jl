@@ -1,9 +1,9 @@
 # CausalityTools
 
-[![CI](https://github.com/juliadynamics/CausalityTools.jl/workflows/CI/badge.svg)](https://github.com/JuliaDynamics/CausalityTools.jl/actions)
-[![](https://img.shields.io/badge/docs-latest_tagged-blue.svg)](https://juliadynamics.github.io/CausalityTools.jl/stable/)
-[![](https://img.shields.io/badge/docs-dev_(master)-blue.svg)](https://juliadynamics.github.io/CausalityTools.jl/dev/)
-[![codecov](https://codecov.io/gh/JuliaDynamics/CausalityTools.jl/branch/master/graph/badge.svg?token=6XlPGg5nRG)](https://codecov.io/gh/JuliaDynamics/CausalityTools.jl)
+[![CI](https://github.com/juliadynamics/TransferEntropy.jl/workflows/CI/badge.svg)](https://github.com/JuliaDynamics/TransferEntropy.jl/actions)
+[![](https://img.shields.io/badge/docs-latest_tagged-blue.svg)](https://juliadynamics.github.io/TransferEntropy.jl/stable/)
+[![](https://img.shields.io/badge/docs-dev_(master)-blue.svg)](https://juliadynamics.github.io/TransferEntropy.jl/dev/)
+[![codecov](https://codecov.io/gh/JuliaDynamics/TransferEntropy.jl/branch/master/graph/badge.svg?token=6XlPGg5nRG)](https://codecov.io/gh/JuliaDynamics/TransferEntropy.jl)
 
 `CausalityTools.jl` provides methods for causal inference and detection of dynamical coupling based on time series.
 
