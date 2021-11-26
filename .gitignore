@@ -1,6 +1,5 @@
 docs/Manifest.toml
 docs/build/*
-some_docs/*
 Manifest.toml
 *.scss
 *.css
