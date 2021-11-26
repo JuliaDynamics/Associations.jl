@@ -54,12 +54,6 @@ PAGES = [
         "invariant_measure.md",
         "dataset.md",
     ],
-    #"Tutorials" => [
-    #    "Mutual information" => [
-    #        "tutorial_mutualinfo.md",
-    #    ]
-    #],
-
  ]
 
 makedocs(
@@ -71,7 +65,7 @@ makedocs(
         ],
         ),
     sitename = "CausalityTools.jl",
-    authors = "Kristian Agasøster Haaga, Tor Einar Møller",
+    authors = "Kristian Agasøster Haaga, Tor Einar Møller, George Datseris",
     pages = PAGES
 )
 
