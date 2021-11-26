@@ -121,8 +121,9 @@ function crossmap(x, y, d, τ, bootstrap_method::Symbol;
                 distⱼ = norm(xᵢ - nns[j])
                 u[j] = exp(-distⱼ / dist₁)
             end
+            s = sum(u)
             for j = 1:d+1
-                w[j] = u[j] / sum(u)
+                w[j] = u[j] / s
             end
             
             # For each weight
