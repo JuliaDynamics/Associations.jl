@@ -15,6 +15,7 @@ module CausalityTools
     include("CrossMappings/CrossMappings.jl")
     include("SMeasure/smeasure.jl")
     include("PredictiveAsymmetry/PredictiveAsymmetry.jl")
+    include("EmpiricalDynamicalModelling/EmpiricalDynamicalModelling.jl")
     include("example_systems/ExampleSystems.jl")
 
     using Requires 
