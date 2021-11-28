@@ -57,9 +57,8 @@ d, τ = 2, 1
 for (i, a) in enumerate(as)
     for (j, b) in enumerate(bs)
         s = nonlinear_sindriver(a = a, b = a, c = c)
-        orbit = trajectory(s, npts, Ttr = 10000)
-        X, Y = columns(orbit)
-        # Use the segment bootstrap estimator, take the mean of 50 reps over segments of # length L = 200
+        X, Y = columns(trajectory(s, npts, Ttr = 10000))
+        # Use the segment bootstrap estimator, take the mean of 50 reps over segments of length L = 200
         pai_xys[i, j] = pai(X, Y, d, τ, :segment, L = 200, nreps = 50) |> mean
         pai_yxs[i, j] = pai(Y, X, d, τ, :segment, L = 200, nreps = 50) |> mean
     end
