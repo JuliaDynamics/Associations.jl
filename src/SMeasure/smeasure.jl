@@ -20,8 +20,12 @@ using NearestNeighbors, Distances, Neighborhood, DelayEmbeddings
         K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
         dy::Int = 2, τy::Int = 1) → Float64
 
-S-measure test [1] for the directional dependence between univariate/multivariate time 
-series `x` and `y`.
+S-measure [^Quiroga2000] for the directional dependence between 
+univariate/multivariate time series `x` and `y`. 
+
+Returns a scalar `s ∈ [0, 1]`, where `s = 0` indicates independence between `x` and `y`, 
+and higher values indicate synchronization between `x` and `y`, with complete 
+synchronization for `s = 1.0`.
 
 ## Input data 
 
@@ -85,11 +89,7 @@ x, y = orbit[:, 1], orbit[:, 2]
 s_measure(x, y, dx = 4, τx = 3, dy = 5, τy = 1)
 ```
 
-## References
-
-Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000]
-“Learning driver-response relationships from synchronization patterns,” 
-Phys. Rev. E61(5), 5142–5148.
+[^Quiroga2000]: Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000] “Learning driver-response relationships from synchronization patterns,” Phys. Rev. E61(5), 5142–5148.
 """
 function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int = 3, 
         metric = SqEuclidean(),
