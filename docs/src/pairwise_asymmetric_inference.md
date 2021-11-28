@@ -66,7 +66,7 @@ for (i, a) in enumerate(as)
 end
 ```
 
-Now that we have computed the PAI in both directions, we define a measure of directionality as the difference between PAI in the ``X`` to ``Y`` direction and in the ``Y`` to ``X`` direction, so that if ``X`` drives ``Y``, then ``\\Delta < 0``.
+Now that we have computed the PAI in both directions, we define a measure of directionality as the difference between PAI in the ``X \to Y`` direction and in the ``Y \to X`` direction, so that if ``X`` drives ``Y``, then ``\Delta < 0``.
 
 ```@example pai_ex
 Δ = pai_xys .- pai_yxs
