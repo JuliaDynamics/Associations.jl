@@ -56,8 +56,8 @@ npts = 2000
 d, τ = 2, 1
 for (i, a) in enumerate(as)
     for (j, b) in enumerate(bs)
-        sys = nonlinear_sindriver(a = a, b = a, c = c)
-        orbit = trajectory(sys, npts, Ttr = 10000)
+        s = nonlinear_sindriver(a = a, b = a, c = c)
+        orbit = trajectory(s, npts, Ttr = 10000)
         X, Y = columns(orbit)
         # Use the segment bootstrap estimator, take the mean of 50 reps over segments of # length L = 200
         pai_xys[i, j] = pai(X, Y, d, τ, :segment, L = 200, nreps = 50) |> mean
@@ -66,7 +66,7 @@ for (i, a) in enumerate(as)
 end
 ```
 
-Now that we have computed the PAI in both directions, we define a measure of directionality as ``\\Delta = cor(y(t), \\tilde{y}(t) | M_{xy}) - cor(x(t), \\tilde{x}(t) | M_{yx})``, so that ``X`` drives ``Y``, then ``\\Delta < 0``.
+Now that we have computed the PAI in both directions, we define a measure of directionality as the difference between PAI in the ``X \\to Y`` direction and in the ``Y \\to X`` direction, so that if ``X`` drives ``Y``, then ``\\Delta < 0``.
 
 ```@example pai
 Δ = pai_xys .- pai_yxs
