@@ -103,7 +103,9 @@ plot(legend = :bottomleft, ylabel = "Correlation coefficient (ρ)",
 hline!([0], ls = :dash, label = "", color = :grey)
 scatter!(1:kmax, cors, label = "tent map", marker = :star)
 scatter!(1:kmax, cors_sine, label = "sine")
+savefig("simplex_correlation_sine_tent.svg") # hide
 ```
 
-In contrast to the tent map, where prediction accuracy drops off and stabilizes around zero for increasing `k`, 
-the prediction accuracy is rather insensitive to the choice of `k`. 
+![](simplex_correlation_sine_tent.svg)
+
+In contrast to the tent map, for which prediction accuracy drops off and stabilizes around zero for increasing `k`, the prediction accuracy is rather insensitive to the choice of `k` for the noisy sine time series. 
