@@ -9,7 +9,7 @@ pai
 Let's try to reproduce figure 8 in McCracken & Weigel (2014)[^McCracken2014]. We'll start by defining the their example B (equations 6-7). This system consists of two
 variables ``X`` and ``Y``, where ``X`` drives ``Y``.
 
-```@example pai
+```@example pai_ex
 using CausalityTools, DynamicalSystems, Plots, StatsBase, Statistics, Distributions; gr()
 
 function eom_nonlinear_sindriver(dx, x, p, n)
@@ -45,7 +45,7 @@ savefig("pai_ts.svg") # hide
 
 Now, let's generate such time series for many different values of the parameters `a` and `b`, and compute PAI for fixed `p = 2.0`. This will replicate the upper right panel of figure 8 in the original paper.
 
-```@example pai
+```@example pai_ex
 as = 0.25:0.25:4.0
 bs = 0.25:0.25:4.0
 
@@ -66,9 +66,9 @@ for (i, a) in enumerate(as)
 end
 ```
 
-Now that we have computed the PAI in both directions, we define a measure of directionality as the difference between PAI in the ``X \\to Y`` direction and in the ``Y \\to X`` direction, so that if ``X`` drives ``Y``, then ``\\Delta < 0``.
+Now that we have computed the PAI in both directions, we define a measure of directionality as the difference between PAI in the ``X`` to ``Y`` direction and in the ``Y`` to ``X`` direction, so that if ``X`` drives ``Y``, then ``\\Delta < 0``.
 
-```@example pai
+```@example pai_ex
 Δ = pai_xys .- pai_yxs
 
 clr = cgrad(:magma, categorical = true)
