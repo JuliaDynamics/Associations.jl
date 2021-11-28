@@ -97,7 +97,7 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
         theiler_window::Int = 0 # only point itself excluded
         ) where {D1, D2, T}
     
-    # # Match length of datasets by excluding end points.
+    # Match length of datasets by excluding end points.
     lx = length(x); ly = length(y)
     lx > ly ? X = x[1:ly, :] : X = x
     ly > lx ? Y = y[1:lx, :] : Y = y
@@ -107,14 +107,16 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
     treeY = searchstructure(KDTree, Y, tree_metric)
 
     # Pre-allocate vectors to hold indices and distances during loops
-    dists_x = Vector{T}(undef, K)
-    dists_x_cond_y = Vector{T}(undef, K)
+    dists_x = zeros(T, K)
+    dists_x_cond_y = zeros(T, K)
 
-    # Mean squared distances in X
-    Rx = Vector{T}(undef, N)
+    # Mean squared distances in X, and 
+    # mean squared distances in X conditioned on Y
+    Rx = zeros(T, N)
+    Rx_cond_y = zeros(T, N)
 
-    # Mean squared distances in X conditioned on Y
-    Rx_cond_y = Vector{T}(undef, N)
+    # Search for the K nearest neighbors of each points in both X and Y
+    treeX = searchstructure(KDTree, X, tree_metric)
 
     # use one more neighbor, because we need to excluded the first 
     # (itself) afterwards (distance to itself is zero)
