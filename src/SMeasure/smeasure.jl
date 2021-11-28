@@ -20,7 +20,7 @@ using NearestNeighbors, Distances, Neighborhood, DelayEmbeddings
         K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
         dy::Int = 2, τy::Int = 1) → Float64
 
-S-measure [^Quiroga2000] for the directional dependence between 
+S-measure [^Grassberger1999][^Quiroga2000] for the directional dependence between 
 univariate/multivariate time series `x` and `y`. 
 
 Returns a scalar `s ∈ [0, 1]`, where `s = 0` indicates independence between `x` and `y`, 
@@ -90,6 +90,7 @@ s_measure(x, y, dx = 4, τx = 3, dy = 5, τy = 1)
 ```
 
 [^Quiroga2000]: Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000] “Learning driver-response relationships from synchronization patterns,” Phys. Rev. E61(5), 5142–5148.
+[^Grassberger1999]: Arnhold, J., Grassberger, P., Lehnertz, K., & Elger, C. E. (1999). A robust method for detecting interdependences: application to intracranially recorded EEG. Physica D: Nonlinear Phenomena, 134(4), 419-430.
 """
 function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int = 3, 
         metric = SqEuclidean(),
