@@ -103,9 +103,6 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
     ly > lx ? Y = y[1:lx, :] : Y = y
     N = length(X)
 
-    treeX = searchstructure(KDTree, X, tree_metric)
-    treeY = searchstructure(KDTree, Y, tree_metric)
-
     # Pre-allocate vectors to hold indices and distances during loops
     dists_x = zeros(T, K)
     dists_x_cond_y = zeros(T, K)
@@ -117,28 +114,26 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
 
     # Search for the K nearest neighbors of each points in both X and Y
     treeX = searchstructure(KDTree, X, tree_metric)
-
-    # use one more neighbor, because we need to excluded the first 
-    # (itself) afterwards (distance to itself is zero)
-    neighborhoodtype = NeighborNumber(K + 1) 
-        
-    idxs_X = bulkisearch(treeX, X, neighborhoodtype)
-    idxs_Y = bulkisearch(treeY, Y, neighborhoodtype)
+    treeY = searchstructure(KDTree, Y, tree_metric)
+    neighborhoodtype, theiler = NeighborNumber(K), Theiler(0)
+    idxs_X = bulkisearch(treeX, X, neighborhoodtype, theiler)
+    idxs_Y = bulkisearch(treeY, Y, neighborhoodtype, theiler)
     
-    @inbounds for i in 1:N
-        @views pxᵢ, pyᵢ = X[i], Y[i]
+    for n in 1:N
+        pxₙ = X[n]
     
-        for j = 2:K
-            dists_x[j] = @views evaluate(metric, pxᵢ, X[idxs_X[i][j]])
-            dists_x_cond_y[j] = @views evaluate(metric, pxᵢ, X[idxs_Y[i][j]])
+        for j = 1:K
+            rₙⱼ = idxs_X[n][j] # nearest neighbor indices in X
+            sₙⱼ = idxs_Y[n][j] # nearest neighbor indices in Y
+            dists_x[j] = evaluate(metric, pxₙ, X[rₙⱼ])
+            dists_x_cond_y[j] = evaluate(metric, pxₙ, X[sₙⱼ])
         end
         
-        Rx[i] = sum(dists_x) / K
-        Rx_cond_y[i] = sum(dists_x_cond_y) / K
+        Rx[n] = sum(dists_x) / K
+        Rx_cond_y[n] = sum(dists_x_cond_y) / K
     end
-
-    S = sum(Rx ./ Rx_cond_y) / N
-    return S
+    
+    return sum(Rx ./ Rx_cond_y) / N
 end
 
 function s_measure(x::AbstractVector{T}, y::AbstractVector{T}; K::Int = 3,
