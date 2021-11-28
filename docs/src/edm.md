@@ -85,7 +85,7 @@ The main point of Sugihara & May's paper was that this drop-off of prediction ac
 
 Let's demonstrate this by also investigating how the correlation between observed and predicted values behaves as a function of `k` for a regular, non-chaotic time series. We'll use a sine wave with additive noise.
 
-```@example
+```@example simplex_projection
 𝒩 = Uniform(-0.5, 0.5)
 xs = 0.0:1.0:2000.0
 r = sin.(0.5 .* xs) .+ rand(𝒩, length(xs))
