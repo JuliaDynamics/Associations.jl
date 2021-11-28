@@ -109,3 +109,93 @@ savefig("simplex_correlation_sine_tent.svg") # hide
 ![](simplex_correlation_sine_tent.svg)
 
 In contrast to the tent map, for which prediction accuracy drops off and stabilizes around zero for increasing `k`, the prediction accuracy is rather insensitive to the choice of `k` for the noisy sine time series. 
+
+## S-map
+
+```@docs
+smap
+```
+
+The s-map, or sequential locally weighted global map, was introduced in Sugihara (1994)[^Sugihara1994]. The s-map approximates the dynamics of a system as a locally weighted global map, with a tuning parameter ``\theta`` that controls the degree of nonlinearity in the model. For ``\theta = 0``, the model is the maximum likelihood global linear solution (of eq. 2 in Sugihara, 1994), and for increasing ``\theta > 0``, the model becomes increasingly nonlinear and localized (Sugihara, 1996)[^Sugihara1996].
+
+When such a model has been constructed, it be used as prediction tool for out-of-sample points. It extends the prediction power of the simplex projection method, which only approximates the dynamics with a piecewise linear map. Let's elaborate with an example.
+
+### Example: prediction power for the Lorenz system
+
+In our implementation of `smap`, the input is a multivariate dataset - which can be a `Dataset` of either the raw variables of a multivariate dynamical system, or a `Dataset` containing an embedding of a single time series. 
+Here, we'll show an example of the former.
+
+Let's generate an example orbit from a bidirectionally coupled set of Lorenz systems. We'll use the built-in 
+`CausalityTools.ExampleSystems.lorenz_lorenz_bidir` system, and select the first three variables for analysis.
+
+```@example smap_lorenz
+using CausalityTools, Plots, DynamicalSystems, Statistics; gr()
+
+sys = CausalityTools.ExampleSystems.lorenz_lorenz_bidir()
+T, Δt = 150, 0.05
+lorenz = trajectory(sys, T, Δt = Δt, Ttr = 100)[:, 1:3]
+p_orbit = plot(xlabel = "x", ylabel = "y", zlabel = "z")
+plot!(columns(lorenz)..., marker = :circle, label = "", ms = 2, lα = 0.5)
+savefig(lorenz_attractor.svg) # hide
+```
+
+![](lorenz_attractor.svg)
+
+Now, we compute the `k`-step forward predictions for `k` ranging from `1` to `15`. The tuning parameter `θ` 
+varies from `0.0` (linear model) to `2.0` (strongly nonlinear model). Our goal is to see which model 
+yields the best predictions across multiple `k`.
+
+We'll use the first 500 points of the orbit to train the model. Then, using that model, we try to
+predict the next 500 points (which are not part of the training set). 
+Finally, we compute the correlation between the predicted values and the observed values, which measures
+the model prediction skill. This procedure is repeated for each combination of `k` and `θ`.
+
+```@example smap_lorenz
+ks, θs = 1:15, 0.0:0.5:2.0
+n_trainees, n_predictees = 500, 500;
+
+# Compute correlations between predicted values `preds` and actual values `truths` 
+# for all parameter combinations
+cors = zeros(length(ks), length(θs))
+for (i, k) in enumerate(ks)
+    for (j, θ) in enumerate(θs)
+        pred = n_trainees+1:n_trainees+n_predictees
+        train = 1:n_trainees
+
+        preds, truths = smap(lorenz, θ = θ, k = k, trainees = train, predictees = pred)
+        cors[i, j] = cor(preds, truths)
+    end
+end
+
+p_θ_k_sensitivity = plot(xlabel = "Prediction time (k)", ylabel = "cor(observed, predicted)", 
+    legend = :bottomleft, ylims = (-1.1, 1.1))
+hline!([0], ls = :dash, c = :grey, label = "")
+markers = [:star :circle :square :star5 :hexagon :circle :star]
+cols = [:black, :red, :blue, :green, :purple, :grey, :black]
+labels = ["θ = $θ" for θ in θs]
+for i = 1:length(θs)
+    plot!(ks, cors[:, i], marker = markers[i], c = cols[i], ms = 5, label = labels[i])
+end
+
+# Let's also plot the subset of points we're actually using.
+p_orbit = plot(columns(lorenz[1:n_trainees+n_predictees])..., marker = :circle, label = "", ms = 2, lα = 0.5)
+
+plot(p_orbit, p_θ_k_sensitivity, layout = grid(1, 2), size = (700, 400))
+savefig("smap_sensitivity_lorenz.svg") # hide
+```
+
+![](smap_sensitivity_lorenz.svg)
+
+The nonlinear models (colored lines and symbols) far outperform the linear model (black line + stars).
+
+Because the predictions for our system improves with increasingly nonlinear models, it indicates that our 
+system has some inherent nonlinearity. This is, of course, correct, since our Lorenz system is chaotic.
+
+A formal way to test the presence of nonlinearity is, for example, to define the null hypothesis 
+"H0: predictions do not improve when using an equivalent nonlinear versus a linear model" (equivalent in the sense  that the only parameter is `θ`) or, equivalently, "`H0: ρ_linear = ρ_nonlinear`". If predictions do in fact improve, we
+instead accept the alternative hypothesis that prediction *do* improve when using nonlinear models versus using linear models. This can be formally tested using a z-statistic [^Sugihara1994].
+
+## References
+
+[^Sugihara1994]: Sugihara, G. (1994). Nonlinear forecasting for the classification of natural time series. Philosophical Transactions of the Royal Society of London. Series A: Physical and Engineering Sciences, 348(1688), 477-495.
+[^Sugihara1996]: Sugihara, George, et al. "Nonlinear control of heart rate variability in human infants." Proceedings of the National Academy of Sciences 93.6 (1996): 2608-2613.
