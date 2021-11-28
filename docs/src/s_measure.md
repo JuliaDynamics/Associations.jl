@@ -40,20 +40,18 @@ We'll also do the same for the Henon maps.
 
 The test parameters are embedding dimensions (`dx` for the source and `dy` for the target), the embedding lags (`τx` for the source and `τy` for the target), and the number of nearest neighbors `K`. We'll compute the test with fixed embedding parameters, but a varying number of nearest neighbors (`ks = 2:10`).
 
-For the sake of demonstration, we'll use 4-dimensional embedding with embedding lag 3 for the source, and a 5-dimensional embedding with embedding lag 1 for the target. For a real use case, these embedding parameters should be 
-chosen more carefully.
+For the sake of demonstration, we'll use the same embedding parameters both for the source and for the target, for all analyses. For a real use case, embedding parameters should be chosen more carefully, and will, in general, be different for the source and for the target.
 
 ```@example smeasure_random_henon
-# Decide on some embedding parameters
 dx, dy = 5, 5
 τx, τy = 1, 1
 
 # Compute the s-measures for different values of k
 ks = 2:10
-ss_r_xy = [s_measure2(xr, yr, dx = dx, τx = τx, dy = dy, τy = τy, K = k) for k in ks]
-ss_r_yx = [s_measure2(yr, xr, dx = dx, τx = τx, dy = dy, τy = τy, K = k) for k in ks]
-ss_henon_xy = [s_measure2(x, y, dx = dx, τx = τx, dy = dy, τy = τy, K = k) for k in ks]
-ss_henon_yx = [s_measure2(y, x, dx = dx, τx = τx, dy = dy, τy = τy, K = k) for k in ks]
+ss_r_xy = [s_measure(xr, yr, dx = dx, τx = τx, dy = dy, τy = τy, K = k) for k in ks]
+ss_r_yx = [s_measure(yr, xr, dx = dx, τx = τx, dy = dy, τy = τy, K = k) for k in ks]
+ss_henon_xy = [s_measure(x, y, dx = dx, τx = τx, dy = dy, τy = τy, K = k) for k in ks]
+ss_henon_yx = [s_measure(y, x, dx = dx, τx = τx, dy = dy, τy = τy, K = k) for k in ks]
 
 plot(xlabel = "# nearest neighbors (k)", ylabel = "S", ylims = (-0.05, 1.05))
 plot!(ks, ss_r_xy,  label = "random uncoupled system (x -> y)", marker = stroke(2), c = :black)
