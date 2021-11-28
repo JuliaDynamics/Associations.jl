@@ -4,12 +4,7 @@ using Reexport
 @reexport module SMeasure
 export s_measure
 
-import Distances: Metric, SqEuclidean, evaluate, Euclidean
-import NearestNeighbors: KDTree
-import ChaosTools: FixedMassNeighborhood, neighborhood
-using Neighborhood
-using ChaosTools
-using DelayEmbeddings
+using NearestNeighbors, Distances, Neighborhood, DelayEmbeddings
 
 
 """
@@ -25,8 +20,12 @@ using DelayEmbeddings
         K::Int = 2, metric = SqEuclidean(), tree_metric = Euclidean(),
         dy::Int = 2, τy::Int = 1) → Float64
 
-S-measure test [1] for the directional dependence between univariate/multivariate time 
-series `x` and `y`.
+S-measure [^Grassberger1999][^Quiroga2000] for the directional dependence between 
+univariate/multivariate time series `x` and `y`. 
+
+Returns a scalar `s ∈ [0, 1]`, where `s = 0` indicates independence between `x` and `y`, 
+and higher values indicate synchronization between `x` and `y`, with complete 
+synchronization for `s = 1.0`.
 
 ## Input data 
 
@@ -90,11 +89,8 @@ x, y = orbit[:, 1], orbit[:, 2]
 s_measure(x, y, dx = 4, τx = 3, dy = 5, τy = 1)
 ```
 
-## References
-
-Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000]
-“Learning driver-response relationships from synchronization patterns,” 
-Phys. Rev. E61(5), 5142–5148.
+[^Quiroga2000]: Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000] “Learning driver-response relationships from synchronization patterns,” Phys. Rev. E61(5), 5142–5148.
+[^Grassberger1999]: Arnhold, J., Grassberger, P., Lehnertz, K., & Elger, C. E. (1999). A robust method for detecting interdependences: application to intracranially recorded EEG. Physica D: Nonlinear Phenomena, 134(4), 419-430.
 """
 function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int = 3, 
         metric = SqEuclidean(),
@@ -102,46 +98,43 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
         theiler_window::Int = 0 # only point itself excluded
         ) where {D1, D2, T}
     
-    # # Match length of datasets by excluding end points.
+    # Match length of datasets by excluding end points.
     lx = length(x); ly = length(y)
     lx > ly ? X = x[1:ly, :] : X = x
     ly > lx ? Y = y[1:lx, :] : Y = y
     N = length(X)
 
+    # Pre-allocate vectors to hold indices and distances during loops
+    dists_x = zeros(T, K)
+    dists_x_cond_y = zeros(T, K)
+
+    # Mean squared distances in X, and 
+    # mean squared distances in X conditioned on Y
+    Rx = zeros(T, N)
+    Rx_cond_y = zeros(T, N)
+
+    # Search for the K nearest neighbors of each points in both X and Y
     treeX = searchstructure(KDTree, X, tree_metric)
     treeY = searchstructure(KDTree, Y, tree_metric)
-
-    # Pre-allocate vectors to hold indices and distances during loops
-    dists_x = Vector{T}(undef, K)
-    dists_x_cond_y = Vector{T}(undef, K)
-
-    # Mean squared distances in X
-    Rx = Vector{T}(undef, N)
-
-    # Mean squared distances in X conditioned on Y
-    Rx_cond_y = Vector{T}(undef, N)
-
-    # use one more neighbor, because we need to excluded the first 
-    # (itself) afterwards (distance to itself is zero)
-    neighborhoodtype = NeighborNumber(K + 1) 
-        
-    idxs_X = bulkisearch(treeX, X, neighborhoodtype)
-    idxs_Y = bulkisearch(treeY, Y, neighborhoodtype)
+    neighborhoodtype, theiler = NeighborNumber(K), Theiler(0)
+    idxs_X = bulkisearch(treeX, X, neighborhoodtype, theiler)
+    idxs_Y = bulkisearch(treeY, Y, neighborhoodtype, theiler)
     
-    @inbounds for i in 1:N
-        @views pxᵢ, pyᵢ = X[i], Y[i]
+    for n in 1:N
+        pxₙ = X[n]
     
-        for j = 2:K
-            dists_x[j] = @views evaluate(metric, pxᵢ, X[idxs_X[i][j]])
-            dists_x_cond_y[j] = @views evaluate(metric, pxᵢ, X[idxs_Y[i][j]])
+        for j = 1:K
+            rₙⱼ = idxs_X[n][j] # nearest neighbor indices in X
+            sₙⱼ = idxs_Y[n][j] # nearest neighbor indices in Y
+            dists_x[j] = evaluate(metric, pxₙ, X[rₙⱼ])
+            dists_x_cond_y[j] = evaluate(metric, pxₙ, X[sₙⱼ])
         end
         
-        Rx[i] = sum(dists_x) / K
-        Rx_cond_y[i] = sum(dists_x_cond_y) / K
+        Rx[n] = sum(dists_x) / K
+        Rx_cond_y[n] = sum(dists_x_cond_y) / K
     end
-
-    S = sum(Rx ./ Rx_cond_y) / N
-    return S
+    
+    return sum(Rx ./ Rx_cond_y) / N
 end
 
 function s_measure(x::AbstractVector{T}, y::AbstractVector{T}; K::Int = 3,
