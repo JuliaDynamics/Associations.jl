@@ -56,7 +56,7 @@ savefig("simplex_correspondence.svg") # hide
 
 ![](simplex_correspondence.svg)
 
-There is high correlation between observed and predicted values when predicting only one time step `k = 1`
+There is high correlation between observed and predicted values when predicting only one time step (`k = 1`)
 into the future. As `k` increases, the performance drops off. Let's investigate this systematically.
 
 ```@example simplex_projection
