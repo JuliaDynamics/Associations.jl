@@ -120,7 +120,7 @@ The simplex projection method can also be used to determine the optimal embeddin
 Given an embedding lag `τ`, we can embed a time series `x` for a range of embedding dimensions `d ∈ 2:dmax` and
 compute the average prediction power over multiple `ks` using the simplex projection method.
 
-Here, we compute the average prediction skills from `k=1` up to `k=15` time steps into the future, for 
+Here, we compute the average prediction skills from `k=1` up to `k=10` time steps into the future, for 
 embedding dimensions `d = 2:10`.
 
 ```@example
@@ -135,7 +135,7 @@ x1, x2, x3 = columns(lorenz)
 τ = estimate_delay(x1, "ac_zero")
 
 # Compute average prediction skill for 
-ds, ks = 2:10, 1:15
+ds, ks = 2:10, 1:10
 ρs = delay_simplex(x1, τ, ds = ds, ks = ks)
 
 plot(xlabel = "Embedding dimension", ylabel = "ρ̄(observed, predicted")
