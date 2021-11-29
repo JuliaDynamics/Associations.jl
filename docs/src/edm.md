@@ -139,7 +139,7 @@ ds, ks = 2:10, 1:15
 ρs = delay_simplex(x1, τ, ds = ds, ks = ks)
 
 plot(xlabel = "Embedding dimension", ylabel = "ρ̄(observed, predicted")
-plot!(ds, ds, label = "", c = :black, marker = :star)
+plot!(ds, ρs, label = "", c = :black, marker = :star)
 savefig("simplex_embedding.svg") # hide
 ```
 
@@ -232,8 +232,6 @@ system has some inherent nonlinearity. This is, of course, correct, since our Lo
 A formal way to test the presence of nonlinearity is, for example, to define the null hypothesis 
 "H0: predictions do not improve when using an equivalent nonlinear versus a linear model" (equivalent in the sense  that the only parameter is `θ`) or, equivalently, "`H0: ρ_linear = ρ_nonlinear`". If predictions do in fact improve, we
 instead accept the alternative hypothesis that prediction *do* improve when using nonlinear models versus using linear models. This can be formally tested using a z-statistic [^Sugihara1994].
-
-## References
 
 [^Sugihara1994]: Sugihara, G. (1994). Nonlinear forecasting for the classification of natural time series. Philosophical Transactions of the Royal Society of London. Series A: Physical and Engineering Sciences, 348(1688), 477-495.
 [^Sugihara1996]: Sugihara, George, et al. "Nonlinear control of heart rate variability in human infants." Proceedings of the National Academy of Sciences 93.6 (1996): 2608-2613.
