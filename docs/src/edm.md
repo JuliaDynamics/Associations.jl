@@ -156,7 +156,7 @@ smap
 
 The s-map, or sequential locally weighted global map, was introduced in Sugihara (1994)[^Sugihara1994]. The s-map approximates the dynamics of a system as a locally weighted global map, with a tuning parameter ``\theta`` that controls the degree of nonlinearity in the model. For ``\theta = 0``, the model is the maximum likelihood global linear solution (of eq. 2 in Sugihara, 1994), and for increasing ``\theta > 0``, the model becomes increasingly nonlinear and localized (Sugihara, 1996)[^Sugihara1996].
 
-When such a model has been constructed, it be used as prediction tool for out-of-sample points. It extends the prediction power of the simplex projection method, which only approximates the dynamics with a piecewise linear map. Let's elaborate with an example.
+When such a model has been constructed, it be used as prediction tool for out-of-sample points, and can be used to characterize nonlinearity in a time series (Sugihara, 1994).  Let's demonstrate with an example.
 
 ### Example: prediction power for the Lorenz system
 
