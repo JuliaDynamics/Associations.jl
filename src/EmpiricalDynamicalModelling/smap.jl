@@ -25,9 +25,9 @@ first be embedded using `DynamicalSystems.genembed` first.
 
 ## Training and prediction sets
 
-By default, the first `ntrain` points of `x` is used as the library set (`Xtrain = x[1:Ntrain-k]`), and the 
-remaining half (`Xpred = x[Ntrain+1:end]`) is assigned to the prediction set. Overlapping index ranges 
-are not possible as of yet.
+By default, the first half of the points of `x` are used as the library set 
+(`Xtrain = x[1:ntrain-k]`), and the remaining half (`Xpred = x[ntrain+1:end]`) is assigned 
+to the prediction set. Overlapping index ranges are not possible as of yet.
 
 When `θ = 0.0`, all weights are identical, and the A reduces to a linear autoregressive A. 
 Nonlinearity is introduced when `θ > 0`, so tuning this parameters can be used to distinguish 
