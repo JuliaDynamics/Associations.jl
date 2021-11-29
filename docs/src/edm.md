@@ -110,6 +110,44 @@ savefig("simplex_correlation_sine_tent.svg") # hide
 
 In contrast to the tent map, for which prediction accuracy drops off and stabilizes around zero for increasing `k`, the prediction accuracy is rather insensitive to the choice of `k` for the noisy sine time series. 
 
+### Example: determining optimal embedding dimension
+
+```@docs
+delay_simplex
+```
+
+The simplex projection method can also be used to determine the optimal embedding dimension for a time series.
+Given an embedding lag `τ`, we can embed a time series `x` for a range of embedding dimensions `d ∈ 2:dmax` and
+compute the average prediction power over multiple `ks` using the simplex projection method.
+
+Here, we compute the average prediction skills from `k=1` up to `k=15` time steps into the future, for 
+embedding dimensions `d = 2:10`.
+
+```@example
+using CausalityTools, DynamicalSystems, Plots; gr()
+
+sys = CausalityTools.ExampleSystems.lorenz_lorenz_bidir()
+T, Δt = 150, 0.05
+lorenz = trajectory(sys, T, Δt = Δt, Ttr = 100)[:, 1:3]
+x1, x2, x3 = columns(lorenz)
+
+# Determine the optimal embedding delay
+τ = estimate_delay(x1, "ac_zero")
+
+# Compute average prediction skill for 
+ds, ks = 2:10, 1:15
+ρs = delay_simplex(x1, τ, ds = ds, ks = ks)
+
+plot(xlabel = "Embedding dimension", ylabel = "ρ̄(observed, predicted")
+plot!(ds, ds, label = "", c = :black, marker = :star)
+savefig("simplex_embedding.svg") # hide
+```
+
+![](simplex_embedding.svg)
+
+Based on the predictability criterion, the optimal embedding dimension, for this particular realization
+of the first variable of the Lorenz system, seems to be 2.
+
 ## S-map
 
 ```@docs
@@ -136,7 +174,7 @@ T, Δt = 150, 0.05
 lorenz = trajectory(sys, T, Δt = Δt, Ttr = 100)[:, 1:3]
 p_orbit = plot(xlabel = "x", ylabel = "y", zlabel = "z")
 plot!(columns(lorenz)..., marker = :circle, label = "", ms = 2, lα = 0.5)
-savefig(lorenz_attractor.svg) # hide
+savefig("lorenz_attractor.svg") # hide
 ```
 
 ![](lorenz_attractor.svg)
