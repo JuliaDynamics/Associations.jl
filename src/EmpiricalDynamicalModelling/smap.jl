@@ -9,7 +9,7 @@ export smap
 
 Sequential locally weighted global linear map (S-map; Sugihara, 1994)[^Sugihara1994].
 
-For each predictee ``x_ ∈ X_{pred}`, the algorithm uses points in the library/training set 
+For each predictee ``x_i ∈ X_{pred}```, the algorithm uses points in the library/training set 
 ``X_{train} \\setminus x_i`` to fit a weighted linear model for predicting ``x_{i+k}`` 
 (xᵢ projected `k` time steps into the future).
 
