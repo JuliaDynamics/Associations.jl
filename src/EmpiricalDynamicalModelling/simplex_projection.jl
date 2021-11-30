@@ -42,7 +42,11 @@ is based on Ye et al. (2015)[^Ye2015].
 """
 function simplex_predictions(x, k; τ = 1, d = 2, 
         training = 1:length(x) ÷ 2, 
-        prediction = length(x) ÷ 2 + 1:length(x)-τ*(d-1))
+        # Predictees need somewhere to go when projected forward in time, 
+        # so make sure that we exclude predictees that are among the the 
+        # last τ*(d-1) - k points (these would result in simplices for 
+        # which one of the vertices has no target `k` steps in the future)
+        prediction = length(x) ÷ 2 + 1:length(x)-τ*(d-1)-k)
     
     # Generate embedding and separate the embedding points into a training set and 
     # a set of predictees. 
@@ -54,7 +58,9 @@ function simplex_predictions(x, k; τ = 1, d = 2,
     #if isempty(training ∩ prediction)
     # For now, the training set excludes the `k` last points, so that 
     # when later finding nearest neighbors, these neighbors have "somewhere to go" 
-    # when projected forward in time.
+    # when projected forward in time. This can be done more intelligently, because
+    # some library points are lost, and when using overlapping libraries, the 
+    # indexing is not that simple. For now, just use non-overlapping libraries.
     theiler = Theiler(0)
     trainees = Mₓ[training[1:end-k]]
 

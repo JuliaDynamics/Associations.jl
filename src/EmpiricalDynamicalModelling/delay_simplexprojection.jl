@@ -28,8 +28,12 @@ function delay_simplex(x, τ; ds = 2:10, ks = 1:8)
 
         ρs_k = zeros(length(ks))
         for (j, k) in enumerate(ks)
-            train = 1:length(x) ÷ 2 - k
-            pred = length(x) ÷ 2 + 1 : length(x) - d*τ
+            train = 1:length(x) ÷ 2
+            # Predictees need somewhere to go when projected forward in time, 
+            # so make sure that we exclude predictees that are among the the 
+            # last τ*(d-1) - k points (these would result in simplices for 
+            # which one of the vertices has no target `k` steps in the future)
+            pred = length(x) ÷ 2 + 1 : length(x) - τ*(d-1) - k
 
             x̄, x̄_actual = simplex_predictions(x, k; τ = τ, d = d, 
                 training = train, 
