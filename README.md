@@ -11,9 +11,8 @@ Check out the [documentation](https://juliadynamics.github.io/CausalityTools.jl/
 
 ## Key tools
 
-- A easy-to-use framework for estimating information theoretic measures, such as transfer entropy, predictive asymmetry.
-- Generalized entropy and mutual information.
-- Convergent cross mapping, S-measure and joint distance distribution.
+- A easy-to-use framework for estimating information theoretic measures, such as transfer entropy, predictive asymmetry, generalized entropy and mutual information.
+- Convergent cross mapping, pairwise asymmetric inference, S-measure and joint distance distribution.
 - Surrogate data generation.
 
 ## Installation
