@@ -97,9 +97,12 @@ end
 """
     penchant(x, y, l; weighted = false) → ρ̄
 
-Computes the *mean observed penchant* of the `l`-assignment ``\\{C, E\\} = \\{x, y\\}, \\{x_{t-l}, y_t\\}``.
+Computes the *mean observed penchant* (McCracken & Weigel, 2016)[^McCrackenWeigel2016] 
+of the `l`-assignment ``\\{\\text{cause}, \\text{effect}\\} =\\{x_{t-l}, y_t\\}``.
 
 If `weighted == true`, then compute the *weighted mean observed penchant*.
+
+See also data requirements discussed in [`lean`](@ref).
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
@@ -128,7 +131,7 @@ end
     lean(x, y, l = 1; weighted = true) → ρ̄
 
 Compute the *mean observed leaning* `ρ̄` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] between scalar time series `x` and `y`,
-based on the standard `l`-assignment of the `l`-assignment ``\\{C, E\\} = \\{x, y\\}, \\{x_{t-l}, y_t\\}``.
+based on the standard `l`-assignment of the `l`-assignment ``\\{\\text{cause}, \\text{effect}\\} =\\{x_{t-l}, y_t\\}``.
 
 If `weighted == true`, then each penchant is weighted by the number of times it appears in 
 the data, which yields the *weighted mean observed leaning*. This the default behavior, since 
