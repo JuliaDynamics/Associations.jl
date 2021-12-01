@@ -48,6 +48,9 @@ PAGES = [
         "generalized_entropy.md",
         "info_estimators.md",
     ],
+    "Exploratory" => [
+        "leanings.md"
+    ],
 
     "example_systems.md",
     "Utilities" => [
