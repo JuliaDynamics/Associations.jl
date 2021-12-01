@@ -34,7 +34,7 @@ function penchant_counts(x, y, l = 1)
     penchants = get_penchants(x, y)
 
     @inbounds for penchant in penchants
-        sx, sy = penchant[1], penchant[2]
+        state_cause, state_effect = penchant[1], penchant[2]
             
         # Number of times the assumed cause has appeared
         n_c = 0
@@ -51,16 +51,15 @@ function penchant_counts(x, y, l = 1)
             effect = y[t]
             cause = x[t-l]
 
-            if effect == sx && cause == sy
+            if effect == state_effect && cause == state_cause
                 n_ec += 1
             end
-            
 
-            if effect == sx
+            if effect == state_effect
                 n_e += 1
             end
 
-            if cause == sy
+            if cause == state_cause
                 n_c += 1
             end
         end
