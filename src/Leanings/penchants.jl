@@ -130,18 +130,26 @@ end
 Compute the *mean observed leaning* `ρ̄` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] between scalar time series `x` and `y`,
 based on the standard `l`-assignment of the `l`-assignment ``\\{C, E\\} = \\{x, y\\}, \\{x_{t-l}, y_t\\}``.
 
-If `ρ̄ > 0`, then the probability that `x` drives `y` is higher than the probability 
-that `y` drives `x`. Vice versa, if `ρ̄ > 0`, then the probability that `y` drives `x` is higher than the probability 
-that `x` drives `y`.
-
 If `weighted == true`, then each penchant is weighted by the number of times it appears in 
 the data, which yields the *weighted mean observed leaning*. This the default behavior, since 
 "...[the weighted mean observed leaning] accounts for the frequency of observed cause-effect pairs 
 within the data, which is assumed to be a predictor of causal influence" (McCracken & Weigel, 2016).
 
-This implementation *does not* take care of the tolerance domains discussed in the paper. 
-Pre-process your time series, using appropriate binning or symbolization schemes, 
-so that `x` and `y` both consists of discrete symbols. 
+## Intepretation
+
+If `ρ̄ > 0`, then the probability that `x` drives `y` is higher than the probability 
+that `y` drives `x`. Vice versa, if `ρ̄ > 0`, then the probability that `y` drives `x` is higher than the probability 
+that `x` drives `y`.
+
+## Data requirements
+
+Both `x` and `y` *must* be discrete, and the number discrete states can't be too high 
+relative to the number of points in `x` and `y`. Otherwise, probabilities cannot be reliably estimated. 
+If the function returns `NaN`, then you probably either haven't discretized your time series, 
+or the partition is too fine-grained given the numbers of points available.
+
+Hence, this implementation *does not* take care of the tolerance domains discussed in the paper. 
+Pre-process your time series using appropriate binning or symbolization schemes.
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
