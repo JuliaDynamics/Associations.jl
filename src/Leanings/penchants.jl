@@ -129,19 +129,18 @@ end
 
     lean(x, y, l = 1; weighted = true) → ρ̄
 
-Compute the *mean observed leaning* `ρ̄` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] between scalar time series `x` and `y`,
-based on the standard `l`-assignment of the `l`-assignment ``\\{\\text{cause}, \\text{effect}\\} =\\{x_{t-l}, y_t\\}``.
+Compute the *mean observed leaning* `ρ̄` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] between scalar time series `x` and `y`.
+
+If `ρ̄ > 0`, then the probability that `x` drives `y` is higher than the probability 
+that `y` drives `x`. Vice versa, if `ρ̄ > 0`, then the probability that `y` drives `x` is higher than the probability 
+that `x` drives `y`.
+
+## Weighting
 
 If `weighted == true`, then each penchant is weighted by the number of times it appears in 
 the data, which yields the *weighted mean observed leaning*. This the default behavior, since 
 "...[the weighted mean observed leaning] accounts for the frequency of observed cause-effect pairs 
 within the data, which is assumed to be a predictor of causal influence" (McCracken & Weigel, 2016).
-
-## Intepretation
-
-If `ρ̄ > 0`, then the probability that `x` drives `y` is higher than the probability 
-that `y` drives `x`. Vice versa, if `ρ̄ > 0`, then the probability that `y` drives `x` is higher than the probability 
-that `x` drives `y`.
 
 ## Data requirements
 
