@@ -51,6 +51,7 @@ PAGES = [
         "info_estimators.md",
     ],
 
+    "edm.md",
     "example_systems.md",
     "Utilities" => [
         "invariant_measure.md",
