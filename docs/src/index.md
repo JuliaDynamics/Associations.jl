@@ -35,6 +35,10 @@ We also provide estimators for generalized entropy and mutual information, thoug
 - Generalized entropy ([`genentropy`](@ref)) and fast histograms ([`binhist`](@ref))
 - Mutual information ([`mutualinfo`](@ref))
 
+### Exploratory methods
+
+- [Penchants and leanings](@ref leanings).
+
 ## Contributions/issues
 
 Do you want additional methods or example systems to be implemented? Make a PR to the 
