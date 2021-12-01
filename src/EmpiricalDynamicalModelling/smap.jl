@@ -91,3 +91,117 @@ function smap(x::Dataset; θ = 1.0, k = 1, trainees = 1:length(x) ÷ 2, predicte
     
     return x̂s, x̂s_truths
 end
+
+#Based on https://stackoverflow.com/questions/48460875/vector-matrix-element-wise-multiplication-by-rows-in-julia-efficiently
+function wtsmultA!(Ax, wts, A)
+    @inbounds for j = 1:size(A,2) 
+        @simd for i = 1:size(A,1) 
+            Ax[i,j] = wts[j] * A[i,j]
+        end
+    end 
+    return Ax
+end  
+
+"""
+    fill_library_indices!(idxs, n, i)
+
+Fill `idxs` (`Vector{Int}` of length `n - 1`) with the indices `1:n`, excluding `i < n`.
+"""
+function fill_library_indices!(idxs, n, i)
+    ct = 1
+    @inbounds for k in 1:n
+        if k != i
+            idxs[ct] = k
+            ct += 1
+        end
+    end
+end
+
+export smap_leaveoneout
+# A variant of the crossmap applied when there is overlap between prediction and training sets.
+# Uses exhaustive leave-one-out cross-validation (https://en.wikipedia.org/wiki/Cross-validation_(statistics))
+function smap_leaveoneout(x::Dataset{D, T}; θ = 1.0, k = 1, metric = Euclidean(), r = 0,
+        trainees = nothing, predictees = nothing) where {D, T}
+    
+    # No need to locate neighbors. Manually do Theiler window in loop instead.
+    alldists = pairwise(Euclidean(), x)
+    X = Matrix(x)
+
+    # Length of dataset, length of training set, and dimension
+    n = length(x); nₜ = n - 1; d = size(x, 2)
+  
+    # Pre-allocate arrays. These will be re-used at every iteration.
+    wts = zeros(nₜ)
+    bx = zeros(nₜ - k)
+    A = zeros(nₜ - k, d + 1)
+    A[:, 1] = ones(nₜ - k)
+    Ax = zeros(nₜ - k, d + 1)
+
+    # Store predictions and ground truths
+    x̂s = Vector{T}(undef, 0)
+    x̂s_truth = Vector{T}(undef, 0)
+    idxs = zeros(Int, nₜ)
+    @show d + 1
+
+    for (i, xᵢ) in enumerate(x)
+        if i < n - k
+            # This leads to excessive memory allocations because we need to explicitly 
+            # collect the non-consecutive indices. We therefore define a function that generates 
+            # the indices for us without extra allocations. The benchmark timing difference is 
+            # a factor of about 30.
+            # if i < d + 1
+            #     @show "2"
+            #     fst = 
+            #     lst = 
+            #     idxs = d+1+i:n
+            # elseif d + 1 < i < n - d + 1
+            #     @show "1"
+            #     fst = 1:i-1
+            #     lst = i+1:n
+            #     idxs = union(fst, lst)
+            # elseif  d < i
+            #     @show "3"
+            #     idxs = d
+            # end
+            # @show i, idxs |> collect
+            
+
+            # #fill_library_indices!(idxs, n, i)
+            # training_set = @views X[idxs, :]
+ 
+            # # Distances from xᵢ to all other points, and the mean of those distances
+            # distsᵢ = @views alldists[i, idxs]
+            # d̄ = mean(distsᵢ)
+        
+            # wts .= exp.(-θ .* distsᵢ ./ d̄)
+            # W = Diagonal(wts[1:nₜ - k])
+
+            # # We want to train a model that predicts k time steps into the future
+            # # For that, each row/point in `A` must be time-shifted `k`` steps 
+            # # relative to the corresponding entry in `b`. Weights are applied after 
+            # # selecting the points.
+            # #@views wtsmultA!(Ax, wts[1:end-k], A[1:end-k, :])
+            # #bx .= @views wts[1:end-k] .* @views training_set[1+k:end, 1]
+
+            # bx = W * training_set[1+k:end, 1]
+            # Ax = W * [ones(nₜ - k) training_set[1:nₜ - k]]
+    
+            # # # Least squares solution
+            # c = Ax \ bx
+            
+            # # Eq. 3.1 in Sugihara (1994). Here, we predict x̂ᵢ using the 
+            # # model obtained from the least squares solution.
+            # # c[1] = constant, c[2:end] are the coefficients. 
+            # x̂ᵢ = c[1] + sum(xᵢ .* @views c[2:end])
+
+            # # Locate the corresponding grouth truth
+            # x̂ᵢ_truth = @views x[i + k][1]
+
+            # push!(x̂s, x̂ᵢ)
+            # push!(x̂s_truth, x̂ᵢ_truth)
+        end
+    end
+    
+    return x̂s, x̂s_truth 
+
+end
