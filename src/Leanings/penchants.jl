@@ -96,12 +96,35 @@ end
 """
     penchant(x, y, l; weighted = false) → ρ̄
 
-Computes the *mean observed penchant* `ρ̄ ∈ [-1, 1]` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] 
-of the `l`-assignment ``\\{\\text{cause}, \\text{effect}\\} =\\{x_{t-l}, y_t\\}``.
+Computes the *mean observed penchant* `ρ̄` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] 
+of the `l`-assignment ``\\{\\text{C}, \\text{E}\\} = \\{\\text{cause}, \\text{effect}\\} =\\{x_{t-l}, y_t\\}``.
 
 If `weighted == true`, then compute the *weighted mean observed penchant*.
 
-See also data requirements discussed in [`lean`](@ref).
+## Definition 
+
+The *causal penchant* , or causal tendency, is a causal indicator defined as 
+``\\rho_{CE} = P(E|C) - P(E|\\bar{C})``, where ``\\rho_{CE} \\in [-1, 1]`` (McCracken & Weigel, 2016). 
+If ``\\rho_{CE} > 0``, then ``C`` causes or drives ``E``, and if 
+``\\rho_{CE} \\leq 0`, then the direction of influence is undetermined.
+
+A direct formula for ``\\rho_{CE}`` can be obtained using Bayes' theorem.
+
+```math
+P(E|C) = P(C|E) \\dfrac{P(E)}{P(C)} 
+```
+Using the definitions of probability complements, one arrives at the following 
+expression (see the original paper for a detailed derivation):
+
+```math
+\\rho_{CE} = P(E|C) \\left[1 + \\dfrac{P(C)}{1-P(C)} \\right] - \\dfrac{P(E)}{1 - P(C)}.
+```
+
+Applying appropriate discretization schemes, these probabilities can be estimated 
+directly from time series using simple counting, which makes the method fast and 
+well-suited for exploratory causal inference analysis.
+
+See also notes on data requirements discussed in [`lean`](@ref).
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
@@ -157,5 +180,5 @@ Pre-process your time series using appropriate binning or symbolization schemes.
 function lean(x, y, l = 1; weighted = true)
     return penchant(x, y, l, weighted = weighted) - 
         penchant(y, x, l, weighted = weighted)
-end
+end 
 
