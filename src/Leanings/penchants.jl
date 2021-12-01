@@ -88,7 +88,7 @@ function mean_observed_ρ(ρs, κs, ns_ec, L, weighted = false)
     end
 
     if weighted
-        ρ / L 
+        return ρ / L 
     else 
         return ρ / ct
     end
