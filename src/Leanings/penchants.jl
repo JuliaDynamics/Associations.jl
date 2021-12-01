@@ -1,5 +1,5 @@
 
-export mean_observed_penchant, mean_leaning
+export penchant, lean
 
 using Statistics
 
@@ -95,7 +95,7 @@ function mean_observed_ρ(ρs, κs, ns_ec, L, weighted = false)
 end
 
 """
-    mean_observed_penchant(x, y, l, weighted = false) → ρ̄
+    penchant(x, y, l; weighted = false) → ρ̄
 
 Computes the *mean observed penchant* of the `l`-assignment ``\\{C, E\\} = \\{x, y\\}, \\{x_{t-l}, y_t\\}``.
 
@@ -103,7 +103,7 @@ If `weighted == true`, then compute the *weighted mean observed penchant*.
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
-function mean_observed_penchant(x, y, l = 1; weighted = false)
+function penchant(x, y, l = 1; weighted = false)
     n = length(x)
     ns_c, ns_e, ns_ec = penchant_counts(x, y, l)
 
@@ -125,7 +125,7 @@ end
 
 """
 
-    mean_leaning(x, y, l = 1, weighted = true) → ρ̄
+    lean(x, y, l = 1; weighted = true) → ρ̄
 
 Compute the *mean observed leaning* `ρ̄` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] between scalar time series `x` and `y`,
 based on the standard `l`-assignment of the `l`-assignment ``\\{C, E\\} = \\{x, y\\}, \\{x_{t-l}, y_t\\}``.
@@ -153,8 +153,8 @@ Pre-process your time series using appropriate binning or symbolization schemes.
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
-function mean_leaning(x, y, l = 1; weighted = true)
-    return mean_observed_penchant(x, y, l, weighted = weighted) - 
-        mean_observed_penchant(y, x, l, weighted = weighted)
+function lean(x, y, l = 1; weighted = true)
+    return penchant(x, y, l, weighted = weighted) - 
+        penchant(y, x, l, weighted = weighted)
 end
 
