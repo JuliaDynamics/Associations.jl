@@ -4,6 +4,6 @@ Leanings are probability-based exploratory causal inference measures that rely o
 implementations of the *penchants and leanings* algoriths from McCracken and Weigel (2016).
 
 ```@docs
-mean_observed_penchant
-mean_leaning
+penchant
+lean
 ```
