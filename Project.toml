@@ -29,7 +29,7 @@ Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 
 [compat]
 ChaosTools = "^2.0"
-DelayEmbeddings = "^2.0"
+DelayEmbeddings = "^2.0.2"
 Distances = "^0.10"
 Distributions = "^0.24, 0.25"
 DynamicalSystemsBase = "^2.0"
