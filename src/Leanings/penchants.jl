@@ -106,7 +106,7 @@ If `weighted == true`, then compute the *weighted mean observed penchant*.
 The *causal penchant* , or causal tendency, is a causal indicator defined as 
 ``\\rho_{CE} = P(E|C) - P(E|\\bar{C})``, where ``\\rho_{CE} \\in [-1, 1]`` (McCracken & Weigel, 2016). 
 If ``\\rho_{CE} > 0``, then ``C`` causes or drives ``E``, and if 
-``\\rho_{CE} \\leq 0`, then the direction of influence is undetermined.
+``\\rho_{CE} \\leq 0``, then the direction of influence is undetermined.
 
 A direct formula for ``\\rho_{CE}`` can be obtained using Bayes' theorem.
 
@@ -152,11 +152,12 @@ end
 
     lean(x, y, l = 1; weighted = true) → ρ̄
 
-Compute the *mean observed leaning* `λ ∈ [-2, 2]` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] between scalar time series `x` and `y`.
+Compute the *mean observed leaning* `λ ∈ [-2, 2]` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] 
+between scalar time series `x` and `y`.
 
 If `ρ̄ > 0`, then the probability that `x` drives `y` is higher than the probability 
-that `y` drives `x`. Vice versa, if `ρ̄ > 0`, then the probability that `y` drives `x` is higher than the probability 
-that `x` drives `y`.
+that `y` drives `x`. Vice versa, if `ρ̄ > 0`, then the probability that `y` drives `x` 
+is higher than the probability that `x` drives `y`.
 
 ## Weighting
 
