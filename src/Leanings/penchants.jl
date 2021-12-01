@@ -153,7 +153,8 @@ Pre-process your time series using appropriate binning or symbolization schemes.
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
-function mean_leaning(x, y, l = 1, weighted = true)
+function mean_leaning(x, y, l = 1; weighted = true)
     return mean_observed_penchant(x, y, l, weighted = weighted) - 
         mean_observed_penchant(y, x, l, weighted = weighted)
 end
+
