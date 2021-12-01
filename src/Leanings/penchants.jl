@@ -96,7 +96,7 @@ end
 """
     penchant(x, y, l; weighted = false) → ρ̄
 
-Computes the *mean observed penchant* (McCracken & Weigel, 2016)[^McCrackenWeigel2016] 
+Computes the *mean observed penchant* `ρ̄ ∈ [-1, 1]` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] 
 of the `l`-assignment ``\\{\\text{cause}, \\text{effect}\\} =\\{x_{t-l}, y_t\\}``.
 
 If `weighted == true`, then compute the *weighted mean observed penchant*.
@@ -129,7 +129,7 @@ end
 
     lean(x, y, l = 1; weighted = true) → ρ̄
 
-Compute the *mean observed leaning* `ρ̄` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] between scalar time series `x` and `y`.
+Compute the *mean observed leaning* `λ ∈ [-2, 2]` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] between scalar time series `x` and `y`.
 
 If `ρ̄ > 0`, then the probability that `x` drives `y` is higher than the probability 
 that `y` drives `x`. Vice versa, if `ρ̄ > 0`, then the probability that `y` drives `x` is higher than the probability 
