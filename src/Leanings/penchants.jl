@@ -128,7 +128,7 @@ See also [`lean`](@ref) and data requirements discussed therein.
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
-function penchant(x, y, l = 1; weighted = false)
+function penchant(x, y, l = 1; weighted = true)
     n = length(x)
     ns_c, ns_e, ns_ec = penchant_counts(x, y, l)
 
@@ -179,7 +179,6 @@ Pre-process your time series using appropriate binning or symbolization schemes.
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
 function lean(x, y, l = 1; weighted = true)
-    return penchant(x, y, l, weighted = weighted) - 
-        penchant(y, x, l, weighted = weighted)
+    return penchant(x, y, l, weighted = weighted) - penchant(y, x, l, weighted = weighted)
 end 
 
