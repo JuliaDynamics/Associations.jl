@@ -124,7 +124,7 @@ Applying appropriate discretization schemes, these probabilities can be estimate
 directly from time series using simple counting, which makes the method fast and 
 well-suited for exploratory causal inference analysis.
 
-See also notes on data requirements discussed in [`lean`](@ref).
+See also [`lean`](@ref) and data requirements discussed therein.
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
