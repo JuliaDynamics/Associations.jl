@@ -89,8 +89,9 @@ function te_aut(targets, candidates, est, q = 1.0, base = 2)
 
         k = 1; kmax = 5
         while k < kmax
+            #target = Dataset(θs...)
             # The first chosen variable is the target variable.
-            push!(θs, targets[η]...)
+            #push!(θs, targets[η]...)
 
             Ntot = sum(length.(candidates))
             Hs = zeros(Ntot)
@@ -107,8 +108,8 @@ function te_aut(targets, candidates, est, q = 1.0, base = 2)
                 
                 for k = 1:length(Cᵢ)
                     # H(θ | Cᵢ[k]) = H(θ, Cᵢ[k]) - H(Cᵢ[k]) (chain rule for entropy)
-                    Hθ_and_Cᵢk = genentropy(Dataset(θs..., Cᵢ[k]), est, q = q, base = base)
-                    HCᵢk = genentropy(Dataset(Cᵢ[k]), est, base = base)
+                    Hθ_and_Cᵢk = genentropy(Dataset(targets[η]..., Cᵢ[k]), est, q = q, base = base)
+                    HCᵢk = genentropy(Dataset(Cᵢ[k]), est, q = q, base = base)
                     Hθ_given_Cᵢk = Hθ_and_Cᵢk - HCᵢk
                     Hsᵢ[k] = Hθ_given_Cᵢk 
                     Hs[ct] = Hθ_given_Cᵢk
@@ -138,12 +139,25 @@ function te_aut(targets, candidates, est, q = 1.0, base = 2)
 
             passes = rand([true, false])
 
-            if passes
-                deleteat!(candidates[j], τidx)
-                println("\t The candidate passed the significance test. Removes its status as candidate. $Ntot candidates remaining.")
-            else
-                println("\t The candidate failed the significance test")
+            # if passes
+            #     deleteat!(candidates[j], τidx)
+            #     println("\t The candidate passed the significance test. Removes its status as candidate. $Ntot candidates remaining.")
+            # else
+            #     println("\t The candidate failed the significance test")
+            # end
+            cmi = 0.0
+
+            if k == 1 # No variables have been selected (θ == ∅), so CMI reduces to MI
+                candidate = Dataset(chosen_candidate)
+                target = Dataset(targets[η]...)
+                Hc = genentropy(Dataset(candidate), est; base = base, q = q)
+                Ht = genentropy(Dataset(target), est; base = base, q = q)
+                Hct = genentropy(Dataset(candidate, target), est; base = base, q = q)
+                cmi = Hc + Ht - Hct
+            else # At least one variable has been selected, so we can condition on θ
+
             end
+            @show cmi
             # Make sure we terminate at some point
             k += 1
         end
