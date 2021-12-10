@@ -1,10 +1,24 @@
 # [Transfer entropy](@ref transferentropy)
 
+
+## Basic
+
 ```@docs
 transferentropy
 ```
 
-## Reproducing Schreiber 
+## Automated methods
+
+The following methods estimate embedding parameters for transfer entropy estimation 
+using iterative optimization procedures. 
+
+```@docs
+bbnue
+```
+
+## Examples
+
+### Reproducing Schreiber (2000)
 
 Let's try to reproduce the results from Schreiber's original paper[^Schreiber2000] on transfer entropy. We'll use a 
 visitation frequency estimator, which computes entropies by counting visits of the system's orbit to discrete portions 
