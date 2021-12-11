@@ -1,10 +1,20 @@
 # [Transfer entropy](@ref transferentropy)
 
+The following `transferentropy` function computes transfer entropy "manually", that is,
+in addition to specifying an estimator, you have to specify embedding parameters.
+
 ```@docs
 transferentropy
 ```
 
-## Reproducing Schreiber 
+The `bbnue` function optimizes embedding parameters using an iterative procedure for 
+variable selection, and performs null hypothesis testing as part of that procedure.
+
+```@docs
+bbnue
+```
+
+## Example: Reproducing Schreiber (2000)
 
 Let's try to reproduce the results from Schreiber's original paper[^Schreiber2000] on transfer entropy. We'll use a 
 visitation frequency estimator, which computes entropies by counting visits of the system's orbit to discrete portions 
