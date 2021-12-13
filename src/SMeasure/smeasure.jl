@@ -121,13 +121,13 @@ function s_measure(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}; K::Int 
     idxs_Y = bulkisearch(treeY, Y, neighborhoodtype, theiler)
     
     for n in 1:N
-        pxₙ = X[n]
+        px = X[n]
     
         for j = 1:K
-            rₙⱼ = idxs_X[n][j] # nearest neighbor indices in X
-            sₙⱼ = idxs_Y[n][j] # nearest neighbor indices in Y
-            dists_x[j] = evaluate(metric, pxₙ, X[rₙⱼ])
-            dists_x_cond_y[j] = evaluate(metric, pxₙ, X[sₙⱼ])
+            rⱼ = idxs_X[n][j] # nearest neighbor indices in X
+            sⱼ = idxs_Y[n][j] # nearest neighbor indices in Y
+            dists_x[j] = evaluate(metric, px, X[rⱼ])
+            dists_x_cond_y[j] = evaluate(metric, px, X[sⱼ])
         end
         
         Rx[n] = sum(dists_x) / K
