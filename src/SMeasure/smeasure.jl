@@ -4,12 +4,7 @@ using Reexport
 @reexport module SMeasure
 export s_measure
 
-import Distances: Metric, SqEuclidean, evaluate, Euclidean
-import NearestNeighbors: KDTree
-import ChaosTools: FixedMassNeighborhood, neighborhood
-using Neighborhood
-using ChaosTools
-using DelayEmbeddings
+using NearestNeighbors, Distances, Neighborhood, DelayEmbeddings
 
 
 """
