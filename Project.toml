@@ -44,7 +44,7 @@ SimpleDiffEq = "^1"
 StaticArrays = "^1"
 StatsBase = "^0.33"
 TimeseriesSurrogates = "^1.2"
-TransferEntropy = "^1.4"
+TransferEntropy = "^1.5"
 Wavelets = "0.9"
 julia = "^1.6"
 
