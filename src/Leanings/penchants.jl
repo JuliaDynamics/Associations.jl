@@ -1,7 +1,7 @@
 
-export penchant, lean
+export penchant, lean, NoTolerance, SymmetricTolerance, AsymmetricTolerance
 
-using Statistics
+using Statistics, IntervalArithmetic
 
 # We just assume that the time series have been pre-binned or symbolized
 # However, `get_states`` might turn out much more complicated if we decide 
@@ -18,7 +18,74 @@ function get_penchants(x, y)
     return Iterators.product(states, states)
 end
 
-function penchant_counts(x, y, l = 1)
+# get_penchants(x, y, tol::NoTolerance) = get_penchants(x, y)
+# function get_penchants(x, y, tol::SymmetricTolerance)
+#     states = get_states(
+#         [Interval(xᵢ - tol.σx, xᵢ + tol.σx) for xᵢ in x],
+#         [Interval(yᵢ - tol.σy, yᵢ + tol.σy) for yᵢ in y]
+#     )
+# end
+
+# Some types that 
+abstract type ToleranceType end
+
+"""
+    SymmetricTolerance(σx, σy)
+    SymmetricTolerance(σ)
+
+Indicates that penchant calculations are performed not on 
+the raw time series values, but on symmetric tolerance intervals around the 
+raw values. That is, for the target values `x` and `y`, we consider 
+intersections between `[x - σx, x + σx]` and `[y - σy, y + σy]`. 
+
+If a single `σ` is given, it is assigned to both variables.
+"""
+struct SymmetricTolerance <: ToleranceType
+    σx
+    σy
+end
+
+SymmetricTolerance(σ) = SymmetricTolerance(σ, σ)
+
+""" 
+    AsymmetricTolerance(σx₋ σx₊ σy₋ σy₊)
+
+Indicates that penchant calculations are performed not on 
+the raw time series values, but on asymmetric tolerance intervals 
+around the raw values. That is, for the target values `x` and `y`, we consider 
+intersections between `[x - σx₋, x + σx₊]` and `[y - σy₋, y + σy₊]`. 
+"""
+struct AsymmetricTolerance <: ToleranceType
+    σx₋
+    σx₊
+    σy₋
+    σy₊
+end
+
+""" 
+    NoTolerance() 
+
+Indicates that penchant calculations are performed using the
+the raw time series values. 
+"""
+struct NoTolerance <: ToleranceType end
+
+equals_within_tolerance(x, y, tol::NoTolerance) = x == y
+function equals_within_tolerance(x, y, tol::AsymmetricTolerance)
+    #xint = Interval(x - tol.σx₋, x + tol.σx₊)
+    yint = Interval(y - tol.σy₋, y + tol.σy₊)
+    #xint ∩ yint != ∅
+end
+
+function equals_within_tolerance(x, y, tol::SymmetricTolerance)
+    #xint = Interval(x - tol.σx, x + tol.σx)
+    yint = Interval(y - tol.σy, y + tol.σy)
+    x ∈ yint
+
+    #xint ∩ yint != ∅
+end
+
+function penchant_counts(x, y, l::Int = 1, tol = NoTolerance())
     @assert length(x) == length(y)
     n = length(x)
     
@@ -50,17 +117,21 @@ function penchant_counts(x, y, l = 1)
             # standard l-assignment
             effect = y[t]
             cause = x[t-l]
-
-            if effect == state_effect && cause == state_cause
-                n_ec += 1
-            end
-
-            if effect == state_effect
+            #pe = equals_within_tolerance(effect, state_effect, tol)
+            #pc = equals_within_tolerance(cause, state_cause, tol)
+            pe = equals_within_tolerance(state_effect, effect, tol)
+            pc = equals_within_tolerance(state_cause, cause, tol)
+            
+            if pe
                 n_e += 1
             end
 
-            if cause == state_cause
+            if pc
                 n_c += 1
+            end
+
+            if pe && pc
+                n_ec += 1
             end
         end
         push!(ns_ec, n_ec)
@@ -68,9 +139,10 @@ function penchant_counts(x, y, l = 1)
         push!(ns_e, n_e)
     end
 
+    @show ns_c, ns_e, ns_ec
+
     return ns_c, ns_e, ns_ec
 end
-
 
 function mean_observed_ρ(ρs, κs, ns_ec, L, weighted = false)
     ρ = 0.0
@@ -94,12 +166,24 @@ function mean_observed_ρ(ρs, κs, ns_ec, L, weighted = false)
 end
 
 """
-    penchant(x, y, l; weighted = false) → ρ̄
+    penchant(x, y, l, tol = NoTolerance(); weighted = false) → ρ̄
 
 Computes the *mean observed penchant* `ρ̄` (McCracken & Weigel, 2016)[^McCrackenWeigel2016] 
 of the `l`-assignment ``\\{\\text{C}, \\text{E}\\} = \\{\\text{cause}, \\text{effect}\\} =\\{x_{t-l}, y_t\\}``.
 
 If `weighted == true`, then compute the *weighted mean observed penchant*.
+
+## Tolerances 
+
+If `tol` is an instance of `NoTolerance`, then penchants are computed on the raw 
+time series values (default behaviour). If `tol = SymmetricTolerance(σx, σy)`, 
+then each `xᵢ` and `yᵢ` are assigned the tolerances `[xᵢ - σx, xᵢ + σx]`
+and `[yᵢ - σx, yᵢ + σx]`. If `tol = AsymmetricTolerance(σx₋ σx₊ σy₋ σy₊)`, 
+then each `xᵢ` and `yᵢ` are assigned the tolerances `[xᵢ - σx₋ , xᵢ + σx₊]`
+and `[yᵢ - σy₋ , yᵢ + σy₊]`.
+
+Rigorous interval arithmetic to from IntervalArithmetic.jl are 
+used to compute intersections between tolerance intervals.
 
 ## Definition 
 
@@ -128,9 +212,9 @@ See also [`lean`](@ref) and data requirements discussed therein.
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
-function penchant(x, y, l = 1; weighted = true)
+function penchant(x, y, l = 1, tol::ToleranceType = NoTolerance(); weighted = true)
     n = length(x)
-    ns_c, ns_e, ns_ec = penchant_counts(x, y, l)
+    ns_c, ns_e, ns_ec = penchant_counts(x, y, l, tol)
 
     L = n - l # "library length", resulting from shifting the time series l steps
     Ps_e = ns_e ./ L
@@ -178,7 +262,7 @@ Pre-process your time series using appropriate binning or symbolization schemes.
 
 [^McCrackenWeigel2016]: McCracken, J. M., & Weigel, R. S. (2016). Nonparametric causal inference for bivariate time series. Physical Review E, 93(2), 022207.
 """
-function lean(x, y, l = 1; weighted = true)
-    return penchant(x, y, l, weighted = weighted) - penchant(y, x, l, weighted = weighted)
+function lean(x, y, l = 1, tol = NoTolerance(); weighted = true)
+    return penchant(x, y, l, tol, weighted = weighted) - penchant(y, x, l, tol, weighted = weighted)
 end 
 
