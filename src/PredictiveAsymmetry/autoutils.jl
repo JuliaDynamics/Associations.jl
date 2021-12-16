@@ -26,49 +26,6 @@ function get_delay_τs(source, target; maxlag::Union{Int, Float64} = 0.05)
     return delay_τs
 end
 
-export pa
-# H(Ȳ⁻, Y⁺, X⁻) - H(Ȳ⁻, Y⁺) - H(Ȳ⁺, Y⁻, X⁻) + H(Ȳ⁺, Y⁻)
-function pa(source, target, est, ηs;
-        normalize = false, f::Real = 1.0,
-        d𝒯 = 1, dT = 1, dS = 1, τT = -1, τS = -1, base = 2, q = 1)
-    @assert τT < 0
-    @assert τS < 0 
-    τs⁻ = 0:-1:τS*(dS - 1)
-    νs⁻ = 0:-1:τT*(dT - 1)
-    νs⁺ = .-(0:-1:τT*(dT - 1))
-    #@show length(νs⁻), length(τs⁻)
-    data = Dataset(source, target)
-    lags = [τs⁻..., νs⁻..., νs⁺..., ηs..., .-(ηs)...,]
-    js = [repeat([1], length(τs⁻))...,repeat([2], length(νs⁻)*2)..., repeat([2], length(ηs)*2)..., ]
-    E = genembed(data, lags, js)
-
-    nη = length(ηs)
-    X⁻ = Dataset(E[:, 1:dS])
-    Y⁻ = Dataset(E[:, dS+1:dS+dT])
-    Y⁺ = Dataset(E[:, dS+dT+1:dS+dT+dT])
-    n = dimension(X⁻)+dimension(Y⁻)+dimension(Y⁺)
-    Ȳ⁻ = Dataset(E[:, n+1:n+nη])
-    Ȳ⁺ = Dataset(E[:, n+nη+1:end])
-    
-    pas = zeros(nη)
-    #@show 1:dS, dS+1:dS+dT, dS+dT+1:dS+dT+dT, n+1:n+length(ηs), n+length(ηs)+1:length(lags)
-
-    for η in ηs
-        Ȳ⁺Y⁻ = Dataset(Dataset(Ȳ⁺[:, η]), Y⁻)
-        Ȳ⁻Y⁺ = Dataset(Dataset(Ȳ⁻[:, η]), Y⁺)
-        Ȳ⁺Y⁻X⁻ = Dataset(Ȳ⁺Y⁻, X⁻)
-        Ȳ⁻Y⁺X⁻ = Dataset(Ȳ⁻Y⁺, X⁻)
-
-        pas[η] = 
-            genentropy(Ȳ⁻Y⁺X⁻, est, base = base, q = q) - 
-            genentropy(Ȳ⁻Y⁺, est, base = base, q = q) - 
-            genentropy(Ȳ⁺Y⁻X⁻, est, base = base, q = q) + 
-            genentropy(Ȳ⁺Y⁻, est, base = base, q = q)
-    end
-
-    return pas
-end
-
 """
     search_τs(inputs...; 
         maxlag::Union{Int, Float64} = 0.05, τcutoff::Int = 100) → delay_τs
