@@ -26,18 +26,38 @@ function get_delay_τs(source, target; maxlag::Union{Int, Float64} = 0.05)
     return delay_τs
 end
 
-function get_delay_τs(source, target, cond; maxlag::Union{Int, Float64} = 0.05)
-    # Ensure all time series are of the same length.
-        Ls = [length.(source); length.(target); length.(cond)]
-        @assert all(Ls .== maximum(Ls))
+"""
+    search_τs(source, target, cond; 
+        maxlag::Union{Int, Float64} = 0.05, τcutoff::Int = 100) → delay_τs
+
+Decide delay range search among when searching for maximum embedding delays, based on input 
+time series length(s).
+"""
+function search_τs(source, target, cond; 
+        maxlag::Union{Int, Float64} = 0.05, τcutoff::Int = 100)
+
+    # Ensure all input time series are of the same length.
+    Ls = [length.(source); length.(target); length.(cond)]
+    @assert all(Ls .== maximum(Ls))
     
-        if maxlag isa Int
-            delay_τs = 1:maxlag
-        else
-            delay_τs = 1:ceil(Int, maximum(Ls)*maxlag)
-        end
-        return delay_τs
+    if maxlag isa Int
+        delay_τs = 1:minimum(maxlag, cutoff)
+    else
+        delay_τs = 1:ceil(Int, maximum(Ls)*maxlag)
     end
+    return delay_τs
+end
+
+"""
+    bbnue_embedding_lags(include_instantaneous, τmax, exclude)
+
+Generate embedding lags for predictive asymmetry analysis using the bbnue algorithm. 
+"""
+function bbnue_embedding_lags(include_instantaneous, τmax, exclude)
+    @assert τmax > 0
+    startlag = include_instantaneous ? 0 : -1
+    [τ for τ in startlag:-1:-τmax if abs(τ) ∉ abs.(exclude)]
+end
 
 """
     pa_candidate_variables(
@@ -56,8 +76,8 @@ of the target process and of the conditional processes, respectively. `k` is the
 If `include_instantaneous == true`, then the analysis will also consider instantaneous interactions between
 the variables.
 
-If `maxlag` is an integer, `maxlag` is taken as the maximum allowed embedding lag. If `maxlag` is a float, 
-then the maximum embedding lag is taken as `maximum([length.(source); length.(target); length.(cond)])*maxlag`.
+If `maxlag < τcutoff` is an integer, `maxlag` is taken as the maximum allowed embedding lag. If `maxlag` is a float, 
+then the maximum embedding lag is taken as `minimum(maximum([length.(source); length.(target); length.(cond)])*maxlag, τcutoff)`.
 `τmin` is the minimum amount of variables to include in the candidate set (that is, each variable is embedded 
 with lags `startlag:-1:-τmin`).
 """
@@ -66,25 +86,26 @@ function pa_candidate_variables(source, target, cond;
         include_instantaneous = true,
         method_delay = "ac_min",
         τmin::Int = 2,
-        maxlag::Union{Int, Float64} = 0.05)
+        maxlag::Union{Int, Float64} = 0.05, 
+        τcutoff::Int = 100)
     
     @assert τmin > 0
 
-    # Find the maximum allowed embedding lag for each of the candidates.
-    # We need at least two variables to allow exlusion of the `η`-lag, 
-    # so make sure we don't get only one variable from the delay method.
-    delay_τs = get_delay_τs(source, target, cond)
+    # Generate candidate set. First, estimate a suitable maximum embedding lag for each 
+    # of the input variables. We need at least two variables to allow exlusion of the `k`th
+    # lag, so make sure we don't get only one variable from the delay method by using `τmin`.
+    delay_τs = search_τs(source, target, cond, maxlag = maxlag, τcutoff = τcutoff)
     τsmax_source = [max(estimate_delay(s, method_delay, delay_τs), τmin) for s in source]
     τsmax_target = [max(estimate_delay(t, method_delay, delay_τs), τmin) for t in target]
     τsmax_cond = [max(estimate_delay(c, method_delay, delay_τs), τmin) for c in cond]
 
-    # Generate candidate set
-    startlag = include_instantaneous ? 0 : -1
-
-    τs_source = [[startlag:-1:-τ...,] for τ in τsmax_source]
-    τs_target = [[startlag:-1:-τ...,] for τ in τsmax_target]
-    τs_cond = [[startlag:-1:-τ...,] for τ in τsmax_cond]
+    # Next, compute the embeddings lags for each input variable, making sure that 
+    # the prediction lag `k` does not overlap with the embedding lag.
+    τs_source = [bbnue_embedding_lags(include_instantaneous, τ, k) for τ in τsmax_source]
+    τs_target = [bbnue_embedding_lags(include_instantaneous, τ, k) for τ in τsmax_target]
+    τs_cond = [bbnue_embedding_lags(include_instantaneous, τ, k) for τ in τsmax_cond]
     
+    # Forward prediction lags.
     ks_T⁺ = [k for i in 1:length(target)]
     ks_T⁻ = [-k for i in 1:length(target)]
     js_T⁺ = [i for i in length(τs_source)+1:length(τs_source)+length(τs_target)]
@@ -93,11 +114,7 @@ function pa_candidate_variables(source, target, cond;
     τs_Ω = [τs_source..., τs_target..., τs_cond...]
     js_Ω = [[i for x in 1:length(τs[i])] for i = 1:length(τs)]
 
-    # Variable filtering, if desired
-    τs_Ω = [filtered_τs(τsᵢ, jsᵢ, k) for (τsᵢ, jsᵢ) in zip(τs, js)]
-    js_Ω = [filtered_js(τsᵢ, jsᵢ, k) for (τsᵢ, jsᵢ) in zip(τs, js)]
-
-    return [τs...,], [js...,], ks_T⁺, ks_T⁻, js_T⁺, js_T⁻
+    return [τs_Ω...,], [js_Ω...,], ks_T⁺, ks_T⁻, js_T⁺, js_T⁻
 end
 
 function pa_candidate_variables(source, target; 
@@ -105,42 +122,42 @@ function pa_candidate_variables(source, target;
         include_instantaneous = true,
         method_delay = "ac_min",
         τmin::Int = 2,
-        maxlag::Union{Int, Float64} = 0.05)
+        maxlag::Union{Int, Float64} = 0.05, 
+        τcutoff::Int = 100)
     
-    # Find the maximum allowed embedding lag for each of the candidates.
-    # We need at least two variables to allow exlusion of the `η`-lag, 
-    # so make sure we don't get only one variable from the delay method.
-    delay_τs = get_delay_τs(source, target, maxlag = maxlag)
+    # Generate candidate set. First, estimate a suitable maximum embedding lag for each 
+    # of the input variables. We need at least two variables to allow exlusion of the `k`th
+    # lag, so make sure we don't get only one variable from the delay method by using `τmin`.
+    delay_τs = search_τs(source, target, cond, maxlag = maxlag, τcutoff = τcutoff)
     τsmax_source = [max(estimate_delay(s, method_delay, delay_τs), τmin) for s in source]
     τsmax_target = [max(estimate_delay(t, method_delay, delay_τs), τmin) for t in target]
 
-    # Generate candidate set
-    startlag = include_instantaneous ? 0 : -1
-    τs_source = [[startlag:-1:-τ...,] for τ in τsmax_source]
-    τs_target = [[startlag:-1:-τ...,] for τ in τsmax_target]
+    # Next, compute the embeddings lags for each input variable, making sure that 
+    # the prediction lag `k` does not overlap with the embedding lag.
+    τs_source = [bbnue_embedding_lags(include_instantaneous, τ, k) for τ in τsmax_source]
+    τs_target = [bbnue_embedding_lags(include_instantaneous, τ, k) for τ in τsmax_target]
     
     ks_T⁺ = [k for i in 1:length(target)] 
     ks_T⁻ = [-k for i in 1:length(target)]
     js_T⁺ = [i for i in length(τs_source)+1:length(τs_source)+length(τs_target)]
     js_T⁻ = [i for i in length(τs_source)+1:length(τs_source)+length(τs_target)]
 
-    τs = [τs_source..., τs_target...,]
-    js = [[i for x in 1:length(τs[i])] for i = 1:length(τs)]
+    τs_Ω = [τs_source..., τs_target...,]
+    js_Ω = [[i for x in 1:length(τs[i])] for i = 1:length(τs)]
 
-    # Variable filtering, if desired
-    τs = [filtered_τs(τsᵢ, jsᵢ, k) for (τsᵢ, jsᵢ) in zip(τs, js)]
-    js = [filtered_js(τsᵢ, jsᵢ, k) for (τsᵢ, jsᵢ) in zip(τs, js)]
-    
-    return [τs...,], [js...,], ks_T⁺, ks_T⁻, js_T⁺, js_T⁻
+    return [τs_Ω...,], [js_Ω...,], ks_T⁺, ks_T⁻, js_T⁺, js_T⁻
 end
 
 function pa_embed_variables(source, target; 
         η::Int = 1, 
         include_instantaneous = true,
         method_delay = "mi_min",
-        maxlag::Union{Int, Float64} = 0.05)
+        maxlag::Union{Int, Float64} = 0.05, 
+        τcutoff::Int = 100)
     
-    τs, js, ks_T⁺, ks_T⁻, js_T⁺, js_T⁻ = pa_candidate_variables(source, target, k = η)
+    τs, js, ks_T⁺, ks_T⁻, js_T⁺, js_T⁻ = pa_candidate_variables(source, target, k = η, 
+        τcutoff = τcutoff, maxlag = maxlag, method_delay = method_delay, 
+        include_instantaneous = include_instantaneous)
     
     # TODO: This is more efficient if not using datasets. Re-do manually.
     data = Dataset([source..., target...,]...,)
