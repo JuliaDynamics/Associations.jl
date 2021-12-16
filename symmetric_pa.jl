@@ -1,8 +1,8 @@
 using Revise, CausalityTools, DynamicalSystems, TimeseriesSurrogates, Statistics, Plots, Distributions
 
 npts = 1000
-c_xy = 0.5#rand(Uniform(0.2, 0.8))
-c_yx = 0.0#rand(Uniform(0.2, 0.8))
+c_xy = rand(Uniform(0.2, 0.8))
+c_yx = rand(Uniform(0.2, 0.8))
 @show c_xy, c_yx
 sys = logistic2_bidir(c_xy = c_xy, c_yx = c_yx)
 x, y = columns(trajectory(sys, npts, Ttr = 1000));
@@ -17,10 +17,10 @@ x, y = columns(trajectory(sys, npts, Ttr = 1000));
 nbins = floor(Int, npts^(1/(max(dX, dY) + 1)))
 est = VisitationFrequency(RectangularBinning(nbins))
 
-#pa_xy, Ȳ⁺Y⁻X⁻s_xy, Ȳ⁻Y⁺X⁻s_xy, Ȳ⁺Y⁻s_xy, Ȳ⁻Y⁺s_xy = PredictiveAsymmetry.pa_naive(x, y, est, ηs, τS = -τX, dS = dX, τT = -τY, dT = dY)
-#pa_yx, Ȳ⁺Y⁻X⁻s_yx, Ȳ⁻Y⁺X⁻s_yx, Ȳ⁺Y⁻s_yx, Ȳ⁻Y⁺s_yx = PredictiveAsymmetry.pa_naive(y, x, est, ηs, τS = -τY, dS = dY, τT = -τX, dT = dX)
-pa_xy = PredictiveAsymmetry.pa_naive(x, y, est, ηs, τS = -τX, dS = dX, τT = -τY, dT = dY)
-pa_yx = PredictiveAsymmetry.pa_naive(y, x, est, ηs, τS = -τY, dS = dY, τT = -τX, dT = dX)
+#pa_xy, Ȳ⁺Y⁻X⁻s_xy, Ȳ⁻Y⁺X⁻s_xy, Ȳ⁺Y⁻s_xy, Ȳ⁻Y⁺s_xy = PredictiveAsymmetry.A₁(x, y, est, ηs, τS = -τX, dS = dX, τT = -τY, dT = dY)
+#pa_yx, Ȳ⁺Y⁻X⁻s_yx, Ȳ⁻Y⁺X⁻s_yx, Ȳ⁺Y⁻s_yx, Ȳ⁻Y⁺s_yx = PredictiveAsymmetry.A₁(y, x, est, ηs, τS = -τY, dS = dY, τT = -τX, dT = dX)
+pa_xy = PredictiveAsymmetry.A₁(x, y, est, ηs, τS = -τX, dS = dX, τT = -τY, dT = dY)
+pa_yx = PredictiveAsymmetry.A₁(y, x, est, ηs, τS = -τY, dS = dY, τT = -τX, dT = dX)
 
 
 te_xy = [transferentropy(x, y, est, η𝒯 = η, τS = -τX, dS = dX, τT = -τY, dT = dY) for η in [-ηmax:-1; 1:ηmax]]
@@ -52,8 +52,8 @@ pa_yx_surr = zeros(ηmax, nsurr)
 # plot!(ηs, Ȳ⁻Y⁺s_yx, label = "Y → X | Ȳ⁻Y⁺", ls = :solid, c = :red)
 
 for i = 1:nsurr
-    pa_xy_surr[:, i] = PredictiveAsymmetry.pa_naive(sx(), y, est, ηs, τS = -τX, dS = dX, τT = -τY, dT = dY)
-    pa_yx_surr[:, i] = PredictiveAsymmetry.pa_naive(sy(), x, est, ηs, τS = -τY, dS = dY, τT = -τX, dT = dX)
+    pa_xy_surr[:, i] = PredictiveAsymmetry.A₁(sx(), y, est, ηs, τS = -τX, dS = dX, τT = -τY, dT = dY)
+    pa_yx_surr[:, i] = PredictiveAsymmetry.A₁(sy(), x, est, ηs, τS = -τY, dS = dY, τT = -τX, dT = dX)
 end
 
 α = 0.01
