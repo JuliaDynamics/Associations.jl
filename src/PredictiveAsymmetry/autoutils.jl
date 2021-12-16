@@ -1,5 +1,5 @@
 import TransferEntropy: process_input, embed_candidate_variables, optim_te
-using DelayEmbeddings, Statistics
+using DelayEmbeddings, Statistics, Entropies
 
 # Usaully, we use all lags from startlag:-\tau_max to construct variables. In some situations,
 # we may want to exclude som of those variables. 
@@ -26,22 +26,65 @@ function get_delay_τs(source, target; maxlag::Union{Int, Float64} = 0.05)
     return delay_τs
 end
 
+export pa
+# H(Ȳ⁻, Y⁺, X⁻) - H(Ȳ⁻, Y⁺) - H(Ȳ⁺, Y⁻, X⁻) + H(Ȳ⁺, Y⁻)
+function pa(source, target, est, ηs;
+        normalize = false, f::Real = 1.0,
+        d𝒯 = 1, dT = 1, dS = 1, τT = -1, τS = -1, base = 2, q = 1)
+    @assert τT < 0
+    @assert τS < 0 
+    τs⁻ = 0:-1:τS*(dS - 1)
+    νs⁻ = 0:-1:τT*(dT - 1)
+    νs⁺ = .-(0:-1:τT*(dT - 1))
+    #@show length(νs⁻), length(τs⁻)
+    data = Dataset(source, target)
+    lags = [τs⁻..., νs⁻..., νs⁺..., ηs..., .-(ηs)...,]
+    js = [repeat([1], length(τs⁻))...,repeat([2], length(νs⁻)*2)..., repeat([2], length(ηs)*2)..., ]
+    E = genembed(data, lags, js)
+
+    nη = length(ηs)
+    X⁻ = Dataset(E[:, 1:dS])
+    Y⁻ = Dataset(E[:, dS+1:dS+dT])
+    Y⁺ = Dataset(E[:, dS+dT+1:dS+dT+dT])
+    n = dimension(X⁻)+dimension(Y⁻)+dimension(Y⁺)
+    Ȳ⁻ = Dataset(E[:, n+1:n+nη])
+    Ȳ⁺ = Dataset(E[:, n+nη+1:end])
+    
+    pas = zeros(nη)
+    #@show 1:dS, dS+1:dS+dT, dS+dT+1:dS+dT+dT, n+1:n+length(ηs), n+length(ηs)+1:length(lags)
+
+    for η in ηs
+        Ȳ⁺Y⁻ = Dataset(Dataset(Ȳ⁺[:, η]), Y⁻)
+        Ȳ⁻Y⁺ = Dataset(Dataset(Ȳ⁻[:, η]), Y⁺)
+        Ȳ⁺Y⁻X⁻ = Dataset(Ȳ⁺Y⁻, X⁻)
+        Ȳ⁻Y⁺X⁻ = Dataset(Ȳ⁻Y⁺, X⁻)
+
+        pas[η] = 
+            genentropy(Ȳ⁻Y⁺X⁻, est, base = base, q = q) - 
+            genentropy(Ȳ⁻Y⁺, est, base = base, q = q) - 
+            genentropy(Ȳ⁺Y⁻X⁻, est, base = base, q = q) + 
+            genentropy(Ȳ⁺Y⁻, est, base = base, q = q)
+    end
+
+    return pas
+end
+
 """
-    search_τs(source, target, cond; 
+    search_τs(inputs...; 
         maxlag::Union{Int, Float64} = 0.05, τcutoff::Int = 100) → delay_τs
 
-Decide delay range search among when searching for maximum embedding delays, based on input 
-time series length(s).
+Decide delay range search among when searching for maximum embedding delays, 
+based on input time series length(s).
 """
-function search_τs(source, target, cond; 
+function search_τs(inputs...; 
         maxlag::Union{Int, Float64} = 0.05, τcutoff::Int = 100)
 
     # Ensure all input time series are of the same length.
-    Ls = [length.(source); length.(target); length.(cond)]
+    Ls = Iterators.flatten([length.(x) for x in [inputs...,]])
     @assert all(Ls .== maximum(Ls))
-    
+
     if maxlag isa Int
-        delay_τs = 1:minimum(maxlag, cutoff)
+        delay_τs = 1:min(maxlag, τcutoff)
     else
         delay_τs = 1:ceil(Int, maximum(Ls)*maxlag)
     end
@@ -56,6 +99,7 @@ Generate embedding lags for predictive asymmetry analysis using the bbnue algori
 function bbnue_embedding_lags(include_instantaneous, τmax, exclude)
     @assert τmax > 0
     startlag = include_instantaneous ? 0 : -1
+    @show startlag, τmax, startlag:-1:-τmax
     [τ for τ in startlag:-1:-τmax if abs(τ) ∉ abs.(exclude)]
 end
 
@@ -76,10 +120,11 @@ of the target process and of the conditional processes, respectively. `k` is the
 If `include_instantaneous == true`, then the analysis will also consider instantaneous interactions between
 the variables.
 
-If `maxlag < τcutoff` is an integer, `maxlag` is taken as the maximum allowed embedding lag. If `maxlag` is a float, 
-then the maximum embedding lag is taken as `minimum(maximum([length.(source); length.(target); length.(cond)])*maxlag, τcutoff)`.
-`τmin` is the minimum amount of variables to include in the candidate set (that is, each variable is embedded 
-with lags `startlag:-1:-τmin`).
+If `maxlag < τcutoff` is an integer, `maxlag` is taken as the maximum allowed embedding lag. 
+If `maxlag` is a float, then the maximum embedding lag is taken as 
+`minimum(maximum([length.(source); length.(target); length.(cond)])*maxlag, τcutoff)`.
+`τmin` is the minimum amount of variables to include in the candidate set (that is, 
+each variable is embedded with lags `startlag:-1:-τmin`).
 """
 function pa_candidate_variables(source, target, cond;
         k::Int = 1,
@@ -112,13 +157,13 @@ function pa_candidate_variables(source, target, cond;
     js_T⁻ = [i for i in length(τs_source)+1:length(τs_source)+length(τs_target)]
 
     τs_Ω = [τs_source..., τs_target..., τs_cond...]
-    js_Ω = [[i for x in 1:length(τs[i])] for i = 1:length(τs)]
+    js_Ω = [[i for x in 1:length(τs[i])] for i = 1:length(τs_Ω)]
 
     return [τs_Ω...,], [js_Ω...,], ks_T⁺, ks_T⁻, js_T⁺, js_T⁻
 end
 
 function pa_candidate_variables(source, target; 
-        k::Int = 1, 
+        k = 1, 
         include_instantaneous = true,
         method_delay = "ac_min",
         τmin::Int = 2,
@@ -128,22 +173,22 @@ function pa_candidate_variables(source, target;
     # Generate candidate set. First, estimate a suitable maximum embedding lag for each 
     # of the input variables. We need at least two variables to allow exlusion of the `k`th
     # lag, so make sure we don't get only one variable from the delay method by using `τmin`.
-    delay_τs = search_τs(source, target, cond, maxlag = maxlag, τcutoff = τcutoff)
+    delay_τs = search_τs(source, target, maxlag = maxlag, τcutoff = τcutoff)
     τsmax_source = [max(estimate_delay(s, method_delay, delay_τs), τmin) for s in source]
     τsmax_target = [max(estimate_delay(t, method_delay, delay_τs), τmin) for t in target]
-
+    @show τsmax_source, τsmax_target
     # Next, compute the embeddings lags for each input variable, making sure that 
     # the prediction lag `k` does not overlap with the embedding lag.
     τs_source = [bbnue_embedding_lags(include_instantaneous, τ, k) for τ in τsmax_source]
     τs_target = [bbnue_embedding_lags(include_instantaneous, τ, k) for τ in τsmax_target]
-    
+    @show τs_source, τs_target
     ks_T⁺ = [k for i in 1:length(target)] 
-    ks_T⁻ = [-k for i in 1:length(target)]
-    js_T⁺ = [i for i in length(τs_source)+1:length(τs_source)+length(τs_target)]
-    js_T⁻ = [i for i in length(τs_source)+1:length(τs_source)+length(τs_target)]
+    ks_T⁻ = [.-k for i in 1:length(target)]
+    js_T⁺ = [repeat([i], length(k)) for i in length(τs_source)+1:length(τs_source)+length(τs_target)]
+    js_T⁻ = [repeat([i], length(k)) for i in length(τs_source)+1:length(τs_source)+length(τs_target)]
 
     τs_Ω = [τs_source..., τs_target...,]
-    js_Ω = [[i for x in 1:length(τs[i])] for i = 1:length(τs)]
+    js_Ω = [[i for x in 1:length(τs_Ω[i])] for i = 1:length(τs_Ω)]
 
     return [τs_Ω...,], [js_Ω...,], ks_T⁺, ks_T⁻, js_T⁺, js_T⁻
 end
