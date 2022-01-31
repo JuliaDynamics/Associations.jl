@@ -1,11 +1,15 @@
 # [Transfer entropy](@ref transferentropy)
 
+## Traditional 
+
 The following `transferentropy` function computes transfer entropy "manually", that is,
 in addition to specifying an estimator, you have to specify embedding parameters.
 
 ```@docs
 transferentropy
 ```
+
+## Automated variable selection
 
 The `bbnue` function optimizes embedding parameters using an iterative procedure for 
 variable selection, and performs null hypothesis testing as part of that procedure.
