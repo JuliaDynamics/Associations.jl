@@ -51,6 +51,12 @@ rossler_lorenz
 chuacircuit_nscroll_sine
 ```
 
+### Repressilator
+
+```@docs
+repressilator
+```
+
 ## [Discrete](@id discrete_systems)
 
 ### [Ulam map](@id ulam)

@@ -18,6 +18,7 @@
     @test isa(mediated_link(), ContinuousDynamicalSystem)
 
     @test isa(rossler_lorenz(), ContinuousDynamicalSystem)
+    @test isa(repressilator(), ContinuousDynamicalSystem)
 
     # Initialise all the systems and generate trajectories
     l = 0.1
@@ -35,5 +36,5 @@
     @test isa(trajectory(mediated_link(), l), Dataset)
 
     @test isa(trajectory(rossler_lorenz(), l), Dataset)
-
+    @test isa(trajectory(repressilator(), l), Dataset)
 end
