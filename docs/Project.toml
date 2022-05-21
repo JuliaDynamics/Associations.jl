@@ -1,5 +1,6 @@
 [deps]
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
 DocumenterTools = "35a29f4d-8980-5a13-9543-d66fff28ecb8"
 DynamicalSystems = "61744808-ddfa-5f27-97ff-6e42cc95d634"

@@ -16,6 +16,7 @@ properties of these delay reconstructions, to infer causal/dynamical relationshi
 time series, and embedding parameters (given as keyword arguments).
 
 - Cross mapping ([`crossmap`](@ref))
+- Pairwise asymmetric inference ([`pai`](@ref))
 - Joint distance distribution ([`jdd`](@ref))
 - S-measure ([`s_measure`](@ref))
 

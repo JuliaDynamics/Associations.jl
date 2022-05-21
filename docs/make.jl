@@ -3,7 +3,7 @@ using Pkg
 CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== nothing
 CI && Pkg.activate(@__DIR__)
 CI && Pkg.instantiate()
-CI && (ENV["GKSwstype"] = "100")
+ENV["GKSwstype"] = "100" # allow local builds without output
 using DelayEmbeddings
 using TransferEntropy
 using Documenter
@@ -11,6 +11,7 @@ using DocumenterTools: Themes
 using CausalityTools
 using DynamicalSystems
 using HypothesisTests
+using Distributions
 
 # %% JuliaDynamics theme.
 # download the themes
@@ -40,6 +41,7 @@ PAGES = [
         "joint_distance_distribution.md",
         "s_measure.md",
         "cross_mapping.md",
+        "pairwise_asymmetric_inference.md"
     ],
     "Information/entropy based" => [
         "mutualinfo.md",
