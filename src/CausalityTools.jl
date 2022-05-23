@@ -5,8 +5,8 @@ module CausalityTools
     export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem, Dataset
     
     import TransferEntropy
-    import TransferEntropy: transferentropy, mutualinfo, Hilbert
-    export transferentropy, mutualinfo, Hilbert
+    import TransferEntropy: transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
+    export transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
     @reexport using Entropies
     @reexport using TransferEntropy
     @reexport using TimeseriesSurrogates
