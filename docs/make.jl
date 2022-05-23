@@ -45,6 +45,7 @@ PAGES = [
     ],
     "Information/entropy based" => [
         "mutualinfo.md",
+        "conditional_mutualinfo.md",
         "TransferEntropy.md",
         "predictive_asymmetry.md",
         "generalized_entropy.md",
