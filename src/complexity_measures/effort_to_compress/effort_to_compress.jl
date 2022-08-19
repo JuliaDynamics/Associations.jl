@@ -4,7 +4,10 @@ export EffortToCompress, EffortToCompressSlidingWindow
     EffortToCompress(; normalize = false, alphabet_size = nothing)
 
 The effort-to-compress (ETC)[^Nagaraj2013] algorithm quantifies the compression complexity 
-of a time series.
+of a time series. 
+
+If applied to two time series, the (bivariate) joint ETC as described in [^Kathpalia2019] 
+can also be computed.
 
 ## Normalization
 
@@ -28,6 +31,8 @@ ETC for multivariate time series. For univariate time series, `alphabet_size` is
 [^Nagaraj2013]: Nagaraj, N., Balasubramanian, K., & Dey, S. (2013). A new complexity 
     measure for time series analysis and classification. The European Physical Journal 
     Special Topics, 222(3), 847-860.
+[^Kathpalia2019]: Kathpalia, A., & Nagaraj, N. (2019). Data-based intervention approach 
+    for Complexity-Causality measure. PeerJ Computer Science, 5, e196.
 """
 struct EffortToCompress
     alphabet_size::Union{Nothing, Int}
