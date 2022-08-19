@@ -113,5 +113,21 @@ using Test
         N_true = count(inequality_tests .== true)
         @show N_true, N_not_true
         @test all(inequality_tests .== true)
+
+        @testset "ETC joint sliding window" begin
+            x1 = rand(0:1, 500)
+            x2 = rand(0:1, 500)
+
+            window_size = 10
+            step = 2
+            alg = EffortToCompressSlidingWindow(
+                window_size = window_size, 
+                step = step)
+
+            windows = get_windows(x1, window_size, step)
+            res = compression_complexity(x1, x2, alg)
+            @test length(res) == length(windows)
+            @test all(res .>= 0)
+        end
     end
 end

@@ -130,3 +130,10 @@ function compression_complexity(
 
     return algorithm.normalize ? N / (length(x) - 1) : N
 end
+
+function compression_complexity(x::AbstractVector{J}, y::AbstractVector{J},
+    algorithm::EffortToCompressSlidingWindow) where {J <: Integer}
+    windows = get_windows(x, algorithm.window_size, algorithm.step)
+    alg = EffortToCompress(normalize = algorithm.normalize)
+    return @views [compression_complexity(x[window], y[window], alg) for window in windows]
+end
