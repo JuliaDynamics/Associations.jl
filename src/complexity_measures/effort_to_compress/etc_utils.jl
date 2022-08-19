@@ -1,125 +1,68 @@
 using StatsBase
+using DelayEmbeddings
 using Entropies
 export get_windows
 
-# TODO: fix indexing and re-initialization, so this function can be re-used without 
-# providing newly initialized `frequency_of_symbols`, `unique_symbols` and `sorted_sequence`
-# It works for now, but initialization of the arrays need to happen *before* calling this 
-# function.
-"""
-estimate_histogram!(frequency_of_symbols, unique_symbols, sorted_sequence, kmax::Int) → Int
 
-Count the occurrences of each of the unique symbols in `sorted_sequence`. The results
-are written into the pre-allocated arrays `frequency_of_symbols` and `unique_symbols`.
-Assummes `length(sorted_sequence) >= 2`.
+allidentical(x) = all(xᵢ -> xᵢ == first(x), x)
 
-This is used for determining which symbols to substitute in a given iteration of the 
-[`effort_to_compress`](@ref) algorithm. Because the [`effort_to_compress`](@ref) algorithm 
-is intented to be used repeatedly in real applications, pre-allocation is necessary for 
-efficiency. Therefore, this function assumes a fixed-length pre-allocated 
-`sorted_sequence`-vector, for which we consider the elements at indices `1:kmax` (as 
-symbols are substituted in [`effort_to_compress`](@ref), `kmax` decreases).
+haszeroentropy(x) = allidentical(x) || length(x) == 1
 
-Returns the number of unique elements found in `sorted_sequence`.
-"""
-function estimate_histogram!(frequency_of_symbols, unique_symbols, sorted_sequence, 
-    kmax::Int)
-    frequency_of_symbols .= 0
-    n_unique = 1
-    
-    unique_symbols[n_unique] = sorted_sequence[n_unique]
-    frequency_of_symbols[n_unique] = 1
+histogram(x) = StatsBase.countmap(x)
 
-    i = 1
-    while i < kmax
-        i += 1
-        last = sorted_sequence[i - 1]
-        next = sorted_sequence[i]
-        if last == next
-            frequency_of_symbols[n_unique] += 1
-        else
-            n_unique += 1
-            unique_symbols[n_unique] = next
-            frequency_of_symbols[n_unique] += 1
-        end
+function vecints_to_int(x::AbstractVector{J}, base) where J <: Integer
+    s = zero(J)
+    for xᵢ in x
+       s = s * base + xᵢ
     end
-
-    #@show "histogram: ", frequency_of_symbols, unique_symbols, sorted_sequence
-
+    return s
 end
 
 
 """
-    ReplacementStrategyInCaseOfEquality
+    symbol_pairs(x::AbstractVector{J}) where J <: Integer → Vector{SVector{2, J}}
 
-How to decide which symbol to replace in case two or more symbols have the same frequency.
+Create a sequence of two-letter symbol pairs from an integer valued time series.
 """
-abstract type ReplacementStrategyInCaseOfEquality end
+function symbol_pairs(x::AbstractVector{J}) where {J}
+    pairs = zeros(SVector{2, J}, length(x) - 1)
 
-""" 
-    PickFirst <: ReplacementStrategyInCaseOfEquality
-
-Pick the first element (according to the sorting algorithm used).
-"""
-struct PickFirst <: ReplacementStrategyInCaseOfEquality end
-
-
-
-"""
-Return the sequence where the element with the highest frequency is replaced by 
-the new symbol `replacement_symbol`.
-"""
-function substituted_sequence(x::AbstractVector{T}, 
-        symbol_sequence, frequency_of_symbols, unique_symbols, 
-        kmax::Int, replacement_strategy::PickFirst) where T <: Integer
-    
-    replacement_value = maximum(x) + 1
-
-    # The new x will always be smaller than the original x.
-    # We don't know how much smaller, so reserve sufficient space.
-    new_x = Vector{T}(undef, 0)
-    sizehint!(new_x, length(x))
-    
-    idx_max = argmax(@view frequency_of_symbols[1:kmax])
-    symbol_to_replace = (@view unique_symbols[1:kmax])[idx_max]
-    indices_to_replace = @views findall(xᵢ -> xᵢ == symbol_to_replace, symbol_sequence[1:kmax])
-    j = 1
-
-    while j <= length(x)
-        if j in indices_to_replace
-            push!(new_x, replacement_value)
-            j += 2
-        else
-            if (j <= length(x))
-                push!(new_x, x[j])
-                j += 1
-            end
-        end
+    for i in 1:length(x) - 1
+        pairs[i] = SA[x[i], x[i+1]]
     end
-
-    # Shrink new vector to its size
-    sizehint!(new_x, length(new_x))
-
-    return new_x
+    return pairs
 end
 
 """
-Fill the pre-allocated `symbol_sequence` vector with two-letter symbols made from the 
-elements `x[1:kmax+1]`. Also, sort the sequence and write in-place to the pre-allocated
-`sorted_sequence` vector.
+    symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Integer} → Vector{SVector{2, Tuple{J, J}}}
+
+Generate symbol pairs from the integer-valued, same-length vectors `x` and `y`.
+The `i`-th element of the returned vector is the `SVector` 
+`SA[(x[i], x[i+1]), (y[i], y[i+1])]`.
 """
-function make_symbols!(symbol_sequence, sorted_sequence, x, kmax::Int) 
-    for j = 1:kmax
-        symbol_sequence[j] = make_symbol(x, j)
+function symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Integer}
+    length(x) == length(y) || throw(ArgumentError("lengths of `x` and `y` must be equal"))
+    length(x) >= 2 || throw(ArgumentError("Lengths of x and y must be >= 2"))
+
+    joint_pairs = Vector{SVector{2, Tuple{Int64, Int64}}}(undef, 0)
+    for i = 1:length(x) - 1 
+        push!(joint_pairs, SA[(x[i], x[i+1]), (y[i], y[i+1])])
     end
-
-
-    sorted_sequence[1:kmax] .= symbol_sequence[1:kmax]
-    sort!(sorted_sequence, alg = Base.Sort.InsertionSort)
+    return joint_pairs
 end
 
-make_symbol(x, i::Int) = @views "$(x[i])$(x[i+1])"
-make_symbol_svec(x, i::Int) = @views SVector(x[i], x[i+1])
+"""
+    symbol_sequence(x::Dataset{D, T}, alphabet_size) where {D <: Integer, T <: Integer} ⇥ Vector{Int}
+
+Create an encoded one-dimensional integer symbol sequence from a integer-valued , assuming that the alphabet used for the original symbolization 
+has `alphabet_size` possible symbols.
+
+In the context of the effort-to-compress algorithm, `x` would typically 
+be a sub-dataset as obtained by `view(d::Dataset, indices)`.
+"""
+function symbol_sequence(x::AbstractDataset{D, T}, alphabet_size::J) where {D, T, J <: Integer}
+    return [vecints_to_int(xᵢ, alphabet_size) for xᵢ in x]
+end
 
 function get_windows(x, window_length, step::Int = 1)
     [i:i+window_length for i in 1:step:length(x)-window_length]

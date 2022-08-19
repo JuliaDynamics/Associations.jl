@@ -3,12 +3,21 @@ abstract type CompressionComplexityAlgorithm end
 export compression_complexity
 
 """
-    compression_complexity(x, algorithm::EffortToCompress) → N    
+    compression_complexity(x, algorithm::EffortToCompress) → N
     compression_complexity(x, algorithm::EffortToCompressSlidingWindow) → Vector{N}
 
+    compression_complexity(x::AbstractVector{Int}, y::AbstractVector{Int}, 
+        algorithm::EffortToCompress) → N    
+    compression_complexity(x::AbstractVector{Int}, y::AbstractVector{Int}, 
+        algorithm::EffortToCompressSlidingWindow) → Vector{N}  
+
 Compute the compression complexity of the pre-binned/pre-symbolized (integer-valued)
-univariate (`Vector{Int}`) or multivariate (`Dataset`) time series, using the given 
-`algorithm`.
+univariate (`Vector{Int}`) or multivariate (`Dataset`) time series `x`, using the given 
+`algorithm`. 
+
+Or, in the case two symbolized time series `x` and `y` are provided, compute 
+the joint compression complexity. For [`EffortToCompress`](@ref), this corresponds to 
+the joint ETC described in [^Kathpalia2019].
 
 See also: [`EffortToCompress`](@ref), [`EffortToCompressSlidingWindow`](@ref).
 
@@ -41,6 +50,8 @@ ts = rand(0:1, 100)
 alg = EffortToCompressSlidingWindow(window_size = 10, step = 5)
 compression_complexity(x, alg)
 ```
+
+[^Kathpalia2019]: Kathpalia, A., & Nagaraj, N. (2019). Data-based intervention approach for Complexity-Causality measure. PeerJ Computer Science, 5, e196.
 """
 function compression_complexity end
 
