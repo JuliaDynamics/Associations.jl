@@ -38,18 +38,18 @@ function pair_to_be_replaced(x::Vector{SVector{2, J}}) where {J <: Int}
     return pair_to_be_replaced
 end
 
+
 function non_sequential_recursive_pair_substitution(pairs, pair_to_replace, 
         symbol_to_replace_with)
     
-    compressed_x = Vector{Int}(undef, 0)
+    T = eltype(first(pairs))
+    compressed_x = Vector{T}(undef, 0)
     sizehint!(compressed_x, length(pairs))
 
     j = 1
-    k = 0
-
     #println("Total pairs: $(length(pairs))\n$pairs\n---")
     n_replaced = 0
-    while j <= length(pairs) && k < 20
+    while j <= length(pairs)
         if pairs[j] == pair_to_replace
             # If replacing the j-th symbol pair, then the j-th and (j+1)-th original symbols
             # are merged. Thus, the index must be incremented by 2 (hence "non-sequential").
@@ -74,19 +74,20 @@ function non_sequential_recursive_pair_substitution(pairs, pair_to_replace,
                 j += 1
                 #println(" and jumped to j=$j")
             elseif j < length(pairs)
-                    # If at any symbol pair but the last, keep the first symbol.
-                    @views push!(compressed_x, pairs[j][1])
-                    #print("n_replaced=$n_replaced | Kept original at j=$j ")
-                    j += 1
-                    #println("and jumped to j=$j")
+                # If at any symbol pair but the last, keep the first symbol.
+                @views push!(compressed_x, pairs[j][1])
+                #print("n_replaced=$n_replaced | Kept original at j=$j ")
+                j += 1
+                #println("and jumped to j=$j")
             end
         end
         
-        k += 1
     end
     sizehint!(compressed_x, length(compressed_x))
     return compressed_x
 end
+
+
 
 function compress(x::Vector{SVector{2, J}}) where {J <: Int}
     # This is a two-letter symbol pair (two integers)
@@ -99,18 +100,15 @@ function compress(x::Vector{SVector{2, J}}) where {J <: Int}
     non_sequential_recursive_pair_substitution(x, pair_to_replace, symbol_to_replace_with)
 end
 
-
-
 function compression_complexity(x::AbstractVector{J}, algorithm::EffortToCompress) where {J <: Integer}
     seq = copy(x)
     N = 0.0
     while !haszeroentropy(seq)
-        seq = compress(symbol_sequence(seq))
+        seq = compress(symbol_pairs(seq))
         N += 1
     end
     return algorithm.normalize ? N / (length(x) - 1) : N
 end
-
 
 function compression_complexity(x::AbstractVector{T}, 
     algorithm::EffortToCompressSlidingWindow) where {T <: Integer}
@@ -118,4 +116,3 @@ function compression_complexity(x::AbstractVector{T},
     alg = EffortToCompress(normalize = algorithm.normalize)
     return @views [compression_complexity(x[window], alg) for window in windows]
 end
-

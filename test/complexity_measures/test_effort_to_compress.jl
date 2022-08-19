@@ -64,4 +64,54 @@ using Test
         @test length(res) == length(windows)
         @test all(res .>= 0)
     end
+
+    @testset "ETC joint" begin
+        # Test case in the "Joint ETC measure for a pair of time series: ETC(X,Y)" 
+        # section in Kathpalia & Nagaraj (2013):
+        alg = EffortToCompress(normalize = false)
+        x = [1, 2, 1, 2, 1, 2]
+        y = [1, 2, 1, 3, 1, 3]
+        @test compression_complexity(x, y, alg) == 4.0
+
+        # Constant sequences should not trigger compression
+        x = [0, 0, 0, 0, 0]
+        y = [1, 1, 1, 1, 1]
+        compression_complexity(x, y, EffortToCompress()) == 0.0
+       
+        
+        # Single-element sequences already have zero-entropy.
+        x = [0]
+        y = [1]
+        compression_complexity(x, y, EffortToCompress()) == 0.0
+
+        x = [1, 1, 0, 1, 1]
+        y = [0, 0, 0, 0, 0]
+        # Should reduce in three steps as
+        # 11011 202 32 4
+        # aaaaa bab cb d
+        compression_complexity(x, y, EffortToCompress()) == 3.0
+
+        # A good test of the correctness of the implementation is that the joint ETC(X, Y)
+        # obeys the relationship stated in Kathpalia & Nagaraj (2013):
+        # ETC(X, Y) <= ETC(X) + ETC(Y)
+        # Here, we test if that is the case for our implementation by running 100000 test
+        # cases on random pairs of length-50 sequences, whose number of symbols 
+        # for each sequence is allowed to vary between 2 and 6 between iterations.
+        inequality_tests = Vector{Bool}(undef, 0)
+        alg = EffortToCompress(normalize = false)
+
+        for i = 1:100000
+            x = rand(0:rand(1:5), 50)
+            y = rand(0:rand(1:5), 50)
+            ETCxy = round(Int, compression_complexity(x, y, alg))
+            ETCx = round(Int, compression_complexity(x, alg))
+            ETCy = round(Int, compression_complexity(y, alg))
+            res = ETCxy <= ETCx + ETCy
+            push!(inequality_tests, res)
+        end
+        N_not_true = count(inequality_tests .!= true)
+        N_true = count(inequality_tests .== true)
+        @show N_true, N_not_true
+        @test all(inequality_tests .== true)
+    end
 end
