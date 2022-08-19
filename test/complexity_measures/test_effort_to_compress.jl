@@ -2,17 +2,28 @@ using Test
 
 @testset "Effort to compress (ETC)" begin 
     @testset "ETC univariate" begin 
-
-        
-        x1 = [1, 2, 1, 2, 1, 1, 1, 2]
-        x2 = [0, 1, 0, 1, 0, 1, 0, 1]
-        x3 = [0, 1, 0, 0, 1, 1, 1, 0]
         alg = EffortToCompress(normalize = false)
-        @test compression_complexity(x1, alg) == 5.0
-        @test compression_complexity(x2, alg) == 1.0
-        @test compression_complexity(x3, alg) == 6.0
-        @test compression_complexity([1], alg) == 0.0
 
+        @testset "Paper examples" begin
+            x1 = [1, 2, 1, 2, 1, 1, 1, 2]
+            x2 = [0, 1, 0, 1, 0, 1, 0, 1]
+            x3 = [0, 1, 0, 0, 1, 1, 1, 0]
+            @test compression_complexity(x1, alg) == 5.0
+            @test compression_complexity(x2, alg) == 1.0
+            @test compression_complexity(x3, alg) == 6.0
+        end
+
+        @testset "MATLAB toolbox comparison" begin
+            x4 = [0, 3, 2, 0, 1, 1, 1, 2, 2, 2, 1]
+            x5 = [1, 0, 1, 1, 2, 1, 1, 1, 0, 2, 0]
+            x6 = [1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1]
+            @test compression_complexity(x4, alg) == 10.0
+            @test compression_complexity(x5, alg) == 8.0
+            @test compression_complexity(x6, alg) == 6.0
+        end
+       
+        @test compression_complexity([1], alg) == 0.0
+        x3 = [0, 1, 0, 0, 1, 1, 1, 0]
         alg_norm = EffortToCompress(normalize = true)
         @test compression_complexity(x3, alg_norm) == 6.0 / (length(x3) - 1)
 

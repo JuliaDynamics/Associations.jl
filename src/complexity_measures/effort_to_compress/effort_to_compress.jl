@@ -3,8 +3,8 @@ export EffortToCompress, EffortToCompressSlidingWindow
 """
     EffortToCompress(; normalize = false, alphabet_size = nothing)
 
-The effort-to-compress (ETC)[^Nagaraj2013] algorithm can be used to compute the 
-compression complexity of a time series.
+The effort-to-compress (ETC)[^Nagaraj2013] algorithm quantifies the compression complexity 
+of a time series.
 
 ## Normalization
 
