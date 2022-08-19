@@ -12,4 +12,6 @@ include("methods/test_crossmapping.jl")
 include("systems/discrete/test_discrete_systems.jl")
 include("systems/continuous/test_continuous_systems.jl")
 
+include("complexity_measures/test_effort_to_compress.jl")
+
 #include("integrations/test_uncertaindata_integration.jl")

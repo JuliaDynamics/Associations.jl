@@ -51,6 +51,9 @@ PAGES = [
         "generalized_entropy.md",
         "info_estimators.md",
     ],
+    "Compression complexity" => [
+        "compression_complexity.md",
+    ],
 
     "example_systems.md",
     "Utilities" => [
