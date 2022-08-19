@@ -38,7 +38,7 @@ compression_complexity(x, EffortToCompress(alphabet_size = 3))
 
 ```julia
 ts = rand(0:1, 100)
-alg = EffortToCompressSlidingWindow(window_length = 10, step = 5)
+alg = EffortToCompressSlidingWindow(window_size = 10, step = 5)
 compression_complexity(x, alg)
 ```
 """
