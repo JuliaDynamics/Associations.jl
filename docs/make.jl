@@ -51,12 +51,13 @@ PAGES = [
         "generalized_entropy.md",
         "info_estimators.md",
     ],
-    "Compression complexity" => [
-        "compression_complexity.md",
+    "Interventional complexity causality" => [
+        "interventional_complexity_causality.md",
     ],
 
     "example_systems.md",
     "Utilities" => [
+        "compression_complexity.md",
         "invariant_measure.md",
         "dataset.md",
     ],

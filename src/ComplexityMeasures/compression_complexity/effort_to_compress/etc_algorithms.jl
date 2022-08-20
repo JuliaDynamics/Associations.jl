@@ -34,7 +34,7 @@ ETC for multivariate time series. For univariate time series, `alphabet_size` is
 [^Kathpalia2019]: Kathpalia, A., & Nagaraj, N. (2019). Data-based intervention approach 
     for Complexity-Causality measure. PeerJ Computer Science, 5, e196.
 """
-struct EffortToCompress
+struct EffortToCompress <: CompressionComplexityAlgorithm
     alphabet_size::Union{Nothing, Int}
     normalize::Bool
 
@@ -51,7 +51,7 @@ end
 Like [`EffortToCompress`](@ref), but applied on a constant-length sliding window across 
 the time series, using the given `step` and `window_size`.
 """
-struct EffortToCompressSlidingWindow
+struct EffortToCompressSlidingWindow <: CompressionComplexityAlgorithm
     alphabet_size::Union{Nothing, Int}
     normalize::Bool
     window_size::Int
@@ -63,9 +63,3 @@ struct EffortToCompressSlidingWindow
         step::Int = 1,
         ) = new(alphabet_size, normalize, window_size, step)
 end
-
-
-include("etc_utils.jl")
-include("etc_univariate.jl")
-include("etc_multivariate.jl")
-include("etc_joint.jl")

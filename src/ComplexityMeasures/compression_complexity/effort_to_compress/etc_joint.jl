@@ -140,3 +140,19 @@ function compression_complexity(x::AbstractVector{J}, y::AbstractVector{J},
     alg = EffortToCompress(normalize = algorithm.normalize)
     return @views [compression_complexity(x[window], y[window], alg) for window in windows]
 end
+
+function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}, algorithm::EffortToCompress, ax::Int, ay::Int) where {D1, D2, T}
+    ax >= 2 &&  ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
+    encoded_x = symbol_sequence(x, ax)
+    encoded_y = symbol_sequence(y, ay)
+
+    return compression_complexity(encoded_x, encoded_y, algorithm)
+end
+
+function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}, 
+        algorithm::EffortToCompressSlidingWindow, ax::Int, ay::Int) where {D1, D2, T}
+    ax >= 2 &&  ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
+    encoded_x = symbol_sequence(x, ax)
+    encoded_y = symbol_sequence(y, ay)
+    return compression_complexity(encoded_x, encoded_y, algorithm)
+end
