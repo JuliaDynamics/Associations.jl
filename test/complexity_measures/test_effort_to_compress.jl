@@ -111,7 +111,6 @@ using Test
         end
         N_not_true = count(inequality_tests .!= true)
         N_true = count(inequality_tests .== true)
-        @show N_true, N_not_true
         @test all(inequality_tests .== true)
 
         @testset "ETC joint sliding window" begin
