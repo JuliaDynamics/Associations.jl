@@ -134,9 +134,38 @@ function compression_complexity(
     return algorithm.normalize ? (N / L) : N
 end
 
+function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}, algorithm::EffortToCompress, ax::Int, ay::Int) where {D1, D2, T}
+    ax >= 2 &&  ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
+    encoded_x = symbol_sequence(x, ax)
+    encoded_y = symbol_sequence(y, ay)
+
+    return compression_complexity(encoded_x, encoded_y, algorithm)
+end
+
+
 function compression_complexity(x::AbstractVector{J}, y::AbstractVector{J},
     algorithm::EffortToCompressSlidingWindow) where {J <: Integer}
     windows = get_windows(x, algorithm.window_size, algorithm.step)
     alg = EffortToCompress(normalize = algorithm.normalize)
     return @views [compression_complexity(x[window], y[window], alg) for window in windows]
 end
+
+function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}, 
+        algorithm::EffortToCompressSlidingWindow, ax::Int, ay::Int) where {D1, D2, T}
+    ax >= 2 &&  ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
+    encoded_x = symbol_sequence(x, ax)
+    encoded_y = symbol_sequence(y, ay)
+    return compression_complexity(encoded_x, encoded_y, algorithm)
+end
+
+# Variables in the first dataset have an alphabet size of 2
+x1, x2 = rand(0:1, 1000), rand(0:1, 1000)
+
+# Variables in the second dataset have an alphabet size of 4
+y1, y2, y3 = rand(0:3, 1000), rand(0:3, 1000), rand(0:3, 1000)
+
+d1 = Dataset(x1, x2)
+d2 = Dataset(y1, y2, y3)
+alg = EffortToCompress(normalize = true)
+alg = EffortToCompressSlidingWindow(normalize = true, window_size = 50, step = 10)
+compression_complexity(d1, d2, alg, 2, 4)

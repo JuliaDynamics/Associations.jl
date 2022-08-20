@@ -17,8 +17,8 @@ module CausalityTools
     include("PredictiveAsymmetry/PredictiveAsymmetry.jl")
     include("example_systems/ExampleSystems.jl")
 
-    include("complexity_measures/compression_complexity.jl")
-
+    include("ComplexityMeasures/ComplexityMeasures.jl")
+    include("InterventionalComplexityCausality/InterventionalComplexityCausality.jl")
     using Requires 
     function __init__()
         #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin

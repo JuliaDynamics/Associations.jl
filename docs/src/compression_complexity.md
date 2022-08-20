@@ -1,4 +1,6 @@
-# Compression complexity
+# [Compression complexity](@id compression_complexity)
+
+## Interface
 
 ```@docs
 compression_complexity
@@ -10,3 +12,6 @@ compression_complexity
 EffortToCompress
 EffortToCompressSlidingWindow
 ```
+
+## Example
+
