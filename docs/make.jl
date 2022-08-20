@@ -52,7 +52,7 @@ PAGES = [
         "info_estimators.md",
     ],
     "Compression complexity" => [
-        "compression_complexity.md",
+        "compression_complexity/compression_complexity.md",
     ],
 
     "example_systems.md",
