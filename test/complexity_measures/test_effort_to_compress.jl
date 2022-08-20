@@ -129,5 +129,14 @@ using Test
             @test length(res) == length(windows)
             @test all(res .>= 0)
         end
+
+        @testset "ETC joint normalization" begin
+            results = zeros(Float64, 10000)
+            for i = 1:10000
+                x, y = rand(0:3, 100), rand(0:5, 100)
+                results[i] = compression_complexity(x, y, EffortToCompress(normalize = true))
+            end
+            @test all(0.0 .<= results .<= 1.0)
+        end
     end
 end

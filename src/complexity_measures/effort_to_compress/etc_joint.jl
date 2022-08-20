@@ -115,7 +115,10 @@ function compression_complexity(
         algorithm::EffortToCompress
     ) where J <: Integer
     length(x) == length(y) || throw(ArgumentError("lengths of `x` and `y` must be equal"))
-    
+    # Store original length before substituting, so that we don't normalize to
+    # the length of the compressed time series.
+    L = length(x) - 1
+
     # Edge case: one-element vectors return zero regardless of normalization (avoids 
     # division by zero).
     if length(x) == length(y) == 1
@@ -127,8 +130,8 @@ function compression_complexity(
         x, y = compress(x, y)
         N += 1
     end
-
-    return algorithm.normalize ? N / (length(x) - 1) : N
+    
+    return algorithm.normalize ? (N / L) : N
 end
 
 function compression_complexity(x::AbstractVector{J}, y::AbstractVector{J},
