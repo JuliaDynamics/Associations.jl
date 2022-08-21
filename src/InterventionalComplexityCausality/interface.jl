@@ -19,11 +19,21 @@ abstract type InterventionalComplexityCausalityEstimator end
 Interventional complexity causality (ICC) is defined as[^Kathpalia2019] *the change in the 
 dynamical complexity of time series X when `Xⁱ` is seen to be generated jointly by the 
 dynamical evolution of both `Y⁻` and `X⁻` as opposed to by the reality of the dynamical 
-evolution of `X⁻` alone"*, where
+evolution of `X⁻` alone"*, that is
 
+```math
+ICC_{Y^{-} \\to X^{i}} = DC(X^{i} | X^{i}) - DC(X^{i} | X^{-}, Y^{-}),
+```
+
+where
+
+- DC is [`dynamical_complexity`](@ref).
 - `Xⁱ` is a block of current values of `X` (`ΔX` in the original paper), 
 - `X⁻` is a block of past values of `X`, not overlapping with and immediately before `Xⁱ`, and 
 - `Y⁻` is a block of values from a time series `Y` taken at the same indices as `X⁻`.
+
+`icc` computes the mean ICC across a series of sliding windows over the input time series 
+`x` and `y`, where the sliding window configuration is dictated by the `estimator`.
 
 Use one of the estimators listed in the documentation.
 
