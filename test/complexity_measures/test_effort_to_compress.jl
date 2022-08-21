@@ -76,13 +76,17 @@ using Test
         d1 = Dataset(x1, x2)
         d2 = Dataset(y1, y2, y3)
         alg = EffortToCompress(normalize = true)
-        @test 0.0 .<= compression_complexity(d1, d2, alg, 2, 4) .<= 1.0
+        @test 0.0 ≤ compression_complexity(d1, d2, alg, 2, 4) ≤ 1.0
 
-        windows = get_windows(data, 50, 10)
-        alg = EffortToCompressSlidingWindow(normalize = true, window_size = 50, step = 10)
-        sw = compression_complexity(data, alg)
+        n_windows, step = 50, 10
+        windows = get_windows(d2, n_windows, step)
+        alg = EffortToCompressSlidingWindow(
+            normalize = true, 
+            window_size = n_windows, 
+            step = step)
+        sw = compression_complexity(d1, d2, alg, 2, 4)
         @test length(sw) == length(windows)
-        @test all(0.0 .<= sw .<= 1.0)
+        @test all(sw .<= 1.0)
     end
 
     @testset "ETC joint" begin
