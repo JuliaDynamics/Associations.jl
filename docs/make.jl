@@ -51,7 +51,7 @@ PAGES = [
         "generalized_entropy.md",
         "info_estimators.md",
     ],
-    "Interventional complexity causality" => [
+    "Complexity based" => [
         "interventional_complexity_causality.md",
     ],
 

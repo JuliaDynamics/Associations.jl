@@ -1,4 +1,4 @@
-# ICC
+# Interventional complexity causality (ICC)
 
 ## Interface
 
