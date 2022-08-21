@@ -15,7 +15,9 @@ EffortToCompressSlidingWindow
 
 ## Example
 
-Below is a reproduction of figure 3 in Nagaraj et al. (2013)[^Nagaraj2013], which compares the (approximate) Lyapunov exponent and compression complexity (ETC) of 200-pt long logistic map time series with varying bifurcation parameters. For ETC, the time series was symbolized to a binary time series by splitting above and below x = 0.5. Lyapunov exponents are estimated directly on the time series.
+Below is a reproduction of figure 3 in Nagaraj et al. (2013)[^Nagaraj2013], which compares the (approximate) Lyapunov exponent and compression complexity (ETC) of 200-pt long logistic map time series with varying bifurcation parameters.
+
+For ETC, the time series is symbolized to a binary time series before analysis. Lyapunov exponents are estimated directly on the (non-symbolized) time series.
 
 ```@example
 using CausalityTools, Plots, StatsBase, Measures
@@ -37,9 +39,12 @@ ls = zeros(length(coeffs))
 etcs = zeros(length(coeffs))
 for (i, a) in enumerate(coeffs)
     sys = logistic2_unidir(r₁ = a, c_xy = 0.0, σ = 0.0)
+    # Generate time series and compute approximate Lyapunov exponents
     x = trajectory(sys, 200, Ttr = 10000)[:, 1]
-    y = [xᵢ > 0.5 ? 1 : 0 for xᵢ in x] 
     ls[i] = lyapunov(x, a)
+
+    # Symbolize and compute effort-to-compress
+    y = [xᵢ > 0.5 ? 1 : 0 for xᵢ in x] 
     etcs[i] = compression_complexity(y, EffortToCompress(normalize = false))
 end
 
