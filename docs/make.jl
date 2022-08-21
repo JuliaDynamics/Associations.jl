@@ -52,12 +52,12 @@ PAGES = [
         "info_estimators.md",
     ],
     "Complexity based" => [
+        "compression_complexity.md",
         "interventional_complexity_causality.md",
     ],
 
     "example_systems.md",
     "Utilities" => [
-        "compression_complexity.md",
         "invariant_measure.md",
         "dataset.md",
     ],
