@@ -10,8 +10,8 @@ function icc_on_segments(x::AbstractVector{J}, y::AbstractVector{J}, estimator::
     windows = get_windows(x, window_size, estimator.step)
     segment_results = zeros(Float64, length(windows))
     for (i, window) in enumerate(windows)
-        current_indices = window[est.w+1]:window[est.w+est.L]
-        past_indices = window[1:est.w]
+        current_indices = window[estimator.w + 1]:window[estimator.w + estimator.L]
+        past_indices = window[1:estimator.w]
         Xⁱ = @views x[current_indices]
         X⁻ = @views x[past_indices]
         Y⁻ = @views y[past_indices]
