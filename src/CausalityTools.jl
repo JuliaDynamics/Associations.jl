@@ -1,4 +1,6 @@
 module CausalityTools
+    include("interface.jl")
+    
     using Reexport 
     import DynamicalSystemsBase: trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
     import DelayEmbeddings: Dataset

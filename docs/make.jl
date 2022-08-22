@@ -52,8 +52,9 @@ PAGES = [
         "info_estimators.md",
     ],
     "Complexity based" => [
-        "compression_complexity.md",
-        "interventional_complexity_causality.md",
+        "complexity/compression_complexity.md",
+        "complexity/dynamical_complexity.md",
+        "complexity/interventional_complexity_causality.md",
     ],
 
     "example_systems.md",

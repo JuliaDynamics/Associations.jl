@@ -16,17 +16,17 @@ function replacement_value(x::Vector{SVector{2, J}}) where {J <: Int}
 end
 
 # TODO: this can be made much faster by not using dictionaries and using pre-allocation
-# and clever indexing. 
+# and clever indexing.
 """
     pair_to_be_replaced(x::Vector{SVector{2, J}}) where {J <: Int} → SVector{2, J}
 
-Compute the most frequently occurring symbol pair `xᵢ`, where each `xᵢ ∈ x` is a symbol 
-pair. In the case of ties, we return the first pair, according to the underlying (lack of) 
+Compute the most frequently occurring symbol pair `xᵢ`, where each `xᵢ ∈ x` is a symbol
+pair. In the case of ties, we return the first pair, according to the underlying (lack of)
 sorting.
 """
 function pair_to_be_replaced(x::Vector{SVector{2, J}}) where {J <: Int}
     # The pair to be replaced is the one that occurs most often, so compute occurrences
-    # of each unique pair. 
+    # of each unique pair.
     hist = histogram(x)
     histkeys = keys(hist) |> collect
     frequencies = values(hist) |> collect
@@ -39,9 +39,9 @@ function pair_to_be_replaced(x::Vector{SVector{2, J}}) where {J <: Int}
 end
 
 
-function non_sequential_recursive_pair_substitution(pairs, pair_to_replace, 
+function non_sequential_recursive_pair_substitution(pairs, pair_to_replace,
         symbol_to_replace_with)
-    
+
     T = eltype(first(pairs))
     compressed_x = Vector{T}(undef, 0)
     sizehint!(compressed_x, length(pairs))
@@ -65,7 +65,7 @@ function non_sequential_recursive_pair_substitution(pairs, pair_to_replace,
                 j += 2
             end
             #println("and jumped to j=$j")
-        else 
+        else
             if j == length(pairs)
                 # If at the last symbol pair, keep both symbols.
                 @views push!(compressed_x, pairs[j][1])
@@ -81,7 +81,7 @@ function non_sequential_recursive_pair_substitution(pairs, pair_to_replace,
                 #println("and jumped to j=$j")
             end
         end
-        
+
     end
     sizehint!(compressed_x, length(compressed_x))
     return compressed_x
@@ -96,11 +96,11 @@ function compress(x::Vector{SVector{2, J}}) where {J <: Int}
     # This is a single integer
     symbol_to_replace_with = replacement_value(x)
 
-    # Compress by using non-sequential recursive pair substitution 
+    # Compress by using non-sequential recursive pair substitution
     non_sequential_recursive_pair_substitution(x, pair_to_replace, symbol_to_replace_with)
 end
 
-function compression_complexity(x::AbstractVector{J}, algorithm::EffortToCompress) where {J <: Integer}
+function compression_complexity(x, algorithm::EffortToCompress)
     seq = copy(x)
     N = 0.0
     while !haszeroentropy(seq)
@@ -110,9 +110,8 @@ function compression_complexity(x::AbstractVector{J}, algorithm::EffortToCompres
     return algorithm.normalize ? N / (length(x) - 1) : N
 end
 
-function compression_complexity(x::AbstractVector{T}, 
-    algorithm::EffortToCompressSlidingWindow) where {T <: Integer}
-    windows = get_windows(x, algorithm.window_size, algorithm.step)
-    alg = EffortToCompress(normalize = algorithm.normalize)
-    return @views [compression_complexity(x[window], alg) for window in windows]
+function compression_complexity(x::AbstractVector{J}, sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm}) where J <: Int
+    return @views [compression_complexity(
+            x[window],
+            sw.estimator) for window in get_windows(x, sw)]
 end

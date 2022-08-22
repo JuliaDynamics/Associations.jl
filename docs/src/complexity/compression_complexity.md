@@ -10,7 +10,6 @@ compression_complexity
 
 ```@docs
 EffortToCompress
-EffortToCompressSlidingWindow
 ```
 
 ## Example

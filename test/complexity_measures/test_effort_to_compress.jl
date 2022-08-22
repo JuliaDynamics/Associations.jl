@@ -1,7 +1,7 @@
 using Test
 
-@testset "Effort to compress (ETC)" begin 
-    @testset "ETC univariate" begin 
+@testset "Effort to compress (ETC)" begin
+    @testset "ETC univariate" begin
         alg = EffortToCompress(normalize = false)
 
         @testset "Paper examples" begin
@@ -21,7 +21,7 @@ using Test
             @test compression_complexity(x5, alg) == 8.0
             @test compression_complexity(x6, alg) == 6.0
         end
-       
+
         @test compression_complexity([1], alg) == 0.0
         x3 = [0, 1, 0, 0, 1, 1, 1, 0]
         alg_norm = EffortToCompress(normalize = true)
@@ -29,11 +29,14 @@ using Test
 
         # Sliding windows
         ts = rand(0:3, 50)
-        alg = EffortToCompressSlidingWindow(window_size = 10, step = 2)
-        windows = get_windows(ts, alg.window_size, alg.step)
-        compression_complexity(ts, alg)
-        @test length(compression_complexity(ts, alg)) == length(windows)
-        @test all(compression_complexity(ts, alg) .>= 0)
+        sw = ConstantWidthSlidingWindow(
+            EffortToCompress(normalize = true),
+            width = 8,
+            step = 5)
+        windows = get_windows(ts, sw)
+        res = compression_complexity(ts, sw)
+        @test length(res) == length(windows)
+        @test all(0.0 .<= res .<= 1.0)
     end
 
     @testset "ETC multivariate" begin
@@ -44,23 +47,24 @@ using Test
 
         @test symbol_sequence(Dataset(x1, x2, x3, x4), 2) == [6, 3, 15, 3]
         @test symbol_sequence(Dataset(x1, x3, x4), 2) == [2, 3, 7, 3]
-        @test compression_complexity(Dataset(x1, x2, x3, x4), EffortToCompress(alphabet_size = 2)) == 3.0
+        @test compression_complexity(Dataset(x1, x2, x3, x4), EffortToCompress(), 2) == 3.0
 
         # Sliding window
-        x1 = rand(0:1, 100)
-        x2 = rand(0:1, 100)
-        x3 = rand(0:1, 100)
-        x4 = rand(0:1, 100)
+        alphabet_size = 2
+        x1 = rand(0:alphabet_size - 1, 100)
+        x2 = rand(0:alphabet_size - 1, 100)
+        x3 = rand(0:alphabet_size - 1, 100)
+        x4 = rand(0:alphabet_size - 1, 100)
         data = Dataset(x1, x2, x3, x4)
         window_size = 10
         step = 2
-        alg = EffortToCompressSlidingWindow(
-            alphabet_size = 2, 
-            window_size = window_size, 
+        sw = ConstantWidthSlidingWindow(
+            EffortToCompress(normalize = true),
+            width = window_size,
             step = step)
-        
-        windows = get_windows(data, window_size, step)
-        res = compression_complexity(data, alg)
+
+        windows = get_windows(data, sw)
+        res = compression_complexity(data, sw, alphabet_size)
         @test length(res) == length(windows)
         @test all(res .>= 0)
 
@@ -78,19 +82,20 @@ using Test
         alg = EffortToCompress(normalize = true)
         @test 0.0 ≤ compression_complexity(d1, d2, alg, 2, 4) ≤ 1.0
 
-        n_windows, step = 50, 10
-        windows = get_windows(d2, n_windows, step)
-        alg = EffortToCompressSlidingWindow(
-            normalize = true, 
-            window_size = n_windows, 
+        window_size, step = 50, 10
+        sw = ConstantWidthSlidingWindow(
+            EffortToCompress(normalize = true),
+            width = window_size,
             step = step)
-        sw = compression_complexity(d1, d2, alg, 2, 4)
-        @test length(sw) == length(windows)
-        @test all(sw .<= 1.0)
+        windows = get_windows(d2, sw)
+
+        res = compression_complexity(d1, d2, sw, 2, 4)
+        @test length(res) == length(windows)
+        @test all(0.0 .<= res .<= 1.0)
     end
 
     @testset "ETC joint" begin
-        # Test case in the "Joint ETC measure for a pair of time series: ETC(X,Y)" 
+        # Test case in the "Joint ETC measure for a pair of time series: ETC(X,Y)"
         # section in Kathpalia & Nagaraj (2013):
         alg = EffortToCompress(normalize = false)
         x = [1, 2, 1, 2, 1, 2]
@@ -101,8 +106,8 @@ using Test
         x = [0, 0, 0, 0, 0]
         y = [1, 1, 1, 1, 1]
         compression_complexity(x, y, EffortToCompress()) == 0.0
-       
-        
+
+
         # Single-element sequences already have zero-entropy.
         x = [0]
         y = [1]
@@ -119,7 +124,7 @@ using Test
         # obeys the relationship stated in Kathpalia & Nagaraj (2013):
         # ETC(X, Y) <= ETC(X) + ETC(Y)
         # Here, we test if that is the case for our implementation by running 100000 test
-        # cases on random pairs of length-50 sequences, whose number of symbols 
+        # cases on random pairs of length-50 sequences, whose number of symbols
         # for each sequence is allowed to vary between 2 and 6 between iterations.
         inequality_tests = Vector{Bool}(undef, 0)
         alg = EffortToCompress(normalize = false)
@@ -143,12 +148,13 @@ using Test
 
             window_size = 10
             step = 2
-            alg = EffortToCompressSlidingWindow(
-                window_size = window_size, 
+            sw = ConstantWidthSlidingWindow(
+                EffortToCompress(normalize = true),
+                width = window_size,
                 step = step)
 
-            windows = get_windows(x1, window_size, step)
-            res = compression_complexity(x1, x2, alg)
+            windows = get_windows(x1, sw)
+            res = compression_complexity(x1, x2, sw)
             @test length(res) == length(windows)
             @test all(res .>= 0)
         end
@@ -157,7 +163,8 @@ using Test
             results = zeros(Float64, 10000)
             for i = 1:10000
                 x, y = rand(0:3, 100), rand(0:5, 100)
-                results[i] = compression_complexity(x, y, EffortToCompress(normalize = true))
+                alg = EffortToCompress(normalize = true)
+                results[i] = compression_complexity(x, y, alg)
             end
             @test all(0.0 .<= results .<= 1.0)
         end
