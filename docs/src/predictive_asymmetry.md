@@ -18,13 +18,13 @@ using CausalityTools, Plots, StatsBase
 ηs = 1:10
 est = VisitationFrequency(RectangularBinning(5)) # guess that 5 bins along each coordinate axis is sufficient
 
-nreps = 75
+nreps = 100
 𝔸xy = zeros(nreps, length(ηs))
 𝔸yx = zeros(nreps, length(ηs))
 
 for i = 1:nreps
     # Some example time series
-    x, y = rand(300), rand(300)
+    x, y = rand(1000), rand(1000)
     𝔸xy[i, :] = predictive_asymmetry(x, y, est, ηs) 
     𝔸yx[i, :] = predictive_asymmetry(y, x, est, ηs) 
 end
@@ -68,9 +68,9 @@ function ulam_system(dx, x, p, t)
 end
 
 ds = DiscreteDynamicalSystem(ulam_system, rand(100) .- 0.5, [0.04])
-trajectory(ds, 100; Ttr = 1000)
+trajectory(ds, 1000; Ttr = 1000)
 
-εs = 0.025:0.025:1.0
+εs = 0.02:0.02:1.0
 ηs = 1:10
 pas_x1x2 = zeros(length(εs), length(ηs)); 
 pas_x2x1 = zeros(length(εs), length(ηs))
@@ -78,7 +78,7 @@ pas_x2x1 = zeros(length(εs), length(ηs))
 for (i, ε) in enumerate(εs)
     set_parameter!(ds, 1, ε)
     # Use time series consisting of 1000 points
-    tr = trajectory(ds, 300; Ttr = 5000)
+    tr = trajectory(ds, 1000; Ttr = 5000)
     X1 = tr[:, 1]; X2 = tr[:, 2]
     @assert !any(isnan, X1)
     @assert !any(isnan, X2)
@@ -118,13 +118,13 @@ series. For each of those surrogate time series, we compute the predictive asymm
 and pick the value at `η = 10`
 
 ```@example predasym_ulam
-n_surr = 50
+n_surr = 100
 pas_x1x2_surr = zeros(length(εs), n_surr); 
 pas_x2x1_surr = zeros(length(εs), n_surr)
 
 for (i, ε) in enumerate(εs)
     set_parameter!(ds, 1, ε)
-    tr = trajectory(ds, 300; Ttr = 5000)
+    tr = trajectory(ds, 1000; Ttr = 5000)
     X1 = tr[:, 1]; @assert !any(isnan, X1)
     X2 = tr[:, 2]; @assert !any(isnan, X2)
     S1 = surrogenerator(X1, RandomShuffle())
