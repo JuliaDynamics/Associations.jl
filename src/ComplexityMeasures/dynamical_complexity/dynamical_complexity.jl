@@ -116,8 +116,8 @@ function dynamical_complexity(x, algorithm::CompressionComplexityAlgorithm,
     windows = get_windows(x, w + L, step)
     segment_results = zeros(Float64, length(windows))
     for (i, window) in enumerate(windows)
-        current_indices = window[w + 1]:window[w + L]
-        past_indices = window[1:w]
+        current_indices = window[L + 1]:window[w + L]
+        past_indices = window[1:L]
         Xⁱ = @views x[current_indices]
         X⁻ = @views x[past_indices]
         segment_results[i] = dynamical_complexity(Xⁱ, X⁻, algorithm)
@@ -134,8 +134,8 @@ function dynamical_complexity(x, y,
     windows = get_windows(x, w + L, step)
     segment_results = zeros(Float64, length(windows))
     for (i, window) in enumerate(windows)
-        current_indices = window[w + 1]:window[w + L]
-        past_indices = window[1:w]
+        current_indices = window[L + 1]:window[w + L]
+        past_indices = window[1:L]
         Xⁱ = @views x[current_indices]
         X⁻ = @views x[past_indices]
         Y⁻ = @views y[past_indices]
