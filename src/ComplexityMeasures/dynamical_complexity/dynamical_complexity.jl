@@ -85,7 +85,6 @@ Mean dynamical complexity of `x` conditioned on `y`:
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 0:1, 200);
 y = rand(rng, 0:1, 200);
-Dataset(x, y)
 
 # Split segments into past and present
 alg = EffortToCompress(normalize = true)
