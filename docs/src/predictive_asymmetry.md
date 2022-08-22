@@ -123,7 +123,6 @@ pas_x1x2_surr = zeros(length(εs), n_surr);
 pas_x2x1_surr = zeros(length(εs), n_surr)
 
 for (i, ε) in enumerate(εs)
-    @show i
     set_parameter!(ds, 1, ε)
     tr = trajectory(ds, 300; Ttr = 5000)
     X1 = tr[:, 1]; @assert !any(isnan, X1)

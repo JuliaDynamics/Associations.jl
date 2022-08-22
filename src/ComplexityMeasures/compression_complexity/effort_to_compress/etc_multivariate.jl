@@ -1,21 +1,22 @@
 using DelayEmbeddings
 export symbol_sequence
 
+function compression_complexity(x::AbstractDataset{D, T}, algorithm::EffortToCompress, alphabet_size::Int) where {D, T}
+    alphabet_size >= 2 || throw(ArgumentError("Alphabet size must be at least 2."))
 
-function compression_complexity(x::AbstractDataset{D, T}, algorithm::EffortToCompress) where {D, T}
-    !isnothing(algorithm.alphabet_size) || throw(ArgumentError("Alphabet size must be specified when input is multivariate"))
-    algorithm.alphabet_size >= 2 || throw(ArgumentError("Alphabet size must be at least 2."))
-    encoded_sequence = symbol_sequence(x, algorithm.alphabet_size)
-    return compression_complexity(encoded_sequence, algorithm)
+    # Assuming that the alphabet size was the same when symbolizing all variables `xᵢ ∈ x`,
+    # encode each unique state vector as a unique integer, so that the multivariate time
+    # series becomes a univariate symbol time series.
+    encoded_x = symbol_sequence(x, alphabet_size)
+    return compression_complexity(encoded_x, algorithm)
 end
 
-function compression_complexity(x::AbstractDataset{D, T}, algorithm::EffortToCompressSlidingWindow) where {D, T}
-    !isnothing(algorithm.alphabet_size) || throw(ArgumentError("Alphabet size must be specified when input is multivariate"))
-    algorithm.alphabet_size >= 2 || throw(ArgumentError("Alphabet size must be at least 2."))
-    
-    encoded_sequence = symbol_sequence(x, algorithm.alphabet_size)
-    windows = get_windows(x, algorithm.window_size, algorithm.step)
-    alg = EffortToCompress(normalize = algorithm.normalize)
-    
-    return @views [compression_complexity(encoded_sequence[w], alg) for w in windows]
+function compression_complexity(x::AbstractDataset{D, T},
+        sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm},
+        alphabet_size::Int) where {D, T}
+    alphabet_size >= 2 || throw(ArgumentError("Alphabet size must be at least 2."))
+
+    encoded_x = symbol_sequence(x, alphabet_size)
+    windows = get_windows(x, sw)
+    return @views [compression_complexity(encoded_x[w], sw.estimator) for w in windows]
 end

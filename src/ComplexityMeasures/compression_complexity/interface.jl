@@ -8,82 +8,117 @@ abstract type CompressionComplexityAlgorithm end
     compression_complexity(x, algorithm) → N
 
 Compute the compression complexity of the pre-binned/pre-symbolized (integer-valued)
-univariate (`Vector{Int}`) or multivariate (`Dataset`) time series `x`, using the given 
-`algorithm`. For multivariate time series, the algorithm's `alphabet_size` must be a 
-nonzero integer giving the number of possible states each state vector can take.
+univariate time series `x` using the given `algorithm`.
 
-# Joint compression complexity
+    compression_complexity(x::Dataset, algorithm, alphabet_size::Int) → N
 
-    compression_complexity(x, y, algorithm) → N
-    compression_complexity(x::Dataset, y::Dataset, algorithm, ax::Int, ay::Int) → N
+Multivariate integer time series `x`, given as `Dataset`s, are first transformed into a
+1D symbol sequence before computing compression complexity. This transformation assuming
+that each variable `xᵢ ∈ x` was symbolized using the same `alphabet_size`. The resulting
+1D symbol sequence is (in this implementation) not correct if different alphabet sizes are
+used, so ensure during pre-processing that the same alphabet is used (e.g.
+`alphabet_size = 2` for a binary time series, and `alphabet_size = 5` for a five-box binned
+time series).
 
-If a second time series `y` is provided, compute the joint compression
-complexity using alphabet size `ax` for `x` and alphabet size `ay` for `y`.
-
-# Returns
-
-See individual algorithms for details on their return values.
-    
-A `Vector` of compression complexities is returned if a sliding window algorithm is used - 
-one value per window.
 
 # Examples
 
-Let's use the effort-to-compress [`EffortToCompress`](@ref) algorithm to quantify the 
-compression complexity of a univariate symbol sequence.
+Quantifying the compression complexity of a univariate symbol sequence using
+the [`EffortToCompress`](@ref) algorithm.
 
-```julia
-# A univariate time series (no need to specify `alphabet_size`)
-ts = [1, 2, 1, 2, 1, 1, 1, 2]
-compression_complexity(x, EffortToCompress())
+```jldoctest; setup = :(using CausalityTools)
+compression_complexity([1, 2, 1, 2, 1, 1, 1, 2], EffortToCompress())
+
+# output
+5.0
 ```
 
-Multivariate time series (given as [`Dataset`](@ref)s) also work.
+Multivariate time series given as [`Dataset`](@ref)s also work, but must be
+symbolized using the same alphabet.
 
-```julia
-# A multivariate time series from a three-letter alphabet
-x1 = rand(0:2, 100)
-x2 = rand(0:2, 100)
-x3 = rand(0:2, 100)
-ts = Dataset(x1, x2, x3)
-compression_complexity(ts, EffortToCompress(alphabet_size = 3))
+```jldoctest; setup = :(using CausalityTools)
+x = [1, 2, 1, 2, 1, 1, 1, 2]
+y = [2, 1, 2, 2, 2, 1, 1, 2]
+alphabet_size = 2
+compression_complexity(Dataset(x, y), EffortToCompress(), alphabet_size)
+
+# output
+7.0
 ```
 
 Sliding window estimators automatically handle window creation,
 and returns a vector of complexity measures computed on each window.
 
-```julia
-ts = rand(0:1, 100)
-alg = EffortToCompressSlidingWindow(window_size = 10, step = 5)
-compression_complexity(x, alg)
+```jldoctest; setup = :(using CausalityTools)
+using Random; rng = MersenneTwister(1234);
+x = rand(rng, 0:1, 100)
+alg = EffortToCompress(normalize = false)
+sw = ConstantWidthSlidingWindow(alg, width = 25, step = 15)
+compression_complexity(x, sw)
+
+# output
+5-element Vector{Float64}:
+ 12.0
+ 14.0
+ 14.0
+ 14.0
+ 11.0
 ```
 
-## Joint 
+# Joint compression complexity
 
-The joint compression complexity between two time series can also
-be computed, but then we must specify the alphabet size to ensure
-correctness of the result. Below
+    compression_complexity(x::AbstractVector, y::AbstractVector, algorithm) → N
+    compression_complexity(x::Dataset, y::Dataset, algorithm, ax::Int, ay::Int) → N
 
-```julia
-x = rand(0:2, 100)
-y = rand(0:2, 100)
-alg = EffortToCompress(normalize = true, alphabet_size = 2)
-compression_complexity(x, y, alg)
-```
+If a two time series `y` is provided, compute the joint compression
+complexity using alphabet size `ax` for `x` and alphabet size `ay` for `y`.
 
-This also works for multivariate time series.
+`x` and `y` must be either both integer-valued vectors, or both `Dataset`s (potentially
+of different dimensions). If computing the joint compression complexity between a
+univariate time series and a multivariate time series, simply wrap the univariate time
+series in a `Dataset`.
 
-```julia
-# Variables in the first dataset have an alphabet size of 2
-x1, x2 = rand(0:1, 1000), rand(0:1, 1000)
+# Examples
 
-# Variables in the second dataset have an alphabet size of 4
-y1, y2, y3 = rand(0:3, 1000), rand(0:3, 1000), rand(0:3, 1000)
+Joint compression complexity between two time series:
 
-d1 = Dataset(x1, x2)
-d2 = Dataset(y1, y2, y3)
+```jldoctest; setup = :(using CausalityTools)
+using  Random; rng = MersenneTwister(1234);
+x = rand(rng, 0:2, 100)
+y = rand(rng, 0:2, 100)
 alg = EffortToCompress(normalize = true)
-compression_complexity(d1, d2, alg, 2, 4)
+compression_complexity(x, y, alg)
+
+# output
+0.2222222222222222
+```
+
+For multivariate time series, we must specify the alphabet size
+for each variable to ensure that results are correct.
+
+```jldoctest; setup = :(using CausalityTools, DelayEmbeddings)
+# Multivariate time series X has variables encoded with a 2-letter alphabet,
+x1 = [1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0]
+x2 = [1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 0]
+X = Dataset(x1, x2)
+
+# Multivariate time series Y has variables encoded with a 3-letter alphabet
+y1 = [1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0]
+y2 = [2, 2, 0, 2, 2, 2, 2, 2, 1, 1, 2]
+y3 = [2, 2, 0, 2, 2, 2, 1, 2, 1, 1, 2]
+Y = Dataset(y1, y2, y3)
+
+alg = EffortToCompress(normalize = true)
+compression_complexity(X, Y, alg, 2, 3)
+
+# output
+0.9
+```
+
+# Returns
+
+See individual algorithms for details on their return values. A `Vector` of compression
+complexities is returned if a sliding window algorithm is used - one value per window.
 ```
 
 See also: [`EffortToCompress`](@ref), [`EffortToCompressSlidingWindow`](@ref).

@@ -1,5 +1,5 @@
 # This file implements 2-variable joint effort-to-compress (ETC).
-# TODO: it is also possible to compute joint ETC for more than two sequences, but it 
+# TODO: it is also possible to compute joint ETC for more than two sequences, but it
 # is probably best to use generated functions for this. I'm leaving it for future work.
 
 using StatsBase, Entropies, StaticArrays
@@ -21,7 +21,7 @@ end
 
 function pair_to_be_replaced(x::Vector{SVector{2, Tuple{J, J}}}) where {J <: Integer}
     # The pair to be replaced is the one that occurs most often, so compute occurrences
-    # of each unique pair. 
+    # of each unique pair.
     hist = histogram(x)
     histkeys = keys(hist) |> collect
     frequencies = values(hist) |> collect
@@ -33,13 +33,13 @@ function pair_to_be_replaced(x::Vector{SVector{2, Tuple{J, J}}}) where {J <: Int
 end
 
 function non_sequential_recursive_pair_substitution(
-        pairs::Vector{SVector{2, Tuple{J, J}}}, 
-        pair_to_replace, 
+        pairs::Vector{SVector{2, Tuple{J, J}}},
+        pair_to_replace,
         symbol_to_replace_with) where {J <: Integer}
     #@show pair_to_replace
     #@show symbol_to_replace_with
     T = eltype(first(first(pairs)))
-    
+
     compressed_x = Vector{T}(undef, 0)
     compressed_y = Vector{T}(undef, 0)
     sizehint!(compressed_x, length(pairs))
@@ -68,7 +68,7 @@ function non_sequential_recursive_pair_substitution(
                 j += 2
             end
             #println("and jumped to j=$j")
-        else 
+        else
             if j == length(pairs)
                 # If at the last symbol pair, keep both symbols.
                 @views push!(compressed_x, pairs[j][1][1])
@@ -87,7 +87,7 @@ function non_sequential_recursive_pair_substitution(
                 #println("and jumped to j=$j")
             end
         end
-        
+
     end
     sizehint!(compressed_x, length(compressed_x))
     sizehint!(compressed_y, length(compressed_y))
@@ -105,13 +105,13 @@ function compress(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Int}
     # This is a single integer
     symbol_to_replace_with = replacement_value(seq, pair_to_replace)
 
-    # Compress by using non-sequential recursive pair substitution 
+    # Compress by using non-sequential recursive pair substitution
     non_sequential_recursive_pair_substitution(seq, pair_to_replace, symbol_to_replace_with)
 end
 
 function compression_complexity(
-        x::AbstractVector{J}, 
-        y::AbstractVector{J}, 
+        x::AbstractVector{J},
+        y::AbstractVector{J},
         algorithm::EffortToCompress
     ) where J <: Integer
     length(x) == length(y) || throw(ArgumentError("lengths of `x` and `y` must be equal"))
@@ -119,7 +119,7 @@ function compression_complexity(
     # the length of the compressed time series.
     L = length(x) - 1
 
-    # Edge case: one-element vectors return zero regardless of normalization (avoids 
+    # Edge case: one-element vectors return zero regardless of normalization (avoids
     # division by zero).
     if length(x) == length(y) == 1
         return 0.0
@@ -130,15 +130,18 @@ function compression_complexity(
         x, y = compress(x, y)
         N += 1
     end
-    
+
     return algorithm.normalize ? (N / L) : N
 end
 
-function compression_complexity(x::AbstractVector{J}, y::AbstractVector{J},
-    algorithm::EffortToCompressSlidingWindow) where {J <: Integer}
-    windows = get_windows(x, algorithm.window_size, algorithm.step)
-    alg = EffortToCompress(normalize = algorithm.normalize)
-    return @views [compression_complexity(x[window], y[window], alg) for window in windows]
+function compression_complexity(
+        x::AbstractVector{J},
+        y::AbstractVector{J},
+        sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm}) where {J <: Integer}
+    return @views [compression_complexity(
+            x[window],
+            y[window],
+            sw.estimator) for window in get_windows(x, sw)]
 end
 
 function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}, algorithm::EffortToCompress, ax::Int, ay::Int) where {D1, D2, T}
@@ -149,10 +152,13 @@ function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2
     return compression_complexity(encoded_x, encoded_y, algorithm)
 end
 
-function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}, 
-        algorithm::EffortToCompressSlidingWindow, ax::Int, ay::Int) where {D1, D2, T}
+function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T},
+        sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm}, ax::Int, ay::Int) where {D1, D2, T}
     ax >= 2 &&  ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
     encoded_x = symbol_sequence(x, ax)
     encoded_y = symbol_sequence(y, ay)
-    return compression_complexity(encoded_x, encoded_y, algorithm)
+    return @views [compression_complexity(
+            encoded_x[window],
+            encoded_y[window],
+            sw.estimator) for window in get_windows(x, sw)]
 end

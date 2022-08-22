@@ -37,7 +37,7 @@ end
     symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Integer} → Vector{SVector{2, Tuple{J, J}}}
 
 Generate symbol pairs from the integer-valued, same-length vectors `x` and `y`.
-The `i`-th element of the returned vector is the `SVector` 
+The `i`-th element of the returned vector is the `SVector`
 `SA[(x[i], x[i+1]), (y[i], y[i+1])]`.
 """
 function symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Integer}
@@ -45,7 +45,7 @@ function symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: In
     length(x) >= 2 || throw(ArgumentError("Lengths of x and y must be >= 2"))
 
     joint_pairs = Vector{SVector{2, Tuple{Int64, Int64}}}(undef, 0)
-    for i = 1:length(x) - 1 
+    for i = 1:length(x) - 1
         push!(joint_pairs, SA[(x[i], x[i+1]), (y[i], y[i+1])])
     end
     return joint_pairs
@@ -54,16 +54,18 @@ end
 """
     symbol_sequence(x::Dataset{D, T}, alphabet_size) where {D <: Integer, T <: Integer} ⇥ Vector{Int}
 
-Create an encoded one-dimensional integer symbol sequence from a integer-valued , assuming that the alphabet used for the original symbolization 
+Create an encoded one-dimensional integer symbol sequence from a integer-valued , assuming that the alphabet used for the original symbolization
 has `alphabet_size` possible symbols.
 
-In the context of the effort-to-compress algorithm, `x` would typically 
+In the context of the effort-to-compress algorithm, `x` would typically
 be a sub-dataset as obtained by `view(d::Dataset, indices)`.
 """
 function symbol_sequence(x::AbstractDataset{D, T}, alphabet_size::J) where {D, T, J <: Integer}
     return [vecints_to_int(xᵢ, alphabet_size) for xᵢ in x]
 end
 
-function get_windows(x, window_length, step::Int = 1)
-    [i:i+window_length for i in 1:step:length(x)-window_length]
+function get_windows(x, window_length::Int, step::Int = 1)
+    [i:i+window_length for i in 1:step:(length(x) - window_length)]
 end
+
+get_windows(x, sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm}) = get_windows(x, sw.width, sw.step)
