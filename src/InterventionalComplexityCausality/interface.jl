@@ -49,7 +49,7 @@ signs, see Kathpalia and Nagaraj (2019)[^Kathpalia2019].
 
 ```jldoctest; setup = :(using CausalityTools)
 using Statistics, Random
-rng = MersienneTwister(1234)
+rng = MersenneTwister(1234)
 x = rand(rng, 0:1, 500)
 y = rand(rng, 0:1, 500)
 est = CompressionComplexityCausalityEstimator(
