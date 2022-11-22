@@ -4,10 +4,13 @@ CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== 
 CI && Pkg.activate(@__DIR__)
 CI && Pkg.instantiate()
 ENV["GKSwstype"] = "100" # allow local builds without output
+using DelayEmbeddings
 using Documenter
 using DocumenterTools: Themes
-using Entropies
 using CausalityTools
+using DynamicalSystems
+using HypothesisTests
+using Distributions
 
 # %% JuliaDynamics theme.
 # download the themes
@@ -31,9 +34,15 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "Information measures" => [
-        "probabilities.md",
-        "entropy.md",
+    "surrogate.md",
+
+    "Distance based" => [
+        "joint_distance_distribution.md",
+        "s_measure.md",
+        "cross_mapping.md",
+        "pairwise_asymmetric_inference.md"
+    ],
+    "Information/entropy based" => [
         "mutualinfo.md",
         # "conditional_mutualinfo.md",
         # "TransferEntropy.md",
@@ -41,10 +50,16 @@ PAGES = [
         # "generalized_entropy.md",
         # "info_estimators.md",
     ],
-]
+
+    "example_systems.md",
+    "Utilities" => [
+        "invariant_measure.md",
+        "dataset.md",
+    ],
+ ]
 
 makedocs(
-    modules = [CausalityTools, Entropies],
+    modules = [CausalityTools, Entropies, TransferEntropy, DelayEmbeddings],
     format = Documenter.HTML(
         prettyurls = CI,
         assets = [
