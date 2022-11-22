@@ -1,24 +1,25 @@
 module CausalityTools
-    using Reexport 
-    import DynamicalSystemsBase: trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
+    using Reexport
     import DelayEmbeddings: Dataset
-    export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem, Dataset
-    
-    import TransferEntropy
-    import TransferEntropy: transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
-    export transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
+    import DynamicalSystemsBase: trajectory
+    import DynamicalSystemsBase: DiscreteDynamicalSystem, ContinuousDynamicalSystem
+    export Dataset
+    export trajectory
+    export DiscreteDynamicalSystem, ContinuousDynamicalSystem
     @reexport using Entropies
-    @reexport using TransferEntropy
     @reexport using TimeseriesSurrogates
 
-    include("JointDistanceDistribution/JointDistanceDistribution.jl")
-    include("CrossMappings/CrossMappings.jl")
-    include("SMeasure/smeasure.jl")
-    include("PredictiveAsymmetry/PredictiveAsymmetry.jl")
+    include("core.jl")
+    include("methods/infomeasures/infomeasures.jl")
+    include("methods/ccm/ccm.jl")
+    include("methods/joint_distance_distribution/joint_distance_distribution.jl")
+    include("methods/pairwise_asymmetric_inference/pairwise_asymmetric_inference.jl")
+    include("methods/smeasure/smeasure.jl")
     include("example_systems/ExampleSystems.jl")
 
-    using Requires 
-    function __init__()
+    include("utils/kde.jl")
+    #using Requires
+    #function __init__()
         #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin
         #   include("integrations/uncertaindata.jl")
         #end
@@ -27,6 +28,5 @@ module CausalityTools
         # #   import PerronFrobenius: SimplexExact, SimplexPoint
         #    export SimplexExact, SimplexPoint
         #end
-    end
-end 
-
+    #end
+end
