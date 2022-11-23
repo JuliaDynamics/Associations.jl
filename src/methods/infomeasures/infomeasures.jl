@@ -3,6 +3,7 @@ include("various/probabilities.jl")
 include("various/entropies.jl")
 
 # The below belong in this package.
+include("entropy_cross/entropy_cross.jl")
 include("entropy_relative/entropy_relative.jl")
 include("mutualinfo/mutualinfo.jl")
 
