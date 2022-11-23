@@ -12,4 +12,5 @@ mutualinfo
 MutualInformationEstimator
 KraskovStögbauerGrassberger1
 KraskovStögbauerGrassberger2
+Gao2018
 ```
