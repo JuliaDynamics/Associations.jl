@@ -9,7 +9,7 @@ export KraskovStögbauerGrassberger1, KSG1
 """
     KSG1 <: MutualInformationEstimator
     KraskovStögbauerGrassberger1 <: MutualInformationEstimator
-    KraskovStögbauerGrassberger1(; k::Int = 1, w = 0, metric_marginals = Chebyshev(), base = 2)
+    KraskovStögbauerGrassberger1(; k::Int = 1, w = 0, metric_marginals = Chebyshev())
 
 The `KraskovStögbauerGrassberger1` mutual information estimator (you can use `KSG1` for
 short) is the ``I^{(1)}`` `k`-th nearest neighbor estimator from
@@ -37,20 +37,18 @@ in the joint space ``X``.
     Kraskov, A., Stögbauer, H., & Grassberger, P. (2004). Estimating mutual information.
     Physical review E, 69(6), 066138.
 """
-struct KraskovStögbauerGrassberger1{MJ, MM, B} <: MutualInformationEstimator
+struct KraskovStögbauerGrassberger1{MJ, MM} <: MutualInformationEstimator
     k::Int
     w::Int
     metric_joint::MJ # always Chebyshev, otherwise estimator is not valid!
     metric_marginals::MM
-    base::B
 
     function KraskovStögbauerGrassberger1(;
             k::Int = 1,
             w::Int = 0,
-            metric_marginals::MM = Chebyshev(),
-            base::B = 2) where {MJ, MM, B}
+            metric_marginals::MM = Chebyshev()) where MM
         metric_joint = Chebyshev()
-        new{typeof(metric_joint), MM, B}(k, w, metric_joint, metric_marginals, base)
+        new{typeof(metric_joint), MM}(k, w, metric_joint, metric_marginals)
     end
 end
 
@@ -60,38 +58,36 @@ function mutualinfo(e::Renyi, est::KraskovStögbauerGrassberger1, x::Vector_or_D
     e.q == 1 || throw(ArgumentError(
         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
     ))
-    (; k, w, metric_joint, metric_marginals, base) = est
+    (; k, w, metric_joint, metric_marginals) = est
     joint = Dataset(x...)
     marginals = Dataset.(x)
     M = length(x)
     N = length(joint)
-    D = dimension(joint)
 
     # `ds[i]` := the distance to k-th nearest neighbor for the point `joint[i]`.
     # In the paper, for method 1, ϵᵢ = 2*ds[i].
     tree_joint = KDTree(joint, metric_joint)
-    ds = last.(bulksearch(tree_joint, joint, NeighborNumber(k), Theiler(0))[2])
+    ds = last.(bulksearch(tree_joint, joint, NeighborNumber(k), Theiler(w))[2])
 
     # `marginals_nₖs[i][k]` contains the number of points within radius `ds[i]` of
     # the point `marginals[k][i]`.
     ns = [zeros(Int, N) for m in eachindex(marginals)]
     s = 0.0
     for (m, xₘ) in enumerate(marginals)
-        marginal_inrangecount!(est, ns[m], xₘ, metric_marginals, ds)
+        marginal_inrangecount!(est, ns[m], xₘ, ds)
     end
     marginal_nₖs = Dataset(ns...)
 
-    h = digamma(k) +
+    mi = digamma(k) +
         (M - 1) * digamma(N) -
         (1 / N) * sum(sum(digamma.(nₖ)) for nₖ in marginal_nₖs)
-    return h / log(base, ℯ)
+    return mi / log(e.base, ℯ)
 end
 const KSG1 = KraskovStögbauerGrassberger1
 
-function marginal_inrangecount!(est::KraskovStögbauerGrassberger1, ns, xₘ, metric_marginals, ds)
+function marginal_inrangecount!(est::KraskovStögbauerGrassberger1, ns, xₘ, ds)
     @assert length(ns) == length(xₘ)
-    (; k, w, metric_joint, metric_marginals, base) = est
-    tree = KDTree(xₘ, Chebyshev())
+    tree = KDTree(xₘ, est.metric_marginals)
     @inbounds for i in eachindex(xₘ)
         # Usually, we'd subtract 1 because inrangecount includes the point itself, but
         # we do the +1 in ψ(n + 1) here, so we don't need the +1 in the final MI formula.
@@ -100,4 +96,5 @@ function marginal_inrangecount!(est::KraskovStögbauerGrassberger1, ns, xₘ, me
     return ns
 end
 
-mutualinfo(est::KraskovStögbauerGrassberger1, args...) = mutualinfo(Shannon(), est, args...)
+mutualinfo(est::KraskovStögbauerGrassberger1, args...; base = 2, kwargs...) =
+    mutualinfo(Shannon(; base), est, args...; kwargs...)

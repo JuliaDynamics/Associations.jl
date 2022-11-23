@@ -7,7 +7,7 @@ export KraskovStögbauerGrassberger2, KSG2
 """
     KSG2 <: MutualInformationEstimator
     KraskovStögbauerGrassberger2 <: MutualInformationEstimator
-    KraskovStögbauerGrassberger2(; k::Int = 1, w = 0, metric_marginals = Chebyshev(), base = 2)
+    KraskovStögbauerGrassberger2(; k::Int = 1, w = 0, metric_marginals = Chebyshev())
 
 The `KraskovStögbauerGrassberger2` mutual information estimator (you can use `KSG2` for
 short) is the ``I^{(2)}`` `k`-th nearest neighbor estimator from
@@ -57,23 +57,21 @@ then estimated as
     Kraskov, A., Stögbauer, H., & Grassberger, P. (2004). Estimating mutual information.
     Physical review E, 69(6), 066138.
 """
-struct KraskovStögbauerGrassberger2{MJ, MM, B} <: MutualInformationEstimator
+struct KraskovStögbauerGrassberger2{MJ, MM} <: MutualInformationEstimator
     k::Int
     w::Int
     metric_joint::MJ # always Chebyshev, otherwise estimator is not valid!
-    metric_marginals::MM
-    base::B
+    metric_marginals::MM # can be any metric
 
     function KraskovStögbauerGrassberger2(;
             k::Int = 1,
             w::Int = 0,
-            metric_marginals::MM = Chebyshev(),
-            base::B = 2) where {MJ, MM, B}
+            metric_marginals::MM = Chebyshev()
+        ) where MM
         metric_joint = Chebyshev()
-        new{typeof(metric_joint), MM, B}(k, w, metric_joint, metric_marginals, base)
+        new{typeof(metric_joint), MM}(k, w, metric_joint, metric_marginals)
     end
 end
-
 const KSG2 = KraskovStögbauerGrassberger2
 
 function mutualinfo(e::Renyi, est::KraskovStögbauerGrassberger2, x::Vector_or_Dataset...)
@@ -82,45 +80,50 @@ function mutualinfo(e::Renyi, est::KraskovStögbauerGrassberger2, x::Vector_or_D
     e.q == 1 || throw(ArgumentError(
         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
     ))
-    (; k, metric_joint, metric_marginals, base) = est
+    (; k, w, metric_joint, metric_marginals) = est
     joint = Dataset(x...)
     marginals = Dataset.(x)
     M = length(x)
     N = length(joint)
-    D = dimension(joint)
 
     # `ds[i]` := the distance to k-th nearest neighbor for the point `joint[i]`.
     tree_joint = KDTree(joint, metric_joint)
-    knn_idxs = last.(bulksearch(tree_joint, joint, NeighborNumber(k), Theiler(0))[1])
+    knn_idxs = last.(bulkisearch(tree_joint, joint, NeighborNumber(k), Theiler(w)))
+    knn_ds = last.(bulksearch(tree_joint, joint, NeighborNumber(k), Theiler(w))[2])
+
     ns = [zeros(Int, N) for _ in eachindex(marginals)]
-    s = 0.0
-    for (k, xᵢ) in enumerate(marginals)
-        marginal_inrangecount!(est, ns[k], xᵢ, knn_idxs)
+    for (m, xₘ) in enumerate(marginals)
+        marginal_inrangecount!(est, ns[m], xₘ, knn_idxs, knn_ds)
     end
     marginal_nₖs = Dataset(ns...)
+    a = digamma(k)
+    b = (M - 1) / k
+    c = (M - 1) * digamma(N)
+    d = (1 / N) * sum(sum(digamma.(nₖ)) for nₖ in marginal_nₖs)
+    mi = a - b + c - d
 
-    h = digamma(k) -
-        (M - 1) / k +
-        (M - 1) * digamma(N) -
-        (1 / N) * sum(sum(digamma.(nₖ)) for nₖ in marginal_nₖs)
-    return h / log(base, ℯ)
+    return mi / log(e.base, ℯ)
 end
-mutualinfo(est::KraskovStögbauerGrassberger2, args...) = mutualinfo(Shannon(), est, args...)
+mutualinfo(est::KraskovStögbauerGrassberger2, args...; base = 2, kwargs...) =
+    mutualinfo(Shannon(; base), est, args...; kwargs...)
 
 function marginal_inrangecount!(est::KraskovStögbauerGrassberger2, ns::Vector{Int},
-        xₘ::AbstractDataset, knn_idxs)
-    (; k, w, metric_joint, metric_marginals, base) = est
+        xₘ::AbstractDataset, knn_idxs, ds)
     @assert length(ns) == length(xₘ)
-
-    tree = KDTree(xₘ, metric_marginals)
-    @inbounds for (i, (xᵢᵐ, joint_nnᵢ)) in enumerate(zip(xₘ, knn_idxs))
+    tree = KDTree(xₘ, est.metric_marginals)
+    #ds = first.(bulksearch(tree, xₘ, NeighborNumber(est.k), Theiler(est.w))[2])
+    @inbounds for (i, (xᵢᵐ, nᵢ)) in enumerate(zip(xₘ, knn_idxs))
+        # nᵢₘ := projection of `k`-th nearest neighbor from joint space into
+        # this marginal space (i.e. just subset some columns of `joint` and
+        # select points from that).
+        nᵢₘ = xₘ.data[nᵢ]
+        #@show nᵢ, nᵢₘ, xᵢᵐ
         # ϵᵢᵐ := distance from marginal point xᵢᵐ to the joint space query point `joint[i]`,
         # considering only the marginal axes for `xₘ`.
-        ϵᵢᵐ = evaluate(Chebyshev(), xᵢᵐ, xₘ[joint_nnᵢ])
-
-        # Usually, we'd subtract 1 because inrangecount includes the point itself, but
-        # we do the +1 in ψ(n + 1) here, so we don't need the +1 in the final MI formula.
-        ns[i] = inrangecount(tree, xᵢᵐ, ϵᵢᵐ)
+        ϵᵢᵐ = evaluate(est.metric_marginals, xᵢᵐ, nᵢₘ)
+        # Subtract 1 because `inrangecount` includes the point itself.
+        ns[i] = inrangecount(tree, xᵢᵐ, ϵᵢᵐ) - 1
+        #ns[i] = count(evaluate(est.metric_marginals, xᵢᵐ, xₘ[j]) < ϵᵢᵐ for j in 1:N)
     end
     return ns
 end
