@@ -34,6 +34,7 @@ PAGES = [
     "Information measures" => [
         "probabilities.md",
         "entropy.md",
+        "relative_entropy.md",
         "mutualinfo.md",
         # "conditional_mutualinfo.md",
         # "TransferEntropy.md",

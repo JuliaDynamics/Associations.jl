@@ -3,15 +3,18 @@ export entropy_relative
 
 abstract type RelativeEntropyEstimator end
 
-include("tsallis/entropy_relative_tsallis.jl")
+#include("tsallis/entropy_relative_tsallis.jl")
 
-
-function entropy_relative(e::Entropy, est::RelativeEntropyEstimator,
+"""
+    entropy_relative([e::Entropy], est::RelativeEntropyEstimator,
         x::Vector_or_Dataset, y::Vector_or_Dataset)
-    throw(ArgumentError(
-        "Relative $typeof(e) entropy not defined for $typeof(est) estimator"
-    ))
-end
 
+Compute the (differential) relative entropy of type `e` between `x` and `y` using the
+provided [`RelativeEntropyEstimator`](@ref).
 
-include("estimators/Wang.jl")
+The first argument, the entropy type, is optional; it defaults to [`Shannon`](@ref).
+"""
+function entropy_relative end
+
+include("estimators/Wang2009.jl")
+include("estimators/BulinskiDimitrov.jl")
