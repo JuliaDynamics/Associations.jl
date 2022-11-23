@@ -9,7 +9,7 @@ entropy_relative
 ## Estimators
 
 ```@docs
-RelativeEntropyEstimators
+RelativeEntropyEstimator
 Wang
-BulinskiDimitrov
+WangTransformed
 ```
