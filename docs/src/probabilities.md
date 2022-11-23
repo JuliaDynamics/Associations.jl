@@ -55,13 +55,8 @@ Dispersion
 TransferOperator
 ```
 
-### Utility methods/types
-
-```@docs
-InvariantMeasure
-invariantmeasure
-transfermatrix
-```
+For explicit estimation of the transfer operator, see 
+[Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl).
 
 ## Kernel density
 
