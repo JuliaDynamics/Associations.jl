@@ -35,6 +35,7 @@ PAGES = [
         "probabilities.md",
         "entropy.md",
         "entropy_relative.md",
+        "entropy_cross.md",
         "mutualinfo.md",
         # "conditional_mutualinfo.md",
         # "TransferEntropy.md",
