@@ -11,6 +11,10 @@ entropy_normalized
 
 ## Types
 
+```@docs
+Entropy
+```
+
 ### Rényi (generalized) entropy
 
 ```@docs
