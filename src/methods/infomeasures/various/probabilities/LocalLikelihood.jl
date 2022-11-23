@@ -96,11 +96,14 @@ function point_density!(S₁, S₂, est::LocalLikelihood, xᵢ, bwᵢ, neighbors
         return 0.0
     end
 
+    # The commented-out code follows the paper. This gives nonsense results.
     #num = S₀ * exp(-0.5 * transpose(μ) * inv(Σ) * μ)
     #den = N * (2π)^(D/2) * (bwᵢ^D) * sqrt(detΣ)
     #return #num/den
+    # the following code is from https://github.com/wgao9/lnn/blob/master/lnn.py,
+    # by one of the original authors,
+    # but I have no idea where this formula comes from. It seems to work, though.
     offset = transpose(μ) * inv(Σ) * μ
-    #@show offset
     return -log(S₀) +
         log(Ntot - 1) +
         0.5*D*log(2π) +
@@ -119,7 +122,7 @@ function entropy(e::Renyi, est::LocalLikelihood, x)
     !(e.q ≈ 1.0) || error("Renyi entropy for $(typeof(est)) estimator not defined for q = $(e.q) (i.e. Shannon entropy not defined)")
     N = length(x)
     ρs = point_densities(est, x)
-    ĴkLNN = sum(ρs .^(e.q - 1)) / (bias(e, est, x) * N)
+    ĴkLNN = sum(ρs .^ (e.q - 1)) / (bias(e, est, x) * N)
     return (ĴkLNN / (e.q - 1) ) / log(e.base, ℯ)
 end
 
