@@ -5,7 +5,6 @@ repo = "https://github.com/kahaaga/CausalityTools.jl.git"
 version = "2.0.0"
 
 [deps]
-ChaosTools = "608a59af-f2a3-5ad4-90b4-758bdf3122a7"
 DSP = "717857b8-e6f2-59f4-9121-6e50c889abd2"
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
@@ -32,7 +31,6 @@ TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
 Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 
 [compat]
-ChaosTools = "3"
 DelayEmbeddings = "^2.5"
 Distances = "^0.10"
 Distributions = "^0.24, 0.25"
