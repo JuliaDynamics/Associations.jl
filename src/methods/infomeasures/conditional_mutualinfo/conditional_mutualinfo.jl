@@ -2,14 +2,14 @@ using Entropies: ProbabilitiesEstimator, Entropy, EntropyEstimator, Shannon
 using DelayEmbeddings: Dataset
 export ConditionalMutualInformation
 export CMI
-export conditional_mutualinfo
+export cmi
 
 """  The supertype for all conditional mutual information estimators """
 abstract type ConditionalMutualInformationEstimator end
-struct CMI{METHOD} <: InformationMeasure
-    method::METHOD # e.g. 2MI, 4
+Base.@kwdef struct CMI{METHOD} <: InformationMeasure
+    method::METHOD = nothing # e.g. 2MI, 4
 end
-CMI() = error("Please provide an estimation method, e.g. `CMI(MI2())`")
+
 # """
 #     conditional_mutualinfo([e::Entropy,] est::ProbabilitiesEstimator, x, y, z)
 #     conditional_mutualinfo([e::Entropy,] est::EntropyEstimator, x, y, z)
@@ -39,17 +39,34 @@ CMI() = error("Please provide an estimation method, e.g. `CMI(MI2())`")
 # `z`, by a sum of marginal entropies (whose type is dictated by `e`), using the
 # provided [`EntropyEstimator`](@ref) estimator.
 # """
-function estimate(m::CMI{MI2}, e::Entropy, est, x, y, z)
+
+
+# This constant exist solely to allow nice default values. Add any 
+# new estimator types that are not `MutualInformationEstimator`s to this type union
+const CMI_ESTIMATOR_TYPES = Union{ProbabilitiesEstimator, EntropyEstimator, MutualInformationEstimator}
+
+
+function estimate(infomeasure::CMI{Nothing}, e::Entropy, est::CMI_ESTIMATOR_TYPES, x, y, z)
+    error("Please provide a valid estimation method to CMI, e.g. `CMI(MI2())`")
+end
+function estimate(infomeasure::CMI{MI2}, e::Entropy, est, x, y, z)
     mutualinfo(e, est, x, Dataset(y, z)) - 
         mutualinfo(e, est, x, z)
 end
 
-function estimate(m::CMI{H4}, e::Entropy, est, x, y, z)
+function estimate(infomeasure::CMI{H4}, e::Entropy, est, x, y, z)
     entropy(e, est, Dataset(x, y)) + 
         entropy(e, est, Dataset(x, z)) -
         entropy(e, est, Dataset(z)) -
         entropy(e, est, Dataset(x, y, z))
 end
+
+# Default to Shannon-type CMI and estimating using the MI2 method
+cmi(est, x, y, z; base = 2) = cmi(Shannon(; base), est, x, y, z)
+cmi(e::Entropy, est, x, y, z; method::EstimationMethod = MI2()) = 
+    estimate(CMI(method), e, est, x, y, z)
+cmi(e::Entropy, est::ConditionalMutualInformationEstimator, x, y, z) = 
+    estimate(CMI(), e, est, x, y, z)
 
 # """
 #     conditional_mutualinfo(e::MutualInformation, x, y, z)

@@ -1,17 +1,19 @@
+
 using Neighborhood: bulkisearch, inrangecount
 using Neighborhood: Theiler, NeighborNumber, KDTree, Chebyshev
 using SpecialFunctions: digamma
 
-export VejmelkaPalus
+export Frenzel
 
-Base.@kwdef struct VejmelkaPalus{MJ, MM} <: ConditionalMutualInformationEstimator
+Base.@kwdef struct Frenzel{MJ, MM} <: ConditionalMutualInformationEstimator
     k::Int = 1
     w::Int = 0
     metric_joint::MJ = Chebyshev()
     metric_marginals::MM = Chebyshev()
 end
 
-function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::VejmelkaPalus, X, Y, Z)
+
+function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::Frenzel, X, Y, Z)
     e.q ≈ 1 || throw(ArgumentError(
         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
     ))
@@ -33,17 +35,13 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::VejmelkaPalus, X, Y,
     tree_yz = KDTree(YZ, metric_marginals)
     tree_z = KDTree(Z, metric_marginals)
 
-    cmi = digamma(k) - 
-        estimate_digammas(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N)
+    cmi = time_averaged_harmonic_numbers(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N) -
+        harmonic_number(k - 1) 
 
     return cmi / log(e.base, ℯ)
 end
 
-estimate(infomeasure::CMI, est::VejmelkaPalus, args...; base = 2, kwargs...) = 
-    estimate(infomeasure, Shannon(; base), est, args...; kwargs...)
-
-
-function estimate_digammas(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N)
+function time_averaged_harmonic_numbers(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N)
     mean_dgs = 0.0
     for (i, dᵢ) in enumerate(ds_joint)
         # Usually, we subtract 1 because inrangecount includes the point itself,
@@ -51,12 +49,15 @@ function estimate_digammas(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N)
         nxz = inrangecount(tree_xz, XZ[i], dᵢ)
         nxy = inrangecount(tree_yz, YZ[i], dᵢ)
         nz = inrangecount(tree_z, Z[i], dᵢ)
-        mean_dgs += digamma(nxz) + digamma(nxy) - digamma(nz)
+        mean_dgs += harmonic_number(nxz) + 
+            harmonic_number(nxy) -
+            harmonic_number(nz)
     end
 
     return mean_dgs / N
 end
 
+harmonic_number(n::Int) = -sum(1/i for i = 1:n)
 # Example from their paper.
 # using Distributions: Normal
 # using Statistics: cor

@@ -67,7 +67,7 @@ Base.@kwdef struct Gao2018{MJ, MM} <: MutualInformationEstimator
     metric_marginals::MM = Euclidean()
 end
 
-function mutualinfo(e::Renyi, est::Gao2018, x::Vector_or_Dataset...)
+function estimate(infomeasure::MI{Nothing}, e::Renyi, est::Gao2018, x::Vector_or_Dataset...)
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
     e.q == 1 || throw(ArgumentError(

@@ -74,7 +74,7 @@ struct KraskovStögbauerGrassberger2{MJ, MM} <: MutualInformationEstimator
 end
 const KSG2 = KraskovStögbauerGrassberger2
 
-function mutualinfo(e::Renyi, est::KraskovStögbauerGrassberger2, x::Vector_or_Dataset...)
+function estimate(infomeasure::MI{Nothing}, e::Renyi, est::KraskovStögbauerGrassberger2, x::Vector_or_Dataset...)
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
     e.q == 1 || throw(ArgumentError(
@@ -104,8 +104,6 @@ function mutualinfo(e::Renyi, est::KraskovStögbauerGrassberger2, x::Vector_or_D
 
     return mi / log(e.base, ℯ)
 end
-mutualinfo(est::KraskovStögbauerGrassberger2, args...; base = 2, kwargs...) =
-    mutualinfo(Shannon(; base), est, args...; kwargs...)
 
 function marginal_inrangecount!(est::KraskovStögbauerGrassberger2, ns::Vector{Int},
         xₘ::AbstractDataset, knn_idxs, ds)
