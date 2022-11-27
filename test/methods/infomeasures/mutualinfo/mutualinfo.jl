@@ -15,9 +15,9 @@ using Entropies: Kraskov, KozachenkoLeonenko, VisitationFrequency, RectangularBi
 
     # Estimators for which Renyi entropies cannot be used
     est_kl = KozachenkoLeonenko()
-    est_k = Kraskov()
-    est_k1 = Kraskov1(k = 2)
-    est_k2 = Kraskov2(k = 2)
+    est_k = Kraskov(k = 2)
+    est_k1 = KSG1(k = 2)
+    est_k2 = KSG2(k = 2)
 
     @test mutualinfo(est_kl, x, y) isa Real
     @test mutualinfo(est_kl, x, z) isa Real
