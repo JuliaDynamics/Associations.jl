@@ -54,7 +54,7 @@ makedocs(
         ],
         ),
     sitename = "CausalityTools.jl",
-    authors = "Kristian Agasøster Haaga, Tor Einar Møller, George Datseris",
+    authors = "Kristian Agasøster Haaga, David Diego, Tor Einar Møller, George Datseris",
     pages = PAGES
 )
 
