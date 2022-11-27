@@ -20,7 +20,7 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::Frenzel, X, Y, Z)
     (; k, w, metric_joint, metric_marginals) = est
     @assert length(X) == length(Y) == length(Z)
     N = length(X)
-    # Ensures that vector-valued inputs are converted to datasets, so that 
+    # Ensures that vector-valued inputs are converted to datasets, so that
     # building the marginal/joint spaces and neighbor searches are fast.
     X = Dataset(X)
     Y = Dataset(Y)
@@ -36,7 +36,7 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::Frenzel, X, Y, Z)
     tree_z = KDTree(Z, metric_marginals)
 
     cmi = time_averaged_harmonic_numbers(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N) -
-        harmonic_number(k - 1) 
+        harmonic_number(k - 1)
 
     return cmi / log(e.base, ℯ)
 end
@@ -49,7 +49,7 @@ function time_averaged_harmonic_numbers(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_
         nxz = inrangecount(tree_xz, XZ[i], dᵢ)
         nxy = inrangecount(tree_yz, YZ[i], dᵢ)
         nz = inrangecount(tree_z, Z[i], dᵢ)
-        mean_dgs += harmonic_number(nxz) + 
+        mean_dgs += harmonic_number(nxz) +
             harmonic_number(nxy) -
             harmonic_number(nz)
     end
@@ -75,7 +75,7 @@ harmonic_number(n::Int) = -sum(1/i for i = 1:n)
 #     z2[1] = rand(Na1); z2[2] = rand(Na1)
 #     for i = 3:n
 #         z1[i] = α₁*z1[i-1] + α₂*z1[i-2] + a1[i] - β₁*a1[i-1] - β₂*a1[i-2]
-#         z2[i] = α₁*(ϵ*z1[i-1]+(1-ϵ)*z2[i-1]) + 
+#         z2[i] = α₁*(ϵ*z1[i-1]+(1-ϵ)*z2[i-1]) +
 #             α₂*z2[i-2] + a2[i] - β₁*a2[i-1] - β₂*a2[i-2]
 #     end
 #     Z = [z1[2:end] z2[2:end] circshift(z2, -1)[2:end]]
