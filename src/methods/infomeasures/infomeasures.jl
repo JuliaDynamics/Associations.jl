@@ -1,11 +1,11 @@
 
-# TODO: Name this something reasonable. EstimatinMethod is generic, 
+# TODO: Name this something reasonable. EstimatinMethod is generic,
 """
     EstimationMethod
 
 Some information measures, like mutual information or conditional mutual information,
-may be computed in sevaral different ways. In CausalityTools, we call these 
-*compound* measures. For example, mutual information may be computed as a sum of 
+may be computed in sevaral different ways. In CausalityTools, we call these
+*compound* measures. For example, mutual information may be computed as a sum of
 marginal entropy terms, or in terms of a KL-divergence.
 
 `EstimationMethod` is the supertype of all compound estimation methods, which
@@ -33,14 +33,13 @@ include("various/entropies.jl")
 include("entropy_cross/entropy_cross.jl")
 include("entropy_relative/entropy_relative.jl")
 include("mutualinfo/mutualinfo.jl")
-
 include("conditional_mutualinfo/conditional_mutualinfo.jl")
 #include("transferentropy/transferentropy.jl")
 #include("predictive_asymmetry/predictive_asymmetry.jl")
 
 # TODO:
-# Explain somewhere in the documentation that if `ProbabilitiesEstimators` 
+# Explain somewhere in the documentation that if `ProbabilitiesEstimators`
 # are used, then the *discrete* version of whatever measure is computed.
 # Otherwise, the *differential* entropy/mi/cmi/whatever is estimated.
-# Some methods are *compound measures*, in the sense that they can be built 
+# Some methods are *compound measures*, in the sense that they can be built
 # from lower-level measures.
