@@ -1,6 +1,6 @@
 # [Entropies](@id entropies)
 
-## API
+## API, types & estimators
 
 ```@docs
 entropy
@@ -9,47 +9,47 @@ entropy_maximum
 entropy_normalized
 ```
 
-## Types
-
 ```@docs
 Entropy
 ```
 
-### Rényi (generalized) entropy
+### Generalized entropies
+
+#### Rényi (generalized) entropy
 
 ```@docs
 Renyi
 ```
 
-### Tsallis (generalized) entropy
+#### Tsallis (generalized) entropy
 
 ```@docs
 Tsallis
 ```
 
-### Shannon entropy (convenience)
+#### Shannon entropy (convenience)
 
 ```@docs
 Shannon
 ```
 
-### Curado entropy
+#### Curado entropy
 
 ```@docs
 Curado
 ```
 
-### Stretched exponental entropy
+#### Stretched exponental entropy
 
 ```@docs
 StretchedExponential
 ```
 
-## Estimators
+### Estimators
 
 Here we list functions which compute Shannon entropies via alternate means, without explicitly computing some probability distributions and then using the Shannon formula.
 
-### Nearest neighbors entropy
+#### Nearest neighbors entropy
 
 ```@docs
 Kraskov
@@ -58,10 +58,11 @@ Zhu
 ZhuSingh
 GaoNaive
 GaoNaiveCorrected
+Goria
 LeonenkoProzantoSavani
 ```
 
-### Order statistics entropy
+#### Order statistics entropy
 
 ```@docs
 Vasicek
@@ -195,12 +196,12 @@ function plot_entropy_estimates(Hs, Ls, Htrue)
     # l-th sample size).
     medians, lbs, ubs = medians_and_quantiles(Hs, Ls);
 
-    fig = Figure(resolution = (600, 600))
+    fig = Figure(resolution = (600, 1000))
     ymax = (vcat(Hs...) |> Iterators.flatten |> maximum) * 1.1
     ymin = (vcat(Hs...) |> Iterators.flatten |> minimum) * 0.9
 
-    # We have six estimators, so place them on a 3x2 grid
-    positions = (Tuple(c) for c in CartesianIndices((3, 2)))
+    # We have eight estimators, so place them on a 4-by-2 grid
+    positions = (Tuple(c) for c in CartesianIndices((4, 2)))
     for (i, (est, c)) in enumerate(zip(estimators, positions))
         ax = Axis(fig[first(c), last(c)],
             xlabel = "Sample size (L)",
@@ -240,6 +241,7 @@ estimators = [
     GaoNaiveCorrected(; k),
     ZhuSingh(; k),
     Zhu(; k),
+    Goria(; k),
 ]
 Ls = [100:100:1000 |> collect; 2500:2500:5000 |> collect]
 
