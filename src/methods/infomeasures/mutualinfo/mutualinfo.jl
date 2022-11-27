@@ -29,7 +29,7 @@ or [`Tsallis`](@ref).
 Mutual information ``I`` between ``X`` and ``Y`` is defined as
 
 ```math
-I(X_1; X_2; \\ldots, X_m ) =
+I(X_1; X_2; \\ldots; X_m ) =
 \\sum_{x_1, x_2, \\ldots, x_m}
 p(x_1, x_2, \\ldots, x_m)
 \\log_b \\left( \\dfrac{p(x_1, x_2, \\ldots, x_m)}{p(x_1)p(x_2)\\cdots p(x_m)} \\right)
@@ -52,13 +52,14 @@ where ``H_e(\\cdot)`` is the entropy of type `e`.
 function mutualinfo end
 
 
-# This constant exist solely to allow nice default values. Add any 
+# This constant exist solely to allow nice default values. Add any
 # new estimator types that are not `MutualInformationEstimator`s to this type union
 const MI_ESTIMATOR_TYPES = Union{ProbabilitiesEstimator, EntropyEstimator}
 
 # If `x` is variable, then H3 is treated as a N-component estimate
 # We just call it H3, because bivariate MI it is the most common use case.
-function estimate(infomeasure::MI{H3}, e::Entropy, est::MI_ESTIMATOR_TYPES, x::Vector_or_Dataset...)
+function estimate(infomeasure::MI{H3}, e::Entropy, est::MI_ESTIMATOR_TYPES,
+        x::Vector_or_Dataset...)
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
     # Identity from Cover & Thomas (2006)
@@ -68,25 +69,26 @@ end
 
 # Informative error messages.
 function estimate(infomeasure::MI{Nothing}, e::Entropy, est::MI_ESTIMATOR_TYPES, args...)
-    error("""Please provide a valid estimation method to MI, e.g. 
-    `estimate(MI(H3()), Shannon(), Kraskov(), x, y, ...)`""")
+    error("""Please provide a valid estimation method to MI, e.g.
+    `estimate(MI(H3()), Shannon(), KSG1(), x, y, ...)`""")
 end
-function estimate(infomeasure::MI{Nothing}, e::Entropy, est::MutualInformationEstimator, args...; 
+function estimate(infomeasure::MI{Nothing}, e::Entropy, est::MutualInformationEstimator, args...;
         kwargs...)
     error("`estimate` not implemented for `MI` with estimator $(typeof(est))")
 end
-function estimate(infomeasure::MI{Nothing}, est::MutualInformationEstimator, args...; 
+function estimate(infomeasure::MI{Nothing}, est::MutualInformationEstimator, args...;
         kwargs...)
-    error("""Entropy type `e` must be specified, e.g. 
+    error("""Entropy type `e` must be specified, e.g.
     `estimate(MI(), Shannon(), KSG1(), x, y)}`""")
 end
 
 # Default to Shannon-type MI and estimating using the H3 method
 # If dedicated estimators have other defaults, override in `./estimators/relevant_file.jl`.
-mi(est::MI_ESTIMATOR_TYPES, x::Vector_or_Dataset...; base = 2) = mi(Shannon(; base), est, x...)
-mi(e::Entropy, est::MI_ESTIMATOR_TYPES, x::Vector_or_Dataset...; method::EstimationMethod = H3()) = 
+mutualinfo(est::MI_ESTIMATOR_TYPES, x...; base = 2) =
+    mutualinfo(Shannon(; base), est, x...)
+mutualinfo(e::Entropy, est::MI_ESTIMATOR_TYPES, x...; method::EstimationMethod = H3()) =
     estimate(MI(method), e, est, x...)
-mi(e::Entropy, est::MutualInformationEstimator, x::Vector_or_Dataset...) = 
+mutualinfo(e::Entropy, est::MutualInformationEstimator, x...) =
     estimate(MI(), e, est, x...)
 
 include("estimators/estimators.jl")
