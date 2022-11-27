@@ -9,7 +9,7 @@ Subtypes of `CrossEntropyEstimator` estimate the differential cross-entropy
 
 Currently implemented subtypes are:
 
-- [`BulinskiDimitrovCE`](@ref).
+- [`BulinskiDimitrov`](@ref).
 """
 abstract type CrossEntropyEstimator end
 
