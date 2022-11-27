@@ -1,8 +1,9 @@
+import Distributions: Distribution, Uniform, Normal
 
 """
     noise_uu(n::Int, lo = - 1, hi = 1)
 
-Generate a signal consisting of `n` steps of uncorrelated uniform noise from 
+Generate a signal consisting of `n` steps of uncorrelated uniform noise from
 a uniform distribution on `[lo, hi]`.
 """
 function noise_uu(n::Int; lo = - 1, hi = 1)

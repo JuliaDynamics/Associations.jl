@@ -1,6 +1,5 @@
 @reexport module ExampleSystems
 
-using Distributions
 using StatsBase
 using DynamicalSystemsBase, DelayEmbeddings
 
