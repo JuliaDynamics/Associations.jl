@@ -41,7 +41,7 @@ end
 # """
 
 
-# This constant exist solely to allow nice default values. Add any 
+# This constant exist solely to allow nice default values. Add any
 # new estimator types that are not `MutualInformationEstimator`s to this type union
 const CMI_ESTIMATOR_TYPES = Union{ProbabilitiesEstimator, EntropyEstimator, MutualInformationEstimator}
 
@@ -50,12 +50,12 @@ function estimate(infomeasure::CMI{Nothing}, e::Entropy, est::CMI_ESTIMATOR_TYPE
     error("Please provide a valid estimation method to CMI, e.g. `CMI(MI2())`")
 end
 function estimate(infomeasure::CMI{MI2}, e::Entropy, est, x, y, z)
-    mutualinfo(e, est, x, Dataset(y, z)) - 
+    mutualinfo(e, est, x, Dataset(y, z)) -
         mutualinfo(e, est, x, z)
 end
 
 function estimate(infomeasure::CMI{H4}, e::Entropy, est, x, y, z)
-    entropy(e, est, Dataset(x, y)) + 
+    entropy(e, est, Dataset(x, y)) +
         entropy(e, est, Dataset(x, z)) -
         entropy(e, est, Dataset(z)) -
         entropy(e, est, Dataset(x, y, z))
@@ -63,9 +63,9 @@ end
 
 # Default to Shannon-type CMI and estimating using the MI2 method
 cmi(est, x, y, z; base = 2) = cmi(Shannon(; base), est, x, y, z)
-cmi(e::Entropy, est, x, y, z; method::EstimationMethod = MI2()) = 
+cmi(e::Entropy, est, x, y, z; method::EstimationMethod = MI2()) =
     estimate(CMI(method), e, est, x, y, z)
-cmi(e::Entropy, est::ConditionalMutualInformationEstimator, x, y, z) = 
+cmi(e::Entropy, est::ConditionalMutualInformationEstimator, x, y, z) =
     estimate(CMI(), e, est, x, y, z)
 
 # """
