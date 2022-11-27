@@ -28,7 +28,11 @@ Base.@kwdef struct LeonenkoProzantoSavani <: EntropyEstimator
 end
 
 function entropy(e::Renyi, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
-    h = log(Î(e.q, est, x)) / (1 - e.q) # measured in nats
+    if e.q ≈ 1.0
+        h = Î(e.q, est, x) # measured in nats
+    else
+        h = log(Î(e.q, est, x)) / (1 - e.q) # measured in nats
+    end
     return h / log(e.base, ℯ) # convert to desired base.
 end
 
@@ -46,26 +50,26 @@ function Î(q, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
     Cₖ = (gamma(k) / gamma(k + 1 - q))^(1 / (1 - q))
     tree = KDTree(x, Euclidean())
     idxs, ds = bulksearch(tree, x, NeighborNumber(k), Theiler(w))
-    if q ≈ 1.0
-        h = (1 / N) * sum(ξᵢ_shannon(last(dᵢ), Vₘ, N, D, k)^(1 - q) for dᵢ in ds)
-    else
+    if q ≈ 1.0 # equations 3.9 & 3.10 in Leonenko et al. (2008)
+        h = (1 / N) * sum(log.(ξᵢ_shannon(last(dᵢ), Vₘ, N, D, k) for dᵢ in ds))
+    else # equations 3.1 & 3.2 in Leonenko et al. (2008)
         h = (1 / N) * sum(ξᵢ_renyi_tsallis(last(dᵢ), Cₖ, Vₘ, N, D)^(1 - q) for dᵢ in ds)
     end
     return h
 end
 ξᵢ_renyi_tsallis(dᵢ, Cₖ, Vₘ, N::Int, D::Int) = (N - 1) * Cₖ * Vₘ * (dᵢ)^D
-ξᵢ_shannon(dᵢ, Vₘ, N::Int, D::Int, k) = (N - 1) * exp(digamma(k)) * Vₘ * (dᵢ)^D
+ξᵢ_shannon(dᵢ, Vₘ, N::Int, D::Int, k) = (N - 1) * exp(-digamma(k)) * Vₘ * (dᵢ)^D
 
 using Distributions: MvNormal
-using Distributions
+import Distributions.entropy as dentropy
 function entropy(e::Renyi, 𝒩::MvNormal; base = 2)
     q = e.q
     if q ≈ 1.0
-        h = Distributions.entropy(𝒩)
+        h = dentropy(𝒩)
     else
         Σ = 𝒩.Σ
         D = length(𝒩.μ)
-        h = Distributions.entropy(𝒩) - (D / 2) * (1 + log(q) / (1 - q))
+        h = dentropy(𝒩) - (D / 2) * (1 + log(q) / (1 - q))
     end
     return h / log(base, ℯ)
 end
