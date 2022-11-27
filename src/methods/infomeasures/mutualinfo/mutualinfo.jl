@@ -2,7 +2,7 @@ using Entropies: ProbabilitiesEstimator, EntropyEstimator, Entropy, Shannon
 
 export MutualInformationEstimator
 export MI
-export mi
+export mutualinfo
 
 """ The supertype of all dedicated mutual information estimators """
 abstract type MutualInformationEstimator end
