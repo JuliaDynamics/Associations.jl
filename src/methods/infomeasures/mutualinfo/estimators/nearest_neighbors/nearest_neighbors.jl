@@ -1,5 +1,5 @@
 include("utils.jl")
-include("Kraskov1.jl")
-include("Kraskov2.jl")
+include("KSG1.jl")
+include("KSG2.jl")
+include("Evans.jl")
 include("Gao2018.jl")
-#include("GaoNaive.jl")
