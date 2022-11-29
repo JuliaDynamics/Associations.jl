@@ -1,12 +1,10 @@
 # Cross entropy
 
-## API
+## API & estimators
 
 ```@docs
 entropy_cross
 ```
-
-## Estimators
 
 ```@docs
 CrossEntropyEstimator

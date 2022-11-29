@@ -1,12 +1,10 @@
 # Relative entropy
 
-## API
+## API & estimators
 
 ```@docs
 entropy_relative
 ```
-
-## Estimators
 
 ```@docs
 RelativeEntropyEstimator

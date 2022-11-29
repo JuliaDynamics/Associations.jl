@@ -1,6 +1,6 @@
 # [Probabilities](@id probabilities_estimators)
 
-## Probabilities API
+## API & estimators
 
 The probabilities API is defined by
 
@@ -20,13 +20,13 @@ total_outcomes
 missing_outcomes
 ```
 
-## Count occurrences (counting)
+### Counting
 
 ```@docs
 CountOccurrences
 ```
 
-## Visitation frequency (histograms)
+### Histograms
 
 ```@docs
 ValueHistogram
@@ -34,7 +34,7 @@ RectangularBinning
 FixedRectangularBinning
 ```
 
-## Permutation (symbolic)
+### Permutation (symbolic)
 
 ```@docs
 SymbolicPermutation
@@ -43,41 +43,41 @@ SymbolicAmplitudeAwarePermutation
 SpatialSymbolicPermutation
 ```
 
-## Dispersion (symbolic)
+### Dispersion (symbolic)
 
 ```@docs
 Dispersion
 ```
 
-## Transfer operator (binning)
+### TransferOperator (binning)
 
 ```@docs
 TransferOperator
 ```
 
-For explicit estimation of the transfer operator, see 
+For explicit estimation of the transfer operator, see
 [Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl).
 
-## Kernel density
+### Kernel density
 
 ```@docs
 NaiveKernel
 ```
 
-## Local likelihood
+### Local likelihood
 
 ```@docs
 LocalLikelihood
 ```
 
-## Timescales
+### Timescales
 
 ```@docs
 WaveletOverlap
 PowerSpectrum
 ```
 
-## Diversity
+### Diversity
 
 ```@docs
 Diversity

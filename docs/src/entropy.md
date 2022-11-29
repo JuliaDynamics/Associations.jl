@@ -1,6 +1,14 @@
-# [Entropies](@id entropies)
+# [Generalized entropies](@id entropies)
 
-## API, types & estimators
+## API
+
+The following functions/types make up the entropy API:
+
+- [`Entropy`](@ref), and all its subtypes.
+- [`entropy`](@ref) / [`entropy!`](@ref)
+- [`entropy_maximum`](@ref),
+- [`entropy_normalized`](@ref),
+- [`EntropyEstimator`](@ref), and all its subtypes.
 
 ```@docs
 entropy
@@ -9,47 +17,48 @@ entropy_maximum
 entropy_normalized
 ```
 
+## Discrete
+
+Discrete entropies are defined by formulas defined over a set of [`Probabilities`](@ref), has a minimum value of 0, often have a defined maximum (see [`entropy_maximum`](@ref)), and can therefore be normalized (see [`entropy_normalized`](@ref)).
+
 ```@docs
 Entropy
-```
-
-### Generalized entropies
-
-#### Rényi (generalized) entropy
-
-```@docs
 Renyi
-```
-
-#### Tsallis (generalized) entropy
-
-```@docs
 Tsallis
-```
-
-#### Shannon entropy (convenience)
-
-```@docs
 Shannon
-```
-
-#### Curado entropy
-
-```@docs
 Curado
-```
-
-#### Stretched exponental entropy
-
-```@docs
 StretchedExponential
 ```
 
-### Estimators
+## Continuous/differential entropy
 
-Here we list functions which compute Shannon entropies via alternate means, without explicitly computing some probability distributions and then using the Shannon formula.
+Continuous (differential) entropies are defined by an *integral*, and are 
+related to but don't share all the same properties as discrete entropies.
+For example, Shannon differential entropy may even be *negative* for 
+some distributions.
 
-#### Nearest neighbors entropy
+Continuous entropies must be estimated using some form of "plug-in" estimator. For example, the Shannon differential entropy for a random variable $X$ with support $\mathcal{X}$ is defined as
+
+$$h(x) = \mathbb{E}[-\log{(f(X))}] = -\int_{\mathcal{X}}f(x) \log f(x) dx.$$
+
+There are several ways of estimating this integral from observed data,
+using what is called "plug-in" estimators. A common plug-in estimator is the resubstitution estimator
+
+$$\hat{H}(x) = -\frac{1}{N}\sum_{i=1}^N \log{(\hat{p}(X_i))},$$
+
+where $\hat{p}$ is estimated using the samples $X_1, X_2, \ldots, X_N$, is a plug-in estimator for Shannon differential entropy.
+
+Subtypes of [`EntropyEstimator`](@ref)s use various forms of plug-in estimators to estimate differential entropy. For example, [`Kraskov`](@ref) estimates *Shannon* differential entropy. [`LeonenkoProzantoSavani`](@ref), on the other hand, estimates both [`Shannon`](@ref), [`Renyi`](@ref) and 
+[`Tsallis`](@ref) differential entropy.
+
+!!! note "Plug-in estimators for differential entropy"
+    When using [`entropy`](@ref) with a [`ProbabilityEstimator`](@ref), it is always the discrete entropy that is computed. When using [`entropy`](@ref) with an [`EntropyEstimator`](@ref), it is the *differential* entropy that is computed.
+
+```@docs
+EntropyEstimator
+```
+
+### Nearest neighbor based estimators
 
 ```@docs
 Kraskov
@@ -62,7 +71,7 @@ Goria
 LeonenkoProzantoSavani
 ```
 
-#### Order statistics entropy
+### Order statistics based estimators
 
 ```@docs
 Vasicek
@@ -196,12 +205,12 @@ function plot_entropy_estimates(Hs, Ls, Htrue)
     # l-th sample size).
     medians, lbs, ubs = medians_and_quantiles(Hs, Ls);
 
-    fig = Figure(resolution = (600, 1000))
+    fig = Figure(resolution = (800, 1000))
     ymax = (vcat(Hs...) |> Iterators.flatten |> maximum) * 1.1
     ymin = (vcat(Hs...) |> Iterators.flatten |> minimum) * 0.9
 
-    # We have eight estimators, so place them on a 4-by-2 grid
-    positions = (Tuple(c) for c in CartesianIndices((4, 2)))
+    # We have 9 estimators, so place them on a 5-by-2 grid
+    positions = (Tuple(c) for c in CartesianIndices((5, 2)))
     for (i, (est, c)) in enumerate(zip(estimators, positions))
         ax = Axis(fig[first(c), last(c)],
             xlabel = "Sample size (L)",
@@ -242,6 +251,8 @@ estimators = [
     ZhuSingh(; k),
     Zhu(; k),
     Goria(; k),
+    LeonenkoProzantoSavani(; k),
+    Lord(; k = k*5)
 ]
 Ls = [100:100:1000 |> collect; 2500:2500:5000 |> collect]
 
