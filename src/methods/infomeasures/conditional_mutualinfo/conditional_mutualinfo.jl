@@ -1,6 +1,6 @@
 using Entropies: ProbabilitiesEstimator, Entropy, EntropyEstimator, Shannon
 using DelayEmbeddings: Dataset
-export ConditionalMutualInformation
+export ConditionalMutualInformationEstimator
 export CMI
 export cmi
 
@@ -9,6 +9,27 @@ abstract type ConditionalMutualInformationEstimator end
 Base.@kwdef struct CMI{METHOD} <: InformationMeasure
     method::METHOD = nothing # e.g. 2MI, 4
 end
+
+"""
+    cmi([e::Entropy,] est::ProbabilitiesEstimator, x, y, z)
+
+Compute the discrete conditional mutual information (CMI) betwen `x` and `y`, given `z`,
+i.e. ``II(x; y | z)``, using the provided [`ProbabilitiesEstimator`](@ref). This
+decomposes the CMI into four separate entropy terms, for which which probability
+distributions are obtained, and then for which entropies are computed and summed.
+
+    cmi([e::Entropy,] est::ConditionalMutualInformationEstimator, x, y, z)
+    cmi([e::Entropy,] est::MutualInformationEstimator, x, y, z)
+    cmi([e::Entropy,] est::EntropyEstimator, x, y, z)
+
+Estimate the differential/continuous CMI using the provided estimators.
+If `est` is a [`ConditionalMutualInformationEstimator`](@ref), then the differential
+CMI is computed using some direct estimation procedure. If `est` is an
+[`EntropyEstimator`](@ref), then the CMI is estimated by a sum of four marginal
+differential entropies. If `est` is a [`MutualInformationEstimator`](@ref), then
+the CMI is estimated by a sum of two (differential) mutual information terms.
+"""
+function cmi end
 
 # """
 #     conditional_mutualinfo([e::Entropy,] est::ProbabilitiesEstimator, x, y, z)

@@ -4,6 +4,19 @@ using SpecialFunctions: digamma
 
 export VejmelkaPalus
 
+"""
+    VejmelkaPalus <: ConditionalMutualInformationEstimator
+    VejmelkaPalus(k = 1, w = 0)
+
+The `VejmelkaPalus` estimator uses a `k`-th nearest neighbor approach to
+compute conditional mutual information (Vejmelka & Paluš)[^Vejmelka2008].
+
+`w` is the Theiler window.
+
+[^Vejmelka2008]:
+    Vejmelka, M., & Paluš, M. (2008). Inferring the directionality of coupling with
+    conditional mutual information. Physical Review E, 77(2), 026214.
+"""
 Base.@kwdef struct VejmelkaPalus{MJ, MM} <: ConditionalMutualInformationEstimator
     k::Int = 1
     w::Int = 0
@@ -18,7 +31,7 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::VejmelkaPalus, X, Y,
     (; k, w, metric_joint, metric_marginals) = est
     @assert length(X) == length(Y) == length(Z)
     N = length(X)
-    # Ensures that vector-valued inputs are converted to datasets, so that 
+    # Ensures that vector-valued inputs are converted to datasets, so that
     # building the marginal/joint spaces and neighbor searches are fast.
     X = Dataset(X)
     Y = Dataset(Y)
@@ -33,13 +46,13 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::VejmelkaPalus, X, Y,
     tree_yz = KDTree(YZ, metric_marginals)
     tree_z = KDTree(Z, metric_marginals)
 
-    cmi = digamma(k) - 
+    cmi = digamma(k) -
         estimate_digammas(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N)
 
     return cmi / log(e.base, ℯ)
 end
 
-estimate(infomeasure::CMI, est::VejmelkaPalus, args...; base = 2, kwargs...) = 
+estimate(infomeasure::CMI, est::VejmelkaPalus, args...; base = 2, kwargs...) =
     estimate(infomeasure, Shannon(; base), est, args...; kwargs...)
 
 
@@ -56,28 +69,3 @@ function estimate_digammas(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N)
 
     return mean_dgs / N
 end
-
-# Example from their paper.
-# using Distributions: Normal
-# using Statistics: cor
-# using LinearAlgebra: eigvals
-# function sunspot_model(n::Int; ϵ, base = 2,
-#         α₁ = 1.90694, α₂ = -0.98751,
-#         β₁ = 0.78512, β₂ = -0.40662)
-#     Na1 = Normal(0, 1)
-#     Na2 = Normal(0, 1)
-#     a1 = rand(Na1, n)
-#     a2 = rand(Na2, n)
-#     z1 = zeros(n)
-#     z2 = zeros(n)
-#     z1[1] = rand(Na1); z1[2] = rand(Na1)
-#     z2[1] = rand(Na1); z2[2] = rand(Na1)
-#     for i = 3:n
-#         z1[i] = α₁*z1[i-1] + α₂*z1[i-2] + a1[i] - β₁*a1[i-1] - β₂*a1[i-2]
-#         z2[i] = α₁*(ϵ*z1[i-1]+(1-ϵ)*z2[i-1]) + 
-#             α₂*z2[i-2] + a2[i] - β₁*a2[i-1] - β₂*a2[i-2]
-#     end
-#     Z = [z1[2:end] z2[2:end] circshift(z2, -1)[2:end]]
-#     cmi = -0.5*sum(log.(eigvals(cor(Z))))
-#     return z1[2:end], z2[2:end], circshift(z2, -1)[2:end], cmi / log(base, ℯ)
-# end

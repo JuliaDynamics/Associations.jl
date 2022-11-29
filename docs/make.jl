@@ -37,10 +37,9 @@ PAGES = [
         "entropy_relative.md",
         "entropy_cross.md",
         "mutualinfo.md",
-        # "conditional_mutualinfo.md",
+        "cmi.md",
         # "TransferEntropy.md",
         # "predictive_asymmetry.md",
-        # "generalized_entropy.md",
         # "info_estimators.md",
     ],
 ]
