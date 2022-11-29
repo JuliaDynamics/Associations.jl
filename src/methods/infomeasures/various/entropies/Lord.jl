@@ -10,7 +10,6 @@ export Lord
 
 `Lord` estimates the [`Shannon`](@ref) mutual information using a nearest neighbor
 approach with a local nonuniformity correction (LNC).
-
 """
 Base.@kwdef struct Lord{M} <: EntropyEstimator
     k::Int = 10
@@ -38,11 +37,8 @@ function entropy(e::Renyi, est::Lord, x::AbstractDataset{D}) where {D}
     # Centered neighbors need to be ordered row-wise in a matrix. We re-fill this matrix
     # for every query point `xᵢ`
     A = @MMatrix zeros(k+1, D)
-
     h = 0.0
     rs = zeros(D)
-    g2 = gamma(D/2 + 1)
-    πs = π^(D/2)
     ks = zeros(N)
     ϵs = zeros(N)
     ratios = zeros(N)
@@ -56,23 +52,23 @@ function entropy(e::Renyi, est::Lord, x::AbstractDataset{D}) where {D}
         # SVD. The columns of Vt are the semi-axes of the ellipsoid, while Σ gives the
         # magnitudes of the axes.
         U, Σ, Vt = svd(A)
-
-        # How many of the `k` neighbors of `xᵢ` are within the ellipsoid
-        # whose semi-axes have lengths rs[1], rs[2], ..., rs[D]?
-        # ---------------------------------------------------------------------
         σ₁ = Σ[1]
         ϵᵢ = last(ds[i])
-        # Scale semi-axis lengths to k-th neighbor distance, and create
-        # matrix ellipse representation, relative to origin. Center points
-        # around `xᵢ` too, so we can use the ellipse directly.
+        # Scale semi-axis lengths to k-th neighbor distance
         rs .= ϵᵢ .* (Σ ./ σ₁)
+        # Create matrix ellipse representation, centered at origin.
         Λ = hyperellipsoid_matrix(Vt, rs)
+        # Take the point `xᵢ` as the origin for the neighborhood, so we can check directly
+        # whether points are inside the ellipse. This happens for a point `x`
+        # whenever `xᵀΛx <= 1`.
         nns_centered = (pt - xᵢ for pt in neighborsᵢ)
-        # points inside the ellipse obey xᵀΛx <= 1
-        ks[i] = count([transpose(p) * Λ * p <= 1.0 for p in nns_centered]) + 1
-        ratios[i] = sum(log.(Σ ./ σ₁))
-        ϵs[i] = ϵᵢ
-        h += log(ks[i] * gamma(1 + D/2) / (N * π^(D/2) * ϵᵢ^D * prod(Σ ./ σ₁)) )
+        kᵢ = count([transpose(p) * Λ * p <= 1.0 for p in nns_centered])
+        # In the paper the point itself is always counted inside the ellipsoid,
+        # so that there is always one point present. Here we instead set the local density
+        # to zero if that is the case.
+        if kᵢ > 0
+            h += log(kᵢ * gamma(1 + D/2) / (N * π^(D/2) * ϵᵢ^D * prod(Σ ./ σ₁)) )
+        end
     end
     h = - h / N
     # h = log(N) +
