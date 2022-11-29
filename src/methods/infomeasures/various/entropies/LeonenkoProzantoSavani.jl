@@ -8,10 +8,10 @@ export LeonenkoProzantoSavani
 
 """
     LeonenkoProzantoSavani <: EntropyEstimator
-    LeonenkoProzantoSavani(k = 1, w = 0, base = MathConstants.e)
+    LeonenkoProzantoSavani(k = 1, w = 0)
 
 The `LeonenkoProzantoSavani` estimator computes the [`Shannon`](@ref), [`Renyi`](@ref), or
-[`Tsallis`](@ref) to the given `base`, entropy using `k`-th nearest-neighbor approach
+[`Tsallis`](@ref) [`entropy`](@ref) using the `k`-th nearest-neighbor approach
 from Leonenko et al. (2008)[^LeonenkoProsantoSavani2008].
 
 `w` is the Theiler window, which determines if temporal neighbors are excluded
