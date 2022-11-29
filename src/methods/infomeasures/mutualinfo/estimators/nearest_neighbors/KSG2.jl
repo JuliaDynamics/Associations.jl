@@ -2,7 +2,7 @@ using Neighborhood: Chebyshev, KDTree, Theiler, NeighborNumber
 using Neighborhood: bulksearch
 using SpecialFunctions: digamma
 using DelayEmbeddings: Dataset, AbstractDataset
-
+using Statistics: mean
 export KraskovStögbauerGrassberger2, KSG2
 """
     KSG2 <: MutualInformationEstimator
@@ -88,40 +88,55 @@ function estimate(infomeasure::MI{Nothing}, e::Renyi, est::KraskovStögbauerGras
 
     # `ds[i]` := the distance to k-th nearest neighbor for the point `joint[i]`.
     tree_joint = KDTree(joint, metric_joint)
-    knn_idxs = last.(bulkisearch(tree_joint, joint, NeighborNumber(k), Theiler(w)))
-    knn_ds = last.(bulksearch(tree_joint, joint, NeighborNumber(k), Theiler(w))[2])
-
+    knn_idxs, knn_ds = bulksearch(tree_joint, joint, NeighborNumber(k), Theiler(w))
+    idxs = last.(knn_idxs)
+    ds = last.(knn_ds)
     ns = [zeros(Int, N) for _ in eachindex(marginals)]
+    ϵs = [zeros(N) for _ in eachindex(marginals)]
+
     for (m, xₘ) in enumerate(marginals)
-        marginal_inrangecount!(est, ns[m], xₘ, knn_idxs, knn_ds)
+        eval_dists_to_knns!(ϵs[m], xₘ, idxs, est.metric_marginals)
+        marginal_inrangecount!(est, ns[m], xₘ, idxs, ds, m)
     end
+    ϵ_maxes = [maximum(x) for x in Dataset(ϵs...)]
+    @show all(ϵ_maxes .== ds)
     marginal_nₖs = Dataset(ns...)
-    a = digamma(k)
-    b = (M - 1) / k
-    c = (M - 1) * digamma(N)
-    d = (1 / N) * sum(sum(digamma.(nₖ)) for nₖ in marginal_nₖs)
-    mi = a - b + c - d
+
+    @show M
+    mi = digamma(k) -
+        # The commented-out term appears in Kraskov (2004), but that gives
+        # erroneous estimates that do not align with what they show in the
+        # paper. Not dividing by k, as done here, fixes the problem,
+        # and appears in the KSG2 estimator equation in
+        # https://warwick.ac.uk/fac/sci/mathsys/people/students/2019intake/ni/corrected_report_mi_haoranni.pdf,
+        # though it is not stated how it is reached.
+        (M-1) - #(M - 1) / k  -
+        mean(sum(digamma.(nₖ)) for nₖ in marginal_nₖs) +
+        (M - 1) * digamma(N)
 
     return mi / log(e.base, ℯ)
 end
+function eval_dists_to_knns!(ds, pts, knn_idxs, metric)
+    @inbounds for i in eachindex(pts)
+        ds[i] = evaluate(metric, pts[i], pts[knn_idxs[i]])
+    end
+
+    return ds
+end
+
 
 function marginal_inrangecount!(est::KraskovStögbauerGrassberger2, ns::Vector{Int},
-        xₘ::AbstractDataset, knn_idxs, ds)
+        xₘ::AbstractDataset, knn_idxs, ds, m)
     @assert length(ns) == length(xₘ)
+    N = length(xₘ)
     tree = KDTree(xₘ, est.metric_marginals)
-    #ds = first.(bulksearch(tree, xₘ, NeighborNumber(est.k), Theiler(est.w))[2])
-    @inbounds for (i, (xᵢᵐ, nᵢ)) in enumerate(zip(xₘ, knn_idxs))
-        # nᵢₘ := projection of `k`-th nearest neighbor from joint space into
-        # this marginal space (i.e. just subset some columns of `joint` and
-        # select points from that).
-        nᵢₘ = xₘ.data[nᵢ]
-        #@show nᵢ, nᵢₘ, xᵢᵐ
-        # ϵᵢᵐ := distance from marginal point xᵢᵐ to the joint space query point `joint[i]`,
-        # considering only the marginal axes for `xₘ`.
-        ϵᵢᵐ = evaluate(est.metric_marginals, xᵢᵐ, nᵢₘ)
+    for i = 1:N
+        xᵢᵐ = xₘ[i]
+        # Add small noise to facilitate ≤ while still using inrangecount
+        ϵᵢᵐ = evaluate(est.metric_marginals, xᵢᵐ, xₘ[knn_idxs[i]]) + 1e1*eps()
+        #@show m, i, ϵᵢᵐ, ds[i]
         # Subtract 1 because `inrangecount` includes the point itself.
         ns[i] = inrangecount(tree, xᵢᵐ, ϵᵢᵐ) - 1
-        #ns[i] = count(evaluate(est.metric_marginals, xᵢᵐ, xₘ[j]) < ϵᵢᵐ for j in 1:N)
     end
     return ns
 end
