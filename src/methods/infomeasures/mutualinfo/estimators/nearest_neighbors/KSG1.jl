@@ -3,7 +3,7 @@ using Neighborhood: bulksearch
 using SpecialFunctions: digamma
 using DelayEmbeddings: AbstractDataset, Dataset
 using DelayEmbeddings: dimension
-
+using Statistics: mean
 export KraskovStögbauerGrassberger1, KSG1
 
 """
@@ -77,10 +77,9 @@ function estimate(infomeasure::MI{Nothing}, e::Renyi, est::KraskovStögbauerGras
         marginal_inrangecount!(est, ns[m], xₘ, ds)
     end
     marginal_nₖs = Dataset(ns...)
-
     mi = digamma(k) +
         (M - 1) * digamma(N) -
-        (1 / N) * sum(sum(digamma.(nₖ)) for nₖ in marginal_nₖs)
+        mean(sum(digamma.(nₖ)) for nₖ in marginal_nₖs)
     return mi / log(e.base, ℯ)
 end
 const KSG1 = KraskovStögbauerGrassberger1
