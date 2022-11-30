@@ -31,6 +31,7 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
+    "Independence tests" => "independence.md",
     "Information measures" => [
         "probabilities.md",
         "entropy.md",

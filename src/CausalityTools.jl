@@ -18,6 +18,10 @@ module CausalityTools
     include("example_systems/ExampleSystems.jl")
 
     include("utils/kde.jl")
+
+    # Independence tests must be loaded after everything else has been defined.
+    include("independence.jl")
+
     #using Requires
     #function __init__()
         #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin
