@@ -1,2 +1,3 @@
 include("VejmelkaPalus.jl")
-include("Frenzel.jl")
+include("FrenzelPompe.jl")
+include("Rahimzamani.jl")

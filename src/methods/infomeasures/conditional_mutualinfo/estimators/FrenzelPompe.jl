@@ -1,33 +1,37 @@
+
 using Neighborhood: bulkisearch, inrangecount
 using Neighborhood: Theiler, NeighborNumber, KDTree, Chebyshev
 using SpecialFunctions: digamma
 
-export VejmelkaPalus
+export FrenzelPompe
 
 """
-    VejmelkaPalus <: ConditionalMutualInformationEstimator
-    VejmelkaPalus(k = 1, w = 0)
+    FrenzelPompe <: ConditionalMutualInformationEstimator
+    FrenzelPompe(k = 1, w = 0)
 
-The `VejmelkaPalus` estimator uses a `k`-th nearest neighbor approach to
-compute conditional mutual information (Vejmelka & Paluš)[^Vejmelka2008].
+The `FrenzelPompe` estimator is used to estimate the differential conditional
+mutual information using a `k`-th nearest neighbor approach that is
+analogous to that of the [`KSG1`](@ref) mutual information estimator
+(Frenzel & Pompe, 2007).
 
-This estimator is identical to the [`FrenzelPompe`](@ref) estimator,
+This estimator is identical to the [`VejmelkaPalus`](@ref) estimator,
 which appeared in a separate paper around the same time.
 
-`w` is the Theiler window.
+`w` is the Theiler window, which controls the number of temporal neighbors that are excluded
+during neighbor searches.
 
-[^Vejmelka2008]:
-    Vejmelka, M., & Paluš, M. (2008). Inferring the directionality of coupling with
-    conditional mutual information. Physical Review E, 77(2), 026214.
+[^Frenzel2007]:
+    Frenzel, S., & Pompe, B. (2007). Partial mutual information for coupling analysis of
+    multivariate time series. Physical review letters, 99(20), 204101.
 """
-Base.@kwdef struct VejmelkaPalus{MJ, MM} <: ConditionalMutualInformationEstimator
+Base.@kwdef struct FrenzelPompe{MJ, MM} <: ConditionalMutualInformationEstimator
     k::Int = 1
     w::Int = 0
     metric_joint::MJ = Chebyshev()
     metric_marginals::MM = Chebyshev()
 end
 
-function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::VejmelkaPalus, X, Y, Z)
+function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::FrenzelPompe, X, Y, Z)
     e.q ≈ 1 || throw(ArgumentError(
         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
     ))
@@ -49,25 +53,19 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::VejmelkaPalus, X, Y,
     tree_yz = KDTree(YZ, metric_marginals)
     tree_z = KDTree(Z, metric_marginals)
 
-    cmi = digamma(k) -
-        estimate_digammas(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N)
-
-    return cmi / log(e.base, ℯ)
-end
-
-estimate(infomeasure::CMI, est::VejmelkaPalus, args...; base = 2, kwargs...) =
-    estimate(infomeasure, Shannon(; base), est, args...; kwargs...)
-
-function estimate_digammas(tree_xz, tree_yz, tree_z, XZ, YZ, Z, ds_joint, N)
-    mean_dgs = 0.0
+    condmi = 0.0
     for (i, dᵢ) in enumerate(ds_joint)
         # Usually, we subtract 1 because inrangecount includes the point itself,
         # but we'll have to add it again inside the digamma, so just skip it.
-        nxz = inrangecount(tree_xz, XZ[i], dᵢ)
-        nxy = inrangecount(tree_yz, YZ[i], dᵢ)
-        nz = inrangecount(tree_z, Z[i], dᵢ)
-        mean_dgs += digamma(nxz) + digamma(nxy) - digamma(nz)
+        condmi += digamma(k)
+        condmi -= digamma(inrangecount(tree_xz, XZ[i], dᵢ))
+        condmi -= digamma(inrangecount(tree_yz, YZ[i], dᵢ))
+        condmi += digamma(inrangecount(tree_z, Z[i], dᵢ))
     end
+    condmi /= N
 
-    return mean_dgs / N
+    return condmi / log(e.base, ℯ)
 end
+
+estimate(infomeasure::CMI, est::FrenzelPompe, args...; base = 2, kwargs...) =
+    estimate(infomeasure, Shannon(; base), est, args...; kwargs...)

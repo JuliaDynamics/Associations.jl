@@ -10,6 +10,7 @@ MutualInformationEstimator
 ```@docs
 KraskovStögbauerGrassberger1
 KraskovStögbauerGrassberger2
+GaoKannanOhViswanath
 Gao2018
 ```
 
@@ -138,6 +139,7 @@ estimators = [
     KSG1(; k), 
     KSG2(; k),
     Gao2018(; k),
+    GaoKannanOhViswanath(; k),
 ]
 ```
 
@@ -229,9 +231,15 @@ fig = plot_results(family3, ifamily3;
     estimators = estimators, base = base)
 ```
 
-Wee see that the [`Lord`](@ref) estimator, which estimates local volume elements using a singular-value decomposition (SVD) of local neighborhoods, outperforms the other estimators by a large margin.
+We see that the [`Lord`](@ref) estimator, which estimates local volume elements using a singular-value decomposition (SVD) of local neighborhoods, outperforms the other estimators by a large margin.
 
 ### Reproducing Kraskov et al. (2004)
+
+Here, we'll reproduce Figure 4 from Kraskov et al. (2004)'s seminal paper on the nearest-neighbor based mutual information estimator. We'll estimate the mutual information
+between marginals of a bivariate Gaussian for a fixed time series length of 2000,
+varying the number of neighbors. *Note: in the original paper, they show multiple
+curves corresponding to different time series length. We only show two single curves:
+one for the [`KSG1`](@ref) estimator and one for the [`KSG2`](@ref) estimator*.
 
 ```@example ex_mutualinfo
 using CausalityTools
@@ -239,21 +247,82 @@ using LinearAlgebra: det
 using Distributions: MvNormal
 using StateSpaceSets: Dataset
 using CairoMakie
-N = 10000
+using Statistics
+
+N = 2000
 c = 0.9
 Σ = [1 c; c 1]
 N2 = MvNormal([0, 0], Σ)
-D2 = Dataset([rand(N2) for i = 1:10000])
-X = D2[:, 1] |> Dataset
-Y = D2[:, 2] |> Dataset
-
 mitrue = -0.5*log(det(Σ)) # in nats
-ks = [5:5:20; 25:25:100; 150]
-mis_ksg1 = map(k -> mutualinfo(Shannon(; base = ℯ), KSG1(; k), X, Y), ks)
-mis_ksg2 = map(k -> mutualinfo(Shannon(; base = ℯ), KSG1(; k), X, Y), ks)
+ks = [2; 5; 7; 10:10:70] .* 2
+
+nreps = 30
+mis_ksg1 = zeros(nreps, length(ks))
+mis_ksg2 = zeros(nreps, length(ks))
+for i = 1:nreps
+    D2 = Dataset([rand(N2) for i = 1:N])
+    X = D2[:, 1] |> Dataset
+    Y = D2[:, 2] |> Dataset
+    mis_ksg1[i, :] = map(k -> mutualinfo(Shannon(; base = ℯ), KSG1(; k), X, Y), ks)
+    mis_ksg2[i, :] = map(k -> mutualinfo(Shannon(; base = ℯ), KSG2(; k), X, Y), ks)
+end
 fig = Figure()
 ax = Axis(fig[1, 1], xlabel = "k / N", ylabel = "Mutual infomation (nats)")
-scatterlines!(ax, ks ./ N, mis_ksg1, label = "KSG1")
-scatterlines!(ax, ks ./ N, mis_ksg2, label = "KSG2")
-f
+scatterlines!(ax, ks ./ N, mean(mis_ksg1, dims = 1) |> vec, label = "KSG1")
+scatterlines!(ax, ks ./ N, mean(mis_ksg2, dims = 1) |> vec, label = "KSG2")
+hlines!(ax, [mitrue], color = :black, linewidth = 3, label = "I (true)")
+axislegend()
+fig
+```
+
+## Continuous-discrete mixture data
+
+Most estimators suffer from significant bias when applied to discrete
+data. One possible resolution is to add a small amount of noise to discrete variables, so that the data becomes continuous in practice.
+
+Instead of adding noise to your data, you can consider using an
+estimator that is specifically designed to deal with continuous-discrete mixture data. One example is the [`GaoKannanOhViswanath`](@ref) estimator.
+
+Here, we compare its performance to [`KSG1`](@ref) on uniformly 
+distributed discrete multivariate data. The true mutual information is zero.
+
+```@example ex_mutualinfo
+using CausalityTools
+using Statistics
+using StateSpaceSets: Dataset
+using Statistics: mean
+using CairoMakie
+
+function compare_ksg_gkov(;
+        k = 5,
+        base = 2,
+        nreps = 15,
+        Ls = [500:100:1000; 2000; 3000; 4000; 5000])
+    mis_ksg1 = zeros(nreps, length(Ls))
+    mis_gkov = zeros(nreps, length(Ls))
+    for (j, L) in enumerate(Ls)
+        for i = 1:nreps
+            X = Dataset(float.(rand(1:10, L, 2)))
+            Y = Dataset(float.(rand(1:10, L, 2)))
+            mis_ksg1[i, j] = mutualinfo(Shannon(; base), KSG1(; k), X, Y)
+            mis_gkov[i, j] = mutualinfo(Shannon(; base), GaoKannanOhViswanath(; k), X, Y)
+        end
+    end
+    return mis_ksg1, mis_gkov
+end
+
+fig = Figure()
+ax = Axis(fig[1, 1], 
+    xlabel = "Sample size", 
+    ylabel = "Mutual information (bits)")
+Ls = [100; 200; 500; 1000:1000:5000; 10000]
+nreps = 10
+k = 5
+mis_ksg1, mis_gkov = compare_ksg_gkov(; nreps, k, Ls)
+scatterlines!(ax, Ls, mean(mis_ksg1, dims = 1) |> vec, 
+    label = "KSG1", color = :black)
+scatterlines!(ax, Ls, mean(mis_gkov, dims = 1) |> vec, 
+    label = "GaoKannanOhViswanath", color = :red)
+axislegend(position = :rb)
+fig
 ```

@@ -8,5 +8,7 @@ ConditionalMutualInformationEstimator
 ```
 
 ```@docs
+Rahimzamani
+FrenzelPompe
 VejmelkaPalus
 ```
