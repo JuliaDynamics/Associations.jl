@@ -1,13 +1,15 @@
 # Relative entropy
 
-## API & estimators
+## API
 
 ```@docs
 entropy_relative
+RelativeEntropyEstimator
 ```
 
+## Estimators
+
 ```@docs
-RelativeEntropyEstimator
 Wang
 WangTransformed
 ```

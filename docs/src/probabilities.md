@@ -1,6 +1,6 @@
-# [Probabilities](@id probabilities_estimators)
+# Probabilities
 
-## API & estimators
+## [Probabilities API](@id probabilities_estimators)
 
 The probabilities API is defined by
 
@@ -19,6 +19,8 @@ outcome_space
 total_outcomes
 missing_outcomes
 ```
+
+## Estimators
 
 ### Counting
 

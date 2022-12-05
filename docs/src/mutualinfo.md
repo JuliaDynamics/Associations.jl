@@ -7,23 +7,13 @@ mutualinfo
 MutualInformationEstimator
 ```
 
-## `KSG1` / `KSG2`
+## Estimators
 
 ```@docs
 KraskovStögbauerGrassberger1
 KraskovStögbauerGrassberger2
-```
-
-## `GaoKannanOhViswanath`
-
-```@docs
 GaoKannanOhViswanath
-```
-
-## `Gao2018`
-
-```@docs
-Gao2018
+GaoOhViswanath
 ```
 
 ## Examples
@@ -152,7 +142,7 @@ estimators = [
     Lord(; k = k_lord),
     KSG1(; k), 
     KSG2(; k),
-    Gao2018(; k),
+    GaoOhViswanath(; k),
     GaoKannanOhViswanath(; k),
 ]
 ```

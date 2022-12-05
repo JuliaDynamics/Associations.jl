@@ -1,11 +1,13 @@
 # Conditional mutual information
 
-## API & estimators
+## API
 
 ```@docs
 cmi
 ConditionalMutualInformationEstimator
 ```
+
+## Dedicated estimators
 
 ```@docs
 Rahimzamani

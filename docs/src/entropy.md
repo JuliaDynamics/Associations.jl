@@ -1,64 +1,72 @@
-# [Generalized entropies](@id entropies)
+# [Entropy (generalized)](@id entropies)
 
 ## API
 
-The following functions/types make up the entropy API:
-
-- [`Entropy`](@ref), and all its subtypes.
-- [`entropy`](@ref) / [`entropy!`](@ref)
-- [`entropy_maximum`](@ref),
-- [`entropy_normalized`](@ref),
-- [`EntropyEstimator`](@ref), and all its subtypes.
-
 ```@docs
 entropy
-entropy!
-entropy_maximum
-entropy_normalized
-```
-
-## Discrete
-
-Discrete entropies are defined by formulas defined over a set of [`Probabilities`](@ref), has a minimum value of 0, often have a defined maximum (see [`entropy_maximum`](@ref)), and can therefore be normalized (see [`entropy_normalized`](@ref)).
-
-```@docs
 Entropy
+Shannon
 Renyi
 Tsallis
-Shannon
 Curado
 StretchedExponential
 ```
 
-## Continuous/differential entropy
+## Estimator table
 
-Continuous (differential) entropies are defined by an *integral*, and are 
-related to but don't share all the same properties as discrete entropies.
-For example, Shannon differential entropy may even be *negative* for 
-some distributions.
+Discrete entropies are just simple functions (sums, actually) of 
+probability mass functions [(pmf)](https://en.wikipedia.org/wiki/Probability_mass_function).
+We provide naive plug-in estimators of generalized entropies for all 
+[`ProbabilitiesEstimator`](@ref)s. It is known that naive plug-in estimates underestimate 
+the entropy, but currently, no bias correction is applied to any of the discrete estimators.
 
-Continuous entropies must be estimated using some form of "plug-in" estimator. For example, the Shannon differential entropy for a random variable $X$ with support $\mathcal{X}$ is defined as
+Continuous entropy estimators estimate  *differential*, or continuous, generalized 
+entropies. [`EntropyEstimator`](@ref)s approximate *integrals* instead of sums, and 
+therefore rely on estimating density functionals, which each estimator does slightly 
+differently, and tailored to the specific entropy being computed. An 
+[`EntropyEstimator`](@ref) is therefore typically only defined for a single or a few 
+types of generalized entropies.
 
-$$h(x) = \mathbb{E}[-\log{(f(X))}] = -\int_{\mathcal{X}}f(x) \log f(x) dx.$$
+!!! info
+    The table scrolls sideways, so is best viewed on a large screen. An `x` indicates that no 
+    implementation exists.
 
-There are several ways of estimating this integral from observed data,
-using what is called "plug-in" estimators. A common plug-in estimator is the resubstitution estimator
+| Estimator                                   | Principle                   | Input data          | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) | [`Curado`](@ref) | [`StretchedExponential`](@ref) |
+| ------------------------------------------- | --------------------------- | ------------------- | :---------------: | :-------------: | :---------------: | :--------------: | :----------------------------: |
+| [`CountOccurrences`](@ref)                  | Frequencies                 | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`ValueHistogram`](@ref)                    | Binning (histogram)         | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`TransferOperator`](@ref)                  | Binning (transfer operator) | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`NaiveKernel`](@ref)                       | Kernel density estimation   | `Dataset`           |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`LocalLikelihood`](@ref)                   | Local likelhood Estimation  | `Dataset`           |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`SymbolicPermutation`](@ref)               | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`SymbolicWeightedPermutation`](@ref)       | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`SymbolicAmplitudeAwarePermutation`](@ref) | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`Dispersion`](@ref)                        | Dispersion patterns         | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`Diversity`](@ref)                         | Cosine similarity           | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`WaveletOverlap`](@ref)                    | Wavelet transform           | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`PowerSpectrum`](@ref)                     | Fourier spectra             | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`KozachenkoLeonenko`](@ref)                | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Kraskov`](@ref)                           | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Zhu`](@ref)                               | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
+| [`ZhuSingh`](@ref)                          | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
+| [`GaoNaive`](@ref)                          | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
+| [`GaoNaiveCorrected`](@ref)                 | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Goria`](@ref)                             | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
+| [`LeonenkoProzantoSavani`](@ref)            | Nearest neighbors           | `Dataset`           |    Continuous     |   Continuous    |    Continuous     |        x         |               x                |
+| [`Vasicek`](@ref)                           | Order statistics            | `Vector`            |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Ebrahimi`](@ref)                          | Order statistics            | `Vector`            |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Correa`](@ref)                            | Order statistics            | `Vector`            |    Continuous     |        x        |         x         |        x         |               x                |
+| [`AlizadehArghami`](@ref)                   | Order statistics            | `Vector`            |    Continuous     |        x        |         x         |        x         |               x                |
 
-$$\hat{H}(x) = -\frac{1}{N}\sum_{i=1}^N \log{(\hat{p}(X_i))},$$
+!!! info "Missing implementation?"
+    Submit an issue or a pull request! We're happy to assist.
 
-where $\hat{p}$ is estimated using the samples $X_1, X_2, \ldots, X_N$, is a plug-in estimator for Shannon differential entropy.
 
-Subtypes of [`EntropyEstimator`](@ref)s use various forms of plug-in estimators to estimate differential entropy. For example, [`Kraskov`](@ref) estimates *Shannon* differential entropy. [`LeonenkoProzantoSavani`](@ref), on the other hand, estimates both [`Shannon`](@ref), [`Renyi`](@ref) and 
-[`Tsallis`](@ref) differential entropy.
-
-!!! note "Plug-in estimators for differential entropy"
-    When using [`entropy`](@ref) with a [`ProbabilityEstimator`](@ref), it is always the discrete entropy that is computed. When using [`entropy`](@ref) with an [`EntropyEstimator`](@ref), it is the *differential* entropy that is computed.
+## Continuous estimators
 
 ```@docs
 EntropyEstimator
 ```
-
-### Nearest neighbor based estimators
 
 ```@docs
 Kraskov
@@ -69,11 +77,6 @@ GaoNaive
 GaoNaiveCorrected
 Goria
 LeonenkoProzantoSavani
-```
-
-### Order statistics based estimators
-
-```@docs
 Vasicek
 AlizadehArghami
 Ebrahimi

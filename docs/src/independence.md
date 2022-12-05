@@ -1,6 +1,6 @@
 # Independence testing
 
-## API and tests
+## API
 
 ```@docs
 independence
@@ -8,5 +8,10 @@ independence
 
 ```@docs
 ConditionalIndependenceTest
+```
+
+## `LocalPermutation`
+
+```@docs
 LocalPermutation
 ```
