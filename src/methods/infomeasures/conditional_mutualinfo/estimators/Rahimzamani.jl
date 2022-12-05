@@ -47,12 +47,12 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::Rahimzamani, X, Y, Z
         # I assume ρ_{i, xy} is the distance in the *joint* space.
         dmax = ds_joint[i]
         k̂ = dmax == 0 ? inrangecount(tree_joint, joint[i], 0.0) - 1  : k
-        h += digamma(k̂)
-        h -= log(inrangecount(tree_xz, XZ[i], dmax))
-        h -= log(inrangecount(tree_yz, YZ[i], dmax))
-        h += log(inrangecount(tree_z, Z[i], dmax))
+        condmi += digamma(k̂)
+        condmi -= log(inrangecount(tree_xz, XZ[i], dmax))
+        condmi -= log(inrangecount(tree_yz, YZ[i], dmax))
+        condmi += log(inrangecount(tree_z, Z[i], dmax))
     end
-    h /= N
+    condmi /= N
 
-    return h / log(e.base, ℯ)
+    return condmi / log(e.base, ℯ)
 end
