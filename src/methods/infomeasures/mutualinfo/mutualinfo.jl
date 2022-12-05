@@ -35,15 +35,14 @@ p(x_1, x_2, \\ldots, x_m)
 \\log_b \\left( \\dfrac{p(x_1, x_2, \\ldots, x_m)}{p(x_1)p(x_2)\\cdots p(x_m)} \\right)
 ```
 
-If `est` is a [`MutualInformationEstimator`](@ref), then the mutual information is computed
-using some specialized algorithm. If `est` is a [`ProbabilitiesEstimator`](@ref) or
-[`EntropyEstimator`](@ref), then ``I(\\bf{X})`` is estimated as
-
-```math
-\\hat{I}(\\bf{X}) = - H_e(\\bf{X}) + \\sum_{i=1}^k H_e(X_i)
-```
-
-where ``H_e(\\cdot)`` is the entropy of type `e`.
+- If `est` is a [`MutualInformationEstimator`](@ref), then the mutual information is
+    computed using some specialized algorithm.
+- If `est` is a [`ProbabilitiesEstimator`](@ref) or
+    [`EntropyEstimator`](@ref), then ``I(\\bf{X})`` is estimated as
+    ```math
+    \\hat{I}(\\bf{X}) = - H_e(\\bf{X}) + \\sum_{i=1}^k H_e(X_i)
+    ```
+    where ``H_e(\\cdot)`` is the entropy of type `e`.
 
 [^Cover2006]: Cover, T. M., Thomas, J. A. (2006). Elements of Information Theory 2nd
     Edition (Wiley Series in Telecommunications and Signal Processing). Wiley-Interscience.
