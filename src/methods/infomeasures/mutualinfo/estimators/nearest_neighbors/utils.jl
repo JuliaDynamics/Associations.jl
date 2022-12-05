@@ -12,3 +12,11 @@ function count_within_radius!(p, x, metric, ϵs, N)
 
     return p
 end
+
+function eval_dists_to_knns!(ds, pts, knn_idxs, metric)
+    @inbounds for i in eachindex(pts)
+        ds[i] = evaluate(metric, pts[i], pts[knn_idxs[i]])
+    end
+
+    return ds
+end
