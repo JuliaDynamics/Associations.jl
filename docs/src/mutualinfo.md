@@ -1,20 +1,34 @@
 # Mutual information
 
-## API & estimators
+## API
 
 ```@docs
 mutualinfo
 MutualInformationEstimator
 ```
 
+## `KSG1` / `KSG2`
+
 ```@docs
 KraskovStögbauerGrassberger1
 KraskovStögbauerGrassberger2
+```
+
+## `GaoKannanOhViswanath`
+
+```@docs
 GaoKannanOhViswanath
+```
+
+## `Gao2018`
+
+```@docs
 Gao2018
 ```
 
 ## Examples
+
+### Comparing with analytical mutual information
 
 Let's compare the performance of a subset of the implemented mutual information estimators. We'll use example data from Lord et al., where the analytical mutual information is known.
 
@@ -143,7 +157,7 @@ estimators = [
 ]
 ```
 
-### Family 1
+#### Family 1
 
 In this system, samples are concentrated around the diagonal $X = Y$,
 and the strip of samples gets thinner as $\alpha \to 0$.
@@ -168,7 +182,7 @@ fig = plot_results(family1, ifamily1;
     base = base)
 ```
 
-### Family 2
+#### Family 2
 
 ```@example ex_mutualinfo
 function family2(α, n::Int)
@@ -202,7 +216,7 @@ with_theme(new_cycle_theme()) do
 end
 ```
 
-### Family 3
+#### Family 3
 
 In this system, we draw samples from a 4D Gaussian distribution distributed
 as specified in the `ifamily3` function below. We let $X$ be the two first
@@ -275,7 +289,7 @@ axislegend()
 fig
 ```
 
-## Continuous-discrete mixture data
+### Continuous-discrete mixture data
 
 Most estimators suffer from significant bias when applied to discrete
 data. One possible resolution is to add a small amount of noise to discrete variables, so that the data becomes continuous in practice.
@@ -297,18 +311,34 @@ function compare_ksg_gkov(;
         k = 5,
         base = 2,
         nreps = 15,
-        Ls = [500:100:1000; 2000; 3000; 4000; 5000])
-    mis_ksg1 = zeros(nreps, length(Ls))
-    mis_gkov = zeros(nreps, length(Ls))
+        Ls = [500:100:1000; 1500; 2000; 3000; 4000; 5000; 1000])
+
+    est_gkov = GaoKannanOhViswanath(; k)
+    est_ksg1 = KSG1(; k)
+
+    mis_ksg1_mix = zeros(nreps, length(Ls))
+    mis_ksg1_discrete = zeros(nreps, length(Ls))
+    mis_ksg1_cont = zeros(nreps, length(Ls))
+    mis_gkov_mix = zeros(nreps, length(Ls))
+    mis_gkov_discrete = zeros(nreps, length(Ls))
+    mis_gkov_cont = zeros(nreps, length(Ls))
+
     for (j, L) in enumerate(Ls)
         for i = 1:nreps
-            X = Dataset(float.(rand(1:10, L, 2)))
-            Y = Dataset(float.(rand(1:10, L, 2)))
-            mis_ksg1[i, j] = mutualinfo(Shannon(; base), KSG1(; k), X, Y)
-            mis_gkov[i, j] = mutualinfo(Shannon(; base), GaoKannanOhViswanath(; k), X, Y)
+            X = Dataset(float.(rand(1:8, L, 2)))
+            Y = Dataset(float.(rand(1:8, L, 2)))
+            Z = Dataset(rand(L, 2))
+            W = Dataset(rand(L, 2))
+            mis_ksg1_discrete[i, j] = mutualinfo(Shannon(; base), est_ksg1, X, Y)
+            mis_gkov_discrete[i, j] = mutualinfo(Shannon(; base), est_gkov, X, Y)
+            mis_ksg1_mix[i, j] = mutualinfo(Shannon(; base), est_ksg1, X, Z)
+            mis_gkov_mix[i, j] = mutualinfo(Shannon(; base), est_gkov, X, Z)
+            mis_ksg1_cont[i, j] = mutualinfo(Shannon(; base), est_ksg1, Z, W)
+            mis_gkov_cont[i, j] = mutualinfo(Shannon(; base), est_gkov, Z, W)
         end
     end
-    return mis_ksg1, mis_gkov
+    return mis_ksg1_mix, mis_ksg1_discrete, mis_ksg1_cont,
+        mis_gkov_mix, mis_gkov_discrete, mis_gkov_cont
 end
 
 fig = Figure()
@@ -316,13 +346,30 @@ ax = Axis(fig[1, 1],
     xlabel = "Sample size", 
     ylabel = "Mutual information (bits)")
 Ls = [100; 200; 500; 1000:1000:5000; 10000]
-nreps = 10
-k = 5
-mis_ksg1, mis_gkov = compare_ksg_gkov(; nreps, k, Ls)
-scatterlines!(ax, Ls, mean(mis_ksg1, dims = 1) |> vec, 
-    label = "KSG1", color = :black)
-scatterlines!(ax, Ls, mean(mis_gkov, dims = 1) |> vec, 
-    label = "GaoKannanOhViswanath", color = :red)
+nreps = 5
+k = 3
+mis_ksg1_mix, mis_ksg1_discrete, mis_ksg1_cont,
+    mis_gkov_mix, mis_gkov_discrete, mis_gkov_cont = 
+    compare_ksg_gkov(; nreps, k, Ls)
+
+scatterlines!(ax, Ls, mean(mis_ksg1_mix, dims = 1) |> vec, 
+    label = "KSG1 (mixed)", color = :black, 
+    marker = :utriangle)
+scatterlines!(ax, Ls, mean(mis_ksg1_discrete, dims = 1) |> vec, 
+    label = "KSG1 (discrete)", color = :black, 
+    linestyle = :dash, marker = '▲')
+scatterlines!(ax, Ls, mean(mis_ksg1_cont, dims = 1) |> vec, 
+    label = "KSG1 (continuous)", color = :black, 
+    linestyle = :dot, marker = '●')
+scatterlines!(ax, Ls, mean(mis_gkov_mix, dims = 1) |> vec, 
+    label = "GaoKannanOhViswanath (mixed)", color = :red, 
+    marker = :utriangle)
+scatterlines!(ax, Ls, mean(mis_gkov_discrete, dims = 1) |> vec, 
+    label = "GaoKannanOhViswanath (discrete)", color = :red, 
+    linestyle = :dash, marker = '▲')
+scatterlines!(ax, Ls, mean(mis_gkov_cont, dims = 1) |> vec, 
+    label = "GaoKannanOhViswanath (continuous)", color = :red, 
+    linestyle = :dot, marker = '●')
 axislegend(position = :rb)
 fig
 ```
