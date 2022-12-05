@@ -99,10 +99,10 @@ function estimate(infomeasure::MI{Nothing}, e::Renyi, est::KraskovStögbauerGras
         marginal_inrangecount!(est, ns[m], xₘ, idxs, ds, m)
     end
     ϵ_maxes = [maximum(x) for x in Dataset(ϵs...)]
-    @show all(ϵ_maxes .== ds)
+    #@show all(ϵ_maxes .== ds)
     marginal_nₖs = Dataset(ns...)
 
-    @show M
+    #@show M
     mi = digamma(k) -
         # The commented-out term appears in Kraskov (2004), but that gives
         # erroneous estimates that do not align with what they show in the
@@ -116,14 +116,6 @@ function estimate(infomeasure::MI{Nothing}, e::Renyi, est::KraskovStögbauerGras
 
     return mi / log(e.base, ℯ)
 end
-function eval_dists_to_knns!(ds, pts, knn_idxs, metric)
-    @inbounds for i in eachindex(pts)
-        ds[i] = evaluate(metric, pts[i], pts[knn_idxs[i]])
-    end
-
-    return ds
-end
-
 
 function marginal_inrangecount!(est::KraskovStögbauerGrassberger2, ns::Vector{Int},
         xₘ::AbstractDataset, knn_idxs, ds, m)
