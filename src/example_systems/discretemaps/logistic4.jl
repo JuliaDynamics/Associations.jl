@@ -8,13 +8,13 @@ export logistic4
 Equations of motion for a 4D transitive causal chain of unidirectionally
 coupled logistic maps, where ``y_1 \\to y_2 \\to y_3 \\to y_4`` [1].
 
-*Note: With the default parameters which are as in [1], for some initial conditions, 
-this system wanders off to ``\\pm \\infty`` for some of the variables. Make sure that 
+*Note: With the default parameters which are as in [1], for some initial conditions,
+this system wanders off to ``\\pm \\infty`` for some of the variables. Make sure that
 you have a good realisation before using the orbit for anything.**
 
 ## Equations of motion
 
-```math 
+```math
 \\begin{aligned}
 y_1(t+1) &= y_1(t)(r_1 - r_1 y_1) \\\\
 y_2(t+1) &= y_2(t)(r_2 - c_{12} y_1 - r_2 y_2) \\\\
@@ -50,16 +50,16 @@ end
         c₁₂ = 0.4, c₂₃ = 0.4, c₃₄ = 0.35) → DiscreteDynamicalSystem
 
 Initialise a system of a transitive chain of four unidirectionally coupled
-logistic maps, where ``y_1 \\to y_2 \\to y_3 \\to y_4`` [1]. Default 
+logistic maps, where ``y_1 \\to y_2 \\to y_3 \\to y_4`` [1]. Default
 parameters are as in [1].
 
-*Note: With the default parameters which are as in [1], for some initial conditions, 
-this system wanders off to ``\\pm \\infty`` for some of the variables. Make sure that 
+*Note: With the default parameters which are as in [1], for some initial conditions,
+this system wanders off to ``\\pm \\infty`` for some of the variables. Make sure that
 you have a good realisation before using the orbit for anything.*
 
 ## Equations of motion
 
-```math 
+```math
 \\begin{aligned}
 y_1(t+1) &= y_1(t)(r_1 - r_1 y_1) \\\\
 y_2(t+1) &= y_2(t)(r_2 - c_{12} y_1 - r_2 y_2) \\\\
