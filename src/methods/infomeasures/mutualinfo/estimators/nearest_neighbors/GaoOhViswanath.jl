@@ -1,10 +1,10 @@
 using Entropies: ball_volume
-export Gao2018
+export GaoOhViswanath
 """
-    Gao2018 <: MutualInformationEstimator
+    GaoOhViswanath <: MutualInformationEstimator
 
-The `GaoKSG` mutual information estimator, also called the bias-improved-KSG estimator by
-Gao et al. (2018)[^Gao2018], is given by
+The `GaoOhViswanath` mutual information estimator, also called the bias-improved-KSG
+estimator, or BI-KSG, by Gao et al. (2018)[^Gao2018], is given by
 
 ```math
 \\begin{align}
@@ -21,53 +21,21 @@ Gao et al. (2018)[^Gao2018], is given by
 \\end{align},
 ```
 
-where ``c_{d, 2} = \\dfrac{\\pi^{\\dfrac{d}{2}}}{\\Gamma{(\\dfrac{d}{2} + 1)}}`` is the
+where ``c_{d, 2} = \\dfrac{\\pi^{\\frac{d}{2}}}{\\Gamma{(\\dfrac{d}{2} + 1)}}`` is the
 volume of a ``d``-dimensional unit ``\\mathcal{l}_2``-ball.
-
-## KSG
-
-```math
-\\begin{align}
-\\hat{H}_{KSG}(X, Y)
-&= \\hat{H}_{KSG}(X) + \\hat{H}_{KSG}(Y) - \\hat{H}_{KZL}(X, Y) \\\\
-\\end{align}
-```
-
-where ``\\hat{H}_{KSG}`` is the Kraskov-Stögbauer-Grassberger (KSG) marginal entropy
-estimator estimator
-
-```math
-\\hat{H}_{KSG} = \\dfrac{1}{N} \\sum_{i}^N \\log{
-    \\left(-\\psi{(n_{x, i, \\infty} + 1)} +
-    \\psi{(N)} +
-    \\log{(c_{d_{x}, \\infty})} -
-    d_x \\log{(\\rho_{k, i, \\infty})}
-    \\right)}
-```
-
-and ``\\hat{H}_{KZL}`` is the Kozachenko-Leonenko (KZL) marginal entropy estimator
-
-```math
-\\hat{H}_{KZL} = \\dfrac{1}{N} \\sum_{i}^N \\log{
-    \\left(
-        \\dfrac{N \\cdot c_{d, p} \\cdot (\\rho_{k, i, p})^d}{k}
-    \\right)} + \\log{(k)} - \\psi{(k)},
-```
-
-and ``\\psi{(x)}`` is the digamma function.
 
 [^Gao2018]:
     Gao, W., Oh, S., & Viswanath, P. (2018). Demystifying fixed k-nearest neighbor
     information estimators. IEEE Transactions on Information Theory, 64(8), 5629-5661.
 """
-Base.@kwdef struct Gao2018{MJ, MM} <: MutualInformationEstimator
+Base.@kwdef struct GaoOhViswanath{MJ, MM} <: MutualInformationEstimator
     k::Int = 1
     w::Int = 0
     metric_joint::MJ = Euclidean()
     metric_marginals::MM = Euclidean()
 end
 
-function estimate(infomeasure::MI{Nothing}, e::Renyi, est::Gao2018, x::Vector_or_Dataset...)
+function estimate(infomeasure::MI{Nothing}, e::Renyi, est::GaoOhViswanath, x::Vector_or_Dataset...)
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
     e.q == 1 || throw(ArgumentError(
@@ -102,7 +70,7 @@ function estimate(infomeasure::MI{Nothing}, e::Renyi, est::Gao2018, x::Vector_or
     return mi / log(e.base, ℯ)
 end
 
-function marginal_inrangecount!(est::Gao2018, ns, xₘ, ds)
+function marginal_inrangecount!(est::GaoOhViswanath, ns, xₘ, ds)
     @assert length(ns) == length(xₘ)
     tree = KDTree(xₘ, est.metric_marginals)
     @inbounds for i in eachindex(xₘ)
@@ -112,5 +80,38 @@ function marginal_inrangecount!(est::Gao2018, ns, xₘ, ds)
     return ns
 end
 
-mutualinfo(est::Gao2018, args...; base = 2, kwargs...) =
+mutualinfo(est::GaoOhViswanath, args...; base = 2, kwargs...) =
     mutualinfo(Shannon(; base), est, args...; kwargs...)
+
+
+# ## KSG
+
+# ```math
+# \\begin{align}
+# \\hat{H}_{KSG}(X, Y)
+# &= \\hat{H}_{KSG}(X) + \\hat{H}_{KSG}(Y) - \\hat{H}_{KZL}(X, Y) \\\\
+# \\end{align}
+# ```
+
+# where ``\\hat{H}_{KSG}`` is the Kraskov-Stögbauer-Grassberger (KSG) marginal entropy
+# estimator estimator
+
+# ```math
+# \\hat{H}_{KSG} = \\dfrac{1}{N} \\sum_{i}^N \\log{
+#     \\left(-\\psi{(n_{x, i, \\infty} + 1)} +
+#     \\psi{(N)} +
+#     \\log{(c_{d_{x}, \\infty})} -
+#     d_x \\log{(\\rho_{k, i, \\infty})}
+#     \\right)}
+# ```
+
+# and ``\\hat{H}_{KZL}`` is the Kozachenko-Leonenko (KZL) marginal entropy estimator
+
+# ```math
+# \\hat{H}_{KZL} = \\dfrac{1}{N} \\sum_{i}^N \\log{
+#     \\left(
+#         \\dfrac{N \\cdot c_{d, p} \\cdot (\\rho_{k, i, p})^d}{k}
+#     \\right)} + \\log{(k)} - \\psi{(k)},
+# ```
+
+# and ``\\psi{(x)}`` is the digamma function.
