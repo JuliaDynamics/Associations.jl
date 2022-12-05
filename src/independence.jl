@@ -59,7 +59,14 @@ Specialized performance-increasing methods may have been implemented for some es
 ```julia
 using CausalityTools
 using Random
-x, y, z = Dataset(rand(1000, 2)), Dataset(rand(1000, 1)), Dataset(rand(1000, 1))
+
+# Create a scenario where X and Y are connected through Z. Then I(X; Y | Z) = 0.
+X = randn(1000)
+Y = X .+ randn(1000)
+Z = randn(1000) .+ 0.5*Y
+x, y, z = Dataset.([Z, Y, Z])
+
+
 e = Shannon(; base = ℯ)
 test_vf = LocalPermutation(; measure = CMI(MI2()), e, est = VisitationFrequency(5))
 test_kr = LocalPermutation(; measure = CMI(MI2()), e, est = Kraskov(k = 10))
@@ -88,7 +95,7 @@ end
 # It is possible to specialize on the measure, e.g. LocalPermutation{CMI}. This
 # should be done for the NN-based CMI methods, so we don't have to reconstruct
 # KD-trees and do marginal searches for all marginals all the time.
-function independence(test::LocalPermutation, x, y, z) # TODO: this is probably only valid for info measures.
+function independence(test::LocalPermutation, x, y, z)
     (; measure, e, est, rng, kperm, nsurr) = test
     @assert length(x) == length(y) == length(z)
     N = length(x)
@@ -128,7 +135,7 @@ function independence(test::LocalPermutation, x, y, z) # TODO: this is probably 
         Îs[b] = estimate(measure, e, est, x̂, y, z)
     end
     p = count(Îs .>= Î) / nsurr
-    return Î, p
+    return p, Î
 end
 
 new_permutation!(n̂, rng) = shuffle!(rng, n̂)

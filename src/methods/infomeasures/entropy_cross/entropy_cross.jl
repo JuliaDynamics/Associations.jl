@@ -2,6 +2,13 @@ export CrossEntropyEstimator
 export entropy_cross
 
 """
+    CrossEntropy <: InformationMeasure
+
+The cross-entropy. Used with [`estimate`](@ref) to compute cross-entropy.
+"""
+struct CrossEntropy <: InformationMeasure
+
+"""
     CrossEntropyEstimator <: InformationEstimator
 
 Subtypes of `CrossEntropyEstimator` estimate the differential cross-entropy
@@ -47,6 +54,20 @@ See also: [`Entropy`](@ref).
 function entropy_cross(e::Entropy, est::CrossEntropyEstimator,
         x::AbstractDataset{D}, y::AbstractDataset{D}) where D
 end
+
+"""
+    entropy_relative(::Renyi, p::Probabilities, q::Probabilities)
+
+Estimate the (discrete) relative entropy, or KL divergence, between the pre-computed
+probability distributions `p` and `q`, where `p[i]` and `q[i]` is the probability of the
+`i`-th outcome in some [outcome_space](@ref) ``\\omega{X}``, defined as
+
+```math
+D_{KL}(X || Y) = \\sum_{x \\in \\mathcal{X}} P(x) \\log{\\dfrac{P(x)}{Q(x)}}
+```
+
+See also: [`probabilities`](@ref).
+"""
 
 # TODO: we can also define C(ℙ, ℚ) = D(ℙ || ℚ) + H(ℙ), so cross entropy
 # can be estimated using any combination of relative entropy and entropy estimators,

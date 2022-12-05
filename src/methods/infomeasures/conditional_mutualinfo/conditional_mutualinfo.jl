@@ -11,31 +11,33 @@ Base.@kwdef struct CMI{METHOD} <: InformationMeasure
 end
 
 """
-    cmi([e::Entropy,] est::ProbabilitiesEstimator, X, Y, Z)
-
-Compute the discrete conditional mutual information (CMI) between `x` and `y` given `z`,
-i.e. ``II(X; Y | Z)``, using the provided [`ProbabilitiesEstimator`](@ref),
-by the decomposing CMI into four discrete entropy terms:
-``CMI(X; Y | Z) = H(X, Y) + H(Y, Z) - H(X, Y, Z) - H(Z)``.
-
     cmi([e::Entropy,] est::ConditionalMutualInformationEstimator, x, y, z)
     cmi([e::Entropy,] est::MutualInformationEstimator, x, y, z)
     cmi([e::Entropy,] est::EntropyEstimator, x, y, z)
+    cmi([e::Entropy,] est::ProbabilitiesEstimator, x, y, z)
 
-Estimate the differential/continuous CMI using the provided estimator.
+Compute the discrete or continuous (differential) conditional mutual information (CMI)
+between `x` and `y` given `z`, i.e. ``II(X; Y | Z)``, using the provided estimator `est`.
 
 - If `est` is a [`ConditionalMutualInformationEstimator`](@ref), then the differential
     CMI is computed using some direct estimation procedure.
-
-- If `est` is an [`EntropyEstimator`](@ref), then, CMI is estimated by a sum of
-    four *differential entropy* terms
-    ``CMI(X; Y | Z) = H(X, Y) + H(Y, Z) - H(X, Y, Z) - H(Z)``.
-
 - If `est` is a [`MutualInformationEstimator`](@ref), then CMI is estimated by a sum of two
     (differential) mutual information terms:
     ``CMI(X; Y | Z) = I(X; Y, Z) + I(X; Z)``.
+- If `est` is an [`EntropyEstimator`](@ref), then, CMI is estimated by a sum of
+    four *differential entropy* terms
+    ``CMI(X; Y | Z) = H(X, Y) + H(Y, Z) - H(X, Y, Z) - H(Z)``.
+- If `est` is a [`ProbabilitiesEstimator`](@ref), then the discrete CMI is computed by
+    decomposing CMI into four discrete entropy terms:
+    ``CMI(X; Y | Z) = H(X, Y) + H(Y, Z) - H(X, Y, Z) - H(Z)``.
 
-If the entropy type is not specified, then `Shannon(; base = 2)` is used.
+If the entropy type (first argument) is not specified, then `Shannon(; base = 2)` is used.
+
+## Common usage
+
+Used with [`LocalPermutation`](@ref) for conditional independence testing.
+
+
 """
 function cmi end
 
