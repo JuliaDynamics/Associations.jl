@@ -6,7 +6,7 @@ export entropy_cross
 
 The cross-entropy. Used with [`estimate`](@ref) to compute cross-entropy.
 """
-struct CrossEntropy <: InformationMeasure
+struct CrossEntropy <: InformationMeasure end
 
 """
     CrossEntropyEstimator <: InformationEstimator
@@ -45,9 +45,10 @@ C(\\mathbb{P}, \\mathbb{Q}) = - \\int_{\\mathbb{R}^d} p(x) \\log{(q(x))} dx.
 
 ## Other cross entropies
 
-Other types of cross entropies based on entropies where `type(e) != Shannon` are
-also possible to compute, but currently no estimators for such quantities are defined
-in this package yet.
+Besides the Shannon cross entropy, one can also define cross entropies based on
+other generalized entropies. However, there is no consensus in the literature on
+what the definition of such cross  entropies are. Therefore, individual
+[`CrossEntropyEstimator`](@ref) specify precisely which quantities they approximate.
 
 See also: [`Entropy`](@ref).
 """
@@ -55,19 +56,19 @@ function entropy_cross(e::Entropy, est::CrossEntropyEstimator,
         x::AbstractDataset{D}, y::AbstractDataset{D}) where D
 end
 
-"""
-    entropy_relative(::Renyi, p::Probabilities, q::Probabilities)
+# """
+#     entropy_relative(::Renyi, p::Probabilities, q::Probabilities)
 
-Estimate the (discrete) relative entropy, or KL divergence, between the pre-computed
-probability distributions `p` and `q`, where `p[i]` and `q[i]` is the probability of the
-`i`-th outcome in some [outcome_space](@ref) ``\\omega{X}``, defined as
+# Estimate the (discrete) relative entropy, or KL divergence, between the pre-computed
+# probability distributions `p` and `q`, where `p[i]` and `q[i]` is the probability of the
+# `i`-th outcome in some [outcome_space](@ref) ``\\omega{X}``, defined as
 
-```math
-D_{KL}(X || Y) = \\sum_{x \\in \\mathcal{X}} P(x) \\log{\\dfrac{P(x)}{Q(x)}}
-```
+# ```math
+# D_{KL}(X || Y) = \\sum_{x \\in \\mathcal{X}} P(x) \\log{\\dfrac{P(x)}{Q(x)}}
+# ```
 
-See also: [`probabilities`](@ref).
-"""
+# See also: [`probabilities`](@ref).
+# """
 
 # TODO: we can also define C(ℙ, ℚ) = D(ℙ || ℚ) + H(ℙ), so cross entropy
 # can be estimated using any combination of relative entropy and entropy estimators,
