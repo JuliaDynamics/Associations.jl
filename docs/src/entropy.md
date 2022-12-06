@@ -1,10 +1,13 @@
 # [Entropy (generalized)](@id entropies)
 
-## API
+## API & entropy types
 
 ```@docs
 entropy
 Entropy
+```
+
+```@docs
 Shannon
 Renyi
 Tsallis
@@ -12,24 +15,46 @@ Curado
 StretchedExponential
 ```
 
-## Estimator table
+## Estimators
 
 Discrete entropies are just simple functions (sums, actually) of 
-probability mass functions [(pmf)](https://en.wikipedia.org/wiki/Probability_mass_function).
-We provide naive plug-in estimators of generalized entropies for all 
-[`ProbabilitiesEstimator`](@ref)s. It is known that naive plug-in estimates underestimate 
-the entropy, but currently, no bias correction is applied to any of the discrete estimators.
+probability mass functions [(pmf)](https://en.wikipedia.org/wiki/Probability_mass_function),
+which you can estimate using [`ProbabilitiesEstimator`](@ref)s. Every 
+[`ProbabilitiesEstimator`](@ref)s thus serves as a naive plug-in estimators of all 
+generalized entropies. No bias correction is currently applied to any of the discrete 
+estimators.
 
-Continuous entropy estimators estimate  *differential*, or continuous, generalized 
-entropies. [`EntropyEstimator`](@ref)s approximate *integrals* instead of sums, and 
-therefore rely on estimating density functionals, which each estimator does slightly 
-differently, and tailored to the specific entropy being computed. An 
-[`EntropyEstimator`](@ref) is therefore typically only defined for a single or a few 
-types of generalized entropies.
+Continuous (differential) entropies, on the other hand, are approximated by [`EntropyEstimator`](@ref)s,
+and are functions of *integrals*, and rely on estimating density functionals. 
+Each [`EntropyEstimator`](@ref)s uses a different technique for approximating relevant
+probability densities, and is often tailed to one or a few types of generalized entropy.
+For example, [`Kraskov`](@ref) estimates the [`Shannon`](@ref) entropy, while
+[`LeonenkoProzantoSavani`](@ref) estimates [`Shannon`](@ref), [`Renyi`](@ref), and 
+[`Tsallis`](@ref) entropies.
 
-!!! info
-    The table scrolls sideways, so is best viewed on a large screen. An `x` indicates that no 
-    implementation exists.
+```@docs
+EntropyEstimator
+```
+
+```@docs
+Kraskov
+KozachenkoLeonenko
+Zhu
+ZhuSingh
+GaoNaive
+GaoNaiveCorrected
+Goria
+LeonenkoProzantoSavani
+Vasicek
+AlizadehArghami
+Ebrahimi
+Correa
+```
+
+## Implementations
+
+The table below summarizes this available implementations. An `x` indicates that no
+implementation exists. The table scrolls sideways, so is best viewed on a large screen.
 
 | Estimator                                   | Principle                   | Input data          | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) | [`Curado`](@ref) | [`StretchedExponential`](@ref) |
 | ------------------------------------------- | --------------------------- | ------------------- | :---------------: | :-------------: | :---------------: | :--------------: | :----------------------------: |
@@ -60,28 +85,6 @@ types of generalized entropies.
 
 !!! info "Missing implementation?"
     Submit an issue or a pull request! We're happy to assist.
-
-
-## Continuous estimators
-
-```@docs
-EntropyEstimator
-```
-
-```@docs
-Kraskov
-KozachenkoLeonenko
-Zhu
-ZhuSingh
-GaoNaive
-GaoNaiveCorrected
-Goria
-LeonenkoProzantoSavani
-Vasicek
-AlizadehArghami
-Ebrahimi
-Correa
-```
 
 ## Convenience
 
