@@ -36,11 +36,12 @@ D(\\mathbb{P} || \\mathbb{Q}) =
     \\int_{\\mathbb{R}^D} p(x) \\log{\\left( \\dfrac{p(x)}{q(x)} \\right)} dx,
 ```
 
-# Other relative entropies
+## Other relative entropies
 
-Other types of relative entropies based on entropies where `type(e) != Shannon` are
-also possible to compute, but currently no estimators for such quantities are defined
-in this package yet.
+Besides the Shannon relative entropy, one can also define relative entropies based on
+other generalized entropies. However, there is no consensus in the literature on
+what the definition of such relative entropies are. Therefore, individual
+[`RelativeEntropyEstimator`](@ref) specify precisely which quantities they approximate.
 
 See also: [`Entropy`](@ref).
 
@@ -48,10 +49,12 @@ See also: [`Entropy`](@ref).
     Bulinski, A., & Dimitrov, D. (2021). Statistical estimation of the Kullback-Leibler
     divergence. Mathematics, 9(5), 544.
 """
-function entropy_relative(e::Entropy, est::RelativeEntropyEstimator, x, y) end
+function entropy_relative end
 # entropy_relative(est::RelativeEntropyEstimator, args...; base = 2, kwargs...) =
 #     entropy_relative(Shannon(; base), est, args...; kwargs...)
 
+entropy_relative(e::Entropy, est::RelativeEntropyEstimator, x, y) =
+    entropy_relative(e, est, Dataset(x), Dataset(y))
 """
     entropy_relative(::Renyi, p::Probabilities, q::Probabilities)
 
@@ -63,11 +66,11 @@ probability distributions `p` and `q`, where `p[i]` and `q[i]` is the probabilit
 D_{KL}(X || Y) = \\sum_{x \\in \\mathcal{X}} P(x) \\log{\\dfrac{P(x)}{Q(x)}}
 ```
 
+For this definition to be meaningful `p` and `q` must have *the same* outcome space.
+
 See also: [`probabilities`](@ref).
 """
-function entropy_relative(::Renyi, x::Probabilities, y::Probabilities)
-
-end
+function entropy_relative end
 
 using Distributions: MvNormal
 using LinearAlgebra: tr, inv
@@ -86,5 +89,5 @@ function entropy_relative(e::Renyi, N1::MvNormal, N2::MvNormal)
     ) / log(e.base, ℯ)
 end
 
-include("estimators/Wang.jl")
-include("estimators/WangTransformed.jl")
+include("analytical.jl")
+include("estimators/estimators.jl")
