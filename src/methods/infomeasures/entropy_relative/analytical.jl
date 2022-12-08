@@ -14,3 +14,7 @@ function entropy_relative(e::Renyi, x::Beta, y::Beta)
         (1 / (q - 1)) * log(_beta(a, b) / _beta(αx, βx))
     return re / log(e.base, ℯ)
 end
+
+
+# Analytical KL divergence for 1D normals:
+# https://ieeexplore.ieee.org/abstract/document/6832827?casa_token=ZhfFH5_G6XgAAAAA:RzQMg0Zjn-CwtOWw4N-jeum3bWzP7tRioSSFAb76fZX58JmXDBW7mSqjbxvr73NDa9fplUSIGw
