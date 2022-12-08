@@ -26,7 +26,8 @@ where ``\\log_q`` is the `q`-logarithm (see Furuichi, 2006), and `q != 1`.
 !!! warn "Common outcome space"
     X and Y must share outcome space for these estimates to make sense.
 
-[^Furuichi2006]: Furuichi, S. (2006). Information theoretical properties of Tsallis
+[^Furuichi2006]:
+    Furuichi, S. (2006). Information theoretical properties of Tsallis
     entropies. Journal of Mathematical Physics, 47(2), 023302.
 """
 struct FuruichiCD{P<:ProbabilitiesEstimator} <: ConditionalEntropyEstimator

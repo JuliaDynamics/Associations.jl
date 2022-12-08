@@ -2,19 +2,21 @@ using Entropies: Probabilities, Tsallis
 using Entropies: entropy
 
 """
-    Furuichi <: MutualInformationEstimator
+    TsallisMIFuruichi <: MutualInformationEstimator
+    TsallisMIFuruichi(est::ProbabilitiesEstimator)
 
-A mutual information estimator that computes the Tsallis mutual information as defined in
-Furuichi (2006)[^Furuichi2006], based on Tsallis mutual entropy.
+`TsallisMIFuruichi` is an estimator of the Tsallis mutual "information",
+which they Furuichi (2006)[^Furuichi2006] denotes the Tsallis *mutual entropy*
+(see Furuichi (2006) for reasoning on naming the method).
 
 [^Furuichi2006]:
     Furuichi, S. Information theoretical properties of Tsallis entropies. J. Math. Phys.
     2006, 47, 023302.
 """
-struct Furuichi <: MutualInformationEstimator
-
+struct TsallisMIFuruichi{P} <: MutualInformationEstimator
+    est::P
 end
 
-function mutualinfo(e::Tsallis, est::Furuichi, p::Probabilities, q::Probabilities)
-    return entropy(e, p) + entropy(e, q) + joint_entropy(e, p, q)
+function mutualinfo(e::Tsallis, est::TsallisMIFuruichi, x, y)
+    return entropy(e, x) + entropy(e, y) + entropy(e, Dataset(x, y))
 end
