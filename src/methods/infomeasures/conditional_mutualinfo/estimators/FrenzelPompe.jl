@@ -31,7 +31,7 @@ Base.@kwdef struct FrenzelPompe{MJ, MM} <: ConditionalMutualInformationEstimator
     metric_marginals::MM = Chebyshev()
 end
 
-function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::FrenzelPompe, X, Y, Z)
+function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::FrenzelPompe, x, y, z)
     e.q ≈ 1 || throw(ArgumentError(
         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
     ))
@@ -40,9 +40,9 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::FrenzelPompe, X, Y, 
     N = length(X)
     # Ensures that vector-valued inputs are converted to datasets, so that
     # building the marginal/joint spaces and neighbor searches are fast.
-    X = Dataset(X)
-    Y = Dataset(Y)
-    Z = Dataset(Z)
+    X = Dataset(x)
+    Y = Dataset(y)
+    Z = Dataset(z)
     joint = Dataset(X, Y, Z)
     XZ = Dataset(X, Z)
     YZ = Dataset(Y, Z)

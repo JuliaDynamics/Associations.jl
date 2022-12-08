@@ -23,15 +23,15 @@ Base.@kwdef struct Rahimzamani{M} <: ConditionalMutualInformationEstimator
     metric::M = Chebyshev()
 end
 
-function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::Rahimzamani, X, Y, Z)
+function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::Rahimzamani, x, y, z)
     e.q ≈ 1 || throw(ArgumentError(
         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
     ))
     (; k, w, metric) = est
-    joint = Dataset(X, Y, Z)
-    XZ = Dataset(X, Z)
-    YZ = Dataset(Y, Z)
-    Z = Dataset(Z)
+    joint = Dataset(x, y, z)
+    XZ = Dataset(x, z)
+    YZ = Dataset(y, z)
+    Z = Dataset(z)
     N = length(joint)
     M = 3
     tree_joint = KDTree(joint, metric)

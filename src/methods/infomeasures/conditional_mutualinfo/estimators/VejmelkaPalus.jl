@@ -27,18 +27,19 @@ Base.@kwdef struct VejmelkaPalus{MJ, MM} <: ConditionalMutualInformationEstimato
     metric_marginals::MM = Chebyshev()
 end
 
-function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::VejmelkaPalus, X, Y, Z)
+function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::VejmelkaPalus, x, y, z)
     e.q ≈ 1 || throw(ArgumentError(
         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
     ))
     (; k, w, metric_joint, metric_marginals) = est
-    @assert length(X) == length(Y) == length(Z)
-    N = length(X)
     # Ensures that vector-valued inputs are converted to datasets, so that
     # building the marginal/joint spaces and neighbor searches are fast.
-    X = Dataset(X)
-    Y = Dataset(Y)
-    Z = Dataset(Z)
+    X = Dataset(x)
+    Y = Dataset(y)
+    Z = Dataset(z)
+    @assert length(X) == length(Y) == length(Z)
+    N = length(X)
+
     joint = Dataset(X, Y, Z)
     XZ = Dataset(X, Z)
     YZ = Dataset(Y, Z)
