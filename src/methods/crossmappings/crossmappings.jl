@@ -8,6 +8,9 @@ export predict, crossmap
 export CrossmapMeasure, CrossmapEstimator
 export ExpandingSegment, RandomSegment
 
+"""
+The supertype for all cross-map measures.
+"""
 abstract type CrossmapMeasure end
 
 """

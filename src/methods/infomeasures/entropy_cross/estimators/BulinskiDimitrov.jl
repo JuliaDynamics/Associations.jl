@@ -7,6 +7,19 @@ export BulinskiDimitrov
 The `BulinskiDimitrov` estimator computes the [`Shannon`](@ref) differential cross
 entropy between two variables based on `k`-th nearest neighbor searches,
 using Theiler window `w`.
+
+## Description
+
+The `BulinskiDimitrov` estimator (Bulinski & Dimitrov, 2021)[^Bulinski2021] computes the
+Shannon differential cross entropy, which they define as
+
+```math
+C(\\mathbb{P}, \\mathbb{Q}) = - \\int_{\\mathbb{R}^d} p(x) \\log{(q(x))} dx,
+```
+
+where ``\\mathbb{P}`` and ``\\mathbb{Q}`` are continuous probability measures
+with densities ``p(x)`` and ``q(x)`` (``x \\in \\mathcal{R}^D``),
+with respect to the Lebesque measure ``\\mu``, and ``dx := \\mu(dx)``.
 """
 Base.@kwdef struct BulinskiDimitrov{M} <: CrossEntropyEstimator
     k::Int = 1

@@ -1,5 +1,26 @@
 # Mutual information
 
+Mutual informations come in several forms in the literature, depending on what type of
+entropy they are based on. In CausalityTools.jl, we indicate the different types of mutual
+informations by passing an [`Entropy`](@ref) instance as the first argument to
+[`mutualinfo`](@ref).
+
+For example, to compute the Shannon mutual information, do
+`mutualinfo(Shannon(), est, x, y)`, to compute Tsallis mutual information, do
+`mutualinfo(Tsallis(; q), est, x, y)`.
+
+## Implementations
+
+Any of the following estimators can be used with [`mutualinfo`](@ref).
+
+| Estimator                              | Principle           | Input data          | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) |
+| -------------------------------------- | ------------------- | ------------------- | :---------------: | :-------------: | :---------------: |
+| [`KraskovStögbauerGrassberger1`](@ref) | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
+| [`KraskovStögbauerGrassberger2`](@ref) | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
+| [`GaoKannanOhViswanath`](@ref)         | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
+| [`GaoOhViswanath`](@ref)               | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
+| [`TsallisMIFuruichi`](@ref)                   | Estimator-dependent | Estimator-dependent |         x         |        x        |     Discrete      |
+
 ## API
 
 ```@docs
@@ -14,7 +35,7 @@ KraskovStögbauerGrassberger1
 KraskovStögbauerGrassberger2
 GaoKannanOhViswanath
 GaoOhViswanath
-FuruichiMI
+TsallisMIFuruichi
 ```
 
 ## Examples

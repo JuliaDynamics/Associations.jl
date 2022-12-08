@@ -5,44 +5,59 @@ export PoczosSchneiderRE
 
 """
     PoczosSchneiderRE <: RelativeEntropyEstimator
+    PoczosSchneiderRE(k = 1, w = 0)
 
-A relative entropy estimator that can be used to compute Renyi or Tsallis
-relative entropies (divergences) (Póczos & Schneider)[^Póczos2011].
+`PoczosSchneiderRE` is a relative entropy estimator that can be used to compute Renyi or
+Tsallis relative entropies (divergences) (Póczos & Schneider, 2011)[^Póczos2011].
 
-## Definitions
+`w` is the Theiler window, which controls how many temporal neighbors are excluded
+during neighbor searches. `w = 0` means that only the point itself is excluded.
 
-We here re-state the definitions from Póczos & Schneider (2011).
-Let ``p, q`` be density function ``\\mathbb{R}^d \\supseteq M_0 \\to \\mathbb{R}``
-and let ``\\alpha \\in \\mathbb{R}`` with ``\\alpha \\neq 1``, and assume the following integrals
-exist.
+## Description
+
+Let ``\\mathbb{P}`` and ``\\mathbb{Q}`` be continuous probability measures
+with density functions ``p(x)`` and ``q(x)`` (``x \\in M_0 \\subseteq \\mathcal{R}^D``),
+i.e. ``p: M_0 \\subseteq \\mathcal{R}^D \\mapsto \\mathbb{R}`` and
+``q: M_0 \\subseteq \\mathcal{R}^D \\mapsto \\mathbb{R}``,
+with respect to the Lebesque measure ``\\mu``, and ``dx := \\mu(dx)``.
+
+Let ``q\\in \\mathbb{R}`` with ``q \\neq 1``. Assuming the following
+integral exists, `PoczosSchneiderRE` estimates
+
+```math
+V_{q}(\\mathbb{P} || \\mathbb{Q}) = \\int_{M_0} p^{q}(x)q^{1 - q}(x) dx.
+```
+
+The estimate for ``V_{q}(\\mathbb{P} || \\mathbb{Q})`` is then plugged into one of
+the formulas below.
 
 ### Renyi divergence
 
-```math
-R_{\\alpha}(p || q) =
-\\dfrac{1}{\\alpha - 1}\\log \\int_{M_0} p^{\\alpha}(x)q^{1-\\alpha}(x) dx
-```
+If called with `entropy_relative(Renyi(), PoczosSchneiderRE(), x, y)`, then the Rényi
+divergence is returned:
 
-When `q = 1`, ``R_{\\alpha}(p || q) = KL(p || q)``.
+```math
+R_{q}(\\mathbb{P} || \\mathbb{Q}) =
+\\dfrac{1}{q - 1}\\log V_{q}(\\mathbb{P} || \\mathbb{Q}).
+```
 
 ### Tsallis divergence
 
+If called with `entropy_relative(Tsallis(), PoczosSchneiderRE(), x, y)`, then Tsallis
+divergence is returned:
+
 ```math
-T_{\\alpha}(p || q) =
-\\dfrac{1}{\\alpha - 1}
+T_{q}(\\mathbb{P} || \\mathbb{Q}) =
+\\dfrac{1}{q - 1}
 \\left(
-    \\int_{M_0} p^{\\alpha}(x)q^{1-\\alpha}(x) dx - 1
+    V_{q}(\\mathbb{P} || \\mathbb{Q}) - 1
 \\right)
 ```
 
-## Definitions
-
-The integrals in both the Renyi and Tsallis divergences as stated here are identical.
-The `PoczosSchneiderRE` estimator boils down to estimating this integral, then plugging the
-estimate into the formulas above.
-
 [^Póczos2011]:
-    Póczos, B., & Schneider, J. (2011, June). On the estimation of alpha-divergences. In Proceedings of the Fourteenth International Conference on Artificial Intelligence and Statistics (pp. 609-617). JMLR Workshop and Conference Proceedings.
+    Póczos, B., & Schneider, J. (2011, June). On the estimation of alpha-divergences. In
+    Proceedings of the Fourteenth International Conference on Artificial Intelligence and
+    Statistics (pp. 609-617). JMLR Workshop and Conference Proceedings.
 """
 Base.@kwdef struct PoczosSchneiderRE <: RelativeEntropyEstimator
     k::Int = 1

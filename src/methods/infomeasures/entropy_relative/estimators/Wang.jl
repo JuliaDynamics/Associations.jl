@@ -20,8 +20,12 @@ during neighbor searches. `w = 0` means that only the point itself is excluded.
 The `Wang` estimator computes the Shannon relative entropy, or KL-divergence, given by
 
 ```math
-D(P || Q) = \\int_{\\mathbb{R}^d} p(x) \\log \\dfrac{p(x)}{q(x)} dx
+D(\\mathbb{P} || \\mathbb{Q}) = \\int_{\\mathbb{R}^d} p(x) \\log \\dfrac{p(x)}{q(x)} dx
 ```
+
+where ``\\mathbb{P}`` and ``\\mathbb{Q}`` are continuous probability measures
+with densities ``p(x)`` and ``q(x)`` (``x \\in \\mathcal{R}^D``),
+with respect to the Lebesque measure ``\\mu``, and ``dx := \\mu(dx)``.
 
 [^Wang2009]:
     Wang, Q., Kulkarni, S. R., & Verdú, S. (2009). Divergence estimation for

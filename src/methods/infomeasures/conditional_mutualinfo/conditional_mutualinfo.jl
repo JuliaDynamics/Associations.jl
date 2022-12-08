@@ -26,7 +26,7 @@ between `x` and `y` given `z`, i.e. ``II(X; Y | Z)``, using the provided estimat
     ``CMI(X; Y | Z) = I(X; Y, Z) + I(X; Z)``.
 - If `est` is an [`EntropyEstimator`](@ref), then, CMI is estimated by a sum of
     four *differential entropy* terms
-    ``CMI(X; Y | Z) = H(X, Y) + H(Y, Z) - H(X, Y, Z) - H(Z)``.
+    ``CMI(X; Y | Z) = h(X, Y) + h(Y, Z) - h(X, Y, Z) - h(Z)``.
 - If `est` is a [`ProbabilitiesEstimator`](@ref), then the discrete CMI is computed by
     decomposing CMI into four discrete entropy terms:
     ``CMI(X; Y | Z) = H(X, Y) + H(Y, Z) - H(X, Y, Z) - H(Z)``.
