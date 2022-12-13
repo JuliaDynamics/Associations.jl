@@ -1,5 +1,6 @@
 using Entropies: ball_volume
 export GaoOhViswanath
+
 """
     GaoOhViswanath <: MutualInformationEstimator
 
@@ -16,8 +17,8 @@ estimator, or BI-KSG, by Gao et al. (2018)[^Gao2018], is given by
         \\left(
             \\dfrac{c_{d_{x}, 2} c_{d_{y}, 2}}{c_{d_{x} + d_{y}, 2}}
         \\right)
-    } -
-    \\dfrac{1}{N} \\sum_{i=1}^N \\left( \\log{(n_{x, i, 2})} + \\log{(n_{y, i, 2})} \\right)
+    } - \\\\
+    & \\dfrac{1}{N} \\sum_{i=1}^N \\left( \\log{(n_{x, i, 2})} + \\log{(n_{y, i, 2})} \\right)
 \\end{align},
 ```
 
@@ -35,7 +36,9 @@ Base.@kwdef struct GaoOhViswanath{MJ, MM} <: MutualInformationEstimator
     metric_marginals::MM = Euclidean()
 end
 
-function estimate(infomeasure::MI{Nothing}, e::Renyi, est::GaoOhViswanath, x::Vector_or_Dataset...)
+function estimate(def::MIShannonDifferential, est::GaoOhViswanath, x::Vector_or_Dataset...)
+    e = def.e
+
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
     e.q == 1 || throw(ArgumentError(
@@ -79,10 +82,6 @@ function marginal_inrangecount!(est::GaoOhViswanath, ns, xₘ, ds)
     end
     return ns
 end
-
-mutualinfo(est::GaoOhViswanath, args...; base = 2, kwargs...) =
-    mutualinfo(Shannon(; base), est, args...; kwargs...)
-
 
 # ## KSG
 

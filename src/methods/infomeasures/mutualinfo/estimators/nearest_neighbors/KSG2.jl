@@ -74,12 +74,11 @@ struct KraskovStögbauerGrassberger2{MJ, MM} <: MutualInformationEstimator
 end
 const KSG2 = KraskovStögbauerGrassberger2
 
-function estimate(infomeasure::MI{Nothing}, e::Renyi, est::KraskovStögbauerGrassberger2, x::Vector_or_Dataset...)
+function estimate(def::MIShannonDifferential, est::KraskovStögbauerGrassberger2, x::Vector_or_Dataset...)
+    e = def.e
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
-    e.q == 1 || throw(ArgumentError(
-        "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
-    ))
+
     (; k, w, metric_joint, metric_marginals) = est
     joint = Dataset(x...)
     marginals = Dataset.(x)

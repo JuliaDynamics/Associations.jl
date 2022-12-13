@@ -31,8 +31,8 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
 
 !!! warn "Implementation note"
     In Gao et al., (2017), they claim (roughly speaking) that the estimator
-    reduces to the [`KSG1`](@ref) estimator for continuous-valued data.
-    However, [`KSG1`](@ref) uses the digamma function, while `GaoKannanOhViswanath`
+    reduces to the [`KraskovStögbauerGrassberger1`](@ref) estimator for continuous-valued data.
+    However, [`KraskovStögbauerGrassberger1`](@ref) uses the digamma function, while `GaoKannanOhViswanath`
     uses the logarithm instead, so the estimators are not exactly equivalent
     for continuous data.
 
@@ -42,7 +42,7 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
     `k`-th nearest distances among the two marginal spaces, which are in general not the
     same as the `k`-th neighbor distance in the joint space (unless both marginals are
     univariate). Therefore, our implementation here differs slightly from algorithm 1 in
-    `GaoKannanOhViswanath`. We have modified it in a way that mimics [`KSG1`](@ref) for
+    `GaoKannanOhViswanath`. We have modified it in a way that mimics [`KraskovStögbauerGrassberger1`](@ref) for
     continous data. Note that because of using the `log` function instead of `digamma`,
     there will be slight differences between the methods. See the source code for more
     details.
@@ -58,13 +58,13 @@ Base.@kwdef struct GaoKannanOhViswanath <: MutualInformationEstimator
     k::Int = 1
     w::Int = 0
 end
-# We here extend the estimator to multiple variables (i.e. the multi-information),
+# TODO: We here extend the estimator to multiple variables (i.e. the multi-information),
 # which was not treated in Gao et al., (2017).
 
 # Note: input datasets must have the same type. Remind the user ot convert in the
 # docstring.
-function mutualinfo(e::Renyi, est::GaoKannanOhViswanath,
-        x, y)
+function estimate(def::MIShannonDifferential, est::GaoKannanOhViswanath, x, y)
+    e = def.e
     (; k, w) = est
     X = Dataset(x)
     Y = Dataset(y)

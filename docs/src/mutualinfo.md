@@ -19,23 +19,35 @@ Any of the following estimators can be used with [`mutualinfo`](@ref).
 | [`KraskovStögbauerGrassberger2`](@ref) | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
 | [`GaoKannanOhViswanath`](@ref)         | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
 | [`GaoOhViswanath`](@ref)               | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
-| [`TsallisMIFuruichi`](@ref)                   | Estimator-dependent | Estimator-dependent |         x         |        x        |     Discrete      |
+| [`MIShannonDifferential`](@ref)                | Estimator-dependent | Estimator-dependent |    Continuous     |        x        |         x         |
+| [`MIShannon`](@ref)                    | Estimator-dependent | Estimator-dependent |     Discrete      |        x        |     Discrete      |
+| [`MITsallis`](@ref)                    | Estimator-dependent | Estimator-dependent |         x         |        x        |     Discrete      |
 
 ## API
 
 ```@docs
-mutualinfo
 MutualInformationEstimator
+mutualinfo
 ```
 
-## Estimators
+## Dedicated estimators
 
 ```@docs
 KraskovStögbauerGrassberger1
 KraskovStögbauerGrassberger2
 GaoKannanOhViswanath
 GaoOhViswanath
-TsallisMIFuruichi
+```
+
+## Derived estimators
+
+```@docs
+MIShannon
+MITsallis
+MIShannonDifferential
+ShannonH3
+TsallisH3
+ShannonH3Differential
 ```
 
 ## Examples
@@ -96,7 +108,7 @@ run(est; f::Function, # function that generates data
         nreps::Int = 10, 
         αs = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1], 
         n::Int = 1000) =
-    map(α -> mutualinfo(Shannon(; base), est, f(α, n)...), αs)
+    map(α -> mutualinfo(MIShannonDifferential(e = Shannon(; base)), est, f(α, n)...), αs)
 
 function compute_results(f::Function; estimators, k = 5, k_lord = 20,
         n = 1000, base = ℯ, nreps = 10,
@@ -169,31 +181,6 @@ estimators = [
 ]
 ```
 
-#### Family 1
-
-In this system, samples are concentrated around the diagonal $X = Y$,
-and the strip of samples gets thinner as $\alpha \to 0$.
-
-```@example ex_mutualinfo
-function family1(α, n::Int)
-    x = rand(n)
-    v = rand(n)
-    y = x + α * v
-    return Dataset(x), Dataset(y)
-end
-
-# True mutual information values for these data
-function ifamily1(α; base = ℯ)
-    mi = -log(α) - α - log(2)
-    return mi / log(base, ℯ)
-end
-
-fig = plot_results(family1, ifamily1; 
-    k_lord = k_lord, k = k, nreps = 10,
-    estimators = estimators,
-    base = base)
-```
-
 #### Family 2
 
 ```@example ex_mutualinfo
@@ -226,6 +213,31 @@ with_theme(new_cycle_theme()) do
     axislegend(position = :lt)
     return f
 end
+```
+
+#### Family 1
+
+In this system, samples are concentrated around the diagonal $X = Y$,
+and the strip of samples gets thinner as $\alpha \to 0$.
+
+```@example ex_mutualinfo
+function family1(α, n::Int)
+    x = rand(n)
+    v = rand(n)
+    y = x + α * v
+    return Dataset(x), Dataset(y)
+end
+
+# True mutual information values for these data
+function ifamily1(α; base = ℯ)
+    mi = -log(α) - α - log(2)
+    return mi / log(base, ℯ)
+end
+
+fig = plot_results(family1, ifamily1; 
+    k_lord = k_lord, k = k, nreps = 10,
+    estimators = estimators,
+    base = base)
 ```
 
 #### Family 3
@@ -289,8 +301,9 @@ for i = 1:nreps
     D2 = Dataset([rand(N2) for i = 1:N])
     X = D2[:, 1] |> Dataset
     Y = D2[:, 2] |> Dataset
-    mis_ksg1[i, :] = map(k -> mutualinfo(Shannon(; base = ℯ), KSG1(; k), X, Y), ks)
-    mis_ksg2[i, :] = map(k -> mutualinfo(Shannon(; base = ℯ), KSG2(; k), X, Y), ks)
+    measure = MIShannonDifferential(e = Shannon(base = ℯ))
+    mis_ksg1[i, :] = map(k -> mutualinfo(measure, KSG1(; k), X, Y), ks)
+    mis_ksg2[i, :] = map(k -> mutualinfo(measure, KSG2(; k), X, Y), ks)
 end
 fig = Figure()
 ax = Axis(fig[1, 1], xlabel = "k / N", ylabel = "Mutual infomation (nats)")
@@ -341,12 +354,13 @@ function compare_ksg_gkov(;
             Y = Dataset(float.(rand(1:8, L, 2)))
             Z = Dataset(rand(L, 2))
             W = Dataset(rand(L, 2))
-            mis_ksg1_discrete[i, j] = mutualinfo(Shannon(; base), est_ksg1, X, Y)
-            mis_gkov_discrete[i, j] = mutualinfo(Shannon(; base), est_gkov, X, Y)
-            mis_ksg1_mix[i, j] = mutualinfo(Shannon(; base), est_ksg1, X, Z)
-            mis_gkov_mix[i, j] = mutualinfo(Shannon(; base), est_gkov, X, Z)
-            mis_ksg1_cont[i, j] = mutualinfo(Shannon(; base), est_ksg1, Z, W)
-            mis_gkov_cont[i, j] = mutualinfo(Shannon(; base), est_gkov, Z, W)
+            measure = MIShannonDifferential(e = Shannon(; base = ℯ))
+            mis_ksg1_discrete[i, j] = mutualinfo(measure, est_ksg1, X, Y)
+            mis_gkov_discrete[i, j] = mutualinfo(measure, est_gkov, X, Y)
+            mis_ksg1_mix[i, j] = mutualinfo(measure, est_ksg1, X, Z)
+            mis_gkov_mix[i, j] = mutualinfo(measure, est_gkov, X, Z)
+            mis_ksg1_cont[i, j] = mutualinfo(measure, est_ksg1, Z, W)
+            mis_gkov_cont[i, j] = mutualinfo(measure, est_gkov, Z, W)
         end
     end
     return mis_ksg1_mix, mis_ksg1_discrete, mis_ksg1_cont,
