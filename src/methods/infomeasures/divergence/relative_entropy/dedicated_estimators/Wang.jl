@@ -4,7 +4,7 @@ using Neighborhood: KDTree, Euclidean
 using Neighborhood: bulksearch
 
 """
-    Wang <: RelativeEntropyEstimator
+    Wang <: DivergenceEstimator
     Wang(k = 5, l = 5, w = 0)
 
 The `Wang` relative entropy estimator (Wang et al., 2009[^Wang2009] computes the
@@ -32,16 +32,17 @@ with respect to the Lebesque measure ``\\mu``, and ``dx := \\mu(dx)``.
     multidimensional densities via k-Nearest-Neighbor distances. IEEE Transactions on
     Information Theory, 55(5), 2392-2405.
 """
-Base.@kwdef struct Wang <: RelativeEntropyEstimator
+Base.@kwdef struct Wang <: DivergenceEstimator
     k::Int = 5
     l::Int = 5
     w::Int = 0
 end
 
-function entropy_relative(e::Renyi, est::Wang,
+function estimate(measure::RelativeEntropyRenyiDifferential, est::Wang,
         x::AbstractDataset{D},
         y::AbstractDataset{D}) where D
-    e.q == 1 || error("`entropy_relative` not defined for `Wang` estimator for Renyi with q = $(e.q)")
+    q, base = measure.e.q, measure.e.base
+    q == 1 || error("`divergence` not defined for `Wang` estimator for Rènyi with q = $(e.q)")
     (; k, l, w) = est
     n, m = length(x), length(y)
     tree_x = KDTree(x, Euclidean())
@@ -54,7 +55,5 @@ function entropy_relative(e::Renyi, est::Wang,
     hr = digamma(k) - digamma(l) + # correction
         (D / n) * sum(log.(νs ./ ρs)) +
         log(m / (n - 1))
-    return hr / log(e.base, ℯ)
+    return hr / log(base, ℯ)
 end
-entropy_relative(est::Wang, args...; base = 2, kwargs...) =
-    entropy_relative(Shannon(; base), est, args...; kwargs...)

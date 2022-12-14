@@ -48,7 +48,7 @@ function estimate(measure::InformationMeasure, args...; kwargs...) end
 
 include("discrete.jl")
 include("mutualinfo/mutualinfo.jl")
-
+include("divergence/divergence.jl")
 
 # Things that will be eventually moved to Entropies.jl
 include("various/probabilities.jl")

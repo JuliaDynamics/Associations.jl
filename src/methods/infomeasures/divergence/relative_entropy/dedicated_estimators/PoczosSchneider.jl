@@ -4,7 +4,7 @@ using SpecialFunctions: digamma
 export PoczosSchneiderRE
 
 """
-    PoczosSchneiderRE <: RelativeEntropyEstimator
+    PoczosSchneiderRE <: DivergenceEstimator
     PoczosSchneiderRE(k = 1, w = 0)
 
 `PoczosSchneiderRE` is a relative entropy estimator that can be used to compute Renyi or
@@ -33,7 +33,7 @@ the formulas below.
 
 ### Renyi divergence
 
-If called with `entropy_relative(Renyi(), PoczosSchneiderRE(), x, y)`, then the Rényi
+If called with `divergence(Renyi(), PoczosSchneiderRE(), x, y)`, then the Rényi
 divergence is returned:
 
 ```math
@@ -43,7 +43,7 @@ R_{q}(\\mathbb{P} || \\mathbb{Q}) =
 
 ### Tsallis divergence
 
-If called with `entropy_relative(Tsallis(), PoczosSchneiderRE(), x, y)`, then Tsallis
+If called with `divergence(Tsallis(), PoczosSchneiderRE(), x, y)`, then Tsallis
 divergence is returned:
 
 ```math
@@ -59,23 +59,26 @@ T_{q}(\\mathbb{P} || \\mathbb{Q}) =
     Proceedings of the Fourteenth International Conference on Artificial Intelligence and
     Statistics (pp. 609-617). JMLR Workshop and Conference Proceedings.
 """
-Base.@kwdef struct PoczosSchneiderRE <: RelativeEntropyEstimator
+Base.@kwdef struct PoczosSchneiderRE <: DivergenceEstimator
     k::Int = 1
     w::Int = 0
 end
 
-function entropy_relative(e::Tsallis, est::PoczosSchneiderRE,
+function divergence(measure::RelativeEntropyTsallisDifferential, est::PoczosSchneiderRE,
         x::AbstractDataset{D}, y::AbstractDataset{D}) where D
-    D̂q = estimate_D̂(e.q, est, x, y)
-    D̂qᵀ = 1 / (e.q - 1) * log(D̂q)
-    return  D̂qᵀ / log(e.base, ℯ)
+    q, base = measure.e.q, measure.e.base
+    D̂q = estimate_D̂(q, est, x, y)
+    D̂qᵀ = 1 / (q - 1) * log(D̂q)
+    return  D̂qᵀ / log(base, ℯ)
 end
 
-function entropy_relative(e::Renyi, est::PoczosSchneiderRE,
+function divergence(measure::RelativeEntropyRenyiDifferential, est::PoczosSchneiderRE,
         x::AbstractDataset{D}, y::AbstractDataset{D}) where D
-    D̂q = estimate_D̂(e.q, est, x, y)
-    D̂qᴿ = 1 / (e.q - 1) * (D̂q - 1)
-    return  D̂qᴿ / log(e.base, ℯ)
+    @assert e.q > 0 && e.q != 1.0 # todo: limits for special cases.
+    q, base = measure.e.q, measure.e.base
+    D̂q = estimate_D̂(q, est, x, y)
+    D̂qᴿ = 1 / (q - 1) * (D̂q - 1)
+    return  D̂qᴿ / log(base, ℯ)
 end
 
 function estimate_D̂(q::Real, est::PoczosSchneiderRE,
