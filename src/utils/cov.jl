@@ -1,7 +1,7 @@
 import Statistics.cov
 using Statistics: mean
 using StateSpaceSets: AbstractDataset
-using StaticArrays: @MMatrix, @MVector, SMatrix
+using StaticArrays: @MMatrix, @MVector, SMatrix, SVector
 
 export fastcov
 
