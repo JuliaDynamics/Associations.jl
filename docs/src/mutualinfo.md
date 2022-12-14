@@ -108,7 +108,7 @@ run(est; f::Function, # function that generates data
         nreps::Int = 10, 
         αs = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1], 
         n::Int = 1000) =
-    map(α -> mutualinfo(MIShannonDifferential(e = Shannon(; base)), est, f(α, n)...), αs)
+    map(α -> mutualinfo(MIShannonDifferential(; base), est, f(α, n)...), αs)
 
 function compute_results(f::Function; estimators, k = 5, k_lord = 20,
         n = 1000, base = ℯ, nreps = 10,
@@ -301,7 +301,7 @@ for i = 1:nreps
     D2 = Dataset([rand(N2) for i = 1:N])
     X = D2[:, 1] |> Dataset
     Y = D2[:, 2] |> Dataset
-    measure = MIShannonDifferential(e = Shannon(base = ℯ))
+    measure = MIShannonDifferential(; base = ℯ)
     mis_ksg1[i, :] = map(k -> mutualinfo(measure, KSG1(; k), X, Y), ks)
     mis_ksg2[i, :] = map(k -> mutualinfo(measure, KSG2(; k), X, Y), ks)
 end
@@ -354,7 +354,7 @@ function compare_ksg_gkov(;
             Y = Dataset(float.(rand(1:8, L, 2)))
             Z = Dataset(rand(L, 2))
             W = Dataset(rand(L, 2))
-            measure = MIShannonDifferential(e = Shannon(; base = ℯ))
+            measure = MIShannonDifferential(; base = ℯ)
             mis_ksg1_discrete[i, j] = mutualinfo(measure, est_ksg1, X, Y)
             mis_gkov_discrete[i, j] = mutualinfo(measure, est_gkov, X, Y)
             mis_ksg1_mix[i, j] = mutualinfo(measure, est_ksg1, X, Z)
