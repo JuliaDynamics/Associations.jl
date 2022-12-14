@@ -83,12 +83,12 @@ function predict(measure::PredictiveDistanceCorrelation, T̄::AbstractDataset{DT
     for (i, (nnidxsᵢ, dᵢ)) in enumerate(zip(nnidxs, ds))
         u .= exp.(-dᵢ ./ dᵢ[1])
         w .= u ./ sum(u)
-        # The predicted vector t̂ is the center of mass, weighted by distances from S̄
+        # The predicted vector t̂ is a linear combination of the points in T̄[nnidxsᵢ], where
+        # weights are determines by neighbor distances to point sᵢ ∈ S̄
         t̂ .= 0 # re-zero
         for d = 1:DT
             t̂ .+= w[d] .* T̄[nnidxsᵢ][d]
         end
-        t̂ ./= nnd
         push!(T̂, t̂)
     end
     return Dataset(T̂)

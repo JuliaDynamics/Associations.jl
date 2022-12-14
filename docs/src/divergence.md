@@ -1,15 +1,6 @@
 # Divergences (relative entropy)
 
-## API
-
-```@docs
-divergence
-Divergence
-DivergenceDefinition
-DivergenceEstimator
-```
-
-## Supported divergences
+## Relative entropies
 
 | Estimator                                    | Principle           | Input data                       | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) |
 | -------------------------------------------- | ------------------- | -------------------------------- | :---------------: | :-------------: | :---------------: |
@@ -20,26 +11,39 @@ DivergenceEstimator
 | [`RelativeEntropyRenyi`](@ref)               | Estimator-dependent | Estimator-dependent              |         x         |    Discrete     |         x         |
 | [`RelativeEntropyTsallis`](@ref)             | Estimator-dependent | Estimator-dependent              |         x         |        x        |     Discrete      |
 
-### Discrete
+## API
+
+```@docs
+divergence
+DivergenceDefinition
+DivergenceEstimator
+```
+
+### Shannon relative entropy (KL divergence)
 
 ```@docs
 RelativeEntropyShannon
-RelativeEntropyRenyi
-RelativeEntropyTsallis
-TsallisDivergence
-RenyiDivergence
 ShannonDivergence
+RelativeEntropyShannonDifferential
+ShannonDivergenceDifferential
 ```
 
-### Continuous
+### Rényi relative entropy
 
 ```@docs
-RelativeEntropyShannonDifferential
+RelativeEntropyRenyi
+RenyiDivergence
 RelativeEntropyRenyiDifferential
+RenyiDivergenceDifferential
+```
+
+### Tsallis relative entropy
+
+```@docs
+RelativeEntropyTsallis
+TsallisDivergence
 RelativeEntropyTsallisDifferential
 TsallisDivergenceDifferential
-RenyiDivergenceDifferential
-ShannonDivergenceDifferential
 ```
 
 ## Dedicated estimators

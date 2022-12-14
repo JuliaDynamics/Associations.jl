@@ -5,7 +5,7 @@ export divergence
 """
 The supertype for all divergences.
 """
-abstract type Divergence end
+abstract type Divergence <: InformationMeasure end
 
 """
 The supertype for all divergence definitions.
