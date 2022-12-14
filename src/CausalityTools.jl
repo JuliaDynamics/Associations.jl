@@ -11,17 +11,17 @@ module CausalityTools
 
     include("core.jl")
     include("methods/infomeasures/infomeasures.jl")
-    include("methods/crossmappings/crossmappings.jl")
+    #include("methods/crossmappings/crossmappings.jl")
     #include("methods/ccm/ccm.jl")
     #include("methods/joint_distance_distribution/joint_distance_distribution.jl")
     #include("methods/pairwise_asymmetric_inference/pairwise_asymmetric_inference.jl")
     #include("methods/smeasure/smeasure.jl")
-    include("example_systems/ExampleSystems.jl")
+    #include("example_systems/ExampleSystems.jl")
 
     include("utils/utils.jl")
 
-    # Independence tests must be loaded after everything else has been defined.
-    include("independence.jl")
+    # # Independence tests must be loaded after everything else has been defined.
+    # include("independence.jl")
 
     #using Requires
     #function __init__()
