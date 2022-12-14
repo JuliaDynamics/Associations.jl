@@ -1,5 +1,41 @@
 # [Entropy (generalized)](@id entropies)
 
+## Implementations
+
+Any of the following estimators can be used with [`entropy`](@ref). An `x` indicates that
+no implementation exists. The table scrolls sideways, so is best viewed on a large screen. Any [`ProbabilitiesEstimator`](@ref) may be used to estimate discrete entropy.
+
+| Estimator                                   | Principle                   | Input data          | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) | [`Curado`](@ref) | [`StretchedExponential`](@ref) |
+| ------------------------------------------- | --------------------------- | ------------------- | :---------------: | :-------------: | :---------------: | :--------------: | :----------------------------: |
+| [`CountOccurrences`](@ref)                  | Frequencies                 | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`ValueHistogram`](@ref)                    | Binning (histogram)         | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`TransferOperator`](@ref)                  | Binning (transfer operator) | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`NaiveKernel`](@ref)                       | Kernel density estimation   | `Dataset`           |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`LocalLikelihood`](@ref)                   | Local likelihood Estimation | `Dataset`           |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`SymbolicPermutation`](@ref)               | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`SymbolicWeightedPermutation`](@ref)       | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`SymbolicAmplitudeAwarePermutation`](@ref) | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`Dispersion`](@ref)                        | Dispersion patterns         | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`Diversity`](@ref)                         | Cosine similarity           | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`WaveletOverlap`](@ref)                    | Wavelet transform           | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+| [`PowerSpectrum`](@ref)                     | Fourier spectra             | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
+
+The following estimators are dedicated entropy estimators, and can also be used with [`entropy`](@ref).
+
+| Estimator                        | Principle         | Input data | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) | [`Curado`](@ref) | [`StretchedExponential`](@ref) |
+| -------------------------------- | ----------------- | ---------- | :---------------: | :-------------: | :---------------: | :--------------: | :----------------------------: |
+| [`Kraskov`](@ref)                | Nearest neighbors | `Dataset`  |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Zhu`](@ref)                    | Nearest neighbors | `Dataset`  |    Continuous     |        x        |         x         |        x         |               x                |
+| [`ZhuSingh`](@ref)               | Nearest neighbors | `Dataset`  |    Continuous     |        x        |         x         |        x         |               x                |
+| [`GaoNaive`](@ref)               | Nearest neighbors | `Dataset`  |    Continuous     |        x        |         x         |        x         |               x                |
+| [`GaoNaiveCorrected`](@ref)      | Nearest neighbors | `Dataset`  |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Goria`](@ref)                  | Nearest neighbors | `Dataset`  |    Continuous     |        x        |         x         |        x         |               x                |
+| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors | `Dataset`  |    Continuous     |   Continuous    |    Continuous     |        x         |               x                |
+| [`Vasicek`](@ref)                | Order statistics  | `Vector`   |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Ebrahimi`](@ref)               | Order statistics  | `Vector`   |    Continuous     |        x        |         x         |        x         |               x                |
+| [`Correa`](@ref)                 | Order statistics  | `Vector`   |    Continuous     |        x        |         x         |        x         |               x                |
+| [`AlizadehArghami`](@ref)        | Order statistics  | `Vector`   |    Continuous     |        x        |         x         |        x         |               x                |
+
 ## API & entropy types
 
 ```@docs
@@ -50,41 +86,6 @@ AlizadehArghami
 Ebrahimi
 Correa
 ```
-
-## Implementations
-
-The table below summarizes this available implementations. An `x` indicates that no
-implementation exists. The table scrolls sideways, so is best viewed on a large screen.
-
-| Estimator                                   | Principle                   | Input data          | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) | [`Curado`](@ref) | [`StretchedExponential`](@ref) |
-| ------------------------------------------- | --------------------------- | ------------------- | :---------------: | :-------------: | :---------------: | :--------------: | :----------------------------: |
-| [`CountOccurrences`](@ref)                  | Frequencies                 | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`ValueHistogram`](@ref)                    | Binning (histogram)         | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`TransferOperator`](@ref)                  | Binning (transfer operator) | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`NaiveKernel`](@ref)                       | Kernel density estimation   | `Dataset`           |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`LocalLikelihood`](@ref)                   | Local likelhood Estimation  | `Dataset`           |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`SymbolicPermutation`](@ref)               | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`SymbolicWeightedPermutation`](@ref)       | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`SymbolicAmplitudeAwarePermutation`](@ref) | Ordinal patterns            | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`Dispersion`](@ref)                        | Dispersion patterns         | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`Diversity`](@ref)                         | Cosine similarity           | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`WaveletOverlap`](@ref)                    | Wavelet transform           | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`PowerSpectrum`](@ref)                     | Fourier spectra             | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
-| [`KozachenkoLeonenko`](@ref)                | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
-| [`Kraskov`](@ref)                           | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
-| [`Zhu`](@ref)                               | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
-| [`ZhuSingh`](@ref)                          | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
-| [`GaoNaive`](@ref)                          | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
-| [`GaoNaiveCorrected`](@ref)                 | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
-| [`Goria`](@ref)                             | Nearest neighbors           | `Dataset`           |    Continuous     |        x        |         x         |        x         |               x                |
-| [`LeonenkoProzantoSavani`](@ref)            | Nearest neighbors           | `Dataset`           |    Continuous     |   Continuous    |    Continuous     |        x         |               x                |
-| [`Vasicek`](@ref)                           | Order statistics            | `Vector`            |    Continuous     |        x        |         x         |        x         |               x                |
-| [`Ebrahimi`](@ref)                          | Order statistics            | `Vector`            |    Continuous     |        x        |         x         |        x         |               x                |
-| [`Correa`](@ref)                            | Order statistics            | `Vector`            |    Continuous     |        x        |         x         |        x         |               x                |
-| [`AlizadehArghami`](@ref)                   | Order statistics            | `Vector`            |    Continuous     |        x        |         x         |        x         |               x                |
-
-!!! info "Missing implementation?"
-    Submit an issue or a pull request! We're happy to assist.
 
 ## Convenience
 
