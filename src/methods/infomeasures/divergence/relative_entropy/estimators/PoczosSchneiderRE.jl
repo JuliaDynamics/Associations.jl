@@ -60,11 +60,11 @@ T_{q}(\\mathbb{P} || \\mathbb{Q}) =
     Statistics (pp. 609-617). JMLR Workshop and Conference Proceedings.
 """
 Base.@kwdef struct PoczosSchneiderRE <: DivergenceEstimator
-    k::Int = 1
+    k::Int = 2
     w::Int = 0
 end
 
-function divergence(measure::RelativeEntropyTsallisDifferential, est::PoczosSchneiderRE,
+function estimate(measure::RelativeEntropyTsallis, est::PoczosSchneiderRE,
         x::AbstractDataset{D}, y::AbstractDataset{D}) where D
     q, base = measure.e.q, measure.e.base
     D̂q = estimate_D̂(q, est, x, y)
@@ -72,13 +72,14 @@ function divergence(measure::RelativeEntropyTsallisDifferential, est::PoczosSchn
     return  D̂qᵀ / log(base, ℯ)
 end
 
-function divergence(measure::RelativeEntropyRenyiDifferential, est::PoczosSchneiderRE,
+function estimate(measure::RelativeEntropyRenyi, est::PoczosSchneiderRE,
         x::AbstractDataset{D}, y::AbstractDataset{D}) where D
-    @assert e.q > 0 && e.q != 1.0 # todo: limits for special cases.
-    q, base = measure.e.q, measure.e.base
+    e = measure.e
+    q, base = e.q, e.base
+    @assert q > 0 && q != 1.0 # todo: limits for special cases.
     D̂q = estimate_D̂(q, est, x, y)
     D̂qᴿ = 1 / (q - 1) * (D̂q - 1)
-    return  D̂qᴿ / log(base, ℯ)
+    return  D̂qᴿ #/ log(base, ℯ)
 end
 
 function estimate_D̂(q::Real, est::PoczosSchneiderRE,
@@ -97,14 +98,17 @@ function estimate_D̂(q::Real, est::PoczosSchneiderRE,
     ρs_x = last.(ds_x) .^ D
     νs_xiny = last.(ds_xiny) .^ D
 
-    # Multiplicative bias and density factors can be pre-computed.
-    Bₖ = gamma(k)^2 / (gamma(k - q + 1) * gamma(k + q - 1))
-    f = (N - 1) / M * Bₖ
-    @show Bₖ, f
-    D̂ᵀ = 0.0
+    # Multiplicative bias and density factors can be pre-computed. However, for large k,
+    # the gamma function blows up, so we need to temporarily use BigFloat here to ensure
+    # we get reliable estimates even when using many neighbors.
+    K = BigFloat(k)
+    T = typeof(0.0)
+    Bₖ = T(gamma(K)^2 / (gamma(K - q + 1) * gamma(K + q - 1)))
+    f = (N - 1) / M
+    D̂ = 0.0
     for i = 1:N
-        D̂ᵀ += (f * ρs_x[i] / νs_xiny[i])^(1 - q) * Bₖ
+        D̂ += (f * ρs_x[i] / νs_xiny[i])^(1 - q) * Bₖ
     end
-    D̂ᵀ /= N
-    return D̂ᵀ
+    D̂ /= N
+    return D̂
 end

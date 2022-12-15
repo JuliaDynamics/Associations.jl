@@ -1,3 +1,3 @@
 include("Wang.jl")
 include("WangTransformed.jl")
-include("PoczosSchneider.jl")
+include("PoczosSchneiderRE.jl")

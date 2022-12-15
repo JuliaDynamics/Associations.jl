@@ -9,11 +9,13 @@ Currently implemented subtypes are:
 """
 abstract type DivergenceEstimator <: InformationMeasureEstimator end
 
-include("renyi/RelativeEntropyRenyi.jl")
-include("renyi/RelativeEntropyRenyiDifferential.jl")
-include("tsallis/RelativeEntropyTsallis.jl")
-include("tsallis/RelativeEntropyTsallisDifferential.jl")
-include("shannon/RelativeEntropyShannon.jl")
-include("shannon/RelativeEntropyShannonDifferential.jl")
+include("definitions/ShannonDivergence.jl")
+include("definitions/RenyiDivergence.jl")
+include("definitions/TsallisDivergence.jl")
+include("definitions/TsallisDivergenceDifferential.jl")
 
-include("dedicated_estimators/estimators.jl")
+include("measures/RelativeEntropyRenyi.jl")
+include("measures/RelativeEntropyTsallis.jl")
+include("measures/RelativeEntropyShannon.jl")
+
+include("estimators/estimators.jl")

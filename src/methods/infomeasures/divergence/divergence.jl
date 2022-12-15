@@ -12,6 +12,11 @@ The supertype for all divergence definitions.
 """
 abstract type DivergenceDefinition <: Definition end
 
+divergence(def::DivergenceDefinition, measure::Divergence, est, x, y) =
+    estimate(def, measure, est, x, y)
+divergence(measure::Divergence, est, x, y) =
+    estimate(measure, est, x, y)
+
 """
     divergence(definition::RelativeEntropyShannon, est::ProbabilitiesEstimator, x, y) → div::Real
     divergence(definition::RelativeEntropyTsallis, est::ProbabilitiesEstimator, x, y) → div::Real
@@ -51,7 +56,7 @@ the following measures (some of which may be tweaked according to multiple defin
 """
 function divergence end
 
-divergence(measure, est, x, y) = estimate(measure, est, Dataset(x), Dataset(y))
+divergence(measure, est, x, y) = estimate(measure, est, x, y)
 # """
 #     divergence(::Renyi, p::Probabilities, q::Probabilities)
 
@@ -68,24 +73,5 @@ divergence(measure, est, x, y) = estimate(measure, est, Dataset(x), Dataset(y))
 # See also: [`probabilities`](@ref).
 # """
 function divergence end
-
-using Distributions: MvNormal
-using LinearAlgebra: tr, inv
-function divergence(e::Renyi, N1::MvNormal, N2::MvNormal)
-    # TODO: only for q = 1
-    μ₁, μ₂ = N1.μ, N2.μ
-    Σ₁, Σ₂ = N1.Σ, N2.Σ
-    @assert length(μ₁) == length(μ₂)
-    D = length(μ₁)
-    return 0.5 * (
-        tr(inv(Σ₂)*Σ₁) +
-        transpose(μ₂ - μ₁)*inv(Σ₂)*(μ₂ - μ₁) -
-        D +
-        log(det(Σ₂)/det(Σ₁))
-    ) / log(e.base, ℯ)
-end
-
-# TODO: define alias divergence, and allow Divergence types to be passed as first argument.
-# Can be used with  L2 divergence, for example.
 
 include("relative_entropy/relative_entropy.jl")

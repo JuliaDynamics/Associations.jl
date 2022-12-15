@@ -28,7 +28,7 @@ function transform_samples(est::WangTransformed, x, y)
     D̂ = Dataset([Ĉinvsq * (dᵢ - μ̂) for dᵢ in D])
 end
 
-function divergence(measure::RelativeEntropyRenyiDifferential, est::WangTransformed,
+function estimate(measure::RelativeEntropyShannon, est::WangTransformed,
         x::AbstractDataset{D}, y::AbstractDataset{D}) where D
     (; k, l, w) = est
     D̂ = transform_samples(est, x, y)

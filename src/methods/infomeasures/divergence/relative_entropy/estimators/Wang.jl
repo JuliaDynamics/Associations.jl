@@ -38,7 +38,7 @@ Base.@kwdef struct Wang <: DivergenceEstimator
     w::Int = 0
 end
 
-function estimate(measure::RelativeEntropyRenyiDifferential, est::Wang,
+function estimate(measure::RelativeEntropyShannon, est::Wang,
         x::AbstractDataset{D},
         y::AbstractDataset{D}) where D
     q, base = measure.e.q, measure.e.base

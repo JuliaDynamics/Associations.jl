@@ -1,4 +1,4 @@
-export RelativeEntropyTsallisDifferential
+
 export TsallisDivergenceDifferential
 
 """
@@ -39,27 +39,3 @@ T_{q}(\\mathbb{P} || \\mathbb{Q}) =
     Statistics (pp. 609-617). JMLR Workshop and Conference Proceedings.
 """
 struct TsallisDivergenceDifferential <: DivergenceDefinition end
-
-"""
-    RelativeEntropyTsallisDifferentialDifferential <: MutualInformation
-    RelativeEntropyTsallisDifferential(; base = 2, q = 1.5,
-        definition = TsallisDivergenceDifferential()
-
-`RelativeEntropyTsallisDifferential` is a directive to compute the differential
-[Tsallis](@ref) relative entropy (or divergence) to the given `base`.
-
-## Supported definitions
-
-- [`TsallisDivergenceDifferential`](@ref).
-
-See also: [`divergence`](@ref).
-"""
-struct RelativeEntropyTsallisDifferential{D <: DivergenceDefinition, E <: Entropy} <: Divergence
-    e::E
-    definition::D
-    function RelativeEntropyTsallisDifferential(; base = 2, q = 1.5,
-            definition::D = TsallisDivergenceDifferential()) where {D}
-            e = Tsallis(; base, q)
-        new{D, typeof(e)}(e, definition)
-    end
-end
