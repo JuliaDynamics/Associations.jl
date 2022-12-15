@@ -1,5 +1,7 @@
 export ShannonCD
 
+
+
 """
     ShannonCD <: ConditionalEntropyEstimator
     ShannonCD(est::EntropyEstimator)
@@ -17,10 +19,16 @@ entropy by first approximating probabilities, and plugging them into the formula
 The `ShannonCD` estimator thus can use any [`ProbabilitiesEstimator`](@ref) to compute a
 plug-in estimate of``H(X | Y) = H(X,Y) - H(X)``.
 
+!!! warn "Common outcome space"
+    Input variables must share [`outcome_space`](@ref) for probability-based estimators to
+    yield meaningful estimates. For example, if using [`ValueHistogram`](@ref), make
+    sure to use a [`FixedRectangularBinning`](@ref).
+
 ## Continuous/differential Shannon conditional entropy
 
 If `est` is an [`EntropyEstimator`](@ref) then the differential conditional entropy
 ``h(X | Y) = -\\int h(X,Y) - h(X)``, where ``h(\\cdot)`` is the differential entropy.
+
 """
 struct ShannonCD{E} <: ConditionalEntropyEstimator
     est::E
