@@ -1,7 +1,7 @@
 export BulinskiDimitrov
 
 """
-    BulinskiDimitrov <: RelativeEntropyEstimator
+    BulinskiDimitrov <: DivergenceEstimator
     BulinskiDimitrov(k = 1, w = 0)
 
 The `BulinskiDimitrov` estimator computes the [`Shannon`](@ref) differential cross
@@ -27,7 +27,7 @@ Base.@kwdef struct BulinskiDimitrov{M} <: CrossEntropyEstimator
     metric::M = Euclidean()
 end
 
-function entropy_cross(e::Renyi, est::BulinskiDimitrov,
+function estimate(measure::CrossEntropyShannon, est::BulinskiDimitrov,
         x::AbstractDataset{D},
         y::AbstractDataset{D}) where D
     e.q == 1 || error("`entropy_cross` not defined for `BulinskiDimitrov` estimator for Renyi with q = $(e.q)")
@@ -49,6 +49,3 @@ function entropy_cross(e::Renyi, est::BulinskiDimitrov,
 
     return hc / log(e.base, ℯ)
 end
-
-entropy_cross(est::BulinskiDimitrov, args...; base = 2, kwargs...) =
-    entropy_cross(Shannon(; base), est, args...; kwargs...)
