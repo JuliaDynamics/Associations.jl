@@ -17,9 +17,10 @@ probests = [
         # We can't guarantee that the result is any particular value, because these are just
         # plug-in estimators. Just check that pluggin in works.
         @testset "$(typeof(probests[i]).name.name)" for i in eachindex(probests)
-            measure = MITsallis(q = 1.5, base = 2, definition = TsallisH3())
-            mi = mutualinfo(measure, probests[i], x, y)
-            @test mi isa Real
+            measure = MITsallis(q = 1.5, base = 2)
+            def = TsallisH3()
+            @test mutualinfo(def, measure, probests[i], x, y) isa Real
+            @test mutualinfo(measure, probests[i], x, y) isa Real # default
         end
     end
 end
