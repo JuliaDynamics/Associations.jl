@@ -44,19 +44,16 @@ using Random
 X = randn(1000)
 Y = X .+ randn(1000)
 Z = randn(1000) .+ 0.5*Y
-x, y, z = Dataset.([Z, Y, Z])
-
+x, y, z = Dataset.([X, Y, Z])
 
 e = Shannon(; base = ℯ)
-test_vf = LocalPermutation(; measure = CMI(MI2()), e, est = VisitationFrequency(5))
-test_kr = LocalPermutation(; measure = CMI(MI2()), e, est = Kraskov(k = 10))
-test_ksg1 = LocalPermutation(; measure = CMI(MI2()), e, est = KSG1(k = 10))
-test_vp = LocalPermutation(; measure = CMI(), e, est = VejmelkaPalus(k = 10))
+test_vf = LocalPermutation(measure = CMIShannon(base = 2), est = VisitationFrequency(5))
+test_kr = LocalPermutation(measure = CMIShannon(base = 2), est = Kraskov(k = 10))
+test_fpvp = LocalPermutation(measure = CMIShannon(base = 2), est = FrenzelPompeVelmejkaPalus(k = 10))
 
-pval_vf, Îxyz_vf = independence(test_vf, x, y, z)
-pval_kr, Îxyz_kr = independence(test_kr, x, y, z)
-pval_ksg1, Îxyz_ksg1 = independence(test_ksg1, x, y, z)
-pval_vp, Îxyz_vp = independence(test_vp, x, y, z)
+r_vf = independence(test_vf, x, y, z)
+r_kr = independence(test_kr, x, y, z)
+r_fpvp = independence(test_fpvp, x, y, z)
 ```
 
 [^Runge2018]: Runge, J. (2018, March). Conditional independence testing based on a
@@ -101,17 +98,31 @@ quantile(r::LocalPermutationTest, q) = quantile(r.Msurr, q)
 function Base.show(io::IO, test::LocalPermutationTest)
     onesided_uq = [quantile(test.Msurr, q) for q in [0.95, 0.99]]
 
+    α005 = pvalue(test) < 0.05 ?
+        "H₀ not rejected at α = 0.05 → Interpretation: X ⫫ Y | Z"  :
+        "H₀ rejected at α = 0.05  → Interpretation: X and Y are dependent given Z"
+    α001 = pvalue(test) < 0.01 ?
+        "H₀ not rejected at α = 0.01 → Interpretation: X ⫫ Y | Z"  :
+        "H₀ rejected at α = 0.01  → Interpretation: X and Y are dependent given Z"
+    α0001 = pvalue(test) < 0.001 ?
+        "H₀ not rejected at α = 0.01 → Interpretation: X ⫫ Y | Z"  :
+        "H₀ rejected at α = 0.01  → Interpretation: X and Y are dependent given Z"
+
     print(io,
         """
-        `LocalPermutation` independence test.
+        `LocalPermutation` independence test (H₀: X ⫫ Y | Z)"
         -------------------------------------
         Estimated: $(test.M)
-        p-value:   $(test.pvalue)
         # permutations: $(test.nsurr)
         Permutation ensemble quantiles:
           (99.9%): $(quantile(test.Msurr, 0.999))
           (99%):   $(quantile(test.Msurr, 0.99))
-          (95%):   $(quantile(test.Msurr, 0.95))"""
+          (95%):   $(quantile(test.Msurr, 0.95))
+        p-value:   $(test.pvalue)
+          $α005
+          $α001
+          $α0001\
+        """
 
         )
 end
@@ -157,7 +168,7 @@ function independence(test::LocalPermutation, x, y, z)
         end
         Îs[b] = estimate(measure, est, X̂, Y, Z)
     end
-    p = count(Îs .>= Î) / nsurr
+    p = count(Î .<= Îs) / nsurr
     return LocalPermutationTest(Î, Îs, p, nsurr)
 end
 
