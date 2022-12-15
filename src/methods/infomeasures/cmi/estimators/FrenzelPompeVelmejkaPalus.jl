@@ -3,19 +3,16 @@ using Neighborhood: bulkisearch, inrangecount
 using Neighborhood: Theiler, NeighborNumber, KDTree, Chebyshev
 using SpecialFunctions: digamma
 
-export FrenzelPompe
+export FrenzelPompeVelmejkaPalus
 
 """
-    FrenzelPompe <: ConditionalMutualInformationEstimator
-    FrenzelPompe(k = 1, w = 0)
+    FrenzelPompeVelmejkaPalus <: ConditionalMutualInformationEstimator
+    FrenzelPompeVelmejkaPalus(k = 1, w = 0)
 
-The `FrenzelPompe` estimator is used to estimate the differential conditional
+The `FrenzelPompeVelmejkaPalus` estimator is used to estimate the differential conditional
 mutual information using a `k`-th nearest neighbor approach that is
-analogous to that of the [`KSG1`](@ref) mutual information estimator
-(Frenzel & Pompe, 2007).
-
-This estimator is identical to the [`VejmelkaPalus`](@ref) estimator,
-which appeared in a separate paper around the same time.
+analogous to that of the [`KraskovStögbauerGrassberger1`](@ref) mutual information estimator
+(Frenzel & Pompe, 2007[^Frenzel2007]; Vejmelka & Paluš, 2008[^Vejmelka2008]).
 
 `w` is the Theiler window, which controls the number of temporal neighbors that are excluded
 during neighbor searches.
@@ -23,26 +20,28 @@ during neighbor searches.
 [^Frenzel2007]:
     Frenzel, S., & Pompe, B. (2007). Partial mutual information for coupling analysis of
     multivariate time series. Physical review letters, 99(20), 204101.
+    `w` is the Theiler window.
+[^Vejmelka2008]:
+    Vejmelka, M., & Paluš, M. (2008). Inferring the directionality of coupling with
+    conditional mutual information. Physical Review E, 77(2), 026214.
 """
-Base.@kwdef struct FrenzelPompe{MJ, MM} <: ConditionalMutualInformationEstimator
+Base.@kwdef struct FrenzelPompeVelmejkaPalus{MJ, MM} <: ConditionalMutualInformationEstimator
     k::Int = 1
     w::Int = 0
     metric_joint::MJ = Chebyshev()
     metric_marginals::MM = Chebyshev()
 end
 
-function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::FrenzelPompe, x, y, z)
-    e.q ≈ 1 || throw(ArgumentError(
-        "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
-    ))
+function estimate(measure::CMIShannon, est::FrenzelPompeVelmejkaPalus, x, y, z)
+    e = measure.e
     (; k, w, metric_joint, metric_marginals) = est
-    @assert length(X) == length(Y) == length(Z)
-    N = length(X)
     # Ensures that vector-valued inputs are converted to datasets, so that
     # building the marginal/joint spaces and neighbor searches are fast.
     X = Dataset(x)
     Y = Dataset(y)
     Z = Dataset(z)
+    @assert length(X) == length(Y) == length(Z)
+    N = length(X)
     joint = Dataset(X, Y, Z)
     XZ = Dataset(X, Z)
     YZ = Dataset(Y, Z)
@@ -66,6 +65,3 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::FrenzelPompe, x, y, 
 
     return condmi / log(e.base, ℯ)
 end
-
-estimate(infomeasure::CMI, est::FrenzelPompe, args...; base = 2, kwargs...) =
-    estimate(infomeasure, Shannon(; base), est, args...; kwargs...)

@@ -22,6 +22,11 @@ I_q^T(X; Y | Z)
 = I_q^T(X; Y, Z) - I_q^T(X; Z)
 ```
 
+!!! warn
+    Input data must share [`outcome_space`](@ref) for this estimator to yield
+    meaningful results. For example, if using [`ValueHistogram`](@ref), make
+    sure to use a [`FixedRectangularBinning`](@ref).
+
 [^Furuichi2006]:
     Furuichi, S. (2006). Information theoretical properties of Tsallis
     entropies. Journal of Mathematical Physics, 47(2), 023302.

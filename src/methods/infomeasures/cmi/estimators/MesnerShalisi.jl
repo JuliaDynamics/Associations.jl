@@ -19,15 +19,15 @@ Base.@kwdef struct MesnerShalisi{M} <: ConditionalMutualInformationEstimator
     metric::M = Chebyshev()
 end
 
-function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::FrenzelPompe, X, Y, Z)
-    e.q ≈ 1 || throw(ArgumentError(
-        "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
-    ))
+function estimate(measure::CMIShannon, est::MesnerShalisi, x, y, z)
+    e = measure.e
     (; k, w, metric) = est
+    X = Dataset(x)
+    Y = Dataset(y)
+    Z = Dataset(z)
     joint = Dataset(X, Y, Z)
     XZ = Dataset(X, Z)
     YZ = Dataset(Y, Z)
-    Z = Dataset(Z)
     N = length(joint)
     M = 3
     tree_joint = KDTree(joint, metric)
@@ -44,13 +44,13 @@ function estimate(infomeasure::CMI{Nothing}, e::Renyi, est::FrenzelPompe, X, Y, 
         # TODO: this might not be correct..."
         dmax = ds_joint[i]
         k̂ = dmax == 0 ? inrangecount(tree_joint, joint[i], 0.0) - 1  : k
-        h += digamma(k̂)
+        condmi += digamma(k̂)
         # Simulate ≤ by adding smallest possible nudge.
-        h -= log(inrangecount(tree_xz, XZ[i], dmax + eps()))
-        h -= log(inrangecount(tree_yz, YZ[i], dmax + eps()))
-        h += log(inrangecount(tree_z, Z[i], dmax + eps()))
+        condmi -= log(inrangecount(tree_xz, XZ[i], dmax + eps()))
+        condmi -= log(inrangecount(tree_yz, YZ[i], dmax + eps()))
+        condmi += log(inrangecount(tree_z, Z[i], dmax + eps()))
     end
-    h /= N
+    condmi /= N
 
-    return h / log(e.base, ℯ)
+    return condmi / log(e.base, ℯ)
 end

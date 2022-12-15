@@ -1,6 +1,0 @@
-include("VejmelkaPalus.jl")
-include("FrenzelPompe.jl")
-include("Rahimzamani.jl")
-include("Poczos.jl")
-include("TsallisCMIFuruichi.jl")
-include("MesnerShalisi.jl")

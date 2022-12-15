@@ -27,12 +27,14 @@ Base.@kwdef struct PoczosSchneiderCMI{M} <: ConditionalMutualInformationEstimato
     metric::M = Euclidean()
 end
 
-function cmi(e::Entropy, est::PoczosSchneiderCMI, x, y, z)
-    return 1/(e.q-1)*log(Q1(e, est, x, y, z)) * log(e.base, ℯ)
+function estimate(measure::CMIRenyi, est::PoczosSchneiderCMI, x, y, z)
+    e = measure.e
+    c = 1/(e.q-1)*log(Q3(e, est, x, y, z))
+    return c / log(e.base, ℯ)
 end
 
 
-function Q1(e::Entropy, est::PoczosSchneiderCMI, x, y, z)
+function Q3(e::Entropy, est::PoczosSchneiderCMI, x, y, z)
     q = e.q
     (; k, w, metric) = est
     @assert length(x) == length(y) == length(z)
