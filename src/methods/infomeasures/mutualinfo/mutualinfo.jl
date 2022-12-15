@@ -1,46 +1,74 @@
 export MutualInformation
 export MutualInformationEstimator
+export MutualInformationDefinition
 export mutualinfo
 
 """ The supertype of all mutual information like measures """
 abstract type MutualInformation <: InformationMeasure end
 
+""" The supertype for mutual information definitions. """
+abstract type MutualInformationDefinition <: Definition end
+
 """ The supertype of all dedicated mutual information estimators """
 abstract type MutualInformationEstimator <: InformationMeasureEstimator end
 
+include("measures/MIShannon.jl")
+include("definitions/ShannonH3.jl")
 
-"""
-    mutualinfo(definition::MIShannon, est::ProbabilitiesEstimator, x, y) → MI::Real
-    mutualinfo(definition::MITsallis, est::ProbabilitiesEstimator, x, y) → MI::Real
-
-    mutualinfo(definition::MIShannonDifferential, est::EntropyEstimator, x, y) → MI::Real
-    mutualinfo(definition::MIShannonDifferential, est::MutualInformationEstimator, x, y) → MI::Real
-
-Estimate the generalized mutual information (MI) (using the formula and logarithm base
-specified by `definition`) between `x` and `y`, using the provided estimator.
-
-The first set of signatures is for discrete MI. The second set of signatures is for
-differential MI. For a full list of compatible definitions and estimators, see the
-online documentation.
-
-Returns `MI`, the mutual information estimate, whose interpretation depends on the
-combination of `definition` and `est`.
-
-## Supported definitions
-
-Generalized mutual information-like quantities are abundant in the literature.
-Sometimes, different authors give different definitions of divergence measures with the
-same name. We currently support the following measures (some of which may be tweaked
-according to multiple definitions):
-
-- [`MIShannon`](@ref). Discrete Shannon mutual information.
-- [`MITsallis`](@ref). Discrete Tsallis mutual information.
-- [`MIShannonDifferential`](@ref). Differential Shannon mutual information.
-"""
-mutualinfo(def, est, x, y) = estimate(def, est, x, y)
-
-include("shannon/MIShannon.jl")
-include("shannon/MIShannonDifferential.jl")
-include("tsallis/MITsallis.jl")
+include("measures/MITsallis.jl")
+include("definitions/TsallisH3.jl")
 
 include("estimators/estimators.jl")
+
+"""
+    mutualinfo(measure, est::MutualInformationEstimator, x, y)
+    mutualinfo([definition], measure, est::EntropyEstimator, x, y)
+    mutualinfo([definition], measure, est::ProbabilitiesEstimator, x, y)
+
+Estimate  `measure`, a generalized mutual information (MI),
+between `x` and `y` using the provided estimator.
+
+- If `est` is a [`MutualInformationEstimator`](@ref), then mutual information is computed
+    using some specialized procedure.
+- If `est` is an [`EntropyEstimator`](@ref) or a [`ProbabilitiesEstimator`], then mutual
+    information is computed using some [`MutualInformationDefinition`](@ref) (listed below).
+
+## Supported measures (definitions)
+
+- [`MIShannon`](@ref) (defaults to [`ShannonH3`] definition)
+- [`MITsallis`](@ref) (defaults to [`TsallisH3`] definition).
+
+## Supported estimators (continuous)
+
+Dedicated estimators:
+
+- [`KraskovStögbauerGrassberger1`](@ref), or [`KSG1`](@ref)
+- [`KraskovStögbauerGrassberger2`](@ref), or [`KSG2`](@ref)
+- [`GaoKannanOhViswanath`](@ref).
+- [`GaoOhViswanath`](@ref).
+
+We also support the following [`EntropyEstimator`](@ref)s
+
+- [`Kraskov`](@ref)
+- [`KozachenkoLeonenko`](@ref)
+- [`GaoNaive`](@ref) and [`GaoNaiveCorrected`](@ref)
+- [`Goria`](@ref)
+- [`Zhu`](@ref)
+- [`ZhuSingh`](@ref)
+- [`LeonenkoProzantoSavani`](@ref)
+- [`Lord`](@ref)
+
+## Supported estimators (discrete)
+
+In principle, any [`ProbabilitiesEstimator`](@ref) that operates on multivariate data
+may be used, but you shuld make sure to use one that uses the same discretization for
+both the joint and marginal spaces. This is automatically handled if you use:
+
+- **[`ValueHistogram`](@ref)**. Bin visitation frequencies are counted in the joint space
+    `XY`, then marginal probabilities are obtained from the joint bin visits.
+"""
+function mutualinfo end
+mutualinfo(def::MutualInformationDefinition, measure::MutualInformation, est, x, y) =
+    estimate(def, measure, est, x, y)
+mutualinfo(measure::MutualInformation, est, x, y) =
+    estimate(measure, est, x, y)

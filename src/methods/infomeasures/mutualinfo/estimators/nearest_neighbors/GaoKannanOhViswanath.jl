@@ -63,8 +63,8 @@ end
 
 # Note: input datasets must have the same type. Remind the user ot convert in the
 # docstring.
-function estimate(def::MIShannonDifferential, est::GaoKannanOhViswanath, x, y)
-    e = def.e
+function estimate(measure::MIShannon, est::GaoKannanOhViswanath, x, y)
+    e = measure.e
     (; k, w) = est
     X = Dataset(x)
     Y = Dataset(y)

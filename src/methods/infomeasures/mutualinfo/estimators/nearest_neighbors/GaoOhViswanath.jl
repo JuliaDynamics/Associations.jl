@@ -36,8 +36,8 @@ Base.@kwdef struct GaoOhViswanath{MJ, MM} <: MutualInformationEstimator
     metric_marginals::MM = Euclidean()
 end
 
-function estimate(def::MIShannonDifferential, est::GaoOhViswanath, x::Vector_or_Dataset...)
-    e = def.e
+function estimate(measure::MIShannon, est::GaoOhViswanath, x::Vector_or_Dataset...)
+    e = measure.e
 
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
