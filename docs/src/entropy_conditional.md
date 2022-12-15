@@ -1,34 +1,35 @@
 # Conditional entropy
 
-Conditional entropies appear in many forms in the literature, depending on what type of 
-entropy they are based on. In CausalityTools.jl, we indicate the different types of divergences by
-passing an [`Entropy`](@ref) instance as the first argument [`entropy_relative`](@ref).
-
-For example, to compute the Shannon conditional entropy, do
-`entropy_conditional(Shannon(), est, x)`, and to compute Rényi conditional entropy, do 
-`entropy_conditional(Renyi(; q), est, x)`.
-
 ## Implementations
 
-Any of the following estimators can be used with [`entropy_cross`](@ref).
+Any of the following estimators can be used with [`entropy_conditional`](@ref).
 
-| Estimator            | Principle | Input data          | [`Shannon`](@ref) |   [`Renyi`](@ref)    | [`Tsallis`](@ref) |
-| -------------------- | --------- | ------------------- | :---------------: | :------------------: | :---------------: |
-| [`FuruichiCD`](@ref) |           | Estimator-dependent |         x         |          x           |     Discrete      |
-| [`ShannonCD`](@ref)  |           | Estimator-dependent |         x         | Discrete, continuous |         x         |
-| [`Jizba`](@ref)      |           | Estimator-dependent |         x         |       Discrete       |         x         |
+| Estimator                                       | Principle           | Input data          | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) |
+| ----------------------------------------------- | ------------------- | ------------------- | :---------------: | :-------------: | :---------------: |
+| [`ConditionalEntropyShannon`](@ref)             | Estimator-dependent | Estimator-dependent |     Discrete      |        x        |         x         |
+| [`ConditionalEntropyRenyi`](@ref)               | Estimator-dependent | Estimator-dependent |         x         |    Discrete     |         x         |
+| [`ConditionalEntropyTsallis`](@ref)             | Estimator-dependent | Estimator-dependent |         x         |        x        |     Discrete      |
+| [`ConditionalEntropyShannonDifferential`](@ref) | Estimator-dependent | Estimator-dependent |    Continuous     |        x        |         x         |
 
 ## API
 
 ```@docs
-entropy_cross
+entropy_conditional
+ConditionalEntropy
+ConditionalEntropyDefinition
 ConditionalEntropyEstimator
 ```
 
-## Estimators
+## Dedicated estimators
+
+No dedicated estimators of conditional entropy are currently implemented. Use
+one of the derived estimators instead.
+
+## Derived estimators
 
 ```@docs
-FuruichiCD
-Jizba
-ShannonCD
+ConditionalEntropyShannon
+ConditionalEntropyRenyi
+ConditionalEntropyTsallis
+ConditionalEntropyShannonDifferential
 ```

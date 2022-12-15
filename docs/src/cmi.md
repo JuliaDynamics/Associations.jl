@@ -13,13 +13,11 @@ For example, to compute the Shannon conditional mutual information, do
 
 Any of the following estimators can be used with [`cmi`](@ref).
 
-| Estimator                    | Principle         | Input data         | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) |
-| ---------------------------- | ----------------- | ------------------ | :---------------: | :-------------: | :---------------: |
-| [`Rahimzamani`](@ref)        | Nearest neighbors | `Vector`,`Dataset` |    Continuous     |        x        |         x         |
-| [`FrenzelPompe`](@ref)       | Nearest neighbors | `Vector`,`Dataset` |    Continuous     |        x        |         x         |
-| [`VejmelkaPalus`](@ref)      | Nearest neighbors | `Vector`,`Dataset` |    Continuous     |        x        |         x         |
-| [`PoczosSchneiderCMI`](@ref) | Nearest neighbors | `Vector`,`Dataset` |    Continuous     |        x        |         x         |
-| [`TsallisCMIFuruichi`](@ref)        | Nearest neighbors | `Vector`,`Dataset` |    Continuous     |        x        |     Discrete      |
+| Estimator                           | Principle         | Input data         |  [`Shannon`](@ref)  | [`Renyi`](@ref) | [`Tsallis`](@ref) |
+| ----------------------------------- | ----------------- | ------------------ | :-----------------: | :-------------: | :---------------: |
+| [`FrenzelPompeVelmejkaPalus`](@ref) | Nearest neighbors | `Vector`,`Dataset` |     Continuous      |        x        |         x         |
+| [`Rahimzamani`](@ref)               | Nearest neighbors | `Vector`,`Dataset` | Continuous/discrete |        s        |         x         |
+| [`PoczosSchneiderCMI`](@ref)        | Nearest neighbors | `Vector`,`Dataset` |          x          |   Continuous    |         x         |
 
 ## API
 
@@ -32,8 +30,6 @@ ConditionalMutualInformationEstimator
 
 ```@docs
 Rahimzamani
-FrenzelPompe
-VejmelkaPalus
+FrenzelPompeVelmejkaPalus
 PoczosSchneiderCMI
-TsallisCMIFuruichi
 ```

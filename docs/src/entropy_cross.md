@@ -2,10 +2,12 @@
 
 Cross entropies appear in many forms in the literature, depending on what type of entropy
 they are based on. In CausalityTools.jl, we indicate the different types of cross entropies
-by passing an [`Entropy`](@ref) instance as the first argument [`entropy_relative`](@ref).
+by passing an [`CrossEntropy`](@ref) instance as the first argument to 
+[`entropy_cross`](@ref).
 
-For example, to compute the Shannon cross entropy, do `entropy_cross(Shannon(), est, x)`,
-and to compute Rényi cross entropy, do `entropy_cross(Renyi(; q), est, x)`.
+For example, to compute the Shannon cross entropy, do
+`entropy_cross(CrossEntropyShannon(), est, x)`, and to compute Rényi cross entropy, do
+`entropy_cross(CrossEntropyRenyi(; q), est, x)`.
 
 ## Implementations
 
@@ -19,11 +21,21 @@ Any of the following estimators can be used with [`entropy_cross`](@ref).
 
 ```@docs
 entropy_cross
+CrossEntropy
+CrossEntropyDefinition
 CrossEntropyEstimator
 ```
 
-## Estimators
+### Shannon cross-entropy
 
 ```@docs
+CrossEntropyShannon
 BulinskiDimitrov
+```
+
+### Rényi cross-entropy
+
+```@docs
+CrossEntropyRenyi
+Thierrin
 ```

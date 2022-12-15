@@ -58,7 +58,6 @@ combination with relevant divergences above.
 | [`PoczosSchneiderRE`](@ref)                  | Nearest neighbors   | `Dataset`s with equal dimensions |    Continuous     |   Continuous    |    Continuous     |
 
 
-
 ```@docs
 Wang
 WangTransformed
