@@ -1,11 +1,15 @@
 module CausalityTools
-    using Reexport
-    import DelayEmbeddings: Dataset
+
+    import StateSpaceSets: Dataset, columns
+    export Dataset, columns
+
     import DynamicalSystemsBase: trajectory
-    import DynamicalSystemsBase: DiscreteDynamicalSystem, ContinuousDynamicalSystem
-    export Dataset
     export trajectory
+
+    import DynamicalSystemsBase: DiscreteDynamicalSystem, ContinuousDynamicalSystem
     export DiscreteDynamicalSystem, ContinuousDynamicalSystem
+
+    using Reexport
     @reexport using Entropies
     @reexport using TimeseriesSurrogates
 
@@ -19,6 +23,7 @@ module CausalityTools
     #include("example_systems/ExampleSystems.jl")
 
     include("utils/utils.jl")
+    include("independence_tests/independence.jl")
 
     # # Independence tests must be loaded after everything else has been defined.
     # include("independence.jl")
