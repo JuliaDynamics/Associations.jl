@@ -46,13 +46,19 @@ Given some `input` data, estimate some information measure using the given
 """
 function estimate(measure::InformationMeasure, args...; kwargs...) end
 
-include("discrete.jl")
-include("mutualinfo/mutualinfo.jl")
-include("divergence/divergence.jl")
-
 # Things that will be eventually moved to Entropies.jl
 include("various/probabilities.jl")
 include("various/entropies.jl")
+
+# Higher-level measures
+#include("entropy_conditional/entropy_conditional.jl")
+include("entropy_cross/entropy_cross.jl")
+include("divergence/divergence.jl")
+include("mutualinfo/mutualinfo.jl")
+include("cmi/cmi.jl")
+
+
+
 # """
 #     EstimationMethod
 
