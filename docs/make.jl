@@ -41,6 +41,7 @@ PAGES = [
         "joint_distance_distribution.md",
         "s_measure.md",
         "cross_mapping.md",
+        "pairwise_asymmetric_inference.md"
     ],
     "Information/entropy based" => [
         "mutualinfo.md",

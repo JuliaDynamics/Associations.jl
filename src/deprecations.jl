@@ -1,7 +1,7 @@
 
 function crossmap(x::AbstractVector, y::AbstractVector, args...; kwargs...)
     error("""
-    The cross-mapping API has been completely re-written for CausalityTools v1.6.
+    The cross-mapping API has been completely re-written for CausalityTools v2.0.
 
     This update fixes an indexing bug for an internal cross-map function, and makes it
     easier to apply different sampling approaches and run ensemble analyses.
@@ -20,7 +20,7 @@ end
 
 function pai(x::AbstractVector, y::AbstractVector, args...; kwargs...)
     error("""
-    The cross-mapping API has been completely re-written for CausalityTools v1.6.
+    The cross-mapping API has been completely re-written for CausalityTools v2.0.
 
     This update fixes an indexing bug for an internal cross-map function, and makes it
     easier to apply different sampling approaches and run ensemble analyses.

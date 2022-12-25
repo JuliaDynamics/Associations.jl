@@ -185,5 +185,6 @@ Base.@kwdef struct CrossmapEnsemble{M, E} # todo: perhaps just use a more genera
     end
 end
 
+include("compat.jl") # remove this file when 2.0 is released.
 include("estimators/estimators.jl")
 include("measures/ccm-like/measures.jl")

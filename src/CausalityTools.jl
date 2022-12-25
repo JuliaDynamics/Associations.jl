@@ -19,7 +19,7 @@ module CausalityTools
     include("example_systems/ExampleSystems.jl")
     include("methods/crossmappings/crossmappings.jl")
 
-    include("deprecations.jl")
+    #include("deprecations.jl") # activate for 2.0
     using Requires
     function __init__()
         #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin

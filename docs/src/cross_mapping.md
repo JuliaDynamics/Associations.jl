@@ -1,12 +1,13 @@
-# Cross mapping
+# [Cross mapping](@id cross_mapping_api)
 
 ## API
 
 !!! info "New cross mapping API"
     In CausalityTools v1.6, the cross mapping API has been completely
     rewritten. The old syntax (both for convergent cross mapping
-    and for pairwise asymmetric inference) has been phased out
-    without deprecations.
+    and for pairwise asymmetric inference) will give a deprecation warning, but still works, and contains a bug fix. The old
+    syntax will be abandoned in CausalityTools v2.0, so if writing new
+    code, you should use the syntax below.
     You're now reading the documentation for the new API.
 
 The cross mapping API consists of the following functions.
