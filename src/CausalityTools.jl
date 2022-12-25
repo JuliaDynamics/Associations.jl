@@ -1,23 +1,26 @@
 module CausalityTools
-    using Reexport 
+    using Reexport
     import DynamicalSystemsBase: trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
-    import DelayEmbeddings: Dataset
-    export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem, Dataset
-    
-    import TransferEntropy
-    import TransferEntropy: transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
-    export transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
+    export trajectory, DiscreteDynamicalSystem, ContinuousDynamicalSystem
+
+    import StateSpaceSets: Dataset, columns
+    export Dataset, columns
+
+    #import TransferEntropy
+    #import TransferEntropy: transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
+    #export transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
     @reexport using Entropies
     @reexport using TransferEntropy
     @reexport using TimeseriesSurrogates
 
     include("JointDistanceDistribution/JointDistanceDistribution.jl")
-    include("CrossMappings/CrossMappings.jl")
     include("SMeasure/smeasure.jl")
     include("PredictiveAsymmetry/PredictiveAsymmetry.jl")
     include("example_systems/ExampleSystems.jl")
+    include("methods/crossmappings/crossmappings.jl")
 
-    using Requires 
+    include("deprecations.jl")
+    using Requires
     function __init__()
         #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin
         #   include("integrations/uncertaindata.jl")
@@ -28,5 +31,9 @@ module CausalityTools
         #    export SimplexExact, SimplexPoint
         #end
     end
-end 
 
+    # TODO: update message with breaking change
+    # - bug fix for cross mappings (fix offset in prediction indices)
+    # - Convention: negative τ := past values in source predict present in target
+    # -             positive τ := future values in source predict present in target
+end
