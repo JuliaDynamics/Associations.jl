@@ -18,7 +18,7 @@ The cross mapping API consists of the following functions.
 These functions can dispatch on a [`CrossmapMeasure`](@ref), and we currently implement
 
 - [`ConvergentCrossMapping`](@ref).
-- [`PairwiseAsymmetricEmbedding](@ref).
+- [`PairwiseAsymmetricEmbedding`](@ref).
 
 ```@docs
 crossmap
