@@ -12,7 +12,7 @@ function crossmap(x::AbstractVector, y::AbstractVector, args...; kwargs...)
     neighbor searches to predict `t`), is:
     - `crossmap(ConvergentCrossMapping(; d, τ, ...), t, s)`
 
-    `crossmap_bootstrap` has been replaced with `crossmap(::CrossmapEnsemble, x, y)`.
+    `crossmap_bootstrap` has been replaced with `crossmap(::Ensemble, x, y)`.
 
     See the online documentation for more information.
     """)
@@ -31,7 +31,7 @@ function pai(x::AbstractVector, y::AbstractVector, args...; kwargs...)
     variable in the embedding of `t`), is:
     - `crossmap(PairwiseAsymmetricInference(; d, τ, ...), t, s)`
 
-    `crossmap_bootstrap` has been replaced with `crossmap(::CrossmapEnsemble, x, y)`.
+    `crossmap_bootstrap` has been replaced with `crossmap(::Ensemble, x, y)`.
 
     See the online documentation for more information.
     """)

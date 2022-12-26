@@ -121,7 +121,7 @@ end
 # # -----------------------------------------------------------------------------------------
 # # Ensemble analysis. Repeats an analysis ensemble.nreps times. Takes care of the embedding.
 # # -----------------------------------------------------------------------------------------
-function crossmap(ensemble::CrossmapEnsemble{<:CCMLike, <:CrossmapEstimator{<:Integer, R}},
+function crossmap(ensemble::Ensemble{<:CCMLike, <:CrossmapEstimator{<:Integer, R}},
         target::AbstractVector, source::AbstractVector) where R
     (; measure, est, nreps) = ensemble
     emb, idx_t̄, idxs_S̄ = embed(measure, target, source)
@@ -137,7 +137,7 @@ function crossmap(ensemble::CrossmapEnsemble{<:CCMLike, <:CrossmapEstimator{<:In
     return ρs
 end
 
-function crossmap(ensemble::CrossmapEnsemble{<:CCMLike, <:CrossmapEstimator},
+function crossmap(ensemble::Ensemble{<:CCMLike, <:CrossmapEstimator},
         target::AbstractVector, source::AbstractVector)
     (; measure, est, nreps) = ensemble
     libsizes = est.libsizes

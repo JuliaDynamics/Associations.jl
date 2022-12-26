@@ -10,7 +10,7 @@ export predict
 export crossmap
 export CrossmapMeasure
 export CrossmapEstimator
-export CrossmapEnsemble
+export Ensemble
 
 """
 The supertype for all cross-map measures
@@ -32,7 +32,7 @@ different packages may be used, subtypes must implement the `LIBSIZES` and `RNG`
 type parameters.
 
 For efficiency purposes, subtypes may contain mutable containers that can be re-used
-for ensemble analysis (see [`CrossmapEnsemble`](@ref)).
+for ensemble analysis (see [`Ensemble`](@ref)).
 
 ## Libraries
 
@@ -170,17 +170,17 @@ function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractDatas
 end
 
 """
-    CrossmapEnsemble(; measure::CrossmapMeasure, est::CrossmapEstimator, nreps::Int = 100)
+    Ensemble(; measure::CrossmapMeasure, est::CrossmapEstimator, nreps::Int = 100)
 
-A directive to compute an ensemble cross-map analysis, where `measure` (e.g.
+A directive to compute an ensemble analysis, where `measure` (e.g.
 [`ConvergentCrossMapping`](@ref)) is computed
 using the given estimator `est` (e.g. [`RandomVectors`](@ref))
 """
-Base.@kwdef struct CrossmapEnsemble{M, E} # todo: perhaps just use a more general Ensemble?
+Base.@kwdef struct Ensemble{M, E} # todo: perhaps just use a more general Ensemble?
     measure::M
     est::E
     nreps::Int = 100
-    function CrossmapEnsemble(measure::M, est::E; nreps = 100) where {M, E}
+    function Ensemble(measure::M, est::E; nreps = 100) where {M, E}
         new{M, E}(measure, est, nreps)
     end
 end

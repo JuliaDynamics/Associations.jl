@@ -51,7 +51,7 @@ function crossmap(x, y, d, τ, bootstrap_method::Symbol;
         r = 0, correspondence_measure = Statistics.cor)
     @warn """\
     `crossmap(x, y, d, τ, bootstrap_method; kwargs...)` is deprecated. Use \
-    `crossmap(CrossmapEnsemble(PAI(; d, τ), est::CrossmapEstimator), x, y)` instead.
+    `crossmap(Ensemble(PAI(; d, τ), est::CrossmapEstimator), x, y)` instead.
     """
     measure = ConvergentCrossMapping(; d, τ, f = correspondence_measure, w = r)
     if bootstrap_method == :random
@@ -59,7 +59,7 @@ function crossmap(x, y, d, τ, bootstrap_method::Symbol;
     else bootstrap_method == :segment
         est = RandomSegment(libsizes = L)
     end
-    ensemble = CrossmapEnsemble(measure, est, nreps = nreps)
+    ensemble = Ensemble(measure, est, nreps = nreps)
     return crossmap(ensemble, y, x)
 end
 
@@ -115,7 +115,7 @@ function pai(x, y, d, τ, bootstrap_method::Symbol;
         r = 0, correspondence_measure = Statistics.cor)
     @warn """\
     `pai(x, y, d, τ; kwargs...)`d is deprecated. Use \
-    `crossmap(CrossmapEnsemble(PAI(; d, τ), est::CrossmapEstimator), x, y)` instead.
+    `crossmap(Ensemble(PAI(; d, τ), est::CrossmapEstimator), x, y)` instead.
     """
     measure = CCM(; d, τ, f = correspondence_measure, w = r)
     if bootstrap_method == :random
@@ -123,6 +123,6 @@ function pai(x, y, d, τ, bootstrap_method::Symbol;
     else bootstrap_method == :segment
         est = RandomSegment(libsizes = L)
     end
-    ensemble = CrossmapEnsemble(measure, est, nreps = nreps)
+    ensemble = Ensemble(measure, est, nreps = nreps)
     return crossmap(ensemble, y, x)
 end

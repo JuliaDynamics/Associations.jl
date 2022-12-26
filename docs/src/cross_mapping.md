@@ -187,7 +187,7 @@ reproduce_figure_3A_naive(ConvergentCrossMapping(d = 3))
 
 Hm. This looks a bit like the paper, but the curve is not smooth. We can do better!
 
-It is not clear from the paper exactly *what* they plot in their Figure 3A, if they plot an average of some kind, or precisely what parameters and initial conditions they use. However, we can get a smoother plot by using a [`CrossmapEnsemble`](@ref). Combined with a [`CrossmapEstimator`](@ref), it uses Monte Carlo resampling on subsets of the input data to compute an ensemble of `ρ`s that we here use to compute the median and 90-th percentile range for each library size.
+It is not clear from the paper exactly *what* they plot in their Figure 3A, if they plot an average of some kind, or precisely what parameters and initial conditions they use. However, we can get a smoother plot by using a [`Ensemble`](@ref). Combined with a [`CrossmapEstimator`](@ref), it uses Monte Carlo resampling on subsets of the input data to compute an ensemble of `ρ`s that we here use to compute the median and 90-th percentile range for each library size.
 
 ```@example MAIN_CCM
 function reproduce_figure_3A_ensemble(measure::CrossmapMeasure)
@@ -199,9 +199,9 @@ function reproduce_figure_3A_ensemble(measure::CrossmapMeasure)
     libsizes = [20:5:50; 55:5:200; 300:50:500; 600:100:900; 1000:500:3000]
     # No point in doing more than one rep, because there data are always the same
     # for `ExpandingSegment.`
-    ensemble_ev = CrossmapEnsemble(measure, ExpandingSegment(; libsizes); nreps = 1)
-    ensemble_rs = CrossmapEnsemble(measure, RandomSegment(; libsizes); nreps = 50)
-    ensemble_rv = CrossmapEnsemble(measure, RandomVectors(; libsizes); nreps = 50)
+    ensemble_ev = Ensemble(measure, ExpandingSegment(; libsizes); nreps = 1)
+    ensemble_rs = Ensemble(measure, RandomSegment(; libsizes); nreps = 50)
+    ensemble_rv = Ensemble(measure, RandomVectors(; libsizes); nreps = 50)
     ρs_x̂y_es = crossmap(ensemble_ev, x, y)
     ρs_ŷx_es = crossmap(ensemble_ev, y, x)
     ρs_x̂y_rs = crossmap(ensemble_rs, x, y)
@@ -251,7 +251,7 @@ function reproduce_figure_3B()
             sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.7, βxy, βyx);
             # Generate 1000 points. Randomly select a 400-pt long segment.
             x, y = columns(trajectory(sys_bidir, 1300, Ttr = 10000));
-            ensemble = CrossmapEnsemble(CCM(d = 3, w = 5, τ = -1), RandomVectors(libsizes = 400), nreps = 10)
+            ensemble = Ensemble(CCM(d = 3, w = 5, τ = -1), RandomVectors(libsizes = 400), nreps = 10)
             ρx̂ys[i, j] = mean(crossmap(ensemble, x, y))
             ρŷxs[i, j] = mean(crossmap(ensemble, y, x))
         end
@@ -323,7 +323,7 @@ function reproduce_figure_8_mccraken()
     pai_ŷ_yx = zeros(length(as), length(bs))
 
     # Use the vectors bootstrap estimator, take the mean of 50 independent libraries.
-    ensemble_rv = CrossmapEnsemble(measure, RandomSegment(libsizes = 200), nreps = 50)
+    ensemble_rv = Ensemble(measure, RandomSegment(libsizes = 200), nreps = 50)
     for (i, a) in enumerate(as)
         for (j, b) in enumerate(bs)
             s = nonlinear_sindriver(a = a, b = a, c = 2.0)
