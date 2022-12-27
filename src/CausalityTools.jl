@@ -6,9 +6,6 @@ module CausalityTools
     import StateSpaceSets: Dataset, columns
     export Dataset, columns
 
-    #import TransferEntropy
-    #import TransferEntropy: transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
-    #export transferentropy, mutualinfo, conditional_mutualinfo, Hilbert
     @reexport using Entropies
     @reexport using TransferEntropy
     @reexport using TimeseriesSurrogates
@@ -19,7 +16,6 @@ module CausalityTools
     include("example_systems/ExampleSystems.jl")
     include("methods/crossmappings/crossmappings.jl")
 
-    #include("deprecations.jl") # activate for 2.0
     using Requires
     function __init__()
         #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin
@@ -31,9 +27,4 @@ module CausalityTools
         #    export SimplexExact, SimplexPoint
         #end
     end
-
-    # TODO: update message with breaking change
-    # - bug fix for cross mappings (fix offset in prediction indices)
-    # - Convention: negative τ := past values in source predict present in target
-    # -             positive τ := future values in source predict present in target
 end
