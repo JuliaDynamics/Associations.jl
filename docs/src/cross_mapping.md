@@ -309,39 +309,43 @@ function nonlinear_sindriver(;u₀ = rand(2), a = 1.0, b = 1.0, c = 2.0, Δt = 1
     DiscreteDynamicalSystem(eom_nonlinear_sindriver, u₀, [a, b, c, 0, Δt])
 end
 
-function reproduce_figure_8_mccraken()
+function reproduce_figure_8_mccraken(; 
+        c = 2.0, Δt = 0.2,
+        as = 0.25:0.25:5.0,
+        bs = 0.25:0.25:5.0)
     # -----------------------------------------------------------------------------------------
     # Generate many time series for many different values of the parameters `a` and `b`,
-    # and compute PAI fixed `p = 2.0`. This will replicate the upper right panel of 
+    # and compute PAI. This will replicate the upper right panel of 
     # figure 8 in McCracken & Weigel (2014).
     # -----------------------------------------------------------------------------------------
-    as = 0.25:0.25:4.0
-    bs = 0.25:0.25:4.0
-
+    
     measure = PairwiseAsymmetricInference(d = 3)
-    pai_x̂_xy = zeros(length(as), length(bs))
-    pai_ŷ_yx = zeros(length(as), length(bs))
 
-    # Use the vectors bootstrap estimator, take the mean of 50 independent libraries.
-    ensemble_rv = Ensemble(measure, RandomSegment(libsizes = 200), nreps = 50)
+    # Manually resample `nreps` length-`L` time series and use mean ρ(x̂|X̄y) - ρ(ŷ|Ȳx)
+    # for each parameter combination.
+    nreps = 50
+    L = 300 # length of timeseries
+    Δ = zeros(length(as), length(bs))
     for (i, a) in enumerate(as)
         for (j, b) in enumerate(bs)
-            s = nonlinear_sindriver(a = a, b = a, c = 2.0)
-            x, y = columns(trajectory(s, 5000, Ttr = 10000))
-            pai_x̂_xy[i, j] = crossmap(ensemble_rv, x, y) |> mean
-            pai_ŷ_yx[i, j] = crossmap(ensemble_rv, y, x) |> mean
+            s = nonlinear_sindriver(; a, b, c,  Δt)
+            x, y = columns(trajectory(s, 1000, Ttr = 10000))
+            Δreps = zeros(nreps)
+            for i = 1:nreps
+                # Ensure we're subsampling at the same time indices. 
+                ind_start = rand(1:(1000-L))
+                r = ind_start:(ind_start + L)
+                Δreps[i] = @views crossmap(measure, y[r], x[r]) - 
+                    crossmap(measure, x[r], y[r])
+            end
+            Δ[i, j] = mean(Δreps)
         end
     end
-    # - `pai_ŷ_yx` quantifies how well an embedding of `y` (plus one non-lagged component 
-    #       of `x`) predicts `y`.
-    # - `pai_x̂_xy` quantifies how well an embedding of `x` (plus one non-lagged component 
-    #       of `y`) predicts `x`.
-    Δ = pai_ŷ_yx .- pai_x̂_xy 
 
     # -----------------------------------------------------------------------------------------
     # An example time series for plotting.
     # -----------------------------------------------------------------------------------------
-    sys = nonlinear_sindriver(a = 1.0, b = 1.0, c = 2.0)
+    sys = nonlinear_sindriver(; a = 1.0, b = 1.0, c, Δt)
     npts = 500
     orbit = trajectory(sys, npts, Ttr = 10000)
     x, y = columns(orbit)
@@ -360,10 +364,12 @@ function reproduce_figure_8_mccraken()
         ax_hm.yticks = (1:length(as), string.([i % 2 == 0 ? as[i] : "" for i = 1:length(as)]))
         ax_hm.xticks = (1:length(bs), string.([i % 2 == 0 ? bs[i] : "" for i = 1:length(bs)]))
         hm = heatmap!(ax_hm, Δ,  colormap = :viridis)
-        Colorbar(fig[2, 3], hm; label = "ρ(ŷ | yx) - ρ(x̂ | xy)")
+        Colorbar(fig[2, 3], hm; label = "Δ' = ρ(ŷ | yx) - ρ(x̂ | xy)")
         fig
     end
 end
 
 reproduce_figure_8_mccraken()
 ```
+
+As expected, ``\Delta < 0`` for all parameter combinations, implying that ``X`` "PAI drives" ``Y``.
