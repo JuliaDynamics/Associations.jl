@@ -4,9 +4,9 @@
 # end
 
 # """
-#     mutualinfo([e::Entropy,] est::MutualInformationEstimator, X₁, X₂, ...)
-#     mutualinfo([e::Entropy,] est::ProbabilitiesEstimator, X₁, X₂, ...)
-#     mutualinfo([e::Entropy,] est::EntropyEstimator, X₁, X₂, ...)
+#     mutualinfo([e::EntropyDefinition,] est::MutualInformationEstimator, X₁, X₂, ...)
+#     mutualinfo([e::EntropyDefinition,] est::ProbabilitiesEstimator, X₁, X₂, ...)
+#     mutualinfo([e::EntropyDefinition,] est::DifferentialEntropyEstimator, X₁, X₂, ...)
 
 # Estimate ``I(\\bf{X})``, the  mutual information between the datasets
 # ``\\bf{X} = \\{\\bf{X}_1,\\bf{X}_2, \\ldots, \\bf{X}_m \\}``, using the provided
@@ -31,7 +31,7 @@
 # - If `est` is a [`MutualInformationEstimator`](@ref), then the mutual information is
 #     computed using some specialized algorithm.
 # - If `est` is a [`ProbabilitiesEstimator`](@ref) or
-#     [`EntropyEstimator`](@ref), then ``I(\\bf{X})`` is estimated as
+#     [`DifferentialEntropyEstimator`](@ref), then ``I(\\bf{X})`` is estimated as
 
 #     ```math
 #     \\hat{I}(\\bf{X}) = - H_e(\\bf{X}) + \\sum_{i=1}^k H_e(X_i)
@@ -48,11 +48,11 @@
 
 # # This constant exist solely to allow nice default values. Add any
 # # new estimator types that are not `MutualInformationEstimator`s to this type union
-# const MI_ESTIMATOR_TYPES = Union{ProbabilitiesEstimator, EntropyEstimator}
+# const MI_ESTIMATOR_TYPES = Union{ProbabilitiesEstimator, DifferentialEntropyEstimator}
 
 # # If `x` is variable, then H3 is treated as a N-component estimate
 # # We just call it H3, because bivariate MI it is the most common use case.
-# function estimate(infomeasure::MI{H3}, e::Entropy, est::MI_ESTIMATOR_TYPES,
+# function estimate(infomeasure::MI{H3}, e::EntropyDefinition, est::MI_ESTIMATOR_TYPES,
 #         x::Vector_or_Dataset...)
 #     @assert length(x) >= 2 ||
 #         error("Need at leats two input datasets to compute mutual information between them.")
@@ -62,11 +62,11 @@
 # end
 
 # # Informative error messages.
-# function estimate(infomeasure::MI{Nothing}, e::Entropy, est::MI_ESTIMATOR_TYPES, args...)
+# function estimate(infomeasure::MI{Nothing}, e::EntropyDefinition, est::MI_ESTIMATOR_TYPES, args...)
 #     error("""Please provide a valid estimation method to MI, e.g.
 #     `estimate(MI(H3()), Shannon(), KSG1(), x, y, ...)`""")
 # end
-# function estimate(infomeasure::MI{Nothing}, e::Entropy, est::MutualInformationEstimator, args...;
+# function estimate(infomeasure::MI{Nothing}, e::EntropyDefinition, est::MutualInformationEstimator, args...;
 #         kwargs...)
 #     error("`estimate` not implemented for `MI` with estimator $(typeof(est))")
 # end
@@ -80,9 +80,9 @@
 # # If dedicated estimators have other defaults, override in `./estimators/relevant_file.jl`.
 # mutualinfo(est::MI_ESTIMATOR_TYPES, x...; base = 2) =
 #     mutualinfo(Shannon(; base), est, x...)
-# mutualinfo(e::Entropy, est::MI_ESTIMATOR_TYPES, x...; method::EstimationMethod = H3()) =
+# mutualinfo(e::EntropyDefinition, est::MI_ESTIMATOR_TYPES, x...; method::EstimationMethod = H3()) =
 #     estimate(MI(method), e, est, x...)
-# mutualinfo(e::Entropy, est::MutualInformationEstimator, x...) =
+# mutualinfo(e::EntropyDefinition, est::MutualInformationEstimator, x...) =
 #     estimate(MI(), e, est, x...)
 
 # include("estimators/estimators.jl")

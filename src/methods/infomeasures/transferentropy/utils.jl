@@ -472,3 +472,14 @@ function get_marginals(measure::TransferEntropy, pts::AbstractDataset; emb::TEVa
 
     return joint, ST, T𝒯, T
 end
+
+function get_marginals(measure::TransferEntropy, condmutualinfo::ConditionalMutualInformation, s, t; emb::EmbeddingTE)
+    pts, vars, τs, js = te_embed(s, t, emb)
+
+    # Get marginals
+    S = pts[:, vars.S]
+    T = pts[:, vars.T]
+    𝒯 = pts[:, vars.𝒯]
+
+    return S, T, 𝒯
+end

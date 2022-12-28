@@ -1,5 +1,5 @@
 using DSP
-using Entropies: Entropy
+using Entropies: EntropyDefinition
 
 export Amplitude, Phase, Hilbert
 abstract type InstantaneousSignalProperty end
@@ -21,7 +21,7 @@ struct Phase <: InstantaneousSignalProperty end
         source::InstantaneousSignalProperty = Phase(),
         target::InstantaneousSignalProperty = Phase(),
         cond::InstantaneousSignalProperty = Phase())
-    ) <: TransferEntropyEstimator
+    ) <: TransferDifferentialEntropyEstimator
 
 Compute transfer entropy on instantaneous phases/amplitudes of relevant signals, which are
 obtained by first applying the Hilbert transform to each signal, then extracting the
@@ -40,7 +40,7 @@ See also: [`Phase`](@ref), [`Amplitude`](@ref).
 
 [^Palus2014]: Paluš, M. (2014). Cross-scale interactions and information transfer. Entropy, 16(10), 5263-5289.
 """
-struct Hilbert <: TransferEntropyEstimator
+struct Hilbert <: TransferDifferentialEntropyEstimator
     source::InstantaneousSignalProperty
     target::InstantaneousSignalProperty
     cond::InstantaneousSignalProperty
@@ -54,7 +54,7 @@ struct Hilbert <: TransferEntropyEstimator
     end
 end
 
-function transferentropy(e::Entropy, est::Hilbert, source, target)
+function transferentropy(e::EntropyDefinition, est::Hilbert, source, target)
     hil_s = DSP.hilbert(source)
     hil_t = DSP.hilbert(target)
 
@@ -78,7 +78,7 @@ function transferentropy(e::Entropy, est::Hilbert, source, target)
     transferentropy(e, est.est, s, t)
 end
 
-function transferentropy(e::Entropy, est::Hilbert, source, target, cond)
+function transferentropy(e::EntropyDefinition, est::Hilbert, source, target, cond)
     hil_s = DSP.hilbert(source)
     hil_t = DSP.hilbert(target)
     hil_c = DSP.hilbert(cond)

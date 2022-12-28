@@ -6,14 +6,14 @@ export bbnue
 # Keep this for when a common interface for optimized variable selection methods has been established
 # """
 #export BBNUE
-#     BBNUE(est) <: TransferEntropyEstimator
+#     BBNUE(est) <: TransferDifferentialEntropyEstimator
 
 # The bootstrap-based non-uniform embedding estimator (BB-NUE) for conditional transfer entropy (Montalto et al., 2014).
 # Uses the estimator `est` to compute relevant marginal entropies. (e.g. `VisitationFrequency(RectangularBinning(3))`)
 
 # [^Montalto2014]: Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
 # """
-# struct BBNUE{E} <: TransferEntropyEstimator
+# struct BBNUE{E} <: TransferDifferentialEntropyEstimator
 #     est::E
 # end
 
@@ -116,7 +116,7 @@ te_xy, te_yx
 
 [^Montalto2014]: Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
 """
-function bbnue(e::Entropy, est::ProbabilitiesEstimator, source, target, cond;
+function bbnue(e::EntropyDefinition, est::ProbabilitiesEstimator, source, target, cond;
         η = 1, include_instantaneous = true,
         method_delay = "ac_min", maxlag::Union{Int, Float64} = 0.05,
         α = 0.05, nsurr = 19, surr::TimeseriesSurrogates.Surrogate = RandomShuffle())
@@ -135,7 +135,7 @@ function bbnue(e::Entropy, est::ProbabilitiesEstimator, source, target, cond;
         α, nsurr, surr)
 end
 
-function bbnue(e::Entropy, est::ProbabilitiesEstimator, source, target;
+function bbnue(e::EntropyDefinition, est::ProbabilitiesEstimator, source, target;
         η = 1, include_instantaneous = true,
         method_delay = "ac_min", maxlag::Union{Int, Float64} = 0.05,
         α = 0.05, nsurr = 19, surr::TimeseriesSurrogates.Surrogate = RandomShuffle())

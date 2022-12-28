@@ -1,6 +1,4 @@
 
 # testfile("smeasure.jl")
-# testfile("crossmap.jl")
-# testfile("crossmap.jl")
-# testfile("joint_distance_distribution.jl")
+testfile("cross_mappings/ccm-like.jl")
 testfile("infomeasures/infomeasures.jl")

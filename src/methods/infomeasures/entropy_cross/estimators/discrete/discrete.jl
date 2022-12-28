@@ -7,7 +7,7 @@ The supertype of all cross entropy definitions.
 abstract type CrossEntropyDefinition end
 
 """
-    DiscreteCrossEntropy <: CrossEntropyEstimator
+    DiscreteCrossEntropy <: CrossDifferentialEntropyEstimator
     DiscreteCrossEntropy(est::ProbabilitiesEstimator, definition::CrossEntropyDefinition)
 
 `DiscreteCrossEntropy` is a generic probability-based plug-in estimator for discrete
@@ -29,7 +29,7 @@ generalization is to be computed. Currently, we support:
 The `DiscreteCrossEntropy estimator first uses `est` to compute probabilities, then plugs
 these probabilities into the cross entropy formula specified by `definition`.
 """
-struct DiscreteCrossEntropy{P<:ProbabilitiesEstimator, D <: CrossEntropyDefinition} <: CrossEntropyEstimator
+struct DiscreteCrossEntropy{P<:ProbabilitiesEstimator, D <: CrossEntropyDefinition} <: CrossDifferentialEntropyEstimator
     est::P
     definition::D
 end

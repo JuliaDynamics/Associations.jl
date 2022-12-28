@@ -1,34 +1,53 @@
 # Mutual information
 
 Mutual informations come in several forms in the literature, depending on what type of
-entropy they are based on. In CausalityTools.jl, we indicate the different types of mutual
-informations by passing an [`Entropy`](@ref) instance as the first argument to
-[`mutualinfo`](@ref).
-
+entropy they are based on. We currently offer estimates for the following mutual information
+measures, which can be computed using of the estimators listed below.
 For example, to compute the Shannon mutual information, do
 `mutualinfo(Shannon(), est, x, y)`, to compute Tsallis mutual information, do
 `mutualinfo(Tsallis(; q), est, x, y)`.
+
+## Measures and definitions
+
+```@docs
+MIShannon
+MITsallis
+ShannonH3
+TsallisH3
+```
 
 ## Implementations
 
 Any of the following estimators can be used with [`mutualinfo`](@ref).
 
-| Estimator                              | Principle           | Input data          | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) |
-| -------------------------------------- | ------------------- | ------------------- | :---------------: | :-------------: | :---------------: |
-| [`KraskovStögbauerGrassberger1`](@ref) | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
-| [`KraskovStögbauerGrassberger2`](@ref) | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
-| [`GaoKannanOhViswanath`](@ref)         | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
-| [`GaoOhViswanath`](@ref)               | Nearest neighbors   | `Vector`,`Dataset`  |    Continuous     |        x        |         x         |
-| [`MIShannonDifferential`](@ref)                | Estimator-dependent | Estimator-dependent |    Continuous     |        x        |         x         |
-| [`MIShannon`](@ref)                    | Estimator-dependent | Estimator-dependent |     Discrete      |        x        |     Discrete      |
-| [`MITsallis`](@ref)                    | Estimator-dependent | Estimator-dependent |         x         |        x        |     Discrete      |
+| Estimator                              | Principle         | Input data         | [`MIShannon`](@ref) | [`MIRenyi`](@ref) | [`MITsallis`](@ref) |
+| -------------------------------------- | ----------------- | ------------------ | :-----------------: | :---------------: | :-----------------: |
+| [`KraskovStögbauerGrassberger1`](@ref) | Nearest neighbors | `Vector`,`Dataset` |     Continuous      |         x         |          x          |
+| [`KraskovStögbauerGrassberger2`](@ref) | Nearest neighbors | `Vector`,`Dataset` |     Continuous      |         x         |          x          |
+| [`GaoKannanOhViswanath`](@ref)         | Nearest neighbors | `Vector`,`Dataset` |     Continuous      |         x         |          x          |
+| [`GaoOhViswanath`](@ref)               | Nearest neighbors | `Vector`,`Dataset` |     Continuous      |         x         |          x          |
 
-## API
+Continuous/differential mutual information may also be estimated using any of our
+differential entropy estimators that support multivariate input data.
 
-```@docs
-MutualInformationEstimator
-mutualinfo
-```
+| Estimator                        | Principle         | Input data | [`MIShannon`](@ref) |
+| -------------------------------- | ----------------- | ---------- | :-----------------: |
+| [`Kraskov`](@ref)                | Nearest neighbors | `Dataset`  |         ✅          |
+| [`Zhu`](@ref)                    | Nearest neighbors | `Dataset`  |         ✅          |
+| [`ZhuSingh`](@ref)               | Nearest neighbors | `Dataset`  |         ✅          |
+| [`GaoNaive`](@ref)               | Nearest neighbors | `Dataset`  |         ✅          |
+| [`GaoNaiveCorrected`](@ref)      | Nearest neighbors | `Dataset`  |         ✅          |
+| [`Goria`](@ref)                  | Nearest neighbors | `Dataset`  |         ✅          |
+| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors | `Dataset`  |         ✅          |
+
+Discrete mutual information may also be estimated using any of our probability estimators
+that support multivariate input data.
+
+| Estimator                  | Principle                   | [`MIShannon`](@ref) | [`MITsallis`](@ref) |
+| -------------------------- | --------------------------- | :-----------------: | :-----------------: |
+| [`CountOccurrences`](@ref) | Frequencies                 |         ✅          |         ✅          |
+| [`ValueHistogram`](@ref)   | Binning (histogram)         |         ✅          |         ✅          |
+| [`TransferOperator`](@ref) | Binning (transfer operator) |         ✅          |         ✅          |
 
 ## Dedicated estimators
 
@@ -37,17 +56,6 @@ KraskovStögbauerGrassberger1
 KraskovStögbauerGrassberger2
 GaoKannanOhViswanath
 GaoOhViswanath
-```
-
-## Derived estimators
-
-```@docs
-MIShannon
-MITsallis
-MIShannonDifferential
-ShannonH3
-TsallisH3
-ShannonH3Differential
 ```
 
 ## Examples

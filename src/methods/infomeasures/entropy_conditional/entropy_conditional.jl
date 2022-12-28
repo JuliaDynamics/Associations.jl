@@ -1,5 +1,5 @@
 export ConditionalEntropy
-export ConditionalEntropyEstimator
+export ConditionalDifferentialEntropyEstimator
 export ConditionalEntropyDefinition
 export entropy_conditional
 
@@ -15,11 +15,11 @@ abstract type ConditionalEntropyDefinition <: Definition end
 """
 The supertype for all conditional entropy estimators.
 """
-abstract type ConditionalEntropyEstimator end
+abstract type ConditionalDifferentialEntropyEstimator end
 
 """
-    entropy_conditional(e::Entropy,
-        est::ConditionalEntropyEstimator{ProbabilitiesEstimator}, x, y)
+    entropy_conditional(e::EntropyDefinition,
+        est::ConditionalDifferentialEntropyEstimator{ProbabilitiesEstimator}, x, y)
 
 Compute the conditional entropy of type `e` of `x` given `y`, which we denote
 ``h^e(X|Y)`` in the continuous case and ``H^e(X|Y)`` in the discrete case, using the given
@@ -31,7 +31,7 @@ depending on `est`.
 ## Description
 
 The definition of the conditional entropy varies depending on which [`Entropy`](@ref) is
-it based on. Individual [`ConditionalEntropyEstimator`](@ref)s specify the formulas they
+it based on. Individual [`ConditionalDifferentialEntropyEstimator`](@ref)s specify the formulas they
 approximate.
 """
 
@@ -39,7 +39,7 @@ approximate.
     entropy_conditional(definition::ConditionalEntropyShannon, est::ProbabilitiesEstimator, x, y) → ce::Real
     entropy_conditional(definition::ConditionalEntropyTsallis, est::ProbabilitiesEstimator, x, y) → ce::Real
 
-    entropy_conditional(definition::ConditionalEntropyShannonDifferential, est::EntropyEstimator, x, y) → ce::Real
+    entropy_conditional(definition::ConditionalEntropyShannonDifferential, est::DifferentialEntropyEstimator, x, y) → ce::Real
 
 Estimate the generalized conditional entropy (CE) (using the formula and logarithm base
 specified by `definition`) between `x` and `y`, using the provided estimator.

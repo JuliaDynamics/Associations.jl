@@ -1,5 +1,5 @@
 
-function event_transferentropyrate(e::Entropy,
+function event_transferentropyrate(e::EntropyDefinition,
         event::EventIdentifier,
         est::ProbabilitiesEstimator,
         target::V, source::V, cond::Vararg{V};

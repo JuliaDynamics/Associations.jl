@@ -5,9 +5,7 @@ abstract type IndependenceTest end
 """
     ConditionalIndependenceTest <: IndependenceTest
 
-The supertype for all conditional independence tests.
-
-Currently, the following concrete implementations exist:
+The supertype for all conditional independence tests, which are:
 
 - [`LocalPermutation`](@ref).
 """
@@ -17,9 +15,7 @@ abstract type ConditionalIndependenceTest <: IndependenceTest end
     independence(test, x, y, z)
 
 Compute the conditional independence of `x` and `y` given `z` using
-the provided [`ConditionalIndependenceTest`](@ref).
-
-## Implemented independence tests
+the provided [`ConditionalIndependenceTest`](@ref), which can be one of the following:
 
 - [`LocalPermutation`](@ref)
 """

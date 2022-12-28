@@ -1,4 +1,4 @@
-export CrossEntropyEstimator
+export CrossDifferentialEntropyEstimator
 export entropy_cross
 
 """
@@ -14,7 +14,7 @@ The supertype of all cross-entropy definitions.
 abstract type CrossEntropyDefinition <: Definition end
 
 """
-    CrossEntropyEstimator <: InformationEstimator
+    CrossDifferentialEntropyEstimator <: InformationEstimator
 
 The supertype of all cross-entropy estimators.
 
@@ -22,12 +22,12 @@ The supertype of all cross-entropy estimators.
 
 - [`BulinskiDimitrov`](@ref).
 """
-abstract type CrossEntropyEstimator end
+abstract type CrossDifferentialEntropyEstimator end
 
 """
     entropy_cross(measure::CrossEntropy, est::ProbabilitiesEstimator, x, y)
 
-    entropy_cross(measure::CrossEntropy, est::CrossEntropyEstimator, x, y)
+    entropy_cross(measure::CrossEntropy, est::CrossDifferentialEntropyEstimator, x, y)
 
 Estimate `measure`, a cross-entropy of some kind, between `x` and `y` using the given
 estimator.
@@ -66,16 +66,16 @@ include("definitions/Thierrin.jl")
 include("estimators/BulinskiDimitrov.jl")
 
 # """
-#     entropy_cross(e::Entropy, est::CrossEntropyEstimator, x::AbstractDataset{D},
+#     entropy_cross(e::EntropyDefinition, est::CrossDifferentialEntropyEstimator, x::AbstractDataset{D},
 #         y::AbstractDataset{D}) where D
 
 # Estimate the differential cross-entropy of type `e` between `D`-dimensional dataset
-# `x` and `y`, using the provided [`CrossEntropyEstimator`](@ref).
+# `x` and `y`, using the provided [`CrossDifferentialEntropyEstimator`](@ref).
 
 # ## Description
 
 # The definition of cross entropy varies depending on which [`Entropy`](@ref) is it based on.
-# Individual [`CrossEntropyEstimator`](@ref)s specify the formulas they approximate.
+# Individual [`CrossDifferentialEntropyEstimator`](@ref)s specify the formulas they approximate.
 
 # """
 # function entropy_cross()

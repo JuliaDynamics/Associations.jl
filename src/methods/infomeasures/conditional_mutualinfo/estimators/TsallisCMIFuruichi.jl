@@ -36,7 +36,7 @@ struct TsallisCMIFuruichi{P <: ProbabilitiesEstimator} <: MutualInformationEstim
 end
 
 # TODO: use estimate interface with MI2
-function cmi(e::Tsallis, est::TsallisCMIFuruichi, x, y, z)
+function condmutualinfo(e::Tsallis, est::TsallisCMIFuruichi, x, y, z)
     @assert e.q > 1
     X = Dataset(X)
     return mutualinfo(e, est.est, X, Dataset(y, z)) -

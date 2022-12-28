@@ -1,4 +1,4 @@
-using Entropies: EntropyEstimator
+using Entropies: DifferentialEntropyEstimator
 using StateSpaceSets: AbstractDataset, Dataset
 using Neighborhood: Euclidean, KDTree, NeighborNumber, Theiler
 using Neighborhood: bulksearch
@@ -7,7 +7,7 @@ using SpecialFunctions: digamma
 export GaoNaive, GaoNaiveCorrected
 
 """
-    GaoNaive <: EntropyEstimator
+    GaoNaive <: DifferentialEntropyEstimator
     GaoNaive(k = 1, w = 0, base = 2)
 
 The `GaoNaive` estimator (Gao et al., 2015) computes the [`Shannon`](@ref)
@@ -27,7 +27,7 @@ when searching for neighbours).
     neighbor estimates of entropy. American journal of mathematical and management
     sciences, 23(3-4), 301-321.
 """
-Base.@kwdef struct GaoNaive{B} <: EntropyEstimator
+Base.@kwdef struct GaoNaive{B} <: DifferentialEntropyEstimator
     k::Int = 1
     w::Int = 0
     base::B = 2
@@ -47,7 +47,7 @@ function entropy(e::Renyi, est::GaoNaive, x::AbstractDataset{D}) where D
 end
 
 """
-    GaoNaiveCorrected <: EntropyEstimator
+    GaoNaiveCorrected <: DifferentialEntropyEstimator
     GaoNaiveCorrected(k = 1, w = 0, base = 2)
 
 The `GaoNaiveCorrected` estimator (Gao et al., 2015), computes the [`Shannon`](@ref)
@@ -70,7 +70,7 @@ when searching for neighbours).
     neighbor estimates of entropy. American journal of mathematical and management
     sciences, 23(3-4), 301-321.
 """
-Base.@kwdef struct GaoNaiveCorrected{B} <: EntropyEstimator
+Base.@kwdef struct GaoNaiveCorrected{B} <: DifferentialEntropyEstimator
     k::Int = 1
     w::Int = 0
     base::B = 2

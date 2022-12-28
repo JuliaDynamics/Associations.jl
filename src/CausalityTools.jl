@@ -1,7 +1,7 @@
 module CausalityTools
 
-    import StateSpaceSets: Dataset, columns
-    export Dataset, columns
+    import StateSpaceSets: Dataset, columns, standardize
+    export Dataset, columns, standardize
 
     import DynamicalSystemsBase: trajectory
     export trajectory

@@ -3,8 +3,8 @@ export ShannonCD
 
 
 """
-    ShannonCD <: ConditionalEntropyEstimator
-    ShannonCD(est::EntropyEstimator)
+    ShannonCD <: ConditionalDifferentialEntropyEstimator
+    ShannonCD(est::DifferentialEntropyEstimator)
     ShannonCD(est::ProbabilitiesEstimator)
 
 `ShannonCD` is a generic estimator that computes the discrete or differential conditional
@@ -14,7 +14,7 @@ Shannon entropy, depending on `est`.
 
 ### Discrete Shannon conditional entropy
 
-If `est` is a [`ConditionalEntropyEstimator`](@ref), then compute the discrete conditional
+If `est` is a [`ConditionalDifferentialEntropyEstimator`](@ref), then compute the discrete conditional
 entropy by first approximating probabilities, and plugging them into the formula below.
 The `ShannonCD` estimator thus can use any [`ProbabilitiesEstimator`](@ref) to compute a
 plug-in estimate of``H(X | Y) = H(X,Y) - H(X)``.
@@ -26,11 +26,11 @@ plug-in estimate of``H(X | Y) = H(X,Y) - H(X)``.
 
 ## Continuous/differential Shannon conditional entropy
 
-If `est` is an [`EntropyEstimator`](@ref) then the differential conditional entropy
+If `est` is an [`DifferentialEntropyEstimator`](@ref) then the differential conditional entropy
 ``h(X | Y) = -\\int h(X,Y) - h(X)``, where ``h(\\cdot)`` is the differential entropy.
 
 """
-struct ShannonCD{E} <: ConditionalEntropyEstimator
+struct ShannonCD{E} <: ConditionalDifferentialEntropyEstimator
     est::E
 end
 

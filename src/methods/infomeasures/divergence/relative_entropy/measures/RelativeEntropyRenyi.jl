@@ -3,7 +3,7 @@ export RelativeEntropyRenyi
 
 """
     RelativeEntropyRenyi <: Divergence
-    RelativeEntropyRenyi(e::Entropy = Shannon())
+    RelativeEntropyRenyi(e::EntropyDefinition = Shannon())
     RelativeEntropyRenyi(; base::Real)
 
 `RelativeEntropyRenyi` is a directive to compute the discrete Rényi relative entropy
@@ -16,7 +16,7 @@ export RelativeEntropyRenyi
 
 See also: [`divergence`](@ref).
 """
-struct RelativeEntropyRenyi{E <: Entropy} <: Divergence
+struct RelativeEntropyRenyi{E <: EntropyDefinition} <: Divergence
     e::E
     function RelativeEntropyRenyi(; base = 2, q = 1.5)
             e = Renyi(; base, q)
@@ -55,7 +55,7 @@ function estimate(def::RenyiDivergence, measure::RelativeEntropyRenyi,
     b = est.binning
     XY = Dataset(x, y)
     rb = RectangularBinEncoding(XY, b)
-    XY_bins = Dataset([Entropies.encode_as_bin(xy, rb) for xy in XY])
+    XY_bins = Dataset([Entropies.encode(rb, xy) for xy in XY])
     PX = probabilities(XY_bins[:, 1:DX])
     PY = probabilities(XY_bins[:, DX+1:end])
     re = 1 / (q - 1) * log(sum(pᵢ^q * qᵢ^(1 - q) for (pᵢ, qᵢ) in zip(PX, PY)))

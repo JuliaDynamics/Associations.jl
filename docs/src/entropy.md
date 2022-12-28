@@ -20,7 +20,7 @@ no implementation exists. The table scrolls sideways, so is best viewed on a lar
 | [`WaveletOverlap`](@ref)                    | Wavelet transform           | `Vector`            |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
 | [`PowerSpectrum`](@ref)                     | Fourier spectra             | `Vector`, `Dataset` |     Discrete      |    Discrete     |     Discrete      |     Discrete     |            Discrete            |
 
-The following estimators are dedicated entropy estimators, and can also be used with [`entropy`](@ref).
+The following estimators are *differential* entropy estimators, and can also be used with [`entropy`](@ref).
 
 | Estimator                        | Principle         | Input data | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) | [`Curado`](@ref) | [`StretchedExponential`](@ref) |
 | -------------------------------- | ----------------- | ---------- | :---------------: | :-------------: | :---------------: | :--------------: | :----------------------------: |
@@ -60,16 +60,16 @@ which you can estimate using [`ProbabilitiesEstimator`](@ref)s. Every
 generalized entropies. No bias correction is currently applied to any of the discrete 
 estimators.
 
-Continuous (differential) entropies, on the other hand, are approximated by [`EntropyEstimator`](@ref)s,
-and are functions of *integrals*, and rely on estimating density functionals. 
-Each [`EntropyEstimator`](@ref)s uses a different technique for approximating relevant
-probability densities, and is often tailed to one or a few types of generalized entropy.
+Continuous (differential) entropies, on the other hand, are approximated by [`DifferentialEntropyEstimator`](@ref)s,
+and are functions of *integrals*, and rely on estimating density functionals.
+Each [`DifferentialEntropyEstimator`](@ref)s uses a different technique for approximating relevant
+probability densities, and is often tailored to one or a few types of generalized entropy.
 For example, [`Kraskov`](@ref) estimates the [`Shannon`](@ref) entropy, while
 [`LeonenkoProzantoSavani`](@ref) estimates [`Shannon`](@ref), [`Renyi`](@ref), and 
 [`Tsallis`](@ref) entropies.
 
 ```@docs
-EntropyEstimator
+DifferentialEntropyEstimator
 ```
 
 ```@docs
@@ -116,10 +116,13 @@ gets large enough.
 We'll first make two helper functions.
 
 - **`analytical_entropy(estimators, Ls; d::Int, r, base = 2)`**: Computes the analytical  
-Shannon differential entropy to the given `base` of a multivariate normal distribution with covariance matrix with diagonal elements `r` and zeros on the off-diagonal. Does so for each of the given `estimators` for each
-sample size in `Ls`.
-- **`mvnormal_entropies(; d::Int, r, base = 2, kwargs...)`**: Estimates  the Shannon entropy to the given `base` of samples from a multivariate normal distribution as specified as above.
-- **`plot`
+    Shannon differential entropy to the given `base` of a multivariate normal distribution
+    with covariance matrix with diagonal elements `r` and zeros on the off-diagonal.
+    Does so for each of the given `estimators` for each
+    sample size in `Ls`.
+- **`mvnormal_entropies(; d::Int, r, base = 2, kwargs...)`**: Estimates  the Shannon
+     entropy to the given `base` of samples from a multivariate normal distribution as
+    specified as above.
 
 ```@example ex_entropy_estimators
 using CausalityTools
@@ -158,7 +161,7 @@ We'll also need a function to summarize the estimates.
 
 ```@example ex_entropy_estimators
 # A helper to get the estimator name for plotting.
-getname(est::EntropyEstimator) = typeof(est).name.name  |> string
+getname(est::DifferentialEntropyEstimator) = typeof(est).name.name  |> string
 function medians_and_quantiles(Hs, Ls; q = 0.95)
     medians = [zeros(length(Ls)) for est in estimators]
     lb = [zeros(length(Ls)) for est in estimators]

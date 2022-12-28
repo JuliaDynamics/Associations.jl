@@ -5,8 +5,8 @@ using Neighborhood: bulksearch, isearch
 export Lindner
 
 """
-    Lindner <: TransferEntropyEstimator
-    Lindner(k = 1, w = 0, base = MathConstants.e)
+    Lindner <: TransferDifferentialEntropyEstimator
+    Lindner(k = 1, w = 0, base = 2)
 
 The `Lindner` transfer entropy estimator (Lindner et al., 2011)[^Lindner2011], which is
 also used in the Trentool MATLAB toolbox, and is based on nearest neighbor searches.
@@ -38,12 +38,12 @@ neighbor searches are performed.
     A Matlab open source toolbox to analyse information flow in time series data with
     transfer entropy. BMC neuroscience, 12(1), 1-22.
 """
-Base.@kwdef struct Lindner{B} <: EntropyEstimator
-    k::Int = 1 # number of neighbors in joint space.
+Base.@kwdef struct Lindner{B} <: DifferentialEntropyEstimator
+    k::Int = 2 # number of neighbors in joint space.
     w::Int = 0
-    base::B = MathConstants.e
+    base::B = 2
 
-    function Zhu1(k::Int, w::Int, base::B) where B
+    function Lindner(k::Int, w::Int, base::B) where B
         k >= 2 || throw(DomainError("The number of neighbors k must be >= 2."))
         new{B}(k, w, base)
     end
@@ -52,7 +52,7 @@ end
 function transferentropy(measure::Renyi, est::Lindner, args...)
     (; k, w, base) = est
     measure.q ≈ 1.0 || error("Renyi transfer entropy with q = $(measure.q) not defined for $(typeof(e))")
-    joint, ST, TT⁺, T = get_marginals(TE(), args...)
+    joint, ST, TT⁺, T = get_marginals(TransferEntropy(), args...)
 
     W = Theiler(w)
     tree_joint = KDTree(joint, Euclidean())

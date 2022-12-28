@@ -14,7 +14,7 @@ export RelativeEntropyShannon
 
 See also: [`divergence`](@ref).
 """
-struct RelativeEntropyShannon{E <: Entropy} <: Divergence
+struct RelativeEntropyShannon{E <: EntropyDefinition} <: Divergence
     e::E
     function RelativeEntropyShannon(; base = 2)
             e = Shannon(; base)

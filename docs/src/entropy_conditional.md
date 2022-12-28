@@ -17,7 +17,7 @@ Any of the following estimators can be used with [`entropy_conditional`](@ref).
 entropy_conditional
 ConditionalEntropy
 ConditionalEntropyDefinition
-ConditionalEntropyEstimator
+ConditionalDifferentialEntropyEstimator
 ```
 
 ## Dedicated estimators

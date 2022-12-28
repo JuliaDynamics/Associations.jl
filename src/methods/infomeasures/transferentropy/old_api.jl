@@ -1,6 +1,6 @@
 
 """
-transferentropy([e::Entropy], s, t, [c,] est;
+transferentropy([e::EntropyDefinition], s, t, [c,] est;
     τT = -1, τS = -1, η𝒯 = 1, dT = 1, dS = 1, d𝒯 = 1, [τC = -1, dC = 1])
 
 Estimate transfer entropy[^Schreiber2000] from source `s` to target `t`, ``TE^{q}(s \\to t)``, using the
@@ -150,31 +150,31 @@ transferentropy(x, y, est, base = MathConstants.e, q = 2) # TE in nats, order-2 
 # function transferentropy! end
 
 
-function transferentropy(e::Entropy, est::ProbabilitiesEstimator,
+function transferentropy(e::EntropyDefinition, est::ProbabilitiesEstimator,
     args...; base = 2, params = params = TransferEntropy(), kwargs...)
 
     transferentropy(Shannon(; base), est, args...; kwargs...)
 end
-function transferentropy(est::TransferEntropyEstimator, args...; base = 2, kwargs...)
+function transferentropy(est::TransferDifferentialEntropyEstimator, args...; base = 2, kwargs...)
     transferentropy(Shannon(; base), est, args...; kwargs...)
 end
 
 
 
 """
-    transferentropy([e::Entropy,] est::ProbabilitiesEstimator, s, t, [c];
+    transferentropy([e::EntropyDefinition,] est::ProbabilitiesEstimator, s, t, [c];
         τT = -1, τS = -1, η𝒯 = 1, dT = 1, dS = 1, d𝒯 = 1, [τC = -1, dC = 1])
-    transferentropy(]e::Entropy,] est::TransferEntropyEstimator, s, t, [c]; kwargs...)
+    transferentropy(]e::EntropyDefinition,] est::TransferDifferentialEntropyEstimator, s, t, [c]; kwargs...)
 
 Estimate transfer entropy from `s` to `t`, optionally conditioning on `c`,
 by a sum of marginal entropies.
 
 # Arguments
 
-- `e::Entropy`. The type of entropy to compute. Optional. Defaults to `Shannon(; base = 2)`
+- `e::EntropyDefinition`. The type of entropy to compute. Optional. Defaults to `Shannon(; base = 2)`
     if not specified. The unit of the transfer entropy is controlled by the logarithm base,
     which must be provided as a keyword to `e`.
-- `est`. Either a [`ProbabilitiesEstimator`](@ref) or a [`TransferEntropyEstimator`](@ref),
+- `est`. Either a [`ProbabilitiesEstimator`](@ref) or a [`TransferDifferentialEntropyEstimator`](@ref),
     which controls how probabilities and entropies are estimated for each marginal.
 - `s::AbstractVector`: The source time series
 - `t::AbstractVector`: The target time series
@@ -182,24 +182,24 @@ by a sum of marginal entropies.
 
 See also: [`Entropy`](@ref), [`ProbabilitiesEstimator`](@ref).
 """
-function transferentropy(e::Entropy, est::ProbabilitiesEstimator,
+function transferentropy(e::EntropyDefinition, est::ProbabilitiesEstimator,
         args...; params = TransferEntropy(), kwargs...)
     joint, ST, T𝒯, T = get_marginals(params, args...; emb = EmbeddingTE(; kwargs...))
     from_marginals(TE(), e, est, joint, ST, T𝒯, T)
 end
 
 """
-    transferentropy(e::EntropyEstimator, s, t, [c];
+    transferentropy(e::DifferentialEntropyEstimator, s, t, [c];
         τT = -1, τS = -1, η𝒯 = 1, dT = 1, dS = 1, d𝒯 = 1, [τC = -1, dC = 1])
 
 Estimate Shannon transfer entropy from `s` to `t`, optionally conditioning on `c`,
-by a sum of marginal entropies, using an [`EntropyEstimator`](@ref) estimator from
+by a sum of marginal entropies, using an [`DifferentialEntropyEstimator`](@ref) estimator from
 [Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl).
 
 These methods estimate entropies using some procedure that doesn't explicitly construct a
 probability distribution.
 """
-function transferentropy(e::EntropyEstimator, args...; kwargs...)
+function transferentropy(e::DifferentialEntropyEstimator, args...; kwargs...)
     joint, ST, T𝒯, T = get_marginals(TE(), args...; emb = EmbeddingTE(; kwargs...))
     from_marginals(TE(), e, joint, ST, T𝒯, T)
 end

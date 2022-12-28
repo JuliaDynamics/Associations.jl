@@ -39,7 +39,7 @@ Rényi-based mutual information.
 abstract type InformationMeasure <: CausalityMeasure end
 
 """
-    estimate(e::Entropy, est::InformationMeasureEstimator, input::Vector_or_Dataset...)
+    estimate(e::EntropyDefinition, est::InformationMeasureEstimator, input::Vector_or_Dataset...)
 
 Given some `input` data, estimate some information measure using the given
 [`InformationMeasureEstimator`](@ref), with respect to the generalized entropy `e`.
@@ -52,11 +52,11 @@ include("various/entropies.jl")
 
 # Higher-level measures
 #include("entropy_conditional/entropy_conditional.jl")
-include("entropy_cross/entropy_cross.jl")
-include("divergence/divergence.jl")
+#include("entropy_cross/entropy_cross.jl")
+#include("divergence/divergence.jl")
 include("mutualinfo/mutualinfo.jl")
-include("cmi/cmi.jl")
-
+#include("condmutualinfo/condmutualinfo.jl")
+#include("transferentropy/transferentropy.jl")
 
 
 # """
@@ -100,6 +100,6 @@ include("cmi/cmi.jl")
 # TODO:
 # Explain somewhere in the documentation that if `ProbabilitiesEstimators`
 # are used, then the *discrete* version of whatever measure is computed.
-# Otherwise, the *differential* entropy/mi/cmi/whatever is estimated.
+# Otherwise, the *differential* entropy/mi/condmutualinfo/whatever is estimated.
 # Some methods are *compound measures*, in the sense that they can be built
 # from lower-level measures.

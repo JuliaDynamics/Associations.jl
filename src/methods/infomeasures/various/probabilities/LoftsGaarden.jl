@@ -1,10 +1,11 @@
 export LoftsGaarden
+import Entropies: outcome_space
 
 """
-    LoftsGaarden <: ProbabilitiesEstimator
+    Loftsgaarden <: ProbabilitiesEstimator
 
-The `LoftsGaarden` probabilities estimator is based on the `k`-th nearest neighbor
-density estimatio from Loftsgaarden & QuesenBerry (1965).
+The `Loftsgaarden` probabilities estimator is based on the `k`-th nearest neighbor
+density estimatio from Loftsgaarden & Quesenberry (1965).
 
 It estimates probabilities by first estimating the density locally at each sample
 point `xᵢ` using the distance from `xᵢ` to its `k`-th nearest neighbor. The density

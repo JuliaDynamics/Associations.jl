@@ -39,7 +39,7 @@ end
 ## General interface
 
     predictive_asymmetry(s, t, [c],
-        estimator::TransferEntropyEstimator, ηs;
+        estimator::TransferDifferentialEntropyEstimator, ηs;
         d𝒯 = 1, dT = 1, dS = 1, τT = -1, τS = -1,
         [dC = 1, τC = -1,],
         normalize::Bool = false, f::Real = 1.0) → Vector{Float64}

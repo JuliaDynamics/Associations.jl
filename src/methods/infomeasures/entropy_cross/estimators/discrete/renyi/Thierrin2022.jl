@@ -23,7 +23,7 @@ C_{q}^R(\\mathcal{P}; \\mathcal{Q}) :=
 """
 struct RenyiDifferentialCrossEntropyThierrin2022 <: CrossEntropyDefinition end
 
-function entropy_cross(e::Entropy,
+function entropy_cross(e::EntropyDefinition,
         est::DiscreteCrossEntropy{P, RenyiDifferentialCrossEntropyThierrin2022}, x, y) where P
     px = probabilities(est.est, x)
     py = probabilities(est.est, y)

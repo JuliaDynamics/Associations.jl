@@ -1,22 +1,58 @@
 include("utils.jl")
 import DelayEmbeddings: embed
+export embed
 using Neighborhood: Euclidean, KDTree, NeighborNumber, Theiler
 using Neighborhood: bulksearch
 using StaticArrays: MVector
+using StateSpaceSets: AbstractDataset
 
-export predict, crossmap
-export CrossmapMeasure, CrossmapEstimator
-export ExpandingSegment, RandomSegment
+export predict
+export crossmap
+export CrossmapMeasure
+export CrossmapEstimator
+export Ensemble
 
 """
-The supertype for all cross-map measures.
+The supertype for all cross-map measures
+
+Currently implemented measures are:
+- [`ConvergentCrossMapping`](@ref), or [`CCM`](@ref) for short.
+- [`PairwiseAsymmetricInference`](@ref), or [`PAI`](@ref) for short.
 """
 abstract type CrossmapMeasure end
 
 """
-The supertype for all cross-map estimators.
+    CrossmapEstimator{LIBSIZES, RNG}
+
+A parametric supertype for all cross-map estimators, which are used with [`predict`](@ref) and
+[`crossmap`](@ref).
+
+Because the type of the library may differ between estimators, and because RNGs from
+different packages may be used, subtypes must implement the `LIBSIZES` and `RNG`
+type parameters.
+
+For efficiency purposes, subtypes may contain mutable containers that can be re-used
+for ensemble analysis (see [`Ensemble`](@ref)).
+
+## Libraries
+
+A cross-map estimator uses the concept of "libraries". A library is essentially just
+a reference to a set of points, and usually, a library refers to *indices* of points,
+not the actual points themselves.
+
+For example, for timeseries, `RandomVectors(libsizes = 50:25:100)` produces three
+separate libraries, where the first contains 50 randomly selected time indices,
+the second contains 75 randomly selected time indices, and the third contains
+100 randomly selected time indices. This of course assumes that all quantities involved
+can be indexed using the same time indices, meaning that the concept of "library"
+only makes sense *after* relevant quantities have been *jointly* embedded, so that they
+can be jointly indexed. For non-instantaneous prediction, the maximum possible library
+size shrinks with the magnitude of the index/time-offset for the prediction.
+
+For spatial analyses (not yet implemented), indices could be more complex and involve
+multi-indices.
 """
-abstract type CrossmapEstimator end
+abstract type CrossmapEstimator{LIBSIZES, RNG} end
 
 segment_length_error() = "Segment lengths can be inferred only if both a cross-map " *
     "measure and an input time series is provided. " *
@@ -45,69 +81,54 @@ This produces `emb`, a `D`-dimensional `Dataset` where
     `s ∈ sources`. Typically, `emb[:, 1:D-1]` is the subspace in which neighborhood
     searches are done, which forms the basis of cross-map [`predict`](@ref)ions.
 """
-function embed end
+function embed(measure::CrossmapMeasure, args...) end
 
 """
-    crossmap(measure, target, source::AbstractDataset) → ρt̄ₛt
+    crossmap(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractDataset) → ρ
+    crossmap(measure::CrossmapMeasure, target::AbstractVector, source::AbstractVector) → ρ
 
-Like [`predict`](@ref), but return the correspondence between `target` and `t̄ₛ`,
-according to the given cross-map `measure`.
+Compute the cross map estimates between time-aligned time series `t̄` and
+source embedding `S̄`, or between raw time series `t` and `s`.
 
-See also: [`CrossmapMeasure`](@ref), [`ConvergentCrossMapping`](@ref), [`PairwiseAsymmetricInference`](@ref).
+This is just a wrapper around [`predict`](@ref) that simply returns the correspondence
+measure between the source and the target.
 """
 function crossmap end
 
-function crossmap(measure::CrossmapMeasure, target::AbstractVector, source::AbstractDataset)
-    t̄ₛ = predict(measure, target, source);
-    ρt̄ₛt = measure.f(t̄ₛ, target)
-    return ρt̄ₛt
-end
+# Generic implementation. This is the ConvergentCrossMapping/PairwiseAsymmetricInference
+# approach, but other `CrossmapMeasure`s may do something different. Custom
+# implementations go in a relevant `measures/CustomMeasure.jl` file.
 
 """
-    predict(measure, target, source::AbstractDataset{Ds}) → t̂
+    predict(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractDataset) → t̂ₛ
+    predict(measure::CrossmapMeasure, target::AbstractVector, source::AbstractVector) → t̂ₛ, t̄, ρ
 
-For each `i ∈ 1, 2, …, N = length(target) = length(source)`, produce the cross-map
-prediction `t̂ₛ[i]` by a linear combination of points in `target`, where the selection of
-points and weights are determined by the `D+1` nearest neighbors of the point `source[i]`.
+Perform point-wise cross mappings between source embeddings and target time series
+according to the algorithm specified by the given cross-map `measure` (e.g.
+[`ConvergentCrossMapping`](@ref) or [`PairwiseAsymmetricInference`](@ref)).
 
-## Returns
+- **First method**: Returns a vector of predictions `t̂ₛ` (`t̂ₛ` := "predictions of `t̄` based
+    on source embedding `S̄`"), where `t̂ₛ[i]` is the prediction for `t̄[i]`. It assumes
+    pre-embedded data which have been correctly time-aligned using a joint embedding
+    (see [`embed`](@ref)), i.e. such that `t̄[i]` and `S̄[i]` correspond to the same time
+    index.
+- **Second method**: Jointly embeds the `target` and `source` time series (according to
+    `measure`) to obtain time-index aligned target timeseries `t̄` and source embedding
+    `S̄` (which is now a [`Dataset`](@ref)).
+    Then calls `predict(measure, t̄, S̄)` (the first method), and returns both the
+    predictions `t̂ₛ`, observations `t̄` and their correspondence `ρ` according to `measure`.
 
-Returns a vector of predictions `t̂`, where `t̂ₛ[i]` is the prediction for `target[i]`.
+## Description
 
-You can either compute the agreement between predictions and observations manually,
-or use [`crossmap`](@ref) instead, which directly returns the correspondence between
-`target` and `t̂ₛ` according to `measure`.
+For each `i ∈ {1, 2, …, N}` where `N = length(t) == length(s)`, we make the prediction
+`t̂[i]` (an estimate of `t[i]`) based on a linear combination of `D + 1` other points in
+`t`, where the selection of points and weights for the linear combination are determined
+by the `D+1` nearest neighbors of the point `S̄[i]`. The details of point selection and
+weights depend on `measure`.
 
-## Arguments
-
-- *`measure::CrossmapMeasure`*. A cross-map measure, e.g. [`ConvergentCrossMapping`](@ref), which
-    determines which cross-map procedure is applied. *Note* `crossmap` doesn't embed
-    input data, so any embedding parameters in `measure` are ignored.
-- *`target::AbstractVector`*. A scalar-valued vector.
-- *`source::AbstractDataset`*. A `Ds`-dimensional source dataset.
-
-## Data requirements
-
-Assumes that `target` and `source` have already been jointly embedded using [`embed`](@ref),
-so that indexing is correct.
-
-See also: [`CrossmapMeasure`](@ref), [`ConvergentCrossMapping`](@ref), [`PairwiseAsymmetricInference`](@ref).
+*Note: Some [`CrossmapMeasure`](@ref)s may define more general mapping
+procedures. If so, the algorithm is described in their docstring*.
 """
-function predict end
-
-# """
-#     predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractDataset) → t̂
-#     predict(measure::CrossmapMeasure, T̄::AbstractDataset, S̄::AbstractDataset) → t̂
-
-# A version of `predict` that uses the already-constructed embedding `S̄` to predict
-# univariate timeseries `t` using the given `measure`.
-
-# To obtain the correlation between observed and predicted values, you can do:
-# - `cor(t, t̂)` if `t isa AbstractVector`
-# - `fastcor(t, t̂)` if `t isa Dataset`. `fastcor` uses canonical correlation analysis
-#      to project t̂ and S̄ into a common 2D space where `cor(t, t̂)` to compute the
-#      correlation between observed and predicted values in the reduced 2D space.
-# """
 function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractDataset)
     @assert length(S̄) == length(t)
     (; d, τ, w) = measure
@@ -116,56 +137,54 @@ function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractDatas
 
     # The number of neighbors depend on the type of cross map measure. We could make
     # this a tunable parameter, but for now, just stick with dim(embedding) + 1.
-    nnd = dimension(S̄) + 1
+    nnd = n_neighbors_simplex(measure) #dimension(S̄) + 1
+
+    # TODO: maybe construct the tree at a higher level, and use a more elaborate skip
+    # function? Not sure what is fastest. Need to experiment...
     tree = KDTree(S̄, Euclidean())
-    # Todo: maybe re-use the same tree, but with a more elaborate skip function?
-    # Not sure what is fastest. Need to experiment...
-    nnidxs, ds = bulksearch(tree, S̄, NeighborNumber(nnd), Theiler(w))
-    t̂ = zeros(length(S̄))
+    nnidxs, ds = bulksearch(tree, S̄, NeighborNumber(nnd), Theiler(w + 1))
+
+    t̂ₛ = zeros(length(S̄))
     u = zeros(MVector{nnd}) # one extra neighbor due to the extra coordinate from t
     w = zeros(MVector{nnd}) # one extra neighbor due to the extra coordinate from t
     for (i, (nnidxsᵢ, dᵢ)) in enumerate(zip(nnidxs, ds))
+        # There are two cases where the distance(s) from the query point to its closest
+        # neighbor(s) is indistinguishable from zero:
+        #   1) when sampling with replacement, or
+        #   2) when input data points are very similar.
+        # When either is the case, we encounter division by zero when computing weights.
+        # To circumvent zero-division, we simply add some artifical small distance
+        # to all distances, so that there are no zero-distance neighbors.
+        if !(first(dᵢ) > 0.0)
+            for i = 1:nnd
+                # One order of magnitude higher than smallest possible float
+                dᵢ[i] += eps()*10
+            end
+        end
         u .= exp.(-dᵢ ./ dᵢ[1])
         w .= u ./ sum(u)
         # Predict using weights computed from source `s` applied to values from target `t`
-        t̂[i] = sum(w .* t[nnidxsᵢ])
+        t̂ₛ[i] = sum(w .* t[nnidxsᵢ])
     end
-    return t̂
+    return t̂ₛ
 end
 
-# Multivariate version. Used by PredictiveDistanceCorrelation.
-function predict(measure::CrossmapMeasure, T̄::AbstractDataset{DT},
-        S̄::AbstractDataset{DS}) where {DT, DS}
-    @assert length(S̄) == length(T̄)
-    (; d, τ, w) = measure
-    # Tree structure must be created for every L, because we can't include data
-    # outside the considered time range.
+"""
+    Ensemble(; measure::CrossmapMeasure, est::CrossmapEstimator, nreps::Int = 100)
 
-    # The number of neighbors depend on the type of cross map measure. We could make
-    # this a tunable parameter, but for now, just stick with dim(embedding) + 1.
-    nnd = dimension(T̄) + 1
-    tree = KDTree(S̄, Euclidean())
-    # Todo: maybe re-use the same tree, but with a more elaborate skip function?
-    # Not sure what is fastest. Need to experiment...
-    nnidxs, ds = bulksearch(tree, S̄, NeighborNumber(nnd), Theiler(w))
-    T̂ = Vector{SVector{DT}}(undef, 0) # predicted values
-    u = zeros(MVector{nnd}) # one extra neighbor due to the extra coordinate from t
-    w = zeros(MVector{nnd}) # one extra neighbor due to the extra coordinate from t
-
-    t̂ = zeros(MVector{DT})# prediction vector.
-    for (i, (nnidxsᵢ, dᵢ)) in enumerate(zip(nnidxs, ds))
-        u .= exp.(-dᵢ ./ dᵢ[1])
-        w .= u ./ sum(u)
-        # The predicted vector t̂ is the center of mass, weighted by distances from S̄
-        t̂ .= 0 # re-zero
-        for d = 1:DT
-            t̂ .+= w[d] .* T̄[nnidxsᵢ][d]
-        end
-        t̂ ./= nnd
-        push!(T̂, t̂)
+A directive to compute an ensemble analysis, where `measure` (e.g.
+[`ConvergentCrossMapping`](@ref)) is computed
+using the given estimator `est` (e.g. [`RandomVectors`](@ref))
+"""
+Base.@kwdef struct Ensemble{M, E} # todo: perhaps just use a more general Ensemble?
+    measure::M
+    est::E
+    nreps::Int = 100
+    function Ensemble(measure::M, est::E; nreps = 100) where {M, E}
+        new{M, E}(measure, est, nreps)
     end
-    return Dataset(T̂)
 end
 
+include("compat.jl") # remove this file when 2.0 is released.
 include("estimators/estimators.jl")
-include("measures/measures.jl")
+include("ccm-like/ccm-like.jl")

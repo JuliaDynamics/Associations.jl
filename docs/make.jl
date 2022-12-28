@@ -40,7 +40,7 @@ PAGES = [
         "entropy_cross.md",
         "divergence.md",
         "mutualinfo.md",
-        "cmi.md",
+        "condmutualinfo.md",
         # "TransferEntropy.md",
         # "predictive_asymmetry.md",
         # "info_estimators.md",

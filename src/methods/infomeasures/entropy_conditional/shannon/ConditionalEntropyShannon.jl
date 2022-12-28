@@ -21,7 +21,7 @@ We provide specialized implementations for:
 struct Shannon2H <: ConditionalEntropyDefinition end
 
 """
-    ConditionalEntropyShannon <: ConditionalEntropyEstimator
+    ConditionalEntropyShannon <: ConditionalDifferentialEntropyEstimator
     ConditionalEntropyShannon(; base = 2, definition::Definition = ShannonH2())
 
 `ConditionalEntropyShannon` is a generic plug-in estimator for discrete conditional
@@ -46,7 +46,7 @@ entropy_conditional(measure, ValueHistogram(b), x, y)
 ```
 See also: [`mutualinfo`](@ref).
 """
-struct ConditionalEntropyShannon{D <: Definition, E <: Renyi} <: ConditionalEntropyEstimator
+struct ConditionalEntropyShannon{D <: Definition, E <: Renyi} <: ConditionalDifferentialEntropyEstimator
     e::E
     definition::D
     function ConditionalEntropyShannon(; base = 2,

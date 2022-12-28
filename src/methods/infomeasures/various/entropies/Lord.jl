@@ -5,13 +5,13 @@ using Neighborhood: bulksearch
 export Lord
 
 """
-    Lord <: EntropyEstimator
+    Lord <: DifferentialEntropyEstimator
     Lord(k = 1, w = 0, base = 2)
 
-`Lord` estimates the [`Shannon`](@ref) mutual information using a nearest neighbor
+`Lord` estimates the [`Shannon`](@ref) entropy using a nearest neighbor
 approach with a local nonuniformity correction (LNC).
 """
-Base.@kwdef struct Lord{M} <: EntropyEstimator
+Base.@kwdef struct Lord{M} <: DifferentialEntropyEstimator
     k::Int = 10
     w::Int = 0
     metric::M = Euclidean()

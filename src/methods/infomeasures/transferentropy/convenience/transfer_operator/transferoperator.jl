@@ -42,7 +42,7 @@ function marginal_probs_from_μ(seleced_axes, visited_bins, iv::InvariantMeasure
     return marginal
 end
 
-function transferentropy(e::Entropy, est::TransferOperator{<:RectangularBinning}, s, t;
+function transferentropy(e::EntropyDefinition, est::TransferOperator{<:RectangularBinning}, s, t;
         kwargs...)
 
     emb = EmbeddingTE(; kwargs...)
@@ -71,7 +71,7 @@ function transferentropy(e::Entropy, est::TransferOperator{<:RectangularBinning}
         entropy(e, Probabilities(p_joint))
 end
 
-function transferentropy(e::Entropy, est::TransferOperator{<:RectangularBinning}, s, t, c;
+function transferentropy(e::EntropyDefinition, est::TransferOperator{<:RectangularBinning}, s, t, c;
         kwargs...)
 
     emb = EmbeddingTE(; kwargs...)

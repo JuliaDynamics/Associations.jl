@@ -17,4 +17,4 @@ CausalityTools.jl has a modular design, meaning that any "high-level" informatio
     [`ProbabilitiesEstimator`](@ref).
 - Information measures are computed in their differential/continuous
     form by using dedicated estimators, such as
-    [`EntropyEstimator`](@ref), or [`MutualInformationEstimator`](@ref).
+    [`DifferentialEntropyEstimator`](@ref), or [`MutualInformationEstimator`](@ref).

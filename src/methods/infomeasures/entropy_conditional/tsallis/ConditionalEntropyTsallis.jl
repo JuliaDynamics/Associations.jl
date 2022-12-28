@@ -23,7 +23,7 @@ where ``\\log_q`` is the `q`-logarithm (see Furuichi, 2006), and `q != 1`.
 struct Tsallis2H <: ConditionalEntropyDefinition end
 
 """
-    ConditionalEntropyTsallis <: ConditionalEntropyEstimator
+    ConditionalEntropyTsallis <: ConditionalDifferentialEntropyEstimator
     ConditionalEntropyTsallis(; base = 2, q = 1.5, k = 1,
         definition::Definition = TsallisH2())
 
@@ -61,7 +61,7 @@ entropy_conditional(measure, ValueHistogram(b), x, y)
 ```
 See also: [`mutualinfo`](@ref).
 """
-struct ConditionalEntropyTsallis{D <: Definition, E <: Tsallis} <: ConditionalEntropyEstimator
+struct ConditionalEntropyTsallis{D <: Definition, E <: Tsallis} <: ConditionalDifferentialEntropyEstimator
     e::E
     definition::D
     function ConditionalEntropyTsallis(; base = 2, q = 1.5, k = 1,

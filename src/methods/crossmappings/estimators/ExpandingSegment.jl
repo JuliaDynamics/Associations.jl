@@ -1,26 +1,24 @@
+export ExpandingSegment
+
 """
     ExpandingSegment <: CrossmapEstimator
-    ExpandingSegment(L::Int)
+    ExpandingSegment(; libsizes::Int, rng = Random.default_rng())
 
 Indicatates that cross mapping is performed on a contiguous time series segment/window,
 starting from the first available data point up to the `L`th data point.
+
+If used in an ensemble setting, the estimator is applied to time indices `Lmin:step:Lmax`
+of the joint embedding.
 """
-struct ExpandingSegment <: CrossmapEstimator
-    L::Int
-end
+struct ExpandingSegment{I, R} <: CrossmapEstimator{I, R}
+    libsizes::I
+    # For other estimators, `rng` is used for ensemble analyses. For `ExpandingSegment`,
+    # an ensemble doesn't make sense, because there is no random sampling involved.
+    # However, when the input is uncertain data, the `rng` *does* matter, so we have
+    # it here for convenience.
+    rng::R
 
-ExpandingSegment() = error(crossmap_err())
-ExpandingSegment(measure::CrossmapMeasure, x::AbstractVector) =
-    ExpandingSegment(max_segmentlength(measure, x))
-
-
-function predict(measure::CrossmapMeasure, est::ExpandingSegment,
-        t::AbstractVector, s::AbstractVector,
-        L::Int = max_segmentlength(s, measure))
-    # Embed together, so that time indices are aligned properly.
-    mixed_embedding = embed_for_crossmap(measure, s, t)
-    S̄ = mixed_embedding[1:L, 1:end-1]
-    t = mixed_embedding[1:L, end]
-    t̂ = predict(measure, S̄[1:L], t[1:L])
-    return t, t̂
+    function ExpandingSegment(; libsizes::I, rng::R = Random.default_rng()) where {I, R}
+        new{I, R}(libsizes, rng)
+    end
 end

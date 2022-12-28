@@ -24,7 +24,7 @@ entropies.
 struct Renyi2H <: ConditionalEntropyDefinition end
 
 """
-    ConditionalEntropyRenyi <: ConditionalEntropyEstimator
+    ConditionalEntropyRenyi <: ConditionalDifferentialEntropyEstimator
     ConditionalEntropyRenyi(; base = 2, q = 1.5,
         definition::Definition = RenyiH2())
 
@@ -62,7 +62,7 @@ entropy_conditional(measure, ValueHistogram(b), x, y)
 ```
 See also: [`mutualinfo`](@ref).
 """
-struct ConditionalEntropyRenyi{D <: Definition, E <: Renyi} <: ConditionalEntropyEstimator
+struct ConditionalEntropyRenyi{D <: Definition, E <: Renyi} <: ConditionalDifferentialEntropyEstimator
     e::E
     definition::D
     function ConditionalEntropyRenyi(; base = 2, q = 1.5,

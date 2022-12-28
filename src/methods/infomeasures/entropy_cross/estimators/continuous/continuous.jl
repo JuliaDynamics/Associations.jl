@@ -1,5 +1,5 @@
 # """
-#     ContinuousCrossEntropy <: CrossEntropyEstimator
+#     ContinuousCrossEntropy <: CrossDifferentialEntropyEstimator
 #     ContinuousCrossEntropy(est::ProbabilitiesEstimator, definition::CrossEntropyDefinition)
 
 # `ContinuousCrossEntropy` is a generic plug-in estimator for continuous generalized cross entropy.
@@ -14,7 +14,7 @@
 # The `ContinuousCrossEntropy estimator first uses `est` to compute probabilities, then plugs
 # these probabilities into the cross entropy formula specified by `definition`.
 # """
-# struct ContinuousCrossEntropy{P, D <: CrossEntropyDefinition} <: CrossEntropyEstimator
+# struct ContinuousCrossEntropy{P, D <: CrossEntropyDefinition} <: CrossDifferentialEntropyEstimator
 #     est::P
 #     definition::D
 # end

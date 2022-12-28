@@ -5,13 +5,13 @@ export Shannon2h
     Shannon2h <: ConditionalEntropyDefinition
 
 `Shannon2h` is a directive for [`ConditionalEntropyShannonDifferential`](@ref) used
-in [`entropy_conditional`](@ref) with an [`EntropyEstimator`](@ref)` to compute the
+in [`entropy_conditional`](@ref) with an [`DifferentialEntropyEstimator`](@ref)` to compute the
 continuous Shannon conditional entropy using the formula ``h(Y | X) = h(X,Y) - h(X)``.
 """
 struct Shannon2h <: ConditionalEntropyDefinition end
 
 """
-    ConditionalEntropyShannonDifferential <: ConditionalEntropyEstimator
+    ConditionalEntropyShannonDifferential <: ConditionalDifferentialEntropyEstimator
     ConditionalEntropyShannonDifferential(; base = 2, definition::Definition = Shannon2h())
 
 `ConditionalEntropyShannon` is a generic plug-in estimator for the continuous conditional
@@ -36,7 +36,7 @@ entropy_conditional(measure, est, x, y)
 ```
 See also: [`mutualinfo`](@ref).
 """
-struct ConditionalEntropyShannonDifferential{D <: Definition, E <: Renyi} <: ConditionalEntropyEstimator
+struct ConditionalEntropyShannonDifferential{D <: Definition, E <: Renyi} <: ConditionalDifferentialEntropyEstimator
     e::E
     definition::D
     function ConditionalEntropyShannonDifferential(; base = 2,

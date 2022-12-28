@@ -5,7 +5,7 @@ using DelayEmbeddings.StateSpaceSets: SubDataset
 using LinearAlgebra: det
 
 """
-    Gao2017 <: EntropyEstimator
+    Gao2017 <: DifferentialEntropyEstimator
     Gao2017(k = 1, w = 1)
 
 The `Gao2017` estimator (Gao et al. ,2017)[^Gao2017] can be used to estimate

@@ -211,7 +211,7 @@ function candidate_embedding(source, target;
 end
 
 
-function optim_te(e::Entropy, est, Ω, Y⁺, τs, js, idxs_source, idxs_target, idxs_cond;
+function optim_te(e::EntropyDefinition, est, Ω, Y⁺, τs, js, idxs_source, idxs_target, idxs_cond;
         α = 0.05, nsurr = 100, surr::Surrogate = RandomShuffle())
 
     τs_comb = [(τs...)...,]
@@ -255,7 +255,7 @@ function optim_te(e::Entropy, est, Ω, Y⁺, τs, js, idxs_source, idxs_target, 
 
         # If k == 1, no candidates have been selected, so CMI reduces to MI
         if k == 1
-            cmiₖ = CMIs_between_Y⁺_and_candidates[idx]
+            condmutualinfoₖ = CMIs_between_Y⁺_and_candidates[idx]
 
             for i = 1:nsurr
                 surr_cₖ = s() # Surrogate version of cₖ
@@ -268,7 +268,7 @@ function optim_te(e::Entropy, est, Ω, Y⁺, τs, js, idxs_source, idxs_target, 
             H_𝒮 = entropy(e, Dataset(𝒮...), est)
 
             # Original TE
-            cmiₖ = H_Y⁺_𝒮 +
+            condmutualinfoₖ = H_Y⁺_𝒮 +
                     entropy(e, Dataset([cₖ, 𝒮...,]...,), est) -
                     entropy(e, Dataset(Y⁺, Dataset([cₖ, 𝒮...,]...,)), est) -
                     H_𝒮
@@ -284,7 +284,7 @@ function optim_te(e::Entropy, est, Ω, Y⁺, τs, js, idxs_source, idxs_target, 
 
         # If the candidate passes the significance test, add it to list of selected candidates
         # and remove it from list of remaining candidates.
-        if cmiₖ > quantile(CMI_permutations, 1 - α)
+        if condmutualinfoₖ > quantile(CMI_permutations, 1 - α)
             push!(𝒮, cₖ)
             push!(𝒮_τs, τs_comb[idx])
             push!(𝒮_js, js_comb[idx])

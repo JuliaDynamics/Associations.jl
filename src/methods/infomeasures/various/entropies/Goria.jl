@@ -1,4 +1,4 @@
-using Entropies: EntropyEstimator
+using Entropies: DifferentialEntropyEstimator
 using Entropies: ball_volume
 using StateSpaceSets: AbstractDataset, Dataset
 using Neighborhood: Euclidean, KDTree, NeighborNumber, Theiler
@@ -7,7 +7,7 @@ using SpecialFunctions: digamma
 
 export Goria
 """
-    Goria <: EntropyEstimator
+    Goria <: DifferentialEntropyEstimator
     Goria(k = 1, w = 0, metric = Euclidean())
 
 The `Goria` estimator estimates [`Shannon`](@ref) [`entropy`](@ref) by locating the
@@ -38,7 +38,7 @@ is the digamma function.
     class of random vector entropy estimators and its applications in testing statistical
     hypotheses. Journal of Nonparametric Statistics, 17(3), 277-297.
 """
-Base.@kwdef struct Goria{M} <: EntropyEstimator
+Base.@kwdef struct Goria{M} <: DifferentialEntropyEstimator
     k::Int = 1
     w::Int = 0
     metric::M = Euclidean()

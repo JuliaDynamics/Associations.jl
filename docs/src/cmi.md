@@ -6,12 +6,12 @@ of conditional mutual informations by passing an [`Entropy`](@ref) instance as t
 argument to [`mutualinfo`](@ref).
 
 For example, to compute the Shannon conditional mutual information, do
-`cmi(Shannon(), est, x, y)`, to compute Tsallis conditional mutual information, do
-`cmi(Tsallis(; q), est, x, y)`.
+`condmutualinfo(Shannon(), est, x, y)`, to compute Tsallis conditional mutual information, do
+`condmutualinfo(Tsallis(; q), est, x, y)`.
 
 ## Implementations
 
-Any of the following estimators can be used with [`cmi`](@ref).
+Any of the following estimators can be used with [`condmutualinfo`](@ref).
 
 | Estimator                           | Principle         | Input data         |  [`Shannon`](@ref)  | [`Renyi`](@ref) | [`Tsallis`](@ref) |
 | ----------------------------------- | ----------------- | ------------------ | :-----------------: | :-------------: | :---------------: |
@@ -22,7 +22,7 @@ Any of the following estimators can be used with [`cmi`](@ref).
 ## API
 
 ```@docs
-cmi
+condmutualinfo
 ConditionalMutualInformationEstimator
 ```
 

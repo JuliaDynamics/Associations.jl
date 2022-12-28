@@ -23,7 +23,7 @@ Any of the following estimators can be used with [`entropy_cross`](@ref).
 entropy_cross
 CrossEntropy
 CrossEntropyDefinition
-CrossEntropyEstimator
+CrossDifferentialEntropyEstimator
 ```
 
 ### Shannon cross-entropy

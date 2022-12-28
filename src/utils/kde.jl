@@ -1,4 +1,8 @@
 import Entropies: ball_volume
+export densities_at_points
+export MultivariateKernel, NormalIsotropic, Epanechnikov
+export BandwidthRule, Silverman, DiksFang
+export bandwidth
 
 abstract type MultivariateKernel end
 """
@@ -45,6 +49,28 @@ end
 # -----------------------------------------
 
 """
+    densities_at_points(kernel::MultivariateKernel, x::AbstractDataset, bandwidth)
+
+Compute the local densities at each point `xᵢ ∈ x` using the given multivariate `kernel`
+and `bandwidth`.
+"""
+function densities_at_points(kernel::MultivariateKernel, x::AbstractDataset, bandwidth)
+    ρs = [density_at_point(kernel, x, bandwidth, xᵢ, i) for (i, xᵢ) in enumerate(x)]
+end
+
+function density_at_point(kernel, x::AbstractDataset{D}, bandwidth, xᵢ, i) where D
+    ρᵢ = 0.0
+    @inbounds for j in eachindex(x)
+        if j != i
+            ρᵢ += kernel((xᵢ .- x[j]) ./ bandwidth)
+        end
+    end
+    ρᵢ /= ((length(x) - 1)*bandwidth)^D
+end
+
+
+
+"""
     probability(k::MultivariateKernel, data::AbstractDataset, xᵢ; h) → p̂(xᵢ)
 
 Compute `p̂(xᵢ)`, the kernel density estimate of the probability `p(xᵢ)`, given some
@@ -58,7 +84,57 @@ function probability(kernel::MultivariateKernel, data::AbstractDataset{D, T}, x�
     return 1 / (n * h^D) * sum(kernel((x - p) / h) for p in data)
 end
 
-# https://hal.archives-ouvertes.fr/hal-00353297/document
+"""
+The supertype for all kernel density bandwidth rules.
+"""
+abstract type BandwidthRule end
+
+"""
+    bandwidth(heuristic::BandwidthRule, x::AbstractDataset)
+
+Compute the bandwidth for a kernel density estimator for the input data `x` using
+the given `heuristic`.
+
+## Supported heuristics
+
+- [`Silverman`](@ref)
+- [`DiksFang`](@ref)
+"""
+function bandwidth end
+
+"""
+    DiksFang <: BandwidthRule
+    DickFang(c = 4.8)
+
+A rule of thumb giving the bandwidth ``h`` for kernel density estimation of entropy
+as ``h = cn^{-\\dfrac{2}{7}}``, where ``n`` is the number of data points
+(Diks & Fang, 2017)[DiksFang2017].
+
+[DiksFang2017]:
+    Diks, C., & Fang, H. (2017). Detecting Granger Causality with a Nonparametric
+    Information-Based Statistic (No. 17-03). CeNDEF Working Paper.
+"""
+Base.@kwdef struct DiksFang{C} <: BandwidthRule
+    c::C = 4.8
+end
+function bandwidth(heuristic::DiksFang{C}, x::AbstractDataset) where C
+    heuristic.c * length(x)^(-2/7)
+end
+
+"""
+    Silverman <: BandwidthRule
+    Silverman()
+
+A rule of thumb giving the bandwidth ``h`` for kernel density estimation of entropy
+following the rules outlined in [this paper](https://hal.archives-ouvertes.fr/hal-00353297/document)
+
+"""
+struct Silverman <: BandwidthRule end
+
+function bandwidth(heuristic::Silverman, x::AbstractDataset)
+    silvermans_rule(x)
+end
+
 function silvermans_rule(data::AbstractDataset{D, T}) where {D, T}
     N = length(data)
     M = vcat(columns(data)...)

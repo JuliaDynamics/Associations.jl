@@ -8,75 +8,57 @@ export pvalue
 """
     LocalPermutation <: ConditionalIndependenceTest
     LocalPermutation(;
-        measure = CMI(),
-        e::Entropy = Shannon(; base = 2),
-        est = VejmelkaPalus(k = 5),
+        measure = CMIShannon(),
+        est = FrenzelPompeVelmejkaPalus(k = 5),
         kperm::Int = 5,
         nsurr::Int = 100,
-        rng = Random.default_rng(),
+        rng = Random.MersenneTwister(1234),
     )
 
-The `LocalPermutation` test  (Runge, 2018)[^Runge2018] tests whether two variables
-`X` and `Y` are conditionally independendent given a third variable `Z` (all of which
-may be multivariate).
+A generic implementation of the `LocalPermutation` test  (Runge, 2018)[^Runge2018],
+which tests whether two variables `X` and `Y` are conditionally independendent given a
+third variable `Z` (all of which may be multivariate).
 
-The test can be used for any independence `measure`, here denoted ``\\hat{M}(X; Y | Z)``.
-For example, you can use conditional mutual information, ``I(X; Y | Z)`` ([`cmi`](@ref).
+Our implementation is completely generic, so you can use any valid combination of
+`definition`, `measure` and `est` that yields a conditional dependence measure
+``\\hat{M}(X; Y | Z)`` with the same ordering as [`condmutualinfo`](@ref) (i.e. the conditional
+variable (`Z`) is the third input variable). If a certain measure doesn't have a
+`definition`, it is simply ignored.
+
+The default is to use Shannon-type conditional mutual information, ``I(X; Y | Z)``
+([`condmutualinfo`](@ref) with the [`FrenzelPompeVelmejkaPalus`](@ref]) estimator.
 
 ## Description
 
 `LocalPermutation` creates permuted `X` values using a local permutation scheme that is
 based on `kperm`-th nearest neighbor searches. It attempts ``(x_i^*, y_i, z_i)_{i=1}^N``
 where the goal is that ``x_i^*`` are drawn without replacement, and ``x_i`` is replaced
-by ``x_j`` only if ``z_i \\approx z_j``.
-
-Our implementation is completely generic, so you can use any valid combination of
-`method`, entropy type `e` and estimator `est` to compute the CMI.
-Specialized performance-increasing methods may have been implemented for some estimators.
-
-## Examples
-
-```julia
-using CausalityTools
-using Random
-
-# Create a scenario where X and Y are connected through Z. Then I(X; Y | Z) = 0.
-X = randn(1000)
-Y = X .+ randn(1000)
-Z = randn(1000) .+ 0.5*Y
-x, y, z = Dataset.([X, Y, Z])
-
-e = Shannon(; base = ℯ)
-test_vf = LocalPermutation(measure = CMIShannon(base = 2), est = VisitationFrequency(5))
-test_kr = LocalPermutation(measure = CMIShannon(base = 2), est = Kraskov(k = 10))
-test_fpvp = LocalPermutation(measure = CMIShannon(base = 2), est = FrenzelPompeVelmejkaPalus(k = 10))
-
-r_vf = independence(test_vf, x, y, z)
-r_kr = independence(test_kr, x, y, z)
-r_fpvp = independence(test_fpvp, x, y, z)
-```
+by ``x_j`` only if ``z_i \\approx z_j``. Then, for each permuted version of `X`, it
+computes the original statistic on the permuted data, keeping `Y` and `Z` fixed, i.e.
+``\\hat{M}(\\hat{X}; Y | Z)``.
 
 [^Runge2018]: Runge, J. (2018, March). Conditional independence testing based on a
     nearest-neighbor estimator of conditional mutual information. In International
     Conference on Artificial Intelligence and Statistics (pp. 938-947). PMLR.
 """
-Base.@kwdef struct LocalPermutation{M <: ConditionalMutualInformation, EST, R} <: ConditionalIndependenceTest
+Base.@kwdef struct LocalPermutation{D, M, EST, R} <: ConditionalIndependenceTest
+    definition::D = CMI4H()
     measure::M = CMIShannon(; base = 2)
     est::EST = FrenzelPompeVelmejkaPalus(k = 5)
-    rng::R = MersenneTwister(12345678)
-    kperm::Int = 5
+    rng::R = MersenneTwister(1234)
+    kperm::Int = 10
     nsurr::Int = 100
 end
 Base.show(io::IO, test::LocalPermutation) = print(io,
-"""
-`LocalPermutation` independence test.
--------------------------------------
-measure:        $(test.measure)
-estimator:      $(test.est)
-rng:            $(test.rng)
-# permutations: $(test.nsurr)
-k (perm)        $(test.kperm)
-"""
+    """
+    `LocalPermutation` independence test.
+    -------------------------------------
+    measure:        $(test.measure)
+    estimator:      $(test.est)
+    rng:            $(test.rng)
+    # permutations: $(test.nsurr)
+    k (perm)        $(test.kperm)
+    """
 )
 
 """
@@ -96,25 +78,24 @@ pvalue(r::LocalPermutationTest) = r.pvalue
 quantile(r::LocalPermutationTest, q) = quantile(r.Msurr, q)
 
 function Base.show(io::IO, test::LocalPermutationTest)
-    onesided_uq = [quantile(test.Msurr, q) for q in [0.95, 0.99]]
-
     α005 = pvalue(test) < 0.05 ?
-        "H₀ not rejected at α = 0.05 → Interpretation: X ⫫ Y | Z"  :
-        "H₀ rejected at α = 0.05  → Interpretation: X and Y are dependent given Z"
+        "H₀ rejected at α = 0.05:  Yes ✅" :
+        "H₀ rejected at α = 0.05:  No  ❌"
     α001 = pvalue(test) < 0.01 ?
-        "H₀ not rejected at α = 0.01 → Interpretation: X ⫫ Y | Z"  :
-        "H₀ rejected at α = 0.01  → Interpretation: X and Y are dependent given Z"
+        "H₀ rejected at α = 0.01:  Yes ✅" :
+        "H₀ rejected at α = 0.01:  No  ❌"
     α0001 = pvalue(test) < 0.001 ?
-        "H₀ not rejected at α = 0.01 → Interpretation: X ⫫ Y | Z"  :
-        "H₀ rejected at α = 0.01  → Interpretation: X and Y are dependent given Z"
+        "H₀ rejected at α = 0.001: Yes ✅" :
+        "H₀ rejected at α = 0.001: No  ❌"
 
     print(io,
-        """
-        `LocalPermutation` independence test (H₀: X ⫫ Y | Z)"
+        """\
+        `LocalPermutation` independence test
+        -------------------------------------
+        H₀: conditional independence
         -------------------------------------
         Estimated: $(test.M)
-        # permutations: $(test.nsurr)
-        Permutation ensemble quantiles:
+        Ensemble quantiles ($(test.nsurr) permutations):
           (99.9%): $(quantile(test.Msurr, 0.999))
           (99%):   $(quantile(test.Msurr, 0.99))
           (95%):   $(quantile(test.Msurr, 0.95))
@@ -131,16 +112,12 @@ end
 # should be done for the NN-based CMI methods, so we don't have to reconstruct
 # KD-trees and do marginal searches for all marginals all the time.
 function independence(test::LocalPermutation, x, y, z)
-    (; measure, est, rng, kperm, nsurr) = test
+    (; definition, measure, est, rng, kperm, nsurr) = test
     X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
     e = test.measure.e
     @assert length(X) == length(Y) == length(Z)
     N = length(x)
     Î = estimate(measure,est, X, Y, Z)
-
-    e.q ≈ 1 || throw(ArgumentError(
-        "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
-    ))
     tree_z = KDTree(Z, Chebyshev())
     idxs_z = bulkisearch(tree_z, Z, NeighborNumber(kperm), Theiler(0))
     𝒩 = MVector{kperm, Int16}.(idxs_z) # A statically sized copy
@@ -166,9 +143,10 @@ function independence(test::LocalPermutation, x, y, z)
             push!(𝒰, j)
             X̂.data[i] = X.data[j]
         end
-        Îs[b] = estimate(measure, est, X̂, Y, Z)
+        Îs[b] = estimate(definition, measure, est, X̂, Y, Z)
     end
     p = count(Î .<= Îs) / nsurr
+
     return LocalPermutationTest(Î, Îs, p, nsurr)
 end
 

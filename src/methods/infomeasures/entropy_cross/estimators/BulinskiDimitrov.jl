@@ -21,7 +21,7 @@ where ``\\mathbb{P}`` and ``\\mathbb{Q}`` are continuous probability measures
 with densities ``p(x)`` and ``q(x)`` (``x \\in \\mathcal{R}^D``),
 with respect to the Lebesque measure ``\\mu``, and ``dx := \\mu(dx)``.
 """
-Base.@kwdef struct BulinskiDimitrov{M} <: CrossEntropyEstimator
+Base.@kwdef struct BulinskiDimitrov{M} <: CrossDifferentialEntropyEstimator
     k::Int = 1
     w::Int = 0
     metric::M = Euclidean()

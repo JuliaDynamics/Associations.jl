@@ -14,9 +14,9 @@ export RelativeEntropyTsallis
 
 See also: [`divergence`](@ref).
 """
-struct RelativeEntropyTsallis{E <: Entropy} <: Divergence
+struct RelativeEntropyTsallis{E <: EntropyDefinition} <: Divergence
     e::E
-    function RelativeEntropyTsallis(; base = 2, q = 1.5) where {D}
+    function RelativeEntropyTsallis(; base = 2, q = 1.5)
             e = Tsallis(; base, q)
         new{typeof(e)}(e)
     end

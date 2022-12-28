@@ -1,7 +1,7 @@
 export RenyiCrossEntropy
 
 """
-    RenyiCrossEntropy <: CrossEntropyEstimator
+    RenyiCrossEntropy <: CrossDifferentialEntropyEstimator
 
 A nearest neighbor-based estimator of Rényi differential cross entropy that
 uses a variant of LoftsGaarden & Quesenberry (1965)'s kNN-based density estimates
@@ -11,7 +11,7 @@ to compute probabilities. It doesn't do any bias correction.
     We've not been able to locate this estimator in the literature, so it might be new.
     Have you found it in a paper? Please let us know.
 """
-Base.@kwdef struct RenyiCrossEntropy <: CrossEntropyEstimator
+Base.@kwdef struct RenyiCrossEntropy <: CrossDifferentialEntropyEstimator
     k::Int = 1
     w::Int = 0
 end
@@ -43,7 +43,7 @@ function entropy_cross(e::Renyi, est::RenyiCrossEntropy,
 end
 
 export RenyiCrossEntropyLord
-Base.@kwdef struct RenyiCrossEntropyLord <: CrossEntropyEstimator
+Base.@kwdef struct RenyiCrossEntropyLord <: CrossDifferentialEntropyEstimator
     k::Int = 1
     w::Int = 0
 end

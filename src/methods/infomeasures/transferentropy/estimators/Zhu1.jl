@@ -7,7 +7,7 @@ using SpecialFunctions: digamma
 export Zhu1
 
 """
-    Zhu1 <: EntropyEstimator
+    Zhu1 <: DifferentialEntropyEstimator
     Zhu1(k = 1, w = 0, base = MathConstants.e)
 
 The `Zhu1` transfer entropy estimator (Zhu et al., 2015)[^Zhu2015].
@@ -30,7 +30,7 @@ when searching for neighbours).
     neighbor estimates of entropy. American journal of mathematical and management
     sciences, 23(3-4), 301-321.
 """
-Base.@kwdef struct Zhu1{B} <: EntropyEstimator
+Base.@kwdef struct Zhu1{B} <: DifferentialEntropyEstimator
     k::Int = 1
     w::Int = 0
     base::B = MathConstants.e
@@ -41,7 +41,7 @@ Base.@kwdef struct Zhu1{B} <: EntropyEstimator
     end
 end
 
-function te(est::Zhu1,
+function t(est::Zhu1,
     S::AbstractDataset{DS, Q},
     T::AbstractDataset{DT, Q},
     T⁺::AbstractDataset{DTT, Q}

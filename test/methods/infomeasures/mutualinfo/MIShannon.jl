@@ -6,8 +6,7 @@ probests = [
     ValueHistogram(FixedRectangularBinning(0, 1, 3))
     NaiveKernel(0.2) # probably shouldn't be used.
 ]
-
-
+xw
 k = 5
 diff_entropy_estimators = [
     Kraskov(; k),
