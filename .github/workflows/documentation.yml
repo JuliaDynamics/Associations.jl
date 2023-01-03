@@ -17,12 +17,12 @@ jobs:
       - uses: julia-actions/setup-julia@v1
         with:
           version: '1'
-      - name: Install ChaosTools.jl and Entropies.jl dev branches # TODO: remove this when apprropriate
+      - name: Install ChaosTools.jl and ComplexityMeasures.jl dev branches # TODO: remove this when apprropriate
         shell: julia --color=yes --project=docs/ {0}
         run: |
           using Pkg
           Pkg.add(PackageSpec(; name="ChaosTools", rev="main"))
-          Pkg.add(PackageSpec(; name="Entropies", rev="entropy_signature"))
+          Pkg.add(PackageSpec(; name="ComplexityMeasures", rev="main"))
 
       - name: Install dependencies
         run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(path=pwd())); Pkg.instantiate()'
