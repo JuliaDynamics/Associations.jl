@@ -6,7 +6,7 @@ using LinearAlgebra: det, norm
 using StateSpaceSets: Dataset
 using StaticArrays: MVector, MMatrix, SVector, SMatrix, @SVector
 
-import Entropies: entropy, total_outcomes, outcomes, probabilities, probabilities_and_outcomes
+import ComplexityMeasures: entropy, total_outcomes, outcomes, probabilities, probabilities_and_outcomes
 
 export LocalLikelihood
 """

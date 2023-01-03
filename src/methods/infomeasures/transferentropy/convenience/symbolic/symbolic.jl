@@ -1,4 +1,4 @@
-import Entropies: SymbolicPermutation, CountOccurrences, outcomes, outcomes!
+import ComplexityMeasures: SymbolicPermutation, CountOccurrences, outcomes, outcomes!
 export SymbolicPermutation
 
 # For two or three timeseries as inputs. Each input timeseries is converted to an

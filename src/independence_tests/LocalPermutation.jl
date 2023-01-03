@@ -41,14 +41,14 @@ computes the original statistic on the permuted data, keeping `Y` and `Z` fixed,
     nearest-neighbor estimator of conditional mutual information. In International
     Conference on Artificial Intelligence and Statistics (pp. 938-947). PMLR.
 """
-Base.@kwdef struct LocalPermutation{D, M, EST, R} <: ConditionalIndependenceTest
-    definition::D = CMI4H()
+Base.@kwdef struct LocalPermutation{M, EST, R} <: ConditionalIndependenceTest
     measure::M = CMIShannon(; base = 2)
     est::EST = FrenzelPompeVelmejkaPalus(k = 5)
     rng::R = MersenneTwister(1234)
     kperm::Int = 10
     nsurr::Int = 100
 end
+
 Base.show(io::IO, test::LocalPermutation) = print(io,
     """
     `LocalPermutation` independence test.
@@ -91,9 +91,9 @@ function Base.show(io::IO, test::LocalPermutationTest)
     print(io,
         """\
         `LocalPermutation` independence test
-        -------------------------------------
-        H₀: conditional independence
-        -------------------------------------
+        ----------------------------------------------------------------------------------
+        H₀: "The first two variables are conditionally independent given the third"
+        ----------------------------------------------------------------------------------
         Estimated: $(test.M)
         Ensemble quantiles ($(test.nsurr) permutations):
           (99.9%): $(quantile(test.Msurr, 0.999))
@@ -112,7 +112,7 @@ end
 # should be done for the NN-based CMI methods, so we don't have to reconstruct
 # KD-trees and do marginal searches for all marginals all the time.
 function independence(test::LocalPermutation, x, y, z)
-    (; definition, measure, est, rng, kperm, nsurr) = test
+    (; measure, est, rng, kperm, nsurr) = test
     X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
     e = test.measure.e
     @assert length(X) == length(Y) == length(Z)
@@ -143,7 +143,7 @@ function independence(test::LocalPermutation, x, y, z)
             push!(𝒰, j)
             X̂.data[i] = X.data[j]
         end
-        Îs[b] = estimate(definition, measure, est, X̂, Y, Z)
+        Îs[b] = estimate( measure, est, X̂, Y, Z)
     end
     p = count(Î .<= Îs) / nsurr
 

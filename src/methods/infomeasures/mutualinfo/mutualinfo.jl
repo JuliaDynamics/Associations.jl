@@ -3,75 +3,42 @@ export MutualInformationEstimator
 export MutualInformationDefinition
 export mutualinfo
 
-""" The supertype of all mutual information like measures """
-abstract type MutualInformation <: InformationMeasure end
-
-""" The supertype for mutual information definitions. """
-abstract type MutualInformationDefinition <: Definition end
+""" The supertype of all mutual information measures """
+abstract type MutualInformation{E, D} <: InformationMeasure end
 
 """ The supertype of all dedicated mutual information estimators """
 abstract type MutualInformationEstimator <: InformationMeasureEstimator end
 
+# There are many ways of defining mutual information. Moreover, the definitions
+# differ for different types of base `EntropyDefinition`s. Therefore, we dispatch
+# on subtypes of `MutualInformationDefinition`.
+""" The supertype for mutual information definitions. """
+abstract type MutualInformationDefinition <: Definition end
+
+""" The supertype for all H3-type (three entropies) decomposition of mutual information. """
+abstract type MIH3 <: MutualInformationDefinition end
+
 """
-    mutualinfo(measure, est::MutualInformationEstimator, x, y)
-    mutualinfo([definition], measure, est::DifferentialEntropyEstimator, x, y)
-    mutualinfo([definition], measure, est::ProbabilitiesEstimator, x, y)
+    mutualinfo(measure::MutualInformation, est::MutualInformationEstimator, x, y)
+    mutualinfo(measure::MutualInformation, est::DifferentialEntropyEstimator, x, y)
+    mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)
 
-Estimate  `measure`, a generalized mutual information (MI),
-between `x` and `y` using the provided estimator.
+Estimate the mutual information `measure` (either [`MIShannon`](@ref) or
+[`MITsallis`](@ref)) between `x` and `y` using the provided estimator `est`.
 
-- If `est` is a [`MutualInformationEstimator`](@ref), then mutual information is computed
-    using some specialized procedure.
-- If `est` is an [`DifferentialEntropyEstimator`](@ref) or a [`ProbabilitiesEstimator`], then mutual
-    information is computed using the formula specified by `definition`, which is a
-    [`MutualInformationDefinition`](@ref) (listed below).
-
-## Supported measures (definitions)
-
-- [`MIShannon`](@ref) (defaults to [`ShannonH3`])
-- [`MITsallis`](@ref) (defaults to [`TsallisH3`]).
-
-## Supported estimators (continuous)
-
-Dedicated estimators:
-
-- [`KraskovStögbauerGrassberger1`](@ref), or [`KSG1`](@ref)
-- [`KraskovStögbauerGrassberger2`](@ref), or [`KSG2`](@ref)
-- [`GaoKannanOhViswanath`](@ref).
-- [`GaoOhViswanath`](@ref).
-
-We also support the following [`DifferentialEntropyEstimator`](@ref)s
-
-- [`Kraskov`](@ref)
-- [`KozachenkoLeonenko`](@ref)
-- [`GaoNaive`](@ref) and [`GaoNaiveCorrected`](@ref)
-- [`Goria`](@ref)
-- [`Zhu`](@ref)
-- [`ZhuSingh`](@ref)
-- [`LeonenkoProzantoSavani`](@ref)
-- [`Lord`](@ref)
-
-## Supported estimators (discrete)
-
-In principle, any [`ProbabilitiesEstimator`](@ref) that operates on multivariate data
-may be used, but you shuld make sure to use one that uses the same discretization for
-both the joint and marginal spaces. This is automatically handled if you use:
-
-- **[`ValueHistogram`](@ref)**. Bin visitation frequencies are counted in the joint space
-    `XY`, then marginal probabilities are obtained from the joint bin visits.
+The online documentation provides an [overview table](@ref mutualinfo_overview) of
+compatible measures/definition and estimators.
 """
 mutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
 
-include("shannon/MIShannon.jl")
-include("tsallis/MITsallis.jl")
+include("definitions/definitions.jl")
+include("MIShannon.jl")
+include("MITsallis.jl")
+include("MIRenyi.jl")
+
+include("common_dispatch.jl")
+
 include("estimators/estimators.jl")
 
-
-# estimate(def::MutualInformationDefinition, measure::MutualInformation, est, x, y) =
-#     estimate(def, measure, est, x, y)
-# estimate(measure::MutualInformation, est, x, y) =
-#     estimate(measure, est, x, y)
-
-# # Default to Shannon mutual information
-# estimate(est::ProbabilitiesEstimator, x, y) =
-#     estimate(MIShannon(), est, x, y)
+# Default to Shannon mutual information.
+mutualinfo(est::ProbOrDiffEst, x, y) = estimate(MIShannon(), est, x, y)

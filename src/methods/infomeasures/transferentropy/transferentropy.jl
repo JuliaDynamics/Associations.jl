@@ -1,4 +1,4 @@
-using Entropies: ProbabilitiesEstimator, EntropyDefinition, DifferentialEntropyEstimator
+using ComplexityMeasures: ProbabilitiesEstimator, EntropyDefinition, DifferentialEntropyEstimator
 export transferentropy, transferentropy!
 using DelayEmbeddings: AbstractDataset
 

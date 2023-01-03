@@ -1,5 +1,5 @@
 using DSP
-using Entropies: EntropyDefinition
+using ComplexityMeasures: EntropyDefinition
 
 export Amplitude, Phase, Hilbert
 abstract type InstantaneousSignalProperty end

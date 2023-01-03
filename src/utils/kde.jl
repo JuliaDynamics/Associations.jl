@@ -1,4 +1,4 @@
-import Entropies: ball_volume
+import ComplexityMeasures: ball_volume
 export densities_at_points
 export MultivariateKernel, NormalIsotropic, Epanechnikov
 export BandwidthRule, Silverman, DiksFang

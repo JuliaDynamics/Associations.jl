@@ -1,8 +1,8 @@
 using SpecialFunctions: gamma
 using Neighborhood: bulksearch
 using Neighborhood: Euclidean, Theiler
-import Entropies: DifferentialEntropyEstimator
-import Entropies: entropy
+import ComplexityMeasures: DifferentialEntropyEstimator
+import ComplexityMeasures: entropy
 
 export LeonenkoProzantoSavani
 
@@ -27,6 +27,11 @@ Base.@kwdef struct LeonenkoProzantoSavani <: DifferentialEntropyEstimator
     w::Int = 0
 end
 
+function entropy(e::Shannon, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
+    h = Î(1.0, est, x) # measured in nats
+    return h / log(e.base, ℯ) # convert to desired base.
+end
+
 function entropy(e::Renyi, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
     if e.q ≈ 1.0
         h = Î(e.q, est, x) # measured in nats
@@ -37,7 +42,11 @@ function entropy(e::Renyi, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) w
 end
 
 function entropy(e::Tsallis, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
-    h = (Î(e.q, est, x) - 1) / (1 - e.q) # measured in nats
+    if e.q ≈ 1.0
+        h = Î(e.q, est, x) # measured in nats
+    else
+        h = (Î(e.q, est, x) - 1) / (1 - e.q) # measured in nats
+    end
     return h / log(e.base, ℯ) # convert to desired base.
 end
 

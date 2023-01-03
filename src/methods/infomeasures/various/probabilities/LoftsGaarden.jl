@@ -1,5 +1,5 @@
 export LoftsGaarden
-import Entropies: outcome_space
+import ComplexityMeasures: outcome_space
 
 """
     Loftsgaarden <: ProbabilitiesEstimator
@@ -36,7 +36,7 @@ outcome_space(x::AbstractDataset, ::LoftsGaarden) = 1:length(x)
 function point_densities(est::LoftsGaarden, x::AbstractDataset{D}) where D
     (; k, w, metric) = est
     N = length(x)
-    bᵥ = Entropies.ball_volume(D)
+    bᵥ = ComplexityMeasures.ball_volume(D)
 
     # The bandwidth `bws[i]` for the point `x[i]` is the distance to the `k`-th nearest
     # neighbor of `x[i]`. The local density around, in contrast, in formed by the `kmax`

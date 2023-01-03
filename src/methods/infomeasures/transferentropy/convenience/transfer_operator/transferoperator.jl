@@ -1,6 +1,6 @@
 
-import Entropies: TransferOperator, invariantmeasure, InvariantMeasure, Probabilities
-using Entropies.GroupSlices
+import ComplexityMeasures: TransferOperator, invariantmeasure, InvariantMeasure, Probabilities
+using ComplexityMeasures.GroupSlices
 export TransferOperator
 
 """

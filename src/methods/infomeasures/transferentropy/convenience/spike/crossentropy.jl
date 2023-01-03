@@ -1,4 +1,4 @@
-using Entropies: KozachenkoLeonenko, ball_volume
+using ComplexityMeasures: KozachenkoLeonenko, ball_volume
 using Neighborhood
 using SpecialFunctions
 
@@ -39,7 +39,7 @@ end
 function bentropy(x::AbstractDataset{D, T}, est::KozachenkoLeonenko) where {D, T}
     (; k, w, base) = est
     Nx = length(x)
-    xds = Entropies.maximum_neighbor_distances(x, w, k)
+    xds = ComplexityMeasures.maximum_neighbor_distances(x, w, k)
     bv = ball_volume(D) # for *Euclidean* metric.
     return - digamma(k) + log(Nx - 1) + log(base, bv) +
         ((D / Nx) * sum(log.(base, xds .^ D)))

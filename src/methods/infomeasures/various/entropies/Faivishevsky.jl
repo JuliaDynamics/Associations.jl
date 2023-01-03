@@ -5,12 +5,9 @@ Base.@kwdef struct Faivishevsky{M} <: DifferentialEntropyEstimator
     w::Int = 0
     metric::M = Euclidean()
 end
-import Entropies.ball_volume
+import ComplexityMeasures.ball_volume
 using Neighborhood: search
-function entropy(e::Renyi, est::Faivishevsky, x::AbstractDataset{D}) where D
-    e.q == 1 || throw(ArgumentError(
-        "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimator"
-    ))
+function entropy(e::Shannon, est::Faivishevsky, x::AbstractDataset{D}) where D
     (; k, w, metric) = est
     N = length(x)
     tree = KDTree(x, metric)

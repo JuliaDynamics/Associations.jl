@@ -12,7 +12,7 @@ The entropy (first argument) is optional; if not given, `Shannon()` is used inst
 
 !!! note "Types of transfer entropy"
 The first argument `e` controls the type of transfer entropy, and `e` can be any
-`Entropy` from Entropies.jl. The default, `Shannon()`, computes the regular Shannon
+`Entropy` from ComplexityMeasures.jl. The default, `Shannon()`, computes the regular Shannon
 transfer entropy. Use `Renyi()` to compute generalized Rényi transfer
 entropy[^Jizba2012].
 
@@ -194,7 +194,7 @@ end
 
 Estimate Shannon transfer entropy from `s` to `t`, optionally conditioning on `c`,
 by a sum of marginal entropies, using an [`DifferentialEntropyEstimator`](@ref) estimator from
-[Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl).
+[ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl).
 
 These methods estimate entropies using some procedure that doesn't explicitly construct a
 probability distribution.

@@ -3,6 +3,7 @@ export InformationMeasure
 export InformationMeasureEstimator
 export InformationMeasureDefinition # Actually, InformationMeasure and InformationMeasureDefinition could be identical
 
+const ProbOrDiffEst = Union{ProbabilitiesEstimator, DifferentialEntropyEstimator}
 """
 The supertype for all estimators of information-based measures.
 """
@@ -35,6 +36,10 @@ Rényi-based mutual information.
 - [`MIShannon`](@ref). Discrete Shannon mutual information.
 - [`MITsallisFuruichi`](@ref). Discrete Tsallis mutual information, as defined by
     Furuichi (2006).
+
+### Conditional mutual information (CMI)
+
+- [`CMIDefinitionRenyiSarbu`](@ref). Discrete Rényi CMI.
 """
 abstract type InformationMeasure <: CausalityMeasure end
 
@@ -46,60 +51,17 @@ Given some `input` data, estimate some information measure using the given
 """
 function estimate(measure::InformationMeasure, args...; kwargs...) end
 
-# Things that will be eventually moved to Entropies.jl
+# Maximum-likelihood, jackknife, etc. These are common estimators
+# that can be used to improve various discrete estimates.
+include("generic_estimators/generic_estimators.jl")
+
+# Things that will be eventually moved to ComplexityMeasures.jl
 include("various/probabilities.jl")
 include("various/entropies.jl")
 
 # Higher-level measures
-#include("entropy_conditional/entropy_conditional.jl")
-#include("entropy_cross/entropy_cross.jl")
-#include("divergence/divergence.jl")
 include("mutualinfo/mutualinfo.jl")
-#include("condmutualinfo/condmutualinfo.jl")
-#include("transferentropy/transferentropy.jl")
+include("condmutualinfo/condmutualinfo.jl")
 
-
-# """
-#     EstimationMethod
-
-# Some information measures, like mutual information or conditional mutual information,
-# may be computed in sevaral different ways. In CausalityTools, we call these
-# *compound* measures. For example, mutual information may be computed as a sum of
-# marginal entropy terms, or in terms of a KL-divergence.
-
-# `EstimationMethod` is the supertype of all compound estimation methods, which
-# in the case of information measures are methods of decomposing higher-level measures
-# into lower-level ones. Currently, subtypes are
-
-# - [`MI2`](@ref) (used to estimate conditional mutual information)
-# - [`H4`](@ref) (used to estimate conditional mutual information)
-# - [`H3`](@ref) (used to estimate mutual information)
-# """
-# abstract type EstimationMethod end
-# struct MI2 <: EstimationMethod end
-# struct H3 <: EstimationMethod end
-# struct H4 <: EstimationMethod end
-
-# struct KLDiv <: EstimationMethod end
-
-# export MI2, H3, H4
-
-# Things that will be eventually moved to Entropies.jl
-# include("various/probabilities.jl")
-# include("various/entropies.jl")
-
-# # The below belong in this package.
-# include("entropy_cross/entropy_cross.jl")
-# include("divergence/divergence.jl")
-# include("entropy_conditional/entropy_conditional.jl")
-# include("mutualinfo/mutualinfo.jl")
-# include("conditional_mutualinfo/conditional_mutualinfo.jl")
-#include("transferentropy/transferentropy.jl")
-#include("predictive_asymmetry/predictive_asymmetry.jl")
-
-# TODO:
-# Explain somewhere in the documentation that if `ProbabilitiesEstimators`
-# are used, then the *discrete* version of whatever measure is computed.
-# Otherwise, the *differential* entropy/mi/condmutualinfo/whatever is estimated.
-# Some methods are *compound measures*, in the sense that they can be built
-# from lower-level measures.
+# Estimation of marginal/joint probabilities for all discrete measures.
+include("probabilities_dispatch/probabilities_dispatch.jl")

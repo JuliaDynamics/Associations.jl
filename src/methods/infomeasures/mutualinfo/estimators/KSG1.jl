@@ -56,9 +56,6 @@ function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::Vec
     e = measure.e
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
-    e.q == 1 || throw(ArgumentError(
-        "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
-    ))
     (; k, w, metric_joint, metric_marginals) = est
     joint = Dataset(x...)
     marginals = Dataset.(x)

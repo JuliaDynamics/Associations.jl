@@ -5,7 +5,7 @@ export GenericKernel
     GenericKernel(bandwidth = Silverman(), kernel::MultivariateKernel = NormalIsotropic())
 
 A generic, multivariate plug-in estimator for entropies based on kernel density estimation
-(KDE).
+(KDE) that can in principle be used to compute any differential entropy.
 
 Data should be standardized to zero mean and unit variance before applying `GenericKernel`.
 

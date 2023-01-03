@@ -1,4 +1,4 @@
-using Entropies: ball_volume
+using ComplexityMeasures: ball_volume
 using SpecialFunctions: gamma
 
 export PoczosSchneiderCMI
