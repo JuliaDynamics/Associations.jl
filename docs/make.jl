@@ -6,7 +6,7 @@ CI && Pkg.instantiate()
 ENV["GKSwstype"] = "100" # allow local builds without output
 using Documenter
 using DocumenterTools: Themes
-using Entropies
+using ComplexityMeasures
 using CausalityTools
 
 # %% JuliaDynamics theme.
@@ -31,24 +31,32 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "Independence tests" => "independence.md",
-    "Cross mappings" => "cross_mappings.md",
+
     "Information measures" => [
-        "probabilities.md",
-        "entropy.md",
-        "entropy_conditional.md",
-        "entropy_cross.md",
-        "divergence.md",
+
+        "Information basics" => [
+            "API and design" => "information_basics.md",
+            "probabilities.md",
+            "entropy.md",
+        ],
         "mutualinfo.md",
-        "condmutualinfo.md",
+        #"condmutualinfo.md",
+        "Examples" => [
+            "Entropy" => "examples/examples_entropy.md",
+            "Mutual information" => "examples/examples_mutualinfo.md"
+        ],
         # "TransferEntropy.md",
         # "predictive_asymmetry.md",
         # "info_estimators.md",
     ],
+    "Independence tests" => "independence.md",
+
+    "Cross mappings" => "cross_mappings.md",
+
 ]
 
 makedocs(
-    modules = [CausalityTools, Entropies],
+    modules = [CausalityTools, ComplexityMeasures],
     format = Documenter.HTML(
         prettyurls = CI,
         assets = [
