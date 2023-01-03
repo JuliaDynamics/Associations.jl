@@ -1,21 +1,26 @@
 module CausalityTools
+    using Reexport
 
-    import StateSpaceSets: Dataset, columns, standardize
-    export Dataset, columns, standardize
+    # Datasets and embeddings.
+    using StateSpaceSets
+    using DelayEmbeddings: embed, genembed
+    export embed, genembed
 
     import DynamicalSystemsBase: trajectory
-    export trajectory
-
     import DynamicalSystemsBase: DiscreteDynamicalSystem, ContinuousDynamicalSystem
+    export trajectory
     export DiscreteDynamicalSystem, ContinuousDynamicalSystem
+    @reexport using StateSpaceSets
 
-    using Reexport
-    @reexport using Entropies
+    # Probabilities and entropies
+    @reexport using ComplexityMeasures
+
+    # Null distributions
     @reexport using TimeseriesSurrogates
 
     include("core.jl")
     include("methods/infomeasures/infomeasures.jl")
-    #include("methods/crossmappings/crossmappings.jl")
+    include("methods/crossmappings/crossmappings.jl")
     #include("methods/ccm/ccm.jl")
     #include("methods/joint_distance_distribution/joint_distance_distribution.jl")
     #include("methods/pairwise_asymmetric_inference/pairwise_asymmetric_inference.jl")
@@ -23,10 +28,9 @@ module CausalityTools
     #include("example_systems/ExampleSystems.jl")
 
     include("utils/utils.jl")
-    include("independence_tests/independence.jl")
 
     # # Independence tests must be loaded after everything else has been defined.
-    # include("independence.jl")
+    include("independence_tests/independence.jl")
 
     #using Requires
     #function __init__()
