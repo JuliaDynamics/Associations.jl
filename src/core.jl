@@ -1,5 +1,5 @@
 using DelayEmbeddings: AbstractDataset
-using Entropies: ProbabilitiesEstimator
+using ComplexityMeasures: ProbabilitiesEstimator
 const Vector_or_Dataset{D, T} = Union{AbstractVector{T}, AbstractDataset{D, T}} where {D, T}
 
 export CausalityMeasure
