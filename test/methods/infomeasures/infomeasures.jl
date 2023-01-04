@@ -1,4 +1,5 @@
 #testfile("divergence/divergence.jl")
+testfile("contingency_matrices.jl")
 testfile("mutualinfo/mutualinfo.jl")
 testfile("conditional_mutualinfo/cmi.jl")
 #testfile("transfer_entropy/transferentropy.jl")

@@ -1,3 +1,7 @@
+# This should probably be converted to "marginal encodings" or something like that,
+# which can be re-used both for contingency tables and here
+include("marginal_encodings.jl")
+
 export marginal_probabilities
 
 """
