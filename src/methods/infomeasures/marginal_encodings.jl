@@ -30,7 +30,7 @@ function marginal_encodings(est::SymbolicPermutation{m}, x::AbstractVector...) w
     return [encode.(Ref(est.encoding), embed(xᵢ, m, est.τ).data) for xᵢ in x]
 end
 
-function marginal_encodings(est::Dispersion{m}, x::AbstractVector...) where {m}
+function marginal_encodings(est::Dispersion, x::AbstractVector...)
     return [symbolize_for_dispersion(est, xᵢ) for xᵢ in x]
 end
 

@@ -38,38 +38,9 @@ struct CMIShannon{E <: Shannon} <: ConditionalMutualInformation{E}
 end
 
 function estimate(measure::CMIShannon, est::ProbOrDiffEst, x, y, z)
-    e = measure.e
-    X = Dataset(x)
-    Y = Dataset(y)
-    Z = Dataset(z)
-    XZ = Dataset(X, Z)
-    YZ = Dataset(Y, Z)
-    XYZ = Dataset(X, Y, Z)
-    cmi = entropy(e, est, XZ) +
-        entropy(e, est, YZ)  -
-        entropy(e, est, XYZ) -
-        entropy(e, est, Z)
-    return cmi
-end
-
-# Override some definitions
-const WellDefinedCMIShannonProbEsts{m, D} = Union{
-    SymbolicPermutation{m},
-    ValueHistogram{<:FixedRectangularBinning{D}},
-    Dispersion
-} where {m, D}
-
-function estimate(measure::CMIShannon, est::WellDefinedCMIShannonProbEsts{m, D},
-        x, y, z) where {E, m, D}
-    e = measure.e
-    pXZ, pYZ, pXYZ, pZ = marginal_probabilities(measure, est, x, y, z)
-    HXZ = entropy(e, pXZ)
-    HYZ = entropy(e, pYZ)
-    HXYZ = entropy(e, pXYZ)
-    HZ = entropy(e, pZ)
+    HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h(measure, est, x, y, z)
     return HXZ + HYZ - HXYZ - HZ
 end
-
 
 function estimate(measure::CMIShannon, est::MutualInformationEstimator, x, y, z)
     X = Dataset(x)

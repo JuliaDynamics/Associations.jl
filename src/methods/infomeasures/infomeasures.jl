@@ -69,6 +69,3 @@ include("entropy_conditional/entropy_conditional.jl")
 include("entropy_joint.jl")
 include("mutualinfo/mutualinfo.jl")
 include("condmutualinfo/condmutualinfo.jl")
-
-# Estimation of marginal/joint probabilities for all discrete measures.
-include("probabilities_dispatch/probabilities_dispatch.jl")

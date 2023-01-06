@@ -27,7 +27,6 @@ The supertype of all conditional mutual information estimators.
 abstract type ConditionalMutualInformationEstimator end
 const CMIEstimator = ConditionalMutualInformationEstimator
 
-
 """
     condmutualinfo(measure::CMI, est::CMIEstimator, x, y, z) → cmi::Real
     condmutualinfo(measure::CMI, est::DifferentialEntropyEstimator, x, y, z) → cmi::Real
@@ -45,17 +44,6 @@ CMIs appear in many forms in the scientific literature. We support the following
 """
 condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
 
-# - The first set of signatures is for discrete conditional mutual informations (meaning that
-#     they're computed directly from a set of probabilities estimated by a
-#     [`ProbabilitiesEstimator`](@ref)).
-#     For these methods to give meaningful results, you must ensure that the `est` gives
-#     the *the same* [`outcome_space`](@ref) for both `x` and `y`. For example, use a
-#     [`ValueHistogram`](@ref) with a [`FixedRectangularBinning`](@ref).
-# - The second set of signatures is for differential conditional mutual informations (meaning
-#     that they're computed from density estimates). For a full list of compatible
-#     definitions and estimators, see the online documentation.
-
-#include("definitions/definitions.jl")
 include("CMIShannon.jl")
 include("CMIRenyi.jl")
 include("estimators/estimators.jl")
@@ -64,3 +52,44 @@ include("estimators/estimators.jl")
 condmutualinfo(est::ProbOrDiffEst, x, y, z) = estimate(CMIShannon(), est, x, y, z)
 condmutualinfo(est::MutualInformationEstimator, x, y, z) =
     estimate(CMIShannon(), est, x, y, z)
+
+# Generic H4-formulation of CMI
+function marginal_entropies_cmi4h(measure::ConditionalMutualInformation, est, x, y, z)
+    e = measure.e
+    Z = Dataset(z)
+    Y = Dataset(y)
+    X = Dataset(x)
+    XZ = Dataset(X, Z)
+    YZ = Dataset(Y, Z)
+    XYZ = Dataset(X, Y, Z)
+
+    HXZ = entropy(e, est, XZ)
+    HYZ = entropy(e, est,YZ)
+    HXYZ = entropy(e, est, XYZ)
+    HZ = entropy(e, est, Z)
+    return HXZ, HYZ, HXYZ, HZ
+end
+
+# Override some definitions, because the estimator behaviour need to be adjusted
+# for multiple input variables.
+const WellDefinedCMIShannonProbEsts{m, D} = Union{
+    SymbolicPermutation{m},
+    ValueHistogram{<:FixedRectangularBinning{D}},
+    Dispersion
+} where {m, D}
+
+function marginal_entropies_cmi4h(measure::CMIShannon,
+        est::WellDefinedCMIShannonProbEsts{m, D},
+        x, y, z) where {m, D}
+    e = measure.e
+    eX, eY, eZ = marginal_encodings(est, x, y, z)
+    eXZ = Dataset(eX, eZ)
+    eYZ = Dataset(eY, eZ)
+    eXYZ = Dataset(eX, eY, eZ)
+
+    HXZ = entropy(e, CountOccurrences(), eXZ)
+    HYZ = entropy(e, CountOccurrences(), eYZ)
+    HXYZ = entropy(e, CountOccurrences(), eXYZ)
+    HZ = entropy(e, CountOccurrences(), eZ)
+    return HXZ, HYZ, HXYZ, HZ
+end
