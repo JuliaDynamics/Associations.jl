@@ -73,7 +73,7 @@ diff_mi_estimators = [
         measure = MIShannon(base = 2)
         @test mutualinfo(measure, est, w1, w2) isa Real # default
         # Doesn't work for datasets
-        @test_throws ArgumentErrorError mutualinfo(measure, est, x, y)
+        @test_throws ErrorException mutualinfo(measure, est, x, y)
     end
 
     # ----------------------------------------------------------------
