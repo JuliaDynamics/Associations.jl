@@ -66,20 +66,22 @@ function estimate(
     return (1 / (q - 1) * (1 - mi) / (1-q)) / log(e.base, ℯ)
 end
 
-function estimate(measure::MITsallisFuruichi, est::ProbabilitiesEstimator, x, y)
+function estimate(measure::MITsallisFuruichi, est::ProbOrDiffEst, x, y)
+    e = measure.e
+    X = Dataset(x); Y = Dataset(y); XY = Dataset(X, Y)
+    HX = entropy(e, est, X)
+    HY = entropy(e, est, Y)
+    HXY = entropy(e, est, XY)
+    return HX + HY - HXY
+end
+
+function estimate(measure::MITsallisFuruichi, est::WellDefinedMIShannonProbEsts{m, D},
+        x, y) where { m, D}
+    e = measure.e
     pX, pY, pXY = marginal_probabilities(measure, est, x, y)
     e = measure.e
     HX = entropy(e, pX)
     HY = entropy(e, pY)
     HXY = entropy(e, pXY)
     return HX + HY - HXY
-end
-
-function estimate(measure::MITsallisFuruichi, est::DifferentialEntropyEstimator, x, y)
-    e = measure.e
-    X = Dataset(x); Y = Dataset(y); XY = Dataset(X, Y)
-    hX = entropy(e, est, X)
-    hY = entropy(e, est, Y)
-    hXY = entropy(e, est, XY)
-    return hX + hY - hXY
 end

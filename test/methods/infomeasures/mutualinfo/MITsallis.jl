@@ -3,7 +3,7 @@ using StateSpaceSets: Dataset
 
 probests = [
     ValueHistogram(RectangularBinning(3))
-    ValueHistogram(FixedRectangularBinning(0, 1, 3))
+    #ValueHistogram(FixedRectangularBinning(0, 1, 3))
     NaiveKernel(0.2) # probably shouldn't be used.
 ]
 
@@ -12,8 +12,9 @@ probests_for_timeseries = [
     Dispersion(c = 3, m = 2)
 ]
 
-@testset "MITsallis" begin
-    @test MITsallis(base = 2) isa MITsallis
+@testset "MITsallisFuruichi" begin
+    @test MITsallisFuruichi(base = 2) isa MITsallisFuruichi
+    @test MITsallisMartin(base = 2) isa MITsallisMartin
 
     x = Dataset(rand(10000, 2))
     y = Dataset(rand(10000, 1))

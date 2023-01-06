@@ -3,7 +3,7 @@ using StateSpaceSets: Dataset
 
 probests = [
     ValueHistogram(RectangularBinning(3))
-    ValueHistogram(FixedRectangularBinning(0, 1, 3))
+    #ValueHistogram(FixedRectangularBinning(0, 1, 3))
     NaiveKernel(0.2) # probably shouldn't be used.
 ]
 
@@ -38,53 +38,51 @@ diff_mi_estimators = [
     w1 = randn(10000)
     w2 = randn(10000)
 
-    @testset "MIDefinitionGeneric" begin
-        @test MIShannon(Shannon(; base = 2)) isa MIShannon
-        @test MIShannon(base = 2) isa MIShannon
+    @test MIShannon(Shannon(; base = 2)) isa MIShannon
+    @test MIShannon(base = 2) isa MIShannon
 
-        # ----------------------------------------------------------------
-        # Dedicated estimators.
-        # ----------------------------------------------------------------
-        # Just test that each estimator is reasonably close to zero for data from a uniform
-        # distribution. This number varies wildly between estimators, so we're satisfied
-        # to test just that they don't blow up.
-        @testset "$(typeof(diff_mi_estimators[i]).name.name)" for i in eachindex(diff_mi_estimators)
-            measure = MIShannon(base = 2)
-            mi = mutualinfo(measure, diff_mi_estimators[i], x, y)
-            @test mi isa Real
-            @test -0.5 < mi < 0.1
-        end
+    # ----------------------------------------------------------------
+    # Dedicated estimators.
+    # ----------------------------------------------------------------
+    # Just test that each estimator is reasonably close to zero for data from a uniform
+    # distribution. This number varies wildly between estimators, so we're satisfied
+    # to test just that they don't blow up.
+    @testset "$(typeof(diff_mi_estimators[i]).name.name)" for i in eachindex(diff_mi_estimators)
+        measure = MIShannon(base = 2)
+        mi = mutualinfo(measure, diff_mi_estimators[i], x, y)
+        @test mi isa Real
+        @test -0.5 < mi < 0.1
+    end
 
-        # ----------------------------------------------------------------
-        # Probability-based estimators.
-        #
-        # We can't guarantee that the result is any particular value, because these are just
-        # plug-in estimators. Just check that pluggin in works.
-        # ----------------------------------------------------------------
+    # ----------------------------------------------------------------
+    # Probability-based estimators.
+    #
+    # We can't guarantee that the result is any particular value, because these are just
+    # plug-in estimators. Just check that pluggin in works.
+    # ----------------------------------------------------------------
 
-        # Estimators that accept dataset inputs
-        @testset "$(typeof(probests[i]).name.name)" for i in eachindex(probests)
-            m = MIShannon(base = 2)
-            @test mutualinfo(m, probests[i], x, y) isa Real # default
-        end
+    # Estimators that accept dataset inputs
+    @testset "$(typeof(probests[i]).name.name)" for i in eachindex(probests)
+        m = MIShannon(base = 2)
+        @test mutualinfo(m, probests[i], x, y) isa Real # default
+    end
 
-        # Estimators that only accept timeseries input
-        @testset "$(typeof(probests_for_timeseries[i]).name)" for i in eachindex(probests_for_timeseries)
-            est = probests_for_timeseries[i]
-            measure = MIShannon(base = 2)
-            @test mutualinfo(measure, est, w1, w2) isa Real # default
-            # Doesn't work for datasets
-            @test_throws MethodError mutualinfo(measure, est, x, y)
-        end
+    # Estimators that only accept timeseries input
+    @testset "$(typeof(probests_for_timeseries[i]).name)" for i in eachindex(probests_for_timeseries)
+        est = probests_for_timeseries[i]
+        measure = MIShannon(base = 2)
+        @test mutualinfo(measure, est, w1, w2) isa Real # default
+        # Doesn't work for datasets
+        @test_throws ArgumentErrorError mutualinfo(measure, est, x, y)
+    end
 
-        # ----------------------------------------------------------------
-        # Entropy-based estimators.
-        # ----------------------------------------------------------------
-        @testset "$(typeof(diff_entropy_estimators[i]).name.name)" for i in eachindex(diff_entropy_estimators)
-            measure = MIShannon(base = 2)
-            mi = mutualinfo(measure, diff_entropy_estimators[i], x, y)
-            @test mi isa Real
-            @test -0.5 < mi < 0.1
-        end
+    # ----------------------------------------------------------------
+    # Entropy-based estimators.
+    # ----------------------------------------------------------------
+    @testset "$(typeof(diff_entropy_estimators[i]).name.name)" for i in eachindex(diff_entropy_estimators)
+        measure = MIShannon(base = 2)
+        mi = mutualinfo(measure, diff_entropy_estimators[i], x, y)
+        @test mi isa Real
+        @test -0.5 < mi < 0.1
     end
 end

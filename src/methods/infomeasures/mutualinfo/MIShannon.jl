@@ -58,6 +58,9 @@ struct MIShannon{E <: Shannon} <: MutualInformation{E}
         e = Shannon(; base)
         new{typeof(e)}(e)
     end
+    function MIShannon(e::Shannon)
+        new{typeof(e)}(e)
+    end
 end
 
 function estimate(measure::MIShannon, pxy::ContingencyMatrix{T, 2}) where {T}
@@ -87,4 +90,22 @@ function estimate(measure::MIShannon, est::ProbOrDiffEst, x, y)
     hY = entropy(e, est, Y)
     hXY = entropy(e, est, XY)
     return hX + hY - hXY
+end
+
+# Override some definitions
+const WellDefinedMIShannonProbEsts{m, D} = Union{
+    SymbolicPermutation{m},
+    ValueHistogram{<:FixedRectangularBinning{D}},
+    Dispersion
+} where {m, D}
+
+function estimate(measure::MIShannon, est::WellDefinedMIShannonProbEsts{m, D},
+        x, y, z) where { m, D}
+    e = measure.e
+    pXZ, pYZ, pXYZ, pZ = marginal_probabilities(measure, est, x, y, z)
+    HXZ = entropy(e, pXZ)
+    HYZ = entropy(e, pYZ)
+    HXYZ = entropy(e, pXYZ)
+    HZ = entropy(e, pZ)
+    return HXZ + HYZ - HXYZ - HZ
 end
