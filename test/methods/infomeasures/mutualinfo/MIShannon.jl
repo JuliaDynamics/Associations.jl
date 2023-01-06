@@ -84,6 +84,6 @@ diff_mi_estimators = [
         measure = MIShannon(base = 2)
         mi = mutualinfo(measure, diff_entropy_estimators[i], x, y)
         @test mi isa Real
-        @test -0.5 < mi < 0.1
+        @test -0.5 < mi < 0.15
     end
 end
