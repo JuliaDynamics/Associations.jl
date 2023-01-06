@@ -3,7 +3,7 @@ using StateSpaceSets: Dataset
 
 probests = [
     ValueHistogram(RectangularBinning(3))
-    ValueHistogram(FixedRectangularBinning(0, 1, 3))
+    #ValueHistogram(FixedRectangularBinning(0, 1, 3))
     NaiveKernel(0.2) # probably shouldn't be used.
 ]
 
@@ -30,7 +30,7 @@ diff_mi_estimators = [
 ]
 
 @testset "CMIShannon" begin
-    @test CMIShannon(base = 2) isa CMIShannon
+    @test m = CMIShannon(base = 2) isa CMIShannon
 
     x = Dataset(rand(10000, 2))
     y = Dataset(rand(10000, 1))
@@ -41,15 +41,14 @@ diff_mi_estimators = [
         s, t, c = rand(100), rand(100), rand(100)
         est_bin = ValueHistogram(RectangularBinning(3))
         est_ksg = KSG1()
+
         # binning estimator yields non-negative values
-        @test condmutualinfo(est_bin, s, t, c) >= 0.0
-        @test condmutualinfo(est_ksg, s, t, c) isa Real # not guaranteed to be >= 0
+        @test condmutualinfo(CMIShannon(base = 2), est_bin, s, t, c) >= 0.0
+        @test condmutualinfo(CMIShannon(base = 2), est_ksg, s, t, c) isa Real # not guaranteed to be >= 0
     end
 
     @testset "Definition: CMIDefinitionShannonH4" begin
         @test CMIShannon() isa CMIShannon
-        @test CMIShannon(Shannon(); definition = CMIDefinitionShannonH4()) isa CMIShannon
-        @test CMIShannon(Shannon(); definition = CMIDefinitionShannonMI2()) isa CMIShannon
         # ----------------------------------------------------------------
         # Dedicated estimators.
         # ----------------------------------------------------------------

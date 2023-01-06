@@ -26,14 +26,14 @@ probests_for_timeseries = [
         # plug-in estimators. Just check that pluggin in works.
         @testset "$(typeof(probests[i]).name.name)" for i in eachindex(probests)
             est = probests[i]
-            mi_furu = MITsallis(q = 1.5, base = 2, definition = MITsallisFuruichi())
+            mi_furu = MITsallisFuruichi(q = 1.5, base = 2)
             @test mutualinfo(mi_furu, est, x, y) isa Real
         end
 
         # Estimators that only accept timeseries input
         @testset "$(typeof(probests_for_timeseries[i]).name)" for i in eachindex(probests_for_timeseries)
             est = probests_for_timeseries[i]
-            mi_furu = MITsallis(q = 1.5, base = 2, definition = MITsallisFuruichi())
+            mi_furu = MITsallisFuruichi(q = 1.5, base = 2)
             @test mutualinfo(mi_furu, est, w1, w2) isa Real
             # Doesn't work for datasets.
             #@test_throws MethodError mutualinfo(measure, est, x, y)
@@ -45,14 +45,14 @@ probests_for_timeseries = [
         # plug-in estimators. Just check that pluggin in works.
         @testset "$(typeof(probests[i]).name.name)" for i in eachindex(probests)
             est = probests[i]
-            mi_mart = MITsallis(q = 1.5, base = 2, definition = MITsallisMartin())
+            mi_mart = MITsallisMartin(q = 1.5, base = 2)
             @test mutualinfo(mi_mart, est, x, y) isa Real
         end
 
         # Estimators that only accept timeseries input
         @testset "$(typeof(probests_for_timeseries[i]).name)" for i in eachindex(probests_for_timeseries)
             est = probests_for_timeseries[i]
-            mi_mart = MITsallis(q = 1.5, base = 2, definition = MITsallisMartin())
+            mi_mart = MITsallisMartin(q = 1.5, base = 2)
             @test mutualinfo(mi_mart, est, w1, w2) isa Real
             # Doesn't work for datasets.
             #@test_throws MethodError mutualinfo(measure, est, x, y)
