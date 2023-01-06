@@ -42,10 +42,6 @@ PAGES = [
         "Mutual information" => "mutualinfo.md",
 
         "Conditional mutual information" => "condmutualinfo.md",
-        "Examples" => [
-            "Entropy" => "examples/examples_entropy.md",
-            "Mutual information" => "examples/examples_mutualinfo.md"
-        ],
         "Timeseries analysis" => [
             "Transfer entropy" => "transferentropy.md",
             # "predictive_asymmetry.md",
