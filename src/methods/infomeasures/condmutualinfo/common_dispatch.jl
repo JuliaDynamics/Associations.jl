@@ -30,20 +30,6 @@ function estimate(measure::CMI{E, D}, est, args...) where {E, D}
     #
 end
 
-function estimate(measure::CMI, est::ProbOrDiffEst, x, y, z)
-    e = measure.e
-    X = Dataset(x)
-    Y = Dataset(y)
-    Z = Dataset(z)
-    XZ = Dataset(X, Z)
-    YZ = Dataset(Y, Z)
-    XYZ = Dataset(X, Y, Z)
-    cmi = entropy(e, est, XZ) +
-        entropy(e, est, YZ) -
-        entropy(e, est, XYZ) -
-        entropy(e, est, Z)
-    return cmi / log(e.base, ℯ)
-end
 
 ###########################################################################################
 # Specialized dispatch.

@@ -4,7 +4,7 @@ export CMIDefinitionRenyiH4
     CMIDefinitionRenyiH4 <: ConditionalMutualInformationDefinition
     CMIDefinitionRenyiH4()
 
-A directive to compute Renyi conditional mutual information (CMI) as a sum of four
+A directive to compute Rényi conditional mutual information (CMI) as a sum of four
 entropy terms
 
 ```math
@@ -20,6 +20,6 @@ I(X; Y | Z) = h^R(X, Z) + h^R(Y, z) - h^R(X, Y, Z) - h^R(Z).
 ```
 
 !!! info
-    Rényi CMO do not share all properties of Shannon CMI.
+    Rényi CMI does not share all properties of Shannon CMI.
 """
 struct CMIDefinitionRenyiH4 <: CMIH4 end

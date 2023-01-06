@@ -1,42 +1,50 @@
-export ContingencyMatrix
-export marginal_probs
-
 import Base: size, getindex, setindex
 import ComplexityMeasures: probabilities, outcomes
+using StatsBase: levelsmap
 
-# Contigency matrices (i.e normalized multidimensional histograms) for 2D and 3D.
-# This could in principle be done with fewer lines of code using a generated function,
-# but we only need a maximum of 3D matrices, so we just do it manually for now.
-# This is *not* optimized for speed, but it *works*
+export ContingencyMatrix
+export probabilities, outcomes
+export contingency_matrix
 
+# This should be done so that the following can be added to the docs, but for now,
+# we only need the table, not information about variables.
+# Let `c` be a 2-dimensional `ContingencyMatrix` constructed from input data `x` and `y`.
+# Let `Ωx = unique(x)` and `Ωy = unique(y)`. `c[i, j]` then corresponds to the
+# outcome `(unique(Ωx)[i], unique(Ωy)[j]`). The generalization to higher dimensions is
+# straight-forward.
+
+# This is not optimized for speed, but it *works*
 """
     ContingencyMatrix{T, N} <: AbstractArray{T, N}
-    ContingencyMatrix(x, y, [z], ...) → c::ContingencyMatrix
-    ContingencyMatrix(est::ProbabilitiesEstimator, x, y, [z], ...) → c::ContingencyMatrix
 
-Estimate a contingency matrix (an `N`-dimensional empirical probability mass function,
-taking naive relative frequency counts as probability estimates).
+`ContingencyMatrix` is just a simple wrapper around `AbstractArray{T, N}` (plus some
+extras) that is a multivariate analogue of [`Probabilities`](@ref). It is computed
+using [`contingency_matrix`](@ref).
 
-- If the input data `x` and `y` (and additional variables like `z`, if provided) are
-    already discretized, a contingency matrix is computed directly from the data and
-    the observed outcomes are taken as the unique values occurring in the input data.
-    Outcomes are ordered according to the returned outcomes from `sort(unique(X))`, etc.
+## Description
 
-- If a [`ProbabilitiesEstimator`](@ref) is applied, then the input variables `x`, `y`, `z`,
-    etc, are discretized separately according to `est`. The contingency matrix is then
-    computed based on the observed encodings/symbols/outcomes for each variable.
-    This variant enforces *the same* outcome space for all variables, and calls
-    [`marginal_encodings`](@ref) to get the discretized values.
+Indexing a contingency matrix `c` with multiple indices `i, j, …` returns the `(i, j, …)`th
+element of the empirical probability mass function (pmf). The following convencience
+methods are defined:
 
-`ContingencyMatrix` is just a simple wrapper around `AbstractArray{T, N}` that
-represents multidimensional normalized frequency counts, i.e. a multivariate
-version of [`Probabilities`](@ref). If indexed with two indices `i, j`, then
-it returns the joint probability for the `(i, j)`th outcome.
+- `frequencies(c)` returns the raw counts.
+- `probabilities(c)` contains the normalized counts, i.e. a multidimensional empirical
+    probability mass function (pmf).
+- `probabilities(c, i::Int)` returns the marginal probabilities for the `i`-th dimension.
+- `outcomes(c, i::Int)` returns the marginal outcomes for the `i`-th dimension.
 
-The function `probabilities(x::ContingencyMatrix, i::Int)` returns the marginal
-probabilities for the `i`-th dimension.
-The function `outcomes(x::ContingencyMatrix, i::Int)` returns the marginal
-outcomes for the `i`-th dimension.
+# Ordering
+
+The ordering of outcomes are internally consistent, but we make no promise on the
+ordering of outcomes relative to the input data. This means that if your input
+data are `x = rand(["yes", "no"], 100); y = rand(["small", "medium", "large"], 100)`,
+you'll get a 2-by-3 contingency matrix, but there currently no easy way to
+determine which outcome the i-j-th row/column of this matrix corresponds to.
+
+Since [`ContingencyMatrix`](@ref) is intended for use in information theoretic methods
+that don't care about ordering, as long as the ordering is internally consistent,
+this is not an issue for practical applications in this package.
+This may change in future releases.
 
 ## Usage
 
@@ -47,64 +55,166 @@ quantities:
 - [`mutualinfo`](@ref).
 - [`condmutualinfo`](@ref).
 """
-struct ContingencyMatrix{T, N, O} <: AbstractArray{T, N}
+struct ContingencyMatrix{T, N, I} <: AbstractArray{T, N}
     # We only need to keep track of the joint probabilities. Marginals are obtained through,
     # unsurprisingly, marginalization of the joint probabilities.
-    joint::AbstractArray{T, N}
-    marginals::NTuple{N, Probabilities}
-    marginal_outcomes::NTuple{N, O}
+    probs::AbstractArray{T, N}
+    freqs::AbstractArray{I, N}
 end
-Base.size(c::ContingencyMatrix) = size(c.joint)
-Base.getindex(c::ContingencyMatrix, i) = getindex(c.joint, i)
-Base.getindex(c::ContingencyMatrix, i::Int...) = getindex(c.joint, i...)
-Base.setindex!(c::ContingencyMatrix, v, i) = setindex!(c.joint, v, i)
+Base.size(c::ContingencyMatrix) = size(c.probs)
+Base.getindex(c::ContingencyMatrix, i) = getindex(c.probs, i)
+Base.getindex(c::ContingencyMatrix, i::Int...) = getindex(c.probs, i...)
+Base.setindex!(c::ContingencyMatrix, v, i) = setindex!(c.probs, v, i)
 
-probabilities(c::ContingencyMatrix, i::Int) = c.marginals[i]
-outcomes(c::ContingencyMatrix, i::Int) = c.marginal_outcomes[i]
-
-# TODO: actually dispatch on joint frequency method for all methods below.
-function ContingencyMatrix(X, Y)
-    pX, ΩX = probabilities_and_outcomes(CountOccurrences(), X); lX = length(pX)
-    pY, ΩY = probabilities_and_outcomes(CountOccurrences(), Y); lY = length(pY)
-    p̂X = reshape(pX, lX, 1)
-    p̂Y = reshape(pY, 1, lY)
-    pXY = p̂X .* p̂Y
-    return ContingencyMatrix(pXY, (pX, pY), (ΩX, ΩY))
+frequencies(c::ContingencyMatrix) = c.freqs
+function frequencies(c::ContingencyMatrix, dim::Int)
+    alldims = 1:maximum(size(c.probs))
+    reduce_dims = setdiff(alldims, dim)
+    return dropdims(sum(c.freqs, dims = reduce_dims), dims = (reduce_dims...,))
 end
 
-function ContingencyMatrix(X, Y, Z)
-    pX, ΩX = probabilities_and_outcomes(CountOccurrences(), X); lX = length(pX)
-    pY, ΩY = probabilities_and_outcomes(CountOccurrences(), Y); lY = length(pY)
-    pZ, ΩZ = probabilities_and_outcomes(CountOccurrences(), Z); lZ = length(pZ)
-    p̂X = reshape(pX, lX, 1, 1)
-    p̂Y = reshape(pY, 1, lY, 1)
-    p̂Z = reshape(pZ, 1, 1, lZ)
-    pXYZ = p̂X .* p̂Y .* p̂Z
-    return ContingencyMatrix(pXYZ, (pX, pY, pZ), (ΩX, ΩY, ΩZ))
+probabilities(c::ContingencyMatrix) = c.probs
+function probabilities(c::ContingencyMatrix, dim::Int)
+    alldims = 1:length(size(c.probs))
+    reduce_dims = (setdiff(alldims, dim)...,)
+    marginal =  dropdims(sum(c.probs, dims = reduce_dims), dims = reduce_dims)
+    return Probabilities(marginal)
 end
 
-function ContingencyMatrix(est::ProbabilitiesEstimator, x...)
-    # Enforce same outcome space for all variables.
+"""
+    contingency_matrix(x, y, [z, ...]) → c::ContingencyMatrix
+    contingency_matrix(est::ProbabilitiesEstimator, x, y, [z, ...]) → c::ContingencyMatrix
+
+Estimate a multidimensional contingency matrix `c` from input data `x, y, …`, where the
+input data can be of any and different types, as long as `length(x) == length(y) == …`.
+
+For already discretized data, use the first method. For continuous data, you want to
+discretize the data before computing the contingency table. You can do
+this manually and then use the first method. Alternatively, you can provide a
+[`ProbabilitiesEstimator`](@ref) as the first
+argument to the constructor. Then the input variables `x, y, …` are discretized
+*separately* according to `est` (*enforcing the same outcome space for all variables*),
+by calling [`marginal_encodings`](@ref).
+"""
+function contingency_matrix end
+
+function contingency_matrix(est::ProbabilitiesEstimator, x...)
+    # Enforce identical outcome space for all variables.
     encodings = marginal_encodings(est, x...)
-    return ContingencyMatrix(encodings...)
+    return contingency_matrix(encodings...)
 end
+
+# For this to work generically, we must map unique elements to integers.
+function contingency_matrix(x...)
+    Ls = length.(x);
+    if !all(Ls .== maximum(Ls))
+        throw(ArgumentError("Input data must have equal lengths. Got lengths $Ls."))
+    end
+
+    # The frequency matrix dimensions are dictated by the number of unique occurring values
+    Ωs = unique.(x)
+    matrix_dims = length.(Ωs);
+
+    # Get marginal probabilities and outcomes
+    #pΩs = [probabilities_and_outcomes(CountOccurrences(), xᵢ) for xᵢ in x]
+    freqs, lmaps = freqtable_equallength(matrix_dims, x...)
+
+    # TODO: Inverse map from integer-encoded outcomes to the original outcomes.
+    # marginal_outcomes = [map(k -> lmap[k], last(pΩ)) for (pΩ, lmap) in zip(pΩs, lmaps)]
+    probs = freqs ./ maximum(Ls)
+    return ContingencyMatrix(
+        probs,
+        freqs,
+    )
+end
+
+
+function freqtable_equallength(matrix_dims, x...)
+    # Map the input data to integers. This ensures compatibility with *any* input type.
+    # Then, we can simply create a joint `Dataset{length(x), Int}` and use its elements
+    # as `CartesianIndex`es to update counts.
+    lvl = tolevels.(x)
+    levels = (first(l) for l in lvl)
+    lmaps = [last(l) for l in lvl]
+    X = Dataset(levels...)
+
+    freqs = zeros(Int, matrix_dims)
+    for ix in to_cartesian(sort(X.data)) # sorted matrix access should be faster.
+        freqs[ix] += 1
+    end
+    return freqs, lmaps
+end
+
+function to_cartesian(x)
+    (CartesianIndex.(xᵢ...) for xᵢ in x)
+end
+
+"""
+    tolevels!(levels, x) → levels, dict
+    tolevels(x) → levels, dict
+
+Apply the bijective map ``f : \\mathcal{Q} \\to \\mathbb{N}^+`` to each `x[i]` and store
+the result in `levels[i]`, where `levels` is a pre-allocated integer vector such that
+`length(x) == length(levels)`.
+
+``\\mathcal{Q}`` can be any space, and each ``q \\in \\mathcal{Q}`` is mapped to a unique
+integer  in the range `1, 2, …, length(unique(x))`. This is useful for integer-encoding
+categorical data such as strings, or other complex data structures.
+
+The single-argument method allocated a `levels` vector internally.
+
+`dict` gives the inverse mapping.
+"""
+function tolevels!(levels, x)
+    @assert length(levels) == length(x)
+    lmap = levelsmap(x)
+    for i in eachindex(x)
+        levels[i] = lmap[x[i]]
+    end
+    return levels, lmap
+end
+
+function tolevels(x)
+    lmap = levelsmap(x)
+    levels = zeros(Int, length(x))
+    for i in eachindex(x)
+        levels[i] = lmap[x[i]]
+    end
+    return levels, lmap
+end
+
 
 
 # The following commented-out code below is equivalent to theabove, but muuuch faster.
 # I keep the comments here for, so when I revisit this, I understand *why* it works.
 # This will be moved into some sort of tutorial or doc example at some point.
+
+
+# TODO: actually dispatch on joint frequency method for all methods below.
 # function ContingencyMatrix(X, Y)
-    # Ωx = sort(unique(X))
-    # Ωy = sort(unique(Y))
-    # N = length(X) * length(Y)
-    # pXY = zeros(length(Ωx), length(Ωy)) # enumerates the possible states
-    # for (i, ωyᵢ) in enumerate(Ωy)
-    #     for (j, ωxᵢ) in enumerate(Ωx)
-    #         pXY[j, i] = count_occurrences(ωxᵢ, ωyᵢ, X, Y)
-    #     end
-    # end
-    # return ContingencyMatrix(pXY / N)
+#     pX, ΩX = probabilities_and_outcomes(CountOccurrences(), X); lX = length(pX)
+#     pY, ΩY = probabilities_and_outcomes(CountOccurrences(), Y); lY = length(pY)
+#     p̂X = reshape(pX, lX, 1)
+#     p̂Y = reshape(pY, 1, lY)
+#     pXY = p̂X .* p̂Y
+#     return ContingencyMatrix(pXY, pXY, (pX, pY), (ΩX, ΩY))
 # end
+
+# function ContingencyMatrix(X, Y, Z)
+#     pX, ΩX = probabilities_and_outcomes(CountOccurrences(), X); lX = length(pX)
+#     pY, ΩY = probabilities_and_outcomes(CountOccurrences(), Y); lY = length(pY)
+#     pZ, ΩZ = probabilities_and_outcomes(CountOccurrences(), Z); lZ = length(pZ)
+#     p̂X = reshape(pX, lX, 1, 1)
+#     p̂Y = reshape(pY, 1, lY, 1)
+#     p̂Z = reshape(pZ, 1, 1, lZ)
+#     pXYZ = p̂X .* p̂Y .* p̂Z
+#     return ContingencyMatrix(pXYZ, (pX, pY, pZ), (ΩX, ΩY, ΩZ))
+# end
+
+
+
+
+
 
 #function ContingencyMatrix(X, Y, Z)
     # Ωx = sort(unique(X))
@@ -150,12 +260,13 @@ end
 #     return n
 # end
 
-# function count_occurrences(ωxᵢ, ωyᵢ, X, Y)
+# function count_occurrences(total_count, ωxᵢ, ωyᵢ, X, Y)
 #     n = 0.0
 #     for x in X
 #         for y in Y
 #             if x == ωxᵢ && y == ωyᵢ
 #                 n += 1
+#                 total_count[] += 1
 #             end
 #         end
 #     end

@@ -33,7 +33,6 @@ function estimate(measure::CMIRenyi, est::PoczosSchneiderCMI, x, y, z)
     return c / log(e.base, ℯ)
 end
 
-
 function Q3(e::EntropyDefinition, est::PoczosSchneiderCMI, x, y, z)
     q = e.q
     (; k, w, metric) = est

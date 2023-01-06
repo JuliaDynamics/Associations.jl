@@ -4,7 +4,7 @@ export MutualInformationDefinition
 export mutualinfo
 
 """ The supertype of all mutual information measures """
-abstract type MutualInformation{E, D} <: InformationMeasure end
+abstract type MutualInformation{E} <: InformationMeasure end
 
 """ The supertype of all dedicated mutual information estimators """
 abstract type MutualInformationEstimator <: InformationMeasureEstimator end
@@ -22,21 +22,21 @@ abstract type MIH3 <: MutualInformationDefinition end
     mutualinfo(measure::MutualInformation, est::MutualInformationEstimator, x, y)
     mutualinfo(measure::MutualInformation, est::DifferentialEntropyEstimator, x, y)
     mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)
+    mutualinfo(measure::MutualInformation, c::ContingencyMatrix)
 
 Estimate the mutual information `measure` (either [`MIShannon`](@ref) or
-[`MITsallis`](@ref)) between `x` and `y` using the provided estimator `est`.
+[`MITsallis`](@ref), ) between `x` and `y` using the provided estimator `est`.
+Alternatively, compute mutual information from a pre-computed [`ContingencyMatrix`](@ref).
 
-The online documentation provides an [overview table](@ref mutualinfo_overview) of
-compatible measures/definition and estimators.
+Compatible measures/definitions and estimators are listed in the
+[online documentation](@ref mutualinfo_overview).
 """
 mutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
 
-include("definitions/definitions.jl")
 include("MIShannon.jl")
-include("MITsallis.jl")
-include("MIRenyi.jl")
-
-include("common_dispatch.jl")
+include("MITsallisFuruichi.jl")
+include("MITsallisMartin.jl")
+include("MIRenyiSarbu.jl")
 
 include("estimators/estimators.jl")
 

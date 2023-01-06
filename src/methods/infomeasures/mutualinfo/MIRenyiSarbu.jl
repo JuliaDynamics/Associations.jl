@@ -1,19 +1,13 @@
-export MIDefinitionRenyiSarbu
-
+export MIRenyi
 
 """
-    MIDefinitionRenyiSarbu <: ConditionalMutualInformationDefinition
-    MMIDefinitionRenyiSarbu()
+    MIRenyi <: MutualInformation
+    MIRenyi(; base = 2, q = 1.5)
 
-A definition of discrete Rényi mutual information (Sarbu, 2014[^Sarbu2014]).
-
-!!! warn "This is slooow"
-   Because this definition doesn't lend itself to the very convenient decomposition
-   into marginal entropies, using it is quite slow.
+The discrete Rényi mutual information (see [`MRenyi`](@ref)) from Sarbu (2014)[^Sarbu2014].
 
 ## Description
 
-Assume we observe three discrete random variables ``X``, ``Y`` and ``Z``.
 Sarbu (2014) defines discrete Rényi mutual information as the
 Rényi ``\\alpha``-divergence between the conditional joint probability mass function
 ``p(x, y)`` and the product of the conditional marginals, ``p(x) \\cdot p(y)``:
@@ -38,5 +32,32 @@ I(X, Y; Z)^R_q =
 [^Sarbu2014]: Sarbu, S. (2014, May). Rényi information transfer: Partial Rényi transfer
     entropy and partial Rényi mutual information. In 2014 IEEE International Conference
     on Acoustics, Speech and Signal Processing (ICASSP) (pp. 5666-5670). IEEE.
+
+See also: [`mutualinfo`](@ref).
 """
-struct MIDefinitionRenyiSarbu <: MutualInformationDefinition end
+struct MIRenyiSarbu{E <: Renyi} <: MutualInformation{E}
+    e::E
+    function MIRenyiSarbu(; q = 1.5, base = 2)
+        e = Renyi(; q, base)
+        new{typeof(e)}(e)
+    end
+end
+
+function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}
+    pxy = ContingencyMatrix(est, x, y)
+    px = marginal_probs(pxy, 1)
+    py = marginal_probs(pxy, 2)
+
+    mi = 0.0
+    for i in eachindex(px)
+        for j in eachindex(py)
+            pxyᵢⱼ = pxy[i, j]
+            mi += pxyᵢⱼ^q / ((px[i] * py[j])^(q - 1))
+        end
+    end
+    if mi == 0
+        return 0.0
+    else
+        return (1 / (q - 1) * log(mi)) / log(e.base, ℯ)
+    end
+end

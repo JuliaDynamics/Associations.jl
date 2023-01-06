@@ -1,8 +1,8 @@
-export CMIDefinitionRenyiSarbu
+export CMIRenyi
 
 """
-    CMIDefinitionRenyiSarbu <: ConditionalMutualInformationDefinition
-    CMIDefinitionRenyiSarbu()
+    CMIRenyi <: ConditionalMutualInformationDefinition
+    CMIRenyi()
 
 A definition of Rényi conditional mutual information (Sarbu, 2014[^Sarbu2014]).
 
@@ -34,4 +34,4 @@ I(X, Y; Z)^R_q =
     entropy and partial Rényi mutual information. In 2014 IEEE International Conference
     on Acoustics, Speech and Signal Processing (ICASSP) (pp. 5666-5670). IEEE.
 """
-struct CMIDefinitionRenyiSarbu <: ConditionalMutualInformationDefinition end
+struct CMIRenyi <: ConditionalMutualInformationDefinition end

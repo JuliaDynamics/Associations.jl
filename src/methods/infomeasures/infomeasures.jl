@@ -39,7 +39,7 @@ Rényi-based mutual information.
 
 ### Conditional mutual information (CMI)
 
-- [`CMIDefinitionRenyiSarbu`](@ref). Discrete Rényi CMI.
+- [`CMIRenyi`](@ref). Discrete Rényi CMI.
 """
 abstract type InformationMeasure <: CausalityMeasure end
 
@@ -55,11 +55,18 @@ function estimate(measure::InformationMeasure, args...; kwargs...) end
 # that can be used to improve various discrete estimates.
 include("generic_estimators/generic_estimators.jl")
 
+# Contingency matrices and its computation based on various probabilites
+# estimators
+include("marginal_encodings.jl")
+include("contingency_matrices.jl")
+
 # Things that will be eventually moved to ComplexityMeasures.jl
 include("various/probabilities.jl")
 include("various/entropies.jl")
 
 # Higher-level measures
+include("entropy_conditional/entropy_conditional.jl")
+include("entropy_joint.jl")
 include("mutualinfo/mutualinfo.jl")
 include("condmutualinfo/condmutualinfo.jl")
 
