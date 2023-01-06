@@ -70,6 +70,7 @@ Note also that Julia is column-major, so we need to transpose their example. The
 our second dimension (rows).
 
 ```@example ce_contingency_table
+using CausalityTools
 freqs_yx = [1//8 1//16 1//32 1//32; 
     1//16 1//8  1//32 1//32;
     1//16 1//16 1//16 1//16; 
@@ -94,7 +95,7 @@ probabilities(c_xy, 2)
 And the Shannon conditional entropy ``H^S(X | Y)``
 
 ```@example ce_contingency_table
-ce_y_given_x = entropy_conditional(CEShannon(), c_yx) |> Rational
+ce_x_given_y = entropy_conditional(CEShannon(), c_xy) |> Rational
 ```
 
 This is the same as in their example. Hooray! To compute ``H^S(Y | X)``, we just need to
@@ -103,5 +104,5 @@ flip the contingency matrix.
 ```@example ce_contingency_table
 probs_yx = freqs_yx ./ sum(freqs_yx);
 c_yx = ContingencyMatrix(probs_yx, freqs_yx);
-ce_x_given_x = entropy_conditional(CEShannon(), c_xy) |> Rational
+ce_y_given_x = entropy_conditional(CEShannon(), c_yx) |> Rational
 ```

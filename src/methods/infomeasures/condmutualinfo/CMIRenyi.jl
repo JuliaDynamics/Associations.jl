@@ -42,6 +42,7 @@ function estimate(
         measure::CMIRenyi,
         pxyz::ContingencyMatrix{T, 3}) where T
     e = measure.e
+    q = e.q
     dx, dy, dz = size(pxyz)
     pxz = dropdims(sum(pxyz, dims = 2), dims = 2)
     pyz = dropdims(sum(pxyz, dims = 1), dims = 1)

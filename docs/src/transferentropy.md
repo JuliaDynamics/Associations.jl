@@ -1,5 +1,7 @@
 # Transfer entropy
 
+## API
+
 ```@docs
 transferentropy
 ```
@@ -56,7 +58,7 @@ fig = with_theme(theme_minimal(), markersize = 2) do
     fig = Figure()
     ax = Axis(fig[1, 1], xlabel = "epsilon", ylabel = "Transfer entropy (bits)")
     scatterlines!(ax, εs, te_x1x2, label = "X1 to X2", color = :black, lw = 1.5)
-    scatterlines!(ax, εs, te_x2x1, label = "X2 to X1", color = :red, linestyle = :dot)
+    scatterlines!(ax, εs, te_x2x1, label = "X2 to X1", color = :red, lw = 1.5)
     axislegend(ax, position = :lt)
     return fig
 end
@@ -100,9 +102,9 @@ fig = with_theme(theme_minimal(), markersize = 2) do
     fig = Figure()
     ax = Axis(fig[1, 1], xlabel = "epsilon", ylabel = "Transfer entropy (bits)")
     scatterlines!(ax, εs, te_x1x2, label = "X1 to X2", color = :black, lw = 1.5)
-    scatterlines!(ax, εs, qs_x1x2, label = "", color = :black, linestyle = :dot, lw = 1.5)
+    scatterlines!(ax, εs, qs_x1x2, color = :black, linestyle = :dot, lw = 1.5)
     scatterlines!(ax, εs, te_x2x1, label = "X2 to X1", color = :red)
-    scatterlines!(ax, εs, qs_x2x1, label = "", color = :red, linestyle = :dot)
+    scatterlines!(ax, εs, qs_x2x1, color = :red, linestyle = :dot)
     axislegend(ax, position = :lt)
     return fig
 end
