@@ -1,42 +1,60 @@
-# Conditional mutual information
+# Conditional mutual information (CMI)
 
 ## API
 
 ```@docs
 condmutualinfo
-```
-
-## Types of conditional mutual information
-
-Analogously to [`EntropyDefinition`](@ref), there are also different types of
-CMIs (subtypes of [`ConditionalMutualInformation`](@ref)).
-
-```@docs
 ConditionalMutualInformation
-CMIShannon
-CMIRenyi
 ```
 
-### Definitions
+## CMI definitions
 
-CMIs differ from basic entropies in that there are *multiple* possible
-definitions of a CMI. Any of the definitions below can be given
-as a keyword to the [`ConditionalMutualInformation`](@ref)s listed above (e.g.
-[`CMIShannon`](@ref) or
-[`CMIRenyi`](@ref)), indicating how estimation should be done.
+### Shannon CMI
 
 ```@docs
-ConditionalMutualInformationDefinition
-CMIDefinitionShannonH4
-CMIDefinitionShannonMI2
-CMIDefinitionRenyiH4
-CMIDefinitionRenySarbu
+CMIShannon
 ```
 
-## Estimators
+## Discrete CMI
 
-The following estimators compute CMI in some dedicated way, and always
-override any of the definitions above.
+### [Table of discrete mutual information estimators](@id mutualinfo_overview)
+
+Here, we list the [`ProbabilitiesEstimator`](@ref)s that are compatible with
+[`mutualinformation`](@ref), and which definitions they are valid for.
+
+| Estimator                    | Principle           |     Input data     | [`CMIShannon`](@ref) | [`CMIRenyi`](@ref) |
+| ---------------------------- | ------------------- | :----------------: | :------------------: | :----------------: |
+| [`CountOccurrences`](@ref)   | Frequencies         | `Vector`/`Dataset` |          ✅          |         ✅         |
+| [`ValueHistogram`](@ref)     | Binning (histogram) | `Vector`/`Dataset` |          ✅          |         ✅         |
+| [`SymbolicPermuation`](@ref) | Ordinal patterns    |      `Vector`      |          ✅          |         ✅         |
+| [`Dispersion`](@ref)         | Dispersion patterns |      `Vector`      |          ✅          |         ✅         |
+
+## Differential CMI
+
+### Estimators
+
+The following are *differential mutual information* estimators. They always
+override any definitions above with the concrete integral they estimate.
+
+| Estimator                           | Principle         | [`CMIShannon`](@ref) | [`CMIRenyi`](@ref) |
+| ----------------------------------- | ----------------- | :------------------: | :----------------: |
+| [`FrenzelPompeVelmejkaPalus`](@ref) | Nearest neighbors |          ✅          |         x          |
+| [`MesnerShalisi`](@ref)             | Nearest neighbors |          ✅          |         x          |
+| [`PoczosSchneiderCMI`](@ref)        | Nearest neighbors |          x           |         ✅         |
+| [`Rahimzamani`](@ref)               | Nearest neighbors |          ✅          |         x          |
+
+Continuous/differential conditional mutual information may also be estimated using any of our
+[`DifferentialEntropyEstimator`](@ref) that support multivariate input data.
+
+| Estimator                        | Principle         | Input data | [`CMIShannon`](@ref) | [`CMIRenyi`](@ref) |
+| -------------------------------- | ----------------- | ---------- | :------------------: | :----------------: |
+| [`Kraskov`](@ref)                | Nearest neighbors | `Dataset`  |          ✅          |         x          |
+| [`Zhu`](@ref)                    | Nearest neighbors | `Dataset`  |          ✅          |         x          |
+| [`ZhuSingh`](@ref)               | Nearest neighbors | `Dataset`  |          ✅          |         x          |
+| [`Gao`](@ref)                    | Nearest neighbors | `Dataset`  |          ✅          |         x          |
+| [`Goria`](@ref)                  | Nearest neighbors | `Dataset`  |          ✅          |         x          |
+| [`Lord`](@ref)                   | Nearest neighbors | `Dataset`  |          ✅          |         x          |
+| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors | `Dataset`  |          ✅          |         x          |
 
 ```@docs
 ConditionalMutualInformationEstimator

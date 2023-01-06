@@ -29,7 +29,9 @@ total_outcomes
 missing_outcomes
 ```
 
-## [Overview of probabilities estimators](@id probabilities_estimators)
+## Probabilities estimators
+
+### [Overview of probabilities estimators](@id probabilities_estimators)
 
 Any of the following estimators can be used with [`probabilities`](@ref)
 (in the column "input data"  it is assumed that the `eltype` of the input is `<: Real`).
@@ -50,13 +52,13 @@ Any of the following estimators can be used with [`probabilities`](@ref)
 | [`WaveletOverlap`](@ref)                    | Wavelet transform           | `Vector`            |
 | [`PowerSpectrum`](@ref)                     | Fourier transform           | `Vector` |
 
-## Count occurrences
+### Count occurrences
 
 ```@docs
 CountOccurrences
 ```
 
-## Histograms
+### Histograms
 
 ```@docs
 ValueHistogram
@@ -64,7 +66,7 @@ RectangularBinning
 FixedRectangularBinning
 ```
 
-## Symbolic permutations
+### Symbolic permutations
 
 ```@docs
 SymbolicPermutation
@@ -72,7 +74,7 @@ SymbolicWeightedPermutation
 SymbolicAmplitudeAwarePermutation
 ```
 
-## Dispersion patterns
+### Dispersion patterns
 
 ```@docs
 Dispersion
@@ -87,7 +89,7 @@ TransferOperator
 For explicit estimation of the transfer operator, see
 [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl).
 
-### Utility methods/types
+#### Utility methods/types
 
 ```@docs
 InvariantMeasure
@@ -95,7 +97,7 @@ invariantmeasure
 transfermatrix
 ```
 
-## Kernel density
+### Kernel density
 
 ```@docs
 NaiveKernel
@@ -107,20 +109,20 @@ NaiveKernel
 LocalLikelihood
 ```
 
-## Timescales
+### Timescales
 
 ```@docs
 WaveletOverlap
 PowerSpectrum
 ```
 
-## Diversity
+### Diversity
 
 ```@docs
 Diversity
 ```
 
-## Spatial estimators
+### Spatial estimators
 
 ```@docs
 SpatialSymbolicPermutation
