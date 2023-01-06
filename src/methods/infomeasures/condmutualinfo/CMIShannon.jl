@@ -52,6 +52,25 @@ function estimate(measure::CMIShannon, est::ProbOrDiffEst, x, y, z)
     return cmi
 end
 
+# Override some definitions
+const WellDefinedCMIShannonProbEsts{m, D} = Union{
+    SymbolicPermutation{m},
+    ValueHistogram{<:FixedRectangularBinning{D}},
+    Dispersion
+} where {m, D}
+
+function estimate(measure::CMIShannon, est::WellDefinedCMIShannonProbEsts{m, D},
+        x, y, z) where {E, m, D}
+    e = measure.e
+    pXZ, pYZ, pXYZ, pZ = marginal_probabilities(measure, est, x, y, z)
+    HXZ = entropy(e, pXZ)
+    HYZ = entropy(e, pYZ)
+    HXYZ = entropy(e, pXYZ)
+    HZ = entropy(e, pZ)
+    return HXZ + HYZ - HXYZ - HZ
+end
+
+
 function estimate(measure::CMIShannon, est::MutualInformationEstimator, x, y, z)
     X = Dataset(x)
     Y = Dataset(y)
