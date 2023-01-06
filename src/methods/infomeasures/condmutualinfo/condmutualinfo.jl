@@ -1,5 +1,6 @@
 
-export CMIEstimator
+export ConditionalMutualInformationEstimator
+export ConditionalMutualInformation
 export condmutualinfo
 
 """
