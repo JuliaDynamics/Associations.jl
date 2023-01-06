@@ -7,7 +7,7 @@
 #     w::Int = 0
 # end
 
-# function mutualinfo(e::Renyi, est::GaoNaiveMI, x::Vector_or_Dataset...)
+# function mutualinfo(e::Renyi, est::GaoNaiveMI, x::VectorOrDataset...)
 #     e.q == 1 || throw(ArgumentError(
 #         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
 #     ))

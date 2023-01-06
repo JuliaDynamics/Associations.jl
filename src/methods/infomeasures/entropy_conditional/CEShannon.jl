@@ -33,7 +33,9 @@ function estimate(measure::CEShannon, pxy::ContingencyMatrix{T, 2}) where {T}
         pyⱼ = py[j]
         for i in 1:Nx
             pxyᵢⱼ = pxy[i, j]
-            ce += pxyᵢⱼ * log0(pxyᵢⱼ / pyⱼ)
+            if pxyᵢⱼ != 0.0
+                ce += pxyᵢⱼ * log0(pxyᵢⱼ / pyⱼ)
+            end
         end
     end
     return -ce

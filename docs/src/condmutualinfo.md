@@ -7,7 +7,7 @@ condmutualinfo
 ConditionalMutualInformation
 ```
 
-## CMI definitions
+## Definitions
 
 ### Shannon CMI
 
@@ -15,7 +15,7 @@ ConditionalMutualInformation
 CMIShannon
 ```
 
-## Discrete CMI
+## Discrete
 
 ### [Table of discrete mutual information estimators](@id mutualinfo_overview)
 
@@ -29,7 +29,7 @@ Here, we list the [`ProbabilitiesEstimator`](@ref)s that are compatible with
 | [`SymbolicPermuation`](@ref) | Ordinal patterns    |      `Vector`      |          ✅          |         ✅         |
 | [`Dispersion`](@ref)         | Dispersion patterns |      `Vector`      |          ✅          |         ✅         |
 
-## Differential CMI
+## Differential
 
 ### Estimators
 

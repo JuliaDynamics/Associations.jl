@@ -81,8 +81,8 @@ diff_mi_estimators = [
         @testset "$(typeof(probests_for_timeseries[i]).name)" for i in eachindex(probests_for_timeseries)
             est = probests_for_timeseries[i]
             cmi = CMIShannon(base = 2)
-            @test condmutualinfo(cmi, est, a, b, c) isa Real # default
-            @test_throws MethodError condmutualinfo(cmi, est, x, y, z) isa Real # default
+            @test condmutualinfo(cmi, est, a, b, c) >= 0
+            @test condmutualinfo(cmi, est, x, y, z) >= 0
         end
 
         # ----------------------------------------------------------------

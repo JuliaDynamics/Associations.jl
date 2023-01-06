@@ -44,7 +44,7 @@ Rényi-based mutual information.
 abstract type InformationMeasure <: CausalityMeasure end
 
 """
-    estimate(e::EntropyDefinition, est::InformationMeasureEstimator, input::Vector_or_Dataset...)
+    estimate(e::EntropyDefinition, est::InformationMeasureEstimator, input::VectorOrDataset...)
 
 Given some `input` data, estimate some information measure using the given
 [`InformationMeasureEstimator`](@ref), with respect to the generalized entropy `e`.
@@ -69,3 +69,4 @@ include("entropy_conditional/entropy_conditional.jl")
 include("entropy_joint.jl")
 include("mutualinfo/mutualinfo.jl")
 include("condmutualinfo/condmutualinfo.jl")
+include("transferentropy_new/transferentropy.jl")

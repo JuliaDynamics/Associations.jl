@@ -1,5 +1,5 @@
 import DelayEmbeddings: genembed, AbstractDataset, Dataset
-export EmbeddingTE
+#export EmbeddingTE
 
 function rc(x::Union{AbstractDataset, AbstractVector{T}},
         dim::Union{Int, AbstractVector{Int}},
@@ -308,7 +308,7 @@ Returns a tuple of the embedded `points`, `vars` (a [`TEVars`](@ref) instance th
 variables of the embedding belong to which marginals of the reconstruction; indices are: source = 1,
 target = 2, cond = 3), and a tuple `τs`, which stores the lags for each variable of the reconstruction.
 """
-function te_embed(source::AbstractVector{T}, target::AbstractVector{T}, p::EmbeddingTE) where T
+function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVector{T}) where T
 
     #@show p.τS
     #if (p.τS isa Int && p.τS > 0) || (length(p.τS) > 1 && any(p.τS[p.τS .> 0]))
@@ -346,7 +346,7 @@ function te_embed(source::AbstractVector{T}, target::AbstractVector{T}, p::Embed
     return pts, vars, τs, js
 end
 
-function te_embed(source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}, p::EmbeddingTE) where T
+function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}) where T
 
     #@show p.τS
     #if (p.τS isa Int && p.τS > 0) || (length(p.τS) > 1 && any(p.τS[p.τS .> 0]))
@@ -386,7 +386,6 @@ function te_embed(source::AbstractVector{T}, target::AbstractVector{T}, cond::Ab
 
     return pts, vars, τs, js
 end
-
 
 """
     TEVars(𝒯::Vector{Int}, T::Vector{Int}, S::Vector{Int})
@@ -436,50 +435,4 @@ TEVars(;𝒯::Vector{Int} = Int[],
 function Base.show(io::IO, tv::TEVars)
     s = "$(typeof(tv))(𝒯 = $(tv.𝒯), T = $(tv.T), S = $(tv.S), C = $(tv.C))"
     print(io, s)
-end
-
-function get_marginals(measure::TransferEntropy, s, t; emb::EmbeddingTE)
-    pts, vars, τs, js = te_embed(s, t, emb)
-
-    # Get marginals
-    ST = pts[:, [vars.S; vars.T]]
-    T𝒯 = pts[:, [vars.𝒯; vars.T]]
-    T = pts[:, vars.T]
-    joint = pts
-
-    return joint, ST, T𝒯, T
-end
-
-function get_marginals(measure::TransferEntropy, s, t, c; emb::EmbeddingTE)
-    pts, vars, τs, js = te_embed(s, t, c, emb)
-
-    # Get marginals
-    ST = pts[:, [vars.S; vars.T; vars.C]]
-    T𝒯 = pts[:, [vars.𝒯; vars.T; vars.C]]
-    T = pts[:, [vars.T; vars.C]]
-    joint = pts
-
-    return joint, ST, T𝒯, T
-end
-
-# map a set of pre-embedded points to the correct marginals for transfer entropy computation
-function get_marginals(measure::TransferEntropy, pts::AbstractDataset; emb::TEVars)
-    # Get marginals
-    ST = pts[:, [vars.S; vars.T]]
-    T𝒯 = pts[:, [vars.𝒯; vars.T]]
-    T = pts[:, vars.T]
-    joint = pts
-
-    return joint, ST, T𝒯, T
-end
-
-function get_marginals(measure::TransferEntropy, condmutualinfo::ConditionalMutualInformation, s, t; emb::EmbeddingTE)
-    pts, vars, τs, js = te_embed(s, t, emb)
-
-    # Get marginals
-    S = pts[:, vars.S]
-    T = pts[:, vars.T]
-    𝒯 = pts[:, vars.𝒯]
-
-    return S, T, 𝒯
 end

@@ -36,7 +36,7 @@ Base.@kwdef struct GaoOhViswanath{MJ, MM} <: MutualInformationEstimator
     metric_marginals::MM = Euclidean()
 end
 
-function estimate(measure::MIShannon, est::GaoOhViswanath, x::Vector_or_Dataset...)
+function estimate(measure::MIShannon, est::GaoOhViswanath, x::VectorOrDataset...)
     e = measure.e
 
     @assert length(x) >= 2 ||

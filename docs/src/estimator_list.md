@@ -21,7 +21,7 @@ Subtypes of [`DifferentialEntropyEstimator`](@ref)s use various forms of plug-in
 [`Tsallis`](@ref) differential entropy.
 
 !!! note "Plug-in estimators for differential entropy"
-    When using [`entropy`](@ref) with a [`ProbabilityEstimator`](@ref), it is always the discrete entropy that is computed. When using [`entropy`](@ref) with an [`DifferentialEntropyEstimator`](@ref), it is the *differential* entropy that is computed.
+    When using [`entropy`](@ref) with a [`ProbabilitiesEstimator`](@ref), it is always the discrete entropy that is computed. When using [`entropy`](@ref) with an [`DifferentialEntropyEstimator`](@ref), it is the *differential* entropy that is computed.
 
 
 ## Generalized entropies

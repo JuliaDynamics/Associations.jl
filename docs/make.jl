@@ -42,14 +42,14 @@ PAGES = [
         "Mutual information" => "mutualinfo.md",
 
         "Conditional mutual information" => "condmutualinfo.md",
-
         "Examples" => [
             "Entropy" => "examples/examples_entropy.md",
             "Mutual information" => "examples/examples_mutualinfo.md"
         ],
-        # "TransferEntropy.md",
-        # "predictive_asymmetry.md",
-        # "info_estimators.md",
+        "Timeseries analysis" => [
+            "Transfer entropy" => "transferentropy.md",
+            # "predictive_asymmetry.md",
+        ]
     ],
     "Independence tests" => "independence.md",
 
@@ -58,7 +58,7 @@ PAGES = [
 ]
 
 makedocs(
-    modules = [CausalityTools, ComplexityMeasures],
+    modules = [CausalityTools, ComplexityMeasures, StateSpaceSets],
     format = Documenter.HTML(
         prettyurls = CI,
         assets = [

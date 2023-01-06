@@ -72,9 +72,7 @@ diff_mi_estimators = [
         measure = MIShannon(base = 2)
         @test mutualinfo(measure, est, w1, w2) isa Real # default
         @test mutualinfo(measure, est, w1, w2) >= 0 # default
-        @show est
-        # Doesn't work for datasets
-        @test_throws MethodError mutualinfo(measure, est, x, y)
+        @test mutualinfo(measure, est, x, y) >= 0
     end
 
     # ----------------------------------------------------------------

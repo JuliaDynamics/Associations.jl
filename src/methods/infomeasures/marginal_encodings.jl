@@ -2,9 +2,11 @@ import ComplexityMeasures: symbolize_for_dispersion
 export marginal_encodings
 
 """
-    marginal_encodings(est::ProbabilitiesEstimator, x::AbstractVector...)
+    marginal_encodings(est::ProbabilitiesEstimator, x::VectorOrDataset...)
 
 Encode/discretize each input vector `xᵢ ∈ x` according to a procedure determined by `est`.
+Any `xᵢ ∈ X` that are multidimensional ([`Dataset`](@ref)s) will be encoded column-wise,
+i.e. each column of `xᵢ` is treated as a timeseries and is encoded separately.
 
 This is useful for computing any discrete information theoretic quantity, and is
 used internally by [`contingency_matrix`](@ref).
@@ -24,24 +26,33 @@ way of estimating the [`ContingencyMatrix`](@ref)
 """
 function marginal_encodings end
 
-marginal_encodings(est::CountOccurrences, x::AbstractVector...) = x
-
-function marginal_encodings(est::SymbolicPermutation{m}, x::AbstractVector...) where {m}
-    return [encode.(Ref(est.encoding), embed(xᵢ, m, est.τ).data) for xᵢ in x]
+function marginal_encodings(est, x::VectorOrDataset...)
+    return marginally_encode_variable.(Ref(est), x)
 end
 
-function marginal_encodings(est::Dispersion, x::AbstractVector...)
-    return [symbolize_for_dispersion(est, xᵢ) for xᵢ in x]
+function marginally_encode_variable(est, x::AbstractDataset)
+    return Dataset(marginally_encode_variable.(Ref(est), columns(x))...)
 end
 
-function marginal_encodings(
+function marginally_encode_variable(est::CountOccurrences, x::AbstractVector)
+    return x
+end
+
+function marginally_encode_variable(est::SymbolicPermutation{m}, x::AbstractVector) where {m}
+    emb = embed(x, m, est.τ).data
+    return encode.(Ref(est.encoding), emb)
+end
+
+function marginally_encode_variable(est::Dispersion, x::AbstractVector)
+    return symbolize_for_dispersion(est, x)
+end
+
+function marginally_encode_variable(
         est::ValueHistogram{<:FixedRectangularBinning{D}},
-        xs::AbstractVector...) where D
-
+        x::AbstractVector) where D
     ϵmin = est.binning.ϵmin[1]
     ϵmax = est.binning.ϵmax[1]
     N = est.binning.N
-
-    encoders = [RectangularBinEncoding(FixedRectangularBinning(ϵmin, ϵmax, N, 1), x) for x in xs]
-    [encode.(Ref(e), x) for (x, e) in zip(xs, encoders)]
+    encoder = RectangularBinEncoding(FixedRectangularBinning(ϵmin, ϵmax, N, 1))
+    return encode.(Ref(encoder), x)
 end

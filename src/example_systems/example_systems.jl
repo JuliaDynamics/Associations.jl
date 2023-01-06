@@ -1,4 +1,3 @@
-@reexport module ExampleSystems
 
 using StatsBase
 using DynamicalSystemsBase, DelayEmbeddings
@@ -33,5 +32,3 @@ include("continuous_systems/rossler_rossler_rossler_bidir_forced.jl")
 include("continuous_systems/rossler_lorenz.jl")
 
 include("noise.jl")
-
-end

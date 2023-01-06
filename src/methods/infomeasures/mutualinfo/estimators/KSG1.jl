@@ -52,7 +52,7 @@ struct KraskovStögbauerGrassberger1{MJ, MM} <: MutualInformationEstimator
     end
 end
 
-function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::Vector_or_Dataset...)
+function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::VectorOrDataset...)
     e = measure.e
     @assert length(x) >= 2 ||
         error("Need at leats two input datasets to compute mutual information between them.")
