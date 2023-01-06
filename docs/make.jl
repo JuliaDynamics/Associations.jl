@@ -54,7 +54,7 @@ PAGES = [
     "Independence tests" => "independence.md",
 
     "Cross mappings" => "cross_mappings.md",
-
+    "Joint distance distribution" => "jdd.md",
 ]
 
 makedocs(
