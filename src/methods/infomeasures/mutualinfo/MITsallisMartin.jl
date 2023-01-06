@@ -51,25 +51,8 @@ end
 #     return (1 / (q - 1) * (1 - mi) / (1-q)) / log(e.base, ℯ)
 # end
 
-
-
 function estimate(measure::MITsallisMartin, est::ProbOrDiffEst, x, y)
-    e = measure.e
-    X = Dataset(x); Y = Dataset(y); XY = Dataset(X, Y)
-    hX = entropy(e, est, X)
-    hY = entropy(e, est, Y)
-    hXY = entropy(e, est, XY)
-    q = measure.e.q
-    return hX + hY - (1 - q) * hX * hY - hXY
-end
-
-function estimate(measure::MITsallisMartin, est::WellDefinedMIShannonProbEsts{m, D},
-        x, y) where { m, D}
-    e = measure.e
-    pX, pY, pXY = marginal_probabilities(measure, est, x, y)
-    HX = entropy(e, pX)
-    HY = entropy(e, pY)
-    HXY = entropy(e, pXY)
+    HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
     q = measure.e.q
     return HX + HY - (1 - q) * HX * HY - HXY
 end

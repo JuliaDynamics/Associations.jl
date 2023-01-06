@@ -67,13 +67,14 @@ diff_mi_estimators = [
         @test mutualinfo(m, probests[i], x, y) isa Real # default
     end
 
-    # Estimators that only accept timeseries input
     @testset "$(typeof(probests_for_timeseries[i]).name)" for i in eachindex(probests_for_timeseries)
         est = probests_for_timeseries[i]
         measure = MIShannon(base = 2)
         @test mutualinfo(measure, est, w1, w2) isa Real # default
+        @test mutualinfo(measure, est, w1, w2) >= 0 # default
+        @show est
         # Doesn't work for datasets
-        @test_throws ErrorException mutualinfo(measure, est, x, y)
+        @test_throws MethodError mutualinfo(measure, est, x, y)
     end
 
     # ----------------------------------------------------------------

@@ -42,3 +42,34 @@ include("estimators/estimators.jl")
 
 # Default to Shannon mutual information.
 mutualinfo(est::ProbOrDiffEst, x, y) = estimate(MIShannon(), est, x, y)
+
+# Generic 3H-formulation of mutual information.
+function marginal_entropies_mi3h(measure::MutualInformation, est, x, y)
+    e = measure.e
+    X = Dataset(x)
+    Y = Dataset(y)
+    XY = Dataset(x, y)
+    HX = entropy(e, est, X)
+    HY = entropy(e, est, Y)
+    HXY = entropy(e, est, XY)
+    return HX, HY, HXY
+end
+
+# Override some definitions, because the estimator behaviour need to be adjusted
+# for multiple input variables.
+const WellDefinedMIShannonProbEsts{m, D} = Union{
+    SymbolicPermutation{m},
+    ValueHistogram{<:FixedRectangularBinning{D}},
+    Dispersion
+} where {m, D}
+
+function marginal_entropies_mi3h(measure::MutualInformation,
+        est::WellDefinedMIShannonProbEsts{m, D}, x, y) where {m, D}
+    eX, eY = marginal_encodings(est, x, y)
+    eXY = Dataset(eX, eY)
+    e = measure.e
+    HX = entropy(e, CountOccurrences(), eX)
+    HY = entropy(e, CountOccurrences(), eY)
+    HXY = entropy(e, CountOccurrences(), eXY)
+    return HX, HY, HXY
+end

@@ -67,21 +67,7 @@ function estimate(
 end
 
 function estimate(measure::MITsallisFuruichi, est::ProbOrDiffEst, x, y)
-    e = measure.e
-    X = Dataset(x); Y = Dataset(y); XY = Dataset(X, Y)
-    HX = entropy(e, est, X)
-    HY = entropy(e, est, Y)
-    HXY = entropy(e, est, XY)
-    return HX + HY - HXY
-end
-
-function estimate(measure::MITsallisFuruichi, est::WellDefinedMIShannonProbEsts{m, D},
-        x, y) where { m, D}
-    e = measure.e
-    pX, pY, pXY = marginal_probabilities(measure, est, x, y)
-    e = measure.e
-    HX = entropy(e, pX)
-    HY = entropy(e, pY)
-    HXY = entropy(e, pXY)
+    HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
+    q = measure.e.q
     return HX + HY - HXY
 end
