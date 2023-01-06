@@ -57,6 +57,7 @@ condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
 
 #include("definitions/definitions.jl")
 include("CMIShannon.jl")
+include("CMIRenyi.jl")
 include("estimators/estimators.jl")
 
 # Default to Shannon mutual information.
