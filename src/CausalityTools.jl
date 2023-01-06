@@ -80,4 +80,3 @@ module CausalityTools
         end
     end
 end
-end
