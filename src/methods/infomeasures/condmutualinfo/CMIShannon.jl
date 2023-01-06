@@ -52,6 +52,14 @@ function estimate(measure::CMIShannon, est::ProbOrDiffEst, x, y, z)
     return cmi
 end
 
+function estimate(measure::CMIShannon, est::MutualInformationEstimator, x, y, z)
+    X = Dataset(x)
+    Y = Dataset(y)
+    Z = Dataset(z)
+    YZ = Dataset(Y, Z)
+    m = MIShannon(; base = measure.e.base)
+    return mutualinfo(m, est, X, YZ) + mutualinfo(m, est, X, Y)
+end
 
 function estimate(
         measure::CMIShannon,
