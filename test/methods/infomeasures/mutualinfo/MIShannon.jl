@@ -38,9 +38,9 @@ diff_mi_estimators = [
     w1 = randn(10000)
     w2 = randn(10000)
 
-    @testset "MIDefinitionShannonH3" begin
+    @testset "MIDefinitionGeneric" begin
         @test MIShannon(Shannon(; base = 2)) isa MIShannon
-        @test MIShannon(base = 2, definition = MIDefinitionShannonH3()) isa MIShannon
+        @test MIShannon(base = 2, definition = MIDefinitionGeneric()) isa MIShannon
 
         # ----------------------------------------------------------------
         # Dedicated estimators.
@@ -49,7 +49,7 @@ diff_mi_estimators = [
         # distribution. This number varies wildly between estimators, so we're satisfied
         # to test just that they don't blow up.
         @testset "$(typeof(diff_mi_estimators[i]).name.name)" for i in eachindex(diff_mi_estimators)
-            measure = MIShannon(base = 2, definition = MIDefinitionShannonH3())
+            measure = MIShannon(base = 2, definition = MIDefinitionGeneric())
             mi = mutualinfo(measure, diff_mi_estimators[i], x, y)
             @test mi isa Real
             @test -0.5 < mi < 0.1
@@ -64,14 +64,14 @@ diff_mi_estimators = [
 
         # Estimators that accept dataset inputs
         @testset "$(typeof(probests[i]).name.name)" for i in eachindex(probests)
-            m = MIShannon(base = 2, definition = MIDefinitionShannonH3())
+            m = MIShannon(base = 2, definition = MIDefinitionGeneric())
             @test mutualinfo(m, probests[i], x, y) isa Real # default
         end
 
         # Estimators that only accept timeseries input
         @testset "$(typeof(probests_for_timeseries[i]).name)" for i in eachindex(probests_for_timeseries)
             est = probests_for_timeseries[i]
-            measure = MIShannon(base = 2, definition = MIDefinitionShannonH3())
+            measure = MIShannon(base = 2, definition = MIDefinitionGeneric())
             @test mutualinfo(measure, est, w1, w2) isa Real # default
             # Doesn't work for datasets
             @test_throws MethodError mutualinfo(measure, est, x, y)
@@ -81,7 +81,7 @@ diff_mi_estimators = [
         # Entropy-based estimators.
         # ----------------------------------------------------------------
         @testset "$(typeof(diff_entropy_estimators[i]).name.name)" for i in eachindex(diff_entropy_estimators)
-            measure = MIShannon(base = 2, definition = MIDefinitionShannonH3())
+            measure = MIShannon(base = 2, definition = MIDefinitionGeneric())
             mi = mutualinfo(measure, diff_entropy_estimators[i], x, y)
             @test mi isa Real
             @test -0.5 < mi < 0.1

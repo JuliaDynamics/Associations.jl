@@ -5,14 +5,12 @@
 
 # This will work for any future versions of `Dispersion` with different encoding schemes.
 function marginal_probabilities(
-        measure::CMI{<:EntropyDefinition, <:CMIH4},
+        measure::CMI,
         est::Dispersion,
         x::AbstractVector, y::AbstractVector, z::AbstractVector)
     e = measure.e
     # These are now symbol time series
-    πX = symbolize_for_dispersion(est, x)
-    πY = symbolize_for_dispersion(est, y)
-    πZ = symbolize_for_dispersion(est, z)
+    πX, πY, πZ = marginal_encodings(est, x, y, z)
     πXZ = Dataset(πX, πZ)
     πYZ = Dataset(πY, πZ)
     πXYZ = Dataset(πX, πY, πZ)
@@ -49,12 +47,11 @@ end
 # --------------------------------------------------------------------------------------
 
 # This will work for any future versions of `Dispersion` with different encoding schemes.
-function marginal_probabilities(measure::MutualInformation{<:EntropyDefinition, <:MIH3},
+function marginal_probabilities(measure::MutualInformation,
         est::Dispersion, x::AbstractVector, y::AbstractVector)
     e = measure.e
     # These are now symbol time series
-    πx = symbolize_for_dispersion(est, x)
-    πy = symbolize_for_dispersion(est, y)
+    πx, πy = marginal_encodings(est, x, y)
     πxy = Dataset(πx, πy)
 
     if est.m == 1 # d == 1 is the same as not performing any embedding.

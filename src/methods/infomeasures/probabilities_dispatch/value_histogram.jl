@@ -2,7 +2,7 @@
 # Conditional mutual information
 # --------------------------------------------------------------------------------------
 function marginal_probabilities(
-        measure::CMI{<:EntropyDefinition, <:CMIH4},
+        measure::CMI,
         est::ValueHistogram{<:FixedRectangularBinning{D}},
         x, y, z) where {D}
     e = measure.e
@@ -75,8 +75,7 @@ end
 
 # FixedRectangularBinning demands explicitly specifying the dimension, so need specialized
 # dispatch.
-function marginal_probabilities(
-        measure::MutualInformation{<:EntropyDefinition, <:MIH3},
+function marginal_probabilities(measure::MutualInformation,
         est::ValueHistogram{<:FixedRectangularBinning{D}},
         x, y) where {D}
     e = measure.e

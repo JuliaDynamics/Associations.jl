@@ -1,7 +1,3 @@
-# This should probably be converted to "marginal encodings" or something like that,
-# which can be re-used both for contingency tables and here
-include("marginal_encodings.jl")
-
 export marginal_probabilities
 
 """
@@ -20,6 +16,7 @@ function marginal_probabilities end
 # The following files contain relevant dispatch for all discrete probability-based
 # estimators. The files are (arbitrarily) grouped by estimator.
 ############################################################################################
+
 include("value_histogram.jl")
 include("symbolic_permutation.jl")
 include("dispersion.jl")

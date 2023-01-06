@@ -1,12 +1,14 @@
-x = rand(1:5, 1000)
-y = rand(1:3, 1000)
-z = rand(1:2, 1000)
+mx = 3
+my = 2
+mz = 4
+x = rand(1:mx, 1000)
+y = rand(1:my, 1000)
+z = rand(2:mz+1, 1000) # ensure that starting at something other than 1 also works
 
-c2 = ContingencyMatrix(x, y)
-c3 = ContingencyMatrix(x, y, z)
-
-@test size(c2) == (5, 3)
-@test size(c3) == (5, 3, 2)
+c2 = contingency_matrix(x, y)
+c3 = contingency_matrix(x, y, z)
+@test size(c2) == (3, 2)
+@test size(c3) == (3, 2, 4)
 @test sum(c2) ≈ 1.0
 @test sum(c3) ≈ 1.0
 
@@ -27,8 +29,8 @@ probests = [
     # size of any dimension is at most `lΩ = total_outcomes(est, [x])`.
     # Not all outcomes are guaranteed to be observed, so it is possible that the size of a
     # dimension is *less* than `lΩ`.
-    c2 = ContingencyMatrix(est,u, v)
-    c3 = ContingencyMatrix(est, u, v, w)
+    c2 = contingency_matrix(est, u, v)
+    c3 = contingency_matrix(est, u, v, w)
 
     @test all(size(c2) .<= lΩ)
     @test all(size(c3) .<= lΩ)
