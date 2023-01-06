@@ -6,8 +6,9 @@ CI && Pkg.instantiate()
 ENV["GKSwstype"] = "100" # allow local builds without output
 using Documenter
 using DocumenterTools: Themes
-using ComplexityMeasures
 using CausalityTools
+using ComplexityMeasures
+using StateSpaceSets
 
 # %% JuliaDynamics theme.
 # download the themes
