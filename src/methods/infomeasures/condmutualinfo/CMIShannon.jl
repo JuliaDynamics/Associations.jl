@@ -68,8 +68,9 @@ function estimate(
             for i in 1:dx
                 pxᵢzₖ = pxz[i, k]
                 pxᵢyⱼzₖ = pxyz[i, j, k]
-                if pxᵢyⱼzₖ != 0.0
-                    cmi += pxᵢyⱼzₖ * log0((pzₖ * pxᵢyⱼzₖ) / (pxᵢzₖ * pyⱼzₖ))
+                inner = (pzₖ * pxᵢyⱼzₖ) / (pxᵢzₖ * pyⱼzₖ)
+                if inner != 0.0
+                    cmi += pxᵢyⱼzₖ * log0(inner)
                 end
             end
         end

@@ -1,3 +1,4 @@
+using ComplexityMeasures: log_with_base
 export MIShannon
 
 """
@@ -68,13 +69,16 @@ function estimate(measure::MIShannon{<:Shannon}, pxy::ContingencyMatrix{T, 2}) w
     px = probabilities(pxy, 1)
     py = probabilities(pxy, 2)
     mi = 0.0
-    log0 = log_with_base(e.base)
+    logb = log_with_base(e.base)
     for i in eachindex(px.p)
         pxᵢ = px[i]
         for j in eachindex(py.p)
             pyⱼ = py[j]
             pxyᵢⱼ = pxy[i, j]
-            mi += pxyᵢⱼ * log0(pxyᵢⱼ / (pxᵢ * pyⱼ))
+            inner = pxyᵢⱼ / (pxᵢ * pyⱼ)
+            if inner != 0.0
+                mi += pxyᵢⱼ * logb(inner)
+            end
         end
     end
     return mi
