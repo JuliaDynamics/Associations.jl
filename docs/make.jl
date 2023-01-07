@@ -34,11 +34,9 @@ PAGES = [
     "Overview" => "index.md",
 
     "Information measures" => [
-        "Design philosophy" => "information_basics.md",
-        "Contingency tables" => "contingency.md",
         "Probabilities" => "probabilities.md",
         "Entropy" => "entropy.md",
-
+        "Contingency tables" => "contingency.md",
         "Conditional entropy" => "entropy_conditional.md",
         "Mutual information" => "mutualinfo.md",
 
