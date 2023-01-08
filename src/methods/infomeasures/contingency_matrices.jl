@@ -58,11 +58,11 @@ quantities:
 - [`mutualinfo`](@ref).
 - [`condmutualinfo`](@ref).
 """
-struct ContingencyMatrix{T, N} <: AbstractArray{T, N}
+struct ContingencyMatrix{T, N, I} <: AbstractArray{T, N}
     # We only need to keep track of the joint probabilities. Marginals are obtained through,
     # unsurprisingly, marginalization of the joint probabilities.
     probs::AbstractArray{T, N}
-    freqs::AbstractArray{Int, N}
+    freqs::AbstractArray{I, N}
 end
 Base.size(c::ContingencyMatrix) = size(c.probs)
 Base.getindex(c::ContingencyMatrix, i) = getindex(c.probs, i)
