@@ -1,4 +1,7 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using Distributions: Normal
+using StaticArrays: SVector
+using DynamicalSystemsBase: ContinuousDynamicalSystem
 
 export chuacircuits_driven
 
@@ -10,7 +13,7 @@ driven Chua circuits [1].
 
 ## References
 
-1. Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven Chua's 
+1. Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven Chua's
     circuit." IEEE Transactions on Circuits and Systems I Fundamental
     Theory and Applications 40.11 (1993): 836-840.
 """
@@ -52,8 +55,8 @@ individually for each subsystem.
 
 ## References
 
-1. Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven Chua's 
-    circuit." IEEE Transactions on Circuits and Systems I Fundamental 
+1. Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven Chua's
+    circuit." IEEE Transactions on Circuits and Systems I Fundamental
     Theory and Applications 40.11 (1993): 836-840.
 """
 function chuacircuits_driven(u₀, α₁, α₂, β₁, β₂, F₁, F₂,
@@ -77,8 +80,8 @@ individually for each subsystem.
 
 ## References
 
-1. Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven Chua's 
-    circuit." IEEE Transactions on Circuits and Systems I Fundamental 
+1. Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven Chua's
+    circuit." IEEE Transactions on Circuits and Systems I Fundamental
     Theory and Applications 40.11 (1993): 836-840.
 """
 chuacircuits_driven(;u₀ = [0.1, 0.1, 0.2, 0.15, 0.15, 0.22],

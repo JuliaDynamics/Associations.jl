@@ -1,7 +1,3 @@
-
-using StatsBase
-using DynamicalSystemsBase, DelayEmbeddings
-
 include("discretemaps/ar1.jl")
 include("discretemaps/ar1_bidir.jl")
 include("discretemaps/anishchenko1.jl")

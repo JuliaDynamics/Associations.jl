@@ -1,4 +1,5 @@
-using LabelledArrays 
+using LabelledArrays: LVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
 
 export ulam
 
@@ -14,16 +15,18 @@ end
 """
     ulam(D::Int = 10; u₀ = rand(D), ε::Real = 0.10) → DiscreteDynamicalSystem
 
-A lattice of `D` unidirectionally coupled ulam maps[^Schreiber2000] defined as 
+A lattice of `D` unidirectionally coupled ulam maps[^Schreiber2000] defined as
 
 ```math
 x^{m}_{t+1} = f(\\epsilon x^{m-1}_{t} + (1 - \\epsilon) x_{t}^{m}),
 ```
 
-where ``m = 1, 2, \\ldots, D`` and ``f(x) = 2 - x^2``. In this system, information transfer 
+where ``m = 1, 2, \\ldots, D`` and ``f(x) = 2 - x^2``. In this system, information transfer
 happens only in the direction of increasing ``m``.
 
-[^Schreiber2000]: Schreiber, Thomas. "Measuring information transfer." Physical review letters 85.2 (2000): 461.
+[^Schreiber2000]:
+    Schreiber, Thomas. "Measuring information transfer." Physical review letters 85.2
+    (2000): 461.
 """
 function ulam(D::Int = 10; u₀ = rand(D), ε::Real = 0.10)
 

@@ -1,4 +1,7 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
+using StateSpaceSets: Dataset
 
 export henon_triple
 
@@ -6,7 +9,7 @@ function eom_henon_triple(u, p, n)
     O = zeros(Float64, n + 3, 3)
     x₁, x₂, x₃ = (u...,)
     a, b, c = (p...,)
-    
+
     # Propagate initial condition to the three first time steps.
     for i = 1:3
         O[i, 1] = x₁
@@ -20,7 +23,7 @@ function eom_henon_triple(u, p, n)
         x₂2 = O[i-2, 2]
         x₃1 = O[i-1, 3]
         x₃2 = O[i-2, 3]
-        
+
         x₁new = a - x₁1^2 + b*x₁2
         x₂new = a - c*x₁1*x₂1 - (1 - c)*x₂1^2 + b*x₂2
         x₃new = a - c*x₂1*x₃1 - (1 - c)*x₃1^2 + b*x₃2
@@ -29,7 +32,7 @@ function eom_henon_triple(u, p, n)
         O[i, 2] = x₂new
         O[i, 3] = x₃new
     end
-    
+
     return O[4:end, :]
 end
 

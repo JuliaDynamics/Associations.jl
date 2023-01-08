@@ -1,4 +1,8 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
+using DynamicalSystemsBase: trajectory
+using Distributions: Uniform
 
 export logistic2_unidir
 
@@ -11,7 +15,7 @@ X unidirectionally influences Y [1].
 
 ## Equations of motion
 
-The equations of motion are 
+The equations of motion are
 
 ```math
 \\begin{aligned}
@@ -35,7 +39,7 @@ flat distribution on ``[0, 1]``. Thus, setting `σ = 0.05` is equivalent to
 add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
 range of values of the logistic map.
 
-1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation 
+1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
 """
 
@@ -91,37 +95,37 @@ range of values of the logistic map.
 
 ## References
 
-1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation 
+1. Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy computation
     using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
 """
 logistic2_unidir(;u₀ = rand(2), c_xy = 0.1, r₁ = 3.78, r₂ = 3.66, σ = 0.05) =
     logistic2_unidir(u₀, c_xy, r₁, r₂, σ)
 
 #To get chaotic realisation, check that the orbit doesn't settle to a few unique values
-function good_logistic_unidir_trajectory(npts::Int; 
+function good_logistic_unidir_trajectory(npts::Int;
         Ttr = 1000, dt = 1,
         c_xy = 0.5,
-        Dr₁ = Uniform(3.6, 4.0), 
-        Dr₂ = Uniform(3.6, 4.0), 
-        σ = 0.0, 
+        Dr₁ = Uniform(3.6, 4.0),
+        Dr₂ = Uniform(3.6, 4.0),
+        σ = 0.0,
         n_maxtries = 300)
-    
+
     n_tries = 0
     while n_tries <= n_maxtries
         s = logistic2_unidir(u₀ = rand(2),
-            c_xy = c_xy, 
+            c_xy = c_xy,
             σ = σ,
-            r₁ = rand(Dr₁), 
+            r₁ = rand(Dr₁),
             r₂ = rand(Dr₂))
-        
+
         o = trajectory(s, npts * dt - 1, Ttr = Ttr, dt = dt)
-        
+
         # Ensure there are not too many repeated values, so we don't have trivial behaviour
-        
-        if length(unique(o[:, 1])) > npts * 0.9 && length(unique(o[:, 2])) > npts * 0.9 
+
+        if length(unique(o[:, 1])) > npts * 0.9 && length(unique(o[:, 2])) > npts * 0.9
             return o
         end
-        
+
         n_tries += 1
     end
 end

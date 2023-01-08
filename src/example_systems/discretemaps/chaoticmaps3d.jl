@@ -1,4 +1,6 @@
-using LabelledArrays
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
+using Distributions: Normal
 
 export chaoticmaps
 

@@ -1,4 +1,7 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
+using Distributions: Normal
 
 export var1
 

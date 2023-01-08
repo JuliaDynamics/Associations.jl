@@ -1,3 +1,6 @@
+using StaticArrays: SVector
+using DynamicalSystemsBase: ContinuousDynamicalSystem
+
 export hindmarsh_rose
 
 """

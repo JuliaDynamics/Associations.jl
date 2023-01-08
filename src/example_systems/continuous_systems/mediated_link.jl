@@ -1,4 +1,5 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
 
 export mediated_link
 
@@ -28,7 +29,7 @@ end
 
 """
     mediated_link(;u₀ = rand(9), ωx = 1, ωy = 1.015, ωz = 0.985,
-        k = 0.15, l = 0.2, m = 10.0, 
+        k = 0.15, l = 0.2, m = 10.0,
         c = 0.06) → ContinuousDynamicalSystem
 
 Initialise a three-subsystem dynamical system where `X` and `Y` are
@@ -55,7 +56,7 @@ dz_3 &= l + z_3(z_1 - m)
 
 ##  References
 
-1. Krakovská, Anna, et al. "Comparison of six methods for the detection of 
+1. Krakovská, Anna, et al. "Comparison of six methods for the detection of
     causality in a bivariate time series." Physical Review E 97.4 (2018): 042207
 """
 mediated_link(;u₀ = rand(9), ωx = 1, ωy = 1.015, ωz = 0.985,

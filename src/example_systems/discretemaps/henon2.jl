@@ -1,17 +1,19 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
 
 export henon2
 
 """
     eom_henon2(dx, x, p, n)
 
-Equations of motion for a 2D Henon system consisting of two identical 
+Equations of motion for a 2D Henon system consisting of two identical
 Henon maps with unidirectional forcing ``X \\to Y `` [1].
-    
-## Equations of motion 
-    
-The equations of motion are 
-    
+
+## Equations of motion
+
+The equations of motion are
+
 ```math
 \\begin{aligned}
 x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x_2(t) \\\\
@@ -20,11 +22,11 @@ y_1(t+1) &= 1.4 - [c_{xy} x_1(t) y_1(t) + (1-c_{xy}) y_1^2(t)] + 0.3 y_2(t) \\\\
 y_2(t+1) &= y_1(t)
 \\end{aligned}
 ```
-    
+
 ## References
-    
-1. Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018). 
-    Comparison of six methods for the detection of causality in a bivariate time series. 
+
+1. Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018).
+    Comparison of six methods for the detection of causality in a bivariate time series.
     Physical Review E, 97(4), 042207.
 """
 function eom_henon2(x, p, n)
@@ -48,9 +50,9 @@ end
 Initialize a 2D Henon system consisting of two identical Henon maps with
 unidirectional forcing ``X \\to Y `` [1].
 
-## Equations of motion 
+## Equations of motion
 
-The equations of motion are 
+The equations of motion are
 
 ```math
 \\begin{aligned}
@@ -63,8 +65,8 @@ y_2(t+1) &= y_1(t)
 
 ## References
 
-1. Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018). 
-    Comparison of six methods for the detection of causality in a bivariate time series. 
+1. Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M. (2018).
+    Comparison of six methods for the detection of causality in a bivariate time series.
     Physical Review E, 97(4), 042207.
 """
 henon2(;u₀ = rand(4), c_xy = 2.0) = henon2(u₀, c_xy)
