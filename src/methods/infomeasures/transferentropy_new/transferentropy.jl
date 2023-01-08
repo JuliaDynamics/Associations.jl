@@ -1,6 +1,7 @@
 using StateSpaceSets: AbstractDataset, Dataset
 export transferentropy
 
+include("embedding.jl")
 include("utils.jl")
 
 """
