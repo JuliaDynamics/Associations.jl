@@ -3,7 +3,7 @@ export TERenyiJizba
 """
     TERenyiJizba() <: TransferEntropy
 
-The Rényi transfer entropy from Jizba et al. (2012).
+The Rényi transfer entropy from Jizba et al. (2012)[^Jizba2012].
 
 ## Description
 
@@ -21,19 +21,21 @@ conditional mutual information ([`CMIRenyiJizba`](@ref)).
 The variables ``T^+``, ``T^-``,
 ``S^-`` and ``C^-`` are described in the docstring for [`transferentropy`](@ref).
 
-## Estimation
+## Compatible estimators
 
-Rènyi transfer entropy of this type can be estimated using one the following estimator
-types.
+- **[`ProbabilitiesEstimator`](@ref)**: Any probabilities estimator that accepts
+    multivariate input data or has an implementation for [`marginal_encodings`](@ref).
+    Transfer entropy is computed a sum of marginal (discrete) entropy estimates.
+    Example: [`ValueHistogram`](@ref).
+- **[`DifferentialEntropyEstimator`](@ref)**. Any differential entropy
+    estimator that accepts multivariate input data.
+    Transfer entropy is computed a sum of marginal differential entropy estimates.
+    Example: [`Kraskov`](@ref).
 
-- **[`ProbabilitiesEstimator`](@ref)**. Decomposes the transfer entropy into a sum of
-    marginal entropies, then explicitly computes a probability distribution for each
-    marginal based
-    on some chosen property of the data. Marginal entropies of type `e` are then computed by
-    giving these probabilities to [`entropy`](@ref). Example: [`ValueHistogram`](@ref).
-- **[`DifferentialDifferentialEntropyEstimator`](@ref)**. Decomposes the transfer entropy
-    into a sum of marginal entropies, then computes the differential entropy of type `e`
-    for each marginal. Example: [`Kraskov`](@ref).
+[^Jizba2012]:
+    Jizba, P., Kleinert, H., & Shefaat, M. (2012). Rényi’s information transfer between
+    financial time series. Physica A: Statistical Mechanics and its Applications, 391(10),
+    2971-2989.
 """
 struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy
     e::E

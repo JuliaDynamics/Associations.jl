@@ -21,22 +21,20 @@ where ``I(T^+; S^- | T^-)`` is the Shannon conditional mutual information
 ([`CMIShannon`](@ref)). The variables ``T^+``, ``T^-``,
 ``S^-`` and ``C^-`` are described in the docstring for [`transferentropy`](@ref).
 
-## Estimation
+## Compatible estimators
 
-Shannon transfer entropy can be estimated using one of four estimator types
-
-- **[`ProbabilitiesEstimator`](@ref)**. Decomposes the transfer entropy into a sum of
-    marginal entropies, then explicitly computes a probability distribution for each
-    marginal based
-    on some chosen property of the data. Marginal entropies of type `e` are then computed by
-    giving these probabilities to [`entropy`](@ref). Example: [`ValueHistogram`](@ref).
-- **[`DifferentialDifferentialEntropyEstimator`](@ref)**. Decomposes the transfer entropy
-    into a sum of marginal entropies, then computes the differential entropy of type `e`
-    for each marginal. Example: [`Kraskov`](@ref).
-- **[`MutualInformationEstimator`](@ref)**. Decomposes the transfer entropy into a sum of
-    mutual information terms, which are estimated separately using [`mutualinfo`](@ref).
-    Example: [`KraskovStögbauerGrassberger2`](@ref).
-- **[`ConditionalMutualInformationEstimator`](@ref)**. Use a dedicated CMI estimator.
+- **[`ProbabilitiesEstimator`](@ref)**: Any probabilities estimator that accepts
+    multivariate input data or has an implementation for [`marginal_encodings`](@ref).
+    Transfer entropy is computed a sum of marginal (discrete) entropy estimates.
+    Example: [`ValueHistogram`](@ref).
+- **[`DifferentialEntropyEstimator`](@ref)**. Any differential entropy
+    estimator that accepts multivariate input data.
+    Transfer entropy is computed a sum of marginal differential entropy estimates.
+    Example: [`Kraskov`](@ref).
+- **[`MutualInformationEstimator`](@ref)**. Any mutual information estimator.
+    Formulates the transfer entropy as a sum of mutual information terms, which are
+    estimated separately using [`mutualinfo`](@ref). Example: [`KraskovStögbauerGrassberger2`](@ref).
+- **[`ConditionalMutualInformationEstimator`](@ref)**. Dedicated CMI estimators.
     Example: [`FrenzelPompeVelmejkaPalus`](@ref).
 """
 struct TEShannon{E <: Shannon, EMB} <: TransferEntropy
