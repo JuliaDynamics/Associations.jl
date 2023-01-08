@@ -34,12 +34,10 @@ PAGES = [
     "Overview" => "index.md",
 
     "Information measures" => [
-        "Probabilities" => "probabilities.md",
+        "Probability mass functions" => "probabilities.md",
         "Entropy" => "entropy.md",
-        "Contingency tables" => "contingency.md",
         "Conditional entropy" => "entropy_conditional.md",
         "Mutual information" => "mutualinfo.md",
-
         "Conditional mutual information" => "condmutualinfo.md",
         "Timeseries analysis" => [
             "Transfer entropy" => "transferentropy.md",
