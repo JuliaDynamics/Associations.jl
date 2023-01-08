@@ -35,6 +35,9 @@ struct CMIShannon{E <: Shannon} <: ConditionalMutualInformation{E}
         e = Shannon(; base)
         new{typeof(e)}(e)
     end
+    function CMIShannon(e::E) where E <: Shannon
+        new{E}(e)
+    end
 end
 
 function estimate(measure::CMIShannon, est::ProbOrDiffEst, x, y, z)

@@ -22,7 +22,7 @@ CMIShannon
 Here, we list the [`ProbabilitiesEstimator`](@ref)s that are compatible with
 [`mutualinformation`](@ref), and which definitions they are valid for.
 
-| Estimator                    | Principle           |     Input data     | [`CMIShannon`](@ref) | [`CMIRenyi`](@ref) |
+| Estimator                    | Principle           |     Input data     | [`CMIShannon`](@ref) | [`CMIRenyiSarbu`](@ref) |
 | ---------------------------- | ------------------- | :----------------: | :------------------: | :----------------: |
 | [`CountOccurrences`](@ref)   | Frequencies         | `Vector`/`Dataset` |          ✅          |         ✅         |
 | [`ValueHistogram`](@ref)     | Binning (histogram) | `Vector`/`Dataset` |          ✅          |         ✅         |
@@ -36,7 +36,7 @@ Here, we list the [`ProbabilitiesEstimator`](@ref)s that are compatible with
 The following are *differential mutual information* estimators. They always
 override any definitions above with the concrete integral they estimate.
 
-| Estimator                           | Principle         | [`CMIShannon`](@ref) | [`CMIRenyi`](@ref) |
+| Estimator                           | Principle         | [`CMIShannon`](@ref) | [`CMIRenyiSarbu`](@ref) |
 | ----------------------------------- | ----------------- | :------------------: | :----------------: |
 | [`FrenzelPompeVelmejkaPalus`](@ref) | Nearest neighbors |          ✅          |         x          |
 | [`MesnerShalisi`](@ref)             | Nearest neighbors |          ✅          |         x          |
@@ -46,7 +46,7 @@ override any definitions above with the concrete integral they estimate.
 Continuous/differential conditional mutual information may also be estimated using any of our
 [`DifferentialEntropyEstimator`](@ref) that support multivariate input data.
 
-| Estimator                        | Principle         | Input data | [`CMIShannon`](@ref) | [`CMIRenyi`](@ref) |
+| Estimator                        | Principle         | Input data | [`CMIShannon`](@ref) | [`CMIRenyiSarbu`](@ref) |
 | -------------------------------- | ----------------- | ---------- | :------------------: | :----------------: |
 | [`Kraskov`](@ref)                | Nearest neighbors | `Dataset`  |          ✅          |         x          |
 | [`Zhu`](@ref)                    | Nearest neighbors | `Dataset`  |          ✅          |         x          |

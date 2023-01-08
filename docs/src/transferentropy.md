@@ -10,6 +10,7 @@ transferentropy
 
 ```@docs
 TEShannon
+TERenyiJizba
 ```
 
 ## Examples

@@ -27,7 +27,7 @@ Base.@kwdef struct PoczosSchneiderCMI{M} <: ConditionalMutualInformationEstimato
     metric::M = Euclidean()
 end
 
-function estimate(measure::CMIRenyi, est::PoczosSchneiderCMI, x, y, z)
+function estimate(measure::CMIRenyiSarbu, est::PoczosSchneiderCMI, x, y, z)
     e = measure.e
     c = 1/(e.q-1)*log(Q3(e, est, x, y, z))
     return c / log(e.base, ℯ)

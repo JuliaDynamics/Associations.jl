@@ -1,66 +1,67 @@
 using StateSpaceSets: AbstractDataset, Dataset
-export TEShannon
 export transferentropy
 
 include("utils.jl")
 
+"""
+The supertype of all transfer entropy measures.
+"""
 abstract type TransferEntropy <: InformationMeasure end
 
 """
-    TEShannon(; base = 2)
+    transferentropy(measure::TEShannon, est, s, t, c; kwargs...)
+    transferentropy(measure::TERenyiJizba, est, s, t, c; kwargs...)
 
-The Shannon-type transfer entropy measure given by
-``TE(s \\to t | c) := I(t⁺; s⁻ | t⁻, c⁻)``. Used
-with [`transferentropy`](@ref).
-"""
-Base.@kwdef struct TEShannon{B} <: TransferEntropy
-    base::B = 2
-end
-
-"""
-    transferentropy([measure::TEShannon], est, s, t, c; kwargs...)
-    transferentropy([measure::TEShannon], c::ContingencyMatrix; kwargs...)
-
-Estimate the transfer entropy ``TE(s \\to t | c) := I(t⁺; s⁻ | t⁻, c⁻)`` for
-source variable `s`, target variable `t` and conditional variable(s) `c`.
+Estimate the given transfer entropy `measure` from source variable ``S`` to
+target variable ``T``, conditioned on conditional
+variable(s) ``C`` using the given estimator `est`.
 
 This is just a simple wrapper around [`condmutualinfo`](@ref), and `est` can be
 any [`ConditionalMutualInformationEstimator`](@ref), [`MutualInformationEstimator`](@ref),
 ,[`DifferentialEntropyEstimator`](@ref), or any [`ProbabilitiesEstimator`](@ref) that
 accepts multivariate input data or has an implementation for [`marginal_encodings`](@ref).
 
-If a pre-computed [`ContingencyMatrix`](@ref) `c` is provided, then we just compute
-the conditional mutual information directly from it, assuming the contingency matrix
-was constructed from a meaningful embedding.
+## Description
+
+Transfer entropy is essentially just a special case of conditional mutual information
+where the input data is a certain type of delay embedding. Here, we use
+the [`TEShannon`](@ref) measure to illustrate the embedding procedure,
+which is also used for [`TERenyiJizba`](@ref).
+
+The Shannon CMI is defined as ``TE^S(S \\to T | C) &:= I^S(T^+; S^- | T^-, C^-)``,
+where the variables ``T^+`` (target future), ``T^-``
+(target present/past), ``S^-`` (source present/past) and ``C^-`` (present/past
+of conditioning variables) are constructed by first jointly embedding
+``S``, ``T`` and ``C`` with relevant delay embedding parameters, then subsetting
+relevant columns of the embedding.
+
+Since ``TE^S(S \\to T)`` is just a special case of conditional mutual information,
+*any* combination of variables, e.g. ``S = (A, B)``, ``T = (C, D)``, ``C = (D, E, F)`` are
+valid inputs. In practice, however, the curse of dimensionality quickly
+slows down computation and reliability of the estimated transfer entropy,
+so typically the input data are *timeseries*.
+
 """
-function transferentropy(measure::TEShannon, est, x...;
+function transferentropy end
+
+include("TEShannon.jl")
+include("TERenyiJizba.jl")
+
+function transferentropy(measure::TransferEntropy, est, x...;
         τT = -1, τS = -1, η𝒯 = 1, dT = 1, dS = 1, d𝒯 = 1,τC = -1, dC = 1)
-    # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
     # dataset. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
     emb = EmbeddingTE(; τT, τS, τC, η𝒯, dT, dS, d𝒯, dC)
     S, T, 𝒯, C = te_marginals(emb, x...)
-    cmi = CMIShannon(; base = measure.base)
+    cmi = get_cmi_measure(measure)
+    # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
     return condmutualinfo(cmi, est, 𝒯, S, Dataset(T, C))
 end
 
-function transferentropy(
-        est::Union{
-            ConditionalMutualInformationEstimator,
-            MutualInformationEstimator,
-            DifferentialEntropyEstimator,
-            ProbabilitiesEstimator
-        },
-        args...; kwargs...)
-    return transferentropy(TEShannon(; base = 2), est, args...; kwargs...)
-end
-
-function transferentropy(measure::TEShannon, c::ContingencyMatrix)
-    cmi = CMIShannon(; base = measure.base)
-    return condmutualinfo(cmi, c)
-end
+get_cmi_measure(measure::TEShannon) = CMIShannon(measure.e)
+get_cmi_measure(measure::TERenyiJizba) = CMIRenyiJizba(measure.e)
 
 function te_marginals(emb::EmbeddingTE, x::AbstractVector...)
     pts, vars, τs, js = te_embed(emb, x...)
@@ -75,7 +76,3 @@ function te_marginals(vars::TEVars, pts::AbstractDataset)
     C = pts[:, vars.C]
     return S, T, 𝒯, C
 end
-
-
-#include("hilbert.jl")
-include("TERenyi.jl")

@@ -39,7 +39,7 @@ Rényi-based mutual information.
 
 ### Conditional mutual information (CMI)
 
-- [`CMIRenyi`](@ref). Discrete Rényi CMI.
+- [`CMIRenyiSarbu`](@ref). Discrete Rényi CMI.
 """
 abstract type InformationMeasure <: CausalityMeasure end
 

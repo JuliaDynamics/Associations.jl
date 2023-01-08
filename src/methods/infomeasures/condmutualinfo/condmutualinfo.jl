@@ -41,12 +41,13 @@ between `x` and `y`, given `z`, using the given estimator.
 CMIs appear in many forms in the scientific literature. We support the following CMIs:
 
 - **[`CMIShannon`](@ref)**: Shannon CMI.
-- **[`CMIRenyi`](@ref)**: Renyi CMI.
+- **[`CMIRenyiSarbu`](@ref)**: Renyi CMI.
 """
 condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
 
 include("CMIShannon.jl")
-include("CMIRenyi.jl")
+include("CMIRenyiSarbu.jl")
+include("CMIRenyiJizba.jl")
 include("estimators/estimators.jl")
 
 # Default to Shannon mutual information.
@@ -76,10 +77,11 @@ end
 const WellDefinedCMIShannonProbEsts{m, D} = Union{
     SymbolicPermutation{m},
     ValueHistogram{<:FixedRectangularBinning{D}},
+    ValueHistogram{<:RectangularBinning{T}},
     Dispersion
-} where {m, D}
+} where {m, D, T}
 
-function marginal_entropies_cmi4h(measure::CMIShannon,
+function marginal_entropies_cmi4h(measure::Union{CMIShannon, CMIRenyiSarbu},
         est::WellDefinedCMIShannonProbEsts{m, D},
         x, y, z) where {m, D}
     e = measure.e

@@ -1,14 +1,12 @@
-export CMIRenyi
+export CMIRenyiSarbu
 
 """
-    CMIRenyi <: ConditionalMutualInformation
-    CMIRenyi(; base = 2, definition = CMIRenyiSarbu())
+    CMIRenyiSarbu <: ConditionalMutualInformation
+    CMIRenyiSarbu(; base = 2, definition = CMIRenyiSarbuSarbu())
 
-Rényi conditional mutual information.
+The Rényi conditional mutual information from Sarbu (2014)[^Sarbu2014]).
 
-## Discrete dDescription
-
-The discrete definition comes from Sarbu (2014)[^Sarbu2014]).
+## Discrete description
 
 Assume we observe three discrete random variables ``X``, ``Y`` and ``Z``.
 Sarbu (2014) defines discrete conditional Rényi mutual information as the conditional
@@ -30,16 +28,16 @@ I(X, Y; Z)^R_q =
 
 See also: [`condmutualinfo`](@ref).
 """
-struct CMIRenyi{E <: Renyi} <: ConditionalMutualInformation{E}
+struct CMIRenyiSarbu{E <: Renyi} <: ConditionalMutualInformation{E}
     e::E
-    function CMIRenyi(; base = 2, q = 1.5)
+    function CMIRenyiSarbu(; base = 2, q = 1.5)
         e = Renyi(; base, q)
         new{typeof(e)}(e)
     end
 end
 
 function estimate(
-        measure::CMIRenyi,
+        measure::CMIRenyiSarbu,
         pxyz::ContingencyMatrix{T, 3}) where T
     e = measure.e
     q = e.q
@@ -67,5 +65,5 @@ function estimate(
         end
         cmi += pzₖ * logb(inner)
     end
-    return cmi
+    return 1 / (1 - q) * cmi
 end
