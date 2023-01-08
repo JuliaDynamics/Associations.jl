@@ -60,8 +60,9 @@ end
 const WellDefinedMIShannonProbEsts{m, D} = Union{
     SymbolicPermutation{m},
     ValueHistogram{<:FixedRectangularBinning{D}},
+    ValueHistogram{<:RectangularBinning{T}},
     Dispersion
-} where {m, D}
+} where {m, D, T}
 
 function marginal_entropies_mi3h(measure::MutualInformation,
         est::WellDefinedMIShannonProbEsts{m, D}, x, y) where {m, D}
