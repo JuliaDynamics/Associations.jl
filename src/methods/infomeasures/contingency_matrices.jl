@@ -15,11 +15,14 @@ export contingency_matrix
 
 # This is not optimized for speed, but it *works*
 """
-    ContingencyMatrix{T, N} <: AbstractArray{T, N}
+    ContingencyMatrix{T, N} <: Probabilities{T, N}
 
-`ContingencyMatrix` is just a simple wrapper around `AbstractArray{T, N}` (plus some
-extras) that is a multivariate analogue of [`Probabilities`](@ref). It is computed
-using [`contingency_matrix`](@ref).
+`ContingencyMatrix` is just a simple wrapper around around `AbstractArray{T, N}`.
+
+A contingency matrix is essentially a multivariate analogue of [`Probabilities`](@ref),
+but also keeps track of raw frequencies. It can be estimated from input data with
+[`contingency_matrix`](@ref), either from raw categorical data or by using
+a [`ProbabilitiesEstimator`](@ref) to first discretize the data.
 
 ## Description
 
@@ -27,7 +30,7 @@ Indexing a contingency matrix `c` with multiple indices `i, j, …` returns the 
 element of the empirical probability mass function (pmf). The following convencience
 methods are defined:
 
-- `frequencies(c)` returns the raw counts.
+- `frequencies(c)` returns the multivariate raw counts.
 - `probabilities(c)` contains the normalized counts, i.e. a multidimensional empirical
     probability mass function (pmf).
 - `probabilities(c, i::Int)` returns the marginal probabilities for the `i`-th dimension.
