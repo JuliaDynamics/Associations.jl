@@ -1,3 +1,5 @@
+export MIRenyiJizba
+
 """
     MIRenyiJizba <: ConditionalMutualInformation
 

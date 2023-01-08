@@ -1,3 +1,4 @@
+export CMIRenyiJizba
 """
     CMIRenyiJizba <: ConditionalMutualInformation
 

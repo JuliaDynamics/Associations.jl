@@ -13,6 +13,7 @@ ConditionalMutualInformation
 
 ```@docs
 CMIShannon
+CMIRenyiJizba
 ```
 
 ## Discrete

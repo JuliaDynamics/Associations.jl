@@ -37,6 +37,7 @@ MITsallisMartin
 
 ```@docs
 MIRenyiSarbu
+MIRenyiJizba
 ```
 
 More variants of the discrete Renyi mutual information are possible.

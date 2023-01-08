@@ -1,8 +1,8 @@
-export MIRenyi
+export MIRenyiSarbu
 
 """
-    MIRenyi <: MutualInformation
-    MIRenyi(; base = 2, q = 1.5)
+    MIRenyiSarbu <: MutualInformation
+    MIRenyiSarbu(; base = 2, q = 1.5)
 
 The discrete Rényi mutual information (see [`MRenyi`](@ref)) from Sarbu (2014)[^Sarbu2014].
 

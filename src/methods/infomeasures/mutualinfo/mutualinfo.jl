@@ -37,6 +37,7 @@ include("MIShannon.jl")
 include("MITsallisFuruichi.jl")
 include("MITsallisMartin.jl")
 include("MIRenyiSarbu.jl")
+include("MIRenyiJizba.jl")
 
 include("estimators/estimators.jl")
 
