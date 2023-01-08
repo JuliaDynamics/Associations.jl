@@ -1,4 +1,3 @@
-using Distributions
 using Statistics: quantile
 
 import ComplexityMeasures: entropy
