@@ -5,7 +5,7 @@ using Neighborhood: bulksearch, isearch
 export Lindner
 
 """
-    Lindner <: TransferDifferentialEntropyEstimator
+    Lindner <: TransferEntropyEstimator
     Lindner(k = 1, w = 0, base = 2)
 
 The `Lindner` transfer entropy estimator (Lindner et al., 2011)[^Lindner2011], which is
@@ -49,27 +49,46 @@ Base.@kwdef struct Lindner{B} <: DifferentialEntropyEstimator
     end
 end
 
-function transferentropy(measure::Renyi, est::Lindner, args...)
+function transferentropy(measure::TEShannon, est::Lindner, args...)
     (; k, w, base) = est
-    measure.q ≈ 1.0 || error("Renyi transfer entropy with q = $(measure.q) not defined for $(typeof(e))")
-    joint, ST, TT⁺, T = get_marginals(TransferEntropy(), args...)
-
+    joint, ST, TT⁺, T = h4_marginals(measure, args...)
+    N = length(joint)
     W = Theiler(w)
     tree_joint = KDTree(joint, Euclidean())
     nns_joint, ds_joint = bulksearch(tree_joint, joint, NeighborNumber(k), W)
-    tree_ST, tree_TT⁺, tree_T = KDTree.([ST, TT⁺, T], Ref(Euclidean()))
-
+    ds = last.(ds_joint) # only care about distance to the k-th neighbor
     # For each `xᵢ ∈ M`, where `M` is one of the marginal spaces, count the number of
-    # points within distance `ds_joint[i]` from the point. Then count, for each point in each
+    # points within distance `ds[i]` from the point. Then count, for each point in each
     # of the marginals, how many neighbors each `xᵢ` has given `ds[i]`.
-    nns_ST  = [isearch(tree_ST, pᵢ, WithinRange(ds_joint[i])) for (i, pᵢ) in enumerate(ST)]
-    nns_TT⁺ = [isearch(tree_TT⁺, pᵢ, WithinRange(ds_joint[i])) for (i, pᵢ) in enumerate(TT⁺)]
-    nns_T   = [isearch(tree_T, pᵢ, WithinRange(ds_joint[i])) for (i, pᵢ) in enumerate(T)]
+    tree_ST = KDTree(ST, Euclidean())
+    tree_TT⁺ = KDTree(TT⁺, Euclidean())
+    tree_T = KDTree(T, Euclidean())
+    nns_ST  = [isearch(tree_ST, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(ST)]
+    nns_TT⁺ = [isearch(tree_TT⁺, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(TT⁺)]
+    nns_T   = [isearch(tree_T, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(T)]
 
-    n_ST = length.(nns_ST)
-    n_TT⁺ = length.(nns_TT⁺)
-    n_T = length.(nns_T)
+    n_ST = length.(nns_ST) .+ 1
+    n_TT⁺ = length.(nns_TT⁺) .+ 1
+    n_T = length.(nns_T) .+ 1
 
-    te = 1/N * sum(digamma(n_T + 1) - digamma(n_ST + 1) - digamma(n_TT⁺ + 1)) + digamma(k)
+
+    te = 1/N * sum(digamma.(n_T) .- digamma.(n_ST) .- digamma.(n_TT⁺)) + digamma(k)
     return te / log(ℯ, base)
+end
+
+
+function get_entropy_marginals(measure::TEShannon, s, t)
+    joint, vars, τs, js = te_embed(measure.emb, s, t)
+    ST = pts[:, [vars.S; vars.T]]
+    T𝒯 = pts[:, [vars.𝒯; vars.T]]
+    T = pts[:, vars.T]
+    return joint, ST, T𝒯, T
+end
+
+function get_entropy_marginals(measure::TEShannon, s, t, c)
+    joint, vars, τs, js = te_embed(measure.emb, s, t, c)
+    ST = pts[:, [vars.S; vars.T; vars.C]]
+    T𝒯 = pts[:, [vars.𝒯; vars.T; vars.C]]
+    T = pts[:, [vars.T; vars.C]]
+    return joint, ST, T𝒯, T
 end

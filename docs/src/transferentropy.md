@@ -1,16 +1,35 @@
 # Transfer entropy
 
+The transfer entropy API is made up of the following functions and types,
+which are listed below:
+
+- [`transferentropy`](@ref).
+- [`TransferEntropy`](@ref), and its subtypes.
+- [`EmbeddingTE`](@ref), which exists to provide embedding instructions to
+    subtypes of [`TransferEntropy`](@ref).
+- [`TransferEntropyEstimator`](@ref), and its subtypes.
+
 ## API
 
 ```@docs
 transferentropy
+EmbeddingTE
 ```
 
 ## Definitions
 
 ```@docs
+TransferEntropy
 TEShannon
 TERenyiJizba
+```
+
+## Estimators
+
+```@docs
+TransferEntropyEstimator
+Zhu1
+Lindner
 ```
 
 ## Examples
@@ -68,9 +87,10 @@ fig
 
 As expected, transfer entropy from `X1` to `X2` is higher than from `X2` to `X1` across parameter values for `ε`. But, by our definition of the ulam system, dynamical coupling only occurs from `X1` to `X2`. The results, however, show nonzero transfer entropy in both directions. What does this mean?
 
-Computing transfer entropy from finite time series introduces bias, and so does any particular choice of entropy estimator used to calculate it. To determine whether a transfer entropy estimate should be trusted, we can employ surrogate testing. We'll generate surrogate using TimeseriesSurrogates.jl.
+Computing transfer entropy from finite time series introduces bias, and so does any particular choice of entropy estimator used to calculate it. To determine whether a transfer entropy estimate should be trusted, we can employ surrogate testing. We'll generate surrogate using
+[TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl).
 
-In the example below, we continue with the same time series generated above. However, at each value of ε, we also compute transfer entropy for nsurr = 50 different randomly shuffled (permuted) versions of the source process. If the original transfer entropy exceeds that of some percentile the transfer entropy estimates of the surrogate ensemble, we will take that as "significant" transfer entropy.
+In the example below, we continue with the same time series generated above. However, at each value of `ε`, we also compute transfer entropy for `nsurr = 50` different randomly shuffled (permuted) versions of the source process. If the original transfer entropy exceeds that of some percentile the transfer entropy estimates of the surrogate ensemble, we will take that as "significant" transfer entropy.
 
 ```@example example_te_schreiber
 nsurr = 25 # in real applications, you should use more surrogates

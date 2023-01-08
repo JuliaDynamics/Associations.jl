@@ -1,7 +1,7 @@
-
 using Neighborhood: KDTree, NeighborNumber, WithinRange, Theiler, Chebyshev
 using Neighborhood: bulksearch, isearch
-using DelayEmbeddings: AbstractDataset
+using StateSpaceSets: AbstractDataset, Dataset
+using StateSpaceSets: dimension
 using SpecialFunctions: digamma
 
 export Zhu1
@@ -11,6 +11,8 @@ export Zhu1
     Zhu1(k = 1, w = 0, base = MathConstants.e)
 
 The `Zhu1` transfer entropy estimator (Zhu et al., 2015)[^Zhu2015].
+
+Assumes that the input data have been normalized as described in (Zhu et al., 2015).
 
 This estimator approximates probabilities within hyperrectangles
 surrounding each point `xᵢ ∈ x` using using `k` nearest neighbor searches. However,
@@ -30,25 +32,29 @@ when searching for neighbours).
     neighbor estimates of entropy. American journal of mathematical and management
     sciences, 23(3-4), 301-321.
 """
-Base.@kwdef struct Zhu1{B} <: DifferentialEntropyEstimator
+Base.@kwdef struct Zhu1 <: TransferEntropyEstimator
     k::Int = 1
     w::Int = 0
-    base::B = MathConstants.e
 
-    function Zhu1(k::Int, w::Int, base::B) where B
+    function Zhu1(k::Int, w::Int)
         k >= 2 || throw(DomainError("The number of neighbors k must be >= 2."))
-        new{B}(k, w, base)
+        new(k, w)
     end
 end
 
-function t(est::Zhu1,
-    S::AbstractDataset{DS, Q},
-    T::AbstractDataset{DT, Q},
-    T⁺::AbstractDataset{DTT, Q}
-) where {DS, DT, DTT, Q}
-    (; k, w, base) = est
-    joint = Dataset(S, T, T⁺)
-    ST, TT⁺ = Dataset(S, T), Dataset(T, T⁺)
+function transferentropy(measure::TEShannon, est::Zhu1, args...)
+    (; k, w) = est
+
+    # The Zhu1 estimator needs to keep track of the dimension of the individual
+    # terms that goes into the implicit CMI computation. We could have just used
+    # `h4_marginals` here, but then we wouldn't get the dimensions out of the box.
+    S, T, T⁺, C = individual_marginals(measure.embedding, x...)
+    joint = Dataset(S, T, T⁺, C)
+    ST = Dataset(S, T, C)
+    TT⁺ = Dataset(T, T⁺, C)
+    T = Dataset(T, C)
+
+    DS, DT, DTT⁺ = dimension(S), dimension(T), dimension(TT⁺)
 
     # Find distances in the joint space. Then compute, for each `xᵢ ∈ joint`, the volume of
     # the minimal rectangle containing its `k` nearest neighbors (with `k` fixed).
@@ -79,7 +85,7 @@ function t(est::Zhu1,
 
     # Compute transfer entropy
     return mean_volumes(vJ, vST, vTT⁺, vT, N) +
-        mean_digamma(kST, kTT⁺, kT, k, N, DS, DT, DTT)
+        mean_digamma(kST, kTT⁺, kT, k, N, DS, DT, DTT⁺)
 end
 
 function volumes(x::AbstractDataset, nn_idxs, N::Int)
