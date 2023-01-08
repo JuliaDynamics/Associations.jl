@@ -92,6 +92,63 @@ GaoOhViswanath
 
 ## Examples
 
+### [Quickstart](@id example_mi_quickstart)
+
+Here's an example of different ways of estimating the Shannon mutual information:
+
+We use a dedicated mutual information estimator like
+[`KraskovStögbauerGrassberger2`](@ref) to
+compute the *differential* Shannon mutual information:
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+measure = MIShannon(base = 2)
+mutualinfo(measure, KSG2(k = 5), x, y)
+```
+
+We can also use a [`ValueHistogram`](@ref) estimator to bin the data and compute
+discrete Shannon mutual information.
+
+```@example mi_demonstration
+
+# Use the H3-estimation method with a discrete visitation frequency based 
+# probabilities estimator over a fixed grid covering the range of the data,
+# which is on [0, 1].
+est = ValueHistogram(FixedRectangularBinning(0, 1, 5))
+mutualinfo(measure, est, x, y)
+```
+
+This is in fact is equivalent to using a [`ContingencyMatrix`](@ref).
+
+```@example mi_demonstration
+c = contingency_matrix(est, x, y)
+mutualinfo(measure, c)
+```
+
+However, the [`ContingencyMatrix`](@ref) can also be used with categorical data.
+For example, let's compare the Shannon mutual information between the preferences
+of a population sample with regards to different foods.
+
+```@example mi_demonstration
+n = 1000
+preferences = rand(["neutral", "like it", "hate it"], n);
+random_foods = rand(["water", "flour", "bananas", "booze", "potatoes", "beans", "soup"], n)
+biased_foods = map(preferences) do preference
+    if cmp(preference, "neutral") == 1
+        return rand(["water", "flour"])
+    elseif cmp(preference, "like it") == 1
+        return rand(["bananas", "booze"])
+    else
+        return rand(["potatoes", "beans", "soup"])
+    end
+end
+
+c_biased = contingency_matrix(preferences, biased_foods) 
+c_random = contingency_matrix(preferences, random_foods) 
+mutualinfo(measure, c_biased), mutualinfo(measure, c_random)
+```
+
 ### Discrete MI: synthetic systems example
 
 In this example we generate realizations of two different systems where we know the strength of coupling between the variables. Our aim is to compute Shannon mutual information $I^S(X; Y)$ ([`MIShannon`](@ref)) between time series of each variable and assess how the magnitude of $I^S(X; Y)$ changes as we change the strength of coupling between $X$ and $Y$.
