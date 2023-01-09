@@ -1,5 +1,6 @@
 using LabelledArrays: @LArray
 using StaticArrays: SVector
+using DynamicalSystemsBase: ContinuousDynamicalSystem
 
 export mediated_link
 
