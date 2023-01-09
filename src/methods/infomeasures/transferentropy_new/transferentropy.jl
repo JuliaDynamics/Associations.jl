@@ -35,8 +35,9 @@ using the provided estimator `est`, where ``*`` indicates the given `measure`.
 
 ## Description
 
-The Shannon CMI is defined as ``TE^S(S \\to T | C) &:= I^S(T^+; S^- | T^-, C^-)``,
-where ``I^S(T^+; S^- | T^-, C^-)`` is [`CMIShannon`](@ref). The definition is
+The Shannon transfer entropy is defined as ``TE^S(S \\to T | C) := I^S(T^+; S^- | T^-, C^-)``,
+where ``I^S(T^+; S^- | T^-, C^-)`` is [`CMIShannon`](@ref), and marginals for
+the CMI are constructed as described in [`EmbeddingTE`](@ref). The definition is
 analogous for [`TERenyiJizba`](@ref).
 
 If `s`, `t`, and `c` are univariate timeseries, then the
@@ -44,7 +45,7 @@ the marginal embedding variables ``T^+`` (target future), ``T^-`` (target presen
 ``S^-`` (source present/past) and ``C^-`` (present/past of conditioning variables)
 are constructed by first jointly embedding  `s`, `t` and `c` with relevant delay
 embedding parameters, then subsetting relevant columns of the embedding.
-Details are found in [`EmbeddingTE`](@ref).
+
 
 Since estimates of ``TE^*(S \\to T)`` and ``TE^*(S \\to T | C)`` are just a special cases of
 conditional mutual information where input data are marginals of a particular form of
@@ -61,7 +62,7 @@ pre-embedded and the embedding step is skipped.
 an appropriate delay embedding from the input data before CMI is estimated. Consequently,
 any estimator that can be used for [`ConditionalMutualInformation`](@ref) is, in principle,
 also a valid transfer entropy estimator. Documentation strings for [`TEShannon`](@ref) and
-[`TERenyiJizba`](@ref)) list compatible estimators, and an overview table can be found in
+[`TERenyiJizba`](@ref) list compatible estimators, and an overview table can be found in
 the online documentation.
 """
 function transferentropy end
