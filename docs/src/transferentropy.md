@@ -137,3 +137,81 @@ The plot above shows the original transfer entropies (solid lines) and the 95th 
 [^Schreiber2000]:
     Schreiber, Thomas. "Measuring information transfer." Physical review letters 85.2
     (2000): 461.
+
+### Estimator comparison
+
+Let's reproduce Figure 4 from Zhu et al (2015)[^Zhu2015], where they test some
+dedicated transfer entropy estimators on a bivariate autoregressive system.
+We will test
+
+- The [`Lindner`](@ref) and [`Zhu1`](@ref) dedicated transfer entropy estimators,
+    which try to eliminate bias.
+- The [`KSG1`](@ref) estimator, which computes TE naively as a sum of mutual information
+    terms (without guaranteed cancellation of biases for the total sum).
+- The [`Kraskov`](@ref) estimator, which computes TE naively as a sum of entropy 
+    terms (without guaranteed cancellation of biases for the total sum).
+
+[^Zhu2015]:
+    Zhu, J., Bellanger, J. J., Shu, H., & Le Bouquin Jeannès, R. (2015). Contribution to transfer entropy estimation via the k-nearest-neighbors approach. Entropy, 17(6), 4173-4201.
+
+```@example
+using CausalityTools
+using CairoMakie
+using Statistics
+using Distributions: Normal
+
+function model2(n::Int)
+    𝒩x = Normal(0, 0.1)
+    𝒩y = Normal(0, 0.1)
+    x = zeros(n+2)
+    y = zeros(n+2)
+    x[1] = rand(𝒩x)
+    x[2] = rand(𝒩x)
+    y[1] = rand(𝒩y)
+    y[2] = rand(𝒩y)
+
+    for i = 3:n+2
+        x[i] = 0.45*sqrt(2)*x[i-1] - 0.9*x[i-2] - 0.6*y[i-2] + rand(𝒩x)
+        y[i] = 0.6*x[i-2] - 0.175*sqrt(2)*y[i-1] + 0.55*sqrt(2)*y[i-2] + rand(𝒩y)
+    end
+    return x[3:end], y[3:end]
+end
+te_true = 0.42 # eyeball the theoretical value from their Figure 4.
+
+m = TEShannon(embedding = EmbeddingTE(dT = 2, dS = 2), base = ℯ)
+estimators = [Zhu1(k = 8), Lindner(k = 8), KSG1(k = 8), Kraskov(k = 8)]
+Ls = [floor(Int, 2^i) for i in 8.0:0.5:11]
+nreps = 8
+tes_xy = [[zeros(nreps) for i = 1:length(Ls)] for e in estimators]
+tes_yx = [[zeros(nreps) for i = 1:length(Ls)] for e in estimators]
+for (k, est) in enumerate(estimators)
+    for (i, L) in enumerate(Ls)
+        for j = 1:nreps
+            x, y = model2(L);
+            tes_xy[k][i][j] = transferentropy(m, est, x, y)
+            tes_yx[k][i][j] = transferentropy(m, est, y, x)
+        end
+    end
+end
+
+ymin = minimum(map(x -> minimum(Iterators.flatten(Iterators.flatten(x))), (tes_xy, tes_yx)))
+estimator_names = ["Zhu1", "Lindner", "KSG1", "Kraskov"]
+ls = [:dash, :dot, :dash, :dot]
+mr = [:rect, :hexagon, :xcross, :pentagon]
+
+fig = Figure(resolution = (800, 350))
+ax_xy = Axis(fig[1,1], xlabel = "Signal length", ylabel = "TE (nats)", title = "x → y")
+ax_yx = Axis(fig[1,2], xlabel = "Signal length", ylabel = "TE (nats)", title = "y → x")
+for (k, e) in enumerate(estimators)
+    label = estimator_names[k]
+    marker = mr[k]
+    scatterlines!(ax_xy, Ls, mean.(tes_xy[k]); label, marker)
+    scatterlines!(ax_yx, Ls, mean.(tes_yx[k]); label, marker)
+    hlines!(ax_xy, [te_true]; xmin = 0.0, xmax = 1.0, linestyle = :dash, color = :black) 
+    hlines!(ax_yx, [te_true]; xmin = 0.0, xmax = 1.0, linestyle = :dash, color = :black)
+    linkaxes!(ax_xy, ax_yx)
+end
+axislegend(ax_xy, position = :rb)
+
+fig
+```
