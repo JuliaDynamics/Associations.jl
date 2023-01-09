@@ -3,6 +3,7 @@ using Neighborhood: bulksearch, isearch
 using StateSpaceSets: AbstractDataset, Dataset
 using StateSpaceSets: dimension
 using SpecialFunctions: digamma
+using ComplexityMeasures: maxdists, volume_minimal_rect
 
 export Zhu1
 
@@ -42,7 +43,7 @@ Base.@kwdef struct Zhu1 <: TransferEntropyEstimator
     end
 end
 
-function transferentropy(measure::TEShannon, est::Zhu1, args...)
+function transferentropy(measure::TEShannon, est::Zhu1, x...)
     (; k, w) = est
 
     # The Zhu1 estimator needs to keep track of the dimension of the individual
@@ -54,7 +55,9 @@ function transferentropy(measure::TEShannon, est::Zhu1, args...)
     TT⁺ = Dataset(T, T⁺, C)
     T = Dataset(T, C)
 
-    DS, DT, DTT⁺ = dimension(S), dimension(T), dimension(TT⁺)
+    DS = dimension(S)
+    DT = dimension(T)
+    DT⁺ = dimension(T⁺)
 
     # Find distances in the joint space. Then compute, for each `xᵢ ∈ joint`, the volume of
     # the minimal rectangle containing its `k` nearest neighbors (with `k` fixed).
@@ -84,8 +87,12 @@ function transferentropy(measure::TEShannon, est::Zhu1, args...)
     vT = volumes(T, nns_T, N)
 
     # Compute transfer entropy
-    return mean_volumes(vJ, vST, vTT⁺, vT, N) +
-        mean_digamma(kST, kTT⁺, kT, k, N, DS, DT, DTT⁺)
+    te = mean_volumes(vJ, vST, vTT⁺, vT, N) +
+        mean_digamma(kST, kTT⁺, kT, k, N, DS, DT, DT⁺)
+    # Convert to target unit *after* computations, which all use natural logs.
+    return te / log(measure.e.base, ℯ)
+
+
 end
 
 function volumes(x::AbstractDataset, nn_idxs, N::Int)
@@ -102,7 +109,7 @@ end
 function mean_volumes(vols_joint, vols_ST, vols_TT⁺, vols_T, N::Int)
     vol = 0.0
     for i = 1:N
-        vol += (vols_TT⁺[i] * vols_ST[i]) / (vols_joint[i] * vols_T[i])
+        vol += log((vols_TT⁺[i] * vols_ST[i]) / (vols_joint[i] * vols_T[i]))
     end
     return vol / N
 end

@@ -54,41 +54,31 @@ function transferentropy(measure::TEShannon, est::Lindner, args...)
     joint, ST, TT⁺, T = h4_marginals(measure, args...)
     N = length(joint)
     W = Theiler(w)
-    tree_joint = KDTree(joint, Euclidean())
+    metric =  Chebyshev()
+    tree_joint = KDTree(joint, metric)
     nns_joint, ds_joint = bulksearch(tree_joint, joint, NeighborNumber(k), W)
-    ds = last.(ds_joint) # only care about distance to the k-th neighbor
     # For each `xᵢ ∈ M`, where `M` is one of the marginal spaces, count the number of
     # points within distance `ds[i]` from the point. Then count, for each point in each
     # of the marginals, how many neighbors each `xᵢ` has given `ds[i]`.
-    tree_ST = KDTree(ST, Euclidean())
-    tree_TT⁺ = KDTree(TT⁺, Euclidean())
-    tree_T = KDTree(T, Euclidean())
+    ds = last.(ds_joint) # only care about distance to the k-th neighbor
+    tree_ST = KDTree(ST, metric)
+    tree_TT⁺ = KDTree(TT⁺, metric)
+    tree_T = KDTree(T, metric)
     nns_ST  = [isearch(tree_ST, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(ST)]
     nns_TT⁺ = [isearch(tree_TT⁺, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(TT⁺)]
     nns_T   = [isearch(tree_T, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(T)]
 
-    n_ST = length.(nns_ST) .+ 1
-    n_TT⁺ = length.(nns_TT⁺) .+ 1
-    n_T = length.(nns_T) .+ 1
+    n_ST = length.(nns_ST)
+    n_TT⁺ = length.(nns_TT⁺)
+    n_T = length.(nns_T)
+    te = 0.0
+    for i = 1:N
+        te += digamma(n_T[i] + 1) - digamma(n_TT⁺[i] + 1) - digamma(n_ST[i])
+    end
+    te /= N
+    te += digamma(k)
 
-
-    te = 1/N * sum(digamma.(n_T) .- digamma.(n_ST) .- digamma.(n_TT⁺)) + digamma(k)
+    # Convert to target base *after* digamma computations, because the digamma function
+    # is a function of the natural log.
     return te / log(ℯ, base)
-end
-
-
-function get_entropy_marginals(measure::TEShannon, s, t)
-    joint, vars, τs, js = te_embed(measure.emb, s, t)
-    ST = pts[:, [vars.S; vars.T]]
-    T𝒯 = pts[:, [vars.𝒯; vars.T]]
-    T = pts[:, vars.T]
-    return joint, ST, T𝒯, T
-end
-
-function get_entropy_marginals(measure::TEShannon, s, t, c)
-    joint, vars, τs, js = te_embed(measure.emb, s, t, c)
-    ST = pts[:, [vars.S; vars.T; vars.C]]
-    T𝒯 = pts[:, [vars.𝒯; vars.T; vars.C]]
-    T = pts[:, [vars.T; vars.C]]
-    return joint, ST, T𝒯, T
 end

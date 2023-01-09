@@ -1,7 +1,8 @@
 export TEShannon
 
 """
-    TEShannon(; base = 2) <: TransferEntropy
+    TEShannon <: TransferEntropy
+    TEShannon(; base = 2; embedding = EmbeddingTE()) <: TransferEntropy
 
 The Shannon-type transfer entropy measure.
 
