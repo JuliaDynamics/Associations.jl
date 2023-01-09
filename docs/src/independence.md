@@ -41,23 +41,34 @@ LocalPermutation
 ### Examples
 
 Here, we'll create a three-variable scenario where `X` and `Z` are connected through `Y`,
-so that ``I(X; Z | Y) = 0`` and ``I(X; Y | Z) > 0``. We'll use the four-entropy-sum
-definition ([`CMI4H`](@ref)) of Shannon conditional mutual information
-([`CMIShannon`](@ref)), and use the [`Kraskov`](@ref) estimator to estimate each entropy
-term.
+so that ``I(X; Z | Y) = 0`` and ``I(X; Y | Z) > 0``. We'll test for conditional
+independence using Shannon conditional mutual information
+([`CMIShannon`](@ref)). To estimate CMI, we'll use the [`Kraskov`](@ref) differential
+entropy estimator, which naively computes CMI as a sum of entropy terms without guaranteed
+bias cancellation.
 
 ```@example LOCAL_PERMUTATION_TEST
 using CausalityTools
-using Random
 
-X = randn(10000)
-Y = X .+ randn(10000)
-Z = randn(10000) .+ 0.8*Y
-x, y, z = Dataset.([X, Y, Z])
-
-test = LocalPermutation(
-    definition = CMI4H(),
+X = randn(2000)
+Y = X .+ randn(2000) .* 0.4
+Z = randn(2000) .+ Y
+x, y, z = Dataset.((X, Y, Z))
+test = LocalPermutation(nsurr = 35,
     measure = CMIShannon(base = 2),
-    est = Kraskov(k = 10))
+    est = Kraskov(k = 10)
+);
 test_result = independence(test, x, y, z)
 ```
+
+Since ``X \\to Y \\to Z``, we expect there to be a detectable influence from ``X`` to
+``Y`` even conditioning on ``Z``, because ``Z`` doesn't influence neither ``X`` nor ``Y``.
+The null hypothesis is that the first two variables are conditionally independent given the third, which we reject with a very low p-value. Hence, we accept the alternative
+hypothesis that the first two variables ``X`` and ``Y``. are conditionally *dependent* given ``Z``.
+
+```@example LOCAL_PERMUTATION_TEST
+test_result = independence(test, x, z, y)
+```
+
+As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are conditionally independent given ``Y``, because ``Y`` is the variable that transmits information from
+``X`` to ``Z``.
