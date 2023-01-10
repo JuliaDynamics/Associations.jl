@@ -39,15 +39,13 @@ PAGES = [
         "Conditional entropy" => "entropy_conditional.md",
         "Mutual information" => "mutualinfo.md",
         "Conditional mutual information" => "condmutualinfo.md",
-        "Timeseries analysis" => [
-            "Transfer entropy" => "transferentropy.md",
-            # "predictive_asymmetry.md",
-        ]
+        "Transfer entropy" => "transferentropy.md",
     ],
     "Independence tests" => "independence.md",
 
     "Cross mappings" => "cross_mappings.md",
     "Joint distance distribution" => "jdd.md",
+    "Experimental" => "experimental.md",
 ]
 
 makedocs(
