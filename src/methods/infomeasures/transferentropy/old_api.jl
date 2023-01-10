@@ -1,7 +1,7 @@
 
 """
 transferentropy([e::EntropyDefinition], s, t, [c,] est;
-    τT = -1, τS = -1, η𝒯 = 1, dT = 1, dS = 1, d𝒯 = 1, [τC = -1, dC = 1])
+    τT = -1, τS = -1, ηTf = 1, dT = 1, dS = 1, dTf = 1, [τC = -1, dC = 1])
 
 Estimate transfer entropy[^Schreiber2000] from source `s` to target `t`, ``TE^{q}(s \\to t)``, using the
 provided entropy/probability estimator `est` with logarithms to the given `base`. Optionally, condition
@@ -23,7 +23,7 @@ All possible estimators that can be used are described in the online documentati
 Keyword arguments tune the embedding that will be done to each of the timeseries
 (with more details following below).
 In short, the embedding lags `τT`, `τS`, `τC` must be zero or negative, the
-prediction lag `η𝒯` must be positive, and the embedding dimensions `dT`, `dS`, `dC`, `d𝒯`
+prediction lag `ηTf` must be positive, and the embedding dimensions `dT`, `dS`, `dC`, `dTf`
 must be greater than or equal to 1. Thus, the convention is to use negative lags to
 indicate embedding delays for past state vectors (for the ``T``, ``S`` and ``C`` marginals,
 detailed below), and positive lags to indicate embedding delays for future state vectors
@@ -81,9 +81,9 @@ is necessary to get future states when constructing ``\\mathcal{T}``.*
 
 In practice, the `dT`-dimensional, `dS`-dimensional and `dC`-dimensional state vectors
 comprising ``T``, ``S`` and ``C`` are constructed with embedding lags `τT`,
-`τS`, and `τC`, respectively. The `d𝒯`-dimensional future states ``\\mathcal{T}^{(d_{\\mathcal T}, \\eta_{\\mathcal T})}``
-are constructed with prediction lag `η𝒯` (i.e. predictions go from present/past states to
-future states spanning a maximum of `d𝒯*η𝒯` time steps).
+`τS`, and `τC`, respectively. The `dTf`-dimensional future states ``\\mathcal{T}^{(d_{\\mathcal T}, \\eta_{\\mathcal T})}``
+are constructed with prediction lag `ηTf` (i.e. predictions go from present/past states to
+future states spanning a maximum of `dTf*ηTf` time steps).
 *Note: in Schreiber's paper, only the historical states are defined as
 potentially higher-dimensional, while the future states are always scalar.*
 
@@ -163,7 +163,7 @@ end
 
 """
     transferentropy([e::EntropyDefinition,] est::ProbabilitiesEstimator, s, t, [c];
-        τT = -1, τS = -1, η𝒯 = 1, dT = 1, dS = 1, d𝒯 = 1, [τC = -1, dC = 1])
+        τT = -1, τS = -1, ηTf = 1, dT = 1, dS = 1, dTf = 1, [τC = -1, dC = 1])
     transferentropy(]e::EntropyDefinition,] est::TransferDifferentialEntropyEstimator, s, t, [c]; kwargs...)
 
 Estimate transfer entropy from `s` to `t`, optionally conditioning on `c`,
@@ -184,13 +184,13 @@ See also: [`Entropy`](@ref), [`ProbabilitiesEstimator`](@ref).
 """
 function transferentropy(e::EntropyDefinition, est::ProbabilitiesEstimator,
         args...; params = TransferEntropy(), kwargs...)
-    joint, ST, T𝒯, T = get_marginals(params, args...; emb = EmbeddingTE(; kwargs...))
-    from_marginals(TE(), e, est, joint, ST, T𝒯, T)
+    joint, ST, TTf, T = get_marginals(params, args...; emb = EmbeddingTE(; kwargs...))
+    from_marginals(TE(), e, est, joint, ST, TTf, T)
 end
 
 """
     transferentropy(e::DifferentialEntropyEstimator, s, t, [c];
-        τT = -1, τS = -1, η𝒯 = 1, dT = 1, dS = 1, d𝒯 = 1, [τC = -1, dC = 1])
+        τT = -1, τS = -1, ηTf = 1, dT = 1, dS = 1, dTf = 1, [τC = -1, dC = 1])
 
 Estimate Shannon transfer entropy from `s` to `t`, optionally conditioning on `c`,
 by a sum of marginal entropies, using an [`DifferentialEntropyEstimator`](@ref) estimator from
@@ -200,6 +200,6 @@ These methods estimate entropies using some procedure that doesn't explicitly co
 probability distribution.
 """
 function transferentropy(e::DifferentialEntropyEstimator, args...; kwargs...)
-    joint, ST, T𝒯, T = get_marginals(TE(), args...; emb = EmbeddingTE(; kwargs...))
-    from_marginals(TE(), e, joint, ST, T𝒯, T)
+    joint, ST, TTf, T = get_marginals(TE(), args...; emb = EmbeddingTE(; kwargs...))
+    from_marginals(TE(), e, joint, ST, TTf, T)
 end

@@ -215,3 +215,19 @@ axislegend(ax_xy, position = :rb)
 
 fig
 ```
+
+## Convenience
+
+### Symbolic transfer entropy
+
+```@docs
+SymbolicTransferEntropy
+```
+
+### Phase/amplitude transfer entropy
+
+```@docs
+Hilbert
+Phase
+Amplitude
+```

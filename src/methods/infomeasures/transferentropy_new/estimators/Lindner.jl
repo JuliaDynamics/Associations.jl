@@ -31,7 +31,7 @@ TE(X \\to Y) =
 \\right],
 ```
 
-where the index `k` references the three marginal subspaces `T`, `T𝒯` and `ST` for which
+where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
 neighbor searches are performed.
 
 [Lindner2011]: Lindner, M., Vicente, R., Priesemann, V., & Wibral, M. (2011). TRENTOOL:

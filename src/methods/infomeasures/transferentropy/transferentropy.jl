@@ -80,8 +80,8 @@ transferentropy(est::VALID_TE_ESTIMATOR_TYPES, args...; base = 2, kwargs...) =
 function transferentropy(e::EntropyDefinition, est::Union{DifferentialEntropyEstimator, ProbabilitiesEstimator},
         args...; kwargs...)
     emb = EmbeddingTE(; kwargs...)
-    joint, ST, T𝒯, T = get_marginals(TransferEntropy(), args...; emb)
-    return entropy(m, est, T𝒯) +
+    joint, ST, TTf, T = get_marginals(TransferEntropy(), args...; emb)
+    return entropy(m, est, TTf) +
         entropy(e, est, ST) -
         entropy(e, est, T) -
         entropy(e, est, joint)
@@ -89,14 +89,14 @@ end
 
 function transferentropy(measure::ConditionalMutualInformation, est, args...; kwargs...)
     emb = EmbeddingTE(; kwargs...)
-    S, T, 𝒯 = get_marginals(TransferEntropy(), measure, args...; emb)
-    return condmutualinfo(measure, est, S, 𝒯, T) # TE = I(S; 𝒯| T)
+    S, T, Tf = get_marginals(TransferEntropy(), measure, args...; emb)
+    return condmutualinfo(measure, est, S, Tf, T) # TE = I(S; Tf| T)
 end
 
 function transferentropy(measure::ConditionalMutualInformation, est, args...; kwargs...)
     emb = EmbeddingTE(; kwargs...)
-    S, T, 𝒯 = get_marginals(TransferEntropy(), measure, args...; emb)
-    return mi(measure, est, S, 𝒯, T) # TE = I(S; 𝒯| T) = I()
+    S, T, Tf = get_marginals(TransferEntropy(), measure, args...; emb)
+    return mi(measure, est, S, Tf, T) # TE = I(S; Tf| T) = I()
 end
 
 # function from_marginals(m::TransferEntropy, e::EntropyDefinition, est::MutualInformationEstimator,

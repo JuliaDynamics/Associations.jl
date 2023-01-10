@@ -32,6 +32,8 @@ module CausalityTools
 
     include("example_systems/example_systems.jl")
 
+    include("deprecations/deprecations.jl")
+
     #using Requires
     #function __init__()
         #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin

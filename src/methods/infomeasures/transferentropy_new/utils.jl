@@ -108,25 +108,25 @@ end
 
 
 function get_delay_reconstruction_params(source, target, p::EmbeddingTE)
-    pos_𝒯, lags_𝒯 = rc(target, p.d𝒯, p.η𝒯, true)
+    pos_Tf, lags_Tf = rc(target, p.dTf, p.ηTf, true)
     pos_T, lags_T = rc(target, p.dT, p.τT, false)
     pos_S, lags_S = rc(source, p.dS, p.τS, false)
     pos_C, lags_C = rc(source, p.dC, p.τC, false)
 
-    js = ([pos_𝒯; pos_T; pos_S]...,)
-    τs = ([lags_𝒯; lags_T; lags_S]...,)
+    js = ([pos_Tf; pos_T; pos_S]...,)
+    τs = ([lags_Tf; lags_T; lags_S]...,)
 
     return τs, js
 end
 
 function get_delay_reconstruction_params(source, target, cond, p::EmbeddingTE)
-    pos_𝒯, lags_𝒯 = rc(target, p.d𝒯, p.η𝒯, true)
+    pos_Tf, lags_Tf = rc(target, p.dTf, p.ηTf, true)
     pos_T, lags_T = rc(target, p.dT, p.τT, false)
     pos_S, lags_S = rc(source, p.dS, p.τS, false)
     pos_C, lags_C = rc(cond, p.dC, p.τC, false)
 
-    js = ([pos_𝒯; pos_T; pos_S; pos_C]...,)
-    τs = ([lags_𝒯; lags_T; lags_S; pos_C]...,)
+    js = ([pos_Tf; pos_T; pos_S; pos_C]...,)
+    τs = ([lags_Tf; lags_T; lags_S; pos_C]...,)
 
     return τs, js
 end
@@ -151,32 +151,32 @@ function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVec
     #end
 
     # Get lags and posisions separately for each marginal
-    pos_𝒯, lags_𝒯 = rc(target, p.d𝒯, p.η𝒯, true)
+    pos_Tf, lags_Tf = rc(target, p.dTf, p.ηTf, true)
     pos_T, lags_T = rc(target, p.dT, p.τT, false)
     pos_S, lags_S = rc(source, p.dS, p.τS, false)
 
     # Add one to the index of the positions for the target (rc doesn't know it is in fact our second time series)
     # TODO: make sure this works when `source` and `target` are multiple time series
-    pos_𝒯 .= pos_𝒯 .+ 1
+    pos_Tf .= pos_Tf .+ 1
     pos_T .= pos_T .+ 1
 
-    js = ([pos_𝒯; pos_T; pos_S]...,)
-    τs = ([lags_𝒯; lags_T; lags_S]...,)
+    js = ([pos_Tf; pos_T; pos_S]...,)
+    τs = ([lags_Tf; lags_T; lags_S]...,)
 
     # TODO: This only works for single time series at the moment
     ts = Dataset(source, target)
 
     # The reconstructed points
     pts = genembed(ts, τs, js)
-    d𝒯 = length(pos_𝒯)
+    dTf = length(pos_Tf)
     dT = length(pos_T)
     dS = length(pos_S)
 
     # Which columns/variables map to which marginals?
     vars = TEVars(
-        𝒯  = 1:(d𝒯)           |> collect,
-        T = 1+(d𝒯):dT+(d𝒯)     |> collect,
-        S = 1+(dT+d𝒯):dS+(d𝒯+dT) |> collect)
+        Tf  = 1:(dTf)           |> collect,
+        T = 1+(dTf):dT+(dTf)     |> collect,
+        S = 1+(dT+dTf):dS+(dTf+dT) |> collect)
 
     return pts, vars, τs, js
 end
@@ -188,46 +188,46 @@ function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVec
     #    @warn("Backwards lag τS should be negative. You might be getting nonsensical results!")
     #end
     # Get lags and posisions separately for each marginal
-    pos_𝒯, lags_𝒯 = rc(target, p.d𝒯, p.η𝒯,  true)
+    pos_Tf, lags_Tf = rc(target, p.dTf, p.ηTf,  true)
     pos_T, lags_T = rc(target, p.dT, p.τT, false)
     pos_S, lags_S = rc(source, p.dS, p.τS, false)
     pos_C, lags_C = rc(cond,   p.dC, p.τC, false)
 
     # Add one to the index of the positions for the target (rc doesn't know it is in fact our second time series)
     # TODO: make sure this works when `source` and `target` are multiple time series
-    pos_𝒯 .= pos_𝒯 .+ 1
+    pos_Tf .= pos_Tf .+ 1
     pos_T .= pos_T .+ 1
     pos_C .= pos_C .+ 2
 
-    js = ([pos_𝒯; pos_T; pos_S; pos_C]...,)
-    τs = ([lags_𝒯; lags_T; lags_S; lags_C]...,)
+    js = ([pos_Tf; pos_T; pos_S; pos_C]...,)
+    τs = ([lags_Tf; lags_T; lags_S; lags_C]...,)
 
     # TODO: This only works for single time series at the moment
     ts = Dataset(source, target, cond)
 
     # The reconstructed points
     pts = genembed(ts, τs, js)
-    d𝒯 = length(pos_𝒯)
+    dTf = length(pos_Tf)
     dT = length(pos_T)
     dS = length(pos_S)
     dC = length(pos_C)
 
     # Which columns/variables map to which marginals?
     vars = TEVars(
-        𝒯 = 1:(d𝒯)               |> collect,
-        T = 1+(d𝒯):dT+(d𝒯)         |> collect,
-        S = 1+(dT+d𝒯):dS+(d𝒯+dT)     |> collect,
-        C = 1+(dT+d𝒯+dS):dC+(d𝒯+dT+dS) |> collect)
+        Tf = 1:(dTf)               |> collect,
+        T = 1+(dTf):dT+(dTf)         |> collect,
+        S = 1+(dT+dTf):dS+(dTf+dT)     |> collect,
+        C = 1+(dT+dTf+dS):dC+(dTf+dT+dS) |> collect)
 
     return pts, vars, τs, js
 end
 
 """
-    TEVars(𝒯::Vector{Int}, T::Vector{Int}, S::Vector{Int})
-    TEVars(𝒯::Vector{Int}, T::Vector{Int}, S::Vector{Int}, C::Vector{Int})
-    TEVars(;𝒯 = Int[], T = Int[], S = Int[], C = Int[]) -> TEVars
+    TEVars(Tf::Vector{Int}, T::Vector{Int}, S::Vector{Int})
+    TEVars(Tf::Vector{Int}, T::Vector{Int}, S::Vector{Int}, C::Vector{Int})
+    TEVars(;Tf = Int[], T = Int[], S = Int[], C = Int[]) -> TEVars
 
-Which axes of the state space correspond to the future of the target (`𝒯`),
+Which axes of the state space correspond to the future of the target (`Tf`),
 the present/past of the target (`T`), the present/past of the source (`S`), and
 the present/past of any conditioned variables (`C`)?  This information is used by
 the transfer entropy estimators to ensure that marginal distributions are computed correctly.
@@ -238,36 +238,16 @@ Indices correspond to variables of the embedding, or, equivalently, colums of a 
 - The four-argument constructor assumes there will be conditional variables.
 
 """
-struct TEVars
-    𝒯::Vector{Int}
-    T::Vector{Int}
-    S::Vector{Int}
-    C::Vector{Int}
+Base.@kwdef struct TEVars
+    Tf::Vector{Int} = Int[]
+    T::Vector{Int} = Int[]
+    S::Vector{Int} = Int[]
+    C::Vector{Int} = Int[]
+    TEVars(𝒯, T, S, C) = new(𝒯, T, S, C)
+    TEVars(𝒯, T, S) = new(𝒯, T, S, Int[])
 end
 
-"""
-    TEVars(𝒯::Vector{Int},
-            T::Vector{Int},
-            S::Vector{Int})
-
-Which axes of the state space correspond to the future of the target,
-the present/past of the target, and the present/past of the source?
-Indices correspond to variables of the embedding or colums of a `Dataset`.
-
-This information is used by the transfer entropy estimators to ensure
-the marginal distributions are computed correctly.
-
-This three-argument constructor assumes there will be no conditional variables.
-"""
-TEVars(𝒯::Vector{Int}, T::Vector{Int}, S::Vector{Int}) = TEVars(𝒯, T, S, Int[])
-
-TEVars(;𝒯::Vector{Int} = Int[],
-	    T::Vector{Int} = Int[],
-	    S::Vector{Int} = Int[],
-		C::Vector{Int} = Int[]) =
-	TEVars(𝒯, T, S, C)
-
 function Base.show(io::IO, tv::TEVars)
-    s = "$(typeof(tv))(𝒯 = $(tv.𝒯), T = $(tv.T), S = $(tv.S), C = $(tv.C))"
+    s = "$(typeof(tv))(Tf = $(tv.Tf), T = $(tv.T), S = $(tv.S), C = $(tv.C))"
     print(io, s)
 end

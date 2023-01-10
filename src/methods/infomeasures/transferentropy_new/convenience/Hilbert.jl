@@ -2,6 +2,7 @@ using DSP
 using ComplexityMeasures: EntropyDefinition
 
 export Amplitude, Phase, Hilbert
+
 abstract type InstantaneousSignalProperty end
 
 """
@@ -40,21 +41,21 @@ See also: [`Phase`](@ref), [`Amplitude`](@ref).
 
 [^Palus2014]: Paluš, M. (2014). Cross-scale interactions and information transfer. Entropy, 16(10), 5263-5289.
 """
-struct Hilbert <: TransferDifferentialEntropyEstimator
+struct Hilbert{E} <: TransferEntropyEstimator
     source::InstantaneousSignalProperty
     target::InstantaneousSignalProperty
     cond::InstantaneousSignalProperty
-    est
+    est::E
 
-    function Hilbert(est::VisitationFrequency;
+    function Hilbert(est::E;
             source::InstantaneousSignalProperty = Phase(),
             target::InstantaneousSignalProperty = Phase(),
-            cond::InstantaneousSignalProperty = Phase())
-        new(source, target, cond, est)
+            cond::InstantaneousSignalProperty = Phase()) where E
+        new{E}(source, target, cond, est)
     end
 end
 
-function transferentropy(e::EntropyDefinition, est::Hilbert, source, target)
+function transferentropy(measure::TransferEntropy, est::Hilbert, source, target)
     hil_s = DSP.hilbert(source)
     hil_t = DSP.hilbert(target)
 
@@ -75,10 +76,10 @@ function transferentropy(e::EntropyDefinition, est::Hilbert, source, target)
     end
 
     # Now, estimate transfer entropy on the phases/amplitudes with the given estimator.
-    transferentropy(e, est.est, s, t)
+    transferentropy(measure, est.est, s, t)
 end
 
-function transferentropy(e::EntropyDefinition, est::Hilbert, source, target, cond)
+function transferentropy(measure::TransferEntropy, est::Hilbert, source, target, cond)
     hil_s = DSP.hilbert(source)
     hil_t = DSP.hilbert(target)
     hil_c = DSP.hilbert(cond)
@@ -107,11 +108,5 @@ function transferentropy(e::EntropyDefinition, est::Hilbert, source, target, con
         error("est.cond must be either Phase or Amplitude instance")
     end
 
-    transferentropy(e, est.est, s, t, c)
+    transferentropy(measure, est.est, s, t, c)
 end
-
-
-transferentropy(est::Hilbert, source, target) =
-    transferentropy(Shannon(; base), est, source, target)
-transferentropy(est::Hilbert, source, target, cond) =
-    transferentropy(Shannon(; base), est, source, target, cond)

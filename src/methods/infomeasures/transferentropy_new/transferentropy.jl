@@ -17,11 +17,12 @@ The supertype of all dedicated transfer entropy estimators.
 abstract type TransferEntropyEstimator end
 
 """
-    transferentropy(measure::TEShannon, est, s, t, [c])
+    transferentropy([measure::TEShannon], est, s, t, [c])
     transferentropy(measure::TERenyiJizba, est, s, t, [c])
 
 Estimate the transfer entropy ``TE^*(S \\to T)`` or ``TE^*(S \\to T | C)`` if `c` is given,
 using the provided estimator `est`, where ``*`` indicates the given `measure`.
+If `measure` is not given, then `TEShannon(; base = 2)` is the default.
 
 ## Arguments
 
@@ -45,7 +46,6 @@ the marginal embedding variables ``T^+`` (target future), ``T^-`` (target presen
 ``S^-`` (source present/past) and ``C^-`` (present/past of conditioning variables)
 are constructed by first jointly embedding  `s`, `t` and `c` with relevant delay
 embedding parameters, then subsetting relevant columns of the embedding.
-
 
 Since estimates of ``TE^*(S \\to T)`` and ``TE^*(S \\to T | C)`` are just a special cases of
 conditional mutual information where input data are marginals of a particular form of
@@ -75,10 +75,10 @@ function transferentropy(measure::TransferEntropy, est, x...)
     # dataset. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
-    S, T, 𝒯, C = individual_marginals(measure.embedding, x...)
+    S, T, Tf, C = individual_marginals(measure.embedding, x...)
     cmi = convert_to_cmi_measure(measure)
     # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
-    return condmutualinfo(cmi, est, 𝒯, S, Dataset(T, C))
+    return condmutualinfo(cmi, est, Tf, S, Dataset(T, C))
 end
 
 convert_to_cmi_measure(measure::TEShannon) = CMIShannon(measure.e)
@@ -88,9 +88,9 @@ function individual_marginals(emb::EmbeddingTE, x::AbstractVector...)
     joint, vars, τs, js = te_embed(emb, x...)
     S = joint[:, vars.S]
     T = joint[:, vars.T]
-    𝒯 = joint[:, vars.𝒯]
+    Tf = joint[:, vars.Tf]
     C = joint[:, vars.C]
-    return S, T, 𝒯, C
+    return S, T, Tf, C
 end
 
 function h4_marginals(measure::TransferEntropy, x...)
@@ -103,3 +103,17 @@ function h4_marginals(measure::TransferEntropy, x...)
 end
 
 include("estimators/estimators.jl")
+include("convenience/convenience.jl")
+
+# Default to Shannon-type base 2 transfer entropy
+const TE_ESTIMATORS = Union{
+    TransferEntropyEstimator,
+    ConditionalMutualInformationEstimator,
+    MutualInformationEstimator,
+    DifferentialEntropyEstimator,
+    ProbabilitiesEstimator,
+}
+
+function transferentropy(est::TransferEntropyEstimator, x...)
+    transferentropy(TEShannon(base = 2), est, x...)
+end
