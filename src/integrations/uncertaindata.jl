@@ -1,5 +1,5 @@
 # The uncertainty handling framework in this file will be added
-# as part of a 1.X release. Can be ignored for now.
+# as part of a 2.X release. Can be ignored for now.
 
 import UncertainData:
     resample,
