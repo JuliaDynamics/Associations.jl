@@ -51,10 +51,6 @@ Given some `input` data, estimate some information measure using the given
 """
 function estimate(measure::InformationMeasure, args...; kwargs...) end
 
-# Maximum-likelihood, jackknife, etc. These are common estimators
-# that can be used to improve various discrete estimates.
-include("generic_estimators/generic_estimators.jl")
-
 # Contingency matrices and its computation based on various probabilites
 # estimators
 include("marginal_encodings.jl")
