@@ -1,117 +1,119 @@
-using ComplexityMeasures: ProbabilitiesEstimator, EntropyDefinition, DifferentialEntropyEstimator
-export transferentropy, transferentropy!
-using DelayEmbeddings: AbstractDataset
+using StateSpaceSets: AbstractDataset, Dataset
+export transferentropy
+export TransferEntropy
+export TransferEntropyEstimator
 
-"""
-Abstract type for transfer entropy estimators.
-
-See also: [`MutualInformationEstimator`](@ref), [`DifferentialEntropyEstimator`](@ref),
-[`ProbabilitiesEstimator`](@ref).
-"""
-abstract type TransferDifferentialEntropyEstimator end
-
-# TODO: move all parameters here.
-struct TransferEntropy <: InformationMeasure end
-
+include("embedding.jl")
 include("utils.jl")
 
-function from_marginals(measure::TransferEntropy, e::EntropyDefinition, est::TransferDifferentialEntropyEstimator,
-    args...; kwargs...)
-    msg = "$(typeof(e)) $(typeof(measure)) not implemented for transfer entropy estimator $(typeof(est))"
-    throw(ArgumentError(msg))
-end
-
-function from_marginals(measure::TransferEntropy, e::EntropyDefinition, est::MutualInformationEstimator,
-    args...; kwargs...)
-    msg = "$(typeof(e)) $(typeof(measure)) not implemented for mutual information estimator $(typeof(est))"
-    throw(ArgumentError(msg))
-end
-
-# function from_marginals(measure::TransferEntropy, e::EntropyDefinition, est::ProbabilitiesEstimator,
-#         args...; kwargs...)
-#     combo = "$(typeof(e)) transfer entropy, with probabilities estimated using $(typeof(est))"
-#     msg = "Marginal estimation of $typeof(e) $(typeof(measure)) is not implemented for $combo)"
-#     throw(ArgumentError(msg))
-# end
-
-VALID_TE_ESTIMATOR_TYPES = Union{
-    DifferentialEntropyEstimator,
-    ProbabilitiesEstimator,
-    MutualInformationEstimator,
-    TransferDifferentialEntropyEstimator}
+"""
+The supertype of all transfer entropy measures.
+"""
+abstract type TransferEntropy <: InformationMeasure end
 
 """
-    transferentropy([e::EntropyDefinition,] est::ProbabilitiesEstimator, s, t, [c];
-    transferentropy([e::EntropyDefinition,] est::DifferentialEntropyEstimator, s, t, [c])
-    transferentropy([e::EntropyDefinition,] est::MutualInformationEstimator, s, t, [c])
-    transferentropy([e::EntropyDefinition,] est::TransferDifferentialEntropyEstimator, s, t, [c])
+The supertype of all dedicated transfer entropy estimators.
+"""
+abstract type TransferEntropyEstimator end
 
-Estimate transfer entropy of type `e` from the source timeseries `s` to the target
-timeseries `t`, conditioned on timeseries `c` (if given).
+"""
+    transferentropy([measure::TEShannon], est, s, t, [c])
+    transferentropy(measure::TERenyiJizba, est, s, t, [c])
 
-The first argument - the entropy type - is optional and defaults to `Shannon()`.
+Estimate the transfer entropy ``TE^*(S \\to T)`` or ``TE^*(S \\to T | C)`` if `c` is given,
+using the provided estimator `est`, where ``*`` indicates the given `measure`.
+If `measure` is not given, then `TEShannon(; base = 2)` is the default.
 
-## Estimation methods
+## Arguments
 
-Transfer entropy can be estimated using one of four estimator types
+- **`measure`**: The transfer entropy measure, e.g. [`TEShannon`](@ref) or
+    [`TERenyi`](@ref), which dictates which formula is computed.
+    Embedding parameters are stored in `measure.embedding`, and
+    is represented by an [`EmbeddingTE`](@ref) instance.
+- **`s`**: The source timeseries.
+- **`t`**: The target timeseries.
+- **`c`**: Optional. Any conditional timeseries.
 
-- **[`DifferentialDifferentialEntropyEstimator`](@ref)**. Decomposes the transfer entropy into a sum of marginal
-    entropies, then computes the differential entropy of type `e` for each marginal.
-    Example: [`Kraskov`](@ref).
-- **[`ProbabilitiesEstimator`](@ref)**. Decomposes the transfer entropy into a sum of marginal
-    entropies, then explicitly computes a probability distribution for each marginal based
-    on some chosen property of the data. Marginal entropies of type `e` are then computed by
-    giving these probabilities to [`entropy`](@ref). Example: [`NaiveKernel`](@ref).
-- **[`MutualInformationEstimator`](@ref)**. Decomposes the transfer entropy into a sum of
-    mutual information terms, which are estimated separately using [`mutualinfo`](@ref).
-    Example: [`Kraskov2`](@ref).
-- **[`TransferDifferentialEntropyEstimator`](@ref)**. Estimate the transfer entropy directly using the
-    provided estimator.
+## Description
 
-Together, these estimators cover most existing transfer entropy estimation methods.
-A (non-exhaustive) overview of implemented literature methods are found in the online
-documentation.
+The Shannon transfer entropy is defined as ``TE^S(S \\to T | C) := I^S(T^+; S^- | T^-, C^-)``,
+where ``I^S(T^+; S^- | T^-, C^-)`` is [`CMIShannon`](@ref), and marginals for
+the CMI are constructed as described in [`EmbeddingTE`](@ref). The definition is
+analogous for [`TERenyiJizba`](@ref).
+
+If `s`, `t`, and `c` are univariate timeseries, then the
+the marginal embedding variables ``T^+`` (target future), ``T^-`` (target present/past),
+``S^-`` (source present/past) and ``C^-`` (present/past of conditioning variables)
+are constructed by first jointly embedding  `s`, `t` and `c` with relevant delay
+embedding parameters, then subsetting relevant columns of the embedding.
+
+Since estimates of ``TE^*(S \\to T)`` and ``TE^*(S \\to T | C)`` are just a special cases of
+conditional mutual information where input data are marginals of a particular form of
+[delay embedding](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/reconstruction/),
+*any* combination of variables, e.g. ``S = (A, B)``, ``T = (C, D)``,
+``C = (D, E, F)`` are valid inputs (given as `Dataset`s).
+In practice, however, `s`, `t` and `c` are most often timeseries, and if
+ `s`, `t` and `c` are [`Dataset`](@ref)s, it is assumed that the data are
+pre-embedded and the embedding step is skipped.
+
+## Compatible estimators
+
+`transferentropy` is just a simple wrapper around [`condmutualinfo`](@ref) that constructs
+an appropriate delay embedding from the input data before CMI is estimated. Consequently,
+any estimator that can be used for [`ConditionalMutualInformation`](@ref) is, in principle,
+also a valid transfer entropy estimator. Documentation strings for [`TEShannon`](@ref) and
+[`TERenyiJizba`](@ref) list compatible estimators, and an overview table can be found in
+the online documentation.
 """
 function transferentropy end
-transferentropy(est::VALID_TE_ESTIMATOR_TYPES, args...; base = 2, kwargs...) =
-    transferentropy(Shannon(; base), est, args...; kwargs...)
 
+include("TEShannon.jl")
+include("TERenyiJizba.jl")
 
-function transferentropy(e::EntropyDefinition, est::Union{DifferentialEntropyEstimator, ProbabilitiesEstimator},
-        args...; kwargs...)
-    emb = EmbeddingTE(; kwargs...)
-    joint, ST, TTf, T = get_marginals(TransferEntropy(), args...; emb)
-    return entropy(m, est, TTf) +
-        entropy(e, est, ST) -
-        entropy(e, est, T) -
-        entropy(e, est, joint)
+function transferentropy(measure::TransferEntropy, est, x...)
+    # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
+    # dataset. The horizontal concatenation of C with T then just returns T.
+    # We therefore don't need separate methods for the conditional and non-conditional
+    # cases.
+    S, T, Tf, C = individual_marginals(measure.embedding, x...)
+    cmi = convert_to_cmi_measure(measure)
+    # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
+    return condmutualinfo(cmi, est, Tf, S, Dataset(T, C))
 end
 
-function transferentropy(measure::ConditionalMutualInformation, est, args...; kwargs...)
-    emb = EmbeddingTE(; kwargs...)
-    S, T, Tf = get_marginals(TransferEntropy(), measure, args...; emb)
-    return condmutualinfo(measure, est, S, Tf, T) # TE = I(S; Tf| T)
+convert_to_cmi_measure(measure::TEShannon) = CMIShannon(measure.e)
+convert_to_cmi_measure(measure::TERenyiJizba) = CMIRenyiJizba(measure.e)
+
+function individual_marginals(emb::EmbeddingTE, x::AbstractVector...)
+    joint, vars, τs, js = te_embed(emb, x...)
+    S = joint[:, vars.S]
+    T = joint[:, vars.T]
+    Tf = joint[:, vars.Tf]
+    C = joint[:, vars.C]
+    return S, T, Tf, C
 end
 
-function transferentropy(measure::ConditionalMutualInformation, est, args...; kwargs...)
-    emb = EmbeddingTE(; kwargs...)
-    S, T, Tf = get_marginals(TransferEntropy(), measure, args...; emb)
-    return mi(measure, est, S, Tf, T) # TE = I(S; Tf| T) = I()
+function h4_marginals(measure::TransferEntropy, x...)
+    S, T, T⁺, C = individual_marginals(measure.embedding, x...)
+    joint = Dataset(S, T, T⁺, C)
+    ST = Dataset(S, T, C)
+    TT⁺ = Dataset(T, T⁺, C)
+    T = Dataset(T, C)
+    return joint, ST, TT⁺, T
 end
 
-# function from_marginals(m::TransferEntropy, e::EntropyDefinition, est::MutualInformationEstimator,
-#     args...; kwargs...)
-#     return
-# end
-
-# Estimators
 include("estimators/estimators.jl")
+include("convenience/convenience.jl")
 
-# Literature methods.
-include("convenience/symbolic/symbolic.jl")
-include("convenience/hilbert/hilbert.jl")
-include("convenience/transfer_operator/transferoperator.jl")
-include("convenience/spike/spike.jl") # Continuous-time
+# Default to Shannon-type base 2 transfer entropy
+const TE_ESTIMATORS = Union{
+    TransferEntropyEstimator,
+    ConditionalMutualInformationEstimator,
+    MutualInformationEstimator,
+    DifferentialEntropyEstimator,
+    ProbabilitiesEstimator,
+}
 
-# automated approaches
-include("bbnue/bbnue.jl")
+function transferentropy(est::TransferEntropyEstimator, x...)
+    transferentropy(TEShannon(base = 2), est, x...)
+end

@@ -1,21 +1,21 @@
 using TimeseriesSurrogates
-include("autoutils.jl")
 
 export bbnue
 
 # Keep this for when a common interface for optimized variable selection methods has been established
 # """
 #export BBNUE
-#     BBNUE(est) <: TransferDifferentialEntropyEstimator
+#     BBNUE(est) <: TransferEntropyEstimator
 
 # The bootstrap-based non-uniform embedding estimator (BB-NUE) for conditional transfer entropy (Montalto et al., 2014).
 # Uses the estimator `est` to compute relevant marginal entropies. (e.g. `VisitationFrequency(RectangularBinning(3))`)
 
 # [^Montalto2014]: Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
 # """
-# struct BBNUE{E} <: TransferDifferentialEntropyEstimator
+# struct BBNUE{E} <: TransferEntropyEstimator
 #     est::E
 # end
+
 
 """
     bbnue(source, target, [cond], est;
@@ -116,7 +116,7 @@ te_xy, te_yx
 
 [^Montalto2014]: Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
 """
-function bbnue(e::EntropyDefinition, est::ProbabilitiesEstimator, source, target, cond;
+function bbnue(source, target, cond, est; q = 1, base = 2,
         η = 1, include_instantaneous = true,
         method_delay = "ac_min", maxlag::Union{Int, Float64} = 0.05,
         α = 0.05, nsurr = 19, surr::TimeseriesSurrogates.Surrogate = RandomShuffle())
@@ -125,17 +125,17 @@ function bbnue(e::EntropyDefinition, est::ProbabilitiesEstimator, source, target
         candidate_embedding(
             process_input(source),
             process_input(target),
-            process_input(cond);
-            η,
-            include_instantaneous,
-            method_delay,
-            maxlag)
+            process_input(cond),
+            η = η,
+            include_instantaneous = include_instantaneous,
+            method_delay = method_delay,
+            maxlag = maxlag)
 
-    return optim_te(e, Ω, Y⁺, τs, js, idxs_source, idxs_target, idxs_cond, est;
-        α, nsurr, surr)
+    return optim_te(Ω, Y⁺, τs, js, idxs_source, idxs_target, idxs_cond, est,
+        q = q, base = base, α = α, nsurr = nsurr, surr = surr)
 end
 
-function bbnue(e::EntropyDefinition, est::ProbabilitiesEstimator, source, target;
+function bbnue(source, target, est; q = 1, base = 2,
         η = 1, include_instantaneous = true,
         method_delay = "ac_min", maxlag::Union{Int, Float64} = 0.05,
         α = 0.05, nsurr = 19, surr::TimeseriesSurrogates.Surrogate = RandomShuffle())
@@ -143,18 +143,12 @@ function bbnue(e::EntropyDefinition, est::ProbabilitiesEstimator, source, target
     Ω, Y⁺, τs, js, idxs_source, idxs_target, idxs_cond =
         candidate_embedding(
             process_input(source),
-            process_input(target);
-            η,
-            include_instantaneous,
-            method_delay,
-            maxlag)
+            process_input(target),
+            η = η,
+            include_instantaneous = include_instantaneous,
+            method_delay = method_delay,
+            maxlag = maxlag)
 
-    return optim_te(e, est, Ω, Y⁺, τs, js, idxs_source, idxs_target, idxs_cond;
-        α, nsurr, surr)
+    return optim_te(Ω, Y⁺, τs, js, idxs_source, idxs_target, idxs_cond, est,
+        q = q, base = base, α = α, nsurr = nsurr, surr = surr)
 end
-
-bbnue(est::ProbabilitiesEstimator, s, t; base = 2, kwargs...) =
-    bbnue(Shannon(; base), est, s, t; kwargs...)
-
-bbnue(est::ProbabilitiesEstimator, s, t, c; base = 2, kwargs...) =
-    bbnue(Shannon(; base), est, s, t,c ; kwargs...)
