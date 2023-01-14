@@ -26,7 +26,7 @@ variable (`Z`) is the third input variable). If a certain measure doesn't have a
 `definition`, it is simply ignored.
 
 The default is to use Shannon-type conditional mutual information, ``I(X; Y | Z)``
-([`condmutualinfo`](@ref) with the [`FrenzelPompeVelmejkaPalus`](@ref]) estimator.
+([`CMIShannon`](@ref) with the [`FrenzelPompeVelmejkaPalus`](@ref]) estimator.
 
 ## Description
 
