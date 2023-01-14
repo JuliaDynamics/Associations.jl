@@ -43,6 +43,7 @@ include("estimators/estimators.jl")
 
 # Default to Shannon mutual information.
 mutualinfo(est::ProbOrDiffEst, x, y) = estimate(MIShannon(), est, x, y)
+mutualinfo(est::MutualInformationEstimator, x, y) = estimate(MIShannon(), est, x, y)
 
 # Generic 3H-formulation of mutual information.
 function marginal_entropies_mi3h(measure::MutualInformation, est, x, y)
