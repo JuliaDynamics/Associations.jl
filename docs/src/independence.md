@@ -61,7 +61,7 @@ test = LocalPermutation(nsurr = 35,
 test_result = independence(test, x, y, z)
 ```
 
-Since ``X \\to Y \\to Z``, we expect there to be a detectable influence from ``X`` to
+We expect there to be a detectable influence from ``X`` to
 ``Y`` even conditioning on ``Z``, because ``Z`` doesn't influence neither ``X`` nor ``Y``.
 The null hypothesis is that the first two variables are conditionally independent given the third, which we reject with a very low p-value. Hence, we accept the alternative
 hypothesis that the first two variables ``X`` and ``Y``. are conditionally *dependent* given ``Z``.

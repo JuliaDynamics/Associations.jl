@@ -1,15 +1,5 @@
 # Mutual information
 
-The function that estimates mutual information from data is [`mutualinfo`](@ref).
-It can estimate different types of mutual informations from the scientific literature,
-and each is represented here as a subtype of [`MutualInformation`](@ref). Because a
-mutual information can be formulated in many different ways, each mutual information
-type can be estimated according to multiple definition, which are represented by
-subtypes of [`MutualInformationDefinition`](@ref)).
-
-To see which estimators are compatible with the various definitions, see the
-[overview table](@ref mutualinfo_overview) below.
-
 ## API
 
 ```@docs

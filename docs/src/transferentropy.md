@@ -32,6 +32,28 @@ Zhu1
 Lindner
 ```
 
+## Convenience
+
+### Symbolic transfer entropy
+
+```@docs
+SymbolicTransferEntropy
+```
+
+### Phase/amplitude transfer entropy
+
+```@docs
+Hilbert
+Phase
+Amplitude
+```
+
+## Automated embedding
+
+```@docs
+bbnue
+```
+
 ## Examples
 
 Let's try to reproduce the results from Schreiber's original paper[^Schreiber2000] where
@@ -214,20 +236,4 @@ end
 axislegend(ax_xy, position = :rb)
 
 fig
-```
-
-## Convenience
-
-### Symbolic transfer entropy
-
-```@docs
-SymbolicTransferEntropy
-```
-
-### Phase/amplitude transfer entropy
-
-```@docs
-Hilbert
-Phase
-Amplitude
 ```
