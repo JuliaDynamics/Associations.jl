@@ -2,11 +2,15 @@ export EmbeddingTE
 
 """
     EmbeddingTE(; dS = 1, dT = 1, dTf = 1, dC = 1, τS = -1, τT = -1, ηTf = 1, τC = -1)
+    EmbeddingTE(opt::OptimiseTraditional, s, t, [c])
 
 `EmbeddingTE` provide embedding parameters for transfer entropy analysis
 using either [`TEShannon`](@ref), [`TERenyi`](@ref), or in general any subtype
 of [`TransferEntropy`](@ref), which in turns dictates the embedding used with
 [`transferentropy`](@ref).
+
+The second method finds parameters using the ["traditional"](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/traditional/)
+optimised embedding techniques from DynamicalSystems.jl
 
 ## Convention for generalized delay reconstruction
 

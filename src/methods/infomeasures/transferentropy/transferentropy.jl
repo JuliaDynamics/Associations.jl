@@ -9,7 +9,7 @@ include("utils.jl")
 """
 The supertype of all transfer entropy measures.
 """
-abstract type TransferEntropy <: InformationMeasure end
+abstract type TransferEntropy{E, EMB} <: InformationMeasure end
 
 """
 The supertype of all dedicated transfer entropy estimators.
@@ -29,7 +29,10 @@ If `measure` is not given, then `TEShannon(; base = 2)` is the default.
 - **`measure`**: The transfer entropy measure, e.g. [`TEShannon`](@ref) or
     [`TERenyi`](@ref), which dictates which formula is computed.
     Embedding parameters are stored in `measure.embedding`, and
-    is represented by an [`EmbeddingTE`](@ref) instance.
+    is represented by an [`EmbeddingTE`](@ref) instance. If calling `transferentropy`
+    without giving `measure`, then the embedding is optimized by finding
+    suitable delay embedding parameters using the ["traditional"](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/traditional/)
+    approach from DynamicalSystems.jl.
 - **`s`**: The source timeseries.
 - **`t`**: The target timeseries.
 - **`c`**: Optional. Any conditional timeseries.
@@ -67,6 +70,9 @@ the online documentation.
 """
 function transferentropy end
 
+# Embedding optimization
+include("optimization/optimization.jl")
+
 include("TEShannon.jl")
 include("TERenyiJizba.jl")
 
@@ -76,13 +82,14 @@ function transferentropy(measure::TransferEntropy, est, x...)
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
     S, T, Tf, C = individual_marginals(measure.embedding, x...)
-    cmi = convert_to_cmi_measure(measure)
+    cmi = te_to_cmi(measure)
     # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
     return condmutualinfo(cmi, est, Tf, S, Dataset(T, C))
 end
 
-convert_to_cmi_measure(measure::TEShannon) = CMIShannon(measure.e)
-convert_to_cmi_measure(measure::TERenyiJizba) = CMIRenyiJizba(measure.e)
+te_to_cmi(measure::TEShannon) = CMIShannon(measure.e)
+te_to_cmi(measure::TERenyiJizba) = CMIRenyiJizba(measure.e)
+
 
 function individual_marginals(emb::EmbeddingTE, x::AbstractVector...)
     joint, vars, τs, js = te_embed(emb, x...)

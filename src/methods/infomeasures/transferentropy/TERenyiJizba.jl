@@ -37,7 +37,7 @@ The variables ``T^+``, ``T^-``,
     financial time series. Physica A: Statistical Mechanics and its Applications, 391(10),
     2971-2989.
 """
-struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy
+struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy{E, EMB}
     e::E
     embedding::EMB
     function TERenyiJizba(; base = 2, q = 1.5, embedding::EMB = EmbeddingTE()) where EMB

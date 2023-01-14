@@ -38,7 +38,7 @@ where ``I(T^+; S^- | T^-)`` is the Shannon conditional mutual information
 - **[`ConditionalMutualInformationEstimator`](@ref)**. Dedicated CMI estimators.
     Example: [`FrenzelPompeVelmejkaPalus`](@ref).
 """
-struct TEShannon{E <: Shannon, EMB} <: TransferEntropy
+struct TEShannon{E <: Shannon, EMB} <: TransferEntropy{E, EMB}
     e::E
     embedding::EMB
     function TEShannon(; base = 2, embedding::EMB = EmbeddingTE()) where EMB
@@ -46,7 +46,7 @@ struct TEShannon{E <: Shannon, EMB} <: TransferEntropy
         return new{typeof(e), EMB}(e, embedding)
     end
     function TEShannon(e::E; embedding::EMB = EmbeddingTE()) where {E <:Shannon, EMB}
-        return new{E, EMB}(e)
+        return new{E, EMB}(e, embedding)
     end
     # TODO: add constructor that automatically determines the embedding.
 end
@@ -58,8 +58,10 @@ function transferentropy(
             DifferentialEntropyEstimator,
             ProbabilitiesEstimator
         },
-        args...; kwargs...)
-    return transferentropy(TEShannon(; base = 2), est, args...; kwargs...)
+        x...; kwargs...)
+    emb = EmbeddingTE(OptimiseTraditional(maxdim = 5, maxlag = 0.05), x...)
+    m = TEShannon(; base = 2, embedding = emb)
+    return transferentropy(m, est, x...; kwargs...)
 end
 
 # If a pre-computed [`ContingencyMatrix`](@ref) `c` is provided, then we just compute
