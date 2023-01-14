@@ -51,7 +51,7 @@ function estimate(measure::CMIShannon, est::MutualInformationEstimator, x, y, z)
     Z = Dataset(z)
     YZ = Dataset(Y, Z)
     m = MIShannon(; base = measure.e.base)
-    return mutualinfo(m, est, X, YZ) + mutualinfo(m, est, X, Y)
+    return mutualinfo(m, est, X, YZ) - mutualinfo(m, est, X, Y)
 end
 
 function estimate(
