@@ -58,9 +58,6 @@ Base.@kwdef struct GaoKannanOhViswanath <: MutualInformationEstimator
     k::Int = 1
     w::Int = 0
 end
-mutualinfo(est::GaoKannanOhViswanath, x::VectorOrDataset...) =
-    estimate(MIShannon(), est, x...)
-
 # TODO: We here extend the estimator to multiple variables (i.e. the multi-information),
 # which was not treated in Gao et al., (2017).
 
