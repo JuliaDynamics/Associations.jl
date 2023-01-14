@@ -36,6 +36,9 @@ Base.@kwdef struct GaoOhViswanath{MJ, MM} <: MutualInformationEstimator
     metric_marginals::MM = Euclidean()
 end
 
+mutualinfo(est::GaoOhViswanath, x::VectorOrDataset...) =
+    estimate(MIShannon(), est, x...)
+
 function estimate(measure::MIShannon, est::GaoOhViswanath, x::VectorOrDataset...)
     e = measure.e
 

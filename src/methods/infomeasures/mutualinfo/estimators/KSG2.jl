@@ -75,6 +75,9 @@ struct KraskovStögbauerGrassberger2{MJ, MM} <: MutualInformationEstimator
 end
 const KSG2 = KraskovStögbauerGrassberger2
 
+mutualinfo(est::KraskovStögbauerGrassberger2, x::VectorOrDataset...) =
+    estimate(MIShannon(), est, x...)
+
 function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::VectorOrDataset...)
     e = measure.e
     @assert length(x) >= 2 ||
