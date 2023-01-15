@@ -13,10 +13,10 @@ be either `delay_ifnn`, `delay_fnn` or `delay_f1nn`.
 """
 Base.@kwdef struct OptimiseTraditional{L}
     η::Int = 1
-    maxlag::L = 50
-    maxdim::Int = 8
+    maxlag::L = 0.05
+    maxdim::Int = 5
     method::Function = delay_ifnn
-    dmethod::AbstractString = "ac_zero"
+    dmethod::AbstractString = "mi_min"
 end
 
 """
@@ -62,6 +62,8 @@ function optimize_marginals(opt::OptimiseTraditional, s, t, c)
 
     return EmbeddingTE(; dT = dT, τT = -τT, dS = dS, τS = -τS, dC = dC, τC = -τC,
         ηTf = opt.η, dTf = 1) # always predict a one-dimensional target vector.
+
+
 end
 
 EmbeddingTE(opt::OptimiseTraditional, x...) = optimize_marginals(opt, x...)

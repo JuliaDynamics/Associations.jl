@@ -35,7 +35,7 @@ If `measure` is not given, then `TEShannon(; base = 2)` is the default.
     approach from DynamicalSystems.jl.
 - **`s`**: The source timeseries.
 - **`t`**: The target timeseries.
-- **`c`**: Optional. Any conditional timeseries.
+- **`c`**: Optional. A conditional timeseries.
 
 ## Description
 
@@ -70,11 +70,20 @@ the online documentation.
 """
 function transferentropy end
 
+const TE_ESTIMATORS = Union{
+    TransferEntropyEstimator,
+    ConditionalMutualInformationEstimator,
+    MutualInformationEstimator,
+    DifferentialEntropyEstimator,
+    ProbabilitiesEstimator,
+}
+
 # Embedding optimization
 include("optimization/optimization.jl")
 
 include("TEShannon.jl")
 include("TERenyiJizba.jl")
+
 
 function transferentropy(measure::TransferEntropy, est, x...)
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
@@ -113,14 +122,6 @@ include("estimators/estimators.jl")
 include("convenience/convenience.jl")
 
 # Default to Shannon-type base 2 transfer entropy
-const TE_ESTIMATORS = Union{
-    TransferEntropyEstimator,
-    ConditionalMutualInformationEstimator,
-    MutualInformationEstimator,
-    DifferentialEntropyEstimator,
-    ProbabilitiesEstimator,
-}
-
 function transferentropy(est::TransferEntropyEstimator, x...)
     transferentropy(TEShannon(base = 2), est, x...)
 end
