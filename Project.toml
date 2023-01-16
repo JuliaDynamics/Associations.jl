@@ -31,7 +31,7 @@ TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
 Wavelets = "29a6e085-ba6d-5f35-a997-948ac2efa89a"
 
 [compat]
-ComplexityMeasures = "2"
+ComplexityMeasures = "2.4"
 DelayEmbeddings = "^2.5"
 Distances = "^0.10"
 Distributions = "^0.24, 0.25"

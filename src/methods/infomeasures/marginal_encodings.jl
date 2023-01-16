@@ -17,6 +17,8 @@ used internally by [`contingency_matrix`](@ref).
     then marginal visitations are obtained from the joint bin visits.
     This behaviour is the same for both [`FixedRectangularBinning`](@ref) and
     [`RectangularBinning`](@ref) (which adapts the grid to the data).
+    When using [`FixedRectangularBinning`](@ref), the range along the first dimension
+    is used as a template for all other dimensions.
 - [`SymbolicPermutation`](@ref). Each timeseries is separately [`encode`](@ref)d according
     to its ordinal pattern.
 - [`Dispersion`](@ref). Each timeseries is separately [`encode`](@ref)d according to its
@@ -51,9 +53,10 @@ end
 function marginally_encode_variable(
         est::ValueHistogram{<:FixedRectangularBinning{D}},
         x::AbstractVector) where D
-    ϵmin = est.binning.ϵmin[1]
-    ϵmax = est.binning.ϵmax[1]
-    N = est.binning.N
+    range = first(est.binning.ranges)
+    ϵmin = minimum(range)
+    ϵmax = maximum(range)
+    N = length(range)
     encoder = RectangularBinEncoding(FixedRectangularBinning(ϵmin, ϵmax, N, 1))
     return encode.(Ref(encoder), x)
 end
@@ -67,9 +70,9 @@ end
 function marginal_encodings(est::ValueHistogram{<:RectangularBinning}, x::VectorOrDataset...)
     X = Dataset(Dataset.(x)...)
     encoder = RectangularBinEncoding(est.binning, X)
+
     bins = [vec(encode_as_tuple(encoder, pt))' for pt in X]
     joint_bins = reduce(vcat, bins)
-
     idxs = size.(x, 2) #each input can have different dimensions
     s = 1
     encodings = Vector{Dataset}(undef, length(idxs))
@@ -81,13 +84,17 @@ function marginal_encodings(est::ValueHistogram{<:RectangularBinning}, x::Vector
     end
 
     return encodings
-
 end
 
-# A version of `ComplexityMeasure.encode` that directly returns the joint bin encoding.
-function encode_as_tuple(e::RectangularBinEncoding, point)
-    (; mini, edgelengths) = e
-    # Map a data point to its bin edge (plus one because indexing starts from 1)
-    bin = floor.(Int, (point .- mini) ./ edgelengths) .+ 1
-    return bin # returns
+# A version of `cartesian_bin_index` that directly returns the joint bin encoding
+# instead of converting it to a cartesian index.
+function encode_as_tuple(e::RectangularBinEncoding, point::SVector{D, T}) where {D, T}
+    ranges = e.ranges
+    if e.precise
+        # Don't know how to make this faster unfurtunately...
+        bin = map(searchsortedlast, ranges, point)
+    else
+        bin = floor.(Int, (point .- e.mini) ./ e.widths) .+ 1
+    end
+    return bin
 end
