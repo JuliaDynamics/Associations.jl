@@ -92,7 +92,7 @@ Here,
 ## Examples
 
 Say we wanted to compute the Shannon transfer entropy
-``TE^S{S \\to T} = I^S(T^+; S^- | T^-)``. Using some modern procedure for
+``TE^S(S \\to T) = I^S(T^+; S^- | T^-)``. Using some modern procedure for
 determining optimal embedding parameters using
 [methods from DynamicalSystems.jl](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/unified/),
 we find that the optimal embedding of ``T^{-}`` is three-dimensional and is given by
