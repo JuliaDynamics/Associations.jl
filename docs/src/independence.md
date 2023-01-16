@@ -71,7 +71,7 @@ test = LocalPermutation(nsurr = 35,
     measure = CMIShannon(base = 2),
     est = Kraskov(k = 10)
 );
-test_result = independence(test, x, y, z)
+test_result = conditional_independence(test, x, y, z)
 ```
 
 We expect there to be a detectable influence from ``X`` to
@@ -80,7 +80,7 @@ The null hypothesis is that the first two variables are conditionally independen
 hypothesis that the first two variables ``X`` and ``Y``. are conditionally *dependent* given ``Z``.
 
 ```@example LOCAL_PERMUTATION_TEST
-test_result = independence(test, x, z, y)
+test_result = conditional_independence(test, x, z, y)
 ```
 
 As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are conditionally independent given ``Y``, because ``Y`` is the variable that transmits information from

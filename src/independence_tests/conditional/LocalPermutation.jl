@@ -111,7 +111,7 @@ end
 # It is possible to specialize on the measure, e.g. LocalPermutation{CMI}. This
 # should be done for the NN-based CMI methods, so we don't have to reconstruct
 # KD-trees and do marginal searches for all marginals all the time.
-function independence(test::LocalPermutation, x, y, z)
+function conditional_independence(test::LocalPermutation, x, y, z)
     (; measure, est, rng, kperm, nsurr) = test
     X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
     e = test.measure.e
