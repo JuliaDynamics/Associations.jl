@@ -41,10 +41,9 @@ PAGES = [
         "Conditional mutual information" => "condmutualinfo.md",
         "Transfer entropy" => "transferentropy.md",
     ],
-    "Independence tests" => "independence.md",
-
     "Cross mappings" => "cross_mappings.md",
     "Joint distance distribution" => "jdd.md",
+    "Independence tests" => "independence.md",
     "Experimental" => "experimental.md",
 ]
 
