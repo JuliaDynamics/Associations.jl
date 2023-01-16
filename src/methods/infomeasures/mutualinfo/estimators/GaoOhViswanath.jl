@@ -8,7 +8,7 @@ The `GaoOhViswanath` mutual information estimator, also called the bias-improved
 estimator, or BI-KSG, by Gao et al. (2018)[^Gao2018], is given by
 
 ```math
-\\begin{align}
+\\begin{align*}
 \\hat{H}_{GAO}(X, Y)
 &= \\hat{H}_{KSG}(X) + \\hat{H}_{KSG}(Y) - \\hat{H}_{KZL}(X, Y) \\\\
 &= \\psi{(k)} +
@@ -19,7 +19,7 @@ estimator, or BI-KSG, by Gao et al. (2018)[^Gao2018], is given by
         \\right)
     } - \\\\
     & \\dfrac{1}{N} \\sum_{i=1}^N \\left( \\log{(n_{x, i, 2})} + \\log{(n_{y, i, 2})} \\right)
-\\end{align},
+\\end{align*},
 ```
 
 where ``c_{d, 2} = \\dfrac{\\pi^{\\frac{d}{2}}}{\\Gamma{(\\dfrac{d}{2} + 1)}}`` is the

@@ -42,7 +42,62 @@ include("MIRenyiJizba.jl")
 include("estimators/estimators.jl")
 
 # Default to Shannon mutual information.
-mutualinfo(est::ProbOrDiffEst, x, y) = estimate(MIShannon(), est, x, y)
+
+"""
+    mutualinfo(measure::MutualInformation], est::ContingencyMatrix)
+
+Estimate the discrete version of the given [`MutualInformation`](@ref) `measure` from
+its direct definition (double-sum), using the probabilities from a pre-computed
+[`ContingencyMatrix`](@ref).
+
+See the [online documentation](@ref contingency_matrix_mi) for a list of
+compatible measures.
+"""
+mutualinfo(c::ContingencyMatrix) = estimate(MIShannon(), c)
+
+"""
+    mutualinfo([measure::MutualInformation], est::ProbabilitiesEstimator, x, y)
+
+Estimate the mutual information `measure` between `x` and `y` by a sum of three
+entropy terms, without any bias correction, using the provided
+[`ProbabilitiesEstimator`](@ref) `est`. If `measure` is not given, then the default
+is `MIShannon()`.
+
+Joint and marginal probabilities are computed by jointly discretizing `x` and `y` using
+the approach given by `est`, and obtaining marginal distributions from the joint
+distribution.
+
+This only works for estimators that have an implementation for
+[`marginal_encodings`](@ref). See the
+[online documentation](@ref dedicated_probabilities_estimators_mi) for a list of
+compatible measures.
+"""
+mutualinfo(est::ProbabilitiesEstimator, x, y) = estimate(MIShannon(), est, x, y)
+
+"""
+    mutualinfo([measure::MutualInformation], est::DifferentialEntropyEstimator, x, y)
+
+Estimate the mutual information `measure` between `x` and `y` by a sum of three
+entropy terms, without any bias correction, using any [`DifferentialEntropyEstimator`](@ref)
+compatible with multivariate data. If `measure` is not given, then the default
+is `MIShannon()`.
+
+See the [online documentation](@ref dedicated_diffentropy_estimators_mi) for a list of
+compatible measures.
+"""
+mutualinfo(est::DifferentialEntropyEstimator, x, y) = estimate(MIShannon(), est, x, y)
+
+"""
+    mutualinfo(measure::MutualInformation, est::MutualInformationEstimator, x, y)
+
+Estimate the mutual information `measure` between `x` and `y` using the dedicated
+[`MutualInformationEstimator`](@ref) `est`, which can be either discrete, continuous,
+or a mixture of both, and typically involve some bias correction.
+If `measure` is not given, then the default is `MIShannon()`.
+
+See the [online documentation](@ref dedicated_estimators_mi) for a list of
+compatible measures.
+"""
 mutualinfo(est::MutualInformationEstimator, x, y) = estimate(MIShannon(), est, x, y)
 
 # Generic 3H-formulation of mutual information.
@@ -50,7 +105,7 @@ function marginal_entropies_mi3h(measure::MutualInformation, est, x, y)
     e = measure.e
     X = Dataset(x)
     Y = Dataset(y)
-    XY = Dataset(x, y)
+    XY = Dataset(X, Y)
     HX = entropy(e, est, X)
     HY = entropy(e, est, Y)
     HXY = entropy(e, est, XY)

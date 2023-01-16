@@ -1,77 +1,33 @@
 # Mutual information
 
-## API
+## Mutual information API
+
+The mutual information API is defined by
+
+* [`MutualInformation`](@ref),
+* [`mutualinfo`](@ref),
+* [`MutualInformationEstimator`](@ref).
+
+We provide a suite of estimators of various mutual information quantities. Many more
+variants exist in the literature. Pull requests are welcome!
+
+## Mutual information definitions
 
 ```@docs
-mutualinfo
 MutualInformation
-MutualInformationDefinition
-```
-
-## Definitions
-
-### Shannon mutual information
-
-```@docs
 MIShannon
-```
-
-### Tsallis mutual information
-
-```@docs
 MITsallisFuruichi
 MITsallisMartin
-```
-
-### Rényi mutual information
-
-```@docs
 MIRenyiSarbu
 MIRenyiJizba
 ```
 
-More variants of the discrete Renyi mutual information are possible.
-Pull requests are welcome!
+## Dedicated estimators
 
-## Discrete
-
-### [Table of discrete mutual information estimators](@id mutualinfo_overview)
-
-Here, we list the [`ProbabilitiesEstimator`](@ref)s that are compatible with
-[`mutualinformation`](@ref), and which definitions they are valid for.
-
-| Estimator                    | Principle           |     Input data     | [`MIShannon`](@ref) | [`MITsallisFuruichi`](@ref) | [`MITsallisMartin`](@ref) | [`MIRenyiSurbu`](@ref) |
-| ---------------------------- | ------------------- | :----------------: | :-----------------: | :-------------------------: | :-----------------------: | :--------------------: |
-| [`CountOccurrences`](@ref)   | Frequencies         | `Vector`/`Dataset` |         ✅          |             ✅              |            ✅             |           ✅           |
-| [`ValueHistogram`](@ref)     | Binning (histogram) | `Vector`/`Dataset` |         ✅          |             ✅              |            ✅             |           ✅           |
-| [`SymbolicPermuation`](@ref) | Ordinal patterns    |      `Vector`      |         ✅          |             ✅              |            ✅             |           ✅           |
-| [`Dispersion`](@ref)         | Dispersion patterns |      `Vector`      |         ✅          |             ✅              |            ✅             |           ✅           |
-
-## Differential/continuous
-
-### Estimators
-
-The following are *differential mutual information* estimators.
-
-| Estimator                              | Principle         | [`MIShannon`](@ref) |
-| -------------------------------------- | ----------------- | :-----------------: |
-| [`KraskovStögbauerGrassberger1`](@ref) | Nearest neighbors |         ✅          |
-| [`KraskovStögbauerGrassberger2`](@ref) | Nearest neighbors |         ✅          |
-| [`GaoKannanOhViswanath`](@ref)         | Nearest neighbors |         ✅          |
-| [`GaoOhViswanath`](@ref)               | Nearest neighbors |         ✅          |
-
-Continuous/differential mutual information may also be estimated using any of our
-[`DifferentialEntropyEstimator`](@ref) that support multivariate input data.
-
-| Estimator                        | Principle         | Input data | [`MIShannon`](@ref) |
-| -------------------------------- | ----------------- | ---------- | :-----------------: |
-| [`Kraskov`](@ref)                | Nearest neighbors | `Dataset`  |         ✅          |
-| [`Zhu`](@ref)                    | Nearest neighbors | `Dataset`  |         ✅          |
-| [`ZhuSingh`](@ref)               | Nearest neighbors | `Dataset`  |         ✅          |
-| [`Gao`](@ref)                    | Nearest neighbors | `Dataset`  |         ✅          |
-| [`Goria`](@ref)                  | Nearest neighbors | `Dataset`  |         ✅          |
-| [`Lord`](@ref)                   | Nearest neighbors | `Dataset`  |         ✅          |
-| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors | `Dataset`  |         ✅          |
+[`MutualInformationEstimator`](@ref)s can be either mixed, discrete or a combination of
+both. Each estimator uses a specialized technique to approximate relevant
+densities/integrals and/or probabilities, and is typically tailored to a specific
+type of [`MutualInformation`](@ref) (mostly [`MIShannon`](@ref)).
 
 ```@docs
 MutualInformationEstimator
@@ -80,6 +36,79 @@ KraskovStögbauerGrassberger2
 GaoKannanOhViswanath
 GaoOhViswanath
 ```
+
+### [Table of dedicated estimators](@id dedicated_estimators_mi)
+
+| Estimator                              |    Type    |     Principle     | [`MIShannon`](@ref) | [`MITsallisFuruichi`](@ref) | [`MITsallisMartin`](@ref) | [`MIRenyiSarbu`](@ref) | [`MIRenyiJizba`](@ref) |
+| -------------------------------------- | :--------: | :---------------: | :-----------------: | :-------------------------: | :-----------------------: | :--------------------: | :--------------------: |
+| [`KraskovStögbauerGrassberger1`](@ref) | Continuous | Nearest neighbors |         ✓          |             ✓              |            ✓             |           ✓           |           ✓           |
+| [`KraskovStögbauerGrassberger2`](@ref) | Continuous | Nearest neighbors |         ✓          |             ✓              |            ✓             |           ✓           |           ✓           |
+| [`GaoKannanOhViswanath`](@ref)         |   Mixed    | Nearest neighbors |         ✓          |             ✓              |            ✓             |           ✓           |           ✓           |
+| [`GaoOhViswanath`](@ref)               | Continuous |     `Vector`      |         ✓          |             ✓              |            ✓             |           ✓           |           ✓           |
+
+## Discrete mutual information
+
+```@docs
+mutualinfo(::ProbabilitiesEstimator, ::Any, ::Any)
+mutualinfo(::MutualInformation, ::ContingencyMatrix)
+```
+
+### [Table of discrete mutual information estimators](@id @id dedicated_probabilities_estimators_mi)
+
+Here, we list the [`ProbabilitiesEstimator`](@ref)s that can be used to compute discrete
+[`mutualinformation`](@ref).
+
+| Estimator                    | Principle           | [`MIShannon`](@ref) | [`MITsallisFuruichi`](@ref) | [`MITsallisMartin`](@ref) | [`MIRenyiJizba`](@ref) | [`MIRenyiSurbu`](@ref) |
+| ---------------------------- | ------------------- | :-----------------: | :-------------------------: | :-----------------------: | :--------------------: | :--------------------: |
+| [`CountOccurrences`](@ref)   | Frequencies         |         ✓          |             ✓              |            ✓             |           ✓           |           x           |
+| [`ValueHistogram`](@ref)     | Binning (histogram) |         ✓          |             ✓              |            ✓             |           ✓           |           x           |
+| [`SymbolicPermuation`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           x           |
+| [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |             ✓              |            ✓             |           ✓           |           x           |
+
+### [Contingency matrix](@id contingency_matrix_mi)
+
+Discrete mutual information can be computed directly from its double-sum definition
+by using the probabilities from a [`ContingencyMatrix`](@ref). This estimation
+method works for    both numerical and categorical data, and the following
+[`MutualInformation`](@ref)s are supported.
+
+|                             | [`ContingencyMatrix`](@ref) |
+| --------------------------- | :-------------------------: |
+| [`MIShannon`](@ref)         |             ✓              |
+| [`MITsallisFuruichi`](@ref) |             ✓              |
+| [`MITsallisMartin`](@ref)   |             ✓              |
+| [`MIRenyiSarbu`](@ref)      |             ✓              |
+| [`MIRenyiJizba`](@ref)      |             ✓              |
+
+## Differential/continuous mutual information
+
+```@docs
+mutualinfo(::DifferentialEntropyEstimator, ::Any, ::Any)
+```
+
+### [Table of differential mutual information estimators](@id dedicated_diffentropy_estimators_mi)
+
+The following are *differential mutual information* estimators.
+
+| Estimator                              | Principle         | [`MIShannon`](@ref) |
+| -------------------------------------- | ----------------- | :-----------------: |
+| [`KraskovStögbauerGrassberger1`](@ref) | Nearest neighbors |         ✓          |
+| [`KraskovStögbauerGrassberger2`](@ref) | Nearest neighbors |         ✓          |
+| [`GaoKannanOhViswanath`](@ref)         | Nearest neighbors |         ✓          |
+| [`GaoOhViswanath`](@ref)               | Nearest neighbors |         ✓          |
+
+Continuous/differential mutual information may also be estimated using any of our
+[`DifferentialEntropyEstimator`](@ref) that support multivariate input data.
+
+| Estimator                        | Principle         | [`MIShannon`](@ref) | [`MITsallisFuruichi`](@ref) | [`MITsallisMartin`](@ref) | [`MIRenyiJizba`](@ref) | [`MIRenyiSurbu`](@ref) |
+| -------------------------------- | ----------------- | :-----------------: | :-------------------------: | :-----------------------: | :--------------------: | :--------------------: |
+| [`Kraskov`](@ref)                | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
+| [`Zhu`](@ref)                    | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
+| [`ZhuSingh`](@ref)               | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
+| [`Gao`](@ref)                    | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
+| [`Goria`](@ref)                  | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
+| [`Lord`](@ref)                   | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
+| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 
 ## Examples
 

@@ -4,7 +4,7 @@ export MIRenyiSarbu
     MIRenyiSarbu <: MutualInformation
     MIRenyiSarbu(; base = 2, q = 1.5)
 
-The discrete Rényi mutual information (see [`MRenyi`](@ref)) from Sarbu (2014)[^Sarbu2014].
+The discrete Rényi mutual information from Sarbu (2014)[^Sarbu2014].
 
 ## Description
 
@@ -21,14 +21,6 @@ I(X, Y; Z)^R_q =
 \\right)
 ```
 
-!!! note "Only valid for fixed outcome spaces"
-    This estimator is only well defined for [`ProbabilitiesEstimator`](@ref)s with fixed
-    outcomes spaces. This is synonymous with having to estimate probabilities in the
-    *joint* space, the marginalizing to obtain joint and marginal probability distributions
-    with the same number of elements. This works out-of-the-box for some estimators
-    like [`ValueHistogram`](@ref) with [`FixedRectangularBinning`](@ref), while for
-    estimators such as [`SymbolicPermutation`](@ref), we provide specalized implementations.
-
 [^Sarbu2014]: Sarbu, S. (2014, May). Rényi information transfer: Partial Rényi transfer
     entropy and partial Rényi mutual information. In 2014 IEEE International Conference
     on Acoustics, Speech and Signal Processing (ICASSP) (pp. 5666-5670). IEEE.
@@ -44,13 +36,14 @@ struct MIRenyiSarbu{E <: Renyi} <: MutualInformation{E}
 end
 
 function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}
-    pxy = ContingencyMatrix(est, x, y)
-    px = marginal_probs(pxy, 1)
-    py = marginal_probs(pxy, 2)
+    px = probabilities(pxy, 1)
+    py = probabilities(pxy, 2)
+    e = measure.e
+    q = e.q
 
     mi = 0.0
-    for i in eachindex(px)
-        for j in eachindex(py)
+    for i in eachindex(px.p)
+        for j in eachindex(py.p)
             pxyᵢⱼ = pxy[i, j]
             mi += pxyᵢⱼ^q / ((px[i] * py[j])^(q - 1))
         end
@@ -60,4 +53,14 @@ function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}
     else
         return (1 / (q - 1) * log(mi)) / log(e.base, ℯ)
     end
+end
+
+
+function mutualinfo(::MIRenyiSarbu, est::ProbabilitiesEstimator, args...)
+    throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est))"))
+end
+
+
+function mutualinfo(::MIRenyiSarbu, est::DifferentialEntropyEstimator, args...)
+    throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est))"))
 end

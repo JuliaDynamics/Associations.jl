@@ -12,7 +12,7 @@ Martin et al.'s Tsallis mutual information between variables ``X \\in \\mathbb{R
 ``Y \\in \\mathbb{R}^{d_Y}`` is defined as
 
 ```math
-I_{\\text{Martin}^T(X, Y, q) := H_q^T(X) + H_q^T(Y) - (1 - q)H_q^T(X)H_q^T(Y) - H_q(X, Y),
+I_{\\text{Martin}}^T(X, Y, q) := H_q^T(X) + H_q^T(Y) - (1 - q) H_q^T(X) H_q^T(Y) - H_q(X, Y),
 ```
 
 where ``H^S(\\cdot)`` and ``H^S(\\cdot, \\cdot)`` are the marginal and joint Shannon
@@ -33,26 +33,35 @@ struct MITsallisMartin{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
-# function estimate(
-#         measure::MITsallisMartin,
-#         pxy::ContingencyMatrix{T, 2}) where T
-#     e = measure.e
-#     q = measure.e.q
-#     px = probabilities(pxy, 1)
-#     py = probabilities(pxy, 2)
+# This is definition 3 in Martin et al. (2004), but with pᵢ replaced by the joint
+# distribution and qᵢ replaced by the product of the marginal distributions.
+function estimate(
+        measure::MITsallisMartin,
+        pxy::ContingencyMatrix{T, 2}) where T
+    e = measure.e
+    q = measure.e.q
+    q != 1 || throw(ArgumentError("MITsallisMartin for q=$(q) not defined with estimator ContingencyMatrix"))
+    px = probabilities(pxy, 1)
+    py = probabilities(pxy, 2)
 
-#     mi = 0.0
-#     for i in eachindex(px.p)
-#         for j in eachindex(py.p)
-#             pxyᵢⱼ = pxy[i, j]
-#             mi += pxyᵢⱼ^q / (px[i]^(q - 1) * py[j]^(q - 1))
-#         end
-#     end
-#     return (1 / (q - 1) * (1 - mi) / (1-q)) / log(e.base, ℯ)
-# end
+    mi = 0.0
+    for (i, pxᵢ) in enumerate(px.p)
+        for (j, pyⱼ) in enumerate(py.p)
+            pxyᵢⱼ = pxy[i, j]
+            mi += pxyᵢⱼ^q / (pxᵢ^(q - 1) * pyⱼ^(q - 1))
+        end
+    end
+    f = 1 / (q - 1)
+    return f * (1 - mi)
+end
 
-function estimate(measure::MITsallisMartin, est::ProbOrDiffEst, x, y)
+function estimate(measure::MITsallisMartin, est::ProbabilitiesEstimator, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
     q = measure.e.q
     return HX + HY - (1 - q) * HX * HY - HXY
+end
+
+
+function mutualinfo(::MITsallisMartin, est::DifferentialEntropyEstimator, args...)
+    throw(ArgumentError("MITsallisMartin not implemented for $(typeof(est))"))
 end
