@@ -20,9 +20,9 @@ H^{S}(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} = p(x, y) \\log
 This is the definition used when calling [`entropy_conditional`](@ref) with a
 [`ContingencyMatrix`](@ref).
 
-Equivalently, the following sum of entropies hold
-
 ### Two-entropies formulation
+
+Equivalently, the following difference of entropies hold
 
 ```math
 H^S(X | Y) = H^S(X, Y) - H^S(Y),

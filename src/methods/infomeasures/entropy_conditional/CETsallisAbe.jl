@@ -20,7 +20,8 @@ entropy and the joint Tsallis entropy.
 
 [^Abe2001]:
     Abe, S., & Rajagopal, A. K. (2001). Nonadditive conditional entropy and its
-    significance for local realism. Physica A: Statistical Mechanics and its Applications, 289(1-2), 157-164.
+    significance for local realism. Physica A: Statistical Mechanics and its Applications,
+    289(1-2), 157-164.
 """
 struct CETsallisAbe{E} <: ConditionalEntropy
     e::E
