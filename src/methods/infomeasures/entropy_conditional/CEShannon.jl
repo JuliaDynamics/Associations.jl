@@ -4,27 +4,57 @@ export CEShannon
     CEShannon <: ConditionalEntropy
     CEShannon(; base = 2,)
 
-The [`Shannon`](@ref) conditional entropy measure.
+The[`Shannon`](@ref) conditional entropy measure.
 
-## Definition
+## Discrete definition
+
+### Sum formulation
 
 The conditional entropy between discrete random variables
 ``X`` and ``Y`` with finite ranges ``\\mathcal{X}`` and ``\\mathcal{Y}`` is defined as
 
 ```math
--\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} = p(x, y) \\log(p(x | y)).
+H^{S}(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} = p(x, y) \\log(p(x | y)).
 ```
+
+This is the definition used when calling [`entropy_conditional`](@ref) with a
+[`ContingencyMatrix`](@ref).
+
+Equivalently, the following sum of entropies hold
+
+### Two-entropies formulation
+
+```math
+H^S(X | Y) = H^S(X, Y) - H^S(Y),
+```
+
+where ``H^S(\\cdot`` and ``H^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref) entropy and
+Shannon joint entropy, respectively. This is the definition used when calling
+[`entropy_conditional`](@ref) with a [`ProbabilitiesEstimator`](@ref).
+
+## Differential definition
+
+The differential conditional Shannon entropy is analogously defined as
+
+```math
+H^S(X | Y) = h^S(X, Y) - h^S(Y),
+```
+
+where ``h^S(\\cdot`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref)
+differential entropy and Shannon joint differential entropy, respectively. This is the
+definition used when calling [`entropy_conditional`](@ref) with a
+[`DifferentialEntropyEstimator`](@ref).
 """
 struct CEShannon{E} <: ConditionalEntropy
     e::E
     function CEShannon(; base = 2)
-        e = Shannon(; base)
+        e = MLEntropy(Shannon(; base))
         new{typeof(e)}(e)
     end
 end
 
 function estimate(measure::CEShannon, pxy::ContingencyMatrix{T, 2}) where {T}
-    e = measure.e
+    e = measure.e.definition
     Nx, Ny = size(pxy)
     py = probabilities(pxy, 2)
     ce = 0.0
@@ -39,4 +69,9 @@ function estimate(measure::CEShannon, pxy::ContingencyMatrix{T, 2}) where {T}
         end
     end
     return -ce
+end
+
+function estimate(measure::CEShannon, est::ProbOrDiffEst, x, y)
+    HY, HXY = marginal_entropies_ce2h(measure, est, x, y)
+    return HXY - HY
 end

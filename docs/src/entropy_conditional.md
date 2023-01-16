@@ -1,60 +1,73 @@
 # Conditional entropy
 
-The function that estimates conditional entropy from data is [`entropy_conditional`](@ref).
-It can estimate different types of conditional entropies from the scientific literature,
-and each is represented here as a subtype of [`ConditionalEntropy`](@ref). Because a
-conditional entropy can be formulated in many different ways, each conditional entropy
-type can be estimated according to multiple definitiosn, which are represented by
-subtypes of [`ConditionalEntropyDefinition`](@ref)).
-
-To see which estimators are compatible with the various definitions, see the
-[overview table](@ref conditionalentropy_overview) below.
-
 ## Conditional entropy API
 
+The mutual information API is defined by
+
+* [`ConditionalEntropy`](@ref),
+* [`entropy_conditional`](@ref),
+
+We provide a suite of estimators of various mutual information quantities. Many more
+variants exist in the literature. Pull requests are welcome!
+
+## Conditional entropy definitions
+
 ```@docs
-entropy_conditional
 ConditionalEntropy
-ConditionalEntropyDefinition
-```
-
-## Definitions
-
-More variants of the discrete Tsallis conditional entropy are possible beyond those
-defined below.
-Pull requests are welcome!
-
-### Shannon conditional entropy
-
-```@docs
 CEShannon
-```
-
-### Tsallis conditional entropy
-
-```@docs
 CETsallisFuruichi
 CETsallisAbe
 ```
 
-## Discrete
+More variants exist in the literature. Pull requests are welcome!
 
-### [Table of discrete conditional entropy estimators] (@id conditionalentropy_overview)
+## Discrete conditional entropy
+
+```@docs
+entropy_conditional(::ConditionalEntropy, ::ContingencyMatrix)
+```
+
+### [Contingency matrix](@id contingency_matrix_ce)
+
+Discrete conditional entropy can be computed directly from its sum-definition
+by using the probabilities from a [`ContingencyMatrix`](@ref). This estimation
+method works for  both numerical and categorical data, and the following
+[`ConditionalEntropy`](@ref) definitions are supported.
+
+|                             | [`ContingencyMatrix`](@ref) |
+| --------------------------- | :-------------------------: |
+| [`CEShannon`](@ref)         |             ✓              |
+| [`CETsallisFuruichi`](@ref) |             ✓              |
+| [`CETsallisAbe`](@ref)      |             ✓              |
+
+### [Table of discrete conditional entropy estimators](@id probabilities_estimators_ce)
 
 Here, we list the [`ProbabilitiesEstimator`](@ref)s that are compatible with
 [`entropy_conditional`](@ref), and which definitions they are valid for.
 
-| Estimator                    | Principle           |     Input data     | [`CEShannon`](@ref) | [`CETsallisFuruichi`](@ref) | [`CETsallisAbe`](@ref) |
-| ---------------------------- | ------------------- | :----------------: | :-----------------: | :-------------------------: | :--------------------: |
-| [`CountOccurrences`](@ref)   | Frequencies         | `Vector`/`Dataset` |         ✅          |             ✅              |           ✅           |
-| [`ValueHistogram`](@ref)     | Binning (histogram) | `Vector`/`Dataset` |         ✅          |             ✅              |           ✅           |
-| [`SymbolicPermuation`](@ref) | Ordinal patterns    |      `Vector`      |         ✅          |             ✅              |           ✅           |
-| [`Dispersion`](@ref)         | Dispersion patterns |      `Vector`      |         ✅          |             ✅              |           ✅           |
+| Estimator                    | Principle           | [`CEShannon`](@ref) | [`CETsallisAbe`](@ref) | [`CETsallisFuruichi`](@ref) |
+| ---------------------------- | ------------------- | :-----------------: | :--------------------: | :-------------------------: |
+| [`CountOccurrences`](@ref)   | Frequencies         |         ✓          |           ✓           |              x              |
+| [`ValueHistogram`](@ref)     | Binning (histogram) |         ✓          |           ✓           |              x              |
+| [`SymbolicPermuation`](@ref) | Ordinal patterns    |         ✓          |           ✓           |              x              |
+| [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |           ✓           |              x              |
 
-## Differential/continuous
+## Differential/continuous conditional entropy
 
-We currently don't support the computation of differential conditional entropy.
-Pull requests are welcome!
+### [Table of differential conditional entropy estimators](@id diffentropy_estimators_ce)
+
+Continuous/differential mutual information may be estimated using any of our
+[`DifferentialEntropyEstimator`](@ref)s that support multivariate input data.
+
+| Estimator                        | Principle         | [`CEShannon`](@ref) | [`CETsallisAbe`](@ref) | [`CETsallisFuruichi`](@ref) |
+| -------------------------------- | ----------------- | :-----------------: | :--------------------: | :-------------------------: |
+| [`Kraskov`](@ref)                | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Zhu`](@ref)                    | Nearest neighbors |         ✓          |           x           |              x              |
+| [`ZhuSingh`](@ref)               | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Gao`](@ref)                    | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Goria`](@ref)                  | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Lord`](@ref)                   | Nearest neighbors |         ✓          |           x           |              x              |
+| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |           x           |              x              |
 
 ## Examples
 

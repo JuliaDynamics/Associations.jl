@@ -6,15 +6,17 @@ export CETsallisAbe
 
 Abe & Rajagopal (2001)'s discrete Tsallis conditional entropy measure.
 
-## Definitions
+## Definition
 
 Abe & Rajagopal's Tsallis conditional entropy between discrete random variables
 ``X`` and ``Y`` with finite ranges ``\\mathcal{X}`` and ``\\mathcal{Y}`` is defined as
 
 ```math
-H_q^{T_A}(X | Y) = \\dfrac{1}{1-q}
-\\dfrac{\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} = p(x, y)^q \\log_q(p(x | y))}{\\sum_{y \\in \\mathcal{Y}} p(y)^q},
+H_q^{T_A}(X | Y) = \\dfrac{H_q^T(X, Y) - H_q^T(Y)}{1 + (1-q)H_q^T(Y)},
 ```
+
+where ``H_q^T(\\cdot)`` and ``H_q^T(\\cdot, \\cdot)`` is the [`Tsallis`](@ref)
+entropy and the joint Tsallis entropy.
 
 [^Abe2001]:
     Abe, S., & Rajagopal, A. K. (2001). Nonadditive conditional entropy and its
@@ -23,32 +25,46 @@ H_q^{T_A}(X | Y) = \\dfrac{1}{1-q}
 struct CETsallisAbe{E} <: ConditionalEntropy
     e::E
     function CETsallisAbe(; q = 1.5, base = 2)
-        e = Tsallis(; q, base)
+        e = MLEntropy(Tsallis(; q, base))
         new{typeof(e)}(e)
     end
 end
 
 function estimate(measure::CETsallisAbe, pxy::ContingencyMatrix{T, 2}) where {T}
-    e = measure.e
+    e = measure.e.definition
     Nx, Ny = size(pxy)
     base, q = e.base, e.q
 
     py = probabilities(pxy, 2)
-    ce = 0.0
-    qlog = logq0(q)
-    for j in 1:Ny
-        pyⱼ = py[j]
-        for i in 1:Nx
-            pxyᵢⱼ = pxy[i, j]
-            ce += pxyᵢⱼ^q * qlog(pxyᵢⱼ / pyⱼ)
-        end
-    end
-    ce *= -1
-    ce /= sum(py .^ q)
+    # Definition 7 in Abe & Rajagopal (2001)
+    hjoint = 1 / (1 - q) * (sum(pxy .^ 2) - 1)
 
-    if q == 1
-        return (1/(1 - q))* (ce - 1) / log(base, ℯ)
+    # The marginal Tsallis entropy for the second variable
+    hy = entropy(Tsallis(; q, base), py)
+
+    # Equation 13 in Abe & Rajagopal (2001)
+    ce = (hjoint - hy) / (1 + (1 - q)*hy)
+
+    if q == 1 # if shannon, normalize
+        return ce / log(base, ℯ)
     else
-        return -(1/(1 - q))* (ce - 1)
+        return ce
     end
+end
+
+function estimate(measure::CETsallisAbe, est::ProbabilitiesEstimator, x, y)
+    e = measure.e.definition
+    q, base = e.q, e.base
+
+    HY, HXY = marginal_entropies_ce2h(measure, est, x, y)
+    ce = (HXY - HY) / (1 + (1 - q)*HY)
+    if q == 1 # if shannon, normalize
+        return ce / log(base, ℯ)
+    else
+        return ce
+    end
+end
+
+function estimate(measure::CETsallisAbe, est::DifferentialEntropyEstimator, x, y)
+    throw(ArgumentError("CETsallisAbe not implemented for $(typeof(est))"))
 end

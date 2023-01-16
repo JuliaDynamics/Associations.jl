@@ -6,31 +6,34 @@ export CETsallisFuruichi
 
 Furuichi (2006)'s discrete Tsallis conditional entropy measure.
 
-## Definitions
+## Definition
 
 Furuichi's Tsallis conditional entropy between discrete random variables
 ``X`` and ``Y`` with finite ranges ``\\mathcal{X}`` and ``\\mathcal{Y}`` is defined as
 
 ```math
-H_q^T(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} = p(x, y)^q \\log_q(p(x | y)),
+H_q^T(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}}
+p(x, y)^q \\log_q(p(x | y)),
 ```
 
-when `q \\neq 1`. For ``q = 1``, ``H_q^T(X | Y)`` reduces to the Shannon conditional entropy:
+when ``q \\neq 1``. For ``q = 1``, ``H_q^T(X | Y)`` reduces to the Shannon conditional
+entropy:
 
 ```math
--\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} = p(x, y) \\log(p(x | y))
+H_{q=1}^T(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} =
+p(x, y) \\log(p(x | y))
 ```
 """
 struct CETsallisFuruichi{E} <: ConditionalEntropy
     e::E
     function CETsallisFuruichi(; q = 1.5, base = 2)
-        e = Tsallis(; q, base)
+        e = MLEntropy(Tsallis(; q, base))
         new{typeof(e)}(e)
     end
 end
 
 function estimate(measure::CETsallisFuruichi, pxy::ContingencyMatrix{T, 2}) where {T}
-    e = measure.e
+    e = measure.e.definition
     Nx, Ny = size(pxy)
     q = e.q
     if q == 1
@@ -49,4 +52,9 @@ function estimate(measure::CETsallisFuruichi, pxy::ContingencyMatrix{T, 2}) wher
     ce *= -1.0
 
     return ce
+end
+
+
+function estimate(measure::CETsallisFuruichi, est::ProbOrDiffEst, x, y)
+    throw(ArgumentError("CETsallisFurichi not implemented for $(typeof(est))"))
 end
