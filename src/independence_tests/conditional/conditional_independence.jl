@@ -1,4 +1,4 @@
-export independence
+export conditional_independence
 export ConditionalIndependenceTest
 
 abstract type IndependenceTest end

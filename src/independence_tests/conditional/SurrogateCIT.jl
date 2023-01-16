@@ -73,7 +73,7 @@ function Base.show(io::IO, test::SurrogateCITResult)
 
     print(io,
         """\
-        `SurrogateCIT` independence test
+        `SurrogateCIT` independence test result
         ----------------------------------------------------------------------------------
         H₀: "The first two variables are conditionally independent given the third"
         ----------------------------------------------------------------------------------
