@@ -13,10 +13,10 @@ Rényi ``\\alpha``-divergence between the conditional joint probability mass fun
 ``p(x, y)`` and the product of the conditional marginals, ``p(x) \\cdot p(y)``:
 
 ```math
-I(X, Y; Z)^R_q =
+I(X, Y)^R_q =
 \\dfrac{1}{q-1}
 \\log \\left(
-    \\sum{x \\in X}\\sum{y \\in Y}
+    \\sum_{x \\in X, y \\in Y}
     \\dfrac{p(x, y)^q}{\\left( p(x)\\cdot p(y) \\right)^{q-1}}
 \\right)
 ```
