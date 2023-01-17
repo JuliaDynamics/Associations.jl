@@ -49,7 +49,6 @@ independence
 ```
 
 ```@docs
-IndependenceTest
 ConditionalIndependenceTest
 ```
 
@@ -105,7 +104,7 @@ To demonstrate the [`SurrogateCIT`](@ref) test, we use the transfer entropy meas
 which accepts either two input timeseries, or three timeseries when computing the
 partial/conditional transfer entropy.
 
-´´´@example surrogatecit_te
+```@example surrogatecit_te
 using CausalityTools
 sys = logistic2_unidir(c_xy = 0.5) # x affects y, but not the other way around.
 x, y = columns(trajectory(sys, 1000, Ttr = 10000))
