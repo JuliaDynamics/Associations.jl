@@ -20,7 +20,7 @@ The supertype of all conditional mutual information estimators.
 
 ## Subtypes
 
-- [`FrenzelPompeVelmejkaPalus`](@ref).
+- [`FPVP`](@ref).
 - [`PoczosSchneiderCMI`](@ref).
 - [`Rahimzamani`](@ref).
 - [`MesnerShalisi`](@ref).

@@ -3,14 +3,14 @@ using Neighborhood: bulkisearch, inrangecount
 using Neighborhood: Theiler, NeighborNumber, KDTree, Chebyshev
 using SpecialFunctions: digamma
 
-export FrenzelPompeVelmejkaPalus
+export FPVP
 
 """
-    FrenzelPompeVelmejkaPalus <: ConditionalMutualInformationEstimator
-    FrenzelPompeVelmejkaPalus(k = 1, w = 0)
+    FPVP <: ConditionalMutualInformationEstimator
+    FPVP(k = 1, w = 0)
 
-The `FrenzelPompeVelmejkaPalus` estimator is used to estimate the differential conditional
-mutual information using a `k`-th nearest neighbor approach that is
+The Frenzel-Pompe-Vejmelka-Paluš (or `FPVP` for short) estimator is used to estimate the
+differential conditional mutual information using a `k`-th nearest neighbor approach that is
 analogous to that of the [`KraskovStögbauerGrassberger1`](@ref) mutual information estimator
 (Frenzel & Pompe, 2007[^Frenzel2007]; Vejmelka & Paluš, 2008[^Vejmelka2008]).
 
@@ -25,14 +25,14 @@ during neighbor searches.
     Vejmelka, M., & Paluš, M. (2008). Inferring the directionality of coupling with
     conditional mutual information. Physical Review E, 77(2), 026214.
 """
-Base.@kwdef struct FrenzelPompeVelmejkaPalus{MJ, MM} <: ConditionalMutualInformationEstimator
+Base.@kwdef struct FPVP{MJ, MM} <: ConditionalMutualInformationEstimator
     k::Int = 1
     w::Int = 0
     metric_joint::MJ = Chebyshev()
     metric_marginals::MM = Chebyshev()
 end
 
-function estimate(measure::CMIShannon, est::FrenzelPompeVelmejkaPalus, x, y, z)
+function estimate(measure::CMIShannon, est::FPVP, x, y, z)
     e = measure.e
     (; k, w, metric_joint, metric_marginals) = est
     # Ensures that vector-valued inputs are converted to datasets, so that

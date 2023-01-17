@@ -48,7 +48,7 @@ function estimate(measure::CMIShannon, est::Rahimzamani, x, y, z)
         # The notation for ρ_{i, xy} in the paper in unclear. They claim in the paper that
         # the estimator reduces to the KSG1 estimator when k̂ == k. Therefore,
         # I assume ρ_{i, xy} is the distance in the *joint* space.
-        # ... but isn't this just the FrenzelPompeVelmejkaPalus estimator?
+        # ... but isn't this just the FPVP estimator?
         dmax = ds_joint[i]
         k̂ = dmax == 0 ? inrangecount(tree_joint, joint[i], 0.0) - 1  : k
         condmi += digamma(k̂)

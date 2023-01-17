@@ -1,4 +1,6 @@
 using StateSpaceSets: AbstractDataset, Dataset
+using StateSpaceSets: dimension
+
 export transferentropy
 export TransferEntropy
 export TransferEntropyEstimator
@@ -90,7 +92,7 @@ function transferentropy(measure::TransferEntropy, est, x...)
     # dataset. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
-    S, T, Tf, C = individual_marginals(measure.embedding, x...)
+    S, T, Tf, C = individual_marginals_te(measure.embedding, x...)
     cmi = te_to_cmi(measure)
     # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
     return condmutualinfo(cmi, est, Tf, S, Dataset(T, C))
@@ -100,7 +102,7 @@ te_to_cmi(measure::TEShannon) = CMIShannon(measure.e)
 te_to_cmi(measure::TERenyiJizba) = CMIRenyiJizba(measure.e)
 
 
-function individual_marginals(emb::EmbeddingTE, x::AbstractVector...)
+function individual_marginals_te(emb::EmbeddingTE, x::AbstractVector...)
     joint, vars, τs, js = te_embed(emb, x...)
     S = joint[:, vars.S]
     T = joint[:, vars.T]
@@ -110,7 +112,7 @@ function individual_marginals(emb::EmbeddingTE, x::AbstractVector...)
 end
 
 function h4_marginals(measure::TransferEntropy, x...)
-    S, T, T⁺, C = individual_marginals(measure.embedding, x...)
+    S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
     joint = Dataset(S, T, T⁺, C)
     ST = Dataset(S, T, C)
     TT⁺ = Dataset(T, T⁺, C)

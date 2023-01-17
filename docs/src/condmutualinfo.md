@@ -39,7 +39,7 @@ override any definitions above with the concrete integral they estimate.
 
 | Estimator                           | Principle         | [`CMIShannon`](@ref) | [`CMIRenyiSarbu`](@ref) |
 | ----------------------------------- | ----------------- | :------------------: | :----------------: |
-| [`FrenzelPompeVelmejkaPalus`](@ref) | Nearest neighbors |          ✅          |         x          |
+| [`FPVP`](@ref) | Nearest neighbors |          ✅          |         x          |
 | [`MesnerShalisi`](@ref)             | Nearest neighbors |          ✅          |         x          |
 | [`PoczosSchneiderCMI`](@ref)        | Nearest neighbors |          x           |         ✅         |
 | [`Rahimzamani`](@ref)               | Nearest neighbors |          ✅          |         x          |
@@ -59,7 +59,7 @@ Continuous/differential conditional mutual information may also be estimated usi
 
 ```@docs
 ConditionalMutualInformationEstimator
-FrenzelPompeVelmejkaPalus
+FPVP
 MesnerShalisi
 PoczosSchneiderCMI
 Rahimzamani

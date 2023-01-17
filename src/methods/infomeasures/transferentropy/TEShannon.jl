@@ -37,7 +37,7 @@ where ``I(T^+; S^- | T^-)`` is the Shannon conditional mutual information
     Formulates the transfer entropy as a sum of mutual information terms, which are
     estimated separately using [`mutualinfo`](@ref). Example: [`KraskovStögbauerGrassberger2`](@ref).
 - **[`ConditionalMutualInformationEstimator`](@ref)**. Dedicated CMI estimators.
-    Example: [`FrenzelPompeVelmejkaPalus`](@ref).
+    Example: [`FPVP`](@ref).
 """
 struct TEShannon{E <: Shannon, EMB} <: TransferEntropy{E, EMB}
     e::E

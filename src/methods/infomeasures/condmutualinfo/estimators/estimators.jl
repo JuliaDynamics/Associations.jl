@@ -1,4 +1,4 @@
-include("FrenzelPompeVelmejkaPalus.jl")
+include("FPVP.jl")
 include("Rahimzamani.jl")
 include("PoczosSchneiderCMI.jl")
 include("MesnerShalisi.jl")

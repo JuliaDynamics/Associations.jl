@@ -49,7 +49,7 @@ function transferentropy(measure::TEShannon, est::Zhu1, x...)
     # The Zhu1 estimator needs to keep track of the dimension of the individual
     # terms that goes into the implicit CMI computation. We could have just used
     # `h4_marginals` here, but then we wouldn't get the dimensions out of the box.
-    S, T, T⁺, C = individual_marginals(measure.embedding, x...)
+    S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
     joint = Dataset(S, T, T⁺, C)
     ST = Dataset(S, T, C)
     TT⁺ = Dataset(T, T⁺, C)
