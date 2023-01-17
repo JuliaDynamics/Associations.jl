@@ -48,12 +48,6 @@ Phase
 Amplitude
 ```
 
-## Automated embedding
-
-```@docs
-bbnue
-```
-
 ## Examples
 
 Let's try to reproduce the results from Schreiber's original paper[^Schreiber2000] where

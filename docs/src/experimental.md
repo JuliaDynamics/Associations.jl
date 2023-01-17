@@ -122,3 +122,9 @@ doesn't influence either variables.
 ```@example surrogatecit_te
 independence(test, x, y, rand(length(x)))
 ```
+
+## Automated embedding for transfer entropy
+
+```@docs
+bbnue
+```
