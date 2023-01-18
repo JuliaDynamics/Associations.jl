@@ -20,7 +20,7 @@ Base.@kwdef struct OptimiseTraditional{L}
 end
 
 """
-    optimize_marginals_te([scheme = OptimiseTraditional()], s, t, [c])
+    optimize_marginals_te([scheme = OptimiseTraditional()], s, t, [c]) → EmbeddingTE
 
 Optimize marginal embeddings for transfer entropy computation from source time series `s`
 to target time series `t`, conditioned on `c` if `c` is given, using the provided
