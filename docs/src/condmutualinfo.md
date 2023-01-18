@@ -79,12 +79,11 @@ Here, we list the [`ProbabilitiesEstimator`](@ref)s that are compatible with
 condmutualinfo(::DifferentialEntropyEstimator, ::Any, ::Any, ::Any)
 ```
 
-| Estimator                        | Principle         | Input data | [`CMIShannon`](@ref) | [`CMIRenyiSarbu`](@ref) |
-| -------------------------------- | ----------------- | ---------- | :------------------: | :----------------: |
-| [`Kraskov`](@ref)                | Nearest neighbors | `Dataset`  |          ✓          |         x          |
-| [`Zhu`](@ref)                    | Nearest neighbors | `Dataset`  |          ✓          |         x          |
-| [`ZhuSingh`](@ref)               | Nearest neighbors | `Dataset`  |          ✓          |         x          |
-| [`Gao`](@ref)                    | Nearest neighbors | `Dataset`  |          ✓          |         x          |
-| [`Goria`](@ref)                  | Nearest neighbors | `Dataset`  |          ✓          |         x          |
-| [`Lord`](@ref)                   | Nearest neighbors | `Dataset`  |          ✓          |         x          |
-| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors | `Dataset`  |          ✓          |         x          |
+| Estimator                        | Principle         | Input data | [`CMIShannon`](@ref) |
+| -------------------------------- | ----------------- | ---------- | :------------------: |
+| [`Kraskov`](@ref)                | Nearest neighbors | `Dataset`  |          ✓          |
+| [`Zhu`](@ref)                    | Nearest neighbors | `Dataset`  |          ✓          |
+| [`Gao`](@ref)                    | Nearest neighbors | `Dataset`  |          ✓          |
+| [`Goria`](@ref)                  | Nearest neighbors | `Dataset`  |          ✓          |
+| [`Lord`](@ref)                   | Nearest neighbors | `Dataset`  |          ✓          |
+| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors | `Dataset`  |          ✓          |
