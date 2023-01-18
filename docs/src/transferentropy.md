@@ -14,6 +14,7 @@ which are listed below:
 ```@docs
 transferentropy
 EmbeddingTE
+optimize_marginals_te
 ```
 
 ## Definitions
