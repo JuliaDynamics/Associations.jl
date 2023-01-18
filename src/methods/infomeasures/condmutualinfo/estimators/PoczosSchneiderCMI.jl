@@ -18,7 +18,7 @@ mutual informations, using a `k`-th nearest neighbor approach (Póczos & Schneid
 Base.@kwdef struct PoczosSchneiderCMI{M} <: ConditionalMutualInformationEstimator
     k::Int = 1
     w::Int = 0
-    metric::M = Euclidean()
+    metric::M = Euclidean() # Needs to be euclidean for ball volume formula to be valid.
 end
 
 function estimate(measure::CMIRenyiPoczos, est::PoczosSchneiderCMI, x, y, z)
