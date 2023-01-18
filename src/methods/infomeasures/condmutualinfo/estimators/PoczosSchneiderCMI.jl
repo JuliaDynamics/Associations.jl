@@ -23,7 +23,7 @@ end
 
 function estimate(measure::CMIRenyiPoczos, est::PoczosSchneiderCMI, x, y, z)
     e = measure.e
-    c = 1/(e.q-1)*log(Q3(e, est, x, y, z))
+    c = log(Q3(e, est, x, y, z)) / (e.q-1)
     return c / log(e.base, ℯ)
 end
 
