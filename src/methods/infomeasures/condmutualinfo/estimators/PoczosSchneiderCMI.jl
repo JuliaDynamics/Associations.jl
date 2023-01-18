@@ -10,12 +10,6 @@ The `PoczosSchneiderCMI` estimator computes various (differential) conditional
 mutual informations, using a `k`-th nearest neighbor approach (Póczos & Schneider,
 2012)[^Póczos2012].
 
-## Description
-
-Póczos & Schneider (2012) defines the following quantities.
-
-### Rényi conditional mutual information
-
 [^Póczos2012]:
     Póczos, B., & Schneider, J. (2012, March). Nonparametric estimation of conditional
     information and divergences. In Artificial Intelligence and Statistics (pp. 914-923).
@@ -27,7 +21,7 @@ Base.@kwdef struct PoczosSchneiderCMI{M} <: ConditionalMutualInformationEstimato
     metric::M = Euclidean()
 end
 
-function estimate(measure::CMIRenyiSarbu, est::PoczosSchneiderCMI, x, y, z)
+function estimate(measure::CMIRenyiPoczos, est::PoczosSchneiderCMI, x, y, z)
     e = measure.e
     c = 1/(e.q-1)*log(Q3(e, est, x, y, z))
     return c / log(e.base, ℯ)

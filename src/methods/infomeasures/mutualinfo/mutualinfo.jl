@@ -6,7 +6,16 @@ export mutualinfo
 """ The supertype of all mutual information measures """
 abstract type MutualInformation{E} <: InformationMeasure end
 
-""" The supertype of all dedicated mutual information estimators """
+"""
+    MutualInformationEstimator
+
+The supertype of all dedicated mutual information estimators.
+
+[`MutualInformationEstimator`](@ref)s can be either mixed, discrete or a combination of
+both. Each estimator uses a specialized technique to approximate relevant
+densities/integrals and/or probabilities, and is typically tailored to a specific
+type of [`MutualInformation`](@ref) (mostly [`MIShannon`](@ref)).
+"""
 abstract type MutualInformationEstimator <: InformationMeasureEstimator end
 
 # There are many ways of defining mutual information. Moreover, the definitions
@@ -88,7 +97,7 @@ compatible measures.
 mutualinfo(est::DifferentialEntropyEstimator, x, y) = estimate(MIShannon(), est, x, y)
 
 """
-    mutualinfo(measure::MutualInformation, est::MutualInformationEstimator, x, y)
+    mutualinfo([measure::MutualInformation], est::MutualInformationEstimator, x, y)
 
 Estimate the mutual information `measure` between `x` and `y` using the dedicated
 [`MutualInformationEstimator`](@ref) `est`, which can be either discrete, continuous,

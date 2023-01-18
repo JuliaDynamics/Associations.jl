@@ -29,31 +29,65 @@ abstract type ConditionalMutualInformationEstimator end
 const CMIEstimator = ConditionalMutualInformationEstimator
 
 """
-    condmutualinfo(measure::CMI, est::CMIEstimator, x, y, z) → cmi::Real
-    condmutualinfo(measure::CMI, est::DifferentialEntropyEstimator, x, y, z) → cmi::Real
-    condmutualinfo(measure::CMI, est::ProbabilitiesEstimator, x, y, z) → cmi::Real
+    condmutualinfo([measure::CMI], est::CMIEstimator, x, y, z) → cmi::Real
 
 Estimate a conditional mutual information (CMI) of some kind (specified by `measure`),
-between `x` and `y`, given `z`, using the given estimator.
-
-## Definition
-
-CMIs appear in many forms in the scientific literature. We support the following CMIs:
-
-- **[`CMIShannon`](@ref)**: Shannon CMI.
-- **[`CMIRenyiSarbu`](@ref)**: Renyi CMI.
+between `x` and `y`, given `z`, using the given dedicated
+[`ConditionalMutualInformationEstimator`](@ref), which may be discrete, continuous or
+mixed.
 """
 condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
+
+function condmutualinfo(est::ConditionalMutualInformationEstimator, x, y, z)
+    return estimate(CMIShannon(), est, x, y, z)
+end
 
 include("CMIShannon.jl")
 include("CMIRenyiSarbu.jl")
 include("CMIRenyiJizba.jl")
+include("CMIRenyiPoczos.jl")
 include("estimators/estimators.jl")
 
 # Default to Shannon mutual information.
-condmutualinfo(est::ProbOrDiffEst, x, y, z) = estimate(CMIShannon(), est, x, y, z)
-condmutualinfo(est::MutualInformationEstimator, x, y, z) =
-    estimate(CMIShannon(), est, x, y, z)
+"""
+    condmutualinfo([measure::CMI], est::ProbabilitiesEstimator, x, y, z) → cmi::Real ∈ [0, a)
+
+Estimate the conditional mutual information (CMI) `measure` between `x` and `y` given `z`
+using a sum of entropy terms, without any bias correction, using the provided
+[`ProbabilitiesEstimator`](@ref) `est`.
+If `measure` is not given, then the default is `CMIShannon()`.
+
+With a [`ProbabilitiesEstimator`](@ref), the returned `cmi` is guaranteed to be
+non-negative.
+"""
+function condmutualinfo(est::ProbabilitiesEstimator, x, y, z)
+    return estimate(CMIShannon(), est, x, y, z)
+end
+
+"""
+    condmutualinfo([measure::CMI], est::DifferentialEntropyEstimator, x, y, z) → cmi
+
+Estimate the conditional mutual information (CMI) `measure` between `x` and `y` using
+a sum of entropy terms, without any bias correction, using the provided
+[`DifferentialEntropyEstimator`](@ref) `est` (which must support multivariate data).
+If `measure` is not given, then the default is `CMIShannon()`.
+"""
+function condmutualinfo(est::DifferentialEntropyEstimator, x, y, z)
+    return estimate(CMIShannon(), est, x, y, z)
+end
+
+"""
+    condmutualinfo([measure::CMI], est::MutualInformationEstimator, x, y, z) → cmi::Real
+
+Estimate the conditional mutual information (CMI) `measure` between `x` and `y` using
+a difference of mutual information terms, without any bias correction, using the provided
+[`MutualInformationEstimator`](@ref) `est`, which may be continuous/differential,
+discrete or mixed.
+If `measure` is not given, then the default is `CMIShannon()`.
+"""
+function condmutualinfo(est::MutualInformationEstimator, x, y, z)
+    return estimate(CMIShannon(), est, x, y, z)
+end
 
 # Generic H4-formulation of CMI
 function marginal_entropies_cmi4h(measure::ConditionalMutualInformation, est, x, y, z)
