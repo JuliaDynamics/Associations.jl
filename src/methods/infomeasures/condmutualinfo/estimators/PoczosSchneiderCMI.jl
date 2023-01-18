@@ -71,3 +71,8 @@ function Q3(e::EntropyDefinition, est::PoczosSchneiderCMI, x, y, z)
     condmi /= N
     return condmi
 end
+
+
+function condmutualinfo(est::PoczosSchneiderCMI, x, y, z)
+    return condmutualinfo(CMIRenyiPoczos(), est, x, y, z)
+end
