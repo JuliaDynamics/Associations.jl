@@ -47,23 +47,22 @@ function Q3(e::EntropyDefinition, est::PoczosSchneiderCMI, x, y, z)
     idxs_XYZ, dists_XYZ = bulksearch(tree_XYZ, XYZ, NeighborNumber(k), Theiler(w))
     idxs_Z, dists_Z = bulksearch(tree_Z, Z, NeighborNumber(k), Theiler(w))
 
-    ds_YZ = last.(dists_YZ)
-    ds_XZ = last.(dists_XZ)
-    ds_XYZ = last.(dists_XYZ)
-    ds_z = last.(dists_Z)
+    ds_YZ = last.(dists_YZ) .^ (dimension(YZ) * (1 - q))
+    ds_XZ = last.(dists_XZ) .^ (dimension(XZ) * (1 - q))
+    ds_XYZ = last.(dists_XYZ) .^ (dimension(XYZ) * (1 - q))
+    ds_z = last.(dists_Z) .^ (dimension(Z) * (1 - q))
 
     # Not sure about the index sets here.
     # fyz = (N - 1)^(1 - q)
     #fxz = (N - 1)^(1 - q)
-    bv_yz = ball_volume(dimension(YZ))
-    bv_xz = ball_volume(dimension(XZ))
-    bv_xyz = ball_volume(dimension(XYZ))
-    bv_z = ball_volume(dimension(Z))
+    bv_yz = ball_volume(dimension(YZ)) ^ (1 - q)
+    bv_xz = ball_volume(dimension(XZ)) ^ (1 - q)
+    bv_xyz = ball_volume(dimension(XYZ)) ^(1 - q)
+    bv_z = ball_volume(dimension(Z)) ^ (1 - q)
 
-    # The ninality of each set is the same, because all variables are equal-length
+    # The cardinality of each set is the same, because all variables are equal-length
     n = (N - 1)
-    f = ( (bv_xyz * n)^(1 - q) * (bv_z  * n)^(1 - q) ) /
-        ( (bv_xz  * n)^(1 - q) * (bv_yz * n)^(1 - q) )
+    f = ( (bv_xyz * n) * (bv_z  * n) ) / ( (bv_xz  * n) * (bv_yz * n) )
     B² = (gamma(k)^2 / (gamma(k - q + 1)*gamma(k + q - 1)))^2
     condmi = 0.0
     for i = 1:N
