@@ -127,3 +127,6 @@ include("convenience/convenience.jl")
 function transferentropy(est::TransferEntropyEstimator, x...)
     transferentropy(TEShannon(base = 2), est, x...)
 end
+
+transferentropy(emb::EmbeddingTE, args...; kwargs...) =
+    transferentropy(TEShannon(; embedding = emb), args...; kwargs...)
