@@ -130,3 +130,13 @@ function marginal_entropies_cmi4h(measure::Union{CMIShannon, CMIRenyiSarbu},
     HZ = entropy(e, CountOccurrences(), eZ)
     return HXZ, HYZ, HXYZ, HZ
 end
+
+mi_measure(m::CMIShannon) = MIShannon(m.e)
+function estimate(measure::CMI, est::MutualInformationEstimator, x, y, z)
+    X = Dataset(x)
+    Y = Dataset(y)
+    Z = Dataset(z)
+    YZ = Dataset(Y, Z)
+    m = mi_measure(measure)
+    return mutualinfo(m, est, X, YZ) - mutualinfo(m, est, X, Y)
+end
