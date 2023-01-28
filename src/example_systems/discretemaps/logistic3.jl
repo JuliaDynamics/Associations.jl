@@ -1,4 +1,6 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
 
 export logistic3
 
@@ -29,8 +31,8 @@ with `r₁ = r₂ = r₃ = 4`.
 
 ## References
 
-1. Runge, Jakob. Causal network reconstruction from time series: From theoretical 
-    assumptions to practical estimation, Chaos 28, 075310 (2018); 
+1. Runge, Jakob. Causal network reconstruction from time series: From theoretical
+    assumptions to practical estimation, Chaos 28, 075310 (2018);
     doi: 10.1063/1.5025050
 """
 function eom_logistic3(u, p, t)
@@ -81,8 +83,8 @@ with `r₁ = r₂ = r₃ = 4`.
 
 ## References
 
-1. Runge, Jakob. Causal network reconstruction from time series: From theoretical 
-    assumptions to practical estimation, Chaos 28, 075310 (2018); 
+1. Runge, Jakob. Causal network reconstruction from time series: From theoretical
+    assumptions to practical estimation, Chaos 28, 075310 (2018);
     doi: 10.1063/1.5025050
 """
 logistic3(;u₀ = rand(3), r₁ = 4, r₂ = 4, r₃ = 4,

@@ -1,11 +1,11 @@
-# The uncertainty handling framework in this file will be added 
-# as part of a 1.X release. Can be ignored for now.
+# The uncertainty handling framework in this file will be added
+# as part of a 2.X release. Can be ignored for now.
 
-import UncertainData: 
-    resample, 
-    UncertainDataset, 
-    UncertainIndexDataset, 
-    UncertainValueDataset, 
+import UncertainData:
+    resample,
+    UncertainDataset,
+    UncertainIndexDataset,
+    UncertainValueDataset,
     UncertainIndexValueDataset
 import .s_measure
 import .jdd
@@ -34,7 +34,7 @@ mutualinfo(s::UT, t::UT, method; kwargs...) =
 
 info_methods = [
     :VisitationFrequency, :TransferOperator,
-    :SymbolicPermutation, :SymbolicAmplitudeAwarePermutation, :SymbolicWeightedPermutation, 
+    :SymbolicPermutation, :SymbolicAmplitudeAwarePermutation, :SymbolicWeightedPermutation,
     :NaiveKernel,
     :Kraskov,
     :Kraskov1,
@@ -44,12 +44,12 @@ info_methods = [
     :TimeScaleMODWT
 ]
 
-for method in info_methods 
-    @eval transferentropy(s::UT, t::UT, $(method); kwargs...) =
-        transferentropy(resample(s), resample(t), method; kwargs...)
+for method in info_methods
+    @eval transferentropy($(method), s::UT, t::UT; kwargs...) =
+        transferentropy(method, resample(s), resample(t); kwargs...)
 
-    @eval transferentropy(s::UT, t::UT, c::UT, $(method); kwargs...) =
-        transferentropy(resample(s), resample(t), resample(c), method; kwargs...)
+    @eval transferentropy($(method), s::UT, t::UT, c::UT; kwargs...) =
+        transferentropy(method, resample(s), resample(t), resample(c); kwargs...)
 end
 
 # transferentropy(s::UT, t::UT, method; kwargs...) =
@@ -58,16 +58,16 @@ end
 # transferentropy(s::UT, t::UT, c::UT, method; kwargs...) =
 #     transferentropy(resample(s), resample(t), resample(c), method; kwargs...)
 
-predictive_asymmetry(s::UT, t::UT, method; kwargs...) =
-    predictive_asymmetry(resample(s), resample(t), method; kwargs...)
+predictive_asymmetry(method, s::UT, t::UT; kwargs...) =
+    predictive_asymmetry(method, resample(s), resample(t); kwargs...)
 
-predictive_asymmetry(s::UT, t::UT, c::UT, method; kwargs...) =
-    predictive_asymmetry(resample(s), resample(t), resample(c), method; kwargs...)
+predictive_asymmetry(method, s::UT, t::UT, c::UT; kwargs...) =
+    predictive_asymmetry(method, resample(s), resample(t), resample(c); kwargs...)
 
-crossmap(s::UT, t::UT, args...; kwargs...) = 
+crossmap(s::UT, t::UT, args...; kwargs...) =
     crossmap(resample(s), resample(t), args...; kwargs...)
 
-ccm(s::UT, t::UT, args...; kwargs...) = 
+ccm(s::UT, t::UT, args...; kwargs...) =
     ccm(resample(s), resample(t), args...; kwargs...)
 
 ##########################################################################
@@ -77,7 +77,7 @@ const UIVD = UncertainIndexValueDataset
 
 # TODO: warn about potential index reversals?
 #
-# function warn_about_sampling(s::V, t::W) 
+# function warn_about_sampling(s::V, t::W)
 #     if s isa UIVD
 #         @warn "`s` isa UncertainIndexValueDataset. Index reversals may occur. Consider constrained resampling."
 #     end
@@ -102,25 +102,24 @@ jdd(s::UIVD, t::UIVD; kwargs...) =
 
 jdd(test::OneSampleTTest, s::UIVD, t::UIVD; kwargs...) =
     jdd(test, resample(s), resample(t); kwargs...)
-    
-mutualinfo(s::UIVD, t::UIVD, method; kwargs...) =
-    mutualinfo(resample(s.values), resample(t.values), method; kwargs...)
 
-transferentropy(s::UIVD, t::UIVD, method; kwargs...) =
-    transferentropy(resample(s.values), resample(t.values), method; kwargs...)
+mutualinfo(method, s::UIVD, t::UIVD; kwargs...) =
+    mutualinfo(method, resample(s.values), resample(t.values); kwargs...)
 
-transferentropy(s::UIVD, t::UIVD, c::UIVD, method; kwargs...) =
-    transferentropy(resample(s.values), resample(t.values), resample(c.values), method; kwargs...)
+transferentropy(method, s::UIVD, t::UIVD; kwargs...) =
+    transferentropy(method, resample(s.values), resample(t.values); kwargs...)
 
-predictive_asymmetry(s::UIVD, t::UIVD, method; kwargs...) =
-    predictive_asymmetry(resample(s.values), resample(t.values), method; kwargs...)
+transferentropy(method, s::UIVD, t::UIVD, c::UIVD; kwargs...) =
+    transferentropy(method, resample(s.values), resample(t.values), resample(c.values); kwargs...)
+
+predictive_asymmetry(method, s::UIVD, t::UIVD; kwargs...) =
+    predictive_asymmetry(method, resample(s.values), resample(t.values); kwargs...)
 
 predictive_asymmetry(s::UIVD, t::UIVD, c::UIVD, method; kwargs...) =
     predictive_asymmetry(resample(s.values), resample(t.values), resample(c.values), method; kwargs...)
 
-crossmap(s::UIVD, t::UIVD, args...; kwargs...) = 
+crossmap(s::UIVD, t::UIVD, args...; kwargs...) =
     crossmap(resample(s.values), resample(t.values), args...; kwargs...)
 
-ccm(s::UIVD, t::UIVD, args...; kwargs...) = 
+ccm(s::UIVD, t::UIVD, args...; kwargs...) =
     ccm(resample(s.values), resample(t.values), args...; kwargs...)
-

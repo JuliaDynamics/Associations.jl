@@ -4,14 +4,11 @@ CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== 
 CI && Pkg.activate(@__DIR__)
 CI && Pkg.instantiate()
 ENV["GKSwstype"] = "100" # allow local builds without output
-using DelayEmbeddings
-using TransferEntropy
 using Documenter
 using DocumenterTools: Themes
 using CausalityTools
-using DynamicalSystems
-using HypothesisTests
-using Distributions
+using ComplexityMeasures
+using StateSpaceSets
 
 # %% JuliaDynamics theme.
 # download the themes
@@ -35,32 +32,22 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "surrogate.md",
 
-    "Distance based" => [
-        "joint_distance_distribution.md",
-        "s_measure.md",
-        "cross_mapping.md",
-        "pairwise_asymmetric_inference.md"
+    "Information measures" => [
+        "Probability mass functions" => "probabilities.md",
+        "Entropy" => "entropy.md",
+        "Conditional entropy" => "entropy_conditional.md",
+        "Mutual information" => "mutualinfo.md",
+        "Conditional mutual information" => "condmutualinfo.md",
+        "Transfer entropy" => "transferentropy.md",
     ],
-    "Information/entropy based" => [
-        "mutualinfo.md",
-        "conditional_mutualinfo.md",
-        "TransferEntropy.md",
-        "predictive_asymmetry.md",
-        "generalized_entropy.md",
-        "info_estimators.md",
-    ],
-
-    "example_systems.md",
-    "Utilities" => [
-        "invariant_measure.md",
-        "dataset.md",
-    ],
- ]
+    "Cross mappings" => "cross_mappings.md",
+    "Joint distance distribution" => "jdd.md",
+    "Experimental" => "experimental.md",
+]
 
 makedocs(
-    modules = [CausalityTools, Entropies, TransferEntropy, DelayEmbeddings],
+    modules = [CausalityTools, ComplexityMeasures, StateSpaceSets],
     format = Documenter.HTML(
         prettyurls = CI,
         assets = [
@@ -68,7 +55,7 @@ makedocs(
         ],
         ),
     sitename = "CausalityTools.jl",
-    authors = "Kristian Agasøster Haaga, Tor Einar Møller, George Datseris",
+    authors = "Kristian Agasøster Haaga, David Diego, Tor Einar Møller, George Datseris",
     pages = PAGES
 )
 

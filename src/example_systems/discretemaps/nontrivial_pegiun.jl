@@ -1,4 +1,9 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
+using DynamicalSystemsBase: trajectory
+using Distributions: Normal
+using Statistics: mean, std
 
 export nontrivial_pegiun
 

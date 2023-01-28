@@ -1,46 +1,48 @@
 # CausalityTools.jl
 
-`CausalityTools` is a Julia package that provides algorithms for *detecting 
-dynamical influences* and *causal inference* based on time series data. 
+`CausalityTools` is a Julia package that provides algorithms for *detecting
+dynamical influences* and *causal inference* based on time series data, and other
+commonly used measures of dependence and association.
 
-For an updated overview of the field of causal inference, see for example Runge et al. (2019)[^Runge2019].
+!!! info
+    You are reading the development version of the documentation of
+    CausalityTools.jl that will become version 2.0.
 
-## Getting started
+## Content
 
-Examples showing how to use the causal inference methods are provided in their respective documentation pages.
+The goal of CausalityTools.jl is to provide an easily extendable library of univariate,
+bivariate and multivariate measures of complexity, association and (directional) dependence between data of various kinds. We currently offer:
 
-### Geometric methods
+- A suite of [information measures](@ref information_measures), such as
+    [`mutualinfo`](@ref), [`condmutualinfo`](@ref) and [`transferentropy`](@ref),
+    along with a plethora of estimators for computation of discrete and
+    continuous variants of these measures.
+- A generic [cross-map](@ref cross_mapping_api) interface for causal inference methods
+    based on state space prediction methods. This includes
+    measures such as [`ConvergentCrossMapping`](@ref) and
+    [`PairwiseAsymmetricInference`](@ref).
 
-Geometrically based methods rely on delay reconstructions of the time series, and numerical 
-properties of these delay reconstructions, to infer causal/dynamical relationships. They take as input the
-time series, and embedding parameters (given as keyword arguments).
+Other measures are found in the menu.
 
-- Cross mapping ([`crossmap`](@ref))
-- Pairwise asymmetric inference ([`pai`](@ref))
-- Joint distance distribution ([`jdd`](@ref))
-- S-measure ([`s_measure`](@ref))
+## Input data
 
-### Information theoretic methods
+Input data for CausalityTools are given as:
 
-*Entropy* based methods for causal inference take as inputs the time series in question, and an entropy estimator of choice. Additional parameters are given as keyword arguments. 
+- Univariate *timeseries*, which are given as standard Julia `Vector`s.
+- Multivariate timeseries, *datasets*, or *state space sets*, which are given as
+    [`Dataset`](@ref)s. Many methods convert *timeseries* inputs to [`Dataset`](@ref)
+    for faster internal computations.
+- Categorical data can be used with [`ContingencyMatrix`](@ref) to compute various
+    information theoretic measures and is represented using any iterable whose elements
+    can be any arbitrarily complex data type (as long as it's hashable), for example
+    `Vector{String}`, `{Vector{Int}}`, or `Vector{Tuple{Int, String}}`.
 
-- Transfer entropy ([`transferentropy`](@ref))
-- Predictive asymmetry ([`predictive_asymmetry`](@ref))
+```@docs
+Dataset
+```
 
-We use entropy estimators from [Entropies.jl](https://github.com/JuliaDynamics/Entropies.jl). 
-Which estimator should you use? See the [list of estimators](@ref estimators). 
-A good choice is to start with a [`VisitationFrequency`](@ref) estimator.
-
-We also provide estimators for generalized entropy and mutual information, though these are not causal inference methods per se.
-
-- Generalized entropy ([`genentropy`](@ref)) and fast histograms ([`binhist`](@ref))
-- Mutual information ([`mutualinfo`](@ref))
-
-## Contributions/issues
-
-Do you want additional methods or example systems to be implemented? Make a PR to the 
-master branch in the 
-[CausalityTools repo](https://github.com/JuliaDynamics/CausalityTools.jl), or open an 
-issue describing the desired feature.
-
-[^Runge2019]: Runge, J., Bathiany, S., Bollt, E., Camps-Valls, G., Coumou, D., Deyle, E., Glymour, C., Kretschmer, M., Mahecha, M. D., Muñoz-Marí, J., van Nes, E. H., Peters, J., Quax, R., Reichstein, M., Scheffer, M., Schölkopf, B., Spirtes, P., Sugihara, G., Sun, J., … Zscheischler, J. (2019). Inferring causation from time series in Earth system sciences. Nature Communications, 10(1), 1–13. https://doi.org/10.1038/s41467-019-10105-3
+!!! info
+    This package has been and is under heavy development. Don't hesitate to submit an
+    issue if you find something that doesn't work or doesn't make sense, or if there's
+    some functionality that you're missing.
+    Pull requests are also very welcome!

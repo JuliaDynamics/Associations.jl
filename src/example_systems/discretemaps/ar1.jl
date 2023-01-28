@@ -1,4 +1,7 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
+using Distributions: Normal
 
 export ar1_unidir
 
@@ -17,7 +20,7 @@ y(t+1) &= b_1 y(t) - c_{xy} x + \\xi_{2},
 \\end{aligned}
 ```
 
-where ``\\xi_{1}`` and ``\\xi_{2}`` are drawn from normal distributions 
+where ``\\xi_{1}`` and ``\\xi_{2}`` are drawn from normal distributions
 with zero mean and standard deviation `σ` at each iteration.
 
 ## References
@@ -31,7 +34,7 @@ function eom_ar1_unidir(x, p, n)
     x, y = (x...,)
     ξ₁ = rand(Normal(0, σ))
     ξ₂ = rand(Normal(0, σ))
-    
+
     dx = a₁*x + ξ₁
     dy = b₁*y + c_xy*x + ξ₂
     return SVector{2}(dx, dy)
@@ -43,7 +46,7 @@ function ar1_unidir(u₀, a₁, b₁, c_xy, σ)
 end
 
 """
-    ar1_unidir(u₀, a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, 
+    ar1_unidir(u₀, a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5,
         σ = 0.40662) → DiscreteDynamicalSystem
 
 A bivariate, order one autoregressive model, where ``x \\to y`` [1].
@@ -57,7 +60,7 @@ y(t+1) &= b_1 y(t) - c_{xy} x + \\xi_{2},
 \\end{aligned}
 ```
 
-where ``\\xi_{1}`` and ``\\xi_{2}`` are drawn from normal distributions 
+where ``\\xi_{1}`` and ``\\xi_{2}`` are drawn from normal distributions
 with zero mean and standard deviation `σ` at each iteration.
 
 ## References
@@ -66,5 +69,5 @@ with zero mean and standard deviation `σ` at each iteration.
     dynamical systems and the arrow of time. Chaos: An Interdisciplinary Journal of
     Nonlinear Science, 28(7), 075307. http://doi.org/10.1063/1.5019944
 """
-ar1_unidir(;u₀ = rand(2), a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, σ = 0.40662) = 
+ar1_unidir(;u₀ = rand(2), a₁ = 0.90693, b₁ = 0.40693, c_xy = 0.5, σ = 0.40662) =
     ar1_unidir(u₀, a₁, b₁, c_xy, σ)

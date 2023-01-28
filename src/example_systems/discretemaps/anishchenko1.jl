@@ -1,16 +1,18 @@
-using LabelledArrays
+using LabelledArrays: @LArray
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
 
 export anishchenko1
 
 """
     eom_anishchenko1(u, p, t)
 
-Equations of motion for the system defined by eq. 13 in [1], which can 
+Equations of motion for the system defined by eq. 13 in [1], which can
 give strange, nonchaotic attractors.
 
-## Equations of motion 
+## Equations of motion
 
-The equations of motion are 
+The equations of motion are
 
 ```math
 \\begin{aligned}
@@ -41,12 +43,12 @@ end
 """
     anishchenko1(;u₀ = rand(2), α =3.277, s=0.1, ω=0.5*(sqrt(5)-1)) → DiscreteDynamicalSystem
 
-Initialise the system defined by eq. 13 in [1], which can give strange, 
+Initialise the system defined by eq. 13 in [1], which can give strange,
 nonchaotic attractors.
 
-## Equations of motion 
+## Equations of motion
 
-The equations of motion are 
+The equations of motion are
 
 ```math
 \\begin{aligned}

@@ -1,15 +1,12 @@
 using Test
 using CausalityTools
-import DelayEmbeddings: Dataset
-import DynamicalSystemsBase: DiscreteDynamicalSystem, ContinuousDynamicalSystem
+defaultname(file) = uppercasefirst(replace(splitext(basename(file))[1], '_' => ' '))
+testfile(file, testname=defaultname(file)) = @testset "$testname" begin; include(file); end
 
-
-include("methods/test_smeasure.jl")
-include("methods/test_joint_distance_distribution.jl")
-include("methods/test_predictive_asymmetry.jl")
-include("methods/cross_mappings/ccm_like.jl")
-
-include("systems/discrete/test_discrete_systems.jl")
-include("systems/continuous/test_continuous_systems.jl")
+@testset "CausalityTools.jl" begin
+    testfile("methods/methods.jl")
+    # testfile("systems/discrete_systems.jl")
+    # testfile("systems/continuous_systems.jl")
+end
 
 #include("integrations/test_uncertaindata_integration.jl")

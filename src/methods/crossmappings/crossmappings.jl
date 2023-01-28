@@ -185,6 +185,5 @@ Base.@kwdef struct Ensemble{M, E} # todo: perhaps just use a more general Ensemb
     end
 end
 
-include("compat.jl") # remove this file when 2.0 is released.
 include("estimators/estimators.jl")
-include("measures/ccm-like/measures.jl")
+include("ccm-like/ccm-like.jl")

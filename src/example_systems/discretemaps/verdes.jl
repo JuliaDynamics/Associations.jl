@@ -1,4 +1,7 @@
-using LabelledArrays
+using LabelledArrays: LVector
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem
+using Distributions: Normal
 
 export verdes
 
