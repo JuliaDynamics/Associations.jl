@@ -31,7 +31,7 @@ For example, in just a few lines of code, you can perform Runge's local permutat
 ([`LocalPermutation`](@ref) test on your data with *over 20 different estimators* for
 the conditional mutual information. If your application rather calls for the use
 of traditional [surrogate data](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl),
-the [`SurrogateCIT`](@ref) test seamlessly integrates with any
+the [`SurrogateTest`](@ref) test seamlessly integrates with any
 time series surrogate method from TimeseriesSurrogates.jl.
 
 ### Independence test API
@@ -55,7 +55,7 @@ ConditionalIndependenceTest
 #### Surrogate test (global permutation)
 
 ```@docs
-SurrogateCIT
+SurrogateTest
 ```
 
 #### Local permutation
@@ -98,9 +98,9 @@ test_result = independence(test, x, z, y)
 As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are conditionally independent given ``Y``, because ``Y`` is the variable that transmits information from
 ``X`` to ``Z``.
 
-#### [`SurrogateCIT`](@ref)
+#### [`SurrogateTest`](@ref)
 
-To demonstrate the [`SurrogateCIT`](@ref) test, we use the transfer entropy measure,
+To demonstrate the [`SurrogateTest`](@ref) test, we use the transfer entropy measure,
 which accepts either two input timeseries, or three timeseries when computing the
 partial/conditional transfer entropy.
 
@@ -109,7 +109,7 @@ using CausalityTools
 sys = logistic2_unidir(c_xy = 0.5) # x affects y, but not the other way around.
 x, y = columns(trajectory(sys, 1000, Ttr = 10000))
 
-test = SurrogateCIT(TEShannon(), KSG1(k = 4))
+test = SurrogateTest(TEShannon(), KSG1(k = 4))
 independence(test, x, y)
 ```
 
