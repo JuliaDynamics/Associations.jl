@@ -37,3 +37,19 @@ function fastmean_and_cov(x::Vector{SVector{D, T}}) where {D, T}
     Σ = fastcov(μ, x)
     return μ, Σ
 end
+
+# `fastcor(x)` is twice as fast as `cor(Matrix(x)` and non-allocating.
+export fastcor
+fastcor(x::AbstractDataset) = fastcor(x.data)
+function fastcor(x::Vector{SVector{D, T}}) where {D, T}
+    N = length(x)
+    μ, Σ = fastmean_and_cov(x)
+    σ = std(x)
+    C = @MMatrix zeros(D, D)
+    for j in 1:D
+        for i in 1:D
+            C[i, j] = Σ[i, j] / (σ[i] * σ[j])
+        end
+    end
+    return SMatrix{D, D}(C)
+end

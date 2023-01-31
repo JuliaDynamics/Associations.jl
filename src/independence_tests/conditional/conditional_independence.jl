@@ -33,4 +33,4 @@ function independence(test, args...; kwargs...)
 end
 
 include("local_permutation/LocalPermutation.jl")
-include("surrogate/SurrogateCIT.jl")
+include("surrogate/SurrogateTest.jl")

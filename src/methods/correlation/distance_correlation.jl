@@ -1,5 +1,49 @@
 using StateSpaceSets: AbstractDataset
 using Distances
+
+export DistanceCorrelation
+export distance_correlation
+
+"""
+    DistanceCorrelation
+
+The distance correlation of two variables.
+
+This type exists to be used with [`independence`](@ref) testing. If you only need the
+distance correlation, do [`distance_correlation`](@ref)`(x, y)`.
+"""
+struct DistanceCorrelation end
+
+"""
+    distance_correlation(x, y) → dcor ∈ [0, 1]
+
+Compute the empirical/sample distance correlation (Székely et al., 2007)[^Székely2007],
+here called `dcor`, between datasets `x` and `y`.
+
+[^Székely2007]:
+    Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
+    dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
+"""
+function distance_correlation(x::ArrayOrDataset, y::ArrayOrDataset)
+    return estimate(DistanceCorrelation(), x, y)
+end
+
+# Common interface for higher-level methods.
+function estimate(measure::DistanceCorrelation, X, Y)
+    # TODO: Future optimization: this could be quicker if we only compute distances once
+    # for X and once for Y. Currently, they are computed twice each.
+    𝒱ₙ²xy = distance_covariance(X, Y)
+    𝒱ₙ²x = distance_covariance(X)
+    𝒱ₙ²y = distance_covariance(Y)
+
+    if 𝒱ₙ²x * 𝒱ₙ²y > 0
+        return sqrt(𝒱ₙ²xy / sqrt(𝒱ₙ²x * 𝒱ₙ²y))
+    else
+        return 0.0
+    end
+end
+
+
 """
     distance_covariance(x, y) → dcov::Real
 
@@ -10,8 +54,11 @@ between datasets `x` and `y`.
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
     dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
 """
-function distance_covariance(x::AbstractDataset, y::AbstractDataset)
-    @assert length(x) == length(y)
+function distance_covariance(X::ArrayOrDataset, Y::ArrayOrDataset)
+    x = Dataset(X)
+    y = Dataset(Y)
+    Lx, Ly = length(x), length(y)
+    Lx == Ly || throw(ArgumentError("Inputs `x` and `y` must have same length"))
     N = length(x)
     # The subscript notation in the paper is a bit messy, but it really just refers
     # to column-wise (āₖs), row-wise (āₗs) and overall (ā) means of a pairwise distance
@@ -39,7 +86,7 @@ function distance_covariance(x::AbstractDataset, y::AbstractDataset)
 
     return 𝒱ₙ²
 end
-distance_covariance(x::AbstractDataset) = distance_variance(x)
+distance_covariance(x::ArrayOrDataset) = distance_variance(Dataset(x))
 
 """
     distance_variance(x) → dvar::Real
@@ -51,7 +98,8 @@ for dataset `x`.
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
     dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
 """
-function distance_variance(x::AbstractDataset)
+function distance_variance(X::ArrayOrDataset)
+    x = Dataset(X)
     N = length(x)
     A = pairwise(Euclidean(), Dataset(x))
     āₖs = mean(A, dims = 1) # col-wise mean
@@ -68,41 +116,3 @@ function distance_variance(x::AbstractDataset)
 
     return 𝒱ₙ²
 end
-
-"""
-    distance_correlation(x, y) → dcor ∈ [0, 1]
-
-Compute the empirical/sample distance correlation (Székely et al., 2007)[^Székely2007],
-here called `dcor`, between datasets `x` and `y`.
-
-[^Székely2007]:
-    Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
-    dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
-"""
-function distance_correlation(X::AbstractDataset, Y::AbstractDataset)
-    # TODO: Future optimization: this could be quicker if we only compute distances once
-    # for X and once for Y. Currently, they are computed twice each.
-    𝒱ₙ²xy = distance_covariance(X, Y)
-    𝒱ₙ²x = distance_covariance(X)
-    𝒱ₙ²y = distance_covariance(Y)
-
-    if 𝒱ₙ²x * 𝒱ₙ²y > 0
-        return sqrt(𝒱ₙ²xy / sqrt(𝒱ₙ²x * 𝒱ₙ²y))
-    else
-        return 0.0
-    end
-end
-
-# using Test
-# # Analytical tests
-# # -----------------
-# a = Dataset(repeat([1], 100))
-# @test distance_variance(a) == 0.0
-
-# v = rand(1000, 3); w = 0.5 .* v .+ 1.2;
-# @test distance_correlation(v, w) ≈ 1.0
-# # Comparison with `energy` R package, which is by the authors of the original paper
-# x = -1.0:0.1:1.0
-# y = map(xᵢ -> xᵢ^3 - 2xᵢ^2 - 3, x)
-# dcov = distance_correlation(x, y)
-# @test round(dcov, digits = 3) == 0.673

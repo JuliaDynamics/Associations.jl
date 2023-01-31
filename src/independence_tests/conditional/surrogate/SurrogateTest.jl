@@ -1,10 +1,10 @@
 using TimeseriesSurrogates
-export SurrogateCIT
-export SurrogateCITResult
+export SurrogateTest
+export SurrogateTestResult
 
 """
-    SurrogateCIT <: IndependenceTest
-    SurrogateCIT(;
+    SurrogateTest <: IndependenceTest
+    SurrogateTest(;
         measure = CMIShannon(),
         est = FPVP(k = 5),
         nsurr::Int = 100,
@@ -12,7 +12,7 @@ export SurrogateCITResult
         rng = Random.MersenneTwister(1234),
     )
 
-The `SurrogateCIT` test is a generic conditional independence test (CIT) for assessing
+The `SurrogateTest` test is a generic conditional independence test (CIT) for assessing
 whether two variables `X` and `Y` are conditionally independendent given a third variable
 `Z`. It uses
 [surrogate time series](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl) to
@@ -40,32 +40,32 @@ using CausalityTools
 sys = logistic2_unidir(c_xy = 0.5)
 npts = 1000
 x, y = columns(trajectory(sys, npts, Ttr = npts*10))
-test = SurrogateCIT(TEShannon(), FPVP(k = 10))
+test = SurrogateTest(TEShannon(), FPVP(k = 10))
 independence(test, x, y)
 
 # If `x` and `y` are *independent*.
 ```
 """
-struct SurrogateCIT{M, E, R, S} <: IndependenceTest
+struct SurrogateTest{M, E, R, S} <: IndependenceTest
     measure::M
     est::E
     rng::R
     surrogate::S
     nsurr::Int
 
-    function SurrogateCIT(measure::M = CMIShannon(base = 2), est::EST = FPVP(k = 5);
+    function SurrogateTest(measure::M, est::E = nothing;
         rng::R = MersenneTwister(1234),
         surrogate::S = RandomShuffle(),
         nsurr::Int = 100,
-        ) where {M, EST, R, S}
-        new{M, EST, R, S}(measure, est, rng, surrogate, nsurr)
+        ) where {M, E, R, S}
+        new{M, E, R, S}(measure, est, rng, surrogate, nsurr)
     end
 end
 
 
-Base.show(io::IO, test::SurrogateCIT) = print(io,
+Base.show(io::IO, test::SurrogateTest) = print(io,
     """
-    `SurrogateCIT` independence test.
+    `SurrogateTest` independence test.
     -------------------------------------
     measure:        $(test.measure)
     estimator:      $(test.est)
@@ -76,35 +76,35 @@ Base.show(io::IO, test::SurrogateCIT) = print(io,
 )
 
 """
-    SurrogateCITResult(M, Msurr, pvalue)
+    SurrogateTestResult(M, Msurr, pvalue)
 
-Holds the result of a [`SurrogateCITResult`](@ref). `M` is the measure computed on
+Holds the result of a [`SurrogateTestResult`](@ref). `M` is the measure computed on
 the original data. `Msurr` is a vector of the measure computed on permuted data, where
 Msurr[i] corresponds to the `i`-th permutation. `pvalue` is the `p`-value for the test.
 """
-struct SurrogateCITResult{M, MS, P}
+struct SurrogateTestResult{M, MS, P}
     M::M
     Msurr::MS
     pvalue::P
     nsurr::Int
 end
-pvalue(r::SurrogateCITResult) = r.pvalue
-quantile(r::SurrogateCITResult, q) = quantile(r.Msurr, q)
+pvalue(r::SurrogateTestResult) = r.pvalue
+quantile(r::SurrogateTestResult, q) = quantile(r.Msurr, q)
 
-function Base.show(io::IO, test::SurrogateCITResult)
+function Base.show(io::IO, test::SurrogateTestResult)
     α005 = pvalue(test) < 0.05 ?
-        "H₀ rejected at α = 0.05:  Yes ✅" :
-        "H₀ rejected at α = 0.05:  No  ❌"
+        "Reject H₀ at α = 0.05:  ✓ ---> Accept H₁ (dependence)" :
+        "Reject H₀ at α = 0.05:  ✖ ---> Assume H₀ holds (independence)"
     α001 = pvalue(test) < 0.01 ?
-        "H₀ rejected at α = 0.01:  Yes ✅" :
-        "H₀ rejected at α = 0.01:  No  ❌"
+        "Reject H₀ at α = 0.01:  ✓ ---> Accept H₁ (dependence)" :
+        "Reject H₀ at α = 0.01:  ✖ ---> Assume H₀ holds (independence)"
     α0001 = pvalue(test) < 0.001 ?
-        "H₀ rejected at α = 0.001: Yes ✅" :
-        "H₀ rejected at α = 0.001: No  ❌"
+        "Reject H₀ at α = 0.001: ✓ ---> Accept H₁ (dependence)" :
+        "Reject H₀ at α = 0.001: ✖ ---> Assume H₀ holds (independence)"
 
     print(io,
         """\
-        `SurrogateCIT` independence test result
+        `SurrogateTest` independence test result
         -----------------------------------------------------------------------------------
         H₀: "The first two variables are independent (given the 3rd variable, if relevant)"
         Hₐ: "The first two variables are dependent (given the 3rd variable, if relevant)"
@@ -125,7 +125,7 @@ end
 # Generic dispatch for any three-argument conditional independence measure where the
 # third argument is to be conditioned on. This works naturally with e.g.
 # conditional mutual information.
-function independence(test::SurrogateCIT, x, y, z)
+function independence(test::SurrogateTest, x, y, z)
     (; measure, est, rng, surrogate, nsurr) = test
     X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
     @assert length(X) == length(Y) == length(Z)
@@ -138,7 +138,24 @@ function independence(test::SurrogateCIT, x, y, z)
     end
     p = count(Î .<= Îs) / nsurr
 
-    return SurrogateCITResult(Î, Îs, p, nsurr)
+    return SurrogateTestResult(Î, Îs, p, nsurr)
+end
+
+function independence(test::SurrogateTest, x, y)
+    (; measure, est, rng, surrogate, nsurr) = test
+    X, Y = Dataset(x), Dataset(y)
+    @assert length(X) == length(Y)
+    N = length(x)
+    Î = estimate(measure,est, X, Y)
+    sx = surrogenerator(x, surrogate, rng)
+    sy = surrogenerator(y, surrogate, rng)
+    Îs = zeros(nsurr)
+    for b in 1:nsurr
+        Îs[b] = estimate(measure, est, sx(), sy())
+    end
+    p = count(Î .<= Îs) / nsurr
+
+    return SurrogateTestResult(Î, Îs, p, nsurr)
 end
 
 include("transferentropy.jl")
