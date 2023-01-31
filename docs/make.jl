@@ -51,6 +51,7 @@ makedocs(
     modules = [CausalityTools, ComplexityMeasures, StateSpaceSets],
     format = Documenter.HTML(
         prettyurls = CI,
+        sidebar_sitename = false,
         assets = [
             asset("https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap", class=:css),
         ],

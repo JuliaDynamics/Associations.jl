@@ -1,4 +1,4 @@
-# CausalityTools.jl
+![CausalityTools.jl static logo](assets/large_logo.png)
 
 `CausalityTools` is a Julia package that provides algorithms for *detecting
 dynamical influences* and *causal inference* based on time series data, and other
