@@ -6,6 +6,6 @@ x, y, z = rand(100), rand(100), rand(100)
 
     # Not yet implemented
     test_te = LocalPermutation(TEShannon(), FPVP())
-    @test_throws ArgumentError independence(test_cmi, x, y, z) isa LocalPermutationTestResult
+    @test_throws ArgumentError independence(test_te, x, y, z) isa LocalPermutationTestResult
 
 end
