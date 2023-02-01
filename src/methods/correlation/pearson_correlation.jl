@@ -38,17 +38,18 @@ end
 function estimate(measure::PearsonCorrelation,
         x::VectorOrDataset{1, T},
         y::VectorOrDataset{1, T}) where T
-
     Lx, Ly = length(x), length(y)
     Lx == Ly || throw(ArgumentError("Inputs `x` and `y` must have same length"))
     x̄ = extract_mean(x)
     ȳ = extract_mean(y)
     num = 0.0
-    den = 0.0
     for (xᵢ, yᵢ) in zip(pt_generator(x), pt_generator(y))
         num += (xᵢ - x̄)*(yᵢ - ȳ)
-        den += sqrt((xᵢ - x̄)^2) * sqrt((yᵢ - ȳ)^2)
     end
+    den = sqrt(
+        sum((xᵢ - x̄)^2 for xᵢ in pt_generator(x)) *
+        sum((yᵢ - ȳ)^2 for yᵢ in pt_generator(y))
+    )
     ρ = num / den
     return ρ
 end
