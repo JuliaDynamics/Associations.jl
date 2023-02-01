@@ -40,8 +40,8 @@ PAGES = [
             "Entropy" => "examples/examples_entropy.md",
             "Conditional entropy" => "examples/examples_conditional_entropy.md",
             "Mutual information" => "examples/examples_mutualinfo.md",
-            "Transfer entropy" => "examples_transferentropy.md",
-            "Cross mappings" => "examples_cross_mappings.md",
+            "Transfer entropy" => "examples/examples_transferentropy.md",
+            "Cross mappings" => "examples/examples_cross_mappings.md",
         ],
     ],
     "Information measures" => [
