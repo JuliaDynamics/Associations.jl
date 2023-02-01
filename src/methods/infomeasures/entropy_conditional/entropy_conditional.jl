@@ -79,7 +79,6 @@ end
 # Generic 3H-formulation of mutual information.
 function marginal_entropies_ce2h(measure::ConditionalEntropy, est::ProbabilitiesEstimator, x, y)
     e = measure.e.definition
-    @show "here"
     X = Dataset(x)
     Y = Dataset(y)
     XY = Dataset(X, Y)
