@@ -32,7 +32,16 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-
+    "Examples" => [
+        "Quickstart" => [
+            "Mutual information" => "quickstart/quickstart_mi.md",
+        ],
+        "Longer examples" => [
+            "Entropy" => "examples/examples_entropy.md",
+            "Conditional entropy" => "examples/examples_conditional_entropy.md",
+            "Mutual information" => "examples/examples_mutualinfo.md",
+        ],
+    ],
     "Information measures" => [
         "Probability mass functions" => "probabilities.md",
         "Entropy" => "entropy.md",
@@ -51,6 +60,7 @@ makedocs(
     modules = [CausalityTools, ComplexityMeasures, StateSpaceSets],
     format = Documenter.HTML(
         prettyurls = CI,
+        sidebar_sitename = false,
         assets = [
             asset("https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap", class=:css),
         ],

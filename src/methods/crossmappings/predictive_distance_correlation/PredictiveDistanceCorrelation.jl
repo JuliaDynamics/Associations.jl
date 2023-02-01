@@ -1,8 +1,6 @@
 import DelayEmbeddings: embed
 using Statistics: cor
 
-include("utils.jl")
-
 export PredictiveDistanceCorrelation
 
 """
