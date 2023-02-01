@@ -20,7 +20,7 @@ function marginals_and_surrogenerator(opt::OptimiseTraditional, surrogate::Surro
     return Ŝ, T⁺, S, Dataset(T, C)
 end
 
-function independence(test::SurrogateCIT{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where {E}
+function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where {E}
     (; measure, est, rng, surrogate, nsurr) = test
 
     cmi = te_to_cmi(measure)
@@ -34,5 +34,5 @@ function independence(test::SurrogateCIT{<:TransferEntropy{<:E, <:EmbeddingTypes
     end
     p = count(Î .<= Îs) / nsurr
 
-    return SurrogateCITResult(Î, Îs, p, nsurr)
+    return SurrogateTestResult(Î, Îs, p, nsurr)
 end

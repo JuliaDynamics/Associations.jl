@@ -24,9 +24,9 @@ null hypothesis is that `x` and `y` are independent (given `z`, if provided).
 
 The null hypothesis is specified by `test`, which is a [`IndependenceTest`](@ref).
 
-- [`LocalPermutation`](@ref)
-- [`SurrogateCIT`](@ref). This is essentially a convenience wrapper that performs
-    standard surrogate testing.
+- [`LocalPermutation`](@ref). Compatible with [`CMIShannon`](@ref).
+- [`SurrogateTest`](@ref). This is essentially a convenience wrapper that performs
+    standard surrogate testing. Compatible with [`CMIShannon`](@ref), [`TEShannon`](@ref).
 """
 function independence(test, args...; kwargs...)
     error("No concrete implementation for $(typeof(test)) test yet")
