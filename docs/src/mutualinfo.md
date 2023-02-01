@@ -43,7 +43,7 @@ GaoOhViswanath
 | [`KraskovStögbauerGrassberger1`](@ref) | Continuous | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 | [`KraskovStögbauerGrassberger2`](@ref) | Continuous | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 | [`GaoKannanOhViswanath`](@ref)         |   Mixed    | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
-| [`GaoOhViswanath`](@ref)               | Continuous |     `Vector`      |         ✓          |              x              |             x             |           x            |           x            |
+| [`GaoOhViswanath`](@ref)               | Continuous | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 
 ## Discrete mutual information
 
