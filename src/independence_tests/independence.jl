@@ -1,6 +1,39 @@
+export independence, cit
+export ConditionalIndependenceTest
 
-# Tests based on CMI, transfer entropy and similar methods.
-include("conditional/conditional_independence.jl")
+abstract type IndependenceTest end
 
-# Tests based on MI and other bivaraite methods.
-# TODO.
+"""
+    ConditionalIndependenceTest <: IndependenceTest
+
+The supertype for all conditional independence tests, which are:
+
+- [`LocalPermutationTest`](@ref).
+"""
+abstract type ConditionalIndependenceTest <: IndependenceTest end
+
+"""
+    independence(test, x, y, [z])
+
+Perform the given `test` of independence between `x` and `y` using the provided `test`.
+If `z` is given, compute the conditional independence of `x` and `y` given `z`.
+
+This function is just a generic implementation of a one-sided hypothesis test, where the
+null hypothesis is that `x` and `y` are independent (given `z`, if provided).
+
+## Supported tests
+
+The null hypothesis is specified by `test`, which is a [`IndependenceTest`](@ref).
+
+- [`LocalPermutationTest`](@ref). Compatible with [`CMIShannon`](@ref).
+- [`SurrogateTest`](@ref). This is essentially a convenience wrapper that performs
+    standard surrogate testing. Compatible with [`CMIShannon`](@ref), [`TEShannon`](@ref).
+"""
+function independence(test, args...; kwargs...)
+    error("No concrete implementation for $(typeof(test)) test yet")
+end
+
+include("local_permutation/LocalPermutationTest.jl")
+include("surrogate/SurrogateTest.jl")
+# TODO: rename/find suitable generic name before including
+# include("correlation/correlation.jl). Perhaps `ParametricTest`?

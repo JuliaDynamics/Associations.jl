@@ -30,14 +30,14 @@ end
 
 function Base.show(io::IO, test::CorrelationTestResult)
     α005 = pvalue(test) < 0.05 ?
-        "Reject H₀ at α = 0.05:  ✓ ---> Accept H₁ (dependence)" :
-        "Reject H₀ at α = 0.05:  ✖ ---> Assume H₀ holds (independence)"
+        "H₀ rejected at significance level α = 0.05:  ✓ Evidence favors dependence" :
+        "H₀ rejected at significance level α = 0.05:  ✖ Evidence favors independence"
     α001 = pvalue(test) < 0.01 ?
-        "Reject H₀ at α = 0.01:  ✓ ---> Accept H₁ (dependence)" :
-        "Reject H₀ at α = 0.01:  ✖ ---> Assume H₀ holds (independence)"
+        "H₀ rejected at significance level α = 0.01:  ✓ Evidence favors dependence" :
+        "H₀ rejected at significance level α = 0.01:  ✖ Evidence favors independence"
     α0001 = pvalue(test) < 0.001 ?
-        "Reject H₀ at α = 0.001: ✓ ---> Accept H₁ (dependence)" :
-        "Reject H₀ at α = 0.001: ✖ ---> Assume H₀ holds (independence)"
+        "H₀ rejected at significance level α = 0.001: ✓ Evidence favors dependence" :
+        "H₀ rejected at significance level α = 0.001: ✖ Evidence favors independence"
 
     print(io,
         """\
@@ -83,8 +83,6 @@ Z(V_i, V_j | \\bf{S}) = \\dfrac{1}{2}
 ```
 """
 fishers_z(p̂ᵢⱼ) = 0.5 * log((1 + p̂ᵢⱼ) / (1 - p̂ᵢⱼ))
-
-
 
 function independence(test::Correlation, s, t, conds...)
     S, T, C = Dataset(s), Dataset(t), Dataset(conds...)

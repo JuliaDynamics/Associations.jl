@@ -1,18 +1,18 @@
 using Random: shuffle!, MersenneTwister
 import Statistics: quantile
 
-export LocalPermutation
-export LocalPermutationTestResult
+export LocalPermutationTest
+export LocalPermutationTestTestResult
 export pvalue
 
 """
-    LocalPermutation <: ConditionalIndependenceTest
-    LocalPermutation(measure = CMIShannon(), est = FPVP(k = 5);
+    LocalPermutationTest <: ConditionalIndependenceTest
+    LocalPermutationTest(measure = CMIShannon(), est = FPVP(k = 5);
         kperm::Int = 5,
         nsurr::Int = 100,
         rng = Random.MersenneTwister(1234))
 
-A generic implementation of the `LocalPermutation` test  (Runge, 2018)[^Runge2018],
+A generic implementation of the `LocalPermutationTest` test  (Runge, 2018)[^Runge2018],
 which tests whether two variables `X` and `Y` are conditionally independendent given a
 third variable `Z` (all of which may be multivariate).
 
@@ -24,7 +24,7 @@ The default measure is Shannon conditional mutual information [`CMIShannon`](@re
 
 ## Description
 
-`LocalPermutation` creates permuted `X` values using a local permutation scheme that is
+`LocalPermutationTest` creates permuted `X` values using a local permutation scheme that is
 based on `kperm`-th nearest neighbor searches. Permuted points are constructed as
 ``(x_i^*, y_i, z_i)_{i=1}^N``, where the goal is that ``x_i^*`` are drawn without
 replacement, and ``x_i`` is replaced by ``x_j`` only if ``z_i \\approx z_j``.
@@ -37,7 +37,7 @@ data, keeping `Y` and `Z` fixed, i.e. ``\\hat{M}(\\hat{X}; Y | Z)``.
 x = randn(2000)
 y = randn(2000) .+ 0.7 .* x
 z = sin.(randn(2000)) .* 0.5 .* y
-test = LocalPermutation(CMIShannon(; base = 2), FPVP(k = 10))
+test = LocalPermutationTest(CMIShannon(; base = 2), FPVP(k = 10))
 independence(test, x, y, z)
 ```
 
@@ -45,13 +45,13 @@ independence(test, x, y, z)
     nearest-neighbor estimator of conditional mutual information. In International
     Conference on Artificial Intelligence and Statistics (pp. 938-947). PMLR.
 """
-struct LocalPermutation{M, EST, R} <: ConditionalIndependenceTest
+struct LocalPermutationTest{M, EST, R} <: ConditionalIndependenceTest
     measure::M
     est::EST
     rng::R
     kperm::Int
     nsurr::Int
-    function LocalPermutation(measure::M = CMIShannon(; base = 2), est::EST = FPVP(k = 5);
+    function LocalPermutationTest(measure::M = CMIShannon(; base = 2), est::EST = FPVP(k = 5);
             rng::R = MersenneTwister(1234),
             kperm::Int = 10,
             nsurr::Int = 100) where {M, EST, R}
@@ -59,9 +59,9 @@ struct LocalPermutation{M, EST, R} <: ConditionalIndependenceTest
     end
 end
 
-Base.show(io::IO, test::LocalPermutation) = print(io,
+Base.show(io::IO, test::LocalPermutationTest) = print(io,
     """
-    `LocalPermutation` independence test.
+    `LocalPermutationTest` independence test.
     -------------------------------------
     measure:        $(test.measure)
     estimator:      $(test.est)
@@ -72,37 +72,38 @@ Base.show(io::IO, test::LocalPermutation) = print(io,
 )
 
 """
-    LocalPermutationTestResult(M, Msurr, pvalue)
+    LocalPermutationTestTestResult(M, Msurr, pvalue)
 
-Holds the result of a [`LocalPermutationTestResult`](@ref). `M` is the measure computed on
+Holds the result of a [`LocalPermutationTestTestResult`](@ref). `M` is the measure computed on
 the original data. `Msurr` is a vector of the measure computed on permuted data, where
 Msurr[i] corresponds to the `i`-th permutation. `pvalue` is the `p`-value for the test.
 """
-struct LocalPermutationTestResult{M, MS, P}
+struct LocalPermutationTestTestResult{M, MS, P}
     M::M
     Msurr::MS
     pvalue::P
     nsurr::Int
 end
-pvalue(r::LocalPermutationTestResult) = r.pvalue
-quantile(r::LocalPermutationTestResult, q) = quantile(r.Msurr, q)
+pvalue(r::LocalPermutationTestTestResult) = r.pvalue
+quantile(r::LocalPermutationTestTestResult, q) = quantile(r.Msurr, q)
 
-function Base.show(io::IO, test::LocalPermutationTestResult)
+function Base.show(io::IO, test::LocalPermutationTestTestResult)
     α005 = pvalue(test) < 0.05 ?
-        "H₀ rejected at α = 0.05:  Yes ✅" :
-        "H₀ rejected at α = 0.05:  No  ❌"
+        "H₀ rejected at significance level α = 0.05: ✓ Evidence favors dependence" :
+        "H₀ rejected at significance level α = 0.05: ✖ Evidence favors independence"
     α001 = pvalue(test) < 0.01 ?
-        "H₀ rejected at α = 0.01:  Yes ✅" :
-        "H₀ rejected at α = 0.01:  No  ❌"
+        "H₀ rejected at significance level α = 0.01: ✓ Evidence favors dependence" :
+        "H₀ rejected at significance level α = 0.01: ✖ Evidence favors independence"
     α0001 = pvalue(test) < 0.001 ?
-        "H₀ rejected at α = 0.001: Yes ✅" :
-        "H₀ rejected at α = 0.001: No  ❌"
+        "H₀ rejected at significance level α = 0.001: ✓ Evidence favors dependence" :
+        "H₀ rejected at significance level α = 0.001: ✖ Evidence favors independence"
 
     print(io,
         """\
-        `LocalPermutation` independence test
+        `LocalPermutationTest` independence test
         ----------------------------------------------------------------------------------
-        H₀: "The first two variables are conditionally independent given the third"
+        H₀: "The first two variables are conditionally independent given the 3rd variable"
+        H₁: "The first two variables are conditionally dependent given the 3rd variable"
         ----------------------------------------------------------------------------------
         Estimated: $(test.M)
         Ensemble quantiles ($(test.nsurr) permutations):
@@ -118,14 +119,14 @@ function Base.show(io::IO, test::LocalPermutationTestResult)
         )
 end
 
-function independence(test::LocalPermutation, x, y)
-    throw(ArgumentError("`LocalPermutation` is a conditional independence test, and thus must be given three input variables. Only two were given."))
+function independence(test::LocalPermutationTest, x, y)
+    throw(ArgumentError("`LocalPermutationTest` is a conditional independence test, and thus must be given three input variables. Only two were given."))
 end
 
-# It is possible to specialize on the measure, e.g. LocalPermutation{CMI}. This
+# It is possible to specialize on the measure, e.g. LocalPermutationTest{CMI}. This
 # should be done for the NN-based CMI methods, so we don't have to reconstruct
 # KD-trees and do marginal searches for all marginals all the time.
-function independence(test::LocalPermutation, x, y, z)
+function independence(test::LocalPermutationTest, x, y, z)
     (; measure, est, rng, kperm, nsurr) = test
     X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
     e = test.measure.e
@@ -161,7 +162,7 @@ function independence(test::LocalPermutation, x, y, z)
     end
     p = count(Î .<= Îs) / nsurr
 
-    return LocalPermutationTestResult(Î, Îs, p, nsurr)
+    return LocalPermutationTestTestResult(Î, Îs, p, nsurr)
 end
 
 new_permutation!(n̂, rng) = shuffle!(rng, n̂)

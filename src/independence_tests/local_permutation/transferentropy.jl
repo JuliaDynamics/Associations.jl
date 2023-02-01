@@ -1,8 +1,8 @@
 
-function independence(test::LocalPermutation{<:TransferEntropy}, x::AbstractVector...)
+function independence(test::LocalPermutationTest{<:TransferEntropy}, x::AbstractVector...)
     throw(ArgumentError("`independence` not yet implemented for test `$(typeof(test))`"))
 end
-# function independence(test::LocalPermutation{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where E
+# function independence(test::LocalPermutationTest{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where E
 #     (; measure, est, rng, kperm, nsurr) = test
 #     Ŝ, T⁺, S, T = marginals_and_surrogenerator(measure.embedding, surrogate, x...)
 #     @assert length(T⁺) == length(S) == length(T)
@@ -41,5 +41,5 @@ end
 #     end
 #     p = count(Î .<= Îs) / nsurr
 
-#     return LocalPermutationTest(Î, Îs, p, nsurr)
+#     return LocalPermutationTestTest(Î, Îs, p, nsurr)
 # end
