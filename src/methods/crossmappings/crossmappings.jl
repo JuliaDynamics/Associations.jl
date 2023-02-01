@@ -187,3 +187,6 @@ end
 
 include("estimators/estimators.jl")
 include("ccm-like/ccm-like.jl")
+
+# Experimental
+#include("predictive_distance_correlation/PredictiveDistanceCorrelation.jl")
