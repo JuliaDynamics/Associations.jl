@@ -43,13 +43,13 @@ struct PartialCorrelation <: ParametricAssociationMeasure end
 
 Compute the [`PartialCorrelation`](@ref) between `x` and `y`, given `z`.
 """
-function partial_correlation(x::VectorOrDataset, y::VectorOrDataset, z::VectorOrDataset...)
+function partial_correlation(x::VectorOrDataset, y::VectorOrDataset, z::ArrayOrDataset...)
     return estimate(PartialCorrelation(), x, y, z...)
 end
 
 # Common interface for higher-level methods.
 function estimate(::PartialCorrelation, x::VectorOrDataset, y::VectorOrDataset,
-        conds::VectorOrDataset...)
+        conds::ArrayOrDataset...)
     dimension(x) == 1 || throw(ArgumentError("Input `x` must be 1-dimensional"))
     dimension(y) == 1 || throw(ArgumentError("Input `y` must be 1-dimensional"))
     X, Y, Z = Dataset(x), Dataset(y), Dataset(conds...)
