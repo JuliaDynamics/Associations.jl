@@ -41,6 +41,7 @@ Rahimzamani
 | [`MesnerShalisi`](@ref)      | Nearest neighbors |          ✓          |            x             |
 | [`Rahimzamani`](@ref)        | Nearest neighbors |          ✓          |            x             |
 | [`PoczosSchneiderCMI`](@ref) | Nearest neighbors |          x           |            ✓            |
+| [`GaussianCMI`](@ref)        | Parametric        |          ✓          |            x             |
 
 ## Estimation through mutual information
 
@@ -54,6 +55,7 @@ condmutualinfo(::MutualInformationEstimator, ::Any, ::Any, ::Any)
 | [`KraskovStögbauerGrassberger2`](@ref) | Continuous | Nearest neighbors |          ✓          |
 | [`GaoKannanOhViswanath`](@ref)         |   Mixed    | Nearest neighbors |          ✓          |
 | [`GaoOhViswanath`](@ref)               | Continuous | Nearest neighbors |          ✓          |
+| [`GaussianMI`](@ref)                   |            |    Parametric     |          ✓          |
 
 ## Discrete CMI
 
