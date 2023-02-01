@@ -33,7 +33,7 @@ In practice, we compute the estimate
 -\\dfrac{\\hat{p}_ij}{\\sqrt{ \\hat{p}_{ii} \\hat{p}_{jj} }},
 ```
 
-where ``\\hat{P} = \\hat{\\Sigma}^-1`` is the sample precision matrix.
+where ``\\hat{P} = \\hat{\\Sigma}^{-1}`` is the sample precision matrix.
 """
 struct PartialCorrelation <: ParametricAssociationMeasure end
 
