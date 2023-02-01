@@ -16,3 +16,5 @@ abstract type CausalityMeasure end
 function estimate(measure::M, est::Nothing, args...; kwargs...) where M
     estimate(measure, args...; kwargs...)
 end
+
+include("contingency/contingency_matrices.jl")

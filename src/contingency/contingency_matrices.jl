@@ -16,17 +16,20 @@ export contingency_matrix
 # This is not optimized for speed, but it *works*
 """
     ContingencyMatrix{T, N} <: Probabilities{T, N}
+    ContingencyMatrix(frequencies::AbstractArray{Int, N})
 
-`ContingencyMatrix` is just a simple wrapper around around `AbstractArray{T, N}`.
+A contingency matrix is essentially a multivariate analogue of [`Probabilities`](@ref)
+that also keep track of raw frequencies.
 
-A contingency matrix is essentially a multivariate analogue of [`Probabilities`](@ref),
-but also keeps track of raw frequencies. It can be estimated from input data with
-[`contingency_matrix`](@ref), either from raw categorical data or by using
-a [`ProbabilitiesEstimator`](@ref) to first discretize the data.
+The contingency matrix can be constructed directyly from an `N`-dimensional `frequencies`
+array. Alternatively, the [`contingency_matrix`](@ref) function performs counting for
+you; this works on both raw categorical data, or by first discretizing data using a
+a [`ProbabilitiesEstimator`](@ref).
 
 ## Description
 
-Indexing a contingency matrix `c` with multiple indices `i, j, …` returns the `(i, j, …)`th
+A `ContingencyMatrix` `c` is just a simple wrapper around around `AbstractArray{T, N}`.
+Indexing `c` with multiple indices `i, j, …` returns the `(i, j, …)`th
 element of the empirical probability mass function (pmf). The following convencience
 methods are defined:
 
@@ -64,6 +67,12 @@ struct ContingencyMatrix{T, N, I} <: AbstractArray{T, N}
     probs::AbstractArray{T, N}
     freqs::AbstractArray{I, N}
 end
+
+function ContingencyMatrix(freqs::AbstractArray{Int, N}) where N
+    probs = freqs ./ sum(freqs)
+    return ContingencyMatrix(probs, freqs)
+end
+
 Base.size(c::ContingencyMatrix) = size(c.probs)
 Base.getindex(c::ContingencyMatrix, i) = getindex(c.probs, i)
 Base.getindex(c::ContingencyMatrix, i::Int...) = getindex(c.probs, i...)

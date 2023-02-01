@@ -54,7 +54,6 @@ function estimate(measure::InformationMeasure, args...; kwargs...) end
 # Contingency matrices and its computation based on various probabilites
 # estimators
 include("marginal_encodings.jl")
-include("contingency_matrices.jl")
 
 # Things that will be eventually moved to ComplexityMeasures.jl
 include("various/probabilities.jl")
