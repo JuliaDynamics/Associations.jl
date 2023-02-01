@@ -42,9 +42,9 @@ function estimate(
     e = measure.e
     q = e.q
     dx, dy, dz = size(pxyz)
-    pxz = dropdims(sum(pxyz, dims = 2), dims = 2)
-    pyz = dropdims(sum(pxyz, dims = 1), dims = 1)
-    pz = probabilities(pxyz, 3)
+    pxz = probabilities(pxyz, dims = [1, 3])
+    pyz = probabilities(pxyz, dims = [2, 3])
+    pz = probabilities(pxyz, dims = 3)
     cmi = 0.0
     logb = log_with_base(e.base)
     for k in 1:dz

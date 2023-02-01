@@ -34,8 +34,9 @@ element of the empirical probability mass function (pmf). The following convenci
 methods are defined:
 
 - `frequencies(c)` returns the multivariate raw counts.
-- `probabilities(c)` contains the normalized counts, i.e. a multidimensional empirical
-    probability mass function (pmf).
+- `probabilities(c; dims)` returns a multidimensional empirical
+    probability mass function (pmf) along the given `dims` (defaults to all available
+    dimensions), i.e. the normalized counts.
 - `probabilities(c, i::Int)` returns the marginal probabilities for the `i`-th dimension.
 - `outcomes(c, i::Int)` returns the marginal outcomes for the `i`-th dimension.
 
@@ -86,9 +87,9 @@ function frequencies(c::ContingencyMatrix, dim::Int)
 end
 
 probabilities(c::ContingencyMatrix) = c.probs
-function probabilities(c::ContingencyMatrix, dim::Int)
+function probabilities(c::ContingencyMatrix; dims = 1:length(size(c)))
     alldims = 1:length(size(c.probs))
-    reduce_dims = (setdiff(alldims, dim)...,)
+    reduce_dims = (setdiff(alldims, dims)...,)
     marginal =  dropdims(sum(c.probs, dims = reduce_dims), dims = reduce_dims)
     return Probabilities(marginal)
 end
