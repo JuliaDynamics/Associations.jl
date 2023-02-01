@@ -10,6 +10,14 @@ struct CMITsallis{E <: Tsallis} <: ConditionalMutualInformation{E}
     end
 end
 
+function estimate(measure::CMITsallis, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::CMITsallis, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 function estimate(
         measure::CMITsallis,
         pxyz::ContingencyMatrix{T, 3}) where T

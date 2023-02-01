@@ -29,6 +29,24 @@ struct CMIRenyiJizba{E <: Renyi} <: ConditionalMutualInformation{E}
     end
 end
 
+function estimate(measure::CMIRenyiJizba, est::Contingency, x, y, z)
+    c = _contingency_matrix(measure, est, x, y, z)
+    pxz = probabilities(pxyz, dims = [1, 3])
+    pyz = probabilities(pxyz, dims = [2, 3])
+    pz = probabilities(pxyz, dims = 3)
+    pxyz = c.probs |> Probabilities
+    e = measure.e
+    return entropy(e, pxz) + entropy(e, pyz) - entropy(e, pz) - entropy(e, pxyz)
+end
+
+function _contingency_matrix(measure::CMIRenyiJizba,
+        est::Contingency{<:ProbabilitiesEstimator}, x, y, z)
+    return contingency_matrix(est.est, x, y, z)
+end
+function _contingency_matrix(measure::CMIRenyiJizba, est::Contingency{<:Nothing}, x, y, z)
+    return contingency_matrix(x, y, z)
+end
+
 function estimate(measure::CMIRenyiJizba, est::ProbOrDiffEst, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h(measure, est, x, y, z)
     return HXZ + HYZ - HXYZ - HZ

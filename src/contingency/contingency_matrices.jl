@@ -196,6 +196,7 @@ function tolevels(x)
     return levels, lmap
 end
 
+include("Contingency.jl")
 
 
 # The following commented-out code below is equivalent to theabove, but muuuch faster.

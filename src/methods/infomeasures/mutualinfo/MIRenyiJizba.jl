@@ -31,8 +31,15 @@ struct MIRenyiJizba{E <: Renyi} <: MutualInformation{E}
     end
 end
 
+function estimate(measure::MIRenyiJizba, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
 
-function estimate(measure::MIRenyiJizba{<:Renyi}, pxy::ContingencyMatrix{T, 2}) where {T}
+function estimate(measure::MIRenyiJizba, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
+function estimate(measure::MIRenyiJizba, pxy::ContingencyMatrix{T, 2}) where {T}
     e = measure.e
     q = e.q
     px = probabilities(pxy, 1)

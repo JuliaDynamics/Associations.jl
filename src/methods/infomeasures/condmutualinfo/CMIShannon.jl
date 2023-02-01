@@ -54,6 +54,15 @@ function estimate(measure::CMIShannon, est::MutualInformationEstimator, x, y, z)
     return mutualinfo(m, est, X, YZ) - mutualinfo(m, est, X, Y)
 end
 
+
+function estimate(measure::CMIShannon, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::CMIShannon, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 function estimate(
         measure::CMIShannon,
         pxyz::ContingencyMatrix{T, 3}) where T
@@ -68,8 +77,10 @@ function estimate(
         pzₖ = pz[k]
         for j in 1:dy
             pyⱼzₖ = pyz[j, k]
+            pyⱼzₖ > 0 || continue # leads to NaN
             for i in 1:dx
                 pxᵢzₖ = pxz[i, k]
+                pxᵢzₖ > 0 || continue # leads to NaN
                 pxᵢyⱼzₖ = pxyz[i, j, k]
                 inner = (pzₖ * pxᵢyⱼzₖ) / (pxᵢzₖ * pyⱼzₖ)
                 if inner != 0.0

@@ -34,6 +34,14 @@ struct MITsallisFuruichi{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
+function estimate(measure::MITsallisFuruichi, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::MITsallisFuruichi, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 function estimate(
         measure::MITsallisFuruichi,
         pxy::ContingencyMatrix{T, 2}) where T

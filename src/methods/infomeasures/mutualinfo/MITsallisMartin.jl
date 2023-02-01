@@ -33,6 +33,14 @@ struct MITsallisMartin{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
+function estimate(measure::MITsallisMartin, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::MITsallisMartin, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 # This is definition 3 in Martin et al. (2004), but with pᵢ replaced by the joint
 # distribution and qᵢ replaced by the product of the marginal distributions.
 function estimate(
