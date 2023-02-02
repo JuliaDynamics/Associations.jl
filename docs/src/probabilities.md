@@ -40,21 +40,28 @@ Any of the following estimators can be used with [`probabilities`](@ref)
 Some estimators can also be used with [`contingency_matrix`](@ref) to estimate
 multivariate pmfs.
 
-| Estimator                                   | Principle                   | Input data          |
-|:--------------------------------------------|:----------------------------|:--------------------|
-| [`CountOccurrences`](@ref)                  | Count of unique elements    | `Any` |
-| [`ValueHistogram`](@ref)                    | Binning (histogram)         | `Vector`, `Dataset` |
-| [`TransferOperator`](@ref)                  | Binning (transfer operator) | `Vector`, `Dataset` |
-| [`NaiveKernel`](@ref)                       | Kernel density estimation   | `Dataset`           |
-| [`SymbolicPermutation`](@ref)               | Ordinal patterns            | `Vector`, `Dataset` |
-| [`SymbolicWeightedPermutation`](@ref)       | Ordinal patterns            | `Vector`, `Dataset` |
-| [`SymbolicAmplitudeAwarePermutation`](@ref) | Ordinal patterns            | `Vector`, `Dataset` |
-| [`SpatialSymbolicPermutation`](@ref)        | Ordinal patterns in space   | `Array` |
-| [`Dispersion`](@ref)                        | Dispersion patterns         | `Vector`            |
-| [`SpatialDispersion`](@ref)                 | Dispersion patterns in space  | `Array` |
-| [`Diversity`](@ref)                         | Cosine similarity           | `Vector`            |
-| [`WaveletOverlap`](@ref)                    | Wavelet transform           | `Vector`            |
-| [`PowerSpectrum`](@ref)                     | Fourier transform           | `Vector` |
+| Estimator                                   | Principle                                      | Input data          |
+| :------------------------------------------ | :--------------------------------------------- | :------------------ |
+| [`Contingency`](@ref)                       | Count frequencies, optionally discretize first | `Any`               |
+| [`CountOccurrences`](@ref)                  | Count of unique elements                       | `Any`               |
+| [`ValueHistogram`](@ref)                    | Binning (histogram)                            | `Vector`, `Dataset` |
+| [`TransferOperator`](@ref)                  | Binning (transfer operator)                    | `Vector`, `Dataset` |
+| [`NaiveKernel`](@ref)                       | Kernel density estimation                      | `Dataset`           |
+| [`SymbolicPermutation`](@ref)               | Ordinal patterns                               | `Vector`, `Dataset` |
+| [`SymbolicWeightedPermutation`](@ref)       | Ordinal patterns                               | `Vector`, `Dataset` |
+| [`SymbolicAmplitudeAwarePermutation`](@ref) | Ordinal patterns                               | `Vector`, `Dataset` |
+| [`SpatialSymbolicPermutation`](@ref)        | Ordinal patterns in space                      | `Array`             |
+| [`Dispersion`](@ref)                        | Dispersion patterns                            | `Vector`            |
+| [`SpatialDispersion`](@ref)                 | Dispersion patterns in space                   | `Array`             |
+| [`Diversity`](@ref)                         | Cosine similarity                              | `Vector`            |
+| [`WaveletOverlap`](@ref)                    | Wavelet transform                              | `Vector`            |
+| [`PowerSpectrum`](@ref)                     | Fourier transform                              | `Vector`            |
+
+### Contingency
+
+```@docs
+Contingency
+```
 
 ### Count occurrences
 
