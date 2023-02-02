@@ -31,12 +31,13 @@ struct CETsallisAbe{E} <: ConditionalEntropy
     end
 end
 
-function estimate(measure::CETsallisAbe, pxy::ContingencyMatrix{T, 2}) where {T}
+function estimate(measure::CETsallisAbe, c::ContingencyMatrix{T, 2}) where {T}
     e = measure.e.definition
-    Nx, Ny = size(pxy)
+    Nx, Ny = size(c)
     base, q = e.base, e.q
 
-    py = probabilities(pxy, 2)
+    py = probabilities(c, dims = 2)
+    pxy = probabilities(c)
     # Definition 7 in Abe & Rajagopal (2001)
     hjoint = 1 / (1 - q) * (sum(pxy .^ 2) - 1)
 

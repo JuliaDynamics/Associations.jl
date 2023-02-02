@@ -53,10 +53,12 @@ struct CEShannon{E} <: ConditionalEntropy
     end
 end
 
-function estimate(measure::CEShannon, pxy::ContingencyMatrix{T, 2}) where {T}
+function estimate(measure::CEShannon, c::ContingencyMatrix{T, 2}) where {T}
     e = measure.e.definition
-    Nx, Ny = size(pxy)
-    py = probabilities(pxy, 2)
+    Nx, Ny = size(c)
+
+    py = probabilities(c, dims = 2)
+    pxy = probabilities(c)
     ce = 0.0
     log0 = log_with_base(e.base)
     for j in 1:Ny

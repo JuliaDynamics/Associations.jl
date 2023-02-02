@@ -32,14 +32,15 @@ struct CETsallisFuruichi{E} <: ConditionalEntropy
     end
 end
 
-function estimate(measure::CETsallisFuruichi, pxy::ContingencyMatrix{T, 2}) where {T}
+function estimate(measure::CETsallisFuruichi, c::ContingencyMatrix{T, 2}) where {T}
     e = measure.e.definition
-    Nx, Ny = size(pxy)
+    Nx, Ny = size(c)
     q = e.q
     if q == 1
         return estimate(CEShannon(;base=measure.e.base), pxy)
     end
-    py = probabilities(pxy, 2)
+    py = probabilities(c, dims = 2)
+    pxy = probabilities(c)
     ce = 0.0
     qlog = logq0(q)
     for j in 1:Ny
