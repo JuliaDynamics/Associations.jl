@@ -158,4 +158,5 @@ function independence(test::SurrogateTest, x, y)
     return SurrogateTestResult(Î, Îs, p, nsurr)
 end
 
+include("contingency.jl")
 include("transferentropy.jl")
