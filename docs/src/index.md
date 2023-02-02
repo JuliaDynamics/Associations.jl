@@ -74,6 +74,23 @@ We hope that this will both ease reproduction of existing literature results, an
 new research. Please let us know if you use the package for something useful, or
 publish something based on it!
 
+## Input data
+
+Input data for CausalityTools are given as:
+
+- Univariate *timeseries*, which are given as standard Julia `Vector`s.
+- Multivariate timeseries, *datasets*, or *state space sets*, which are given as
+    [`Dataset`](@ref)s. Many methods convert *timeseries* inputs to [`Dataset`](@ref)
+    for faster internal computations.
+- Categorical data can be used with [`ContingencyMatrix`](@ref) to compute various
+    information theoretic measures and is represented using any iterable whose elements
+    can be any arbitrarily complex data type (as long as it's hashable), for example
+    `Vector{String}`, `{Vector{Int}}`, or `Vector{Tuple{Int, String}}`.
+
+```@docs
+Dataset
+```
+
 ## Maintainers and contributors
 
 The CausalityTools.jl software is maintained by
@@ -100,23 +117,6 @@ important contributions are:
 Many individuals has contributed code to other packages
 in the [JuliaDynamics](https://juliadynamics.github.io/JuliaDynamics/) ecosystem which
 we use here. Contributors are listed in the respective GitHub repos and webpages.
-
-## Input data
-
-Input data for CausalityTools are given as:
-
-- Univariate *timeseries*, which are given as standard Julia `Vector`s.
-- Multivariate timeseries, *datasets*, or *state space sets*, which are given as
-    [`Dataset`](@ref)s. Many methods convert *timeseries* inputs to [`Dataset`](@ref)
-    for faster internal computations.
-- Categorical data can be used with [`ContingencyMatrix`](@ref) to compute various
-    information theoretic measures and is represented using any iterable whose elements
-    can be any arbitrarily complex data type (as long as it's hashable), for example
-    `Vector{String}`, `{Vector{Int}}`, or `Vector{Tuple{Int, String}}`.
-
-```@docs
-Dataset
-```
 
 ## Related packages
 
