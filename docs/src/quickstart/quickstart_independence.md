@@ -2,6 +2,8 @@
 
 ## Mutual information (categorical)
 
+In this example, we expect the `preference` and the `food` variables to be independent.
+
 ```@example
 using CausalityTools
 # Simulate 
@@ -11,6 +13,9 @@ food = rand(["veggies", "meat", "fish"], n)
 test = SurrogateTest(MIShannon(), Contingency())
 independence(test, preference, food)
 ```
+
+As expected, there's not enough evidence to reject the null hypothesis that the
+variables are independent.
 
 ## Conditional mutual information (categorical)
 
@@ -26,10 +31,9 @@ We should be able to reject `places ⫫ experience`, but not reject
 `places ⫫ experience | preferred_equipment`.  Let's see if we can detect these
 relationships using (conditional) mutual information.
 
-```@docs
+```@example indep_cmi
 using CausalityTools
-n = 100000
-α = 0.02 # pick some arbitrary significance level
+n = 10000
 
 places = rand(["city", "countryside", "under a rock"], n);
 preferred_equipment = map(places) do place
@@ -38,7 +42,7 @@ preferred_equipment = map(places) do place
     elseif cmp(place, "countryside") == 1
         return rand(["sled", "snowcarpet"])
     else
-        return rand(["private jet", "car"])
+        return rand(["private jet", "ferris wheel"])
     end
 end;
 experience = map(preferred_equipment) do equipment
@@ -51,6 +55,15 @@ experience = map(preferred_equipment) do equipment
     end
 end;
 
-test_mi = independence(SurrogateTest(MIShannon(), est; nsurr), places, experience)
-test_cmi = independence(SurrogateTest(CMIShannon(), est; nsurr), places, experience, preferred_equipment)
+test_mi = independence(SurrogateTest(MIShannon(), Contingency()), places, experience)
 ```
+
+As expected, the evidence favors the alternative hypothesis that `places` and 
+`experience` are dependent.
+
+```@example  indep_cmi
+test_cmi = independence(SurrogateTest(CMIShannon(), Contingency()), places, experience, preferred_equipment)
+```
+
+Again, as expected, when conditioning on the mediating variable, the dependence disappears,
+and we can't reject the null hypothesis of independence.
