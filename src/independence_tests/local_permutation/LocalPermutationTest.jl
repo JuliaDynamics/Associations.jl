@@ -2,7 +2,7 @@ using Random: shuffle!, MersenneTwister
 import Statistics: quantile
 
 export LocalPermutationTest
-export LocalPermutationTestTestResult
+export LocalPermutationTestResult
 export pvalue
 
 """
