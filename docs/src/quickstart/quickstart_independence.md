@@ -1,6 +1,10 @@
 # [Independence testing](@id quickstart_independence)
 
-## Mutual information (categorical)
+## [[`SurrogateTest`](@ref)](@id quickstart_surrogatetest)
+
+### Mutual information
+
+#### Categorical
 
 In this example, we expect the `preference` and the `food` variables to be independent.
 
@@ -17,7 +21,9 @@ independence(test, preference, food)
 As expected, there's not enough evidence to reject the null hypothesis that the
 variables are independent.
 
-## Conditional mutual information (categorical)
+### Conditional mutual information
+
+#### Categorical
 
 Here, we simulate a survey at a ski resort. The data are such that the place a person
 grew up is associated with how many times they fell while going skiing. The control
@@ -67,3 +73,18 @@ test_cmi = independence(SurrogateTest(CMIShannon(), Contingency()), places, expe
 
 Again, as expected, when conditioning on the mediating variable, the dependence disappears,
 and we can't reject the null hypothesis of independence.
+
+## [[`LocalPermutationTest`](@ref)](@id quickstart_localpermutationtest)
+
+### [`CMIShannon`](@ref)
+
+#### Continuous data
+
+```@example
+using CausalityTools
+x = randn(1000)
+y = randn(1000) .+ 0.7 .* x
+z = sin.(randn(1000)) .* 0.5 .* y
+test = LocalPermutationTest(CMIShannon(; base = 2), FPVP(k = 10), nshuffles = 30)
+independence(test, x, z, y)
+```

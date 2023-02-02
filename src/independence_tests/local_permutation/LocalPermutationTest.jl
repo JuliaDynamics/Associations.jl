@@ -1,61 +1,88 @@
-using Random: shuffle!, MersenneTwister
+using Random: shuffle!
+using Random
 import Statistics: quantile
 
 export LocalPermutationTest
 export LocalPermutationTestResult
 export pvalue
 
+# `LocalPermutationClosenessSearch`and its subtypes is just for internal use.
+# The `LocalPermutationTest` as given in Runge et al. (2018) uses neighbor searches,
+# for determining closeness. This limits the usefulness of the test mostly to continuous
+# data. It is possible to extend the test for discrete/mixed data, but then other
+# "closeness schemes" must be applied. By dispatching on `LocalPermutationClosenessSearch`
+# internally, we don't need to introduce breaking changes later when other search types
+# are introduced.
 """
-    LocalPermutationTest <: ConditionalIndependenceTest
-    LocalPermutationTest(measure = CMIShannon(), est = FPVP(k = 5);
-        kperm::Int = 5,
-        nsurr::Int = 100,
-        rng = Random.MersenneTwister(1234))
+The supertype of all types indicating a way of determining "closeness" for the
+local permutation algorithm.
+"""
+abstract type LocalPermutationClosenessSearch end
 
-A generic implementation of the `LocalPermutationTest` test  (Runge, 2018)[^Runge2018],
-which tests whether two variables `X` and `Y` are conditionally independendent given a
+"""
+    NeighborCloseness <: LocalPermutationClosenessSearch
+
+Determine closeness between points for [`LocalPermutationTest`](@ref) using nearest neighbors
+searches.
+"""
+struct NeighborCloseness <: LocalPermutationClosenessSearch end
+
+"""
+    LocalPermutationTest <: IndependenceTest
+    LocalPermutationTest(measure, [est];
+        kperm::Int = 5,
+        nshuffles::Int = 100,
+        rng = Random.default_rng())
+
+`LocalPermutationTest` is a generic conditional independence test (Runge, 2018)[^Runge2018]
+for assessing whether two variables `X` and `Y` are conditionally independendent given a
 third variable `Z` (all of which may be multivariate).
 
-You can use any valid combination of `definition`, `measure` and `est` that yields a
-conditional dependence measure ``\\hat{M}(X; Y | Z)`` with the same ordering as
-[`condmutualinfo`](@ref) (i.e. the conditional variable (`Z`) is the third input variable).
-The default measure is Shannon conditional mutual information [`CMIShannon`](@ref),
-``I(X; Y | Z)`` with the nearest-neighbor based [`FPVP`](@ref]) differential CMI estimator.
+Any association `measure` (with a compatible estimator `est`, if relevant) with ordering
+``\\hat{M}(X; Y | Z)`` (conditional variable is the third) can be used. To obtain the
+nearest-neighbor approach in Runge, 2018, use the [`CMIShannon`](@ref) measure with the
+[`FPVP`](@ref) estimator.
 
 ## Description
 
-`LocalPermutationTest` creates permuted `X` values using a local permutation scheme that is
-based on `kperm`-th nearest neighbor searches. Permuted points are constructed as
+This is a generic one-sided hypothesis test that checks whether `x` and `y`
+are independent (given `z`, if provided) based on resampling from a null distribution
+assumed to represent independence between the variables. The null distribution is generated
+by repeatedly shuffling the input data in some way that is intended
+to break any dependence between the input variables.
+
+For each shuffle, the provided `measure` is computed (using `est`,
+if relevant) while keeping `Y` and `Z` fixed, but permuting `X`,
+i.e. ``\\hat{M}(\\hat{X}; Y | Z)``. Each shuffle of `X` is done conditional on `Z`, such
+that `xᵢ` is replaced with `xⱼ` only if `zᵢ ≈ zⱼ`, i.e. `zᵢ` and `zⱼ` are close.
+Closeness is determined by a `kperm`-th nearest neighbor search among the points in `Z`,
+and permuted points are constructed as
 ``(x_i^*, y_i, z_i)_{i=1}^N``, where the goal is that ``x_i^*`` are drawn without
 replacement, and ``x_i`` is replaced by ``x_j`` only if ``z_i \\approx z_j``.
-Then, for each permuted version of `X`, it computes the original statistic on the permuted
-data, keeping `Y` and `Z` fixed, i.e. ``\\hat{M}(\\hat{X}; Y | Z)``.
+This procedure is repeated `nshuffles` times, and a test summary is returned.
 
-## Example usage
+## Examples
 
-```julia
-x = randn(2000)
-y = randn(2000) .+ 0.7 .* x
-z = sin.(randn(2000)) .* 0.5 .* y
-test = LocalPermutationTest(CMIShannon(; base = 2), FPVP(k = 10))
-independence(test, x, y, z)
-```
+See [quickstart examples](@ref quickstart_localpermutationtest).
 
 [^Runge2018]: Runge, J. (2018, March). Conditional independence testing based on a
     nearest-neighbor estimator of conditional mutual information. In International
     Conference on Artificial Intelligence and Statistics (pp. 938-947). PMLR.
+
 """
-struct LocalPermutationTest{M, EST, R} <: ConditionalIndependenceTest
+struct LocalPermutationTest{M, EST, C, R} <: IndependenceTest
     measure::M
     est::EST
     rng::R
     kperm::Int
-    nsurr::Int
-    function LocalPermutationTest(measure::M = CMIShannon(; base = 2), est::EST = FPVP(k = 5);
-            rng::R = MersenneTwister(1234),
+    nshuffles::Int
+    closeness_search::C
+    function LocalPermutationTest(measure::M, est::EST;
+            rng::R = Random.default_rng(),
             kperm::Int = 10,
-            nsurr::Int = 100) where {M, EST, R}
-        new{M, EST, R}(measure, est, rng, kperm, nsurr)
+            nshuffles::Int = 100,
+            closeness_search::C = NeighborCloseness()) where {M, EST, C, R}
+        new{M, EST, C, R}(measure, est, rng, kperm, nshuffles, closeness_search)
     end
 end
 
@@ -63,11 +90,11 @@ Base.show(io::IO, test::LocalPermutationTest) = print(io,
     """
     `LocalPermutationTest` independence test.
     -------------------------------------
-    measure:        $(test.measure)
-    estimator:      $(test.est)
-    rng:            $(test.rng)
-    # permutations: $(test.nsurr)
-    k (perm)        $(test.kperm)
+    measure:    $(test.measure)
+    estimator:  $(test.est)
+    rng:        $(test.rng)
+    # shuffles: $(test.nshuffles)
+    k (perm)    $(test.kperm)
     """
 )
 
@@ -82,7 +109,7 @@ struct LocalPermutationTestResult{M, MS, P}
     M::M
     Msurr::MS
     pvalue::P
-    nsurr::Int
+    nshuffles::Int
 end
 pvalue(r::LocalPermutationTestResult) = r.pvalue
 quantile(r::LocalPermutationTestResult, q) = quantile(r.Msurr, q)
@@ -106,7 +133,7 @@ function Base.show(io::IO, test::LocalPermutationTestResult)
         H₁: "The first two variables are conditionally dependent given the 3rd variable"
         ----------------------------------------------------------------------------------
         Estimated: $(test.M)
-        Ensemble quantiles ($(test.nsurr) permutations):
+        Ensemble quantiles ($(test.nshuffles) permutations):
           (99.9%): $(quantile(test.Msurr, 0.999))
           (99%):   $(quantile(test.Msurr, 0.99))
           (95%):   $(quantile(test.Msurr, 0.95))
@@ -127,7 +154,7 @@ end
 # should be done for the NN-based CMI methods, so we don't have to reconstruct
 # KD-trees and do marginal searches for all marginals all the time.
 function independence(test::LocalPermutationTest, x, y, z)
-    (; measure, est, rng, kperm, nsurr) = test
+    (; measure, est, rng, kperm, nshuffles) = test
     X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
     e = test.measure.e
     @assert length(X) == length(Y) == length(Z)
@@ -139,8 +166,8 @@ function independence(test::LocalPermutationTest, x, y, z)
     n̂ = collect(1:N)
     X̂ = deepcopy(X)
     𝒰 = zeros(Int, N) # used indices
-    Îs = zeros(nsurr)
-    for b in 1:nsurr
+    Îs = zeros(nshuffles)
+    for b in 1:nshuffles
         shuffle_neighbor_indices!(𝒩, rng)
         # By re-filling, we avoid allocating extra vector for each surr. By filling with
         # zeros, we make sure that the while loop below isn't affected.
@@ -160,9 +187,9 @@ function independence(test::LocalPermutationTest, x, y, z)
         end
         Îs[b] = estimate( measure, est, X̂, Y, Z)
     end
-    p = count(Î .<= Îs) / nsurr
+    p = count(Î .<= Îs) / nshuffles
 
-    return LocalPermutationTestResult(Î, Îs, p, nsurr)
+    return LocalPermutationTestResult(Î, Îs, p, nshuffles)
 end
 
 new_permutation!(n̂, rng) = shuffle!(rng, n̂)

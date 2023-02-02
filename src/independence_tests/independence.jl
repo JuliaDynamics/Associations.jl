@@ -1,33 +1,22 @@
 export independence, cit
-export ConditionalIndependenceTest
+export IndependenceTest
 
+
+"""
+    IndependenceTest <: IndependenceTest
+
+The supertype for all independence tests.
+"""
 abstract type IndependenceTest end
 
 """
-    ConditionalIndependenceTest <: IndependenceTest
+    independence(test::IndependenceTest, x, y, [z]) → summary
 
-The supertype for all conditional independence tests, which are:
+Perform the given [`IndependenceTest`](@ref) `test` on data `x`, `y` and `z`.
+If only `x` and `y` are given, `test` must provide a bivariate association measure.
+If `z` is given too, then `test` must provide a conditional association measure.
 
-- [`LocalPermutationTest`](@ref).
-"""
-abstract type ConditionalIndependenceTest <: IndependenceTest end
-
-"""
-    independence(test, x, y, [z])
-
-Perform the given `test` of independence between `x` and `y` using the provided `test`.
-If `z` is given, compute the conditional independence of `x` and `y` given `z`.
-
-This function is just a generic implementation of a one-sided hypothesis test, where the
-null hypothesis is that `x` and `y` are independent (given `z`, if provided).
-
-## Supported tests
-
-The null hypothesis is specified by `test`, which is a [`IndependenceTest`](@ref).
-
-- [`LocalPermutationTest`](@ref). Compatible with [`CMIShannon`](@ref).
-- [`SurrogateTest`](@ref). This is essentially a convenience wrapper that performs
-    standard surrogate testing. Compatible with [`CMIShannon`](@ref), [`TEShannon`](@ref).
+Returns a test `summary`, whose type depends on `test`.
 """
 function independence(test, args...; kwargs...)
     error("No concrete implementation for $(typeof(test)) test yet")

@@ -1,64 +1,57 @@
+using Random
 using TimeseriesSurrogates
 export SurrogateTest
 export SurrogateTestResult
 
 """
     SurrogateTest <: IndependenceTest
-    SurrogateTest(;
-        measure = CMIShannon(),
-        est = FPVP(k = 5),
-        nsurr::Int = 100,
+    SurrogateTest(measure, [est];
+        nshuffles::Int = 100,
         surrogate = RandomShuffle(),
-        rng = Random.MersenneTwister(1234),
+        rng = Random.default_rng(),
     )
 
-The `SurrogateTest` test is a generic conditional independence test (CIT) for assessing
-whether two variables `X` and `Y` are conditionally independendent given a third variable
-`Z`. It uses
-[surrogate time series](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl) to
-generate the null distribution.
+A generic (conditional) independence test for assessing whether two variables `X` and `Y`
+are independendent, potentially conditioned on a third variable `Z`, based on
+surrogate data. Used with [`independence`](@ref).
 
-## Null hypotheses
+## Description
 
-- If used with a [`ConditionalMutualInformation`](@ref) measure such as
-    [`CMIShannon`](@ref), then the shuffled variable is the first input `X`.
-- If used with a [`TransferEntropy`](@ref) measure such as
-    [`TEShannon`](@ref), then the shuffled variable is the first input `X`, i.e.
-    the source variable.
+This is a generic one-sided hypothesis test that checks whether `x` and `y`
+are independent (given `z`, if provided) based on resampling from a null distribution
+assumed to represent independence between the variables. The null distribution is generated
+by repeatedly shuffling the input data in some way that is intended
+to break any dependence between the input variables.
 
+There are different ways of shuffling, dictated by `surrogate`, each representing a
+distinct null hypothesis. For each shuffle, the provided `measure` is computed (using `est`,
+if relevant). This procedure is repeated `nshuffles` times, and a test summary is returned.
 
-## Example usage
+For bivariate measures, the default is to shuffle both input variables. For conditional
+measures accepting three input variables, the default is to shuffle the first input.
+Exceptions are:
 
-Here, we'll test if the transfer entropy from `x` to `y` is significant. If we can reject
-the null hypothesis that `x` and `y` are independent, then we take that as evidence
-that `x` influences `y`.
+- If [`TransferEntropy`](@ref) measure such as [`TEShannon`](@ref),
+    then the source variable is always shuffled, and the target and conditional
+    variable are left unshuffled.
 
-```julia
-using CausalityTools
-# If `x` and `y` were dependent given `z`, then we'd expect to be able to reject the
-# null hypothesis that x ⫫ y | z.
-sys = logistic2_unidir(c_xy = 0.5)
-npts = 1000
-x, y = columns(trajectory(sys, npts, Ttr = npts*10))
-test = SurrogateTest(TEShannon(), FPVP(k = 10))
-independence(test, x, y)
+## Examples
 
-# If `x` and `y` are *independent*.
-```
+- [Quickstart examples](@ref quickstart_surrogatetest).
 """
 struct SurrogateTest{M, E, R, S} <: IndependenceTest
     measure::M
     est::E
     rng::R
     surrogate::S
-    nsurr::Int
+    nshuffles::Int
 
     function SurrogateTest(measure::M, est::E = nothing;
-        rng::R = MersenneTwister(1234),
+        rng::R = Random.default_rng(),
         surrogate::S = RandomShuffle(),
-        nsurr::Int = 100,
+        nshuffles::Int = 100,
         ) where {M, E, R, S}
-        new{M, E, R, S}(measure, est, rng, surrogate, nsurr)
+        new{M, E, R, S}(measure, est, rng, surrogate, nshuffles)
     end
 end
 
@@ -67,11 +60,11 @@ Base.show(io::IO, test::SurrogateTest) = print(io,
     """
     `SurrogateTest` independence test.
     -------------------------------------
-    measure:        $(test.measure)
-    estimator:      $(test.est)
-    rng:            $(test.rng)
-    # permutations: $(test.nsurr)
-    surrogate:      $(test.surrogate)
+    measure:    $(test.measure)
+    estimator:  $(test.est)
+    rng:        $(test.rng)
+    # shuffles: $(test.nshuffles)
+    surrogate:  $(test.surrogate)
     """
 )
 
@@ -86,7 +79,7 @@ struct SurrogateTestResult{M, MS, P}
     M::M
     Msurr::MS
     pvalue::P
-    nsurr::Int
+    nshuffles::Int
 end
 pvalue(r::SurrogateTestResult) = r.pvalue
 quantile(r::SurrogateTestResult, q) = quantile(r.Msurr, q)
@@ -110,7 +103,7 @@ function Base.show(io::IO, test::SurrogateTestResult)
         Hₐ: "The first two variables are dependent (given the 3rd variable, if relevant)"
         -----------------------------------------------------------------------------------
         Estimated: $(test.M)
-        Ensemble quantiles ($(test.nsurr) permutations):
+        Ensemble quantiles ($(test.nshuffles) permutations):
           (99.9%): $(quantile(test.Msurr, 0.999))
           (99%):   $(quantile(test.Msurr, 0.99))
           (95%):   $(quantile(test.Msurr, 0.95))
@@ -126,36 +119,36 @@ end
 # third argument is to be conditioned on. This works naturally with e.g.
 # conditional mutual information.
 function independence(test::SurrogateTest, x, y, z)
-    (; measure, est, rng, surrogate, nsurr) = test
+    (; measure, est, rng, surrogate, nshuffles) = test
     X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
     @assert length(X) == length(Y) == length(Z)
     N = length(x)
     Î = estimate(measure,est, X, Y, Z)
     s = surrogenerator(x, surrogate, rng)
-    Îs = zeros(nsurr)
-    for b in 1:nsurr
+    Îs = zeros(nshuffles)
+    for b in 1:nshuffles
         Îs[b] = estimate(measure, est, s(), Y, Z)
     end
-    p = count(Î .<= Îs) / nsurr
+    p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nsurr)
+    return SurrogateTestResult(Î, Îs, p, nshuffles)
 end
 
 function independence(test::SurrogateTest, x, y)
-    (; measure, est, rng, surrogate, nsurr) = test
+    (; measure, est, rng, surrogate, nshuffles) = test
     X, Y = Dataset(x), Dataset(y)
     @assert length(X) == length(Y)
     N = length(x)
     Î = estimate(measure,est, X, Y)
     sx = surrogenerator(x, surrogate, rng)
     sy = surrogenerator(y, surrogate, rng)
-    Îs = zeros(nsurr)
-    for b in 1:nsurr
+    Îs = zeros(nshuffles)
+    for b in 1:nshuffles
         Îs[b] = estimate(measure, est, sx(), sy())
     end
-    p = count(Î .<= Îs) / nsurr
+    p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nsurr)
+    return SurrogateTestResult(Î, Îs, p, nshuffles)
 end
 
 include("contingency.jl")
