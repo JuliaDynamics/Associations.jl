@@ -5,6 +5,16 @@ x = rand(1:mx, 1000)
 y = rand(1:my, 1000)
 z = rand(2:mz+1, 1000) # ensure that starting at something other than 1 also works
 
+# Basics
+# -------------------------------------------------------------------------------------
+c = contingency_matrix(x, y, z)
+@test frequencies(c, dims = 1:2) isa AbstractArray{Int, 2}
+@test frequencies(c, dims = 2) isa AbstractArray{Int, 1}
+@test frequencies(c) isa AbstractArray{Int, 3}
+@test probabilities(c, dims = 1:2) isa Probabilities{<:Real, 2}
+@test probabilities(c, dims = 2) isa Probabilities{<:Real, 1}
+@test probabilities(c) isa Probabilities{<:Real, 3}
+
 c2 = contingency_matrix(x, y)
 c3 = contingency_matrix(x, y, z)
 @test size(c2) == (3, 2)
@@ -12,6 +22,9 @@ c3 = contingency_matrix(x, y, z)
 @test sum(c2) ≈ 1.0
 @test sum(c3) ≈ 1.0
 
+
+# Discretizing data before computing the contingency matrix
+# -------------------------------------------------------------------------------------
 u = rand(1000)
 v = rand(1000)
 w = rand(1000)
@@ -19,6 +32,7 @@ w = rand(1000)
 # These are the estimators that have implementations of `marginal_encodings`
 probests = [
     SymbolicPermutation(m = 3),
+    Dispersion(),
 ]
 
 @testset "Contingency table: with $(probests[i]) discretization" for i in eachindex(probests)
