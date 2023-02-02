@@ -18,7 +18,6 @@ function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y) where M
 end
 
 function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y, z) where MEASURE
-    @show "heyo"
     (; measure, est, rng, surrogate, nsurr) = test
     @assert length(x) == length(y) == length(z)
     N = length(x)
