@@ -47,6 +47,7 @@ PAGES = [
     "Examples" => [
         "Quickstart" => [
             "Mutual information" => "quickstart/quickstart_mi.md",
+            "Independence testing" => "quickstart/quickstart_independence.md",
         ],
         "Longer examples" => [
             "Entropy" => "examples/examples_entropy.md",
@@ -54,6 +55,7 @@ PAGES = [
             "Mutual information" => "examples/examples_mutualinfo.md",
             "Transfer entropy" => "examples/examples_transferentropy.md",
             "Cross mappings" => "examples/examples_cross_mappings.md",
+            "Independence testing" => "examples/examples_independence.md",
         ],
     ],
     "Experimental" => "experimental.md",
