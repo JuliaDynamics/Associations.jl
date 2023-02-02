@@ -32,6 +32,7 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
+    "Independence testing" => "independence.md",
     "Examples" => [
         "Quickstart" => [
             "Mutual information" => "quickstart/quickstart_mi.md",
