@@ -10,14 +10,22 @@ struct CMITsallis{E <: Tsallis} <: ConditionalMutualInformation{E}
     end
 end
 
+function estimate(measure::CMITsallis, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::CMITsallis, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 function estimate(
         measure::CMITsallis,
         pxyz::ContingencyMatrix{T, 3}) where T
     e = measure.e
     dx, dy, dz = size(pxyz)
-    pxz = dropdims(sum(pxyz, dims = 2), dims = 2)
-    pyz = dropdims(sum(pxyz, dims = 1), dims = 1)
-    pz = probabilities(pxyz, 3)
+    pxz = probabilities(pxyz, dims = [1, 3])
+    pyz = probabilities(pxyz, dims = [2, 3])
+    pz = probabilities(pxyz, dims = 3)
     cmi = 0.0
     log0 = log_with_base(e.base)
     for k in 1:dz

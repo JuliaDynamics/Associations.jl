@@ -20,19 +20,19 @@ function marginals_and_surrogenerator(opt::OptimiseTraditional, surrogate::Surro
     return Ŝ, T⁺, S, Dataset(T, C)
 end
 
-function independence(test::SurrogateCIT{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where {E}
-    (; measure, est, rng, surrogate, nsurr) = test
+function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where {E}
+    (; measure, est, rng, surrogate, nshuffles) = test
 
     cmi = te_to_cmi(measure)
     Ŝ, T⁺, S, T = marginals_and_surrogenerator(measure.embedding, surrogate, x...; rng)
     @assert length(T⁺) == length(S) == length(T)
     Î = estimate(cmi, est, T⁺, S, T)
-    Îs = zeros(nsurr)
-    for b in 1:nsurr
+    Îs = zeros(nshuffles)
+    for b in 1:nshuffles
         # TE(ŝ -> t) := I(t⁺; ŝ⁻ | t⁻, c⁻).
         Îs[b] = estimate(cmi, est, T⁺, Ŝ(), T)
     end
-    p = count(Î .<= Îs) / nsurr
+    p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateCITResult(Î, Îs, p, nsurr)
+    return SurrogateTestResult(Î, Îs, p, nshuffles)
 end

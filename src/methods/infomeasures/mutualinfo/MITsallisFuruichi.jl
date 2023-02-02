@@ -34,13 +34,21 @@ struct MITsallisFuruichi{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
+function estimate(measure::MITsallisFuruichi, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::MITsallisFuruichi, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 function estimate(
         measure::MITsallisFuruichi,
         pxy::ContingencyMatrix{T, 2}) where T
     e = measure.e
     q = measure.e.q
-    px = probabilities(pxy, 1)
-    py = probabilities(pxy, 2)
+    px = probabilities(pxy, dims = 1)
+    py = probabilities(pxy, dims = 2)
 
     mi = 0.0
     for i in eachindex(px.p)
@@ -59,6 +67,6 @@ function estimate(measure::MITsallisFuruichi, est::ProbabilitiesEstimator, x, y)
 end
 
 
-function mutualinfo(::MITsallisFuruichi, est::DifferentialEntropyEstimator, args...)
+function estimate(::MITsallisFuruichi, est::DifferentialEntropyEstimator, args...)
     throw(ArgumentError("MITsallisFuruichi not implemented for $(typeof(est))"))
 end

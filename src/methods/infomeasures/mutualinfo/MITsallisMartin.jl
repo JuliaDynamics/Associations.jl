@@ -33,6 +33,14 @@ struct MITsallisMartin{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
+function estimate(measure::MITsallisMartin, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::MITsallisMartin, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 # This is definition 3 in Martin et al. (2004), but with pᵢ replaced by the joint
 # distribution and qᵢ replaced by the product of the marginal distributions.
 function estimate(
@@ -41,8 +49,8 @@ function estimate(
     e = measure.e
     q = measure.e.q
     q != 1 || throw(ArgumentError("MITsallisMartin for q=$(q) not defined with estimator ContingencyMatrix"))
-    px = probabilities(pxy, 1)
-    py = probabilities(pxy, 2)
+    px = probabilities(pxy, dims = 1)
+    py = probabilities(pxy, dims = 2)
 
     mi = 0.0
     for (i, pxᵢ) in enumerate(px.p)
@@ -62,6 +70,6 @@ function estimate(measure::MITsallisMartin, est::ProbabilitiesEstimator, x, y)
 end
 
 
-function mutualinfo(::MITsallisMartin, est::DifferentialEntropyEstimator, args...)
+function estimate(::MITsallisMartin, est::DifferentialEntropyEstimator, args...)
     throw(ArgumentError("MITsallisMartin not implemented for $(typeof(est))"))
 end

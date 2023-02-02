@@ -3,7 +3,7 @@ import ComplexityMeasures: probabilities, outcomes
 using StatsBase: levelsmap
 
 export ContingencyMatrix
-export probabilities, outcomes
+export probabilities, outcomes, frequencies
 export contingency_matrix
 
 # This should be done so that the following can be added to the docs, but for now,
@@ -16,23 +16,28 @@ export contingency_matrix
 # This is not optimized for speed, but it *works*
 """
     ContingencyMatrix{T, N} <: Probabilities{T, N}
+    ContingencyMatrix(frequencies::AbstractArray{Int, N})
 
-`ContingencyMatrix` is just a simple wrapper around around `AbstractArray{T, N}`.
+A contingency matrix is essentially a multivariate analogue of [`Probabilities`](@ref)
+that also keep track of raw frequencies.
 
-A contingency matrix is essentially a multivariate analogue of [`Probabilities`](@ref),
-but also keeps track of raw frequencies. It can be estimated from input data with
-[`contingency_matrix`](@ref), either from raw categorical data or by using
-a [`ProbabilitiesEstimator`](@ref) to first discretize the data.
+The contingency matrix can be constructed directyly from an `N`-dimensional `frequencies`
+array. Alternatively, the [`contingency_matrix`](@ref) function performs counting for
+you; this works on both raw categorical data, or by first discretizing data using a
+a [`ProbabilitiesEstimator`](@ref).
 
 ## Description
 
-Indexing a contingency matrix `c` with multiple indices `i, j, …` returns the `(i, j, …)`th
+A `ContingencyMatrix` `c` is just a simple wrapper around around `AbstractArray{T, N}`.
+Indexing `c` with multiple indices `i, j, …` returns the `(i, j, …)`th
 element of the empirical probability mass function (pmf). The following convencience
 methods are defined:
 
-- `frequencies(c)` returns the multivariate raw counts.
-- `probabilities(c)` contains the normalized counts, i.e. a multidimensional empirical
-    probability mass function (pmf).
+- `frequencies(c; dims)` returns the multivariate raw counts along the given `dims
+    (default to all available dimensions).
+- `probabilities(c; dims)` returns a multidimensional empirical
+    probability mass function (pmf) along the given `dims` (defaults to all available
+    dimensions), i.e. the normalized counts.
 - `probabilities(c, i::Int)` returns the marginal probabilities for the `i`-th dimension.
 - `outcomes(c, i::Int)` returns the marginal outcomes for the `i`-th dimension.
 
@@ -64,23 +69,28 @@ struct ContingencyMatrix{T, N, I} <: AbstractArray{T, N}
     probs::AbstractArray{T, N}
     freqs::AbstractArray{I, N}
 end
+
+function ContingencyMatrix(freqs::AbstractArray{Int, N}) where N
+    probs = freqs ./ sum(freqs)
+    return ContingencyMatrix(probs, freqs)
+end
+
 Base.size(c::ContingencyMatrix) = size(c.probs)
 Base.getindex(c::ContingencyMatrix, i) = getindex(c.probs, i)
 Base.getindex(c::ContingencyMatrix, i::Int...) = getindex(c.probs, i...)
 Base.setindex!(c::ContingencyMatrix, v, i) = setindex!(c.probs, v, i)
 
-frequencies(c::ContingencyMatrix) = c.freqs
-function frequencies(c::ContingencyMatrix, dim::Int)
-    alldims = 1:maximum(size(c.probs))
-    reduce_dims = setdiff(alldims, dim)
-    return dropdims(sum(c.freqs, dims = reduce_dims), dims = (reduce_dims...,))
+function frequencies(c::ContingencyMatrix; dims = 1:ndims(c))
+    alldims = 1:ndims(c)
+    reduce_dims = setdiff(alldims, dims)
+    marginal = dropdims(sum(c.freqs, dims = reduce_dims), dims = (reduce_dims...,))
+    return marginal
 end
 
-probabilities(c::ContingencyMatrix) = c.probs
-function probabilities(c::ContingencyMatrix, dim::Int)
-    alldims = 1:length(size(c.probs))
-    reduce_dims = (setdiff(alldims, dim)...,)
-    marginal =  dropdims(sum(c.probs, dims = reduce_dims), dims = reduce_dims)
+function probabilities(c::ContingencyMatrix; dims = 1:ndims(c))
+    alldims = 1:ndims(c)
+    reduce_dims = (setdiff(alldims, dims)...,)
+    marginal = dropdims(sum(c.probs, dims = reduce_dims), dims = reduce_dims)
     return Probabilities(marginal)
 end
 
@@ -185,8 +195,6 @@ function tolevels(x)
     end
     return levels, lmap
 end
-
-
 
 # The following commented-out code below is equivalent to theabove, but muuuch faster.
 # I keep the comments here for, so when I revisit this, I understand *why* it works.

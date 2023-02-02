@@ -31,12 +31,19 @@ struct MIRenyiJizba{E <: Renyi} <: MutualInformation{E}
     end
 end
 
+function estimate(measure::MIRenyiJizba, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
 
-function estimate(measure::MIRenyiJizba{<:Renyi}, pxy::ContingencyMatrix{T, 2}) where {T}
+function estimate(measure::MIRenyiJizba, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
+function estimate(measure::MIRenyiJizba, pxy::ContingencyMatrix{T, 2}) where {T}
     e = measure.e
     q = e.q
-    px = probabilities(pxy, 1)
-    py = probabilities(pxy, 2)
+    px = probabilities(pxy, dims = 1)
+    py = probabilities(pxy, dims = 2)
     logb = log_with_base(e.base)
     num = 0.0
     den = 0.0
@@ -55,11 +62,11 @@ function estimate(measure::MIRenyiJizba{<:Renyi}, pxy::ContingencyMatrix{T, 2}) 
     return (1 / (1 / q)) * mi
 end
 
-function estimate(measure::MIRenyiJizba, est::ProbOrDiffEst, x, y)
+function estimate(measure::MIRenyiJizba, est::ProbabilitiesEstimator, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
     return HX + HY - HXY
 end
 
-function mutualinfo(::MIRenyiJizba, est::DifferentialEntropyEstimator, args...)
+function estimate(::MIRenyiJizba, est::DifferentialEntropyEstimator, args...)
     throw(ArgumentError("MIRenyiJizba not implemented for $(typeof(est))"))
 end

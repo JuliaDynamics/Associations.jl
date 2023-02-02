@@ -32,7 +32,7 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-
+    "Correlation measures" => "correlation_measures.md",
     "Information measures" => [
         "Probability mass functions" => "probabilities.md",
         "Entropy" => "entropy.md",
@@ -43,6 +43,21 @@ PAGES = [
     ],
     "Cross mappings" => "cross_mappings.md",
     "Joint distance distribution" => "jdd.md",
+    "Independence testing" => "independence.md",
+    "Examples" => [
+        "Quickstart" => [
+            "Mutual information" => "quickstart/quickstart_mi.md",
+            "Independence testing" => "quickstart/quickstart_independence.md",
+        ],
+        "Longer examples" => [
+            "Entropy" => "examples/examples_entropy.md",
+            "Conditional entropy" => "examples/examples_conditional_entropy.md",
+            "Mutual information" => "examples/examples_mutualinfo.md",
+            "Transfer entropy" => "examples/examples_transferentropy.md",
+            "Cross mappings" => "examples/examples_cross_mappings.md",
+            "Independence testing" => "examples/examples_independence.md",
+        ],
+    ],
     "Experimental" => "experimental.md",
 ]
 
@@ -50,6 +65,7 @@ makedocs(
     modules = [CausalityTools, ComplexityMeasures, StateSpaceSets],
     format = Documenter.HTML(
         prettyurls = CI,
+        sidebar_sitename = false,
         assets = [
             asset("https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap", class=:css),
         ],

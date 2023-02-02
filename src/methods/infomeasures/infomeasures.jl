@@ -14,8 +14,9 @@ A generic supertype for definitions of information measures (one measure may hav
 multiple definitions).
 """
 abstract type Definition end
+
 """
-    InformationMeasure <: CausalityMeasure
+    InformationMeasure <: AssociationMeasure
 
 The supertype for all definitions of information-based measures.
 
@@ -41,7 +42,7 @@ Rényi-based mutual information.
 
 - [`CMIRenyiSarbu`](@ref). Discrete Rényi CMI.
 """
-abstract type InformationMeasure <: CausalityMeasure end
+abstract type InformationMeasure <: AssociationMeasure end
 
 """
     estimate(e::EntropyDefinition, est::InformationMeasureEstimator, input::VectorOrDataset...)
@@ -54,7 +55,6 @@ function estimate(measure::InformationMeasure, args...; kwargs...) end
 # Contingency matrices and its computation based on various probabilites
 # estimators
 include("marginal_encodings.jl")
-include("contingency_matrices.jl")
 
 # Things that will be eventually moved to ComplexityMeasures.jl
 include("various/probabilities.jl")
