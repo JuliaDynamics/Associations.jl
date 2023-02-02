@@ -31,10 +31,10 @@ end
 
 function estimate(measure::CMIRenyiJizba, est::Contingency, x, y, z)
     c = _contingency_matrix(measure, est, x, y, z)
-    pxz = probabilities(pxyz, dims = [1, 3])
-    pyz = probabilities(pxyz, dims = [2, 3])
-    pz = probabilities(pxyz, dims = 3)
-    pxyz = c.probs |> Probabilities
+    pxz = probabilities(c, dims = [1, 3])
+    pyz = probabilities(c, dims = [2, 3])
+    pz = probabilities(c, dims = 3)
+    pxyz = probabilities(c)
     e = measure.e
     return entropy(e, pxz) + entropy(e, pyz) - entropy(e, pz) - entropy(e, pxyz)
 end
