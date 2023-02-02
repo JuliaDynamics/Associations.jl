@@ -72,7 +72,7 @@ Base.show(io::IO, test::LocalPermutationTest) = print(io,
 )
 
 """
-    LocalPermutationTestTestResult(M, Msurr, pvalue)
+    LocalPermutationTestResult(M, Msurr, pvalue)
 
 Holds the result of a [`LocalPermutationTestTestResult`](@ref). `M` is the measure computed on
 the original data. `Msurr` is a vector of the measure computed on permuted data, where
@@ -84,10 +84,10 @@ struct LocalPermutationTestTestResult{M, MS, P}
     pvalue::P
     nsurr::Int
 end
-pvalue(r::LocalPermutationTestTestResult) = r.pvalue
-quantile(r::LocalPermutationTestTestResult, q) = quantile(r.Msurr, q)
+pvalue(r::LocalPermutationTestResult) = r.pvalue
+quantile(r::LocalPermutationTestResult, q) = quantile(r.Msurr, q)
 
-function Base.show(io::IO, test::LocalPermutationTestTestResult)
+function Base.show(io::IO, test::LocalPermutationTestResult)
     α005 = pvalue(test) < 0.05 ?
         "α = 0.05: ✓ Evidence favors dependence" :
         "α = 0.05: ✖ Independence cannot be rejected"
@@ -162,7 +162,7 @@ function independence(test::LocalPermutationTest, x, y, z)
     end
     p = count(Î .<= Îs) / nsurr
 
-    return LocalPermutationTestTestResult(Î, Îs, p, nsurr)
+    return LocalPermutationTestResult(Î, Îs, p, nsurr)
 end
 
 new_permutation!(n̂, rng) = shuffle!(rng, n̂)
