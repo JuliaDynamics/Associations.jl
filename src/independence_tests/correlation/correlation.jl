@@ -30,14 +30,14 @@ end
 
 function Base.show(io::IO, test::CorrelationTestResult)
     α005 = pvalue(test) < 0.05 ?
-        "H₀ rejected at significance level α = 0.05:  ✓ Evidence favors dependence" :
-        "H₀ rejected at significance level α = 0.05:  ✖ Evidence favors independence"
+        "α = 0.05:  ✓ Evidence favors dependence" :
+        "α = 0.05:  ✖ Independence cannot be rejected"
     α001 = pvalue(test) < 0.01 ?
-        "H₀ rejected at significance level α = 0.01:  ✓ Evidence favors dependence" :
-        "H₀ rejected at significance level α = 0.01:  ✖ Evidence favors independence"
+        "α = 0.01:  ✓ Evidence favors dependence" :
+        "α = 0.01:  ✖ Independence cannot be rejected"
     α0001 = pvalue(test) < 0.001 ?
-        "H₀ rejected at significance level α = 0.001: ✓ Evidence favors dependence" :
-        "H₀ rejected at significance level α = 0.001: ✖ Evidence favors independence"
+        "α = 0.001: ✓ Evidence favors dependence" :
+        "α = 0.001: ✖ Independence cannot be rejected"
 
     print(io,
         """\
