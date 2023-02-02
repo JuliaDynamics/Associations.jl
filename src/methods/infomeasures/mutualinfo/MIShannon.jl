@@ -79,8 +79,8 @@ end
 
 function estimate(measure::MIShannon, pxy::ContingencyMatrix{T, 2}) where {T}
     e = measure.e
-    px = probabilities(pxy, 1)
-    py = probabilities(pxy, 2)
+    px = probabilities(pxy, dims = 1)
+    py = probabilities(pxy, dims = 2)
     mi = 0.0
     logb = log_with_base(e.base)
     for i in eachindex(px.p)

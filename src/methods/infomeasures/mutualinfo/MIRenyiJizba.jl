@@ -42,8 +42,8 @@ end
 function estimate(measure::MIRenyiJizba, pxy::ContingencyMatrix{T, 2}) where {T}
     e = measure.e
     q = e.q
-    px = probabilities(pxy, 1)
-    py = probabilities(pxy, 2)
+    px = probabilities(pxy, dims = 1)
+    py = probabilities(pxy, dims = 2)
     logb = log_with_base(e.base)
     num = 0.0
     den = 0.0

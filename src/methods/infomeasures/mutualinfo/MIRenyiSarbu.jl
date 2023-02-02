@@ -36,8 +36,8 @@ struct MIRenyiSarbu{E <: Renyi} <: MutualInformation{E}
 end
 
 function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}
-    px = probabilities(pxy, 1)
-    py = probabilities(pxy, 2)
+    px = probabilities(pxy, dims = 1)
+    py = probabilities(pxy, dims = 2)
     e = measure.e
     q = e.q
 

@@ -49,8 +49,8 @@ function estimate(
     e = measure.e
     q = measure.e.q
     q != 1 || throw(ArgumentError("MITsallisMartin for q=$(q) not defined with estimator ContingencyMatrix"))
-    px = probabilities(pxy, 1)
-    py = probabilities(pxy, 2)
+    px = probabilities(pxy, dims = 1)
+    py = probabilities(pxy, dims = 2)
 
     mi = 0.0
     for (i, pxᵢ) in enumerate(px.p)

@@ -47,8 +47,8 @@ function estimate(
         pxy::ContingencyMatrix{T, 2}) where T
     e = measure.e
     q = measure.e.q
-    px = probabilities(pxy, 1)
-    py = probabilities(pxy, 2)
+    px = probabilities(pxy, dims = 1)
+    py = probabilities(pxy, dims = 2)
 
     mi = 0.0
     for i in eachindex(px.p)
