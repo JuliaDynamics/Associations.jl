@@ -35,6 +35,14 @@ struct MIRenyiSarbu{E <: Renyi} <: MutualInformation{E}
     end
 end
 
+function estimate(measure::MIRenyiSarbu, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::MIRenyiSarbu, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}
     px = probabilities(pxy, dims = 1)
     py = probabilities(pxy, dims = 2)
@@ -56,11 +64,11 @@ function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}
 end
 
 
-function mutualinfo(::MIRenyiSarbu, est::ProbabilitiesEstimator, args...)
+function estimate(::MIRenyiSarbu, est::ProbabilitiesEstimator, x, y)
     throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est))"))
 end
 
 
-function mutualinfo(::MIRenyiSarbu, est::DifferentialEntropyEstimator, args...)
+function estimate(::MIRenyiSarbu, est::DifferentialEntropyEstimator, args...)
     throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est))"))
 end
