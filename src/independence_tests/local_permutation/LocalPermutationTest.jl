@@ -78,7 +78,7 @@ Holds the result of a [`LocalPermutationTestTestResult`](@ref). `M` is the measu
 the original data. `Msurr` is a vector of the measure computed on permuted data, where
 Msurr[i] corresponds to the `i`-th permutation. `pvalue` is the `p`-value for the test.
 """
-struct LocalPermutationTestTestResult{M, MS, P}
+struct LocalPermutationTestResult{M, MS, P}
     M::M
     Msurr::MS
     pvalue::P
