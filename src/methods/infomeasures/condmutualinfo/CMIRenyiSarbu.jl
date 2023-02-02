@@ -36,6 +36,14 @@ struct CMIRenyiSarbu{E <: Renyi} <: ConditionalMutualInformation{E}
     end
 end
 
+function estimate(measure::CMIRenyiSarbu, est::Contingency{<:ProbabilitiesEstimator}, x...)
+    return estimate(measure, contingency_matrix(est.est, x...))
+end
+
+function estimate(measure::CMIRenyiSarbu, est::Contingency{<:Nothing}, x...)
+    return estimate(measure, contingency_matrix(x...))
+end
+
 function estimate(
         measure::CMIRenyiSarbu,
         pxyz::ContingencyMatrix{T, 3}) where T
@@ -50,16 +58,15 @@ function estimate(
     for k in 1:dz
         pzₖ = pz[k]
         inner = 0.0
-        if pzₖ != 0.0
-            for j in 1:dy
-                pyⱼzₖ = pyz[j, k]
-                for i in 1:dx
-                    pxᵢzₖ = pxz[i, k]
-                    pxᵢyⱼzₖ = pxyz[i, j, k]
-                    f = (pxᵢzₖ / pzₖ) * (pyⱼzₖ / pzₖ)
-                    if f != 0.0
-                        inner += (pxᵢyⱼzₖ / pzₖ)^q / f^(q-1)
-                    end
+        pzₖ != 0.0 || continue
+        for j in 1:dy
+            pyⱼzₖ = pyz[j, k]
+            for i in 1:dx
+                pxᵢzₖ = pxz[i, k]
+                pxᵢyⱼzₖ = pxyz[i, j, k]
+                f = (pxᵢzₖ / pzₖ) * (pyⱼzₖ / pzₖ)
+                if f != 0.0 && !isnan(f)
+                    inner += (pxᵢyⱼzₖ / pzₖ)^q / f^(q-1)
                 end
             end
         end
