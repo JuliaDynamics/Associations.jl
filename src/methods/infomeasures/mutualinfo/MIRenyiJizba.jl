@@ -67,6 +67,6 @@ function estimate(measure::MIRenyiJizba, est::ProbOrDiffEst, x, y)
     return HX + HY - HXY
 end
 
-function mutualinfo(::MIRenyiJizba, est::DifferentialEntropyEstimator, args...)
+function estimate(::MIRenyiJizba, est::DifferentialEntropyEstimator, args...)
     throw(ArgumentError("MIRenyiJizba not implemented for $(typeof(est))"))
 end

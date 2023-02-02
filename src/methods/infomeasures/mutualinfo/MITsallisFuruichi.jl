@@ -67,6 +67,6 @@ function estimate(measure::MITsallisFuruichi, est::ProbabilitiesEstimator, x, y)
 end
 
 
-function mutualinfo(::MITsallisFuruichi, est::DifferentialEntropyEstimator, args...)
+function estimate(::MITsallisFuruichi, est::DifferentialEntropyEstimator, args...)
     throw(ArgumentError("MITsallisFuruichi not implemented for $(typeof(est))"))
 end

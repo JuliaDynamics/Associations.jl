@@ -70,6 +70,6 @@ function estimate(measure::MITsallisMartin, est::ProbabilitiesEstimator, x, y)
 end
 
 
-function mutualinfo(::MITsallisMartin, est::DifferentialEntropyEstimator, args...)
+function estimate(::MITsallisMartin, est::DifferentialEntropyEstimator, args...)
     throw(ArgumentError("MITsallisMartin not implemented for $(typeof(est))"))
 end
