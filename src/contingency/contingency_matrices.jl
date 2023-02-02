@@ -3,7 +3,7 @@ import ComplexityMeasures: probabilities, outcomes
 using StatsBase: levelsmap
 
 export ContingencyMatrix
-export probabilities, outcomes
+export probabilities, outcomes, frequencies
 export contingency_matrix
 
 # This should be done so that the following can be added to the docs, but for now,
@@ -33,7 +33,8 @@ Indexing `c` with multiple indices `i, j, …` returns the `(i, j, …)`th
 element of the empirical probability mass function (pmf). The following convencience
 methods are defined:
 
-- `frequencies(c)` returns the multivariate raw counts.
+- `frequencies(c; dims)` returns the multivariate raw counts along the given `dims
+    (default to all available dimensions).
 - `probabilities(c; dims)` returns a multidimensional empirical
     probability mass function (pmf) along the given `dims` (defaults to all available
     dimensions), i.e. the normalized counts.
@@ -79,18 +80,17 @@ Base.getindex(c::ContingencyMatrix, i) = getindex(c.probs, i)
 Base.getindex(c::ContingencyMatrix, i::Int...) = getindex(c.probs, i...)
 Base.setindex!(c::ContingencyMatrix, v, i) = setindex!(c.probs, v, i)
 
-frequencies(c::ContingencyMatrix) = c.freqs
-function frequencies(c::ContingencyMatrix, dim::Int)
-    alldims = 1:maximum(size(c.probs))
-    reduce_dims = setdiff(alldims, dim)
-    return dropdims(sum(c.freqs, dims = reduce_dims), dims = (reduce_dims...,))
+function frequencies(c::ContingencyMatrix; dims = 1:ndims(c))
+    alldims = 1:ndims(c)
+    reduce_dims = setdiff(alldims, dims)
+    marginal = dropdims(sum(c.freqs, dims = reduce_dims), dims = (reduce_dims...,))
+    return marginal
 end
 
-probabilities(c::ContingencyMatrix) = c.probs
-function probabilities(c::ContingencyMatrix; dims = 1:length(size(c)))
-    alldims = 1:length(size(c.probs))
+function probabilities(c::ContingencyMatrix; dims = 1:ndims(c))
+    alldims = 1:ndims(c)
     reduce_dims = (setdiff(alldims, dims)...,)
-    marginal =  dropdims(sum(c.probs, dims = reduce_dims), dims = reduce_dims)
+    marginal = dropdims(sum(c.probs, dims = reduce_dims), dims = reduce_dims)
     return Probabilities(marginal)
 end
 
