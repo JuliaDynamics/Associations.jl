@@ -21,7 +21,7 @@ module CausalityTools
     include("core.jl")
     include("methods/infomeasures/infomeasures.jl")
     include("methods/crossmappings/crossmappings.jl")
-    include("methods/joint_distance_distribution.jl")
+    include("methods/JointDistanceDistribution.jl")
     include("methods/correlation/correlation.jl")
     #include("methods/smeasure/smeasure.jl")
     #include("example_systems/ExampleSystems.jl")
