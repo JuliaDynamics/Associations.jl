@@ -22,6 +22,11 @@ end
 
 The joint distance distribution (JDD) measure (Amigó & Hirata, 2018)[^Amigo2018].
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
+- Use with [`jdd`](@ref) to compute the joint distance distribution `Δ` from Amigó & Hirata (2018).
+
 ## Keyword arguments
 
 - **`distance_metric::Metric`**: An instance of a valid distance metric from `Distances.jl`.
@@ -33,11 +38,6 @@ The joint distance distribution (JDD) measure (Amigó & Hirata, 2018)[^Amigo2018
 - **`μ`**: The hypothetical mean value of the joint distance distribution if there
     is no coupling between `x` and `y` (default is `μ = 0.0`).
 
-## Independence testing
-
-If used with [`independence`](@ref), then a `HypothesisTests.OneSampleTTest`
-is returned. Use `pvalue` with keyword `tail = :right` on the result to get the
-p-value at 95% confidence.
 
 ## Examples
 
@@ -61,26 +61,6 @@ end
 
 function estimate(measure::JointDistanceDistribution, est::Nothing, source, target)
     return estimate(measure, source, target)
-end
-
-function rank_transformation(x::AbstractArray{T}) where T
-    N = length(x)
-    s = zeros(Int, N)
-    return rank_transformation!(s, x)
-end
-
-function rank_transformation!(
-        s::AbstractVector{Int},
-        x::AbstractVector{T}) where T <: Real
-    N = length(x)
-    r = zeros(N)
-    # Break ties arbitrarily by sorting. This means that ties are broken according to the
-    # sorting algorithm used, and equal values are assigned different ranks.
-    sortperm!(s, x)
-    for j in 1:N
-        r[s[j]] = j
-    end
-    return r
 end
 
 # Internal method for compatibility with independence tests.

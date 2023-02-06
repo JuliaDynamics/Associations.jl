@@ -1,34 +1,38 @@
 ![CausalityTools.jl static logo](assets/large_logo.png)
 
-`CausalityTools` is a Julia package that provides algorithms for *detecting
-dynamical influences* and *causal inference* based on time series data, and other
-commonly used measures of dependence and association.
-
 !!! info
     You are reading the development version of the documentation of
     CausalityTools.jl that will become version 2.0.
 
-!!! info
-    This package has been and is under heavy development. Don't hesitate to submit an
-    issue if you find something that doesn't work or doesn't make sense, or if there's
-    some functionality that you're missing.
-    Pull requests are also very welcome!
+## Quantifying associations
 
-## Content
+`CausalityTools` is a Julia package that provides algorithms for *detecting
+dynamical influences*, *causal inference* based on time series data, and other
+commonly used measures of dependence and association. The core function for
+quantifying associations is [`independence`](@ref), which performs either a
+parametric or nonparametric (conditional) independence test, using any of the
+following measures:
 
-- Probability mass function estimation, either in one-dimensional
-    ([`Probabilities`](@ref)  or multi-dimensional ([`ContingencyMatrix`](@ref)) form.
-- Generalized entropy estimation.
-- [Information measures](@ref information_measures), such as
-    [`mutualinfo`](@ref), [`condmutualinfo`](@ref) and [`transferentropy`](@ref).
-    along with a plethora of estimators for computation of discrete and
-    continuous variants of these measures.
-- A generic [cross-map](@ref cross_mapping_api) interface for causal inference methods
-    based on state space prediction methods. This includes
-    measures such as [`ConvergentCrossMapping`](@ref) and
-    [`PairwiseAsymmetricInference`](@ref).
+| Measure                               |    Pairwise     | Conditional |
+| ------------------------------------- | :-------------: | :---------: |
+| [`PearsonCorrelation`](@ref)          |       ✓        |     ✖      |
+| [`DistanceCorrelation`](@ref)         |       ✓        |     ✖      |
+| [`SMeasure`](@ref)                    |       ✓        |     ✖      |
+| [`JointDistanceDistribution`](@ref)   |       ✓        |     ✖      |
+| [`PairwiseAsymmetricInference`](@ref) | Not implemented |     ✖      |
+| [`ConvergentCrossMapping`](@ref)      | Not implemented |     ✖      |
+| [`MIShannon`](@ref)                   |       ✓        |     ✖      |
+| [`MIRenyiJizba`](@ref)                |       ✓        |     ✖      |
+| [`MIRenyiSarbu`](@ref)                |       ✓        |     ✖      |
+| [`MITsallisFuruichi`](@ref)           |       ✓        |     ✖      |
+| [`PartialCorrelation`](@ref)          |       ✖        |     ✓      |
+| [`CMIShannon`](@ref)                  |       ✖        |     ✓      |
+| [`CMIRenyiSarbu`](@ref)               |       ✖        |     ✓      |
+| [`CMIRenyiJizba`](@ref)               |       ✖        |     ✓      |
+| [`TransferEntropy`](@ref)             |       ✓        |     ✓      |
 
-Other measures are listed in the menu.
+All of these measure are also available in a simple function form that allows you to
+compute the raw measures outside an independence testing context.
 
 ## Goals
 
@@ -46,34 +50,6 @@ We also want to lower the entry-point to the field of causal inference and assoc
 quantification, by providing well-documented implementations of literature methods
 with runnable code examples.
 
-## API design
-
-Central to the API design is clarifying naming convention/confusion that inevitably
-arises when diving into the literature. Our API clearly distinguishes between
-methods that are conceptually the same but named differently in the literature due
-to differing *estimation* strategies, from methods that actually have different definitions.
-
-We have taken great care to make sure that estimators are reusable and modular. The power
-of this design really shines when computing things like conditional mutual information,
-which can be estimated in more than 20 different ways. Functions have the the general form
-
-```julia
-f([measure], estimator, input_data...)
-
-# Some examples
-condmutualinfo(CMIShannon(base = 2), ValueHistogram(3), x, y, z)
-condmutualinfo(CMIRenyiJizba(base = 2), KSG2(k = 5), x, y, z)
-condmutualinfo(CMIRenyiJizba(base = 2), KSG2(k = 5), x, y, z)
-condmutualinfo(CMIRenyiPoczos(base = 2), PoczosSchneiderCMI(k = 10), x, y, z)
-```
-
-This modular design really shines when it comes to independence testing and causal graph
-inference. You can essentially test the performance of *any* independence measure with
-*any* estimator, as long as its implemented (and if it's not, submit a PR or issue!).
-We hope that this will both ease reproduction of existing literature results, and spawn
-new research. Please let us know if you use the package for something useful, or
-publish something based on it!
-
 ## Input data
 
 Input data for CausalityTools are given as:
@@ -90,6 +66,13 @@ Input data for CausalityTools are given as:
 ```@docs
 Dataset
 ```
+
+## Pull requests and issues
+
+This package has been and is under heavy development. Don't hesitate to submit an
+issue if you find something that doesn't work or doesn't make sense, or if there's
+some functionality that you're missing.
+Pull requests are also very welcome!
 
 ## Maintainers and contributors
 

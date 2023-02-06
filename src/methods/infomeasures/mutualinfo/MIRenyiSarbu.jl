@@ -6,6 +6,11 @@ export MIRenyiSarbu
 
 The discrete Rényi mutual information from Sarbu (2014)[^Sarbu2014].
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+
 ## Description
 
 Sarbu (2014) defines discrete Rényi mutual information as the

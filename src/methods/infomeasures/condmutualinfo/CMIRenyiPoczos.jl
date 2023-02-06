@@ -6,6 +6,11 @@ export CMIRenyiPoczos
 The differential Rényi conditional mutual information ``I_q^{R_{P}}(X; Y | Z)``
 defined in (Póczos & Schneider, 2012)[^Póczos2012].
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information. 
+
 ## Definition
 
 ```math

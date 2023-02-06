@@ -7,6 +7,12 @@ export MIShannon
 
 The Shannon mutual information ``I^S(X; Y)``.
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+
+
 ## Discrete definition
 
 There are many equivalent formulations of discrete Shannon mutual information. In this

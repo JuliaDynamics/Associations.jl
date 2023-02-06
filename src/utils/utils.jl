@@ -3,6 +3,7 @@ include("kde.jl")
 include("cca.jl")
 include("multidimensional_surrogates.jl")
 include("extensions.jl")
+include("transformations.jl")
 
 function logq0(q)
     if q == 1.0

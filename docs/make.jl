@@ -32,18 +32,15 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "Correlation measures" => "correlation_measures.md",
-    "Information measures" => [
-        "Probability mass functions" => "probabilities.md",
-        "Entropy" => "entropy.md",
-        "Conditional entropy" => "entropy_conditional.md",
-        "Mutual information" => "mutualinfo.md",
-        "Conditional mutual information" => "condmutualinfo.md",
-        "Transfer entropy" => "transferentropy.md",
-    ],
-    "Cross mappings" => "cross_mappings.md",
-    "Joint distance distribution" => "jdd.md",
     "Independence testing" => "independence.md",
+    "Correlation measures" => "correlation_measures.md",
+    "Closeness measures" => "closeness_measures.md",
+    "Information measures" => "information_measures.md",
+    "APIs and estimators" => [
+        "Information API" => "information_api.md",
+        "Cross mapping API" => "crossmap_api.md",
+    ],
+
     "Examples" => [
         "Quickstart" => [
             "Mutual information" => "quickstart/quickstart_mi.md",

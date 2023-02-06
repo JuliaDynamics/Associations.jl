@@ -34,6 +34,8 @@ As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are condi
 
 ## [`SurrogateTest`](@ref)
 
+### [[`TEShannon`](@ref)](@id examples_surrogatetest_teshannon)
+
 To demonstrate the [`SurrogateTest`](@ref) test, we use the transfer entropy measure,
 which accepts either two input timeseries, or three timeseries when computing the
 partial/conditional transfer entropy.
@@ -55,3 +57,35 @@ doesn't influence either variables.
 ```@example surrogatecit_te
 independence(test, x, y, rand(length(x)))
 ```
+
+### [[`SMeasure`](@ref)](@id examples_surrogatetest_smeasure)
+
+```@example quickstart_smeasure
+using CausalityTools
+x, y = randn(3000), randn(3000)
+measure = SMeasure(dx = 3, dy = 3)
+s = s_measure(measure, x, y)
+```
+
+The `s` statistic is larger when there is stronger coupling and smaller
+when there is weaker coupling. To check whether `s` is significant (i.e. large
+enough to claim directional dependence), we can use a [`SurrogateTest`](@ref),
+like [here](@ref examples_surrogatetest_smeasure).
+
+```@example quickstart_smeasure
+test = SurrogateTest(measure)
+independence(test, x, y)
+```
+
+The p-value is high, and we can't reject the null at any reasonable significance level.
+Hence, there isn't evidence in the data to support directional coupling from `x` to `y`.
+
+What happens if we use coupled variables?
+
+```@example quickstart_smeasure
+z = x .+ 0.1y
+independence(test, x, z)
+```
+
+Now we can confidently reject the null (independence), and conclude that there is
+evidence in the data to support directional dependence from `x` to `z`.

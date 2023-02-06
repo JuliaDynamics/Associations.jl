@@ -153,3 +153,4 @@ end
 
 include("contingency.jl")
 include("transferentropy.jl")
+include("smeasure.jl")

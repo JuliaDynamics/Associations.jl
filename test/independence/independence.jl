@@ -1,2 +1,3 @@
 include("LocalPermutation.jl")
-include("SurrogateTest.jl")
+include("SurrogateTest/SurrogateTest.jl")
+include("JointDistanceDistributionTest.jl")

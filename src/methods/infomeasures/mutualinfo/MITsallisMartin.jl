@@ -6,6 +6,11 @@ export MITsallisMartin
 
 The discrete Tsallis mutual information from Martin et al. (2005)[^Martin2004].
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+
 ## Description
 
 Martin et al.'s Tsallis mutual information between variables ``X \\in \\mathbb{R}^{d_X}`` and

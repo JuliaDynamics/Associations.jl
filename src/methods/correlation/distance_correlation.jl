@@ -7,10 +7,15 @@ export distance_correlation
 """
     DistanceCorrelation
 
-The distance correlation of two variables.
+The distance correlation (Székely et al., 2007)[^Székely2007] measure quantifies
+potentially nonlinear associations between pairs of variables.
 
-This type exists to be used with [`independence`](@ref) testing. If you only need the
-distance correlation, do [`distance_correlation`](@ref)`(x, y)`.
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for
+    pairwise dependence.
+- Use with [`distance_correlation`](@ref) to compute the raw distance correlation
+    coefficient.
 """
 struct DistanceCorrelation end
 
