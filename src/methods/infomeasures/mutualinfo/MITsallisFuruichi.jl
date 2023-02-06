@@ -7,6 +7,12 @@ export MITsallisFuruichi
 The discrete Tsallis mutual information from Furuichi (2006)[^Furuichi2006], which
 in that paper is called the *mutual entropy*.
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+
+
 ## Description
 
 Furuichi's Tsallis mutual entropy between variables ``X \\in \\mathbb{R}^{d_X}`` and

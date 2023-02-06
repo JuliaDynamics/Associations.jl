@@ -7,6 +7,12 @@ export TEShannon
 
 The Shannon-type transfer entropy measure.
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+    and conditional dependence.
+- Use with [`transferentropy`](@ref) to compute the raw transfer entropy.
+
 ## Description
 
 The transfer entropy from source ``S`` to target ``T``, potentially

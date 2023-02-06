@@ -7,6 +7,11 @@ import ComplexityMeasures: log_with_base
 
 The Shannon conditional mutual information (CMI) ``I^S(X; Y | Z)``.
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information. 
+
 ## Supported definitions
 
 Consider random variables ``X \\in \\mathbb{R}^{d_X}`` and

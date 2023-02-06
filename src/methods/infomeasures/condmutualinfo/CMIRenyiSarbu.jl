@@ -6,6 +6,11 @@ export CMIRenyiSarbu
 
 The Rényi conditional mutual information from Sarbu (2014)[^Sarbu2014]).
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information. 
+
 ## Discrete description
 
 Assume we observe three discrete random variables ``X``, ``Y`` and ``Z``.

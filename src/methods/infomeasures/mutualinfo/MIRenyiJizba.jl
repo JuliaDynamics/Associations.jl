@@ -6,6 +6,11 @@ export MIRenyiJizba
 The Rényi mutual information ``I_q^{R_{J}}(X; Y)`` defined in
 Jizba et al. (2012)[^Jizba2012].
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+
 ## Definition
 
 ```math

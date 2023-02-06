@@ -7,8 +7,11 @@ export PartialCorrelation
 The correlation of two variables, with the effect of a set of conditioning
 variables removed.
 
-This type exists to be used with [`independence`](@ref) testing. If you only need the
-partial correlation coefficient, do [`partial_correlation`](@ref)`(x, y, z)`.
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for
+    conditional dependence.
+- Use with [`partial_correlation`](@ref) to compute the raw correlation coefficient.
 
 ## Description
 

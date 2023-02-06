@@ -7,8 +7,9 @@ export PairwiseAsymmetricInference, PAI
     PairwiseAsymmetricInference(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The pairwise asymmetric inference (PAI) measure (McCracken & Weigel (2014)[^McCracken2014])
-is a version of [`ConvergentCrossMapping`](@ref) that searches for neighbors in
+The pairwise asymmetric inference (PAI) [cross mapping](@ref cross_mapping_api) 
+measure (McCracken & Weigel (2014)[^McCracken2014]) is a version of 
+[`ConvergentCrossMapping`](@ref) that searches for neighbors in
 *mixed* embeddings (i.e. both source and target variables included); otherwise, the
 algorithms are identical.
 

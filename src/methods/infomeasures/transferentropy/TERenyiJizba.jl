@@ -5,6 +5,12 @@ export TERenyiJizba
 
 The Rényi transfer entropy from Jizba et al. (2012)[^Jizba2012].
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+    and conditional dependence.
+- Use with [`transferentropy`](@ref) to compute the raw transfer entropy.
+
 ## Description
 
 The transfer entropy from source ``S`` to target ``T``, potentially

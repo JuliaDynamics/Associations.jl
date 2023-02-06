@@ -8,7 +8,8 @@ export ConvergentCrossMapping, CCM
     ConvergentCrossMapping(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The convergent cross mapping measure (Sugihara et al., 2012)[^Sugihara2012]).
+The convergent [cross mapping](@ref cross_mapping_api) (CCM) measure 
+(Sugihara et al., 2012)[^Sugihara2012]).
 
 Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
 with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
