@@ -8,10 +8,8 @@ association measures [here](@ref information_measures).
 
 ### Modularity
 
-We have taken great care to make sure that information estimators are reusable and modular. The power
-of this design really shines when computing things like conditional mutual information,
-which can be estimated in more than 20 different ways, using both discrete, mixed
-and continuous estimators. Functions have the the general form
+We have taken great care to make sure that information estimators are reusable and modular.
+Functions have the following general form.
 
 ```julia
 f([measure], estimator, input_data...)
@@ -28,7 +26,8 @@ This modular design really shines when it comes to independence testing and caus
 inference. You can essentially test the performance of *any* independence `measure` with
 *any* `estimator`, as long as their combination is implemented (and if it's not,
 please submit a PR or issue!). We hope that this will both ease reproduction of
-existing literature results, and spawn new research. Please let us know if you use the package for something useful, or publish something based on it!
+existing literature results, and spawn new research. Please let us know if you use the
+package for something useful, or publish something based on it!
 
 ### API
 
