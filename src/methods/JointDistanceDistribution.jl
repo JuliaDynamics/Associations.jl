@@ -58,153 +58,76 @@ function estimate(measure::JointDistanceDistribution, est::Nothing, source, targ
     return estimate(measure, source, target)
 end
 
-# # Internal method for compatibility with independence tests.
-# function estimate(measure::JointDistanceDistribution, source, target)
-#     (; metric, B, D, τ) = measure
-#     js = ([1 for i = 1:D]...,)
-#     τs = (collect(0:-τ:-(D-1)*τ)...,)
-#     Ex = genembed(source, τs, js)
-#     Ey = genembed(target, τs, js)
-#     Mx = Matrix(Ex)
-#     My = Matrix(Ey)
+function rank_transformation(x::AbstractArray{T}) where T
+    N = length(x)
+    s = zeros(Int, N)
+    return rank_transformation!(s, x)
+end
 
-#     npts = length(Ex)
-#     Dx = pairwise(metric, Mx, Mx, dims = 1)
-#     Dy = pairwise(metric, My, My, dims = 1)
-
-#     # Normalise the distances to the interval [0, 1]
-#     Dx_min = minimum(Dx[Dx .> 0])
-#     Dy_min = minimum(Dy[Dy .> 0])
-#     Dx_max = maximum(Dx[Dx .> 0])
-#     Dy_max = maximum(Dy[Dy .> 0])
-
-#     Dx_norm = zeros(Float64, size(Dx))
-#     Dy_norm = zeros(Float64, size(Dy))
-
-#     for i in LinearIndices(Dx[Dx .> 0])
-#         Dx_norm[i] = normalise_minmax(Dx[i], Dx_min, Dx_max)
-#     end
-
-#     for i in LinearIndices(Dy[Dy .> 0])
-#         Dy_norm[i] = normalise_minmax(Dy[i], Dy_min, Dy_max)
-#     end
-
-#     mins_δ_yi_yj = fill(2.0, 2*B)
-
-#     for (k, b) in enumerate(1:2*B)
-#         bmin = (b-1)/(2*B)
-#         bmax = b/(2*B)
-
-#         # Find the indices of all pairs (i, j) in Dx whose distances fall inside the interval Ib
-#         #idxs_Dxs_in_Ib = findall(Dx[])
-
-#         # We don't need to store any indices or distances explicitly, but only
-#         # keep track of whether a smaller distance has has been detected.
-#         # The maximum possible distance after normalisation is 1.0, so this
-#         # value can only decrease as we update.
-#         min_δ_yi_yj = 1.0
-
-#         for i = 1:npts
-#             for j = (i+1):npts
-#                 δ_xi_xj = Dx_norm[i, j]
-#                 if bmin < δ_xi_xj <= bmax
-#                     δ_yi_yj = Dy_norm[i, j]
-#                     if δ_yi_yj < min_δ_yi_yj
-#                         min_δ_yi_yj = δ_yi_yj
-#                     end
-#                 end
-#             end
-#         end
-#         mins_δ_yi_yj[k] = min_δ_yi_yj
-#     end
-
-#     Δjdd = [mins_δ_yi_yj[B + i] - mins_δ_yi_yj[i] for i in 1:B]
-
-#     return Δjdd
-# end
-
+function rank_transformation!(
+        s::AbstractVector{Int},
+        x::AbstractVector{T}) where T <: Real
+    N = length(x)
+    r = zeros(N)
+    # Break ties arbitrarily by sorting. This means that ties are broken according to the
+    # sorting algorithm used, and equal values are assigned different ranks.
+    sortperm!(s, x)
+    for j in 1:N
+        r[s[j]] = j
+    end
+    return r
+end
 
 # Internal method for compatibility with independence tests.
 function estimate(measure::JointDistanceDistribution, source, target)
     (; metric, B, D, τ) = measure
+    length(source) == length(target) || error("lengths of inputs must match")
     js = ([1 for i = 1:D]...,)
     τs = (collect(0:-τ:-(D-1)*τ)...,)
     Ex = genembed(source, τs, js)
     Ey = genembed(target, τs, js)
-    # Mx = Matrix(Ex)
-    # My = Matrix(Ey)
-
-    npts = length(Ex)
     Dx = pairwise(metric, Ex.data)
     Dy = pairwise(metric, Ey.data)
 
     # Normalise the distances to the interval [0, 1]
-    fDx = filter(dᵢ -> dᵢ .> 0, Dx)
-    fDy = filter(dᵢ -> dᵢ .> 0, Dy)
+    fDx = filter(dx -> dx .> 0, Dx)
+    fDy = filter(dy -> dy .> 0, Dy)
     Dx_min, Dx_max = minimum(fDx), maximum(fDx)
     Dy_min, Dy_max = minimum(fDy), maximum(fDy)
 
-    # # TODO: the runtime of these loops can be reduced to half by only considering the
-    # # lower triangular part of the distance matrix and mirroring it.
-    for i in eachindex(Dx)
-        Dx[i] = normalise_minmax(Dx[i], Dx_min, Dx_max)
-    end
+    # We don't simply normalize to [0, 1]. We transform the distances to a uniform distribution
+    # over [0, 1] using the normalized rank transformation.
+    normDx = rank_transformation(vec(Dx)) ./ length(Dx)
+    normDy = rank_transformation(vec(Dy)) ./ length(Dy)
 
-    for i in eachindex(Dy)
-        Dy[i] = normalise_minmax(Dy[i], Dy_min, Dy_max)
-    end
-
-
-
-    δs = fill(2.0, 2 * B)
-
+    δs = fill(1.0, 2 * B)
     for (k, b) in enumerate(1:(2 * B))
         bmin = (b - 1) / 2B
         bmax = b / 2B
 
-        δ̃min = jdd_step3(Dx, Dy, bmin, bmax)
+        δ̃min = jdd_step3(normDx, normDy, bmin, bmax)
         δs[k] = δ̃min
     end
 
-    Δjdd = [δs[B + i] - δs[i] for i in 1:B]
-
-    #return Δjdd
-
-    #     # Find the indices of all pairs (i, j) in Dx whose distances fall inside the interval Ib
-    #     #idxs_Dxs_in_Ib = findall(Dx[])
-
-    #     # We don't need to store any indices or distances explicitly, but only
-    #     # keep track of whether a smaller distance has has been detected.
-    #     # The maximum possible distance after normalisation is 1.0, so this
-    #     # value can only decrease as we update.
-    #     min_δ_yi_yj = 1.0
-
-    #     for i = 1:npts
-    #         for j = (i+1):npts
-    #             δ_xi_xj = Dx[i, j]
-    #             if bmin < δ_xi_xj <= bmax
-    #                 δ_yi_yj = Dy[i, j]
-    #                 if δ_yi_yj < min_δ_yi_yj
-    #                     min_δ_yi_yj = δ_yi_yj
-    #                 end
-    #             end
-    #         end
-    #     end
-    #     mins_δ_yi_yj[k] = min_δ_yi_yj
-    # end
-
+    Δ = [δs[B + i] - δs[i] for i in 1:B]
+    return Δ
 end
 
 function jdd_step3(Dx, Dy, bmin, bmax)
-    Dy_min = 1.0 # by definition, 1.0 is the largest normalized distance.
-
-    for (k, Dxₖ) in enumerate(Dx)
-        if bmin <= Dxₖ < bmax
-            Dyₖ = Dy[k]
-            if Dyₖ < Dy_min
-                Dy_min = Dyₖ
+    δy_min = 1.0 # by definition, 1.0 is the largest normalized distance.
+    found = false
+    for (i, δx) in enumerate(Dx)
+        if bmin <= δx < bmax
+            δy = Dy[i]
+            if δy < δy_min
+                δy_min = δy
+                found = true
             end
         end
     end
-    return Dy_min
+    if found
+        return δy_min
+    else
+        return bmin
+    end
 end
