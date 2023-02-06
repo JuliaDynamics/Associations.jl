@@ -8,18 +8,13 @@ service = rand(["netflix", "hbo"], n)
 est = Contingency()
 nshuffles = 3
 
-@test independence(SurrogateTest(MIShannon(), est; nshuffles), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MIRenyiJizba(), est; nshuffles), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MIRenyiSarbu(), est; nshuffles), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MITsallisFuruichi(), est; nshuffles), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MITsallisMartin(), est; nshuffles), food, likeit) isa SurrogateTestResult
-
 @test independence(SurrogateTest(CMIShannon(), est; nshuffles), food, likeit, service) isa SurrogateTestResult
 @test independence(SurrogateTest(CMIRenyiSarbu(), est; nshuffles), food, likeit, service) isa SurrogateTestResult
 @test independence(SurrogateTest(CMIRenyiJizba(), est; nshuffles), food, likeit, service) isa SurrogateTestResult
 
 
 # Analytical tests, in the limit.
+# -------------------------------
 n = 100000
 
 # Pre-discretized data
@@ -27,6 +22,8 @@ likeit = rand(["yes", "no"], n)
 food = rand(["veggies", "meat", "fish"], n)
 service = rand(["netflix", "hbo"], n)
 
+# We should not be able to reject the null hypothesis `food ⫫ likeit | service`, because
+# the variables are all independent.
 test_cmi = independence(SurrogateTest(CMIShannon(), est; nshuffles), food, likeit, service)
 @test pvalue(test_cmi) > 0.05
 
@@ -58,8 +55,8 @@ experience = map(preferred_equipment) do equipment
     end
 end;
 
-test_mi = independence(SurrogateTest(MIShannon(), est; nshuffles), places, experience)
-@test pvalue(test_mi) < α
-
+# We should not be able to reject the null hypothesis `places ⫫ experience | preferred_equipment`, because
+# places → preferred_equipment → experience, so when conditioning on the intermediate variable,
+# the first and last variable in the chain should be independent.
 test_cmi = independence(SurrogateTest(CMIShannon(), est; nshuffles), places, experience, preferred_equipment)
 @test pvalue(test_cmi) > α
