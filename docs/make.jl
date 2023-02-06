@@ -47,6 +47,7 @@ PAGES = [
     "Examples" => [
         "Quickstart" => [
             "Mutual information" => "quickstart/quickstart_mi.md",
+            "Joint distance distribution" => "quickstart/quickstart_jdd.md",
             "Independence testing" => "quickstart/quickstart_independence.md",
         ],
         "Longer examples" => [

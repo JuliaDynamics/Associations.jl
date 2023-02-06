@@ -39,6 +39,11 @@ If used with [`independence`](@ref), then a `HypothesisTests.OneSampleTTest`
 is returned. Use `pvalue` with keyword `tail = :right` on the result to get the
 p-value at 95% confidence.
 
+## Examples
+
+* [Computing the JJD](@ref quickstart_jdd)
+* [Independence testing using JJD](@ref quickstart_jddtest)
+
 [^Amigo2018]:
     Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate
     flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of

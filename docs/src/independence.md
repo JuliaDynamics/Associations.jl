@@ -31,22 +31,13 @@ The independence test API is defined by
 
 ```@docs
 independence
+IndependenceTest
 ```
 
 ## Independence tests
 
 ```@docs
-ConditionalIndependenceTest
-```
-
-### Surrogate test (global permutation)
-
-```@docs
 SurrogateTest
-```
-
-### Local permutation
-
-```@docs
 LocalPermutationTest
+JointDistanceDistributionTest
 ```
