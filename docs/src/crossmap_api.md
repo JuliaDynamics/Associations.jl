@@ -1,4 +1,8 @@
-# [Cross mapping](@id cross_mapping_api)
+
+# [Cross mapping API](@id cross_mapping_api)
+
+This page outlines the cross-mapping API. For concrete implementations of
+cross-map based association measures, see [](@ref).
 
 Several cross mapping methods have emerged in the literature
 Following Sugihara et al. (2012)'s paper on the convergent cross mapping.
@@ -24,15 +28,13 @@ crossmap
 predict
 ```
 
-## Measures
+### Measures
 
 ```@docs
 CrossmapMeasure
-ConvergentCrossMapping
-PairwiseAsymmetricInference
 ```
 
-## Estimators
+### Estimators
 
 ```@docs
 CrossmapEstimator
