@@ -39,13 +39,11 @@ can be used in practice.
 struct JointDistanceDistributionTest{M <: JointDistanceDistribution, R} <: IndependenceTest
     measure::M
     rng::R
-    n_bootstrap::Int
 
     function JointDistanceDistributionTest(
             measure::M = JointDistanceDistribution();
-            rng::R = Random.default_rng(),
-            n_bootstrap::Int = 100) where {M, R}
-        new{M, R}(measure, rng, n_bootstrap)
+            rng::R = Random.default_rng()) where {M, R}
+        new{M, R}(measure, rng)
     end
 end
 
@@ -53,12 +51,15 @@ end
 # `measure.μ`, which is the hypothetical mean of the joint distance
 # distribution under the null (defaults to `0.0`).
 
-struct JDDTestResult2{V, P}
-    Δmeans::V
+struct JDDTestResult{V, T, P}
+    Δjdd::V
+    hypothetical_μ::T
     pvalue::P
 end
 
-function Base.show(io::IO, r::JDDTestResult2)
+pvalue(x::JDDTestResult) = x.pvalue
+
+function Base.show(io::IO, r::JDDTestResult)
     # TODO: make a function to do this (a pairwise and a conditional version), so this 
     # isn't repeated everywhere.
     α005 = r.pvalue < 0.05 ?
