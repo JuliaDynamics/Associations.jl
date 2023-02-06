@@ -22,6 +22,8 @@ function independence(test, args...; kwargs...)
     error("No concrete implementation for $(typeof(test)) test yet")
 end
 
+include("bootstrap.jl")
+include("parametric/parametric.jl")
 include("local_permutation/LocalPermutationTest.jl")
 include("surrogate/SurrogateTest.jl")
 # TODO: rename/find suitable generic name before including

@@ -1,5 +1,46 @@
 # [Independence testing](@id quickstart_independence)
 
+## [[`JointDistanceDistributionTest`](@ref)](@id quickstart_jddtest)
+
+Let's use the built-in `logistic2_bidir` discrete dynamical system to create a pair of
+bidirectionally coupled time series and use the [`JointDistanceDistributionTest`](@ref)
+to see if we can confirm from observed time series that these variables are
+bidirectionally coupled. We'll use a significance level of `1 - α = 0.99`, i.e. `α = 0.01`.
+
+We start by generating some time series and configuring the test.
+
+```@example quickstart_jddtest_logistic
+using CausalityTools
+sys = logistic2_bidir(c_xy = 0.5, c_yx = 0.4)
+x, y = columns(trajectory(sys, 2000, Ttr = 10000))
+measure = JointDistanceDistribution(D = 5, B = 5)
+test = JointDistanceDistributionTest(measure)
+```
+
+Now, we test for independence in both directions.
+
+```@example quickstart_jddtest_logistic
+independence(test, x, y)
+```
+
+```@example quickstart_jddtest_logistic
+independence(test, y, x)
+```
+
+As expected, the null hypothesis is rejected in both directions at the pre-determined 
+significance level, and hence we detect directional coupling in both directions. But what happens if there is no coupling?
+
+```@example quickstart_jddtest_logistic
+sys = logistic2_bidir(c_xy = 0.00, c_yx = 0.0)
+x, y = columns(trajectory(sys, 1000, Ttr = 10000));
+rxy = independence(test, x, y)
+ryx = independence(test, y, x)
+pvalue(rxy), pvalue(ryx)
+```
+
+At significance level `0.99`, we can't reject the null in either direction, hence there's not
+enough evidence in the data to suggest directional coupling.
+
 ## [[`SurrogateTest`](@ref)](@id quickstart_surrogatetest)
 
 ### Mutual information
