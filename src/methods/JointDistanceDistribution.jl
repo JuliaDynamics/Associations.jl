@@ -46,8 +46,8 @@ p-value at 95% confidence.
 """
 Base.@kwdef struct JointDistanceDistribution{M, T} <: AssociationMeasure
     metric::M = Euclidean()
-    B::Int = 10
-    D::Int = 2
+    B::Int = 5
+    D::Int = 3
     τ::Int = 1
     μ::T = 0.0
 end
