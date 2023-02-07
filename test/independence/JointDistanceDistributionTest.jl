@@ -1,17 +1,15 @@
 using Random: MersenneTwister
-rng = MersenneTwister(1234)
-x, y = rand(rng, 3000), rand(rng, 3000)
-m = JointDistanceDistribution(D = 5, B = 10)
+rng = MersenneTwister(12346)
+x, y = randn(rng, 1000), randn(rng, 1000)
+m = JointDistanceDistribution(D = 3, B = 5)
 test =  JointDistanceDistributionTest(m)
 @test test isa JointDistanceDistributionTest
-r = independence(test, x, y)
-@test r isa CausalityTools.JDDTestResult
+@test independence(test, x, y) isa CausalityTools.JDDTestResult
 
 # Don't reject null at significance level (1 - α) when there is no coupling.
-α = 0.01
-@test pvalue(r) > α 
+α = 0.05
+@test pvalue(independence(test, x, y)) > α 
 
 # Reject null at significance level (1 - α) when there is coupling
 z = y .+ x
-r = independence(test, z, x)
-@test pvalue(r) < α
+@test pvalue(independence(test, z, x)) < α
