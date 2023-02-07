@@ -7,7 +7,6 @@ The independence test API is defined by
 
 - [`independence`](@ref)
 - [`IndependenceTest`](@ref)
-- [`ConditionalIndependenceTest`](@ref)
 
 ```@docs
 independence
