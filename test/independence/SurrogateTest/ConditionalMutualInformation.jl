@@ -58,6 +58,6 @@ end;
 # We should not be able to reject the null hypothesis `places ⫫ experience | preferred_equipment`, because
 # places → preferred_equipment → experience, so when conditioning on the intermediate variable,
 # the first and last variable in the chain should be independent.
-test = SurrogateTest(CMIShannon(), est)
+test = SurrogateTest(CMIShannon(), est; nshuffles = 200)
 test_cmi = independence(test, places, experience, preferred_equipment)
 @test pvalue(test_cmi) > α
