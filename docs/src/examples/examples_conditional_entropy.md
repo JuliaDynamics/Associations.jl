@@ -1,4 +1,4 @@
-# [Entropy](@id examples_condentropy)
+# [Conditional entropy](@id examples_condentropy)
 
 ## Discrete: example from Cover & Thomas
 
