@@ -4,7 +4,7 @@ This page outlines the information API. It contains a lot of information, so for
 convenience, we list all concrete implementation of pairwise and conditional
 association measures [here](@ref information_measures).
 
-## [API & design](@id information_measures)
+## [Design](@id information_measures_design)
 
 ### Modularity
 
@@ -29,6 +29,19 @@ please submit a PR or issue!). We hope that this will both ease reproduction of
 existing literature results, and spawn new research. Please let us know if you use the
 package for something useful, or publish something based on it!
 
+## Estimators
+
+Information measures are either estimated using one of the following basic estimator types,
+
+- [`ProbabilitiesEstimator`](@ref)s,
+- [`DifferentialEntropyEstimator`](@ref)s,
+
+or using measure-specific estimators:
+
+- [`MutualInformationEstimator`](@ref)s are used with [`mutualinfo`](@ref)
+- [`ConditionalMutualInformationEstimator`](@ref)s are used with [`condmutualinfo`](@ref)
+- [`TransferEntropyEstimator`](@ref)s are used with [`transferentropy`](@ref)
+
 ### Naming convention: The same name for different things
 
 Upon doing a literature review on the possible variants of information theoretic measures,
@@ -42,62 +55,19 @@ that actually have different definitions.
     information (MI; [`MIShannon`](@ref)), which has both a discrete and continuous version, and there there are multiple equivalent mathematical formulas for them: a direct sum/integral
     over a joint probability mass function (pmf), as a sum of three entropy terms, and as
     a Kullback-Leibler divergence between the joint pmf and the product of the marginal
-    distributions. Since these are all equivalent, we only need once type (`[`MIShannon`](@ref)) to represent them.
-- But Shannon MI is not the  only type of mutual information! "Tsallis mutual information"
+    distributions. Since these definitions are all equivalent, we only need once type
+    ([`MIShannon`](@ref)) to represent them.
+- But Shannon MI is not the  only type of mutual information! For example, "Tsallis mutual information"
     has been proposed in different variants by various authors. Despite sharing the
-    same name, these are actually *nonequivalent definitions*. Naming ambiguities like
-    these are likely to cause confusion. We've thus assigned
+    same name, these are actually *nonequivalent definitions*. We've thus assigned
     them entirely different measure names (e.g. [`MITsallisFuruichi`](@ref) and
     [`MITsallisMartin`](@ref)), with the author name at the end.
 
-Every measure starts with an abbrevation of the quantity it measures, followed by the name of the measure,
-for example:
-
-- [`MIShannon`](@ref) has many *equivalent* definitions that all share the same name.
-- [`MITsallisFuruichi`](@ref) and [`MITsallisMartin`](@ref) are separate measures,
-    because they are defined by *nonequivalent* mathematical formulas.
-
 ## Probability mass functions (pmf)
 
-### Probabilities API
-
-The probabilities API is defined by
-
-- [`ProbabilitiesEstimator`](@ref)
-- [`probabilities`](@ref)
-- [`probabilities_and_outcomes`](@ref)
-- [`ContingencyMatrix`](@ref)
-- [`contingency_matrix`](@ref)
-
-and related functions that you will find in the following documentation blocks:
-
-#### Probabilitities
-
-```@docs
-ProbabilitiesEstimator
-probabilities
-probabilities!
-Probabilities
-```
-
-#### Outcomes
-
-```@docs
-probabilities_and_outcomes
-outcomes
-outcome_space
-total_outcomes
-missing_outcomes
-```
-
-### Estimators
-
-#### [Overview of probabilities estimators](@id probabilities_estimators)
-
-Any of the following estimators can be used with [`probabilities`](@ref)
-(in the column "input data"  it is assumed that the `eltype` of the input is `<: Real`).
-Some estimators can also be used with [`contingency_matrix`](@ref) to estimate
-multivariate pmfs.
+Discrete information theoretic association measures and other quantities are estimated using
+[`ProbabilitiesEstimator`](@ref)s. Here, we list probabilities estimators that are
+compatible with this package.
 
 | Estimator                                   | Principle                                      | Input data          |
 | :------------------------------------------ | :--------------------------------------------- | :------------------ |
@@ -107,14 +77,7 @@ multivariate pmfs.
 | [`TransferOperator`](@ref)                  | Binning (transfer operator)                    | `Vector`, `Dataset` |
 | [`NaiveKernel`](@ref)                       | Kernel density estimation                      | `Dataset`           |
 | [`SymbolicPermutation`](@ref)               | Ordinal patterns                               | `Vector`, `Dataset` |
-| [`SymbolicWeightedPermutation`](@ref)       | Ordinal patterns                               | `Vector`, `Dataset` |
-| [`SymbolicAmplitudeAwarePermutation`](@ref) | Ordinal patterns                               | `Vector`, `Dataset` |
-| [`SpatialSymbolicPermutation`](@ref)        | Ordinal patterns in space                      | `Array`             |
 | [`Dispersion`](@ref)                        | Dispersion patterns                            | `Vector`            |
-| [`SpatialDispersion`](@ref)                 | Dispersion patterns in space                   | `Array`             |
-| [`Diversity`](@ref)                         | Cosine similarity                              | `Vector`            |
-| [`WaveletOverlap`](@ref)                    | Wavelet transform                              | `Vector`            |
-| [`PowerSpectrum`](@ref)                     | Fourier transform                              | `Vector`            |
 
 ### Contingency
 
@@ -128,26 +91,12 @@ Contingency
 CountOccurrences
 ```
 
-### Histograms
+### Histograms (binning)
 
 ```@docs
 ValueHistogram
 RectangularBinning
 FixedRectangularBinning
-```
-
-### Symbolic permutations
-
-```@docs
-SymbolicPermutation
-SymbolicWeightedPermutation
-SymbolicAmplitudeAwarePermutation
-```
-
-### Dispersion patterns
-
-```@docs
-Dispersion
 ```
 
 ### Transfer operator (binning)
@@ -156,10 +105,10 @@ Dispersion
 TransferOperator
 ```
 
+#### Utility methods/types
+
 For explicit estimation of the transfer operator, see
 [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl).
-
-#### Utility methods/types
 
 ```@docs
 InvariantMeasure
@@ -167,16 +116,22 @@ invariantmeasure
 transfermatrix
 ```
 
+### Symbolic permutations
+
+```@docs
+SymbolicPermutation
+```
+
+### Dispersion patterns
+
+```@docs
+Dispersion
+```
+
 ### Kernel density
 
 ```@docs
 NaiveKernel
-```
-
-### Local likelihood
-
-```@docs
-LocalLikelihood
 ```
 
 ### Timescales
@@ -192,16 +147,31 @@ PowerSpectrum
 Diversity
 ```
 
-### Spatial estimators
+### Probabilities API
+
+The probabilities API is defined by
+
+- [`ProbabilitiesEstimator`](@ref)
+- [`probabilities`](@ref)
+- [`probabilities_and_outcomes`](@ref)
+- [`ContingencyMatrix`](@ref)
+- [`contingency_matrix`](@ref)
+
+#### Probabilities and outcomes
 
 ```@docs
-SpatialSymbolicPermutation
-SpatialDispersion
+ProbabilitiesEstimator
+probabilities
+probabilities!
+Probabilities
+probabilities_and_outcomes
+outcomes
+outcome_space
+total_outcomes
+missing_outcomes
 ```
 
-### Encodings
-
-#### Encodings API
+#### Encodings
 
 Some probability estimators first "encode" input data into an intermediate representation indexed by the positive integers. This intermediate representation is called an "encoding".
 
@@ -217,7 +187,7 @@ encode
 decode
 ```
 
-#### Available encodings
+##### Available encodings
 
 ```@docs
 OrdinalPatternEncoding
@@ -225,7 +195,7 @@ GaussianCDFEncoding
 RectangularBinEncoding
 ```
 
-### Contingency tables
+## Contingency tables
 
 To estimate discrete information theoretic quantities that are functions of more than
 one variable, we must estimate empirical joint probability mass functions (pmf).
@@ -252,7 +222,7 @@ extra calculation steps. Whatever you use in practice depends on your use case a
 available estimation methods, but you can always fall back to contingency matrices
 for any discrete measure.
 
-#### Contingency matrix API
+### Contingency matrix API
 
 ```@docs
 ContingencyMatrix
@@ -338,7 +308,6 @@ AlizadehArghami
 Ebrahimi
 Correa
 ```
-
 
 ## Conditional entropy
 
