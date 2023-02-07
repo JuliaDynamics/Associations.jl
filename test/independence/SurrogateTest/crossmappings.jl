@@ -7,6 +7,8 @@ d = 2
 # Regular variant.
 test_ccm = SurrogateTest(CCM(; d, τ), RandomVectors(libsizes = 500; replace = true))
 test_pai = SurrogateTest(PAI(; d, τ), RandomVectors(libsizes = 500; replace = true))
+@test_throws ArgumentError SurrogateTest(Ensemble(CCM(), RandomVectors(libsizes = 100:100:500)))
+@test_throws ArgumentError SurrogateTest(CCM(), RandomVectors(libsizes = 100:100:500))
 
 α = 0.03 # arbitrarily set confidence level to 1 - α
 @test pvalue(independence(test_ccm, x, y)) > α 
