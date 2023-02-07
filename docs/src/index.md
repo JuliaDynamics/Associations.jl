@@ -12,23 +12,23 @@ The core function for quantifying associations is [`independence`](@ref),
 which performs either a parametric or nonparametric (conditional) independence
 test, using any of the following measures:
 
-| Type                 | Measure                               |    Pairwise     | Conditional |
-| -------------------- | ------------------------------------- | :-------------: | :---------: |
-| Correlation          | [`PearsonCorrelation`](@ref)          |       ✓        |     ✖      |
-| Correlation          | [`DistanceCorrelation`](@ref)         |       ✓        |     ✖      |
-| Closeness            | [`SMeasure`](@ref)                    |       ✓        |     ✖      |
-| Closeness            | [`JointDistanceDistribution`](@ref)   |       ✓        |     ✖      |
-| Cross-mapping        | [`PairwiseAsymmetricInference`](@ref) | Not implemented |     ✖      |
-| Cross-mapping        | [`ConvergentCrossMapping`](@ref)      | Not implemented |     ✖      |
-| Shared information   | [`MIShannon`](@ref)                   |       ✓        |     ✖      |
-| Shared information   | [`MIRenyiJizba`](@ref)                |       ✓        |     ✖      |
-| Shared information   | [`MIRenyiSarbu`](@ref)                |       ✓        |     ✖      |
-| Shared information   | [`MITsallisFuruichi`](@ref)           |       ✓        |     ✖      |
-| Shared information   | [`PartialCorrelation`](@ref)          |       ✖        |     ✓      |
-| Shared information   | [`CMIShannon`](@ref)                  |       ✖        |     ✓      |
-| Shared information   | [`CMIRenyiSarbu`](@ref)               |       ✖        |     ✓      |
-| Shared information   | [`CMIRenyiJizba`](@ref)               |       ✖        |     ✓      |
-| Information transfer | [`TransferEntropy`](@ref)             |       ✓        |     ✓      |
+| Type                 | Measure                               | Pairwise | Conditional |
+| -------------------- | ------------------------------------- | :------: | :---------: |
+| Correlation          | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      |
+| Correlation          | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      |
+| Closeness            | [`SMeasure`](@ref)                    |    ✓    |     ✖      |
+| Closeness            | [`JointDistanceDistribution`](@ref)   |    ✓    |     ✖      |
+| Cross-mapping        | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |
+| Cross-mapping        | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |
+| Shared information   | [`MIShannon`](@ref)                   |    ✓    |     ✖      |
+| Shared information   | [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      |
+| Shared information   | [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      |
+| Shared information   | [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      |
+| Shared information   | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |
+| Shared information   | [`CMIShannon`](@ref)                  |    ✖    |     ✓      |
+| Shared information   | [`CMIRenyiSarbu`](@ref)               |    ✖    |     ✓      |
+| Shared information   | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |
+| Information transfer | [`TransferEntropy`](@ref)             |    ✓    |     ✓      |
 
 All of these measure are also available in a simple function form that allows you to
 compute the raw measures outside an independence testing context.
