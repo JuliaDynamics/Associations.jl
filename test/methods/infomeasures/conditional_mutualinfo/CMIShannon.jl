@@ -29,6 +29,20 @@ diff_mi_estimators = [
     GaoOhViswanath(; k),
 ]
 
+
+x = Dataset(rand(1000, 2))
+y = Dataset(rand(1000, 1))
+z = Dataset(rand(1000, 1))
+
+@test FPVP() isa FPVP
+@test MesnerShalisi() isa MesnerShalisi
+@test PoczosSchneiderCMI() isa PoczosSchneiderCMI
+@test Rahimzamani() isa Rahimzamani
+@test condmutualinfo(FPVP(), x, y, z) isa Real
+@test condmutualinfo(MesnerShalisi(), x, y, z) isa Real
+@test condmutualinfo(PoczosSchneiderCMI(), x, y, z) isa Real
+@test condmutualinfo(Rahimzamani(), x, y, z) isa Real
+
 @testset "CMIShannon" begin
     @test m = CMIShannon(base = 2) isa CMIShannon
 
