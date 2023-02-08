@@ -1,4 +1,24 @@
-# [Joint distance distribution](@id quickstart_jdd)
+# Closeness measures
+
+## [S-measure](@id quickstart_smeasure)
+
+### Computing the `s`-statistic
+
+```@example quickstart_smeasure
+using CausalityTools
+x, y = randn(3000), randn(3000)
+measure = SMeasure(dx = 3, dy = 3)
+s = s_measure(measure, x, y)
+```
+
+The `s` statistic is larger when there is stronger coupling and smaller
+when there is weaker coupling. To check whether `s` is significant (i.e. large
+enough to claim directional dependence), we can use a [`SurrogateTest`](@ref),
+like [here](@ref examples_surrogatetest_smeasure).
+
+## [Joint distance distribution](@id quickstart_jdd)
+
+### Computing the `Δ`-statistic
 
 ```@example quickstart_jdd
 using CausalityTools

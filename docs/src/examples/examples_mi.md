@@ -1,8 +1,10 @@
 # [Mutual information](@id quickstart_mutualinfo)
 
-## Quickstart
+## [`MIShannon`](@ref)
 
-### [`MIShannon`](@ref) (differential)
+### Estimation using [`MutualInformationEstimator`](@ref)s
+
+#### [`MIShannon`](@ref) with [`KraskovStögbauerGrassberger2`](@ref)
 
 The differential Shannon mutual information ([`MIShannon`](@ref)) can be estimated
 using a dedicated mutual information estimator like [`KraskovStögbauerGrassberger2`](@ref).
@@ -14,143 +16,7 @@ x, y = rand(1000), rand(1000)
 mutualinfo(KSG2(k = 5), x, y)
 ```
 
-We can also estimate [`MIShannon`](@ref) by naively applying a [`DifferentialEntropyEstimator`](@ref), which doesn't apply any bias correction.
-
-```@example mi_demonstration
-using CausalityTools
-x, y = rand(1000), rand(1000)
-mutualinfo(Kraskov(k = 3), x, y)
-```
-
-### [`MIShannon`](@ref) (discrete, numerical)
-
-A [`ValueHistogram`](@ref) estimator can be used to bin the data and compute
-discrete Shannon mutual information.
-
-```@example mi_demonstration
-using CausalityTools
-
-# Use the H3-estimation method with a discrete visitation frequency based 
-# probabilities estimator over a fixed grid covering the range of the data,
-# which is on [0, 1].
-est = ValueHistogram(FixedRectangularBinning(0, 1, 5))
-mutualinfo(est, x, y)
-```
-
-If you need access to the estimated joint probability mass function,
-use a [`ContingencyMatrix`](@ref). This is slower, but convenient if you need to
-investigate the probabilities manually.
-
-```@example mi_demonstration
-using CausalityTools
-c = contingency_matrix(est, x, y)
-mutualinfo(c)
-```
-
-### [`MIShannon`](@ref) (discrete, categorical)
-
-The [`ContingencyMatrix`](@ref) approach can also be used with categorical data.
-For example, let's compare the Shannon mutual information between the preferences
-of a population sample with regards to different foods.
-
-```@example mi_demonstration
-using CausalityTools
-n = 1000
-preferences = rand(["neutral", "like it", "hate it"], n);
-random_foods = rand(["water", "flour", "bananas", "booze", "potatoes", "beans", "soup"], n)
-biased_foods = map(preferences) do preference
-    if cmp(preference, "neutral") == 1
-        return rand(["water", "flour"])
-    elseif cmp(preference, "like it") == 1
-        return rand(["bananas", "booze"])
-    else
-        return rand(["potatoes", "beans", "soup"])
-    end
-end
-
-c_biased = contingency_matrix(preferences, biased_foods) 
-c_random = contingency_matrix(preferences, random_foods) 
-mutualinfo(c_biased), mutualinfo(c_random)
-```
-
-## Longer examples
-
-### [`MIShannon`](@ref) (discrete): synthetic system
-
-In this example we generate realizations of two different systems where we know the strength of coupling between the variables. Our aim is to compute Shannon mutual information $I^S(X; Y)$ ([`MIShannon`](@ref)) between time series of each variable and assess how the magnitude of $I^S(X; Y)$ changes as we change the strength of coupling between $X$ and $Y$.
-
-#### Defining the systems
-
-Here we implement two of the example systems that come with the [CausalityTools.jl](https://github.com/JuliaDynamics/CausalityTools.jl):
-
-* A stochastic system consisting of two unidirectionally coupled first-order autoregressive processes ([`ar1_unidir`](@ref))
-* A deterministic, chaotic system consisting of two unidirectionally coupled logistic maps ([`logistic2_unidir`](@ref))
-
-We use the default input parameter values (see [`ar1_unidir`](@ref) and [`logistic2_unidir`](@ref) for details) and below we toggle only the random initial conditions and the coupling strength parameter `c_xy`. For each value of `c_xy` we generate 1,000 unique realizations of the system and obtain 500-point time series of the coupled variables.
-
-#### Estimating mutual information
-
-Here we use the binning-based [`ValueHistogram`](@ref) estimator. We summarize the distribution of $I(X; Y)$ values across all realizations using the median and quantiles encompassing 95 % of the values.
-
-```@example
-using CausalityTools
-using Statistics
-using CairoMakie
-
-# Span a range of x-y coupling strengths
-c = 0.0:0.1:1.0
-
-# Number of observations in each time series
-npts = 500
-
-# Number of unique realizations of each system
-n_realizations = 1000
-
-# Get MI for multiple realizations of two systems, 
-# saving three quantiles for each c value
-mi = zeros(length(c), 3, 2)
-
-# Define an estimator for MI
-b = RectangularBinning(4)
-estimator = VisitationFrequency(b)
-
-for i in 1 : length(c)
-    
-    tmp = zeros(n_realizations, 2)
-    
-    for k in 1 : n_realizations
-        
-        # Obtain time series realizations of the two 2D systems 
-        # for a given coupling strength and random initial conditions
-        lmap = trajectory(logistic2_unidir(u₀ = rand(2), c_xy = c[i]), npts - 1, Ttr = 1000)
-        ar1 = trajectory(ar1_unidir(u₀ = rand(2), c_xy = c[i]), npts - 1)
-        
-        # Compute the MI between the two coupled components of each system
-        tmp[k, 1] = mutualinfo(MIShannon(), estimator, lmap[:, 1], lmap[:, 2])
-        tmp[k, 2] = mutualinfo(MIShannon(), estimator, ar1[:, 1], ar1[:, 2])
-    end
-    
-    # Compute lower, middle, and upper quantiles of MI for each coupling strength
-    mi[i, :, 1] = quantile(tmp[:, 1], [0.025, 0.5, 0.975])
-    mi[i, :, 2] = quantile(tmp[:, 2], [0.025, 0.5, 0.975])
-end
-
-# Plot distribution of MI values as a function of coupling strength for both systems
-fig =with_theme(theme_minimal()) do
-    fig = Figure()
-    ax = Axis(fig[1, 1], xlabel = "Coupling strength", ylabel = "Mutual information")
-    band!(ax, c, mi[:, 1, 1], mi[:, 3, 1], color = (:black, 0.3))
-    lines!(ax, c, mi[:, 2, 1], label = "2D chaotic logistic maps", color = :black)
-    band!(ax, c, mi[:, 1, 2], mi[:, 3, 2], color = (:red, 0.3))
-    lines!(ax, c, mi[:, 2, 2],  label = "2D order-1 autoregressive", color = :red)
-    return fig
-end
-fig
-```
-
-As expected, $I(X; Y)$ increases with coupling strength in a system-specific manner.
-
-### [`MIShannon`](@ref) (differential): Reproducing Kraskov et al. (2004)
+#### Reproducing Kraskov et al. (2004)
 
 Here, we'll reproduce Figure 4 from Kraskov et al. (2004)'s seminal paper on the nearest-neighbor based mutual information estimator. We'll estimate the mutual information
 between marginals of a bivariate Gaussian for a fixed time series length of 2000,
@@ -193,7 +59,105 @@ axislegend()
 fig
 ```
 
-### [`MIShannon`](@ref) (differential): estimator comparison
+#### [`MutualInformationEstimator`](@ref) comparison
+
+Most estimators suffer from significant bias when applied to discrete, finite data. One possible resolution is to add a small amount of noise to discrete variables, so that the data becomes continuous in practice.
+
+Instead of adding noise to your data, you can consider using an
+estimator that is specifically designed to deal with continuous-discrete mixture data. One example is the [`GaoKannanOhViswanath`](@ref) estimator.
+
+Here, we compare its performance to [`KSG1`](@ref) on uniformly
+distributed discrete multivariate data. The true mutual information is zero.
+
+```@example ex_mutualinfo
+using CausalityTools
+using Statistics
+using StateSpaceSets: Dataset
+using Statistics: mean
+using CairoMakie
+
+function compare_ksg_gkov(;
+        k = 5,
+        base = 2,
+        nreps = 15,
+        Ls = [500:100:1000; 1500; 2000; 3000; 4000; 5000; 1000])
+
+    est_gkov = GaoKannanOhViswanath(; k)
+    est_ksg1 = KSG1(; k)
+
+    mis_ksg1_mix = zeros(nreps, length(Ls))
+    mis_ksg1_discrete = zeros(nreps, length(Ls))
+    mis_ksg1_cont = zeros(nreps, length(Ls))
+    mis_gkov_mix = zeros(nreps, length(Ls))
+    mis_gkov_discrete = zeros(nreps, length(Ls))
+    mis_gkov_cont = zeros(nreps, length(Ls))
+
+    for (j, L) in enumerate(Ls)
+        for i = 1:nreps
+            X = Dataset(float.(rand(1:8, L, 2)))
+            Y = Dataset(float.(rand(1:8, L, 2)))
+            Z = Dataset(rand(L, 2))
+            W = Dataset(rand(L, 2))
+            measure = MIShannon(; base = ℯ)
+            mis_ksg1_discrete[i, j] = mutualinfo(measure, est_ksg1, X, Y)
+            mis_gkov_discrete[i, j] = mutualinfo(measure, est_gkov, X, Y)
+            mis_ksg1_mix[i, j] = mutualinfo(measure, est_ksg1, X, Z)
+            mis_gkov_mix[i, j] = mutualinfo(measure, est_gkov, X, Z)
+            mis_ksg1_cont[i, j] = mutualinfo(measure, est_ksg1, Z, W)
+            mis_gkov_cont[i, j] = mutualinfo(measure, est_gkov, Z, W)
+        end
+    end
+    return mis_ksg1_mix, mis_ksg1_discrete, mis_ksg1_cont,
+        mis_gkov_mix, mis_gkov_discrete, mis_gkov_cont
+end
+
+fig = Figure()
+ax = Axis(fig[1, 1], 
+    xlabel = "Sample size", 
+    ylabel = "Mutual information (bits)")
+Ls = [100; 200; 500; 1000; 2500; 5000; 10000]
+nreps = 5
+k = 3
+mis_ksg1_mix, mis_ksg1_discrete, mis_ksg1_cont,
+    mis_gkov_mix, mis_gkov_discrete, mis_gkov_cont = 
+    compare_ksg_gkov(; nreps, k, Ls)
+
+scatterlines!(ax, Ls, mean(mis_ksg1_mix, dims = 1) |> vec, 
+    label = "KSG1 (mixed)", color = :black, 
+    marker = :utriangle)
+scatterlines!(ax, Ls, mean(mis_ksg1_discrete, dims = 1) |> vec, 
+    label = "KSG1 (discrete)", color = :black, 
+    linestyle = :dash, marker = '▲')
+scatterlines!(ax, Ls, mean(mis_ksg1_cont, dims = 1) |> vec, 
+    label = "KSG1 (continuous)", color = :black, 
+    linestyle = :dot, marker = '●')
+scatterlines!(ax, Ls, mean(mis_gkov_mix, dims = 1) |> vec, 
+    label = "GaoKannanOhViswanath (mixed)", color = :red, 
+    marker = :utriangle)
+scatterlines!(ax, Ls, mean(mis_gkov_discrete, dims = 1) |> vec, 
+    label = "GaoKannanOhViswanath (discrete)", color = :red, 
+    linestyle = :dash, marker = '▲')
+scatterlines!(ax, Ls, mean(mis_gkov_cont, dims = 1) |> vec, 
+    label = "GaoKannanOhViswanath (continuous)", color = :red, 
+    linestyle = :dot, marker = '●')
+axislegend(position = :rb)
+fig
+```
+
+### Estimation using [`DifferentialEntropyEstimator`](@ref)s
+
+#### Simple example
+
+We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialEntropyEstimator`](@ref).
+Note that this doesn't apply any bias correction.
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+mutualinfo(Kraskov(k = 3), x, y)
+```
+
+#### [`DifferentialEntropyEstimator`](@ref) comparison
 
 Let's compare the performance of a subset of the implemented mutual information estimators. We'll use example data from Lord et al., where the analytical mutual information is known.
 
@@ -322,6 +286,31 @@ estimators = [
 ]
 ```
 
+#### Family 1
+
+In this system, samples are concentrated around the diagonal $X = Y$,
+and the strip of samples gets thinner as $\alpha \to 0$.
+
+```@example ex_mutualinfo
+function family1(α, n::Int)
+    x = rand(n)
+    v = rand(n)
+    y = x + α * v
+    return Dataset(x), Dataset(y)
+end
+
+# True mutual information values for these data
+function ifamily1(α; base = ℯ)
+    mi = -log(α) - α - log(2)
+    return mi / log(base, ℯ)
+end
+
+fig = plot_results(family1, ifamily1; 
+    k_lord = k_lord, k = k, nreps = 10,
+    estimators = estimators,
+    base = base)
+```
+
 #### Family 2
 
 ```@example ex_mutualinfo
@@ -356,31 +345,6 @@ with_theme(new_cycle_theme()) do
 end
 ```
 
-#### Family 1
-
-In this system, samples are concentrated around the diagonal $X = Y$,
-and the strip of samples gets thinner as $\alpha \to 0$.
-
-```@example ex_mutualinfo
-function family1(α, n::Int)
-    x = rand(n)
-    v = rand(n)
-    y = x + α * v
-    return Dataset(x), Dataset(y)
-end
-
-# True mutual information values for these data
-function ifamily1(α; base = ℯ)
-    mi = -log(α) - α - log(2)
-    return mi / log(base, ℯ)
-end
-
-fig = plot_results(family1, ifamily1; 
-    k_lord = k_lord, k = k, nreps = 10,
-    estimators = estimators,
-    base = base)
-```
-
 #### Family 3
 
 In this system, we draw samples from a 4D Gaussian distribution distributed
@@ -412,88 +376,150 @@ fig = plot_results(family3, ifamily3;
 
 We see that the [`Lord`](@ref) estimator, which estimates local volume elements using a singular-value decomposition (SVD) of local neighborhoods, outperforms the other estimators by a large margin.
 
-#### [`MIShannon`](@ref) (continuous/discrete): estimator comparison
+### Estimation using [`ProbabilitiesEstimator`](@ref)s
 
-Most estimators suffer from significant bias when applied to discrete
-data. One possible resolution is to add a small amount of noise to discrete variables, so that the data becomes continuous in practice.
+We can also use [`ProbabilitiesEstimator`](@ref) to estimate Shannon mutual information.
+This does not apply any bias correction.
 
-Instead of adding noise to your data, you can consider using an
-estimator that is specifically designed to deal with continuous-discrete mixture data. One example is the [`GaoKannanOhViswanath`](@ref) estimator.
+#### Discrete [`MIShannon`](@ref) with [`ValueHistogram`](@ref)
 
-Here, we compare its performance to [`KSG1`](@ref) on uniformly 
-distributed discrete multivariate data. The true mutual information is zero.
+A [`ValueHistogram`](@ref) estimator can be used to bin the data and compute
+discrete Shannon mutual information.
 
-```@example ex_mutualinfo
+```@example mi_demonstration
 using CausalityTools
-using Statistics
-using StateSpaceSets: Dataset
-using Statistics: mean
-using CairoMakie
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 1000)
+y = rand(rng, 1000)
 
-function compare_ksg_gkov(;
-        k = 5,
-        base = 2,
-        nreps = 15,
-        Ls = [500:100:1000; 1500; 2000; 3000; 4000; 5000; 1000])
+# Use the H3-estimation method with a discrete visitation frequency based 
+# probabilities estimator over a fixed grid covering the range of the data,
+# which is on [0, 1].
+est = ValueHistogram(FixedRectangularBinning(0, 1, 5))
+mutualinfo(est, x, y)
+```
 
-    est_gkov = GaoKannanOhViswanath(; k)
-    est_ksg1 = KSG1(; k)
+#### Discrete [`MIShannon`](@ref) with [`Contingency`](@ref) (numerical)
 
-    mis_ksg1_mix = zeros(nreps, length(Ls))
-    mis_ksg1_discrete = zeros(nreps, length(Ls))
-    mis_ksg1_cont = zeros(nreps, length(Ls))
-    mis_gkov_mix = zeros(nreps, length(Ls))
-    mis_gkov_discrete = zeros(nreps, length(Ls))
-    mis_gkov_cont = zeros(nreps, length(Ls))
+The above example is in fact equivalent to [`Contingency`](@ref). However,
+using the  [`Contingency`](@ref) estimator is more flexible, because it
+can also be used on [categorical data](@ref discrete_mishannon_categorical).
 
-    for (j, L) in enumerate(Ls)
-        for i = 1:nreps
-            X = Dataset(float.(rand(1:8, L, 2)))
-            Y = Dataset(float.(rand(1:8, L, 2)))
-            Z = Dataset(rand(L, 2))
-            W = Dataset(rand(L, 2))
-            measure = MIShannon(; base = ℯ)
-            mis_ksg1_discrete[i, j] = mutualinfo(measure, est_ksg1, X, Y)
-            mis_gkov_discrete[i, j] = mutualinfo(measure, est_gkov, X, Y)
-            mis_ksg1_mix[i, j] = mutualinfo(measure, est_ksg1, X, Z)
-            mis_gkov_mix[i, j] = mutualinfo(measure, est_gkov, X, Z)
-            mis_ksg1_cont[i, j] = mutualinfo(measure, est_ksg1, Z, W)
-            mis_gkov_cont[i, j] = mutualinfo(measure, est_gkov, Z, W)
-        end
+```@example mi_demonstration
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 1000)
+y = rand(rng, 1000)
+est = ValueHistogram(FixedRectangularBinning(0, 1, 5))
+mutualinfo(Contingency(est), x, y)
+```
+
+#### Discrete [`MIShannon`](@ref) with [`ContingencyMatrix`](@ref) (manual)
+
+If you need explicit access to the estimated joint probability mass function,
+use a [`ContingencyMatrix`](@ref) directly.
+
+```@example mi_demonstration
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 1000)
+y = rand(rng, 1000)
+c = contingency_matrix(est, x, y)
+est = ValueHistogram(FixedRectangularBinning(0, 1, 5))
+mutualinfo(c)
+```
+
+#### [Discrete [`MIShannon`](@ref) with [`Contingency`](@ref) (categorical)](@id discrete_mishannon_categorical)
+
+The [`ContingencyMatrix`](@ref) approach can also be used with categorical data.
+For example, let's compare the Shannon mutual information between the preferences
+of a population sample with regards to different foods.
+
+```@example mi_demonstration
+using CausalityTools
+n = 1000
+preferences = rand(["neutral", "like it", "hate it"], n);
+random_foods = rand(["water", "flour", "bananas", "booze", "potatoes", "beans", "soup"], n)
+biased_foods = map(preferences) do preference
+    if cmp(preference, "neutral") == 1
+        return rand(["water", "flour"])
+    elseif cmp(preference, "like it") == 1
+        return rand(["bananas", "booze"])
+    else
+        return rand(["potatoes", "beans", "soup"])
     end
-    return mis_ksg1_mix, mis_ksg1_discrete, mis_ksg1_cont,
-        mis_gkov_mix, mis_gkov_discrete, mis_gkov_cont
 end
 
-fig = Figure()
-ax = Axis(fig[1, 1], 
-    xlabel = "Sample size", 
-    ylabel = "Mutual information (bits)")
-Ls = [100; 200; 500; 1000; 2500; 5000; 10000]
-nreps = 5
-k = 3
-mis_ksg1_mix, mis_ksg1_discrete, mis_ksg1_cont,
-    mis_gkov_mix, mis_gkov_discrete, mis_gkov_cont = 
-    compare_ksg_gkov(; nreps, k, Ls)
+c_biased = contingency_matrix(preferences, biased_foods) 
+c_random = contingency_matrix(preferences, random_foods) 
+mutualinfo(c_biased), mutualinfo(c_random)
+```
 
-scatterlines!(ax, Ls, mean(mis_ksg1_mix, dims = 1) |> vec, 
-    label = "KSG1 (mixed)", color = :black, 
-    marker = :utriangle)
-scatterlines!(ax, Ls, mean(mis_ksg1_discrete, dims = 1) |> vec, 
-    label = "KSG1 (discrete)", color = :black, 
-    linestyle = :dash, marker = '▲')
-scatterlines!(ax, Ls, mean(mis_ksg1_cont, dims = 1) |> vec, 
-    label = "KSG1 (continuous)", color = :black, 
-    linestyle = :dot, marker = '●')
-scatterlines!(ax, Ls, mean(mis_gkov_mix, dims = 1) |> vec, 
-    label = "GaoKannanOhViswanath (mixed)", color = :red, 
-    marker = :utriangle)
-scatterlines!(ax, Ls, mean(mis_gkov_discrete, dims = 1) |> vec, 
-    label = "GaoKannanOhViswanath (discrete)", color = :red, 
-    linestyle = :dash, marker = '▲')
-scatterlines!(ax, Ls, mean(mis_gkov_cont, dims = 1) |> vec, 
-    label = "GaoKannanOhViswanath (continuous)", color = :red, 
-    linestyle = :dot, marker = '●')
-axislegend(position = :rb)
+#### Longer example: AR1-system and unidirectionally coupled logistic maps
+
+In this example we generate realizations of two different systems where we know the strength of coupling between the variables. Our aim is to compute Shannon mutual information $I^S(X; Y)$ ([`MIShannon`](@ref)) between time series of each variable and assess how the magnitude of $I^S(X; Y)$ changes as we change the strength of coupling between $X$ and $Y$. We'll use two systems that ship with CausalityTools.jl:
+
+* A stochastic system consisting of two unidirectionally coupled first-order autoregressive processes ([`ar1_unidir`](@ref))
+* A deterministic, chaotic system consisting of two unidirectionally coupled logistic maps ([`logistic2_unidir`](@ref))
+
+We use the default input parameter values (see [`ar1_unidir`](@ref) and [`logistic2_unidir`](@ref) for details) and below we toggle only the random initial conditions and the coupling strength parameter `c_xy`. For each value of `c_xy` we generate 1,000 unique realizations of the system and obtain 500-point time series of the coupled variables.
+
+To estimate the mutual information, we use the binning-based [`ValueHistogram`](@ref) estimator. We summarize the distribution of $I(X; Y)$ values across all realizations using the median and quantiles encompassing 95 % of the values.
+
+```@example
+using CausalityTools
+using Statistics
+using CairoMakie
+
+# Span a range of x-y coupling strengths
+c = 0.0:0.1:1.0
+
+# Number of observations in each time series
+npts = 500
+
+# Number of unique realizations of each system
+n_realizations = 1000
+
+# Get MI for multiple realizations of two systems, 
+# saving three quantiles for each c value
+mi = zeros(length(c), 3, 2)
+
+# Define an estimator for MI
+b = RectangularBinning(4)
+estimator = VisitationFrequency(b)
+
+for i in 1 : length(c)
+    
+    tmp = zeros(n_realizations, 2)
+    
+    for k in 1 : n_realizations
+        
+        # Obtain time series realizations of the two 2D systems 
+        # for a given coupling strength and random initial conditions
+        lmap = trajectory(logistic2_unidir(u₀ = rand(2), c_xy = c[i]), npts - 1, Ttr = 1000)
+        ar1 = trajectory(ar1_unidir(u₀ = rand(2), c_xy = c[i]), npts - 1)
+        
+        # Compute the MI between the two coupled components of each system
+        tmp[k, 1] = mutualinfo(MIShannon(), estimator, lmap[:, 1], lmap[:, 2])
+        tmp[k, 2] = mutualinfo(MIShannon(), estimator, ar1[:, 1], ar1[:, 2])
+    end
+    
+    # Compute lower, middle, and upper quantiles of MI for each coupling strength
+    mi[i, :, 1] = quantile(tmp[:, 1], [0.025, 0.5, 0.975])
+    mi[i, :, 2] = quantile(tmp[:, 2], [0.025, 0.5, 0.975])
+end
+
+# Plot distribution of MI values as a function of coupling strength for both systems
+fig =with_theme(theme_minimal()) do
+    fig = Figure()
+    ax = Axis(fig[1, 1], xlabel = "Coupling strength", ylabel = "Mutual information")
+    band!(ax, c, mi[:, 1, 1], mi[:, 3, 1], color = (:black, 0.3))
+    lines!(ax, c, mi[:, 2, 1], label = "2D chaotic logistic maps", color = :black)
+    band!(ax, c, mi[:, 1, 2], mi[:, 3, 2], color = (:red, 0.3))
+    lines!(ax, c, mi[:, 2, 2],  label = "2D order-1 autoregressive", color = :red)
+    return fig
+end
 fig
 ```
+
+As expected, $I(X; Y)$ increases with coupling strength in a system-specific manner.

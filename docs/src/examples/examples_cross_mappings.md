@@ -1,100 +1,13 @@
 # [Cross mappings](@id examples_crossmappings)
 
-## Convergent cross mapping (reproducing Sugihara et al., 2012)
+## [`ConvergentCrossMapping`](@ref)
+
+### Reproducing Sugihara et al. (2012)
 
 !!! note "Run blocks consecutively"
     If copying these examples and running them locally, make sure the relevant packages (given in the first block) are loaded first.
 
-### Figures 3C and 3D
-
-Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
-introduced the [`ConvergentCrossMapping`](@ref) measure.
-Equations and parameters can be found in their supplementary material.
-Simulatenously, we also compute the [`PairwiseAsymmetricInference`](@ref) measure
-from McCracken & Weigel (2014)[^McCracken2014], which is a related method, but uses a
-slightly different embedding.
-
-[^Sugihara2012]:
-    Sugihara, G., May, R., Ye, H., Hsieh, C. H., Deyle, E., Fogarty, M., & Munch, S.
-    (2012). Detecting causality in complex ecosystems. science, 338(6106), 496-500.
-[^McCracken2014]:
-    McCracken, J. M., & Weigel, R. S. (2014). Convergent cross-mapping and pairwise
-    asymmetric inference. Physical Review E, 90(6), 062903.
-
-```@example MAIN_CCM
-using CausalityTools
-using Statistics
-using LabelledArrays
-using StaticArrays
-using DynamicalSystemsBase
-using StateSpaceSets
-using CairoMakie, Printf
-
-# -----------------------------------------------------------------------------------------
-# Create 400-point long time series for Sugihara et al. (2012)'s example for figure 3.
-# -----------------------------------------------------------------------------------------
-function eom_logistic_sugi(u, p, t)
-    (; rx, ry, βxy, βyx) = p
-    (; x, y) = u
-
-    dx = x*(rx - rx*x - βxy*y)
-    dy = y*(ry - ry*y - βyx*x)
-    return SVector{2}(dx, dy)
-end
-
-# βxy := effect on x of y
-# βyx := effect on y of x
-function logistic_sugi(; u0 = rand(2), rx, ry, βxy, βyx)
-    p = @LArray [rx, ry, βxy, βyx] (:rx, :ry, :βxy, :βyx)
-    DiscreteDynamicalSystem(eom_logistic_sugi, u0, p)
-end
-
-sys_unidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.00, βyx = 0.32);
-x, y = columns(trajectory(sys_unidir, 1000, Ttr = 10000));
-
-# -----------------------------------------------------------------------------------------
-# Cross map.
-# -----------------------------------------------------------------------------------------
-m_ccm = ConvergentCrossMapping(d = 2)
-m_pai = PairwiseAsymmetricInference(d = 2)
-# Make predictions x̂y, i.e. predictions `x̂` made from embedding of y (AND x, if PAI)
-t̂ccm_x̂y, tccm_x̂y, ρccm_x̂y = predict(m_ccm, x, y)
-t̂pai_x̂y, tpai_x̂y, ρpai_x̂y = predict(m_pai, x, y);
-# Make predictions ŷx, i.e. predictions `ŷ` made from embedding of x (AND y, if PAI)
-t̂ccm_ŷx, tccm_ŷx, ρccm_ŷx = predict(m_ccm, y, x)
-t̂pai_ŷx, tpai_ŷx, ρpai_ŷx = predict(m_pai, y, x);
-
-# -----------------------------------------------------------------------------------------
-# Plot results
-# -----------------------------------------------------------------------------------------
-ρs = (ρccm_x̂y, ρpai_x̂y, ρccm_ŷx, ρpai_ŷx)
-sccm_x̂y, spai_x̂y, sccm_ŷx, spai_ŷx = (map(ρ -> (@sprintf "%.3f" ρ), ρs)...,)
-
-ρs = (ρccm_x̂y, ρpai_x̂y, ρccm_ŷx, ρpai_ŷx)
-sccm_x̂y, spai_x̂y, sccm_ŷx, spai_ŷx = (map(ρ -> (@sprintf "%.3f" ρ), ρs)...,)
-
-with_theme(theme_minimal(),
-    markersize = 5) do
-    fig = Figure();
-    ax_ŷx = Axis(fig[2,1], aspect = 1, xlabel = "y(t) (observed)", ylabel = "ŷ(t) | x (predicted)")
-    ax_x̂y = Axis(fig[2,2], aspect = 1, xlabel = "x(t) (observed)", ylabel = "x̂(t) | y (predicted)")
-    xlims!(ax_ŷx, (0, 1)), ylims!(ax_ŷx, (0, 1))
-    xlims!(ax_x̂y, (0, 1)), ylims!(ax_x̂y, (0, 1))
-    ax_ts = Axis(fig[1, 1:2], xlabel = "Time (t)", ylabel = "Value")
-    scatterlines!(ax_ts, x[1:300], label = "x")
-    scatterlines!(ax_ts, y[1:300], label = "y")
-    axislegend()
-    scatter!(ax_ŷx, tccm_ŷx, t̂ccm_ŷx, label = "CCM (ρ = $sccm_ŷx)", color = :black)
-    scatter!(ax_ŷx, tpai_ŷx, t̂pai_ŷx, label = "PAI (ρ = $spai_ŷx)", color = :red)
-    axislegend(ax_ŷx, position = :lt)
-    scatter!(ax_x̂y, tccm_x̂y, t̂ccm_x̂y, label = "CCM (ρ = $sccm_x̂y)", color = :black)
-    scatter!(ax_x̂y, tpai_x̂y, t̂pai_x̂y, label = "PAI (ρ = $spai_x̂y)", color = :red)
-    axislegend(ax_x̂y, position = :lt)
-    fig
-end
-```
-
-### Figure 3A
+#### Figure 3A
 
 Let's reproduce figure 3A too, focusing only on [`ConvergentCrossMapping`](@ref) this time. In this figure, they compute the cross mapping for libraries of increasing size, always starting at time index 1. This approach - which we here call the [`ExpandingSegment`](@ref) estimator - is one of many ways of estimating the correspondence between observed and predicted value.
 
@@ -190,7 +103,96 @@ reproduce_figure_3A_ensemble(ConvergentCrossMapping(d = 3, τ = -1, w = 5))
 
 There wasn't really that much of a difference, since for the logistic map, the autocorrelation function flips sign for every lag increase. However, for examples from other systems, tuning `w` may be important.
 
-### Figure 3B
+#### Figures 3C and 3D
+
+Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
+introduced the [`ConvergentCrossMapping`](@ref) measure.
+Equations and parameters can be found in their supplementary material.
+Simulatenously, we also compute the [`PairwiseAsymmetricInference`](@ref) measure
+from McCracken & Weigel (2014)[^McCracken2014], which is a related method, but uses a
+slightly different embedding.
+
+[^Sugihara2012]:
+    Sugihara, G., May, R., Ye, H., Hsieh, C. H., Deyle, E., Fogarty, M., & Munch, S.
+    (2012). Detecting causality in complex ecosystems. science, 338(6106), 496-500.
+[^McCracken2014]:
+    McCracken, J. M., & Weigel, R. S. (2014). Convergent cross-mapping and pairwise
+    asymmetric inference. Physical Review E, 90(6), 062903.
+
+```@example MAIN_CCM
+using CausalityTools
+using Statistics
+using LabelledArrays
+using StaticArrays
+using DynamicalSystemsBase
+using StateSpaceSets
+using CairoMakie, Printf
+
+# -----------------------------------------------------------------------------------------
+# Create 400-point long time series for Sugihara et al. (2012)'s example for figure 3.
+# -----------------------------------------------------------------------------------------
+function eom_logistic_sugi(u, p, t)
+    (; rx, ry, βxy, βyx) = p
+    (; x, y) = u
+
+    dx = x*(rx - rx*x - βxy*y)
+    dy = y*(ry - ry*y - βyx*x)
+    return SVector{2}(dx, dy)
+end
+
+# βxy := effect on x of y
+# βyx := effect on y of x
+function logistic_sugi(; u0 = rand(2), rx, ry, βxy, βyx)
+    p = @LArray [rx, ry, βxy, βyx] (:rx, :ry, :βxy, :βyx)
+    DiscreteDynamicalSystem(eom_logistic_sugi, u0, p)
+end
+
+sys_unidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.00, βyx = 0.32);
+x, y = columns(trajectory(sys_unidir, 1000, Ttr = 10000));
+
+# -----------------------------------------------------------------------------------------
+# Cross map.
+# -----------------------------------------------------------------------------------------
+m_ccm = ConvergentCrossMapping(d = 2)
+m_pai = PairwiseAsymmetricInference(d = 2)
+# Make predictions x̂y, i.e. predictions `x̂` made from embedding of y (AND x, if PAI)
+t̂ccm_x̂y, tccm_x̂y, ρccm_x̂y = predict(m_ccm, x, y)
+t̂pai_x̂y, tpai_x̂y, ρpai_x̂y = predict(m_pai, x, y);
+# Make predictions ŷx, i.e. predictions `ŷ` made from embedding of x (AND y, if PAI)
+t̂ccm_ŷx, tccm_ŷx, ρccm_ŷx = predict(m_ccm, y, x)
+t̂pai_ŷx, tpai_ŷx, ρpai_ŷx = predict(m_pai, y, x);
+
+# -----------------------------------------------------------------------------------------
+# Plot results
+# -----------------------------------------------------------------------------------------
+ρs = (ρccm_x̂y, ρpai_x̂y, ρccm_ŷx, ρpai_ŷx)
+sccm_x̂y, spai_x̂y, sccm_ŷx, spai_ŷx = (map(ρ -> (@sprintf "%.3f" ρ), ρs)...,)
+
+ρs = (ρccm_x̂y, ρpai_x̂y, ρccm_ŷx, ρpai_ŷx)
+sccm_x̂y, spai_x̂y, sccm_ŷx, spai_ŷx = (map(ρ -> (@sprintf "%.3f" ρ), ρs)...,)
+
+with_theme(theme_minimal(),
+    markersize = 5) do
+    fig = Figure();
+    ax_ŷx = Axis(fig[2,1], aspect = 1, xlabel = "y(t) (observed)", ylabel = "ŷ(t) | x (predicted)")
+    ax_x̂y = Axis(fig[2,2], aspect = 1, xlabel = "x(t) (observed)", ylabel = "x̂(t) | y (predicted)")
+    xlims!(ax_ŷx, (0, 1)), ylims!(ax_ŷx, (0, 1))
+    xlims!(ax_x̂y, (0, 1)), ylims!(ax_x̂y, (0, 1))
+    ax_ts = Axis(fig[1, 1:2], xlabel = "Time (t)", ylabel = "Value")
+    scatterlines!(ax_ts, x[1:300], label = "x")
+    scatterlines!(ax_ts, y[1:300], label = "y")
+    axislegend()
+    scatter!(ax_ŷx, tccm_ŷx, t̂ccm_ŷx, label = "CCM (ρ = $sccm_ŷx)", color = :black)
+    scatter!(ax_ŷx, tpai_ŷx, t̂pai_ŷx, label = "PAI (ρ = $spai_ŷx)", color = :red)
+    axislegend(ax_ŷx, position = :lt)
+    scatter!(ax_x̂y, tccm_x̂y, t̂ccm_x̂y, label = "CCM (ρ = $sccm_x̂y)", color = :black)
+    scatter!(ax_x̂y, tpai_x̂y, t̂pai_x̂y, label = "PAI (ρ = $spai_x̂y)", color = :red)
+    axislegend(ax_x̂y, position = :lt)
+    fig
+end
+```
+
+#### Figure 3B
 
 What about figure 3B? Here they generate time series of length 400 for a range of values for both coupling parameters, and plot the dominant direction $\Delta = \rho(\hat{x} | y) - \rho(\hat{y} | x)$.
 
@@ -232,7 +234,9 @@ end
 reproduce_figure_3B()
 ```
 
-## Pairwise asymmetric inference (reproducing McCracken & Weigel, 2014)
+## [`PairwiseAsymmetricInference`](@ref)
+
+### Reproducing McCracken & Weigel (2014)
 
 Let's try to reproduce figure 8 from McCracken & Weigel (2014)'s[^McCracken2014]
 paper on [`PairwiseAsymmetricInference`](@ref) (PAI). We'll start by defining the their example B (equations 6-7). This system consists of two

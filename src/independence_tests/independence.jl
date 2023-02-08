@@ -17,6 +17,8 @@ If only `x` and `y` are given, `test` must provide a bivariate association measu
 If `z` is given too, then `test` must provide a conditional association measure.
 
 Returns a test `summary`, whose type depends on `test`.
+
+See also [examples](@ref examples_independence).
 """
 function independence(test, args...; kwargs...)
     error("No concrete implementation for $(typeof(test)) test yet")
