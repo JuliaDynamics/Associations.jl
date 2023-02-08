@@ -18,7 +18,7 @@ like [here](@ref examples_surrogatetest_smeasure).
 
 ## [Joint distance distribution](@id quickstart_jdd)
 
-### Computing the `Δ`-statistic
+### Computing the `Δ`-distribution
 
 ```@example quickstart_jdd
 using CausalityTools

@@ -22,7 +22,7 @@ likeit = rand(["yes", "no"], n)
 food = rand(["veggies", "meat", "fish"], n)
 service = rand(["netflix", "hbo"], n)
 
-α = 0.05 # pick some arbitrary significance level
+α = 0.01 # pick some arbitrary significance level
 
 # We should not be able to reject the null hypothesis `food ⫫ likeit | service`, because
 # the variables are all independent.
