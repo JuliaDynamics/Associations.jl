@@ -16,7 +16,7 @@ Depth = 3
 
 ```@contents
 Pages = [
-    "examples/independence.md",
+    "examples/examples_independence.md",
 ]
 Depth = 3
 ```
