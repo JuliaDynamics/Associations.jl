@@ -9,7 +9,11 @@ include("embedding.jl")
 include("utils.jl")
 
 """
-The supertype of all transfer entropy measures.
+    TransferEntropy <: AssociationMeasure
+
+The supertype of all transfer entropy measures. Concrete subtypes are 
+- [`TEShannon`](@ref)
+- [`TERenyiJizba`](@ref)
 """
 abstract type TransferEntropy{E, EMB} <: InformationMeasure end
 

@@ -8,7 +8,7 @@ using ComplexityMeasures: maxdists, volume_minimal_rect
 export Zhu1
 
 """
-    Zhu1 <: DifferentialEntropyEstimator
+    Zhu1 <: TransferEntropyEstimator
     Zhu1(k = 1, w = 0, base = MathConstants.e)
 
 The `Zhu1` transfer entropy estimator (Zhu et al., 2015)[^Zhu2015].

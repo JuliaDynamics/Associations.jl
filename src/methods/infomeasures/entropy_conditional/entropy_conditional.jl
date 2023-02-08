@@ -27,12 +27,20 @@ entropy_conditional(measure::ConditionalEntropy, args...; kwargs...) =
 Estimate the discrete version of the given [`ConditionalEntropy`](@ref) `measure` from
 its direct (sum) definition, using the probabilities from a pre-computed
 [`ContingencyMatrix`](@ref), constructed from two input variables `x` and `y`.
+This estimation method works for both numerical and categorical data.
+If `measure` is not given, then the default is `CEShannon()`.
 
 The convention is to compute the entropy of the variable in the *first* column of `c`
 conditioned on the variable in the *second* column of `c`. To do the opposite, call this
 function with a new contingency matrix where the order of the variables is reversed.
 
-If `measure` is not given, then the default is `CEShannon()`.
+## Compatible measures
+
+|                             | [`ContingencyMatrix`](@ref) |
+| --------------------------- | :-------------------------: |
+| [`CEShannon`](@ref)         |             ✓              |
+| [`CETsallisFuruichi`](@ref) |             ✓              |
+| [`CETsallisAbe`](@ref)      |             ✓              |
 """
 function entropy_conditional(measure::ConditionalEntropy, c::ContingencyMatrix)
     return estimate(measure, c)
@@ -41,20 +49,25 @@ end
 """
     entropy_conditional([measure::ConditionalEntropy], est::ProbabilitiesEstimator, x, y)
 
-Estimate the conditional entropy `measure` between `x` and `y` by the difference of
-the joint entropy and the marginal entropy of `y`, without any bias correction, using
-the provided [`ProbabilitiesEstimator`](@ref) `est`.
+Estimate the entropy of `x` conditioned on `y`, using the discrete version of the given
+conditional entropy (CE) `measure`. The CE is computed the difference of
+the joint entropy and the marginal entropy of `y`, using
+the [`ProbabilitiesEstimator`](@ref) `est`, which must compatible with multivariate data
+(that is, have an implementation for [`marginal_encodings`](@ref)). 
+No bias correction is applied. If `measure` is not given, then the default is `CEShannon()`.
+
+## Estimators
 
 Joint and marginal probabilities are computed by jointly discretizing `x` and `y` using
-the approach given by `est`, and obtaining the marginal distribution from the joint
-distribution.
+the approach given by `est`, and obtaining the marginal distribution for `y` from the joint
+distribution. 
 
-This only works for estimators that have an implementation for
-[`marginal_encodings`](@ref). See the
-[online documentation](@ref probabilities_estimators_ce) for a list of
-compatible measures.
-
-If `measure` is not given, then the default is `CEShannon()`.
+| Estimator                    | Principle           | [`CEShannon`](@ref) | [`CETsallisAbe`](@ref) | [`CETsallisFuruichi`](@ref) |
+| ---------------------------- | ------------------- | :-----------------: | :--------------------: | :-------------------------: |
+| [`CountOccurrences`](@ref)   | Frequencies         |         ✓          |           ✓           |              x              |
+| [`ValueHistogram`](@ref)     | Binning (histogram) |         ✓          |           ✓           |              x              |
+| [`SymbolicPermuation`](@ref) | Ordinal patterns    |         ✓          |           ✓           |              x              |
+| [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |           ✓           |              x              |
 """
 function entropy_conditional(measure::ConditionalEntropy, est::ProbabilitiesEstimator, x, y)
     return estimate(measure, est, x, y)
@@ -63,14 +76,24 @@ end
 """
     entropy_conditional([measure::ConditionalEntropy], est::DifferentialEntropyEstimator, x, y)
 
-Estimate the mutual information `measure` between `x` and `y` by a sum of three
-entropy terms, without any bias correction, using any [`DifferentialEntropyEstimator`](@ref)
-compatible with multivariate data.
-
-See the [online documentation](@ref diffentropy_estimators_ce) for a list of
-compatible measures.
-
+Estimate the entropy of `x` conditioned on `y`, using the differential/continuous 
+version of the given conditional entropy (CE) `measure`.  The CE is computed the difference of
+the joint entropy and the marginal entropy of `y`, using
+the [`DifferentialEntropyEstimator`](@ref) `est`, which must be compatible with multivariate data.
+No bias correction is applied.
 If `measure` is not given, then the default is `CEShannon()`.
+
+## Estimators 
+
+| Estimator                        | Principle         | [`CEShannon`](@ref) | [`CETsallisAbe`](@ref) | [`CETsallisFuruichi`](@ref) |
+| -------------------------------- | ----------------- | :-----------------: | :--------------------: | :-------------------------: |
+| [`Kraskov`](@ref)                | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Zhu`](@ref)                    | Nearest neighbors |         ✓          |           x           |              x              |
+| [`ZhuSingh`](@ref)               | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Gao`](@ref)                    | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Goria`](@ref)                  | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Lord`](@ref)                   | Nearest neighbors |         ✓          |           x           |              x              |
+| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |           x           |              x              |
 """
 function entropy_conditional(measure::ConditionalEntropy, est::DifferentialEntropyEstimator, x, y)
     return estimate(measure, est, x, y)

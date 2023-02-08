@@ -13,13 +13,14 @@ export CrossmapEstimator
 export Ensemble
 
 """
-The supertype for all cross-map measures
+    CrossmapMeasure <: AssociationMeasure
 
-Currently implemented measures are:
+The supertype for all cross-map measures. Concrete subtypes are
+
 - [`ConvergentCrossMapping`](@ref), or [`CCM`](@ref) for short.
 - [`PairwiseAsymmetricInference`](@ref), or [`PAI`](@ref) for short.
 """
-abstract type CrossmapMeasure end
+abstract type CrossmapMeasure <: AssociationMeasure end
 
 """
     CrossmapEstimator{LIBSIZES, RNG}
@@ -84,11 +85,17 @@ This produces `emb`, a `D`-dimensional `Dataset` where
 function embed(measure::CrossmapMeasure, args...) end
 
 """
+    crossmap(measure::CrossmapMeasure, t::AbstractVector, s::AbstractVector) → ρ::Real
+    crossmap(measure::CrossmapMeasure, est, t::AbstractVector, s::AbstractVector) → ρ::Vector
     crossmap(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractDataset) → ρ
-    crossmap(measure::CrossmapMeasure, target::AbstractVector, source::AbstractVector) → ρ
 
-Compute the cross map estimates between time-aligned time series `t̄` and
-source embedding `S̄`, or between raw time series `t` and `s`.
+Compute the cross map estimates between between raw time series `t` and `s` (and return
+the real-valued cross-map statistic `ρ`). If a [`CrossmapEstimator`](@ref) `est` is provided, 
+cross mapping is done on random subsamples of the data, where subsampling is dictated by `est`
+(a vector of values for `ρ` is returned). 
+
+Alternatively, cross-map between time-aligned time series `t̄` and source embedding `S̄` that
+have been constructed by jointly (pre-embedding) some input data.
 
 This is just a wrapper around [`predict`](@ref) that simply returns the correspondence
 measure between the source and the target.
@@ -100,23 +107,23 @@ function crossmap end
 # implementations go in a relevant `measures/CustomMeasure.jl` file.
 
 """
+    predict(measure::CrossmapMeasure, t::AbstractVector, s::AbstractVector) → t̂ₛ, t̄, ρ
     predict(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractDataset) → t̂ₛ
-    predict(measure::CrossmapMeasure, target::AbstractVector, source::AbstractVector) → t̂ₛ, t̄, ρ
 
 Perform point-wise cross mappings between source embeddings and target time series
 according to the algorithm specified by the given cross-map `measure` (e.g.
 [`ConvergentCrossMapping`](@ref) or [`PairwiseAsymmetricInference`](@ref)).
 
-- **First method**: Returns a vector of predictions `t̂ₛ` (`t̂ₛ` := "predictions of `t̄` based
-    on source embedding `S̄`"), where `t̂ₛ[i]` is the prediction for `t̄[i]`. It assumes
-    pre-embedded data which have been correctly time-aligned using a joint embedding
-    (see [`embed`](@ref)), i.e. such that `t̄[i]` and `S̄[i]` correspond to the same time
-    index.
-- **Second method**: Jointly embeds the `target` and `source` time series (according to
+- **First method**: Jointly embeds the target `t` and source `s` time series (according to
     `measure`) to obtain time-index aligned target timeseries `t̄` and source embedding
     `S̄` (which is now a [`Dataset`](@ref)).
     Then calls `predict(measure, t̄, S̄)` (the first method), and returns both the
     predictions `t̂ₛ`, observations `t̄` and their correspondence `ρ` according to `measure`.
+- **Second method**: Returns a vector of predictions `t̂ₛ` (`t̂ₛ` := "predictions of `t̄` based
+    on source embedding `S̄`"), where `t̂ₛ[i]` is the prediction for `t̄[i]`. It assumes
+    pre-embedded data which have been correctly time-aligned using a joint embedding
+    (see [`embed`](@ref)), i.e. such that `t̄[i]` and `S̄[i]` correspond to the same time
+    index.
 
 ## Description
 

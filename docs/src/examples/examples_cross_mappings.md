@@ -1,25 +1,93 @@
 # [Cross mappings](@id examples_crossmappings)
 
-## Convergent cross mapping (reproducing Sugihara et al., 2012)
+## [`ConvergentCrossMapping`](@ref)
+
+### [`ConvergentCrossMapping`](@ref) directly
+
+```@example
+using CausalityTools
+x, y = rand(200), rand(100)
+crossmap(CCM(), x, y)
+```
+
+### [`ConvergentCrossMapping`](@ref) with [`RandomVectors`](@ref)
+
+When cross-mapping with the [`RandomVectors`](@ref) estimator, a single random subsample
+of time indices (i.e. not in any particular order) of length `l` is drawn for each library
+size `l`, and cross mapping is performed using the embedding vectors corresponding
+to those time indices.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+
+# We'll draw a single sample at each `l ∈ libsizes`. Sampling with replacement is then
+# necessary, because our 200-pt timeseries will result in embeddings with
+# less than 200 points.
+est = RandomVectors(; libsizes = 50:10:200, replace = true, rng)
+crossmap(CCM(), est, x, y)
+```
+
+To generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
+crossmap repeatedly, e.g.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+est = RandomVectors(; libsizes = 50:10:200, replace = true, rng)
+ρs = [crossmap(CCM(), est, x, y) for i = 1:80]
+M = hcat(ρs...)
+```
+
+Now, the `k`-th row of `M` contains `80` estimates of the correspondence measure `ρ`
+at library size `libsizes[k]`.
+
+### [`ConvergentCrossMapping`](@ref) with [`RandomSegments`](@ref)
+
+When cross-mapping with the [`RandomSegments`](@ref) estimator, a single random subsample
+of continguous, ordered time indices of length `l` is drawn for each library
+size `l`, and cross mapping is performed using the embedding vectors corresponding
+to those time indices.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+
+# We'll draw a single sample at each `l ∈ libsizes`. We limit the library size to 100, 
+# because drawing segments of the data longer than half the available data doesn't make
+# much sense.
+est = RandomSegment(; libsizes = 50:10:100, rng)
+crossmap(CCM(), est, x, y)
+```
+
+As above, to generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
+crossmap repeatedly, e.g.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+est = RandomSegment(; libsizes = 50:10:100, rng)
+ρs = [crossmap(CCM(), est, x, y) for i = 1:80]
+M = hcat(ρs...)
+```
+
+Now, the `k`-th row of `M` contains `80` estimates of the correspondence measure `ρ`
+at library size `libsizes[k]`.
+
+### Reproducing Sugihara et al. (2012)
 
 !!! note "Run blocks consecutively"
     If copying these examples and running them locally, make sure the relevant packages (given in the first block) are loaded first.
 
-### Figures 3C and 3D
+#### Figure 3A
 
-Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
-introduced the [`ConvergentCrossMapping`](@ref) measure.
-Equations and parameters can be found in their supplementary material.
-Simulatenously, we also compute the [`PairwiseAsymmetricInference`](@ref) measure
-from McCracken & Weigel (2014)[^McCracken2014], which is a related method, but uses a
-slightly different embedding.
+Let's reproduce figure 3A too, focusing only on [`ConvergentCrossMapping`](@ref) this time. In this figure, they compute the cross mapping for libraries of increasing size, always starting at time index 1. This approach - which we here call the [`ExpandingSegment`](@ref) estimator - is one of many ways of estimating the correspondence between observed and predicted value.
 
-[^Sugihara2012]:
-    Sugihara, G., May, R., Ye, H., Hsieh, C. H., Deyle, E., Fogarty, M., & Munch, S.
-    (2012). Detecting causality in complex ecosystems. science, 338(6106), 496-500.
-[^McCracken2014]:
-    McCracken, J. M., & Weigel, R. S. (2014). Convergent cross-mapping and pairwise
-    asymmetric inference. Physical Review E, 90(6), 062903.
+For this example, they use a bidirectional system with asymmetrical coupling strength.
 
 ```@example MAIN_CCM
 using CausalityTools
@@ -30,9 +98,6 @@ using DynamicalSystemsBase
 using StateSpaceSets
 using CairoMakie, Printf
 
-# -----------------------------------------------------------------------------------------
-# Create 400-point long time series for Sugihara et al. (2012)'s example for figure 3.
-# -----------------------------------------------------------------------------------------
 function eom_logistic_sugi(u, p, t)
     (; rx, ry, βxy, βyx) = p
     (; x, y) = u
@@ -49,65 +114,6 @@ function logistic_sugi(; u0 = rand(2), rx, ry, βxy, βyx)
     DiscreteDynamicalSystem(eom_logistic_sugi, u0, p)
 end
 
-sys_unidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.00, βyx = 0.32);
-x, y = columns(trajectory(sys_unidir, 1000, Ttr = 10000));
-
-# -----------------------------------------------------------------------------------------
-# Cross map.
-# -----------------------------------------------------------------------------------------
-m_ccm = ConvergentCrossMapping(d = 2)
-m_pai = PairwiseAsymmetricInference(d = 2)
-# Make predictions x̂y, i.e. predictions `x̂` made from embedding of y (AND x, if PAI)
-t̂ccm_x̂y, tccm_x̂y, ρccm_x̂y = predict(m_ccm, x, y)
-t̂pai_x̂y, tpai_x̂y, ρpai_x̂y = predict(m_pai, x, y);
-# Make predictions ŷx, i.e. predictions `ŷ` made from embedding of x (AND y, if PAI)
-t̂ccm_ŷx, tccm_ŷx, ρccm_ŷx = predict(m_ccm, y, x)
-t̂pai_ŷx, tpai_ŷx, ρpai_ŷx = predict(m_pai, y, x);
-
-# -----------------------------------------------------------------------------------------
-# Plot results
-# -----------------------------------------------------------------------------------------
-ρs = (ρccm_x̂y, ρpai_x̂y, ρccm_ŷx, ρpai_ŷx)
-sccm_x̂y, spai_x̂y, sccm_ŷx, spai_ŷx = (map(ρ -> (@sprintf "%.3f" ρ), ρs)...,)
-
-ρs = (ρccm_x̂y, ρpai_x̂y, ρccm_ŷx, ρpai_ŷx)
-sccm_x̂y, spai_x̂y, sccm_ŷx, spai_ŷx = (map(ρ -> (@sprintf "%.3f" ρ), ρs)...,)
-
-with_theme(theme_minimal(),
-    markersize = 5) do
-    fig = Figure();
-    ax_ŷx = Axis(fig[2,1], aspect = 1, xlabel = "y(t) (observed)", ylabel = "ŷ(t) | x (predicted)")
-    ax_x̂y = Axis(fig[2,2], aspect = 1, xlabel = "x(t) (observed)", ylabel = "x̂(t) | y (predicted)")
-    xlims!(ax_ŷx, (0, 1)), ylims!(ax_ŷx, (0, 1))
-    xlims!(ax_x̂y, (0, 1)), ylims!(ax_x̂y, (0, 1))
-    ax_ts = Axis(fig[1, 1:2], xlabel = "Time (t)", ylabel = "Value")
-    scatterlines!(ax_ts, x[1:300], label = "x")
-    scatterlines!(ax_ts, y[1:300], label = "y")
-    axislegend()
-    scatter!(ax_ŷx, tccm_ŷx, t̂ccm_ŷx, label = "CCM (ρ = $sccm_ŷx)", color = :black)
-    scatter!(ax_ŷx, tpai_ŷx, t̂pai_ŷx, label = "PAI (ρ = $spai_ŷx)", color = :red)
-    axislegend(ax_ŷx, position = :lt)
-    scatter!(ax_x̂y, tccm_x̂y, t̂ccm_x̂y, label = "CCM (ρ = $sccm_x̂y)", color = :black)
-    scatter!(ax_x̂y, tpai_x̂y, t̂pai_x̂y, label = "PAI (ρ = $spai_x̂y)", color = :red)
-    axislegend(ax_x̂y, position = :lt)
-    fig
-end
-```
-
-### Figure 3A
-
-Let's reproduce figure 3A too, focusing only on [`ConvergentCrossMapping`](@ref) this time. In this figure, they compute the cross mapping for libraries of increasing size, always starting at time index 1. This approach - which we here call the [`ExpandingSegment`](@ref) estimator - is one of many ways of estimating the correspondence between observed and predicted value.
-
-For this example, they use a bidirectional system with asymmetrical coupling strength.
-
-```@example MAIN_CCM
-using CausalityTools
-using Statistics
-using LabelledArrays
-using StaticArrays
-using DynamicalSystemsBase
-using StateSpaceSets
-using CairoMakie, Printf
 # Used in `reproduce_figure_3A_naive`, and `reproduce_figure_3A_ensemble` below.
 function add_to_fig!(fig_pos, libsizes, ρs_x̂y, ρs_ŷx; title = "", quantiles = false)
     ax = Axis(fig_pos; title, aspect = 1,
@@ -157,8 +163,8 @@ function reproduce_figure_3A_ensemble(measure::CrossmapMeasure)
     # No point in doing more than one rep, because there data are always the same
     # for `ExpandingSegment.`
     ensemble_ev = Ensemble(measure, ExpandingSegment(; libsizes); nreps = 1)
-    ensemble_rs = Ensemble(measure, RandomSegment(; libsizes); nreps = 50)
-    ensemble_rv = Ensemble(measure, RandomVectors(; libsizes); nreps = 50)
+    ensemble_rs = Ensemble(measure, RandomSegment(; libsizes); nreps = 30)
+    ensemble_rv = Ensemble(measure, RandomVectors(; libsizes); nreps = 30)
     ρs_x̂y_es = crossmap(ensemble_ev, x, y)
     ρs_ŷx_es = crossmap(ensemble_ev, y, x)
     ρs_x̂y_rs = crossmap(ensemble_rs, x, y)
@@ -190,7 +196,8 @@ reproduce_figure_3A_ensemble(ConvergentCrossMapping(d = 3, τ = -1, w = 5))
 
 There wasn't really that much of a difference, since for the logistic map, the autocorrelation function flips sign for every lag increase. However, for examples from other systems, tuning `w` may be important.
 
-### Figure 3B
+
+#### Figure 3B
 
 What about figure 3B? Here they generate time series of length 400 for a range of values for both coupling parameters, and plot the dominant direction $\Delta = \rho(\hat{x} | y) - \rho(\hat{y} | x)$.
 
@@ -207,8 +214,8 @@ function reproduce_figure_3B()
         for (j, βyx) in enumerate(βyxs)
             sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.7, βxy, βyx);
             # Generate 1000 points. Randomly select a 400-pt long segment.
-            x, y = columns(trajectory(sys_bidir, 1300, Ttr = 10000));
-            ensemble = Ensemble(CCM(d = 3, w = 5, τ = -1), RandomVectors(libsizes = 400), nreps = 10)
+            x, y = columns(trajectory(sys_bidir, 400, Ttr = 10000));
+            ensemble = Ensemble(CCM(d = 3, w = 5, τ = -1), RandomVectors(libsizes = 100), nreps = 50)
             ρx̂ys[i, j] = mean(crossmap(ensemble, x, y))
             ρŷxs[i, j] = mean(crossmap(ensemble, y, x))
         end
@@ -232,7 +239,83 @@ end
 reproduce_figure_3B()
 ```
 
-## Pairwise asymmetric inference (reproducing McCracken & Weigel, 2014)
+#### Figures 3C and 3D
+
+Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
+introduced the [`ConvergentCrossMapping`](@ref) measure.
+Equations and parameters can be found in their supplementary material.
+Simulatenously, we also compute the [`PairwiseAsymmetricInference`](@ref) measure
+from McCracken & Weigel (2014)[^McCracken2014], which is a related method, but uses a
+slightly different embedding.
+
+[^Sugihara2012]:
+    Sugihara, G., May, R., Ye, H., Hsieh, C. H., Deyle, E., Fogarty, M., & Munch, S.
+    (2012). Detecting causality in complex ecosystems. science, 338(6106), 496-500.
+[^McCracken2014]:
+    McCracken, J. M., & Weigel, R. S. (2014). Convergent cross-mapping and pairwise
+    asymmetric inference. Physical Review E, 90(6), 062903.
+
+```@example MAIN_CCM
+using CausalityTools
+using Statistics
+using LabelledArrays
+using StaticArrays
+using DynamicalSystemsBase
+using StateSpaceSets
+using CairoMakie, Printf
+
+
+# -----------------------------------------------------------------------------------------
+# Create 500-point long time series for Sugihara et al. (2012)'s example for figure 3.
+# -----------------------------------------------------------------------------------------
+sys_unidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.00, βyx = 0.32);
+x, y = columns(trajectory(sys_unidir, 500, Ttr = 10000));
+
+# -----------------------------------------------------------------------------------------
+# Cross map.
+# -----------------------------------------------------------------------------------------
+m_ccm = ConvergentCrossMapping(d = 2)
+m_pai = PairwiseAsymmetricInference(d = 2)
+# Make predictions x̂y, i.e. predictions `x̂` made from embedding of y (AND x, if PAI)
+t̂ccm_x̂y, tccm_x̂y, ρccm_x̂y = predict(m_ccm, x, y)
+t̂pai_x̂y, tpai_x̂y, ρpai_x̂y = predict(m_pai, x, y);
+# Make predictions ŷx, i.e. predictions `ŷ` made from embedding of x (AND y, if PAI)
+t̂ccm_ŷx, tccm_ŷx, ρccm_ŷx = predict(m_ccm, y, x)
+t̂pai_ŷx, tpai_ŷx, ρpai_ŷx = predict(m_pai, y, x);
+
+# -----------------------------------------------------------------------------------------
+# Plot results
+# -----------------------------------------------------------------------------------------
+ρs = (ρccm_x̂y, ρpai_x̂y, ρccm_ŷx, ρpai_ŷx)
+sccm_x̂y, spai_x̂y, sccm_ŷx, spai_ŷx = (map(ρ -> (@sprintf "%.3f" ρ), ρs)...,)
+
+ρs = (ρccm_x̂y, ρpai_x̂y, ρccm_ŷx, ρpai_ŷx)
+sccm_x̂y, spai_x̂y, sccm_ŷx, spai_ŷx = (map(ρ -> (@sprintf "%.3f" ρ), ρs)...,)
+
+with_theme(theme_minimal(),
+    markersize = 5) do
+    fig = Figure();
+    ax_ŷx = Axis(fig[2,1], aspect = 1, xlabel = "y(t) (observed)", ylabel = "ŷ(t) | x (predicted)")
+    ax_x̂y = Axis(fig[2,2], aspect = 1, xlabel = "x(t) (observed)", ylabel = "x̂(t) | y (predicted)")
+    xlims!(ax_ŷx, (0, 1)), ylims!(ax_ŷx, (0, 1))
+    xlims!(ax_x̂y, (0, 1)), ylims!(ax_x̂y, (0, 1))
+    ax_ts = Axis(fig[1, 1:2], xlabel = "Time (t)", ylabel = "Value")
+    scatterlines!(ax_ts, x[1:300], label = "x")
+    scatterlines!(ax_ts, y[1:300], label = "y")
+    axislegend()
+    scatter!(ax_ŷx, tccm_ŷx, t̂ccm_ŷx, label = "CCM (ρ = $sccm_ŷx)", color = :black)
+    scatter!(ax_ŷx, tpai_ŷx, t̂pai_ŷx, label = "PAI (ρ = $spai_ŷx)", color = :red)
+    axislegend(ax_ŷx, position = :lt)
+    scatter!(ax_x̂y, tccm_x̂y, t̂ccm_x̂y, label = "CCM (ρ = $sccm_x̂y)", color = :black)
+    scatter!(ax_x̂y, tpai_x̂y, t̂pai_x̂y, label = "PAI (ρ = $spai_x̂y)", color = :red)
+    axislegend(ax_x̂y, position = :lt)
+    fig
+end
+```
+
+## [`PairwiseAsymmetricInference`](@ref)
+
+### Reproducing McCracken & Weigel (2014)
 
 Let's try to reproduce figure 8 from McCracken & Weigel (2014)'s[^McCracken2014]
 paper on [`PairwiseAsymmetricInference`](@ref) (PAI). We'll start by defining the their example B (equations 6-7). This system consists of two
