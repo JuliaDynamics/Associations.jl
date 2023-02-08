@@ -60,9 +60,9 @@ end
 
 @testset "Estimator specifics" begin
     x, y = rand(50), rand(50)
-    @test ExpandingSegment() isa CrossmapEstimator
-    @test RandomSegment() isa CrossmapEstimator
-    @test RandomVectors() isa CrossmapEstimator
+    @test ExpandingSegment(libsizes = 100) isa CrossmapEstimator
+    @test RandomSegment(libsizes = 100) isa CrossmapEstimator
+    @test RandomVectors(libsizes = 100) isa CrossmapEstimator
     @test Ensemble(CCM(), RandomVectors(libsizes = 100)) isa Ensemble
     @test crossmap(PAI(; τ), RandomVectors(libsizes = 10), x, y) |> length == 1
     @test crossmap(PAI(; τ), RandomVectors(libsizes = 10:10:20), x, y) |> length == 2
