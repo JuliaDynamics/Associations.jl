@@ -51,7 +51,7 @@ of continguous, ordered time indices of length `l` is drawn for each library
 size `l`, and cross mapping is performed using the embedding vectors corresponding
 to those time indices.
 
-```@docs
+```@example
 using CausalityTools
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 200), randn(rng, 200)
@@ -97,6 +97,23 @@ using StaticArrays
 using DynamicalSystemsBase
 using StateSpaceSets
 using CairoMakie, Printf
+
+function eom_logistic_sugi(u, p, t)
+    (; rx, ry, βxy, βyx) = p
+    (; x, y) = u
+
+    dx = x*(rx - rx*x - βxy*y)
+    dy = y*(ry - ry*y - βyx*x)
+    return SVector{2}(dx, dy)
+end
+
+# βxy := effect on x of y
+# βyx := effect on y of x
+function logistic_sugi(; u0 = rand(2), rx, ry, βxy, βyx)
+    p = @LArray [rx, ry, βxy, βyx] (:rx, :ry, :βxy, :βyx)
+    DiscreteDynamicalSystem(eom_logistic_sugi, u0, p)
+end
+
 # Used in `reproduce_figure_3A_naive`, and `reproduce_figure_3A_ensemble` below.
 function add_to_fig!(fig_pos, libsizes, ρs_x̂y, ρs_ŷx; title = "", quantiles = false)
     ax = Axis(fig_pos; title, aspect = 1,
@@ -146,8 +163,8 @@ function reproduce_figure_3A_ensemble(measure::CrossmapMeasure)
     # No point in doing more than one rep, because there data are always the same
     # for `ExpandingSegment.`
     ensemble_ev = Ensemble(measure, ExpandingSegment(; libsizes); nreps = 1)
-    ensemble_rs = Ensemble(measure, RandomSegment(; libsizes); nreps = 50)
-    ensemble_rv = Ensemble(measure, RandomVectors(; libsizes); nreps = 50)
+    ensemble_rs = Ensemble(measure, RandomSegment(; libsizes); nreps = 30)
+    ensemble_rv = Ensemble(measure, RandomVectors(; libsizes); nreps = 30)
     ρs_x̂y_es = crossmap(ensemble_ev, x, y)
     ρs_ŷx_es = crossmap(ensemble_ev, y, x)
     ρs_x̂y_rs = crossmap(ensemble_rs, x, y)
@@ -179,6 +196,49 @@ reproduce_figure_3A_ensemble(ConvergentCrossMapping(d = 3, τ = -1, w = 5))
 
 There wasn't really that much of a difference, since for the logistic map, the autocorrelation function flips sign for every lag increase. However, for examples from other systems, tuning `w` may be important.
 
+
+#### Figure 3B
+
+What about figure 3B? Here they generate time series of length 400 for a range of values for both coupling parameters, and plot the dominant direction $\Delta = \rho(\hat{x} | y) - \rho(\hat{y} | x)$.
+
+In the paper, they use a 1000 different parameterizations for the logistic map parameters, but don't state what is summarized in the plot. For simplicity, we'll therefore just stick to `rx = ry = 3.7`, as in the examples above, and just loop over the coupling strengths in either direction.
+
+```@example MAIN_CCM
+function reproduce_figure_3B()
+    βxys = 0.0:0.02:0.4
+    βyxs = 0.0:0.02:0.4
+    ρx̂ys = zeros(length(βxys), length(βyxs))
+    ρŷxs = zeros(length(βxys), length(βyxs))
+
+    for (i, βxy) in enumerate(βxys)
+        for (j, βyx) in enumerate(βyxs)
+            sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.7, βxy, βyx);
+            # Generate 1000 points. Randomly select a 400-pt long segment.
+            x, y = columns(trajectory(sys_bidir, 400, Ttr = 10000));
+            ensemble = Ensemble(CCM(d = 3, w = 5, τ = -1), RandomVectors(libsizes = 100), nreps = 50)
+            ρx̂ys[i, j] = mean(crossmap(ensemble, x, y))
+            ρŷxs[i, j] = mean(crossmap(ensemble, y, x))
+        end
+    end
+    Δ = ρŷxs .- ρx̂ys
+
+    with_theme(theme_minimal(),
+        markersize = 5) do
+        fig = Figure();
+        ax = Axis(fig[1, 1], xlabel = "βxy", ylabel = "βyx")
+        cont = contourf!(ax, Δ, levels = range(-1, 1, length = 10),
+            colormap = :curl)
+        ax.xticks = 1:length(βxys), string.([i % 2 == 0 ? βxys[i] : "" for i in 1:length(βxys)])
+        ax.yticks = 1:length(βyxs), string.([i % 2 == 0 ? βyxs[i] : "" for i in 1:length(βyxs)])
+        Colorbar(fig[1 ,2], cont, label = "Δ (ρ(ŷ|x) - ρ(x̂|y))")
+        tightlimits!(ax)
+        fig
+    end
+end
+
+reproduce_figure_3B()
+```
+
 #### Figures 3C and 3D
 
 Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
@@ -204,27 +264,12 @@ using DynamicalSystemsBase
 using StateSpaceSets
 using CairoMakie, Printf
 
+
 # -----------------------------------------------------------------------------------------
-# Create 400-point long time series for Sugihara et al. (2012)'s example for figure 3.
+# Create 500-point long time series for Sugihara et al. (2012)'s example for figure 3.
 # -----------------------------------------------------------------------------------------
-function eom_logistic_sugi(u, p, t)
-    (; rx, ry, βxy, βyx) = p
-    (; x, y) = u
-
-    dx = x*(rx - rx*x - βxy*y)
-    dy = y*(ry - ry*y - βyx*x)
-    return SVector{2}(dx, dy)
-end
-
-# βxy := effect on x of y
-# βyx := effect on y of x
-function logistic_sugi(; u0 = rand(2), rx, ry, βxy, βyx)
-    p = @LArray [rx, ry, βxy, βyx] (:rx, :ry, :βxy, :βyx)
-    DiscreteDynamicalSystem(eom_logistic_sugi, u0, p)
-end
-
 sys_unidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.00, βyx = 0.32);
-x, y = columns(trajectory(sys_unidir, 1000, Ttr = 10000));
+x, y = columns(trajectory(sys_unidir, 500, Ttr = 10000));
 
 # -----------------------------------------------------------------------------------------
 # Cross map.
@@ -266,48 +311,6 @@ with_theme(theme_minimal(),
     axislegend(ax_x̂y, position = :lt)
     fig
 end
-```
-
-#### Figure 3B
-
-What about figure 3B? Here they generate time series of length 400 for a range of values for both coupling parameters, and plot the dominant direction $\Delta = \rho(\hat{x} | y) - \rho(\hat{y} | x)$.
-
-In the paper, they use a 1000 different parameterizations for the logistic map parameters, but don't state what is summarized in the plot. For simplicity, we'll therefore just stick to `rx = ry = 3.7`, as in the examples above, and just loop over the coupling strengths in either direction.
-
-```@example MAIN_CCM
-function reproduce_figure_3B()
-    βxys = 0.0:0.02:0.4
-    βyxs = 0.0:0.02:0.4
-    ρx̂ys = zeros(length(βxys), length(βyxs))
-    ρŷxs = zeros(length(βxys), length(βyxs))
-
-    for (i, βxy) in enumerate(βxys)
-        for (j, βyx) in enumerate(βyxs)
-            sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.7, βxy, βyx);
-            # Generate 1000 points. Randomly select a 400-pt long segment.
-            x, y = columns(trajectory(sys_bidir, 1300, Ttr = 10000));
-            ensemble = Ensemble(CCM(d = 3, w = 5, τ = -1), RandomVectors(libsizes = 400), nreps = 10)
-            ρx̂ys[i, j] = mean(crossmap(ensemble, x, y))
-            ρŷxs[i, j] = mean(crossmap(ensemble, y, x))
-        end
-    end
-    Δ = ρŷxs .- ρx̂ys
-
-    with_theme(theme_minimal(),
-        markersize = 5) do
-        fig = Figure();
-        ax = Axis(fig[1, 1], xlabel = "βxy", ylabel = "βyx")
-        cont = contourf!(ax, Δ, levels = range(-1, 1, length = 10),
-            colormap = :curl)
-        ax.xticks = 1:length(βxys), string.([i % 2 == 0 ? βxys[i] : "" for i in 1:length(βxys)])
-        ax.yticks = 1:length(βyxs), string.([i % 2 == 0 ? βyxs[i] : "" for i in 1:length(βyxs)])
-        Colorbar(fig[1 ,2], cont, label = "Δ (ρ(ŷ|x) - ρ(x̂|y))")
-        tightlimits!(ax)
-        fig
-    end
-end
-
-reproduce_figure_3B()
 ```
 
 ## [`PairwiseAsymmetricInference`](@ref)

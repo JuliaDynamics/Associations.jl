@@ -34,34 +34,8 @@ PAGES = [
     "Overview" => "index.md",
     "Independence testing" => "independence.md",
     "Association measures" => "measures.md",
-    "APIs and estimators" => [
-        "api/api_information_overview.md",
-        "api/api_probabilities.md",
-        "api/api_contingency_table.md",
-        "api/api_entropies.md",
-        "api/api_conditional_entropy.md",
-        "api/api_mutualinfo.md",
-        "api/api_condmutualinfo.md",
-        "api/api_transferentropy.md",
-        "api/api_crossmap.md",
-    ],
+    "APIs and estimators" => "api.md",
     "Examples" => "examples.md",
-
-   # "Examples" => [
-    #    "Quickstart" => [
-    #        "Mutual information" => "quickstart/quickstart_mi.md",
-    #        "Joint distance distribution" => "quickstart/quickstart_jdd.md",
-    #        "Independence testing" => "quickstart/quickstart_independence.md",
-    #    ],
-    #    "Longer examples" => [
-    ##        "Entropy" => "examples/examples_entropy.md",
-    #        "Conditional entropy" => "examples/examples_conditional_entropy.md",
-    #        "Mutual information" => "examples/examples_mutualinfo.md",
-    #        "Transfer entropy" => "examples/examples_transferentropy.md",
-    #        "Cross mappings" => "examples/examples_cross_mappings.md",
-    #        "Independence testing" => "examples/examples_independence.md",
-    #    ],
-    #],
     "Experimental" => "experimental.md",
 ]
 

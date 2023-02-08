@@ -17,12 +17,32 @@ condmutualinfo
 ConditionalMutualInformation
 ```
 
-## Estimators
+## [`ConditionalMutualInformationEstimator`](@ref)s
 
 ```@docs
 ConditionalMutualInformationEstimator
+```
+
+### [`FPVP`](@ref)
+
+```@docs
 FPVP
+```
+
+### [`MesnerShalisi`](@ref)
+
+```@docs
 MesnerShalisi
+```
+
+### [`PoczosSchneiderCMI`](@ref)
+
+```@docs
 PoczosSchneiderCMI
+```
+
+### [`Rahimzamani`](@ref)
+
+```@docs
 Rahimzamani
 ```

@@ -11,6 +11,10 @@ The entropies API is re-exported from [ComplexityMeasures.jl](https://github.com
 association measures can be written as a function of differential entropy terms, and can
 thus be estimated using [`DifferentialEntropyEstimator`](@ref)s.
 
+```@docs
+entropy
+```
+
 ## Definitions
 
 ```@docs
@@ -23,51 +27,83 @@ Curado
 StretchedExponential
 ```
 
-### Discrete entropy
+## [`DifferentialEntropyEstimator`](@ref)s
 
-```@docs
-entropy(::EntropyDefinition, ::ProbabilitiesEstimator, ::Any)
-entropy_maximum
-entropy_normalized
-```
-
-### Differential/continuous entropy
+CausalityTools.jl reexports [`DifferentialEntropyEstimator`](@ref)s from
+[ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl).
+Why? Any information-based measure that can be written as a function of differential entropies
+can be estimated using a [`DifferentialEntropyEstimator`](@ref)s. 
 
 ```@docs
 DifferentialEntropyEstimator
-entropy(::DifferentialEntropyEstimator, ::Any)
 ```
 
-```@docs
-Kraskov
-KozachenkoLeonenko
-Zhu
-ZhuSingh
-Gao
-Goria
-Lord
-Vasicek
-AlizadehArghami
-Ebrahimi
-Correa
-```
+### Overview
 
-#### Compatibility table
+Only estimators compatible with multivariate data are applicable to the multi-argument measures
+provided by CausalityTools. Hence, some entropy estimators are missing from the overview
+here (see [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl) for
+details).
 
 Each [`DifferentialEntropyEstimator`](@ref)s uses a specialized technique to approximate relevant
 densities/integrals, and is often tailored to one or a few types of generalized entropy.
 For example, [`Kraskov`](@ref) estimates the [`Shannon`](@ref) entropy.
 
-| Estimator                    | Principle         | Input data | [`Shannon`](@ref) | [`Renyi`](@ref) | [`Tsallis`](@ref) | [`Kaniadakis`](@ref) | [`Curado`](@ref) | [`StretchedExponential`](@ref) |
-| :--------------------------- | :---------------- | :--------- | :---------------: | :-------------: | :---------------: | :------------------: | :--------------: | :----------------------------: |
-| [`KozachenkoLeonenko`](@ref) | Nearest neighbors | `Dataset`  |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`Kraskov`](@ref)            | Nearest neighbors | `Dataset`  |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`Zhu`](@ref)                | Nearest neighbors | `Dataset`  |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`ZhuSingh`](@ref)           | Nearest neighbors | `Dataset`  |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`Gao`](@ref)                | Nearest neighbors | `Dataset`  |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`Goria`](@ref)              | Nearest neighbors | `Dataset`  |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`Lord`](@ref)               | Nearest neighbors | `Dataset`  |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`Vasicek`](@ref)            | Order statistics  | `Vector`   |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`Ebrahimi`](@ref)           | Order statistics  | `Vector`   |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`Correa`](@ref)             | Order statistics  | `Vector`   |        ✓         |        x        |         x         |          x           |        x         |               x                |
-| [`AlizadehArghami`](@ref)    | Order statistics  | `Vector`   |        ✓         |        x        |         x         |          x           |        x         |               x                |
+| Estimator                    | Principle         | [`Shannon`](@ref) |
+| :--------------------------- | :---------------- | :---------------: |
+| [`KozachenkoLeonenko`](@ref) | Nearest neighbors |        ✓         |
+| [`Kraskov`](@ref)            | Nearest neighbors |        ✓         |
+| [`Zhu`](@ref)                | Nearest neighbors |        ✓         |
+| [`ZhuSingh`](@ref)           | Nearest neighbors |        ✓         |
+| [`Gao`](@ref)                | Nearest neighbors |        ✓         |
+| [`Goria`](@ref)              | Nearest neighbors |        ✓         |
+| [`Lord`](@ref)               | Nearest neighbors |        ✓         |
+
+### [`Kraskov`](@ref)
+
+```@docs
+Kraskov
+```
+
+### [`KozachenkoLeonenko`](@ref)
+
+```@docs
+KozachenkoLeonenko
+```
+
+### [`Zhu`](@ref)
+
+```@docs
+Zhu
+```
+
+### [`ZhuSingh`](@ref)
+
+```@docs
+ZhuSingh
+```
+
+### [`Gao`](@ref)
+
+```@docs
+Gao
+```
+
+### [`Goria`](@ref)
+
+```@docs
+Goria
+```
+
+### [`Lord`](@ref)
+
+```@docs
+Lord
+```
+
+## Utilities
+
+```@docs
+entropy_maximum
+entropy_normalized
+```

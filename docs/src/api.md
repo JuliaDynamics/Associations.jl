@@ -1,0 +1,26 @@
+# API
+
+## Information API
+
+```@contents
+Pages = [
+    "api/api_information_overview.md",
+    "api/api_probabilities.md",
+    "api/api_contingency_table.md",
+    "api/api_entropies.md",
+    "api/api_conditional_entropy.md",
+    "api/api_mutualinfo.md",
+    "api/api_condmutualinfo.md",
+    "api/api_transferentropy.md",
+]
+Depth = 3
+```
+
+## Cross-map API
+
+```@contents
+Pages = [
+    "api/api_crossmap.md",
+]
+Depth = 3
+```

@@ -6,8 +6,6 @@ association measures [here](@ref information_measures).
 
 ## [Design](@id information_measures_design)
 
-### Modularity
-
 We have taken great care to make sure that information estimators are reusable and modular.
 Functions have the following general form.
 
@@ -29,8 +27,6 @@ please submit a PR or issue!). We hope that this will both ease reproduction of
 existing literature results, and spawn new research. Please let us know if you use the
 package for something useful, or publish something based on it!
 
-## Estimators
-
 Information measures are either estimated using one of the following basic estimator types,
 
 - [`ProbabilitiesEstimator`](@ref)s,
@@ -42,7 +38,7 @@ or using measure-specific estimators:
 - [`ConditionalMutualInformationEstimator`](@ref)s are used with [`condmutualinfo`](@ref)
 - [`TransferEntropyEstimator`](@ref)s are used with [`transferentropy`](@ref)
 
-### Naming convention: The same name for different things
+## Naming convention: The same name for different things
 
 Upon doing a literature review on the possible variants of information theoretic measures,
 it become painstakingly obvious that authors use *the same name for different concepts*.

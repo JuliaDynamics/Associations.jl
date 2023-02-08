@@ -17,19 +17,33 @@ transferentropy
 TransferEntropy
 ```
 
-## Estimators
+## [`TransferEntropyEstimator`](@ref)s
 
 ```@docs
 TransferEntropyEstimator
+```
+
+### [`Zhu1`](@ref)
+
+```@docs
 Zhu1
+```
+
+### [`Lindner`](@ref)
+
+```@docs
 Lindner
 ```
 
 ## Convenience
 
+### [`SymbolicTransferEntropy`](@ref)
+
 ```@docs
 SymbolicTransferEntropy
 ```
+
+### [`Hilbert`](@ref)
 
 ```@docs
 Hilbert

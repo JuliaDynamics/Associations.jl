@@ -8,8 +8,6 @@ We indicate the different types of cross mappings by
 passing an [`CrossmapMeasure`](@ref) instance as the first argument to [`crossmap`](@ref)
 or [`predict`](@ref).
 
-## API
-
 The cross mapping API consists of the following functions.
 
 - [`predict`](@ref)
@@ -25,13 +23,13 @@ crossmap
 predict
 ```
 
-### Measures
+## Measures
 
 ```@docs
 CrossmapMeasure
 ```
 
-### Estimators
+## Estimators
 
 ```@docs
 CrossmapEstimator

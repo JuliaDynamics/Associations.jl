@@ -17,12 +17,32 @@ mutualinfo
 MutualInformation
 ```
 
-## Estimators
+## [`MutualInformationEstimator`](@ref)s
 
 ```@docs
 MutualInformationEstimator
+```
+
+### [`KraskovStögbauerGrassberger1`](@ref)
+
+```@docs
 KraskovStögbauerGrassberger1
+```
+
+### [`KraskovStögbauerGrassberger2`](@ref)
+
+```@docs
 KraskovStögbauerGrassberger2
+```
+
+### [`GaoKannanOhViswanath`](@ref)
+
+```@docs
 GaoKannanOhViswanath
+```
+
+### [`GaoOhViswanath`](@ref)
+
+```@docs
 GaoOhViswanath
 ```
