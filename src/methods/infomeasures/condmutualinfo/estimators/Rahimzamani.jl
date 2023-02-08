@@ -24,9 +24,6 @@ end
 
 function estimate(measure::CMIShannon, est::Rahimzamani, x, y, z)
     e = measure.e
-    e.q ≈ 1 || throw(ArgumentError(
-        "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
-    ))
     (; k, w, metric) = est
     X = Dataset(x)
     Y = Dataset(y)
