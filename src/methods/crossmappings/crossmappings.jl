@@ -13,13 +13,14 @@ export CrossmapEstimator
 export Ensemble
 
 """
-The supertype for all cross-map measures
+    CrossmapMeasure <: AssociationMeasure
 
-Currently implemented measures are:
+The supertype for all cross-map measures. Concrete subtypes are
+
 - [`ConvergentCrossMapping`](@ref), or [`CCM`](@ref) for short.
 - [`PairwiseAsymmetricInference`](@ref), or [`PAI`](@ref) for short.
 """
-abstract type CrossmapMeasure end
+abstract type CrossmapMeasure <: AssociationMeasure end
 
 """
     CrossmapEstimator{LIBSIZES, RNG}

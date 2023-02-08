@@ -3,7 +3,17 @@ export MutualInformationEstimator
 export MutualInformationDefinition
 export mutualinfo
 
-""" The supertype of all mutual information measures """
+""" 
+    MutualInformation <: AssociationMeasure
+
+The supertype of all mutual information measures. Concrete subtypes are 
+
+- [`MIShannon`](@ref)
+- [`MITsallisFuruichi`](@ref)
+- [`MITsallisMartin`](@ref)
+- [`MIRenyiJizba`](@ref)
+- [`MIRenyiSarbu`](@ref)
+"""
 abstract type MutualInformation{E} <: InformationMeasure end
 
 """

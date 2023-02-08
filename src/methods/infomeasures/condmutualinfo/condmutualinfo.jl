@@ -4,10 +4,14 @@ export ConditionalMutualInformation
 export condmutualinfo
 
 """
-    ConditionalMutualInformation <: InformationMeasure
+    ConditionalMutualInformation <: AssociationMeasure
     CMI # alias
 
-The supertype of all conditional mutual informations.
+The supertype of all conditional mutual information measures. Concrete subtypes are 
+
+- [`CMIShannon`](@ref)
+- [`CMIRenyiJizba`](@ref)
+- [`CMIRenyiPoczos`](@ref)
 """
 abstract type ConditionalMutualInformation{E} <: InformationMeasure end
 const CMI{E} = ConditionalMutualInformation{E}
