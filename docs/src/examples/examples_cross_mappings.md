@@ -2,6 +2,82 @@
 
 ## [`ConvergentCrossMapping`](@ref)
 
+### [`ConvergentCrossMapping`](@ref) directly
+
+```@example
+using CausalityTools
+x, y = rand(200), rand(100)
+crossmap(CCM(), x, y)
+```
+
+### [`ConvergentCrossMapping`](@ref) with [`RandomVectors`](@ref)
+
+When cross-mapping with the [`RandomVectors`](@ref) estimator, a single random subsample
+of time indices (i.e. not in any particular order) of length `l` is drawn for each library
+size `l`, and cross mapping is performed using the embedding vectors corresponding
+to those time indices.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+
+# We'll draw a single sample at each `l ∈ libsizes`. Sampling with replacement is then
+# necessary, because our 200-pt timeseries will result in embeddings with
+# less than 200 points.
+est = RandomVectors(; libsizes = 50:10:200, replace = true, rng)
+crossmap(CCM(), est, x, y)
+```
+
+To generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
+crossmap repeatedly, e.g.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+est = RandomVectors(; libsizes = 50:10:200, replace = true, rng)
+ρs = [crossmap(CCM(), est, x, y) for i = 1:80]
+M = hcat(ρs...)
+```
+
+Now, the `k`-th row of `M` contains `80` estimates of the correspondence measure `ρ`
+at library size `libsizes[k]`.
+
+### [`ConvergentCrossMapping`](@ref) with [`RandomSegments`](@ref)
+
+When cross-mapping with the [`RandomSegments`](@ref) estimator, a single random subsample
+of continguous, ordered time indices of length `l` is drawn for each library
+size `l`, and cross mapping is performed using the embedding vectors corresponding
+to those time indices.
+
+```@docs
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+
+# We'll draw a single sample at each `l ∈ libsizes`. We limit the library size to 100, 
+# because drawing segments of the data longer than half the available data doesn't make
+# much sense.
+est = RandomSegment(; libsizes = 50:10:100, rng)
+crossmap(CCM(), est, x, y)
+```
+
+As above, to generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
+crossmap repeatedly, e.g.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+est = RandomSegment(; libsizes = 50:10:100, rng)
+ρs = [crossmap(CCM(), est, x, y) for i = 1:80]
+M = hcat(ρs...)
+```
+
+Now, the `k`-th row of `M` contains `80` estimates of the correspondence measure `ρ`
+at library size `libsizes[k]`.
+
 ### Reproducing Sugihara et al. (2012)
 
 !!! note "Run blocks consecutively"
