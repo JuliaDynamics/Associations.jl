@@ -43,6 +43,9 @@ z = Dataset(rand(1000, 1))
 @test condmutualinfo(PoczosSchneiderCMI(), x, y, z) isa Real
 @test condmutualinfo(Rahimzamani(), x, y, z) isa Real
 
+@test_throws ArgumentError condmutualinfo(CMIShannon(), FPVP(), x, y)
+@test_throws ArgumentError condmutualinfo(CMIShannon(), FPVP(), x)
+
 @testset "CMIShannon" begin
     @test m = CMIShannon(base = 2) isa CMIShannon
 

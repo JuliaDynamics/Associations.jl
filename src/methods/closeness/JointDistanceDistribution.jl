@@ -41,8 +41,8 @@ The joint distance distribution (JDD) measure (Amigó & Hirata, 2018)[^Amigo2018
 
 ## Examples
 
-* [Computing the JJD](@ref quickstart_jdd)
-* [Independence testing using JJD](@ref quickstart_jddtest)
+* [Computing the JDD](@ref quickstart_jdd)
+* [Independence testing using JDD](@ref quickstart_jddtest)
 
 [^Amigo2018]:
     Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate

@@ -23,6 +23,12 @@ MutualInformation
 MutualInformationEstimator
 ```
 
+## [`GaussianMI`](@ref) (parametric)
+
+```@docs
+GaussianMI
+```
+
 ### [`KraskovStögbauerGrassberger1`](@ref)
 
 ```@docs

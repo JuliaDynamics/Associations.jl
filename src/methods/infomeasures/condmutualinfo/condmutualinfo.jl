@@ -7,7 +7,7 @@ export condmutualinfo
     ConditionalMutualInformation <: AssociationMeasure
     CMI # alias
 
-The supertype of all conditional mutual information measures. Concrete subtypes are 
+The supertype of all conditional mutual information measures. Concrete subtypes are
 
 - [`CMIShannon`](@ref)
 - [`CMIRenyiJizba`](@ref)
@@ -32,6 +32,23 @@ The supertype of all conditional mutual information estimators.
 abstract type ConditionalMutualInformationEstimator end
 const CMIEstimator = ConditionalMutualInformationEstimator
 
+condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
+
+const CMI_ESTIMATORS = Union{
+    ProbabilitiesEstimator,
+    DifferentialEntropyEstimator,
+    MutualInformationEstimator,
+    ConditionalMutualInformationEstimator
+}
+function estimate(measure::CMI, est::CMI_ESTIMATORS, x)
+    txt = "`condmutualinfo` takes three input vectors/datasets. Only one was given."
+    throw(ArgumentError(txt))
+end
+function estimate(measure::CMI, est::CMI_ESTIMATORS, x, y)
+    txt = "`condmutualinfo` takes three input vectors/datasets. Only two were given."
+    throw(ArgumentError(txt))
+end
+
 """
     condmutualinfo([measure::CMI], est::CMIEstimator, x, y, z) → cmi::Real
 
@@ -49,11 +66,14 @@ mixed.
 | [`Rahimzamani`](@ref)        | Nearest neighbors |          ✓          |            x             |
 | [`PoczosSchneiderCMI`](@ref) | Nearest neighbors |          x           |            ✓            |
 """
-condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
+function condmutualinfo(measure::CMI, est::ConditionalMutualInformationEstimator, x, y, z)
+    return estimate(measure, est, x, y, z)
+end
 
-function condmutualinfo(est::ConditionalMutualInformationEstimator, x, y, z)
+function estimate(est::ConditionalMutualInformationEstimator, x, y, z)
     return estimate(CMIShannon(), est, x, y, z)
 end
+
 
 include("CMIShannon.jl")
 include("CMIRenyiSarbu.jl")
@@ -82,17 +102,21 @@ non-negative.
 | [`SymbolicPermuation`](@ref) | Ordinal patterns    |          ✓          |           ✓            |
 | [`Dispersion`](@ref)         | Dispersion patterns |          ✓          |           ✓            |
 """
-function condmutualinfo(est::ProbabilitiesEstimator, x, y, z)
+function condmutualinfo(measure::CMI, est::ProbabilitiesEstimator, x, y, z)
+    return estimate(measure, est, x, y, z)
+end
+
+function estimate(est::ProbabilitiesEstimator, x, y, z)
     return estimate(CMIShannon(), est, x, y, z)
 end
 
 """
-    condmutualinfo([measure::CMI], est::DifferentialEntropyEstimator, x, y, z) → cmi
+    condmutualinfo([measure::CMI], est::DifferentialEntropyEstimator, x, y, z) → cmi::Real
 
-Estimate the mutual information between `x` and `y` conditioned on `z`, using 
+Estimate the mutual information between `x` and `y` conditioned on `z`, using
 the differential version of the given conditional mutual information (CMI) `measure`.
 The [`DifferentialEntropyEstimator`](@ref) `est` must must support multivariate data.
-No bias correction is performed. If `measure` is not given, then the default is 
+No bias correction is performed. If `measure` is not given, then the default is
 `CMIShannon()`.
 
 ## Estimators
@@ -106,19 +130,28 @@ No bias correction is performed. If `measure` is not given, then the default is
 | [`Lord`](@ref)                   | Nearest neighbors |          ✓          |
 | [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |          ✓          |
 """
-function condmutualinfo(est::DifferentialEntropyEstimator, x, y, z)
+function condmutualinfo(measure::CMI, est::DifferentialEntropyEstimator, x, y, z)
+    return estimate(measure, est, x, y, z)
+end
+
+function estimate(est::DifferentialEntropyEstimator, x, y, z)
     return estimate(CMIShannon(), est, x, y, z)
 end
 
 """
     condmutualinfo([measure::CMI], est::MutualInformationEstimator, x, y, z) → cmi::Real
 
-Estimate the mutual information between `x` and `y` conditioned on `z`, using the 
-given conditional mutual information (CMI) `measure`, computed as a 
-a difference of mutual information terms using the provided 
-[`MutualInformationEstimator`](@ref) `est`, which may be continuous/differential,
+Estimate the mutual information between `x` and `y` conditioned on `z`, using the
+given conditional mutual information (CMI) `measure`, computed as a
+a difference of mutual information terms (just the chain rule of mutual information)
+
+```math
+\\hat{I}(X; Y | Z) = \\hat{I}(X; Y, Z) - \\hat{I}(X; Z).
+```
+
+The [`MutualInformationEstimator`](@ref) `est` may be continuous/differential,
 discrete or mixed. No bias correction in performed, except the bias correction
-done for the individual mutual information terms.
+that occurs for each individual mutual information term.
 If `measure` is not given, then the default is `CMIShannon()`.
 
 ## Estimators
@@ -130,9 +163,25 @@ If `measure` is not given, then the default is `CMIShannon()`.
 | [`GaoKannanOhViswanath`](@ref)         |   Mixed    | Nearest neighbors |          ✓          |
 | [`GaoOhViswanath`](@ref)               | Continuous | Nearest neighbors |          ✓          |
 """
-function condmutualinfo(est::MutualInformationEstimator, x, y, z)
+function condmutualinfo(measure::CMI, est::MutualInformationEstimator, x, y, z)
+    return estimate(measure, est, x, y, z)
+end
+
+mi_measure(m::CMIShannon) = MIShannon(m.e)
+# Internal methods for `independence`
+function estimate(measure::CMI, est::MutualInformationEstimator, x, y, z)
+    X = Dataset(x)
+    Y = Dataset(y)
+    Z = Dataset(z)
+    YZ = Dataset(Y, Z)
+    m = mi_measure(measure)
+    return mutualinfo(m, est, X, YZ) - mutualinfo(m, est, X, Z)
+end
+
+function estimate(est::MutualInformationEstimator, x, y, z)
     return estimate(CMIShannon(), est, x, y, z)
 end
+
 
 # Generic H4-formulation of CMI
 function marginal_entropies_cmi4h(measure::ConditionalMutualInformation, est, x, y, z)
@@ -174,14 +223,4 @@ function marginal_entropies_cmi4h(measure::Union{CMIShannon, CMIRenyiSarbu},
     HXYZ = entropy(e, CountOccurrences(), eXYZ)
     HZ = entropy(e, CountOccurrences(), eZ)
     return HXZ, HYZ, HXYZ, HZ
-end
-
-mi_measure(m::CMIShannon) = MIShannon(m.e)
-function estimate(measure::CMI, est::MutualInformationEstimator, x, y, z)
-    X = Dataset(x)
-    Y = Dataset(y)
-    Z = Dataset(z)
-    YZ = Dataset(Y, Z)
-    m = mi_measure(measure)
-    return mutualinfo(m, est, X, YZ) - mutualinfo(m, est, X, Y)
 end

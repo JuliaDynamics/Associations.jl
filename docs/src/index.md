@@ -14,6 +14,7 @@ test, using any of the following measures:
 
 | Type                 | Measure                               | Pairwise | Conditional |
 | -------------------- | ------------------------------------- | :------: | :---------: |
+| Parametric           | [`GaussianMI`](@ref)                  |    ✓    |     ✖      |
 | Correlation          | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      |
 | Correlation          | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      |
 | Closeness            | [`SMeasure`](@ref)                    |    ✓    |     ✖      |
@@ -24,6 +25,7 @@ test, using any of the following measures:
 | Shared information   | [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      |
 | Shared information   | [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      |
 | Shared information   | [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      |
+| Parametric           | [`GaussianCMI`](@ref)                 |    ✖    |     ✓      |
 | Shared information   | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |
 | Shared information   | [`CMIShannon`](@ref)                  |    ✖    |     ✓      |
 | Shared information   | [`CMIRenyiSarbu`](@ref)               |    ✖    |     ✓      |
