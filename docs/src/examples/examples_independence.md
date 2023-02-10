@@ -83,9 +83,28 @@ test_result = independence(test, x, z, y)
 As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are conditionally independent given ``Y``, because ``Y`` is the variable that transmits information from
 ``X`` to ``Z``.
 
-## [`SurrogateTest`](@ref)
+## [[`SurrogateTest`](@ref)](@id examples_surrogatetest)
 
-### Mutual information (categorical)
+## [Distance correlation](@id examples_surrogatetest_distancecorrelation)
+
+```@example
+using CausalityTools
+x = randn(1000)
+y = randn(1000) .+ 0.5x
+independence(SurrogateTest(DistanceCorrelation()), x, y)
+```
+
+### [Partial correlation](@id examples_surrogatetest_partialcorrelation)
+
+```@example
+using CausalityTools
+x = randn(1000)
+y = randn(1000) .+ 0.5x
+z = randn(1000) .+ 0.8y
+independence(SurrogateTest(PartialCorrelation()), x, z, y)
+```
+
+### [Mutual information ([`MIShannon`](@ref), categorical)](@id examples_surrogatetest_mishannon_categorical)
 
 In this example, we expect the `preference` and the `food` variables to be independent.
 
@@ -102,7 +121,7 @@ independence(test, preference, food)
 As expected, there's not enough evidence to reject the null hypothesis that the
 variables are independent.
 
-### Conditional mutual information (categorical)
+### [Conditional mutual information ([`CMIShannon`](@ref), categorical)](@id examples_surrogatetest_cmishannon_categorical)
 
 Here, we simulate a survey at a ski resort. The data are such that the place a person
 grew up is associated with how many times they fell while going skiing. The control
@@ -153,13 +172,12 @@ test_cmi = independence(SurrogateTest(CMIShannon(), Contingency()), places, expe
 Again, as expected, when conditioning on the mediating variable, the dependence disappears,
 and we can't reject the null hypothesis of independence.
 
-### [Transfer entropy](@id examples_surrogatetest_teshannon)
+### Transfer entropy ([`TEShannon`](@ref))
 
-To demonstrate the [`SurrogateTest`](@ref) test, we use the transfer entropy measure
-[`TEShannon`](@ref), which works on two input timeseries, or three input timeseries when
-computing the partial/conditional transfer entropy.
+#### [Pairwise](@id examples_surrogatetest_teshannon)
 
-#### Unidirectionally coupled logistic maps
+We'll see if we can reject independence for two unidirectionally coupled timeseries
+where `x` drives `y`.
 
 ```@example surrogatecit_te
 using CausalityTools
@@ -170,10 +188,10 @@ test = SurrogateTest(TEShannon(), KSG1(k = 4))
 independence(test, x, y)
 ```
 
-As expected, we can reject the null hypothesis that the future of `y` is independent of 
-`x`, because `x` does actually influence `y`. This doesn't change if we compute 
-partial transfer entropy with respect to some random extra time series, because it
-doesn't influence either variables.
+As expected, we can reject the null hypothesis that the future of `y` is independent of
+`x`, because `x` does actually influence `y`. This doesn't change if we compute
+partial (conditional) transfer entropy with respect to some random extra time series,
+because it doesn't influence any of the other two variables.
 
 ```@example surrogatecit_te
 independence(test, x, y, rand(length(x)))

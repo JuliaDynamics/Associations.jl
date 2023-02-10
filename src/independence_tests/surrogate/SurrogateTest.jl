@@ -26,7 +26,6 @@ to break any dependence between the input variables.
 There are different ways of shuffling, dictated by `surrogate`, each representing a
 distinct null hypothesis. For each shuffle, the provided `measure` is computed (using `est`,
 if relevant). This procedure is repeated `nshuffles` times, and a test summary is returned.
-
 For bivariate measures, the default is to shuffle both input variables. For conditional
 measures accepting three input variables, the default is to shuffle the first input.
 Exceptions are:
@@ -35,9 +34,32 @@ Exceptions are:
     then the source variable is always shuffled, and the target and conditional
     variable are left unshuffled.
 
+## Compatible measures
+
+| Measure                               | Pairwise | Conditional | Requires `est` |
+| ------------------------------------- | :------: | :---------: | :------------: |
+| [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      |       No       |
+| [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      |       No       |
+| [`SMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
+| [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |      Yes       |
+| [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |      Yes       |
+| [`MIShannon`](@ref)                   |    ✓    |     ✖      |      Yes       |
+| [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      |      Yes       |
+| [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      |      Yes       |
+| [`MITsallisMartin`](@ref)             |    ✓    |     ✖      |      Yes       |
+| [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      |      Yes       |
+| [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |      Yes       |
+| [`CMIShannon`](@ref)                  |    ✖    |     ✓      |      Yes       |
+| [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |      Yes       |
+| [`TransferEntropy`](@ref)             |    ✓    |     ✓      |      Yes       |
+
 ## Examples
 
-- [Quickstart examples](@ref quickstart_surrogatetest).
+- [Pairwise test, `DistanceCorrelation`](@ref examples_surrogatetest_distancecorrelation).
+- [Pairwise test, `TEShannon`](@ref examples_surrogatetest_teshannon).
+- [Conditional test, `PartialCorrelation`](@ref examples_surrogatetest_partialcorrelation).
+- [Pairwise test, `MIShannon`, categorical](@ref examples_surrogatetest_mishannon_categorical).
+- [Conditional test, `CMIShannon`, categorical](@ref examples_surrogatetest_cmishannon_categorical).
 """
 struct SurrogateTest{M, E, R, S} <: IndependenceTest
     measure::M
@@ -155,3 +177,5 @@ include("contingency.jl")
 include("transferentropy.jl")
 include("smeasure.jl")
 include("crossmapping.jl")
+include("mutualinfo.jl")
+include("condmutualinfo.jl")
