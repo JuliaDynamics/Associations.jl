@@ -1,6 +1,28 @@
-# Correlation measures
+# [Association measures](@id association_measure)
 
-## Pearson correlation
+## Overview
+
+| Type                 | Measure                               | Pairwise | Conditional | Function version               |
+| -------------------- | ------------------------------------- | :------: | :---------: | ------------------------------ |
+| Correlation          | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      | [`pearson_correlation`](@ref)  |
+| Correlation          | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      | [`distance_correlation`](@ref) |
+| Closeness            | [`SMeasure`](@ref)                    |    ✓    |     ✖      | [`s_measure`](@ref)            |
+| Closeness            | [`JointDistanceDistribution`](@ref)   |    ✓    |     ✖      | [`jdd`](@ref)                  |
+| Cross-mapping        | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      | [`crossmap`](@ref)             |
+| Cross-mapping        | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      | [`crossmap`](@ref)             |
+| Shared information   | [`MIShannon`](@ref)                   |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information   | [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information   | [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information   | [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information   | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      | [`partial_correlation`](@ref)  |
+| Shared information   | [`CMIShannon`](@ref)                  |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Shared information   | [`CMIRenyiSarbu`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Shared information   | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Information transfer | [`TransferEntropy`](@ref)             |    ✓    |     ✓      | [`transferentropy`](@ref)      |
+
+## Correlation measures
+
+### Pearson correlation
 
 ```@docs
 PearsonCorrelation
