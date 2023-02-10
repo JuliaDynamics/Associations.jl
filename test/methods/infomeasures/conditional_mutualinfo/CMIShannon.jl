@@ -23,6 +23,7 @@ diff_entropy_estimators = [
 ]
 
 diff_mi_estimators = [
+    GaussianMI(),
     KSG1(; k),
     KSG2(; k),
     GaoKannanOhViswanath(; k),
@@ -38,10 +39,12 @@ z = Dataset(rand(1000, 1))
 @test MesnerShalisi() isa MesnerShalisi
 @test PoczosSchneiderCMI() isa PoczosSchneiderCMI
 @test Rahimzamani() isa Rahimzamani
+@test GaussianCMI() isa GaussianCMI
 @test condmutualinfo(FPVP(), x, y, z) isa Real
 @test condmutualinfo(MesnerShalisi(), x, y, z) isa Real
 @test condmutualinfo(PoczosSchneiderCMI(), x, y, z) isa Real
 @test condmutualinfo(Rahimzamani(), x, y, z) isa Real
+@test condmutualinfo(GaussianCMI(), x, y, z) isa Real
 
 @test_throws ArgumentError condmutualinfo(CMIShannon(), FPVP(), x, y)
 @test_throws ArgumentError condmutualinfo(CMIShannon(), FPVP(), x)
