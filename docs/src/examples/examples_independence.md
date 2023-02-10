@@ -51,7 +51,7 @@ enough evidence in the data to suggest directional coupling.
 
 ### Conditional mutual information (Shannon, differential)
 
-#### Chain of random variables $X \\to Y \\to Z$
+#### Chain of random variables $X \to Y \to Z$
 
 Here, we'll create a three-variable scenario where `X` and `Z` are connected through `Y`,
 so that ``I(X; Z | Y) = 0`` and ``I(X; Y | Z) > 0``. We'll test for conditional
