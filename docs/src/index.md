@@ -1,4 +1,4 @@
-![CausalityTools.jl static logo](assets/large_logo.png)
+![CausalityTools.jl static logo](assets/logo-large.png)
 
 !!! info
     You are reading the development version of the documentation of
@@ -9,31 +9,9 @@
 `CausalityTools` is a Julia package that provides algorithms for detecting
 associations, dynamical influences and *causal inference* from data.
 The core function for quantifying associations is [`independence`](@ref),
-which performs either a parametric or nonparametric (conditional) independence
-test, using any of the following measures:
-
-| Type                 | Measure                               | Pairwise | Conditional |
-| -------------------- | ------------------------------------- | :------: | :---------: |
-| Parametric           | [`GaussianMI`](@ref)                  |    ✓    |     ✖      |
-| Correlation          | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      |
-| Correlation          | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      |
-| Closeness            | [`SMeasure`](@ref)                    |    ✓    |     ✖      |
-| Closeness            | [`JointDistanceDistribution`](@ref)   |    ✓    |     ✖      |
-| Cross-mapping        | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |
-| Cross-mapping        | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |
-| Shared information   | [`MIShannon`](@ref)                   |    ✓    |     ✖      |
-| Shared information   | [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      |
-| Shared information   | [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      |
-| Shared information   | [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      |
-| Parametric           | [`GaussianCMI`](@ref)                 |    ✖    |     ✓      |
-| Shared information   | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |
-| Shared information   | [`CMIShannon`](@ref)                  |    ✖    |     ✓      |
-| Shared information   | [`CMIRenyiSarbu`](@ref)               |    ✖    |     ✓      |
-| Shared information   | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |
-| Information transfer | [`TransferEntropy`](@ref)             |    ✓    |     ✓      |
-
-All of these measure are also available in a simple function form that allows you to
-compute the raw measures outside an independence testing context.
+which performs either a parametric or nonparametric (conditional)
+[`IndependenceTest`](@ref) using some form of
+[association measure](@ref association_measure).
 
 ## Goals
 
