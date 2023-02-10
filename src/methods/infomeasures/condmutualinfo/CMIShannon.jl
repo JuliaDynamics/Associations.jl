@@ -10,7 +10,7 @@ The Shannon conditional mutual information (CMI) ``I^S(X; Y | Z)``.
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information. 
+- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information.
 
 ## Supported definitions
 
@@ -49,16 +49,6 @@ function estimate(measure::CMIShannon, est::ProbOrDiffEst, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h(measure, est, x, y, z)
     return HXZ + HYZ - HXYZ - HZ
 end
-
-function estimate(measure::CMIShannon, est::MutualInformationEstimator, x, y, z)
-    X = Dataset(x)
-    Y = Dataset(y)
-    Z = Dataset(z)
-    YZ = Dataset(Y, Z)
-    m = MIShannon(; base = measure.e.base)
-    return mutualinfo(m, est, X, YZ) - mutualinfo(m, est, X, Y)
-end
-
 
 function estimate(measure::CMIShannon, est::Contingency{<:ProbabilitiesEstimator}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
