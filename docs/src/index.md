@@ -1,4 +1,4 @@
-![CausalityTools.jl static logo](assets/large_logo.png)
+![CausalityTools.jl static logo](assets/logo-large.png)
 
 !!! info
     You are reading the development version of the documentation of
