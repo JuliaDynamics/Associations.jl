@@ -23,6 +23,12 @@ ConditionalMutualInformation
 ConditionalMutualInformationEstimator
 ```
 
+## [`GaussianCMI`](@ref) (parametric)
+
+```@docs
+GaussianCMI
+```
+
 ### [`FPVP`](@ref)
 
 ```@docs
