@@ -3,10 +3,10 @@ export MutualInformationEstimator
 export MutualInformationDefinition
 export mutualinfo
 
-""" 
+"""
     MutualInformation <: AssociationMeasure
 
-The supertype of all mutual information measures. Concrete subtypes are 
+The supertype of all mutual information measures. Concrete subtypes are
 
 - [`MIShannon`](@ref)
 - [`MITsallisFuruichi`](@ref)
@@ -78,7 +78,7 @@ mutualinfo(c::ContingencyMatrix) = estimate(MIShannon(), c)
 """
     mutualinfo([measure::MutualInformation], est::ProbabilitiesEstimator, x, y) → mi::Real ∈ [0, a]
 
-Estimate the mutual information between `x` and `y` using the discrete version of the 
+Estimate the mutual information between `x` and `y` using the discrete version of the
 given `measure`, using the given [`ProbabilitiesEstimator`](@ref) `est` (which must accept
 multivariate data and have an implementation for [`marginal_encodings`](@ref)).
 If `measure` is not given, then the default is `MIShannon()`.
@@ -86,9 +86,9 @@ If `measure` is not given, then the default is `MIShannon()`.
 ## Estimators
 
 The mutual information is computed as sum of three entropy terms, without any bias correction.
-The exception is when using [`Contingency`](@ref); then the mutual information 
+The exception is when using [`Contingency`](@ref); then the mutual information
 is computed using a [`ContingencyMatrix`](@ref).
- 
+
 Joint and marginal probabilities are computed by jointly discretizing `x` and `y` using
 the approach given by `est` (using [`marginal_encodings`](@ref)), and obtaining marginal
 distributions from the joint distribution.
@@ -101,7 +101,13 @@ distributions from the joint distribution.
 | [`SymbolicPermuation`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           x            |
 | [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |             ✓              |            ✓             |           ✓           |           x            |
 """
-mutualinfo(est::ProbabilitiesEstimator, x, y) = estimate(MIShannon(), est, x, y)
+function mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)
+    return estimate(measure, est, x, y)
+end
+
+function estimate(est::ProbabilitiesEstimator, x, y)
+    estimate(MIShannon(), est, x, y)
+end
 
 """
     mutualinfo([measure::MutualInformation], est::DifferentialEntropyEstimator, x, y)
@@ -128,7 +134,12 @@ of entropy terms (with different dimensions), without any bias correction.
 | [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 
 """
-mutualinfo(est::DifferentialEntropyEstimator, x, y) = estimate(MIShannon(), est, x, y)
+function mutualinfo(est::DifferentialEntropyEstimator, x, y)
+    return estimate(est, x, y)
+end
+
+# Internal method for compatibility with `independence`
+estimate(est::DifferentialEntropyEstimator, x, y) = estimate(MIShannon(), est, x, y)
 
 """
     mutualinfo([measure::MutualInformation], est::MutualInformationEstimator, x, y)
@@ -148,7 +159,12 @@ or a mixture of both. Typically, these estimators apply bias correction.
 | [`GaoKannanOhViswanath`](@ref) |   Mixed    |         ✓          |
 | [`GaoOhViswanath`](@ref)       | Continuous |         ✓          |
 """
-mutualinfo(est::MutualInformationEstimator, x, y) = estimate(MIShannon(), est, x, y)
+function mutualinfo(measure::MIShannon, est::MutualInformationEstimator, x, y)
+    return estimate(MIShannon(), est, x, y)
+end
+
+# Internal method for compatibility with `independence`
+estimate(est::MutualInformationEstimator, x, y) = estimate(MIShannon(), est, x, y)
 
 # Generic 3H-formulation of mutual information.
 function marginal_entropies_mi3h(measure::MutualInformation, est, x, y)

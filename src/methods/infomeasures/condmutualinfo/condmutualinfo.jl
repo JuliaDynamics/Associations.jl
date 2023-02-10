@@ -34,6 +34,21 @@ const CMIEstimator = ConditionalMutualInformationEstimator
 
 condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
 
+const CMI_ESTIMATORS = Union{
+    ProbabilitiesEstimator,
+    DifferentialEntropyEstimator,
+    MutualInformationEstimator,
+    ConditionalMutualInformationEstimator
+}
+function estimate(measure::CMI, est::CMI_ESTIMATORS, x)
+    txt = "`condmutualinfo` takes three input vectors/datasets. Only one was given."
+    throw(ArgumentError(txt))
+end
+function estimate(measure::CMI, est::CMI_ESTIMATORS, x, y)
+    txt = "`condmutualinfo` takes three input vectors/datasets. Only two were given."
+    throw(ArgumentError(txt))
+end
+
 """
     condmutualinfo([measure::CMI], est::CMIEstimator, x, y, z) → cmi::Real
 
