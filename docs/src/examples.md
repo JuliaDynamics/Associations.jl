@@ -5,6 +5,7 @@
 ```@contents
 Pages = [
     "examples/examples_mi.md",
+    "examples/examples_conditional_mutual_information.md",
     "examples/examples_transferentropy.md",
     "examples/examples_cross_mappings.md",
     "examples/examples_closeness.md",

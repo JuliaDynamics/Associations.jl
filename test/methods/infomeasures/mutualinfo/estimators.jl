@@ -1,4 +1,5 @@
 ests = [
+    GaussianMI(),
     KSG1(; k),
     KSG2(; k),
     GaoKannanOhViswanath(; k),

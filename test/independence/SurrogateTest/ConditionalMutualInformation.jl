@@ -8,6 +8,8 @@ service = rand(["netflix", "hbo"], n)
 est = Contingency()
 nshuffles = 3
 
+@test_throws ArgumentError SurrogateTest(CMIShannon())
+
 @test independence(SurrogateTest(CMIShannon(), est; nshuffles), food, likeit, service) isa SurrogateTestResult
 @test independence(SurrogateTest(CMIRenyiSarbu(), est; nshuffles), food, likeit, service) isa SurrogateTestResult
 @test independence(SurrogateTest(CMIRenyiJizba(), est; nshuffles), food, likeit, service) isa SurrogateTestResult

@@ -81,6 +81,7 @@ mutualinfo(c::ContingencyMatrix) = estimate(MIShannon(), c)
 Estimate the mutual information between `x` and `y` using the discrete version of the
 given `measure`, using the given [`ProbabilitiesEstimator`](@ref) `est` (which must accept
 multivariate data and have an implementation for [`marginal_encodings`](@ref)).
+See examples [here](@ref example_mi_ProbabilitiesEstimator).
 If `measure` is not given, then the default is `MIShannon()`.
 
 ## Estimators
@@ -114,8 +115,9 @@ end
 
 Estimate the mutual information `measure` between `x` and `y` by a sum of three
 entropy terms, without any bias correction, using any [`DifferentialEntropyEstimator`](@ref)
-compatible with multivariate data. If `measure` is not given, then the default
-is `MIShannon()`.
+compatible with multivariate data. See examples
+[here](@ref example_mi_DifferentialEntropyEstimator). If `measure` is not given, then the
+default is `MIShannon()`.
 
 ## Estimators
 
@@ -132,7 +134,6 @@ of entropy terms (with different dimensions), without any bias correction.
 | [`Goria`](@ref)                  | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 | [`Lord`](@ref)                   | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 | [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
-
 """
 function mutualinfo(est::DifferentialEntropyEstimator, x, y)
     return estimate(est, x, y)
@@ -144,7 +145,9 @@ estimate(est::DifferentialEntropyEstimator, x, y) = estimate(MIShannon(), est, x
 """
     mutualinfo([measure::MutualInformation], est::MutualInformationEstimator, x, y)
 
-Estimate the mutual information `measure` between `x` and `y` using `est`.
+Estimate the mutual information `measure` between `x` and `y` using the
+dedicated [`MutualInformationEstimator`](@ref) `est`.
+See examples [here](@ref example_mi_MutualInformationEstimator).
 If `measure` is not given, then the default is `MIShannon()`.
 
 ## Estimators
@@ -154,6 +157,7 @@ or a mixture of both. Typically, these estimators apply bias correction.
 
 | Estimator                      |    Type    | [`MIShannon`](@ref) |
 | ------------------------------ | :--------: | :-----------------: |
+| [`GaussanMI`](@ref)            | Parametric |         ✓          |
 | [`KSG1`](@ref)                 | Continuous |         ✓          |
 | [`KSG2`](@ref)                 | Continuous |         ✓          |
 | [`GaoKannanOhViswanath`](@ref) |   Mixed    |         ✓          |

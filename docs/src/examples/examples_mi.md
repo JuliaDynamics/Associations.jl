@@ -2,18 +2,58 @@
 
 ## [`MIShannon`](@ref)
 
-### Estimation using [`MutualInformationEstimator`](@ref)s
+### [Estimation using [`MutualInformationEstimator`](@ref)s](@id example_mi_MutualInformationEstimator)
+
+When estimated using a [`MutualInformationEstimator`](@ref), some form of bias
+correction is usually applied. The [`KraskovStögbauerGrassberger1`](@ref) and
+[`KraskovStögbauerGrassberger2`](@ref) estimators are perhaps the most popular.
+A common parametric estimator is [`GaussianMI`](@ref).
+
+#### [`MIShannon`](@ref) with [`GaussianMI`](@ref)
+
+```@example mi_demonstration
+using CausalityTools
+using Distributions
+using Statistics
+
+n = 1000
+using CausalityTools
+x = randn(1000)
+y = rand(1000) .+ x
+mutualinfo(KSG1(k = 5), x, y)
+mutualinfo(GaussianMI(), x, y) # defaults to `MIShannon()`
+```
+
+#### [`MIShannon`](@ref) with [`KraskovStögbauerGrassberger1`](@ref)
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+mutualinfo(KSG1(k = 5), x, y)
+```
 
 #### [`MIShannon`](@ref) with [`KraskovStögbauerGrassberger2`](@ref)
-
-The differential Shannon mutual information ([`MIShannon`](@ref)) can be estimated
-using a dedicated mutual information estimator like [`KraskovStögbauerGrassberger2`](@ref).
-These estimators typically apply some form of bias correction.
 
 ```@example mi_demonstration
 using CausalityTools
 x, y = rand(1000), rand(1000)
 mutualinfo(KSG2(k = 5), x, y)
+```
+
+#### [`MIShannon`](@ref) with [`GaoKannanOhViswanath`](@ref)
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+mutualinfo(GaoKannanOhViswanath(k = 10), x, y)
+```
+
+#### [`MIShannon`](@ref) with [`GaoOhViswanath`](@ref)
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+mutualinfo(GaoOhViswanath(k = 10), x, y)
 ```
 
 #### Reproducing Kraskov et al. (2004)
@@ -144,7 +184,7 @@ axislegend(position = :rb)
 fig
 ```
 
-### Estimation using [`DifferentialEntropyEstimator`](@ref)s
+### [Estimation using [`DifferentialEntropyEstimator`](@ref)s](@id example_mi_DifferentialEntropyEstimator)
 
 #### Simple example
 
@@ -376,7 +416,8 @@ fig = plot_results(family3, ifamily3;
 
 We see that the [`Lord`](@ref) estimator, which estimates local volume elements using a singular-value decomposition (SVD) of local neighborhoods, outperforms the other estimators by a large margin.
 
-### Estimation using [`ProbabilitiesEstimator`](@ref)s
+### [Estimation using [`ProbabilitiesEstimator`](@ref)s](@id example_mi_ProbabilitiesEstimator)
+
 
 We can also use [`ProbabilitiesEstimator`](@ref) to estimate Shannon mutual information.
 This does not apply any bias correction.

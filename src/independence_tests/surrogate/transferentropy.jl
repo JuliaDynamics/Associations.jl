@@ -37,9 +37,9 @@ function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingType
     return SurrogateTestResult(Î, Îs, p, nshuffles)
 end
 
-function SurrogateTest(measure::TEShannon, est::Nothing)
+function SurrogateTest(measure::TEShannon, est::Nothing, args...; kwargs...)
     txt = "A valid estimator must be provided as second argument to `SurrogateTest` " *
-        "when using the `TEShannon` measure.\n" * 
+        "when using the `TEShannon` measure.\n" *
         "Do e.g. SurrogateTest(TEShannon(), FPVP())"
     throw(ArgumentError(txt))
 end
