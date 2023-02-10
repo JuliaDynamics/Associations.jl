@@ -32,7 +32,7 @@ The mutual information estimated (for `normalize == false`) is then estimated as
 
 ```math
 \\hat{I}^S_{Gaussian}(X; Y) = \\dfrac{1}{2}
-\\dfrac{ \\det(\\Sigma_X) \\det(\\Sigma_Y)) } }{\\det(\\Sigma))},
+\\dfrac{ \\det(\\Sigma_X) \\det(\\Sigma_Y)) }{\\det(\\Sigma))},
 ```
 
 where we ``\\Sigma_X`` and ``\\Sigma_Y`` appear in ``\\Sigma`` as
