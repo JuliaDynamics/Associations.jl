@@ -21,7 +21,7 @@ for [`Dataset`](@ref)s, we can very efficiently compute the required
 joint covariance matrix ``\\Sigma`` for the random variables.
 
 Formally, let ``X_1, X_2, \\ldots, X_n`` be a set of ``n`` real-valued random variables.
-Consider the joint precision matrix,``\\P = (p_{ij}) = \\Sigma^-1``. The partial
+Consider the joint precision matrix,``P = (p_{ij}) = \\Sigma^-1``. The partial
 correlation of any pair of variables ``(X_i, X_j)``, given the remaining variables
 ``\\bf{Z} = \\{X_k\\}_{i=1, i \\neq i, j}^n``, is defined as
 
