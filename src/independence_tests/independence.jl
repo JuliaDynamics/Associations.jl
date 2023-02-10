@@ -5,11 +5,7 @@ export IndependenceTest
 """
     IndependenceTest <: IndependenceTest
 
-The supertype for all independence tests. Concrete subtypes are:
-
-- [`SurrogateTest`](@ref).
-- [`LocalPermutationTest`](@ref).
-- [`JointDistanceDistributionTest`](@ref).
+The supertype for all independence tests.
 """
 abstract type IndependenceTest end
 
@@ -22,7 +18,11 @@ If `z` is given too, then `test` must provide a conditional association measure.
 
 Returns a test `summary`, whose type depends on `test`.
 
-See also [examples](@ref examples_independence).
+## Compatible independence tests
+
+- [`SurrogateTest`](@ref).
+- [`LocalPermutationTest`](@ref).
+- [`JointDistanceDistributionTest`](@ref).
 """
 function independence(test, args...; kwargs...)
     error("No concrete implementation for $(typeof(test)) test yet")
