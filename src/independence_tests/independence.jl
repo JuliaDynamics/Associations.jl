@@ -5,7 +5,11 @@ export IndependenceTest
 """
     IndependenceTest <: IndependenceTest
 
-The supertype for all independence tests.
+The supertype for all independence tests. Concrete subtypes are:
+
+- [`SurrogateTest`](@ref).
+- [`LocalPermutationTest`](@ref).
+- [`JointDistanceDistributionTest`](@ref).
 """
 abstract type IndependenceTest end
 
