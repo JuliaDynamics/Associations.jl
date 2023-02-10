@@ -32,8 +32,8 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "Independence testing" => "independence.md",
     "Association measures" => "measures.md",
+    "Independence testing" => "independence.md",
     "APIs and estimators" => "api.md",
     "Examples" => "examples.md",
     "Experimental" => "experimental.md",
