@@ -6,10 +6,10 @@ using StateSpaceSets: Dataset
 export Henon3
 
 """
-    Henon3() <: DiscreteSystem
+    Henon3() <: DiscreteDefinition
     Henon3(; a = 0.1, b = 0.3, c = 0.1, xi = [0.1, 0.2, 0.3])
 
-`Henon3` is a [`DiscreteSystem`](@ref) definition for a lagged discrete dynamical
+`Henon3` is a [`DiscreteDefinition`](@ref) definition for a lagged discrete dynamical
 system consisting of three coupled 1D Henon maps (Papana et al., 2013)[^Papana2013].
 
 ## Equations of motion
@@ -30,7 +30,7 @@ before iteration starts.
     Papana, A., Kyrtsou, C., Kugiumtzis, D., & Diks, C. (2013). Simulation study of
     direct causality measures in multivariate time series. Entropy, 15(7), 2635–2661.
 """
-struct Henon3{T, S, A, B, C} <: DiscreteSystem
+struct Henon3{T, S, A, B, C} <: DiscreteDefinition
     m₁::MVector{2, T} # holds past states of x1
     m₂::MVector{2, T} # holds past states of x2
     m₃::MVector{2, T} # holds past states of x3
@@ -49,8 +49,8 @@ struct Henon3{T, S, A, B, C} <: DiscreteSystem
     end
 end
 
-function system(s::Henon3)
-    return DiscreteDynamicalSystem(eom_henon3, s.xi, s)
+function system(definition::Henon3)
+    return DiscreteDynamicalSystem(eom_henon3, definition.xi, definition)
 end
 
 function eom_henon3(u, p::Henon3, t)

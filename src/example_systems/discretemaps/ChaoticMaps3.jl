@@ -2,7 +2,7 @@ using StaticArrays: SVector
 using DynamicalSystemsBase: DiscreteDynamicalSystem
 export ChaoticMaps3
 """
-    ChaoticMaps3() <: DiscreteSystem
+    ChaoticMaps3() <: DiscreteDefinition
     ChaoticMaps3(; ui = [0.2, 0.1, 0.3], r = 3.4, c_xy = 0.5, c_xz = 0.5, c_yz = 0.3)
 
 A model consisting of three coupled 1D maps, where ``x \\to y`` and ``x \\to z`` (Chen et
@@ -25,7 +25,7 @@ but are added here for explorative purposes.
     Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger
     causality." Physics Letters A 324.1 (2004): 26-35
 """
-Base.@kwdef struct ChaoticMaps3{R, V, C1 ,C2, C3} <: DiscreteSystem
+Base.@kwdef struct ChaoticMaps3{R, V, C1 ,C2, C3} <: DiscreteDefinition
     r::R = 3.4
     c_xy::C1 = 1.4
     c_xz::C2 = 0.3
