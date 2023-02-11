@@ -1,9 +1,8 @@
+
 using LabelledArrays: @LArray
 using StaticArrays: SVector
 using DynamicalSystemsBase: DiscreteDynamicalSystem
 using StateSpaceSets: Dataset
-
-export henon_triple
 
 function eom_henon_triple(u, p, n)
     O = zeros(Float64, n + 3, 3)
@@ -38,12 +37,14 @@ end
 
 
 function henon_triple(u₀, a, b, c, n::Int, n_transient::Int)
+    @warn "`henon_triple` is deprecated in CausalityTools v2. "*
+        "Use `system(HenonTriple())` instead, which returns a `DiscreteDynamicalSystem` "*
+        "that can be iterated."
     p = @LArray [a, b, c] (:a, :b, :c)
     o = eom_henon_triple(u₀, p, n + n_transient)
     x, y, z = o[n_transient+1:end, 1], o[n_transient+1:end, 2], o[n_transient+1:end, 3]
     return Dataset(x, y, z)
 end
-
 
 """
     henon_triple(x, p, n) → Function
