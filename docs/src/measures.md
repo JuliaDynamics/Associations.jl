@@ -7,6 +7,8 @@
 | Correlation          | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      | [`pearson_correlation`](@ref)  |
 | Correlation          | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      | [`distance_correlation`](@ref) |
 | Closeness            | [`SMeasure`](@ref)                    |    ✓    |     ✖      | [`s_measure`](@ref)            |
+| Closeness            | [`HMeasure`](@ref)                    |    ✓    |     ✖      | [`h_measure`](@ref)            |
+| Closeness            | [`MMeasure`](@ref)                    |    ✓    |     ✖      | [`m_measure`](@ref)            |
 | Closeness            | [`JointDistanceDistribution`](@ref)   |    ✓    |     ✖      | [`jdd`](@ref)                  |
 | Cross-mapping        | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      | [`crossmap`](@ref)             |
 | Cross-mapping        | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      | [`crossmap`](@ref)             |
@@ -57,6 +59,20 @@ jdd
 ```@docs
 SMeasure
 s_measure
+```
+
+### H-measure
+
+```@docs
+HMeasure
+h_measure
+```
+
+### M-measure
+
+```@docs
+MMeasure
+m_measure
 ```
 
 ## Cross-map measures

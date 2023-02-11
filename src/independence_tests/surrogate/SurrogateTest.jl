@@ -41,6 +41,8 @@ Exceptions are:
 | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      |       No       |
 | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      |       No       |
 | [`SMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
+| [`HMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
+| [`MMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
 | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |      Yes       |
 | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |      Yes       |
 | [`MIShannon`](@ref)                   |    ✓    |     ✖      |      Yes       |
@@ -175,7 +177,7 @@ end
 
 include("contingency.jl")
 include("transferentropy.jl")
-include("smeasure.jl")
+include("hlms_measure.jl")
 include("crossmapping.jl")
 include("mutualinfo.jl")
 include("condmutualinfo.jl")

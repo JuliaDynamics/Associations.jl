@@ -16,6 +16,28 @@ when there is weaker coupling. To check whether `s` is significant (i.e. large
 enough to claim directional dependence), we can use a [`SurrogateTest`](@ref),
 like [here](@ref examples_surrogatetest_smeasure).
 
+## [H-measure](@id quickstart_hmeasure)
+
+### Computing the `h`-statistic
+
+```@example quickstart_hmeasure
+using CausalityTools
+x, y = randn(3000), randn(3000)
+measure = HMeasure(dx = 3, dy = 3)
+h = h_measure(measure, x, y)
+```
+
+## [M-measure](@id quickstart_mmeasure)
+
+### Computing the `m`-statistic
+
+```@example quickstart_mmeasure
+using CausalityTools
+x, y = randn(3000), randn(3000)
+measure = MMeasure(dx = 3, dy = 3)
+m = m_measure(measure, x, y)
+```
+
 ## [Joint distance distribution](@id quickstart_jdd)
 
 ### Computing the `Δ`-distribution

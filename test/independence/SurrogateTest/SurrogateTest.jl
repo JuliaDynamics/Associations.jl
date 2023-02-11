@@ -2,6 +2,8 @@
 # Pairwise measures
 include("MutualInformation.jl")
 include("SMeasure.jl")
+include("HMeasure.jl")
+include("MMeasure.jl")
 include("TransferEntropyPairwise.jl")
 
 # Conditional measures
