@@ -7,8 +7,7 @@ testfile(file, testname=defaultname(file)) = @testset "$testname" begin; include
     testfile("methods/methods.jl")
     testfile("utils.jl")
     testfile("independence/independence.jl")
-    testfile("systems/discrete_systems.jl")
-    testfile("systems/continuous_systems.jl")
+    testfile("systems/systems.jl")
 end
 
 #include("integrations/test_uncertaindata_integration.jl")
