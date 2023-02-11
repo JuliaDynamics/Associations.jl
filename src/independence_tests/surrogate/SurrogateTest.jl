@@ -43,6 +43,7 @@ Exceptions are:
 | [`SMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
 | [`HMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
 | [`MMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
+| [`LMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
 | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |      Yes       |
 | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |      Yes       |
 | [`MIShannon`](@ref)                   |    ✓    |     ✖      |      Yes       |

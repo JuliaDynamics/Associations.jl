@@ -1,3 +1,6 @@
+using NearestNeighbors, Distances, Neighborhood, StateSpaceSets
+using Distances: SqEuclidean, Euclidean
+
 export LMeasure
 export l_measure
 
@@ -12,9 +15,35 @@ timeseries/embedding are mapped to close states of a source timeseries/embedding
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
-- Use with [`l_measure`](@ref) to compute the raw m-measure statistic.
+- Use with [`l_measure`](@ref) to compute the raw l-measure statistic.
 
 ## Description
+
+`LMeasure` is similar to [`MMeasure`](@ref), but uses distance ranks instead of the raw
+distances.
+
+Let ``\\bf{x_i}`` be an embedding vector, and let ``g_{i,j}`` denote the rank that
+the distance between ``\\bf{x_i}`` and some other vector ``\\bf{x_j}`` in a sorted
+ascending list of distances between ``\\bf{x_i}`` and ``\\bf{x_{i \\neq j}}``
+In other words, ``g_{i,j}`` this is just the ``N-1`` nearest neighbor distances sorted )
+
+`LMeasure` is then defined as
+
+```math
+L^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N}
+\\log \\left( \\dfrac{G_i(x) - G_i^{(k)}(x|y)}{G_i(x) - G_i^k(x)} \\right),
+```
+
+where ``G_i(x) = \\frac{N}{2}`` and ``G_i^K(x) = \\frac{k+1}{2}`` are the mean
+and minimal rank, respectively.
+
+The ``y``-conditioned mean rank is defined as
+
+```math
+G_i^{(k)}(x|y) = \\dfrac{1}{K}\\sum_{j=1}^{K} g_{i,w_{i, j}},
+```
+
+where ``w_{i,j}`` is the index of the ``j``-th nearest neighbor of ``\\bf{y_i}``.
 
 [^Chicharro2009]:
     Chicharro, D., & Andrzejak, R. G. (2009). Reliable detection of directional couplings
@@ -22,7 +51,7 @@ timeseries/embedding are mapped to close states of a source timeseries/embedding
 """
 Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
     K::Int = 2
-    metric::M = SqEuclidean()
+    metric::M = Euclidean()
     tree_metric::TM = Euclidean()
     τx::Int = 1
     τy::Int = 1
@@ -31,52 +60,57 @@ Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
     w::Int = 0
 end
 
+"""
+    l_measure(measure::LMeasure, x::VectorOrDataset, y::VectorOrDataset)
 
+Compute the [`LMeasure`](@ref) from source `x` to target `y`.
+"""
 function l_measure(measure::LMeasure, x::VectorOrDataset, y::VectorOrDataset)
     return estimate(measure, x, y)
 end
 
+function getrank(x, p)
+    xmin, xmax = minimum(x), maximum
+end
+
 # Internal method for use with `independence`
 function estimate(measure::LMeasure, x::AbstractDataset, y::AbstractDataset)
-    error("`estimate` not implemented for LMeasure")
-    # (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
+    (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
-    # # Match length of datasets by excluding end points.
-    # lx = length(x); ly = length(y)
-    # lx > ly ? X = x[1:ly, :] : X = x
-    # ly > lx ? Y = y[1:lx, :] : Y = y
-    # N = length(X)
+    # Match length of datasets by excluding end points.
+    lx = length(x); ly = length(y)
+    lx > ly ? X = x[1:ly, :] : X = x
+    ly > lx ? Y = y[1:lx, :] : Y = y
+    N = length(X)
 
-    # T = eltype(1.0)
-    #  # Pre-allocate vectors to hold indices and distances during loops
-    # dists_x = zeros(T, K)
-    # dists_x_cond_y = zeros(T, K)
+    # Search for the K nearest neighbors of each points in both X and Y
+    treeX = searchstructure(KDTree, X, tree_metric)
+    treeY = searchstructure(KDTree, Y, tree_metric)
+    neighborhoodtype, theiler = NeighborNumber(N), Theiler(0)
+    idxs_X, dists_X = bulksearch(treeX, X, neighborhoodtype, theiler)
+    idxs_Y = bulkisearch(treeY, Y, neighborhoodtype, theiler)
+    Gᵢx = N / 2
+    Gᵢᵏx = (K + 1) / 2
+    Gᵢᵏxy = zeros(N)
 
-    # # Mean squared distances in X, and
-    # # mean squared distances in X conditioned on Y
-    # Rx = zeros(T, N)
-    # Rx_cond_y = zeros(T, N)
+    # Pre-allocate vectors to hold distances and ranks in inner loop
+    dists_Gᵢᵏxy = zeros(K)
+    ranks_Gᵢᵏxy = zeros(Int, K)
+    for i in 1:N
+        xᵢ = X[i]
+        dxᵢ = dists_X[i]
+        for j = 1:K
+            wᵢⱼ = idxs_Y[i][j] # nearest neighbor indices in Y
+            # TODO: get this distance from pre-computed distances? tricky indexing,
+            # not sure if worth it.
+            d_ᵢ_wᵢⱼ = evaluate(metric, xᵢ, X[wᵢⱼ])
+            dists_Gᵢᵏxy[j] = d_ᵢ_wᵢⱼ
+            # The distance is guaranteed to be within closed range of all other distances,
+            # so no need to handle edge cases here.
+            ranks_Gᵢᵏxy[j] = findfirst(d -> d ≈ d_ᵢ_wᵢⱼ, dxᵢ)
+        end
+        Gᵢᵏxy[i] = sum(ranks_Gᵢᵏxy) / K
+    end
 
-    # # Search for the K nearest neighbors of each points in both X and Y
-    # treeX = searchstructure(KDTree, X, tree_metric)
-    # treeY = searchstructure(KDTree, Y, tree_metric)
-    # neighborhoodtype, theiler = NeighborNumber(K), Theiler(w)
-    # idxs_X = bulkisearch(treeX, X, neighborhoodtype, theiler)
-    # idxs_Y = bulkisearch(treeY, Y, neighborhoodtype, theiler)
-
-    # for n in 1:N
-    #     pxₙ = X[n]
-
-    #     for j = 1:K
-    #         rₙⱼ = idxs_X[n][j] # nearest neighbor indices in X
-    #         sₙⱼ = idxs_Y[n][j] # nearest neighbor indices in Y
-    #         dists_x[j] = evaluate(metric, pxₙ, X[rₙⱼ])
-    #         dists_x_cond_y[j] = evaluate(metric, pxₙ, X[sₙⱼ])
-    #     end
-
-    #     Rx[n] = sum(dists_x) / K
-    #     Rx_cond_y[n] = sum(dists_x_cond_y) / K
-    # end
-
-    # return sum(log.((Rx .- Rx_cond_y^K) ./ (Rx .- Rx^K))) / N
+    return sum((Gᵢx .- Gᵢᵏxy) ./ (Gᵢx .- Gᵢᵏx)) / N
 end

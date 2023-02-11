@@ -9,6 +9,7 @@
 | Closeness            | [`SMeasure`](@ref)                    |    ✓    |     ✖      | [`s_measure`](@ref)            |
 | Closeness            | [`HMeasure`](@ref)                    |    ✓    |     ✖      | [`h_measure`](@ref)            |
 | Closeness            | [`MMeasure`](@ref)                    |    ✓    |     ✖      | [`m_measure`](@ref)            |
+| Closeness (ranks)    | [`LMeasure`](@ref)                    |    ✓    |     ✖      | [`l_measure`](@ref)            |
 | Closeness            | [`JointDistanceDistribution`](@ref)   |    ✓    |     ✖      | [`jdd`](@ref)                  |
 | Cross-mapping        | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      | [`crossmap`](@ref)             |
 | Cross-mapping        | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      | [`crossmap`](@ref)             |
@@ -73,6 +74,13 @@ h_measure
 ```@docs
 MMeasure
 m_measure
+```
+
+### L-measure
+
+```@docs
+LMeasure
+l_measure
 ```
 
 ## Cross-map measures

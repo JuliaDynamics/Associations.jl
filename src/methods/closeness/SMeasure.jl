@@ -114,8 +114,8 @@ function estimate(measure::SMeasure, x::AbstractDataset, y::AbstractDataset)
 
     # Mean squared distances in X, and
     # mean squared distances in X conditioned on Y
-    Rᵢ²x = zeros(T, N)
-    Rᵢ²xy = zeros(T, N)
+    Rᵢᵏx = zeros(T, N)
+    Rᵢᵏxy = zeros(T, N)
 
     # Search for the K nearest neighbors of each points in both X and Y
     treeX = searchstructure(KDTree, X, tree_metric)
@@ -134,9 +134,9 @@ function estimate(measure::SMeasure, x::AbstractDataset, y::AbstractDataset)
             dists_x_cond_y[j] = evaluate(metric, pxₙ, X[sₙⱼ])
         end
 
-        Rᵢ²x[n] = sum(dists_x) / K
-        Rᵢ²xy[n] = sum(dists_x_cond_y) / K
+        Rᵢᵏx[n] = sum(dists_x) / K
+        Rᵢᵏxy[n] = sum(dists_x_cond_y) / K
     end
 
-    return sum(Rᵢ²x ./ Rᵢ²xy) / N
+    return sum(Rᵢᵏx ./ Rᵢᵏxy) / N
 end

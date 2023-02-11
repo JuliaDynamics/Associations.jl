@@ -38,6 +38,17 @@ measure = MMeasure(dx = 3, dy = 3)
 m = m_measure(measure, x, y)
 ```
 
+## [L-measure](@id quickstart_mmeasure)
+
+### Computing the `l`-statistic
+
+```@example quickstart_lmeasure
+using CausalityTools
+x, y = randn(3000), randn(3000)
+measure = LMeasure(dx = 3, dy = 3)
+l = l_measure(measure, x, y)
+```
+
 ## [Joint distance distribution](@id quickstart_jdd)
 
 ### Computing the `Δ`-distribution

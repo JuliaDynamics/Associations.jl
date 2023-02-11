@@ -5,7 +5,7 @@ export HMeasure
 
 """
     HMeasure <: AssociationMeasure
-    HMeasure(; K::Int = 2, dx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1)
+    HMeasure(; K::Int = 2, dx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1, w::Int = 0)
 
 The `HMeasure` (Grassberger et al., 1999)[^Grassberger1999] is a pairwise association
 measure. It quantifies the probability with which close state of a target
@@ -70,9 +70,9 @@ function estimate(measure::HMeasure, x::AbstractDataset, y::AbstractDataset)
     dists_x_cond_y = zeros(T, K)
 
     # Rᵢx := Mean squared distance to all other points in X, and
-    # Rᵢ²xy := mean squared distances in X conditioned on Y
+    # Rᵢᵏxy := mean squared distances in X conditioned on Y
     Rᵢx = zeros(T, N)
-    Rᵢ²xy = zeros(T, N)
+    Rᵢᵏxy = zeros(T, N)
 
     # Search for the K nearest neighbors of each points in both X and Y
     dx = pairwise(metric, X)
@@ -86,9 +86,9 @@ function estimate(measure::HMeasure, x::AbstractDataset, y::AbstractDataset)
             sₙⱼ = idxs_Y[n][j] # nearest neighbor indices in Y
             dists_x_cond_y[j] = evaluate(metric, pxₙ, X[sₙⱼ])
         end
-        Rᵢ²xy[n] = sum(dists_x_cond_y) / K
+        Rᵢᵏxy[n] = sum(dists_x_cond_y) / K
         Rᵢx[n] = sum(dx[:, n]) / N
     end
 
-    return sum(log.(Rᵢx ./ Rᵢ²xy)) / N
+    return sum(log.(Rᵢx ./ Rᵢᵏxy)) / N
 end

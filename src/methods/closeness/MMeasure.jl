@@ -5,7 +5,7 @@ export MMeasure
 
 """
     MMeasure <: AssociationMeasure
-    MMeasure(; K::Int = 2, dx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1)
+    MMeasure(; K::Int = 2, dx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1, w::Int = 0)
 
 The `MMeasure` (Andrzejak et al., 2003)[^Andrzejak2003] is a pairwise association
 measure. It quantifies the probability with which close state of a target
@@ -70,11 +70,11 @@ function estimate(measure::MMeasure, x::AbstractDataset, y::AbstractDataset)
     dists_x_cond_y = zeros(T, K)
 
     # Rᵢx := mean squared distance to all other points
-    # Rᵢ²x := Mean squared distances in X, and
-    # Rᵢ²xy := mean squared distances in X conditioned on Y
+    # Rᵢᵏx := Mean squared distances in X, and
+    # Rᵢᵏxy := mean squared distances in X conditioned on Y
     Rᵢx = zeros(T, N)
-    Rᵢ²x = zeros(T, N)
-    Rᵢ²xy = zeros(T, N)
+    Rᵢᵏx = zeros(T, N)
+    Rᵢᵏxy = zeros(T, N)
 
     # Search for the K nearest neighbors of each points in both X and Y
     treeX = searchstructure(KDTree, X, tree_metric)
@@ -94,9 +94,9 @@ function estimate(measure::MMeasure, x::AbstractDataset, y::AbstractDataset)
             dists_x_cond_y[j] = evaluate(metric, pxₙ, X[sₙⱼ])
         end
         Rᵢx[n] = sum(dx[:, n]) / N
-        Rᵢ²x[n] = sum(dists_x) / K
-        Rᵢ²xy[n] = sum(dists_x_cond_y) / K
+        Rᵢᵏx[n] = sum(dists_x) / K
+        Rᵢᵏxy[n] = sum(dists_x_cond_y) / K
     end
 
-    return sum((Rᵢx .- Rᵢ²xy) ./ (Rᵢx .- Rᵢ²x)) / N
+    return sum((Rᵢx .- Rᵢᵏxy) ./ (Rᵢx .- Rᵢᵏx)) / N
 end
