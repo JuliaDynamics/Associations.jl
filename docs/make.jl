@@ -36,6 +36,7 @@ PAGES = [
     "Independence testing" => "independence.md",
     "APIs and estimators" => "api.md",
     "Examples" => "examples.md",
+    "Predefined systems" => "coupled_systems.md",
     "Experimental" => "experimental.md",
 ]
 

@@ -12,6 +12,11 @@ export henon2
 export ar1_bidir
 export ikeda
 export linearmap1
+export logistic2_unidir
+export logistic2_bidir
+export logistic3
+export logistic4
+export nonlinear_3d
 
 function eom_ar1_unidir(x, p, n)
     a₁, b₁, c_xy, σ = (p...,)
@@ -391,6 +396,9 @@ function eom_logistic2_bidir(dx, x, p, n)
 end
 
 function logistic2_bidir(u₀, c_xy, c_yx, r₁, r₂, σ_xy, σ_yx)
+    @warn "`logistic2_bidir` is deprecated in CausalityTools v2. "*
+    "Use `system(Logistic2Bidir())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
     p = @LArray [c_xy, c_yx, r₁, r₂, σ_xy, σ_yx] (:c_xy, :c_yx, :r₁, :r₂, :σ_xy, :σ_yx)
     DiscreteDynamicalSystem(eom_logistic2_bidir, u₀, p)
 end
@@ -477,6 +485,9 @@ function eom_logistic2_unidir(dx, x, p, n)
 end
 
 function logistic2_unidir(u₀, c_xy, r₁, r₂, σ)
+    @warn "`logistic2_unidir` is deprecated in CausalityTools v2. "*
+    "Use `system(Logistic2Unidir())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
     p = @LArray [c_xy, r₁, r₂, σ] (:c_xy, :r₁, :r₂, :σ)
     DiscreteDynamicalSystem(eom_logistic2_unidir, u₀, p)
 end
@@ -551,3 +562,230 @@ function good_logistic_unidir_trajectory(npts::Int;
         n_tries += 1
     end
 end
+
+
+export logistic3
+
+"""
+    eom_logistic3(u, p, t)
+
+Equations of motion for a system consisting of three coupled logistic map
+representing the response of two independent dynamical variables to the
+forcing from a common driver. The dynamical influence goes in the directions
+Z → X and Z → Y.
+
+## Equations of motion
+
+The equations of motion are
+
+```math
+\\begin{aligned}
+x(t+1) = (x(t)(r - r_1 x(t) - z(t) + σ_x η_x)) \\mod 1 \\\\
+y(t+1) = (y(t)(r - r_2 y(t) - z(t) + σ_y η_y)) \\mod 1 \\\\
+z(t+1) = (z(t)(r - r_3 z(t) + σ_z η_z)) \\mod 1
+\\end{aligned}
+```
+
+Dynamical noise may be added to each of the dynamical variables by tuning the
+parameters `σz`, `σx` and `σz`. Default values for the parameters
+`r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour,
+with `r₁ = r₂ = r₃ = 4`.
+
+## References
+
+1. Runge, Jakob. Causal network reconstruction from time series: From theoretical
+    assumptions to practical estimation, Chaos 28, 075310 (2018);
+    doi: 10.1063/1.5025050
+"""
+function eom_logistic3(u, p, t)
+    r₁, r₂, r₃, σx, σy, σz = (p...,)
+    x, y, z = (u...,)
+
+    # Independent dynamical noise for each variable.
+    ηx = rand()
+    ηy = rand()
+    ηz = rand()
+
+    dx = (x*(r₁ - r₁*x - z + σx*ηx)) % 1
+    dy = (y*(r₂ - r₂*y - z + σy*ηy)) % 1
+    dz = (z*(r₃ - r₃*z + σz*ηz)) % 1
+    return SVector{3}(dx, dy, dz)
+end
+
+function logistic3(u₀, r₁, r₂, r₃, σx, σy, σz)
+    @warn "`logistic3` is deprecated in CausalityTools v2. "*
+    "Use `system(Logistic3CommonDriver())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
+    p = @LArray [r₁, r₂, r₃, σx, σy, σz] (:r₁, :r₂, :r₃, :σx, :σy, :σz)
+    DiscreteDynamicalSystem(eom_logistic3, u₀, p)
+end
+
+"""
+    logistic3(;u₀ = rand(3), r = 4,
+        σx = 0.05, σy = 0.05, σz = 0.05) → DiscreteDynamicalSystem
+
+Initialise a dynamical system consisting of three coupled logistic map
+representing the response of two independent dynamical variables to the
+forcing from a common driver. The dynamical influence goes in the directions
+``Z \\to X`` and ``Z \\to Y``.
+
+## Equations of motion
+
+The equations of motion are
+
+```math
+\\begin{aligned}
+x(t+1) = (x(t)(r - r_1 x(t) - z(t) + σ_x η_x)) \\mod 1 \\\\
+y(t+1) = (y(t)(r - r_2 y(t) - z(t) + σ_y η_y)) \\mod 1 \\\\
+z(t+1) = (z(t)(r - r_3 z(t) + σ_z η_z)) \\mod 1
+\\end{aligned}
+```
+
+Dynamical noise may be added to each of the dynamical variables by tuning the
+parameters `σz`, `σx` and `σz`. Default values for the parameters
+`r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour,
+with `r₁ = r₂ = r₃ = 4`.
+
+## References
+
+1. Runge, Jakob. Causal network reconstruction from time series: From theoretical
+    assumptions to practical estimation, Chaos 28, 075310 (2018);
+    doi: 10.1063/1.5025050
+"""
+logistic3(;u₀ = rand(3), r₁ = 4, r₂ = 4, r₃ = 4,
+    σx = 0.05, σy = 0.05, σz = 0.05) = logistic3(u₀, r₁, r₂, r₃, σx, σy, σz)
+
+function eom_logistic4(u, p, t)
+    r₁, r₂, r₃, r₄, c₁₂, c₂₃, c₃₄  = (p...,)
+    y₁, y₂, y₃, y₄ = (u...,)
+
+    dy₁ = y₁*(r₁ - r₁*y₁)
+    dy₂ = y₂*(r₂ - c₁₂*y₁ - r₂*y₂)
+    dy₃ = y₃*(r₃ - c₂₃*y₂ - r₃*y₃)
+    dy₄ = y₄*(r₄ - c₃₄*y₃ - r₄*y₄)
+    return SVector{4}(dy₁, dy₂, dy₃, dy₄)
+end
+
+function logistic4(u₀, r₁, r₂, r₃, r₄, c₁₂, c₂₃, c₃₄)
+    @warn "`logistic4` is deprecated in CausalityTools v2. "*
+    "Use `system(Logistic43Chain())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
+    p = @LArray [r₁, r₂, r₃, r₄, c₁₂, c₂₃, c₃₄] (:r₁, :r₂, :r₃, :r₄, :c₁₂, :c₂₃, :c₃₄)
+    DiscreteDynamicalSystem(eom_logistic4, u₀, p)
+end
+
+"""
+    logistic4(;u₀ = rand(4), r₁ = 3.9, r₂ = 3.6, r₃ = 3.6, r₄ = 3.8,
+        c₁₂ = 0.4, c₂₃ = 0.4, c₃₄ = 0.35) → DiscreteDynamicalSystem
+
+Initialise a system of a transitive chain of four unidirectionally coupled
+logistic maps, where ``y_1 \\to y_2 \\to y_3 \\to y_4`` [1]. Default
+parameters are as in [1].
+
+*Note: With the default parameters which are as in [1], for some initial conditions,
+this system wanders off to ``\\pm \\infty`` for some of the variables. Make sure that
+you have a good realisation before using the orbit for anything.*
+
+## Equations of motion
+
+```math
+\\begin{aligned}
+y_1(t+1) &= y_1(t)(r_1 - r_1 y_1) \\\\
+y_2(t+1) &= y_2(t)(r_2 - c_{12} y_1 - r_2 y_2) \\\\
+y_3(t+1) &= y_3(t)(r_3 - c_{23} y_2 - r_3 y_3) \\\\
+y_4(t+1) &= y_4(t)(r_4 - c_{34} y_3 - r_4 y_4)
+\\end{aligned}
+```
+
+## References
+
+1. Ye, Hao, et al. "Distinguishing time-delayed causal interactions using
+    convergent cross mapping." Scientific reports 5 (2015): 14750
+"""
+logistic4(;u₀ = rand(4),
+            r₁ = 3.9, r₂ = 3.6, r₃ = 3.6, r₄ = 3.8,
+            c₁₂ = 0.4, c₂₃ = 0.4, c₃₄ = 0.35) =
+    logistic4(u₀, r₁, r₂, r₃, r₄, c₁₂, c₂₃, c₃₄)
+
+
+export nonlinear3d
+
+"""
+    eom_nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃,
+        c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃) → DiscreteDynamicalSystem
+
+Equations of motion for a 3d nonlinear system with nonlinear couplings
+``x_1 \\to x_2``, ``x_2 \\to x_3`` and ``x_1 \\to x_3``. Modified from [1].
+
+## Equations of motion
+
+The equations of motion are
+
+```math
+\\begin{aligned}
+x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{1}(t) \\\\
+x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{2}(t) + b x_1 x_2 \\\\
+x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \\xi_{3}(t) + c x_{2}(t) + d x_{1}(t)^2.
+\\end{aligned}
+```
+
+## References
+
+1. Gourévitch, B., Le Bouquin-Jeannès, R., & Faucon, G. (2006). Linear and nonlinear
+    causality between signals: methods, examples and neurophysiological
+    applications. Biological Cybernetics, 95(4), 349–369.
+"""
+function eom_nonlinear3d(x, p, n)
+    x₁, x₂, x₃ = (x...,)
+    a₁, a₂, a₃, b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃ = (p...,)
+    ξ₁ = rand(Normal(0, σ₁))
+    ξ₂ = rand(Normal(0, σ₂))
+    ξ₃ = rand(Normal(0, σ₃))
+
+    dx₁ = a₁*x₁*(1-x₁)^2 * exp(-x₁^2) + b₁*ξ₁
+    dx₂ = a₂*x₂*(1-x₂)^2 * exp(-x₂^2) + b₂*ξ₂ + c₁₂*x₁*x₂
+    dx₃ = a₃*x₃*(1-x₃)^2 * exp(-x₃^2) + b₃*ξ₃ + c₂₃*x₂ + c₁₃*x₁^2
+
+    return SVector{3}(dx₁, dx₂, dx₃)
+end
+
+function nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)
+    p = @LArray [a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃] (:a₁, :a₂, :a₃,  :b₁, :b₂, :b₃, :c₁₂, :c₂₃, :c₁₃, :σ₁, :σ₂, :σ₃)
+    s = DiscreteDynamicalSystem(eom_nonlinear3d, u₀, p)
+    return s
+end
+
+"""
+    nonlinear3d(;u₀ = rand(3),
+        σ₁ = 1.0, σ₂ = 1.0, σ₃ = 1.0,
+        a₁ = 3.4, a₂ = 3.4, a₃ = 3.4,
+        b₁ = 0.4, b₂ = 0.4, b₃ = 0.4,
+        c₁₂ = 0.5, c₂₃ = 0.3, c₁₃ = 0.5) → DiscreteDynamicalSystem
+
+A 3d nonlinear system with nonlinear couplings ``x_1 \\to x_2``,
+``x_2 \\to x_3`` and ``x_1 \\to x_3``. Modified from [1].
+
+## Equations of motion
+
+The equations of motion are
+
+```math
+\\begin{aligned}
+x_1(t+1) &= a_1 x_1 (1-x_1(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{1}(t) \\\\
+x_2(t+1) &= a_1 x_2 (1-x_2(t))^2  e^{-x_2(t)^2} + 0.4 \\xi_{2}(t) + b x_1 x_2 \\\\
+x_3(t+1) &= a_3 x_3 (1-x_3(t))^2  e^{-x_3(t)^2} + 0.4 \\xi_{3}(t) + c x_{2}(t) + d x_{1}(t)^2.
+\\end{aligned}
+```
+
+## References
+
+1. Gourévitch, B., Le Bouquin-Jeannès, R., & Faucon, G. (2006). Linear and nonlinear
+    causality between signals: methods, examples and neurophysiological
+    applications. Biological Cybernetics, 95(4), 349–369.
+"""
+nonlinear3d(;u₀ = rand(3),
+        σ₁ = 1.0, σ₂ = 1.0, σ₃ = 1.0,
+        a₁ = 3.4, a₂ = 3.4, a₃ = 3.4,
+        b₁ = 0.4, b₂ = 0.4, b₃ = 0.4,
+        c₁₂ = 0.5, c₂₃ = 0.3, c₁₃ = 0.5) =
+    nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)

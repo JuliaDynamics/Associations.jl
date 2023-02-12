@@ -38,11 +38,10 @@ The supertype of all continuous system definitions.
 abstract type ContinuousDefinition <: SystemDefinition end
 
 """
-    system(d::DiscreteDefinition)
-    system(d::ContinuousDefinition)
+    system(definition::DiscreteDefinition) → s::DiscreteDynamicalSystem
+    system(definition::ContinuousDefinition) → s::ContinuousDynamicalSystem
 
-Construct a `DiscreteDynamicalSystem` or `ContinuousDynamicalSystem` from `d` that can be
-used with trajectory.
+Initialize a dynamical system from `definition`.
 """
 function system(d::DiscreteDefinition) end
 
@@ -55,12 +54,12 @@ include("discretemaps/henon2.jl")
 include("discretemaps/Henon3.jl")
 include("discretemaps/Ikeda.jl")
 include("discretemaps/LinearMap2.jl")
-#include("discretemaps/nonlinear3D_linear_and_nonlinear_coupling.jl")
+include("discretemaps/Nonlinear3.jl")
 #include("discretemaps/nontrivial_pegiun.jl")
 include("discretemaps/Logistic2Unidir.jl")
 include("discretemaps/Logistic2Bidir.jl")
-#include("discretemaps/logistic3.jl")
-#include("discretemaps/logistic4.jl")
+include("discretemaps/Logistic3CommonDriver.jl")
+include("discretemaps/Logistic4Chain.jl")
 #include("discretemaps/ulammap.jl")
 #include("discretemaps/var1.jl")
 #include("discretemaps/verdes.jl")
