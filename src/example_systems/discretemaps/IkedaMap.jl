@@ -2,11 +2,11 @@ import Distributions: Uniform
 import StaticArrays: SVector
 import DynamicalSystemsBase: DiscreteDynamicalSystem
 using Random
-export Ikeda
+export Ikeda2
 
 """
-    Ikeda <: DiscreteDefinition
-    Ikeda(; xi = [0.19, 0.21], c_xy = 1.0, c_yx = 1.0, a = 0.8, b = 12, c = 0.9,
+    Ikeda2 <: DiscreteDefinition
+    Ikeda2(; xi = [0.19, 0.21], c_xy = 1.0, c_yx = 1.0, a = 0.8, b = 12, c = 0.9,
         r₁ = 0.2, r₂ = 0.15, σ = 0.05, rng = Random.default_rng())
 
 Initialise a discrete two-dimensional Ikeda map system, adapted from Cao et al.
@@ -22,14 +22,12 @@ y(t+1) = \\mu(y \\cos{(\\theta)} - c_{xy} x \\sin{(\\theta)}) - min(\\dfrac{\\si
 \\end{aligned}
 ```
 
-## References
-
 [^Cao1997]:
     Cao, Liangyue, Alistair Mees, and Kevin Judd. "Modeling and predicting
     non-stationary time series." International Journal of Bifurcation and
     Chaos 7.08 (1997): 1823-1831.
 """
-Base.@kwdef struct Ikeda{V, C1, C2, A, B, C, R1, R2, Σ, R} <: DiscreteDefinition
+Base.@kwdef struct Ikeda2{V, C1, C2, A, B, C, R1, R2, Σ, R} <: DiscreteDefinition
     xi::V = [0.19, 0.21]
     c_xy::C1 = 1.0
     c_yx::C2 = 1.0
@@ -42,11 +40,11 @@ Base.@kwdef struct Ikeda{V, C1, C2, A, B, C, R1, R2, Σ, R} <: DiscreteDefinitio
     rng::R = Random.default_rng()
 end
 
-function system(definition::Ikeda)
+function system(definition::Ikeda2)
     return DiscreteDynamicalSystem(eom_ikeda, definition.xi, definition)
 end
 
-function eom_ikeda(u, p::Ikeda, t)
+function eom_ikeda(u, p::Ikeda2, t)
     x, y = u
     (; xi, c_xy, c_yx, a, b, c, r₁, r₂, σ, rng) = p
     θ = a - b/(c + x^2 + y^2)
