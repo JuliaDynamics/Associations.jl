@@ -23,10 +23,15 @@ AR1Bidir
 ChaoticMaps3
 Henon2
 Henon3
-Ikeda
-LinearMap2
+Ikeda2
+ChaoticNoisyLinear2
 Logistic2Unidir
 Logistic2Bidir
 Logistic3CommonDriver
 Logistic4Chain
+Nonlinear3
+Peguin2
+UlamLattice
+Var1
+Verdes3
 ```

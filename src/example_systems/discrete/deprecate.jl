@@ -17,6 +17,10 @@ export logistic2_bidir
 export logistic3
 export logistic4
 export nonlinear_3d
+export nontrivial_pegiun
+export ulam
+export var1
+export verdes
 
 function eom_ar1_unidir(x, p, n)
     a₁, b₁, c_xy, σ = (p...,)
@@ -330,7 +334,7 @@ end
 
 function linearmap1(u₀, c)
     @warn "`linearmap1` is deprecated in CausalityTools v2. "*
-    "Use `system(LinearMap2())` instead, which returns a `DiscreteDynamicalSystem` "*
+    "Use `system(ChaoticNoisyLinear2())` instead, which returns a `DiscreteDynamicalSystem` "*
     "that can be iterated."
     p = @LArray [c] (:c)
     DiscreteDynamicalSystem(eom_linearmap2, u₀, p)
@@ -668,7 +672,7 @@ end
 
 function logistic4(u₀, r₁, r₂, r₃, r₄, c₁₂, c₂₃, c₃₄)
     @warn "`logistic4` is deprecated in CausalityTools v2. "*
-    "Use `system(Logistic43Chain())` instead, which returns a "*
+    "Use `system(Logistic4Chain())` instead, which returns a "*
     "`DiscreteDynamicalSystem` that can be iterated."
     p = @LArray [r₁, r₂, r₃, r₄, c₁₂, c₂₃, c₃₄] (:r₁, :r₂, :r₃, :r₄, :c₁₂, :c₂₃, :c₃₄)
     DiscreteDynamicalSystem(eom_logistic4, u₀, p)
@@ -750,6 +754,9 @@ function eom_nonlinear3d(x, p, n)
 end
 
 function nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)
+    @warn "`nonlinear3d` is deprecated in CausalityTools v2. "*
+    "Use `system(Nonlinear3())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
     p = @LArray [a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃] (:a₁, :a₂, :a₃,  :b₁, :b₂, :b₃, :c₁₂, :c₂₃, :c₁₃, :σ₁, :σ₂, :σ₃)
     s = DiscreteDynamicalSystem(eom_nonlinear3d, u₀, p)
     return s
@@ -789,3 +796,197 @@ nonlinear3d(;u₀ = rand(3),
         b₁ = 0.4, b₂ = 0.4, b₃ = 0.4,
         c₁₂ = 0.5, c₂₃ = 0.3, c₁₃ = 0.5) =
     nonlinear3d(u₀, a₁, a₂, a₃,  b₁, b₂, b₃, c₁₂, c₂₃, c₁₃, σ₁, σ₂, σ₃)
+
+
+function eom_nontrivial_pegiun(u, p, n)
+    n = n + 10
+    O = zeros(Float64, n + 3, 2)
+    x, y = (u...,)
+    p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂ = (p...,)
+
+    # Propagate initial condition to the three first time steps.
+    for i = 1:3
+        O[i, 1] = x
+        O[i, 2] = y
+    end
+    for i = 4:n
+        y1 = O[i-1, 2]
+        x2 = O[i-2, 1]
+        y3 = O[i-3, 2]
+
+        ξ₁ = rand(Normal(0, σ₁))
+        ξ₂ = rand(Normal(0, σ₂))
+        ynew = p₁*y1 + ξ₁
+        xnew = p₂ + p₃*x2 + (p₄ - p₅*y3)/(1 + exp(-p₆*y3)) + ξ₂
+        O[i, 1] = xnew
+        O[i, 2] = ynew
+    end
+    O = O[10+3:end-10, :]
+    O[:, 1] .= O[:, 1] .- mean(O[:, 1])
+    O[:, 2] .= O[:, 2] .- mean(O[:, 2])
+    O[:, 1] .= O[:, 1] ./ std(O[:, 1])
+    O[:, 2] .= O[:, 2] ./ std(O[:, 2])
+    return Dataset(O)
+end
+
+function nontrivial_pegiun(u₀, p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂, n::Int)
+    @warn "`nontrivial_pegiun` is deprecated in CausalityTools v2. "*
+    "Use `system(Peguin2())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
+    p = @LArray [p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂] (:p₁, :p₂, :p₃, :p₄, :p₅, :p₆, :σ₁, :σ₂)
+    eom_nontrivial_pegiun(u₀, p, n)
+end
+
+
+"""
+    nontrivial_pegiun(;u₀ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
+        p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) → Dataset
+
+A 2D discrete autoregressive system with nonlinear, nontrivial coupling from [1] .
+This system is from [1](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf), and
+was also studied in [2](https://www.sciencedirect.com/science/article/pii/S0165027002003679).
+The version implemented here allows for tweaking the parameters of the equations.
+The difference equations are
+
+```math
+\\begin{aligned}
+x(t+1) &= p_2 + p_3 x(t-2) + c_{yx}\\dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \\xi_1(t) \\
+y(t+1) &= p_1 y(t) + \\xi_2(t).
+\\end{aligned}
+```
+Here, ``\\xi_{1,2}(t)`` are two independent normally distributed noise processes
+with zero mean and standard deviations ``\\sigma_1`` and ``\\sigma_2``. The
+``\\xi_{1,2}(t)`` terms represent dynamical noise.
+
+# References
+
+[1] Péguin-Feissolle, A., & Teräsvirta, T. (1999). A General Framework for
+Testing the Granger Noncausaality Hypothesis. Universites d’Aix-Marseille II
+et III. [https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf)
+
+[2] Chávez, M., Martinerie, J., & Le Van Quyen, M. (2003). Statistical
+assessment of nonlinear causality: application to epileptic EEG signals.
+Journal of Neuroscience Methods, 124(2), 113–128.
+doi:10.1016/s0165-0270(02)00367-9
+[https://www.sciencedirect.com/science/article/pii/S0165027002003679](https://www.sciencedirect.com/science/article/pii/S0165027002003679)
+"""
+function nontrivial_pegiun(;u₀ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
+        p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100)
+    eom_nontrivial_pegiun(u₀, [p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂], n)
+end
+
+function eom_ulam(dx, x, p, t)
+    ε = p[:ε]
+    f = x -> 2 - x^2
+    dx[1] = f(ε*x[length(dx)] + (1-ε)*x[1])
+    for i in 2:length(dx)
+        dx[i] = f(ε*x[i-1] + (1-ε)*x[i])
+    end
+end
+
+"""
+    ulam(D::Int = 10; u₀ = rand(D), ε::Real = 0.10) → DiscreteDynamicalSystem
+
+A lattice of `D` unidirectionally coupled ulam maps[^Schreiber2000] defined as
+
+```math
+x^{m}_{t+1} = f(\\epsilon x^{m-1}_{t} + (1 - \\epsilon) x_{t}^{m}),
+```
+
+where ``m = 1, 2, \\ldots, D`` and ``f(x) = 2 - x^2``. In this system, information transfer
+happens only in the direction of increasing ``m``.
+
+[^Schreiber2000]:
+    Schreiber, Thomas. "Measuring information transfer." Physical review letters 85.2
+    (2000): 461.
+"""
+function ulam(D::Int = 10; u₀ = rand(D), ε::Real = 0.10)
+    @warn "`ulam` is deprecated in CausalityTools v2. "*
+    "Use `system(UlamLattice())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
+    p = LVector(ε = ε)
+
+    DiscreteDynamicalSystem(eom_ulam, u₀, p)
+end
+
+function eom_var1(x, p, n)
+    σ₁, σ₂, σ₃ = p[1], p[2], p[3]
+    x₁, x₂, x₃ = x[1], x[2], x[3]
+    θ = rand(Normal(0, σ₁))
+    η = rand(Normal(0, σ₂))
+    ϵ = rand(Normal(0, σ₃))
+
+    dx₁ = θ
+    dx₂ = x₁ * η
+    dx₃ = 0.5*x₃ * x₂ + ϵ
+    return SVector{3}(dx₁, dx₂, dx₃)
+end
+
+function var1(u₀, σ₁, σ₂, σ₃)
+    @warn "`var1` is deprecated in CausalityTools v2. "*
+    "Use `system(Var1())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
+    p = LVector(ε = ε)
+    p = @LArray [σ₁, σ₂, σ₃] (:σ₁, :σ₂, :σ₃)
+
+    DiscreteDynamicalSystem(eom_var1, u₀, p)
+end
+
+"""
+    var1(x, p, n) → DiscreteDynamicalSystem
+
+Initialise a discrete vector autoregressive system where X₁ → X₂ → X₃.
+"""
+var1(;u₀ = rand(3), σ₁ = 1.0, σ₂ = 0.2, σ₃ = 0.3) = var1(u₀, σ₁, σ₂, σ₃)
+
+function eom_verdes(u, p, t)
+    x, y, z = (u...,)
+    ωy, ωz, σx, σy, σz = (p...,)
+
+    ηx = σx == 0 ? 0 : rand(Normal(0, σx))
+    ηy = σy == 0 ? 0 : rand(Normal(0, σy))
+    ηz = σz == 0 ? 0 : rand(Normal(0, σz))
+
+    dx = y*(18y - 27y^2 + 10)/2 + z*(1-z) + ηx
+    dy = (1 - cos((2*pi/ωy) * t))/2 + ηy
+    dz = (1 - sin((2*pi/ωz) * t))/2 + ηz
+    return SVector{3}(dx, dy, dz)
+end
+
+function verdes(u₀, ωy, ωz, σx, σy, σz)
+    @warn "`verdes` is deprecated in CausalityTools v2. "*
+    "Use `system(Verdes())` instead, which returns a "*
+    "`DiscreteDynamicalSystem` that can be iterated."
+    p = LVector(ωy = ωy, ωz = ωz, σx = σx, σy = σy, σz = σz)
+
+    DiscreteDynamicalSystem(eom_verdes, u₀, p)
+end
+
+"""
+    verdes(;u₀ = rand(3), ωy = 315, ωz = 80,
+        σx = 0.0, σy = 0.0, σz = 0.0) → DiscreteDynamicalSystem
+
+Intitialise a 3D system where the response X is a highly nonlinear combination
+of Y and Z (Verdes, 2005)[^Verdes2005]. The forcings Y and Z involve sines and cosines, and
+have different periods, which controlled by `ωy` and `ωz`.
+
+The equations of motion are
+
+```math
+\\begin{aligned}
+x(t+1) &= \\dfrac{y(t)(18y(t) - 27y(t)^2 + 10)}{2} + z(t)(1-z(t)) + ηx \\
+y(t+1) &= \\dfrac{(1 - \\dfrac{\\cos(2\\pi)}{\\omega y}t)}{2} + ηy \\
+z(t+1) &= \\dfrac{(1 - \\dfrac{\\sin(2\\pi)}{\\omega z}t)}{2} + ηz
+\\end{aligned}
+```
+where ηx, ηy, ηz is gaussian noise with mean 0 and standard deviation `σx`, `σy`
+and `σz`.
+
+[^Verdes2005]:
+    Verdes, P. F. "Assessing causality from multivariate time series." Physical
+    Review E 72.2 (2005): 026222.
+"""
+verdes(;u₀ = rand(3),
+    ωy = 315, ωz = 80,
+    σx = 0.01, σy = 0.01, σz = 0.01) =
+    verdes(u₀, ωy, ωz, σx, σy, σz)

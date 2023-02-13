@@ -1,79 +1,34 @@
-export SystemDefinition, DiscreteDefinition, ContinuousSystem
-export system
+include("api.jl")
 
-"""
-    SystemDefinition
+include("discrete/deprecate.jl")
+include("discrete/AR1Unidir.jl")
+include("discrete/AR1Bidir.jl")
+include("discrete/Anishchenko.jl")
+include("discrete/ChaoticMaps3.jl")
+include("discrete/henon2.jl")
+include("discrete/Henon3.jl")
+include("discrete/Ikeda2.jl")
+include("discrete/ChaoticNoisyLinear2.jl")
+include("discrete/Nonlinear3.jl")
+include("discrete/Peguin2.jl")
+include("discrete/Logistic2Unidir.jl")
+include("discrete/Logistic2Bidir.jl")
+include("discrete/Logistic3CommonDriver.jl")
+include("discrete/Logistic4Chain.jl")
+include("discrete/UlamLattice.jl")
+include("discrete/Var1.jl")
+include("discrete/Verdes3.jl")
 
-The abstract type of all system definitions. Abstract subtypes are [`DiscreteDefinition`](@ref)
-and [`ContinuousSystem`](@ref). The purpose of concrete implementations is to allow
-greater flexibility in the type of systems allowed by `DiscreteDefinition`, and
-to streamline randomization of initial conditions and parameters for a particular
-set of governing equations.
-"""
-abstract type SystemDefinition end
-
-"""
-    DiscreteDefinition <: SystemDefinition
-
-The supertype of all discrete system definitions.
-
-Why is this type needed? Ideally, an additional `DiscreteDefinition` definition shouldn't
-be needed, because we should in principle be able to use `DiscreteDynamicalSystem` directly
-for all systems. However, `DiscreteDynamicalSystem` doesn't work
-for systems with memory beyond a single time lag. For example, autoregressive systems
-of order larger than one are not representable using `DiscreteDynamicalSystem`.
-
-Concrete subtypes of `DiscreteDefinition` are *parameter containers* that are passed
-on to [`DiscreteDynamicalSystem`](@ref). They allocate mutable containers that keep
-track of past states of state variables that require it. Use [`system`](@ref) to
-generate a `DiscreteDynamicalSystem` that can be used with [`trajectory`](@ref).
-"""
-abstract type DiscreteDefinition <: SystemDefinition end
-
-"""
-    ContinuousDefinition <: SystemDefinition
-
-The supertype of all continuous system definitions.
-"""
-abstract type ContinuousDefinition <: SystemDefinition end
-
-"""
-    system(definition::DiscreteDefinition) → s::DiscreteDynamicalSystem
-    system(definition::ContinuousDefinition) → s::ContinuousDynamicalSystem
-
-Initialize a dynamical system from `definition`.
-"""
-function system(d::DiscreteDefinition) end
-
-include("discretemaps/deprecate.jl")
-include("discretemaps/AR1Unidir.jl")
-include("discretemaps/AR1Bidir.jl")
-include("discretemaps/Anishchenko.jl")
-include("discretemaps/ChaoticMaps3.jl")
-include("discretemaps/henon2.jl")
-include("discretemaps/Henon3.jl")
-include("discretemaps/Ikeda2.jl")
-include("discretemaps/LinearMap2.jl")
-include("discretemaps/Nonlinear3.jl")
-#include("discretemaps/nontrivial_pegiun.jl")
-include("discretemaps/Logistic2Unidir.jl")
-include("discretemaps/Logistic2Bidir.jl")
-include("discretemaps/Logistic3CommonDriver.jl")
-include("discretemaps/Logistic4Chain.jl")
-#include("discretemaps/ulammap.jl")
-#include("discretemaps/var1.jl")
-#include("discretemaps/verdes.jl")
-
-include("continuous_systems/chuacircuits_driven.jl")
-include("continuous_systems/chuacircuit_nscroll_sine.jl")
-include("continuous_systems/hindmarsh_rose.jl")
-include("continuous_systems/mediated_link.jl")
-include("continuous_systems/lorenz_lorenz_bidir.jl")
-include("continuous_systems/lorenz_lorenz_lorenz_bidir_forced.jl")
-include("continuous_systems/lorenz_lorenz_lorenz_transitive.jl")
-include("continuous_systems/repressilator.jl")
-include("continuous_systems/rossler_rossler_bidir.jl")
-include("continuous_systems/rossler_rossler_rossler_bidir_forced.jl")
-include("continuous_systems/rossler_lorenz.jl")
+include("continuous/chuacircuits_driven.jl")
+include("continuous/chuacircuit_nscroll_sine.jl")
+include("continuous/hindmarsh_rose.jl")
+include("continuous/mediated_link.jl")
+include("continuous/lorenz_lorenz_bidir.jl")
+include("continuous/lorenz_lorenz_lorenz_bidir_forced.jl")
+include("continuous/lorenz_lorenz_lorenz_transitive.jl")
+include("continuous/repressilator.jl")
+include("continuous/rossler_rossler_bidir.jl")
+include("continuous/rossler_rossler_rossler_bidir_forced.jl")
+include("continuous/rossler_lorenz.jl")
 
 include("noise.jl")

@@ -2,6 +2,7 @@
 ComplexityMeasures = "ed8fcbec-b94c-44b6-89df-898894ad9591"
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+DynamicalSystemsBase = "6e36e845-645a-534a-86f2-f5d4aa5a06b4"
 HypothesisTests = "09f84164-cd44-5f33-b23f-e6b0d136a0d5"
 Neighborhood = "645ca80c-8b79-4109-87ea-e1f58159d116"
 Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
