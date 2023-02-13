@@ -28,7 +28,7 @@ through variables ``x_1`` and ``x_2`.
 \\end{align*}
 ```
 
-with ``c_{12} \\geq 0`` and ``c \\geq 0``.
+with ``c_{12} \\geq 0`` and ``c_{21} \\geq 0``.
 
 [^Krakovská2018]:
     Krakovská, A., Jakubík, J., Chvosteková, M., Coufal, D., Jajcay, N., & Paluš, M.

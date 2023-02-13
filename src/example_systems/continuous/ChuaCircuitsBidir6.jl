@@ -31,7 +31,7 @@ be tuned individually for each subsystem.
 \\dfrac{dz_1}{dt} &= -\\beta_1 y_1 + F_1 sin(\\omega_1 t) + \\epsilon_1 \\\\
 \\dfrac{dx_2}{dt} &= \\alpha_2 (y_2, h(x_2)) - \\alpha_2 c_{12}(x_1 - x_2) \\\\
 \\dfrac{dy_2}{dt} &= x_2 - y_2 + z_2 \\\\
-\\dfrac{dz_2}{dt} &= -\\beta_2 y_2 + F_2 sin(\\omega_2 t) + \\epsilon_2 \\\\,
+\\dfrac{dz_2}{dt} &= -\\beta_2 y_2 + F_2 sin(\\omega_2 t) + \\epsilon_2,
 \\end{align*}
 ```
 

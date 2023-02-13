@@ -16,8 +16,8 @@ system consisting of three coupled 1D Henon maps (Papana et al., 2013)[^Papana20
 
 ```math
 \\begin{align*}
-x_1(t+1) &= a - x_1(t)^2 + b x_1(t-2) \\
-x_2(t+1) &= a - c x_1(t) x_2(t)- (1 - c) x_2(t)^2 + b x_2(t-1) \\
+x_1(t+1) &= a - x_1(t)^2 + b x_1(t-2) \\\\
+x_2(t+1) &= a - c x_1(t) x_2(t)- (1 - c) x_2(t)^2 + b x_2(t-1) \\\\
 x_3(t+1) &= c x_2(t) x_3(t) - (1 - c) x_3(t)^2 + b x_3(t-1)
 \\end{align*}
 ```
