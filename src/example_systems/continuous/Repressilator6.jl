@@ -22,12 +22,12 @@ algorithm.
 
 ```math
 \\begin{align*}
-\\dfrac{dm_1}{dt} = -m1 + \\dfrac{\\alpha}{1 + p_3^n} + \\alpha_0 \\\\
-\\dfrac{dm_2}{dt} = -m2 + \\dfrac{\\alpha}{1 + p_1^n} + \\alpha_0 \\\\
-\\dfrac{dm_3}{dt} = -m3 + \\dfrac{\\alpha}{1 + p_2^n} + \\alpha_0 \\\\
-\\dfrac{dp_1}{dt} = -\\beta(p_1 - m_1) \\\\
-\\dfrac{dp_2}{dt} = -\\beta(p_2 - m_2) \\\\
-\\dfrac{dp_3}{dt} = -\\beta(p_3 - m_3) \\\\
+\\dfrac{dm_1}{dt} &= -m1 + \\dfrac{\\alpha}{1 + p_3^n} + \\alpha_0 \\\\
+\\dfrac{dm_2}{dt} &= -m2 + \\dfrac{\\alpha}{1 + p_1^n} + \\alpha_0 \\\\
+\\dfrac{dm_3}{dt} &= -m3 + \\dfrac{\\alpha}{1 + p_2^n} + \\alpha_0 \\\\
+\\dfrac{dp_1}{dt} &= -\\beta(p_1 - m_1) \\\\
+\\dfrac{dp_2}{dt} &= -\\beta(p_2 - m_2) \\\\
+\\dfrac{dp_3}{dt} &= -\\beta(p_3 - m_3) \\\\
 \\end{align*}
 ```
 

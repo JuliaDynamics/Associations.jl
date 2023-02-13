@@ -13,11 +13,11 @@ spiking.
 ## Description
 
 ```math
-\\begin{aligned}
-\\dfrac{dx}{dt} &= y + \\phi(x) - z + I
-\\dfrac{dy}{dt} &= \\psi(x) - y
+\\begin{align*}
+\\dfrac{dx}{dt} &= y + \\phi(x) - z + I \\\\
+\\dfrac{dy}{dt} &= \\psi(x) - y \\\\
 \\dfrac{dz}{dt} &= r[s(x - x_R) - z],
-\\end{aligned}
+\\end{align*}
 ```
 where
 

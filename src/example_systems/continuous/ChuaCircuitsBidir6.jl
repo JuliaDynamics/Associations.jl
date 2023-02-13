@@ -25,14 +25,14 @@ the subsystems are set equal to each other, as in the original paper, but can he
 be tuned individually for each subsystem.
 
 ```math
-    \\begin{align*}
-    \\dfrac{dx_1}{dt} = \\alpha_1(y_1, h(x_1)) - \\alpha_1 \\epsilon(x_1 - x_2) \\\\
-    \\dfrac{dy_1}{dt} = x_1 - y_1 + z_1 \\\\
-    \\dfrac{dz_1}{dt} = -\\beta_1 y_1 + F_1 sin(\\omega_1 t) + \\epsilon_1 \\\\
-    \\dfrac{dx_2}{dt} = \\alpha_2 (y_2, h(x_2)) - \\alpha_2 c_{12}(x_1 - x_2) \\\\
-    \\dfrac{dy_2}{dt} = x_2 - y_2 + z_2 \\\\
-    \\dfrac{dz_2}{dt} = -\\beta_2 y_2 + F_2 sin(\\omega_2 t) + \\epsilon_2 \\\\,
-    \\end{align*}
+\\begin{align*}
+\\dfrac{dx_1}{dt} &= \\alpha_1(y_1, h(x_1)) - \\alpha_1 \\epsilon(x_1 - x_2) \\\\
+\\dfrac{dy_1}{dt} &= x_1 - y_1 + z_1 \\\\
+\\dfrac{dz_1}{dt} &= -\\beta_1 y_1 + F_1 sin(\\omega_1 t) + \\epsilon_1 \\\\
+\\dfrac{dx_2}{dt} &= \\alpha_2 (y_2, h(x_2)) - \\alpha_2 c_{12}(x_1 - x_2) \\\\
+\\dfrac{dy_2}{dt} &= x_2 - y_2 + z_2 \\\\
+\\dfrac{dz_2}{dt} &= -\\beta_2 y_2 + F_2 sin(\\omega_2 t) + \\epsilon_2 \\\\,
+\\end{align*}
 ```
 
 where ``h(x) = M_1x + 0.5(M_0 - M_1)(|x+1| - |x - 1|)`` and ``\\epsilon_1, \\epsilon_2``

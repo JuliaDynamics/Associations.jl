@@ -5,10 +5,7 @@ export system
     SystemDefinition
 
 The abstract type of all system definitions. Abstract subtypes are [`DiscreteDefinition`](@ref)
-and [`ContinuousSystem`](@ref). The purpose of concrete implementations is to allow
-greater flexibility in the type of systems allowed by `DiscreteDefinition`, and
-to streamline randomization of initial conditions and parameters for a particular
-set of governing equations.
+and [`ContinuousSystem`](@ref).
 """
 abstract type SystemDefinition end
 

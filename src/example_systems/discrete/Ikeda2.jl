@@ -16,10 +16,12 @@ Initialise a discrete two-dimensional Ikeda map system, adapted from Cao et al.
 The difference equations are
 
 ```math
-\\begin{aligned}
-x(t+1) = 1 + \\mu(x \\cos{(\\theta)} - c_{yx} y \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\xi_{t}^{(1)})}{(1-x)}, \\xi_{t}^{(2)} \\\\
-y(t+1) = \\mu(y \\cos{(\\theta)} - c_{xy} x \\sin{(\\theta)}) - min(\\dfrac{\\sigma \\zeta_{t}^{(1)})}{(1-y)}, \\zeta_{t}^{(2)}
-\\end{aligned}
+\\begin{align*}
+x(t+1) &= 1 + \\mu(x \\cos{(\\theta)} - c_{yx} y \\sin{(\\theta)}) -
+min( \\dfrac{\\sigma \\xi_{t}^{(1)}}{(1-x)}, \\xi_{t}^{(2)}) \\\\
+y(t+1) &= \\mu(y \\cos{(\\theta)} - c_{xy} x \\sin{(\\theta)}) -
+min(\\dfrac{\\sigma \\zeta_{t}^{(1)}}{(1-y)}, \\zeta_{t}^{(2)})
+\\end{align*}
 ```
 
 [^Cao1997]:

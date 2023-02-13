@@ -19,12 +19,12 @@ through variables ``x_1`` and ``x_2`.
 
 ```math
 \\begin{align*}
-\\dfrac{dx_1}{dt} = \\omega_1 (-y_1) - z_1 + c_{21}*(x_1 - x_2) \\\\
-\\dfrac{dy_1}{dt}  = \\omega_1 x_1 + a y_1 \\\\
-\\dfrac{dz_1}{dt}  = b + z_1 (x_1 - c) \\\\
-\\dfrac{dx_2}{dt}  = \\omega_2 (-y_2) - z_2 + c_{12} (x_2 - x_1) \\\\
-\\dfrac{dy_2}{dt} = \\omega_2*x_2 + a*y_2 \\\\
-\\dfrac{dz_2}{dt} = b + z_2 (x_2 - c) \\\\
+\\dfrac{dx_1}{dt} &= \\omega_1 (-y_1) - z_1 + c_{21}*(x_1 - x_2) \\\\
+\\dfrac{dy_1}{dt} &= \\omega_1 x_1 + a y_1 \\\\
+\\dfrac{dz_1}{dt} &= b + z_1 (x_1 - c) \\\\
+\\dfrac{dx_2}{dt} &= \\omega_2 (-y_2) - z_2 + c_{12} (x_2 - x_1) \\\\
+\\dfrac{dy_2}{dt} &= \\omega_2*x_2 + a*y_2 \\\\
+\\dfrac{dz_2}{dt} &= b + z_2 (x_2 - c) \\\\
 \\end{align*}
 ```
 

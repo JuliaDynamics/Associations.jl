@@ -21,11 +21,11 @@ The dynamical influence goes in the directions ``Z \\to X`` and ``Z \\to Y``.
 The equations of motion are
 
 ```math
-\\begin{aligned*}
-x(t+1) = (x(t)(r - r x(t) - z(t) + \\sigma_x \\eta_x)) \\mod 1 \\\\
-y(t+1) = (y(t)(r - r y(t) - z(t) + \\sigma_y \\eta_y)) \\mod 1 \\\\
-z(t+1) = (z(t)(r - r z(t) + \\sigma_z \\eta_z)) \\mod 1
-\\end{aligned*}
+\\begin{align*}
+x(t+1) &= (x(t)(r - r x(t) - z(t) + \\sigma_x \\eta_x)) \\mod 1 \\\\
+y(t+1) &= (y(t)(r - r y(t) - z(t) + \\sigma_y \\eta_y)) \\mod 1 \\\\
+z(t+1) &= (z(t)(r - r z(t) + \\sigma_z \\eta_z)) \\mod 1
+\\end{align*}
 ```
 
 Dynamical noise may be added to each of the dynamical variables by tuning the

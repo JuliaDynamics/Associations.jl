@@ -16,10 +16,10 @@ the system is chaotic whenever `b < 0.20`.
 
 ```math
 \\begin{align*}
-\\dfrac{dx}{dt} = sin(y) - bx \\\\
-\\dfrac{dy}{dt} = sin(z) - by \\\\
-\\dfrac{dz}{dt} = sin(x) - bz
-\\end{align}
+\\dfrac{dx}{dt} &= sin(y) - bx \\\\
+\\dfrac{dy}{dt} &= sin(z) - by \\\\
+\\dfrac{dz}{dt} &= sin(x) - bz
+\\end{align*}
 ```
 """
 Base.@kwdef struct Thomas3{V, B} <: ContinuousDefinition

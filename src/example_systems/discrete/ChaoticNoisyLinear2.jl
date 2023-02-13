@@ -17,10 +17,10 @@ with coupling strength `c`.
 ## Definition
 
 ```math
-\\begin{align}
+\\begin{align*}
 x(t+1) = 3.4 x(t) (1 - x(t)^2) e^{-x(t)^2} + 0.8x(t-1) + \\xi_x \\\\
 y(t+1) = 3.4 y(t) (1 - y(t)^2) e^{-y(t)^2} + 0.8y(t-1) + \\xi_y + c x(t-2)
-\\end{align}
+\\end{align*}
 ```
 Process noise ``\\xi_x`` and ``\\xi_y``
 is drawn at each iteration from `nx` and `ny`.

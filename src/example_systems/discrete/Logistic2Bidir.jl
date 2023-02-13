@@ -17,12 +17,12 @@ interacting (Diego et al., 2019)[^Diego2019].
 ## Equations of motion
 
 ```math
-\\begin{align}
+\\begin{align*}
 x(t+1) &= r_1 f_{yx}^{t}(1 - f_{yx}^{t}) \\\\
 y(t+1) &= r_2 f_{xy}^{t}(1 - f_{xy}^{t}) \\\\
 f_{xy}^t &= \\dfrac{y(t) + c_{xy}(x(t) + \\sigma_{xy} \\xi_{xy}^t )}{1 + c_{xy} (1 + \\sigma_{xy} )} \\\\
 f_{yx}^t &= \\dfrac{x(t) + c_{yx}(y(t) + \\sigma_{yx} \\xi_{yx}^t )}{1 + c_{yx} (1 + \\sigma_{yx} )},
-\\end{align}
+\\end{align*}
 ```
 
 Here, the coupling strength ``c_{xy}`` controls how strongly species ``x`` influences species

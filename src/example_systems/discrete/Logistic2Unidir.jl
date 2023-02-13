@@ -20,10 +20,10 @@ coupled `x → y` (Diego et al., 2019)[^Diego2019].
 The equations of motion are
 
 ```math
-\\begin{aligned}
+\\begin{align*}
 x(t+1) &= r_1 x(t)(1 - x(t)) \\\\
 y(t+1) &= r_2 f(x,y)(1 - f(x,y)),
-\\end{aligned}
+\\end{align*}
 ```
 
 with

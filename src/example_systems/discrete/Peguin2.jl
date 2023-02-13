@@ -21,10 +21,10 @@ was also studied in Chávez et al. (2003)[^Chávez2003].
 The system is defined by the equations
 
 ```math
-\\begin{aligned}
-x(t+1) &= p_2 + p_3 x(t-2) + c_{yx}\\dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \\xi_1(t) \\
+\\begin{align*}
+x(t+1) &= p_2 + p_3 x(t-2) + c_{yx}\\dfrac{p_4 - p_5 y(t-3)}{1 + e^{-p_6 y(t-3)}} + \\xi_1(t) \\\\
 y(t+1) &= p_1 y(t) + \\xi_2(t).
-\\end{aligned}
+\\end{align*}
 ```
 
 Here, ``\\xi_{1,2}(t)`` are two independent normally distributed noise processes

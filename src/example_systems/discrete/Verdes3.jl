@@ -12,11 +12,11 @@ of Y and Z (Verdes, 2005)[^Verdes2005]. The forcings Y and Z involve sines and c
 have different periods, which controlled by `ωy` and `ωz`.
 
 ```math
-\\begin{aligned}
-x(t+1) &= \\dfrac{y(t)(18y(t) - 27y(t)^2 + 10)}{2} + z(t)(1-z(t)) + ηx \\
-y(t+1) &= \\dfrac{(1 - \\dfrac{\\cos(2\\pi)}{\\omega y}t)}{2} + ηy \\
+\\begin{align*}
+x(t+1) &= \\dfrac{y(t)(18y(t) - 27y(t)^2 + 10)}{2} + z(t)(1-z(t)) + ηx \\\\
+y(t+1) &= \\dfrac{(1 - \\dfrac{\\cos(2\\pi)}{\\omega y}t)}{2} + ηy \\\\
 z(t+1) &= \\dfrac{(1 - \\dfrac{\\sin(2\\pi)}{\\omega z}t)}{2} + ηz
-\\end{aligned}
+\\end{align*}
 ```
 where ηx, ηy, ηz is gaussian noise with mean 0 and standard deviation `σx`, `σy`
 and `σz`.

@@ -14,12 +14,12 @@ unidirectional forcing ``X \\to Y `` (Krakovská et al., 2018)[^Krakovská2018].
 The equations of motion are
 
 ```math
-\\begin{aligned*}
+\\begin{align*}
 x_1(t+1) &= 1.4 - x_1^2(t) + 0.3x_2(t) \\\\
 x_2(t+1) &= x_1(t) \\\\
 y_1(t+1) &= 1.4 - [c_{xy} x_1(t) y_1(t) + (1-c_{xy}) y_1^2(t)] + 0.3 y_2(t) \\\\
 y_2(t+1) &= y_1(t)
-\\end{aligned*}
+\\end{align*}
 ```
 
 [^Krakovská2018]:
