@@ -418,7 +418,6 @@ We see that the [`Lord`](@ref) estimator, which estimates local volume elements 
 
 ### [Estimation using [`ProbabilitiesEstimator`](@ref)s](@id example_mi_ProbabilitiesEstimator)
 
-
 We can also use [`ProbabilitiesEstimator`](@ref) to estimate Shannon mutual information.
 This does not apply any bias correction.
 
@@ -503,7 +502,7 @@ In this example we generate realizations of two different systems where we know 
 * A stochastic system consisting of two unidirectionally coupled first-order autoregressive processes ([`ar1_unidir`](@ref))
 * A deterministic, chaotic system consisting of two unidirectionally coupled logistic maps ([`logistic2_unidir`](@ref))
 
-We use the default input parameter values (see [`ar1_unidir`](@ref) and [`logistic2_unidir`](@ref) for details) and below we toggle only the random initial conditions and the coupling strength parameter `c_xy`. For each value of `c_xy` we generate 1,000 unique realizations of the system and obtain 500-point time series of the coupled variables.
+We use the default input parameter values (see [`AR1Unidir`](@ref) and [`Logistic2Unidir`](@ref) for details) and below we toggle only the random initial conditions and the coupling strength parameter `c_xy`. For each value of `c_xy` we generate 1,000 unique realizations of the system and obtain 500-point time series of the coupled variables.
 
 To estimate the mutual information, we use the binning-based [`ValueHistogram`](@ref) estimator. We summarize the distribution of $I(X; Y)$ values across all realizations using the median and quantiles encompassing 95 % of the values.
 
@@ -527,7 +526,7 @@ mi = zeros(length(c), 3, 2)
 
 # Define an estimator for MI
 b = RectangularBinning(4)
-estimator = VisitationFrequency(b)
+estimator = ValueHistogram(b)
 
 for i in 1 : length(c)
     
@@ -537,8 +536,10 @@ for i in 1 : length(c)
         
         # Obtain time series realizations of the two 2D systems 
         # for a given coupling strength and random initial conditions
-        lmap = trajectory(logistic2_unidir(u₀ = rand(2), c_xy = c[i]), npts - 1, Ttr = 1000)
-        ar1 = trajectory(ar1_unidir(u₀ = rand(2), c_xy = c[i]), npts - 1)
+        s_logistic = system(Logistic2Unidir(; xi = rand(2), c_xy = c[i]))
+        s_ar = system(AR1Unidir(xi = rand(2), c_xy = c[i]))
+        lmap = trajectory(s_logistic, npts - 1, Ttr = 500)
+        ar1 = trajectory(s_ar, npts - 1)
         
         # Compute the MI between the two coupled components of each system
         tmp[k, 1] = mutualinfo(MIShannon(), estimator, lmap[:, 1], lmap[:, 2])
@@ -551,7 +552,7 @@ for i in 1 : length(c)
 end
 
 # Plot distribution of MI values as a function of coupling strength for both systems
-fig =with_theme(theme_minimal()) do
+fig = with_theme(theme_minimal()) do
     fig = Figure()
     ax = Axis(fig[1, 1], xlabel = "Coupling strength", ylabel = "Mutual information")
     band!(ax, c, mi[:, 1, 1], mi[:, 3, 1], color = (:black, 0.3))
