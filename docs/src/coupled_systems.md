@@ -14,7 +14,7 @@ ContinuousDefinition
 system
 ```
 
-## Systems
+## Discrete systems
 
 ```@docs
 Anishchenko
@@ -34,4 +34,20 @@ Peguin2
 UlamLattice
 Var1
 Verdes3
+```
+
+## Continuous systems
+
+```@docs
+ChuaCircuitsBidir6
+ChuaScrollSine3
+HindmarshRose3
+LorenzBidir6
+LorenzForced9
+MediatedLink9
+Repressilator6
+RosslerBidir6
+RosslerForced9
+RosslerLorenzUnidir6
+Thomas3
 ```
