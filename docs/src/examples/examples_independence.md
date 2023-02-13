@@ -13,7 +13,7 @@ We start by generating some time series and configuring the test.
 
 ```@example quickstart_jddtest_logistic
 using CausalityTools
-sys = logistic2_bidir(c_xy = 0.5, c_yx = 0.4)
+sys = system(Logistic2Bidir(c_xy = 0.5, c_yx = 0.4))
 x, y = columns(trajectory(sys, 2000, Ttr = 10000))
 measure = JointDistanceDistribution(D = 5, B = 5)
 test = JointDistanceDistributionTest(measure)
@@ -32,12 +32,12 @@ independence(test, y, x)
 As expected, the null hypothesis is rejected in both directions at the pre-determined 
 significance level, and hence we detect directional coupling in both directions.
 
-## Non-coupled logistic maps
+### Non-coupled logistic maps
 
 What happens in the example above if there is no coupling?
 
 ```@example quickstart_jddtest_logistic
-sys = logistic2_bidir(c_xy = 0.00, c_yx = 0.0)
+sys = system(Logistic2Bidir(c_xy = 0.00, c_yx = 0.0))
 x, y = columns(trajectory(sys, 1000, Ttr = 10000));
 rxy = independence(test, x, y)
 ryx = independence(test, y, x)
@@ -85,7 +85,7 @@ As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are condi
 
 ## [[`SurrogateTest`](@ref)](@id examples_surrogatetest)
 
-## [Distance correlation](@id examples_surrogatetest_distancecorrelation)
+### [Distance correlation](@id examples_surrogatetest_distancecorrelation)
 
 ```@example
 using CausalityTools
@@ -181,7 +181,7 @@ where `x` drives `y`.
 
 ```@example surrogatecit_te
 using CausalityTools
-sys = logistic2_unidir(c_xy = 0.5) # x affects y, but not the other way around.
+sys = system(Logistic2Unidir(c_xy = 0.5)) # x affects y, but not the other way around.
 x, y = columns(trajectory(sys, 1000, Ttr = 10000))
 
 test = SurrogateTest(TEShannon(), KSG1(k = 4))
