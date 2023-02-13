@@ -1,4 +1,4 @@
-export SystemDefinition, DiscreteDefinition, ContinuousSystem, LaggedDiscreteDefinition
+export SystemDefinition, DiscreteDefinition, ContinuousDefinition, LaggedDiscreteDefinition
 export system
 
 """
