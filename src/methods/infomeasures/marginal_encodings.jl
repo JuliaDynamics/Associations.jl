@@ -75,12 +75,14 @@ function marginal_encodings(est::ValueHistogram{<:RectangularBinning}, x::Vector
     joint_bins = reduce(vcat, bins)
     idxs = size.(x, 2) #each input can have different dimensions
     s = 1
-    encodings = Vector{Dataset}(undef, length(idxs))
+    encodings = Vector{Vector}(undef, 0)
     for (i, cidx) in enumerate(idxs)
         variable_subset = s:(s + cidx - 1)
         s += cidx
         y = @views joint_bins[:, variable_subset]
-        encodings[i] = Dataset(y)
+        for j in size(y, 2)
+            push!(encodings, y[:, j])
+        end
     end
 
     return encodings
