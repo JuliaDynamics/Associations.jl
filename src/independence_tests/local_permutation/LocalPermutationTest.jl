@@ -38,10 +38,8 @@ struct NeighborCloseness <: LocalPermutationClosenessSearch end
 for assessing whether two variables `X` and `Y` are conditionally independendent given a
 third variable `Z` (all of which may be multivariate).
 
-Any association `measure` (with a compatible estimator `est`, if relevant) with ordering
-``\\hat{M}(X; Y | Z)`` (conditional variable is the third) can be used. To obtain the
-nearest-neighbor approach in Runge, 2018, use the [`CMIShannon`](@ref) measure with the
-[`FPVP`](@ref) estimator.
+To obtain the nearest-neighbor approach in Runge, 2018, use the [`CMIShannon`](@ref)
+measure with the [`FPVP`](@ref) estimator.
 
 ## Description
 
@@ -61,9 +59,15 @@ and permuted points are constructed as
 replacement, and ``x_i`` is replaced by ``x_j`` only if ``z_i \\approx z_j``.
 This procedure is repeated `nshuffles` times, and a test summary is returned.
 
+## Compatible measures
+
+| Measure                               | Conditional | Requires `est` |
+| ------------------------------------- | :---------: | :------------: |
+| [`CMIShannon`](@ref)                  |      ✓      |      Yes       |
+
 ## Examples
 
-See [quickstart examples](@ref quickstart_localpermutationtest).
+- [Conditional test, `CMIShannon`](@ref examples_localpermutationtest_cmishannon).
 
 [^Runge2018]: Runge, J. (2018, March). Conditional independence testing based on a
     nearest-neighbor estimator of conditional mutual information. In International
@@ -162,7 +166,7 @@ function independence(test::LocalPermutationTest, x, y, z)
     Î = estimate(measure,est, X, Y, Z)
     tree_z = KDTree(Z, Chebyshev())
     idxs_z = bulkisearch(tree_z, Z, NeighborNumber(kperm), Theiler(0))
-    𝒩 = MVector{kperm, Int16}.(idxs_z) # A statically sized copy
+    𝒩 = MVector{kperm, Int}.(idxs_z) # A statically sized copy
     n̂ = collect(1:N)
     X̂ = deepcopy(X)
     𝒰 = zeros(Int, N) # used indices
@@ -198,6 +202,3 @@ function shuffle_neighbor_indices!(idxs::Vector{MVector{D, I}}, rng) where {D, I
         shuffle!(rng, idxs[i])
     end
 end
-
-
-include("transferentropy.jl")
