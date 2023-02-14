@@ -1,4 +1,4 @@
-
+using Random
 n = 200
 
 # Pre-discretized data
@@ -17,12 +17,13 @@ nshuffles = 3
 
 # Analytical tests, in the limit.
 # -------------------------------
-n = 10000
+n = 20000
+rng = MersenneTwister(1234)
 
 # Pre-discretized data
-likeit = rand(["yes", "no"], n)
-food = rand(["veggies", "meat", "fish"], n)
-service = rand(["netflix", "hbo"], n)
+likeit = rand(rng, ["yes", "no"], n)
+food = rand(rng, ["veggies", "meat", "fish"], n)
+service = rand(rng, ["netflix", "hbo"], n)
 
 α = 0.01 # pick some arbitrary significance level
 
