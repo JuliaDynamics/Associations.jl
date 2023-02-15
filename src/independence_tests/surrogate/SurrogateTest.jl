@@ -26,9 +26,7 @@ to break any dependence between the input variables.
 There are different ways of shuffling, dictated by `surrogate`, each representing a
 distinct null hypothesis. For each shuffle, the provided `measure` is computed (using `est`,
 if relevant). This procedure is repeated `nshuffles` times, and a test summary is returned.
-For bivariate measures, the default is to shuffle both input variables. For conditional
-measures accepting three input variables, the default is to shuffle the first input.
-Exceptions are:
+The shuffled variable is always the first variable (`X`). Exceptions are:
 
 - If [`TransferEntropy`](@ref) measure such as [`TEShannon`](@ref),
     then the source variable is always shuffled, and the target and conditional
@@ -166,16 +164,16 @@ function independence(test::SurrogateTest, x, y)
     N = length(x)
     Î = estimate(measure,est, X, Y)
     sx = surrogenerator(x, surrogate, rng)
-    sy = surrogenerator(y, surrogate, rng)
     Îs = zeros(nshuffles)
     for b in 1:nshuffles
-        Îs[b] = estimate(measure, est, sx(), sy())
+        Îs[b] = estimate(measure, est, sx(), y)
     end
     p = count(Î .<= Îs) / nshuffles
 
     return SurrogateTestResult(Î, Îs, p, nshuffles)
 end
 
+# Concrete implementations
 include("contingency.jl")
 include("transferentropy.jl")
 include("hlms_measure.jl")
