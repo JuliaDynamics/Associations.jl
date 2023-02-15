@@ -49,7 +49,7 @@ enough evidence in the data to suggest directional coupling.
 
 ## [`LocalPermutationTest`](@ref)
 
-### Conditional mutual information (Shannon, differential)
+### [Conditional mutual information (Shannon, differential)](@id example_localpermtest_cmishannon)
 
 #### Chain of random variables $X \to Y \to Z$
 
@@ -60,7 +60,7 @@ independence using Shannon conditional mutual information
 entropy estimator, which naively computes CMI as a sum of entropy terms without guaranteed
 bias cancellation.
 
-```@example LOCAL_PERMUTATION_TEST
+```@example LOCAL_PERMUTATION_TEST_CMISHANNON
 using CausalityTools
 
 X = randn(1000)
@@ -76,12 +76,46 @@ We expect there to be a detectable influence from ``X`` to
 The null hypothesis is that the first two variables are conditionally independent given the third, which we reject with a very low p-value. Hence, we accept the alternative
 hypothesis that the first two variables ``X`` and ``Y``. are conditionally *dependent* given ``Z``.
 
-```@example LOCAL_PERMUTATION_TEST
+```@example LOCAL_PERMUTATION_TEST_CMISHANNON
 test_result = independence(test, x, z, y)
 ```
 
 As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are conditionally independent given ``Y``, because ``Y`` is the variable that transmits information from
 ``X`` to ``Z``.
+
+### [Transfer entropy (Shannon, differential)](@id example_localpermtest_teshannon)
+
+#### Chain of random variables $X \to Y \to Z to W$
+
+Here, we demonstrate [`LocalPermutationTest`](@ref) with the [`TEShannon`](@ref) measure
+with default parameters and the [`FPVP`](@ref) estimator. We'll use a system
+of four coupled logistic maps that are linked `X → Y → Z → W`.
+
+```@example LOCAL_PERMUTATION_TEST_TESHANNON
+using CausalityTools
+using Random; rng = Random.default_rng()
+s = system(Logistic4Chain(; xi = rand(4)))
+x, y, z, w = columns(trajectory(s, 2000))
+test = LocalPermutationTest(TEShannon(), FPVP(), nshuffles = 50)
+test_result = independence(test, x, z)
+```
+
+There is significant transfer entropy from `X → Z`. We should expect this transfer entropy
+to be non-significant when conditioning on `Y`, because all information from `X` to `Z`
+is transferred through `Y`.
+
+```@example LOCAL_PERMUTATION_TEST_TESHANNON
+test_result = independence(test, x, z, y)
+```
+
+As expected, we cannot reject the null hypothesis that `X` and `Z` are conditionally
+independent given `Y`.
+
+The same goes for variables one step up the chain
+
+```@example LOCAL_PERMUTATION_TEST_TESHANNON
+test_result = independence(test, y, w, z)
+```
 
 ## [[`SurrogateTest`](@ref)](@id examples_surrogatetest)
 
