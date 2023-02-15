@@ -83,7 +83,9 @@ test_result = independence(test, x, z, y)
 As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are conditionally independent given ``Y``, because ``Y`` is the variable that transmits information from
 ``X`` to ``Z``.
 
-### [[TEShannon](@ref)](@id example_localpermtest_teshannon)
+### [Transfer entropy (Shannon, differential)](@id example_localpermtest_teshannon)
+
+#### Chain of random variables $X \to Y \to Z to W$
 
 Here, we demonstrate [`LocalPermutationTest`](@ref) with the [`TEShannon`](@ref) measure
 with default parameters and the [`FPVP`](@ref) estimator. We'll use a system
@@ -108,6 +110,12 @@ test_result = independence(test, x, z, y)
 
 As expected, we cannot reject the null hypothesis that `X` and `Z` are conditionally
 independent given `Y`.
+
+The same goes for variables one step up the chain
+
+```@example LOCAL_PERMUTATION_TEST_TESHANNON
+test_result = independence(test, y, w, z)
+```
 
 ## [[`SurrogateTest`](@ref)](@id examples_surrogatetest)
 
