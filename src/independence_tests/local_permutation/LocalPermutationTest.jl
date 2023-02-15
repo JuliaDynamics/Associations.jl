@@ -74,8 +74,8 @@ instead of `Z` and we `I(X; Y)` and `Iₖ(X̂; Y)` instead of `I(X; Y | Z)` and
 
 | Measure              |       Pairwise       | Conditional | Requires `est` |
 | -------------------- | :------------------: | :---------: | :------------: |
-| [`CMIShannon`](@ref) | ✓ (non-conditional) |     ✓      |      Yes       |
-| [`TEShannon`](@ref)  |          ✓          |     ✓      |      Yes       |
+| [`CMIShannon`](@ref) |          ✖           |     ✓       |      Yes       |
+| [`TEShannon`](@ref)  |          ✓           |     ✓       |      Yes       |
 
 The `LocalPermutationTest` is only defined for conditional independence testing.
 Exceptions are for measures like [`TEShannon`](@ref), which use conditional
