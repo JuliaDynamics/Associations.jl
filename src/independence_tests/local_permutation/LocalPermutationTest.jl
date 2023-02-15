@@ -171,7 +171,6 @@ function Base.show(io::IO, test::LocalPermutationTestResult)
           $α001
           $α0001\
         """
-
         )
 end
 
@@ -242,3 +241,4 @@ end
 
 # Concrete implementations
 include("transferentropy.jl")
+
