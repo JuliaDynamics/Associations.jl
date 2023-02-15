@@ -87,7 +87,8 @@ The nearest-neighbor approach in Runge (2018) can be reproduced by using the
 
 ## Examples
 
-- [Conditional test, `CMIShannon`](@ref examples_localpermutationtest_cmishannon).
+- [Example using `CMIShannon`](@ref example_localpermtest_cmishannon).
+- [Example using `TEShannon`](@ref example_localpermtest_teshannon).
 
 [^Runge2018]: Runge, J. (2018, March). Conditional independence testing based on a
     nearest-neighbor estimator of conditional mutual information. In International
