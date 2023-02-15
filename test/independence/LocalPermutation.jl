@@ -13,7 +13,3 @@ test_teshannon = LocalPermutationTest(TEShannon(), FPVP())
 
 test_kperm_toolarge = LocalPermutationTest(CMIShannon(), FPVP(), kperm = 200)
 @test_throws ArgumentError independence(test_kperm_toolarge, x, y, z)
-
-# # Not yet implemented
-# test_te = LocalPermutationTest(TEShannon(), FPVP())
-# @test_throws ArgumentError independence(test_te, x, y, z) isa LocalPermutationTestResult
