@@ -72,10 +72,11 @@ instead of `Z` and we `I(X; Y)` and `Iₖ(X̂; Y)` instead of `I(X; Y | Z)` and
 
 ## Compatible measures
 
-| Measure              |       Pairwise       | Conditional | Requires `est` |
-| -------------------- | :------------------: | :---------: | :------------: |
-| [`CMIShannon`](@ref) |          ✖           |     ✓       |      Yes       |
-| [`TEShannon`](@ref)  |          ✓           |     ✓       |      Yes       |
+| Measure                      |       Pairwise       | Conditional | Requires `est` |
+| ---------------------------- | :------------------: | :---------: | :------------: |
+| [`PartialCorrelation`](@ref) |          ✖           |     ✓       |      No        |
+| [`CMIShannon`](@ref)         |          ✖           |     ✓       |      Yes       |
+| [`TEShannon`](@ref)          |          ✓           |     ✓       |      Yes       |
 
 The `LocalPermutationTest` is only defined for conditional independence testing.
 Exceptions are for measures like [`TEShannon`](@ref), which use conditional
@@ -191,9 +192,8 @@ end
 # This method takes `measure` and `est` explicitly, because for some measures
 # like `TEShannon`, `test.measure` may be converted to some other measure before
 # computing the test statistic.
-function permuted_Îs(X, Y, Z, measure::AssociationMeasure, est, test::LocalPermutationTest)
+function permuted_Îs(X, Y, Z, measure, est, test)
     rng, kperm, nshuffles, replace, w = test.rng, test.kperm, test.nshuffles, test.replace, test.w
-    @assert length(X) == length(Y) == length(Z)
     N = length(X)
     test.kperm < N || throw(ArgumentError("kperm must be smaller than input data length"))
 
@@ -241,4 +241,3 @@ end
 
 # Concrete implementations
 include("transferentropy.jl")
-
