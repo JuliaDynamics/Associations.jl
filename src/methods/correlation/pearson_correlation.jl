@@ -56,6 +56,10 @@ function estimate(measure::PearsonCorrelation,
     return ρ
 end
 
+function estimate(measure::PearsonCorrelation, est::Nothing, x, y)
+    return estimate(measure, x, y)
+end
+
 # Silly, but 1-dimensional datasets needs special indexing (because each point is a vector,
 # not a value).
 pt_generator(x::AbstractDataset{1}) = (x[1] for x in x)
