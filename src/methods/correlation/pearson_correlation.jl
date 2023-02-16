@@ -24,7 +24,7 @@ for real-valued random variables ``X`` and ``Y`` with associated samples
 where ``\\bar{x}`` and ``\\bar{y}`` are the means of the observations ``x_k`` and ``y_k``,
 respectively.
 """
-struct PearsonCorrelation end
+struct PearsonCorrelation <: AssociationMeasure end
 
 """
     pearson_correlation(x::VectorOrDataset, y::VectorOrDataset)
