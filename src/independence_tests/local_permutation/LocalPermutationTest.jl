@@ -63,7 +63,7 @@ The algorithm is as follows:
         Repeat for `i = 1, 2, …, n` and obtain the shuffled `X̂ = [x̂₁, x̂₂, …, x̂ₙ]`.
     * Compute the conditional independence statistic `Iₖ(X̂; Y | Z)`.
     * Let `Î[k] = Iₖ(X̂; Y | Z)`.
-6. Compute the p-value as `count(Î[k] .<= I) / nshuffles).
+6. Compute the p-value as `count(Î[k] .<= I) / nshuffles)`.
 
 In additional to the conditional variant from Runge (2018), we also provide a pairwise
 version, where the shuffling procedure is identical, except neighbors in `Y` are used
@@ -72,10 +72,12 @@ instead of `Z` and we `I(X; Y)` and `Iₖ(X̂; Y)` instead of `I(X; Y | Z)` and
 
 ## Compatible measures
 
-| Measure              |       Pairwise       | Conditional | Requires `est` |
-| -------------------- | :------------------: | :---------: | :------------: |
-| [`CMIShannon`](@ref) |          ✖           |     ✓       |      Yes       |
-| [`TEShannon`](@ref)  |          ✓           |     ✓       |      Yes       |
+| Measure                      |       Pairwise       | Conditional | Requires `est` |
+| ---------------------------- | :------------------: | :---------: | :------------: |
+| [`PartialCorrelation`](@ref) |          ✖           |     ✓       |      No        |
+| [`CMIShannon`](@ref)         |          ✖           |     ✓       |      Yes       |
+| [`TEShannon`](@ref)          |          ✓           |     ✓       |      Yes       |
+
 
 The `LocalPermutationTest` is only defined for conditional independence testing.
 Exceptions are for measures like [`TEShannon`](@ref), which use conditional
@@ -191,9 +193,8 @@ end
 # This method takes `measure` and `est` explicitly, because for some measures
 # like `TEShannon`, `test.measure` may be converted to some other measure before
 # computing the test statistic.
-function permuted_Îs(X, Y, Z, measure::AssociationMeasure, est, test::LocalPermutationTest)
+function permuted_Îs(X, Y, Z, measure, est, test)
     rng, kperm, nshuffles, replace, w = test.rng, test.kperm, test.nshuffles, test.replace, test.w
-    @assert length(X) == length(Y) == length(Z)
     N = length(X)
     test.kperm < N || throw(ArgumentError("kperm must be smaller than input data length"))
 
@@ -241,4 +242,3 @@ end
 
 # Concrete implementations
 include("transferentropy.jl")
-

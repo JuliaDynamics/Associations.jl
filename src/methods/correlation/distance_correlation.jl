@@ -17,7 +17,7 @@ potentially nonlinear associations between pairs of variables.
 - Use with [`distance_correlation`](@ref) to compute the raw distance correlation
     coefficient.
 """
-struct DistanceCorrelation end
+struct DistanceCorrelation <: AssociationMeasure end
 
 """
     distance_correlation(x, y) → dcor ∈ [0, 1]
