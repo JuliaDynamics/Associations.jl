@@ -2,7 +2,7 @@ export partial_correlation
 export PartialCorrelation
 
 """
-    PartialCorrelation
+    PartialCorrelation <: AssociationMeasure
 
 The correlation of two variables, with the effect of a set of conditioning
 variables removed.
@@ -38,7 +38,7 @@ In practice, we compute the estimate
 
 where ``\\hat{P} = \\hat{\\Sigma}^{-1}`` is the sample precision matrix.
 """
-struct PartialCorrelation <: ParametricAssociationMeasure end
+struct PartialCorrelation <: AssociationMeasure end
 
 """
     partial_correlation(x::VectorOrDataset, y::VectorOrDataset,
@@ -50,7 +50,7 @@ function partial_correlation(x::VectorOrDataset, y::VectorOrDataset, z::ArrayOrD
     return estimate(PartialCorrelation(), x, y, z...)
 end
 
-# Common interface for higher-level methods.
+# Compatibility with `independence`
 function estimate(::PartialCorrelation, x::VectorOrDataset, y::VectorOrDataset,
         conds::ArrayOrDataset...)
     dimension(x) == 1 || throw(ArgumentError("Input `x` must be 1-dimensional"))
@@ -61,6 +61,11 @@ function estimate(::PartialCorrelation, x::VectorOrDataset, y::VectorOrDataset,
     precision_matrix = invert_cov(cov)
     return partial_correlation_from_precision(precision_matrix, 1, 2)
 end
+
+function estimate(measure::PartialCorrelation, est::Nothing, x, y, z)
+    return estimate(measure, x, y, z)
+end
+
 
 function invert_cov(cov::AbstractMatrix)
     if det(cov) ≈ 0.0

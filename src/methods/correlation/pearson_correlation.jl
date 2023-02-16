@@ -24,7 +24,7 @@ for real-valued random variables ``X`` and ``Y`` with associated samples
 where ``\\bar{x}`` and ``\\bar{y}`` are the means of the observations ``x_k`` and ``y_k``,
 respectively.
 """
-struct PearsonCorrelation end
+struct PearsonCorrelation <: AssociationMeasure end
 
 """
     pearson_correlation(x::VectorOrDataset, y::VectorOrDataset)
@@ -54,6 +54,10 @@ function estimate(measure::PearsonCorrelation,
     )
     ρ = num / den
     return ρ
+end
+
+function estimate(measure::PearsonCorrelation, est::Nothing, x, y)
+    return estimate(measure, x, y)
 end
 
 # Silly, but 1-dimensional datasets needs special indexing (because each point is a vector,
