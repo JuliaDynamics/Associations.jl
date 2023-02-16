@@ -63,7 +63,7 @@ The algorithm is as follows:
         Repeat for `i = 1, 2, …, n` and obtain the shuffled `X̂ = [x̂₁, x̂₂, …, x̂ₙ]`.
     * Compute the conditional independence statistic `Iₖ(X̂; Y | Z)`.
     * Let `Î[k] = Iₖ(X̂; Y | Z)`.
-6. Compute the p-value as `count(Î[k] .<= I) / nshuffles).
+6. Compute the p-value as `count(Î[k] .<= I) / nshuffles)`.
 
 In additional to the conditional variant from Runge (2018), we also provide a pairwise
 version, where the shuffling procedure is identical, except neighbors in `Y` are used
