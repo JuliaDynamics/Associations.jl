@@ -90,6 +90,9 @@ include("optimization/optimization.jl")
 include("TEShannon.jl")
 include("TERenyiJizba.jl")
 
+function transferentropy(args...; kwargs...)
+    return estimate(args...; kwargs...)
+end
 
 function transferentropy(measure::TransferEntropy, est, x...)
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
@@ -128,8 +131,8 @@ include("estimators/estimators.jl")
 include("convenience/convenience.jl")
 
 # Default to Shannon-type base 2 transfer entropy
-function transferentropy(est::TransferEntropyEstimator, x...)
-    transferentropy(TEShannon(base = 2), est, x...)
+function estimate(est::TransferEntropyEstimator, x...)
+    estimate(TEShannon(base = 2), est, x...)
 end
 
 transferentropy(emb::EmbeddingTE, args...; kwargs...) =
