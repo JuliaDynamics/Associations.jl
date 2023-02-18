@@ -10,7 +10,7 @@ x, y, z, w = columns(trajectory(sys, n, Ttr = 10000));
 α = 0.04 # Arbitrary significance level 1 - α = 0.96
 
 # The ground truth is X → Y → Z.
-test = SurrogateTest(TEShannon(), FPVP())
+test = SurrogateTest(TEShannon(), FPVP(); rng)
 
 
 @test pvalue(independence(test, x, z)) < α # This has been manually tested to occur with c₁₂ = 0.8

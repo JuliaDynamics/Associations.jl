@@ -3,23 +3,23 @@ rng = MersenneTwister(1234)
 n = 100
 
 # Pre-discretized data
-likeit = rand(["yes", "no"], n)
-food = rand(["veggies", "meat", "fish"], n)
-service = rand(["netflix", "hbo"], n)
+likeit = rand(rng, ["yes", "no"], n)
+food = rand(rng, ["veggies", "meat", "fish"], n)
+service = rand(rng, ["netflix", "hbo"], n)
 est = Contingency()
 nshuffles = 3
 
 @test_throws ArgumentError SurrogateTest(MIShannon())
 
-@test independence(SurrogateTest(MIShannon(), est; nshuffles), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MIRenyiJizba(), est; nshuffles), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MIRenyiSarbu(), est; nshuffles), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MITsallisFuruichi(), est; nshuffles), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MITsallisMartin(), est; nshuffles), food, likeit) isa SurrogateTestResult
+@test independence(SurrogateTest(MIShannon(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
+@test independence(SurrogateTest(MIRenyiJizba(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
+@test independence(SurrogateTest(MIRenyiSarbu(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
+@test independence(SurrogateTest(MITsallisFuruichi(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
+@test independence(SurrogateTest(MITsallisMartin(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
 
 # Analytical tests, in the limit.
 # -------------------------------
-n = 10000
+n = 100000
 α = 0.02 # pick some arbitrary significance level
 
 # Simulate a survey where the place a person grew up controls how many times they
@@ -48,5 +48,5 @@ experience = map(preferred_equipment) do equipment
 end;
 
 # We should be able to reject the null hypothesis of `places ⫫ experience`.
-test_mi = independence(SurrogateTest(MIShannon(), est; nshuffles), places, experience)
+test_mi = independence(SurrogateTest(MIShannon(), est; nshuffles, rng), places, experience)
 @test pvalue(test_mi) < α

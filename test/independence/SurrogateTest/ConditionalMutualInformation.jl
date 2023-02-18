@@ -3,17 +3,17 @@ rng = MersenneTwister(1234)
 n = 200
 
 # Pre-discretized data
-likeit = rand(["yes", "no"], n)
-food = rand(["veggies", "meat", "fish"], n)
-service = rand(["netflix", "hbo"], n)
+likeit = rand(rng, ["yes", "no"], n)
+food = rand(rng, ["veggies", "meat", "fish"], n)
+service = rand(rng, ["netflix", "hbo"], n)
 est = Contingency()
 nshuffles = 3
 
 @test_throws ArgumentError SurrogateTest(CMIShannon())
 
-@test independence(SurrogateTest(CMIShannon(), est; nshuffles), food, likeit, service) isa SurrogateTestResult
-@test independence(SurrogateTest(CMIRenyiSarbu(), est; nshuffles), food, likeit, service) isa SurrogateTestResult
-@test independence(SurrogateTest(CMIRenyiJizba(), est; nshuffles), food, likeit, service) isa SurrogateTestResult
+@test independence(SurrogateTest(CMIShannon(), est; nshuffles, rng), food, likeit, service) isa SurrogateTestResult
+@test independence(SurrogateTest(CMIRenyiSarbu(), est; nshuffles, rng), food, likeit, service) isa SurrogateTestResult
+@test independence(SurrogateTest(CMIRenyiJizba(), est; nshuffles, rng), food, likeit, service) isa SurrogateTestResult
 
 
 # Analytical tests, in the limit.
@@ -28,7 +28,7 @@ service = rand(rng, ["netflix", "hbo"], n)
 
 # We should not be able to reject the null hypothesis `food ⫫ likeit | service`, because
 # the variables are all independent.
-test_cmi = independence(SurrogateTest(CMIShannon(), est; nshuffles = 200), food, likeit, service)
+test_cmi = independence(SurrogateTest(CMIShannon(), est; nshuffles = 200, rng), food, likeit, service)
 @test pvalue(test_cmi) > α
 
 # Simulate a survey where the place a person grew up controls how many times they
@@ -60,6 +60,6 @@ end;
 # We should not be able to reject the null hypothesis `places ⫫ experience | preferred_equipment`, because
 # places → preferred_equipment → experience, so when conditioning on the intermediate variable,
 # the first and last variable in the chain should be independent.
-test = SurrogateTest(CMIShannon(), est; nshuffles = 200)
+test = SurrogateTest(CMIShannon(), est; nshuffles = 200, rng)
 test_cmi = independence(test, places, experience, preferred_equipment)
 @test pvalue(test_cmi) > α
