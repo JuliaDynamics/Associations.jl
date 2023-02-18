@@ -34,7 +34,8 @@ TE(X \\to Y) =
 where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
 neighbor searches are performed.
 
-[Lindner2011]: Lindner, M., Vicente, R., Priesemann, V., & Wibral, M. (2011). TRENTOOL:
+[^Lindner2011]:
+    Lindner, M., Vicente, R., Priesemann, V., & Wibral, M. (2011). TRENTOOL:
     A Matlab open source toolbox to analyse information flow in time series data with
     transfer entropy. BMC neuroscience, 12(1), 1-22.
 """

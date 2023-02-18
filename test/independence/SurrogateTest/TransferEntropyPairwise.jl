@@ -1,4 +1,6 @@
-sys = system(Logistic2Unidir(c_xy = 0.5))
+using Random
+rng = Random.MersenneTwister(1234)
+sys = system(Logistic2Unidir(; c_xy = 0.5, rng))
 x, y = columns(trajectory(sys, 1000, Ttr = 10000))
 
 # ArgumentError thrown if an estimator isn't provided.
@@ -6,7 +8,7 @@ x, y = columns(trajectory(sys, 1000, Ttr = 10000))
 @test SurrogateTest(TEShannon(), FPVP()) isa SurrogateTest
 
 α = 0.0287 # Arbitrary significance level 1 - α = 0.9713
-test = SurrogateTest(TEShannon(), FPVP())
+test = SurrogateTest(TEShannon(), FPVP(); rng)
 
 # The ground truth is X → Y, so we should be able to reject the null
 # when testing transferentropy(x → y)

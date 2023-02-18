@@ -52,7 +52,8 @@ The shuffled variable is always the first variable (`X`). Exceptions are:
 | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |      Yes       |
 | [`CMIShannon`](@ref)                  |    ✖    |     ✓      |      Yes       |
 | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |      Yes       |
-| [`TransferEntropy`](@ref)             |    ✓    |     ✓      |      Yes       |
+| [`TEShannon`](@ref)                   |    ✓    |     ✓      |      Yes       |
+| [`TERenyiJizba`](@ref)                |    ✓    |     ✓      |      Yes       |
 
 ## Examples
 

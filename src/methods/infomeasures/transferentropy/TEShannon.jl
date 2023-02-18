@@ -31,19 +31,33 @@ where ``I(T^+; S^- | T^-)`` is the Shannon conditional mutual information
 
 ## Compatible estimators
 
-- **[`ProbabilitiesEstimator`](@ref)**: Any probabilities estimator that accepts
-    multivariate input data or has an implementation for [`marginal_encodings`](@ref).
-    Transfer entropy is computed a sum of marginal (discrete) entropy estimates.
-    Example: [`ValueHistogram`](@ref).
-- **[`DifferentialEntropyEstimator`](@ref)**. Any differential entropy
-    estimator that accepts multivariate input data.
-    Transfer entropy is computed a sum of marginal differential entropy estimates.
-    Example: [`Kraskov`](@ref).
-- **[`MutualInformationEstimator`](@ref)**. Any mutual information estimator.
-    Formulates the transfer entropy as a sum of mutual information terms, which are
-    estimated separately using [`mutualinfo`](@ref). Example: [`KraskovStögbauerGrassberger2`](@ref).
-- **[`ConditionalMutualInformationEstimator`](@ref)**. Dedicated CMI estimators.
-    Example: [`FPVP`](@ref).
+Shannon-type transfer entropy can be estimated using a range of different estimators,
+which all boil down to computing conditional mutual information, except for
+[`TransferEntropyEstimator`](@ref), which compute transfer entropy using some direct method.
+
+| Estimator                        | Type                                            | Principle           | [`TEShannon`](@ref) |
+| -------------------------------- | ----------------------------------------------- | ------------------- | :-----------------: |
+| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |         ✓          |
+| [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |         ✓          |
+| [`SymbolicPermuation`](@ref)     | [`ProbabilitiesEstimator`](@ref)                | Ordinal patterns    |         ✓          |
+| [`Dispersion`](@ref)             | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |         ✓          |
+| [`Kraskov`](@ref)                | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |
+| [`Zhu`](@ref)                    | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |
+| [`ZhuSingh`](@ref)               | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |
+| [`Gao`](@ref)                    | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |
+| [`Goria`](@ref)                  | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |
+| [`Lord`](@ref)                   | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |
+| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |
+| [`GaussanMI`](@ref)              | [`MutualInformationEstimator`](@ref)            | Parametric          |         ✓          |
+| [`KSG1`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |
+| [`KSG2`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |
+| [`GaoKannanOhViswanath`](@ref)   | [`MutualInformationEstimator`](@ref)            | Mixed               |         ✓          |
+| [`GaoOhViswanath`](@ref)         | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |
+| [`FPVP`](@ref)                   | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |
+| [`MesnerShalisi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |
+| [`Rahimzamani`](@ref)            | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |
+| [`Zhu1`](@ref)                   | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |
+| [`Lindner`](@ref)                | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |
 """
 struct TEShannon{E <: Shannon, EMB} <: TransferEntropy{E, EMB}
     e::E

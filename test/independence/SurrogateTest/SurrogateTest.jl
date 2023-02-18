@@ -6,6 +6,7 @@ include("HMeasure.jl")
 include("MMeasure.jl")
 include("LMeasure.jl")
 include("TransferEntropyPairwise.jl")
+include("crossmappings.jl")
 
 # Conditional measures
 include("ConditionalMutualInformation.jl")

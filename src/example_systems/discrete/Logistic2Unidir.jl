@@ -9,8 +9,8 @@ export Logistic2Unidir
 
 """
     Logistic2Unidir <: DiscreteDefinition
-    Logistic2Unidir(;u₀ = rand(2), c_xy = 0.1, σ = 0.05,
-        r₁ = 3.78, r₂ = 3.66)
+    Logistic2Unidir(; xi = [0.5, 0.5], c_xy = 0.1, σ = 0.05, r₁ = 3.78, r₂ = 3.66,
+        rng = Random.default_rng())
 
 A bivariate system consisting of two 1D noisy logistic maps which are undirectionally
 coupled `x → y` (Diego et al., 2019)[^Diego2019].
