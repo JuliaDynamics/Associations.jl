@@ -55,7 +55,7 @@ struct Hilbert{E} <: TransferEntropyEstimator
     end
 end
 
-function transferentropy(measure::TransferEntropy, est::Hilbert, source, target)
+function estimate(measure::TransferEntropy, est::Hilbert, source, target)
     hil_s = DSP.hilbert(source)
     hil_t = DSP.hilbert(target)
 
