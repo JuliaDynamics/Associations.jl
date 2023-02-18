@@ -34,7 +34,7 @@ when searching for neighbours).
     sciences, 23(3-4), 301-321.
 """
 Base.@kwdef struct Zhu1 <: TransferEntropyEstimator
-    k::Int = 1
+    k::Int = 2
     w::Int = 0
 
     function Zhu1(k::Int, w::Int)
