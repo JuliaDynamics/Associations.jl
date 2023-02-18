@@ -21,7 +21,8 @@
 | Shared information   | [`CMIShannon`](@ref)                  |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
 | Shared information   | [`CMIRenyiSarbu`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
 | Shared information   | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
-| Information transfer | [`TransferEntropy`](@ref)             |    ✓    |     ✓      | [`transferentropy`](@ref)      |
+| Information transfer | [`TEShannon`](@ref)                   |    ✓    |     ✓      | [`transferentropy`](@ref)      |
+| Information transfer | [`TERenyiJizba`](@ref)                |    ✓    |     ✓      | [`transferentropy`](@ref)      |
 
 ## Correlation measures
 
