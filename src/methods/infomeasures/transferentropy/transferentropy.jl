@@ -67,14 +67,41 @@ pre-embedded and the embedding step is skipped.
 
 ## Compatible estimators
 
+
 `transferentropy` is just a simple wrapper around [`condmutualinfo`](@ref) that constructs
 an appropriate delay embedding from the input data before CMI is estimated. Consequently,
 any estimator that can be used for [`ConditionalMutualInformation`](@ref) is, in principle,
-also a valid transfer entropy estimator. Documentation strings for [`TEShannon`](@ref) and
-[`TERenyiJizba`](@ref) list compatible estimators, and an overview table can be found in
-the online documentation.
+also a valid transfer entropy estimator. [`TransferEntropyEstimator`](@ref)s are the
+exception - they compute transfer entropy directly.
+
+| Estimator                        | Type                                            | Principle           | [`TEShannon`](@ref) | [`TERenyiJizba`](@ref) |
+| -------------------------------- | ----------------------------------------------- | ------------------- | :-----------------: | :--------------------: |
+| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |         ✓          |           ✓            |
+| [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |         ✓          |           ✓            |
+| [`Dispersion`](@ref)             | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |         ✓          |           ✖            |
+| [`Kraskov`](@ref)                | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
+| [`Zhu`](@ref)                    | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
+| [`ZhuSingh`](@ref)               | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
+| [`Gao`](@ref)                    | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
+| [`Goria`](@ref)                  | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
+| [`Lord`](@ref)                   | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
+| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✓            |
+| [`GaussanMI`](@ref)              | [`MutualInformationEstimator`](@ref)            | Parametric          |         ✓          |           ✖            |
+| [`KSG1`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖            |
+| [`KSG2`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖            |
+| [`GaoKannanOhViswanath`](@ref)   | [`MutualInformationEstimator`](@ref)            | Mixed               |         ✓          |           ✖            |
+| [`GaoOhViswanath`](@ref)         | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖            |
+| [`FPVP`](@ref)                   | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖            |
+| [`MesnerShalisi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖            |
+| [`Rahimzamani`](@ref)            | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖            |
+| [`Zhu1`](@ref)                   | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |           ✖            |
+| [`Lindner`](@ref)                | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |           ✖            |
+| [`Hilbert`](@ref)                | [`TransferEntropyEstimator`](@ref)              | Hilbert transform   |         ✓          |           ✖            |
+| [`SymbolicTransferEntropy`](@ref)| [`TransferEntropyEstimator`](@ref)              | Hilbert transform   |         ✓          |           ✖            |
+
 """
 function transferentropy end
+
 
 const TE_ESTIMATORS = Union{
     TransferEntropyEstimator,
