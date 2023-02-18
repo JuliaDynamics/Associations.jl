@@ -109,9 +109,11 @@ function transferentropy(measure::TransferEntropy, est, x...)
     return condmutualinfo(cmi, est, T⁺, S, Dataset(T, C))
 end
 
+# When using any estimator except dedicatd `TransferEntropyEstimator`s,
+# we use the conditional mutual information decomposition, so we need
+# to change the measure for dispatch to work.
 te_to_cmi(measure::TEShannon) = CMIShannon(measure.e)
 te_to_cmi(measure::TERenyiJizba) = CMIRenyiJizba(measure.e)
-
 
 function individual_marginals_te(emb::EmbeddingTE, x::AbstractVector...)
     joint, vars, τs, js = te_embed(emb, x...)
