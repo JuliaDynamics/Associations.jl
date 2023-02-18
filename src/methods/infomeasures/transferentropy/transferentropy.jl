@@ -11,7 +11,7 @@ include("utils.jl")
 """
     TransferEntropy <: AssociationMeasure
 
-The supertype of all transfer entropy measures. Concrete subtypes are 
+The supertype of all transfer entropy measures. Concrete subtypes are
 - [`TEShannon`](@ref)
 - [`TERenyiJizba`](@ref)
 """
@@ -96,10 +96,10 @@ function transferentropy(measure::TransferEntropy, est, x...)
     # dataset. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
-    S, T, Tf, C = individual_marginals_te(measure.embedding, x...)
+    S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
     cmi = te_to_cmi(measure)
     # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
-    return condmutualinfo(cmi, est, Tf, S, Dataset(T, C))
+    return condmutualinfo(cmi, est, T⁺, S, Dataset(T, C))
 end
 
 te_to_cmi(measure::TEShannon) = CMIShannon(measure.e)
