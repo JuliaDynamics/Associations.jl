@@ -94,6 +94,10 @@ function transferentropy(args...; kwargs...)
     return estimate(args...; kwargs...)
 end
 
+function estimate(est::TE_ESTIMATORS, args...; kwargs...)
+    estimate(TEShannon(), est, args...; kwargs...)
+end
+
 function transferentropy(measure::TransferEntropy, est, x...)
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
     # dataset. The horizontal concatenation of C with T then just returns T.
