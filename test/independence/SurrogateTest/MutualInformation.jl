@@ -1,4 +1,5 @@
-
+using Random
+rng = MersenneTwister(1234)
 n = 100
 
 # Pre-discretized data
@@ -18,7 +19,7 @@ nshuffles = 3
 
 # Analytical tests, in the limit.
 # -------------------------------
-n = 100000
+n = 10000
 α = 0.02 # pick some arbitrary significance level
 
 # Simulate a survey where the place a person grew up controls how many times they
@@ -26,14 +27,14 @@ n = 100000
 # `preferred_equipment`, which indicates what type of physical activity the
 # person has engaged with. For this example, we should be able to reject
 # places ⫫ experience, but not reject places ⫫ experience | preferred_equipment
-places = rand(["city", "countryside", "under a rock"], n);
+places = rand(rng, ["city", "countryside", "under a rock"], n);
 preferred_equipment = map(places) do place
     if cmp(place, "city") == 1
-        return rand(["skateboard", "bmx bike"])
+        return rand(rng, ["skateboard", "bmx bike"])
     elseif cmp(place, "countryside") == 1
-        return rand(["sled", "snowcarpet"])
+        return rand(rng, ["sled", "snowcarpet"])
     else
-        return rand(["private jet", "car"])
+        return rand(rng, ["private jet", "car"])
     end
 end;
 experience = map(preferred_equipment) do equipment

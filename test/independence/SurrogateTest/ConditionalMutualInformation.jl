@@ -1,4 +1,5 @@
 using Random
+rng = MersenneTwister(1234)
 n = 200
 
 # Pre-discretized data
@@ -17,9 +18,7 @@ nshuffles = 3
 
 # Analytical tests, in the limit.
 # -------------------------------
-n = 20000
-rng = MersenneTwister(1234)
-
+n = 10000
 # Pre-discretized data
 likeit = rand(rng, ["yes", "no"], n)
 food = rand(rng, ["veggies", "meat", "fish"], n)
@@ -38,14 +37,14 @@ test_cmi = independence(SurrogateTest(CMIShannon(), est; nshuffles = 200), food,
 # person has engaged with. For this example, we should be able to reject
 # places ⫫ experience, but not reject places ⫫ experience | preferred_equipment
 
-places = rand(["city", "countryside", "under a rock"], n);
+places = rand(rng, ["city", "countryside", "under a rock"], n);
 preferred_equipment = map(places) do place
     if cmp(place, "city") == 1
-        return rand(["skateboard", "bmx bike"])
+        return rand(rng, ["skateboard", "bmx bike"])
     elseif cmp(place, "countryside") == 1
-        return rand(["sled", "snowcarpet"])
+        return rand(rng, ["sled", "snowcarpet"])
     else
-        return rand(["private jet", "car"])
+        return rand(rng, ["private jet", "car"])
     end
 end;
 experience = map(preferred_equipment) do equipment

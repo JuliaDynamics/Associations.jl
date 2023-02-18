@@ -1,4 +1,6 @@
-sys = system(Logistic2Unidir(c_xy = 0.5))
+using Random
+rng = Random.MersenneTwister(1234)
+sys = system(Logistic2Unidir(; c_xy = 0.5, rng))
 x, y = columns(trajectory(sys, 1000, Ttr = 10000))
 
 # ArgumentError thrown if an estimator isn't provided.

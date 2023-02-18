@@ -1,6 +1,8 @@
 # Analytical tests (in the limit of a lot of samples)
 # ------------------------------------------------------------
-x, y = rand(300), rand(300)
+using Random
+rng = MersenneTwister(1234)
+x, y = rand(rng, 300), rand(rng, 300)
 z = x .+ y
 test = SurrogateTest(LMeasure())
 α = 0.04 # Some arbitrary significance level.
