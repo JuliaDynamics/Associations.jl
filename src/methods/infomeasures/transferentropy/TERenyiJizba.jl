@@ -54,18 +54,3 @@ struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy{E, EMB}
         return new{E, EMB}(e, embedding)
     end
 end
-
-"""
-    escort_distribution(probs, i::Int, q::Real)
-
-The escort distribution for a probability distribution `probs`. For `q > 1`, the
-escort distribution emphasises more probable events and de-emphasises more improbable
-events. For `q < 1`, the situation is reversed.
-
-```math
-\\text{esc}_q(x) = \\dfrac{p^q(x)}{\\sum_{x \\in \\mathcal{X}} p^q(x)}
-```
-"""
-function escort_distribution(probs, i::Int, q)
-    return probs[i]^q / sum(probs .^ q)
-end

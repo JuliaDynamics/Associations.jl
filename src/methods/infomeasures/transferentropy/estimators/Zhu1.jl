@@ -34,7 +34,7 @@ when searching for neighbours).
     sciences, 23(3-4), 301-321.
 """
 Base.@kwdef struct Zhu1 <: TransferEntropyEstimator
-    k::Int = 1
+    k::Int = 2
     w::Int = 0
 
     function Zhu1(k::Int, w::Int)
@@ -43,18 +43,21 @@ Base.@kwdef struct Zhu1 <: TransferEntropyEstimator
     end
 end
 
-function transferentropy(measure::TEShannon, est::Zhu1, x...)
-    (; k, w) = est
-
+function estimate(measure::TEShannon, est::Zhu1, x::AbstractVector...)
     # The Zhu1 estimator needs to keep track of the dimension of the individual
     # terms that goes into the implicit CMI computation. We could have just used
     # `h4_marginals` here, but then we wouldn't get the dimensions out of the box.
     S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
+    return estimate(measure, est, S, T, T⁺, C)
+end
+
+function estimate(measure::TEShannon, est::Zhu1, S::AbstractDataset, T::AbstractDataset, T⁺::AbstractDataset, C::AbstractDataset)
+    (; k, w) = est
+
     joint = Dataset(S, T, T⁺, C)
     ST = Dataset(S, T, C)
     TT⁺ = Dataset(T, T⁺, C)
     T = Dataset(T, C)
-
     DS = dimension(S)
     DT = dimension(T)
     DT⁺ = dimension(T⁺)
@@ -71,7 +74,9 @@ function transferentropy(measure::TEShannon, est::Zhu1, x...)
     # For each `xᵢ ∈ M`, where `M` is one of the marginal spaces, count the number of
     # points within distance `ds[i]` from the point. Then count, for each point in each
     # of the marginals, how many neighbors each `xᵢ` has given `ds[i]`.
-    tree_ST, tree_TT⁺, tree_T = KDTree.([ST, TT⁺, T], Ref(Chebyshev()))
+    tree_ST = KDTree(ST, Chebyshev())
+    tree_TT⁺ = KDTree(TT⁺, Chebyshev())
+    tree_T = KDTree(T, Chebyshev())
     nns_ST    = [isearch(tree_ST, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(ST)]
     nns_TT⁺   = [isearch(tree_TT⁺, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(TT⁺)]
     nns_T     = [isearch(tree_T, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(T)]

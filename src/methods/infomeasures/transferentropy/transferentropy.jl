@@ -11,7 +11,7 @@ include("utils.jl")
 """
     TransferEntropy <: AssociationMeasure
 
-The supertype of all transfer entropy measures. Concrete subtypes are 
+The supertype of all transfer entropy measures. Concrete subtypes are
 - [`TEShannon`](@ref)
 - [`TERenyiJizba`](@ref)
 """
@@ -90,21 +90,30 @@ include("optimization/optimization.jl")
 include("TEShannon.jl")
 include("TERenyiJizba.jl")
 
+function transferentropy(args...; kwargs...)
+    return estimate(args...; kwargs...)
+end
 
-function transferentropy(measure::TransferEntropy, est, x...)
+function estimate(est::TE_ESTIMATORS, args...; kwargs...)
+    estimate(TEShannon(), est, args...; kwargs...)
+end
+
+function estimate(measure::TransferEntropy, est::TE_ESTIMATORS, x...)
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
     # dataset. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
-    S, T, Tf, C = individual_marginals_te(measure.embedding, x...)
+    S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
     cmi = te_to_cmi(measure)
     # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
-    return condmutualinfo(cmi, est, Tf, S, Dataset(T, C))
+    return condmutualinfo(cmi, est, T⁺, S, Dataset(T, C))
 end
 
+# When using any estimator except dedicatd `TransferEntropyEstimator`s,
+# we use the conditional mutual information decomposition, so we need
+# to change the measure for dispatch to work.
 te_to_cmi(measure::TEShannon) = CMIShannon(measure.e)
 te_to_cmi(measure::TERenyiJizba) = CMIRenyiJizba(measure.e)
-
 
 function individual_marginals_te(emb::EmbeddingTE, x::AbstractVector...)
     joint, vars, τs, js = te_embed(emb, x...)
@@ -128,8 +137,8 @@ include("estimators/estimators.jl")
 include("convenience/convenience.jl")
 
 # Default to Shannon-type base 2 transfer entropy
-function transferentropy(est::TransferEntropyEstimator, x...)
-    transferentropy(TEShannon(base = 2), est, x...)
+function estimate(est::TransferEntropyEstimator, x...)
+    estimate(TEShannon(base = 2), est, x...)
 end
 
 transferentropy(emb::EmbeddingTE, args...; kwargs...) =

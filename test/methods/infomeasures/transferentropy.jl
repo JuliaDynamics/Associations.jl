@@ -3,7 +3,8 @@ x, y, z = rand(1000), rand(1000), rand(1000)
 est = Lindner( k = 5)
 @test transferentropy(est, x, y) isa Real
 
-est = Zhu1( k = 5)
+est = Zhu1(k = 5)
+@test_throws DomainError Zhu1(k = 1)
 @test transferentropy(est, x, y) isa Real
 
 est = ZhuSingh(k = 5)
