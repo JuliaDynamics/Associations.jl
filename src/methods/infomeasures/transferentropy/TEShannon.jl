@@ -58,27 +58,27 @@ struct TEShannon{E <: Shannon, EMB} <: TransferEntropy{E, EMB}
     # TODO: add constructor that automatically determines the embedding.
 end
 
-function transferentropy(
-        est::Union{
-            ConditionalMutualInformationEstimator,
-            MutualInformationEstimator,
-            DifferentialEntropyEstimator,
-            ProbabilitiesEstimator
-        },
-        x...; kwargs...)
-    N = length(first(x))
+# function transferentropy(
+#         est::Union{
+#             ConditionalMutualInformationEstimator,
+#             MutualInformationEstimator,
+#             DifferentialEntropyEstimator,
+#             ProbabilitiesEstimator
+#         },
+#         x...; kwargs...)
+#     N = length(first(x))
 
-    # A very naive heuristic to avoid too high dimensions. *All* marginals are optimised,
-    # so in the worst case, the dimension triples.
-    maxdim = floor(Int, N^(1/7))
-    # The maxlag should also scale with the length the input.
-    maxlag = min(floor(Int, N ÷ 50), 100)
-    dmethod = "mi_min"
-    method = delay_f1nn
-    opt = OptimiseTraditional(; maxdim, maxlag, method, dmethod)
-    m = TEShannon(; base = 2, embedding = EmbeddingTE(opt, x...))
-    return transferentropy(m, est, x...; kwargs...)
-end
+#     # A very naive heuristic to avoid too high dimensions. *All* marginals are optimised,
+#     # so in the worst case, the dimension triples.
+#     maxdim = floor(Int, N^(1/7))
+#     # The maxlag should also scale with the length the input.
+#     maxlag = min(floor(Int, N ÷ 50), 100)
+#     dmethod = "mi_min"
+#     method = delay_f1nn
+#     opt = OptimiseTraditional(; maxdim, maxlag, method, dmethod)
+#     m = TEShannon(; base = 2, embedding = EmbeddingTE(opt, x...))
+#     return transferentropy(m, est, x...; kwargs...)
+# end
 
 # If a pre-computed [`ContingencyMatrix`](@ref) `c` is provided, then we just compute
 # the conditional mutual information directly from it, assuming the contingency matrix
