@@ -132,7 +132,7 @@ Base.show(io::IO, test::LocalPermutationTest) = print(io,
 """
     LocalPermutationTestResult(m, m_surr, pvalue)
 
-Holds the result of a [`LocalPermutationTestTestResult`](@ref). `m` is the measure computed on
+Holds the result of a [`LocalPermutationTest`](@ref). `m` is the measure computed on
 the original data. `m_surr` is a vector of the measure computed on permuted data, where
 `m_surr[i]` is the measure compute on the `i`-th permutation. `pvalue` is the one-sided
 `p`-value for the test.
