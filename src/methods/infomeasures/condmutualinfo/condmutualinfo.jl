@@ -99,7 +99,7 @@ non-negative.
 | ---------------------------- | ------------------- | :------------------: | :---------------------: |
 | [`CountOccurrences`](@ref)   | Frequencies         |          ✓          |           ✓            |
 | [`ValueHistogram`](@ref)     | Binning (histogram) |          ✓          |           ✓            |
-| [`SymbolicPermuation`](@ref) | Ordinal patterns    |          ✓          |           ✓            |
+| [`SymbolicPermutation`](@ref) | Ordinal patterns    |          ✓          |           ✓            |
 | [`Dispersion`](@ref)         | Dispersion patterns |          ✓          |           ✓            |
 """
 function condmutualinfo(measure::CMI, est::ProbabilitiesEstimator, x, y, z)
