@@ -126,7 +126,7 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-condmutualinfo(CMIRenyiPoczos(base = 2, q = 1.2), KSG1(k = 5), x, z, y)
+condmutualinfo(CMIShannon(base = 2), KSG1(k = 5), x, z, y)
 ```
 
 ### Estimation using [`DifferentialEntropyEstimator`](@ref)s
