@@ -1,4 +1,6 @@
 export JointDistanceDistributionTest
+export JDDTestResult
+
 using Statistics: mean, std
 using Distributions: TDist
 using Distributions: cdf
@@ -52,7 +54,13 @@ end
 # Performs a one-sided t-test to see if the joint distance distribution is skewed above
 # `measure.μ`, which is the hypothetical mean of the joint distance
 # distribution under the null (defaults to `0.0`).
+"""
+    JDDTestResult(Δjdd, hypothetical_μ, pvalue)
 
+Holds the results of [`JointDistanceDistributionTest`](@ref). `Δjdd` is the
+`Δ`-distribution, `hypothetical_μ` is the hypothetical mean of the `Δ`-distribution
+under the null, and `pvalue` is the p-value for the one-sided t-test.
+"""
 struct JDDTestResult{V, T, P} <: IndependenceTestResult
     n_vars::Int # 2 vars = pairwise, 3 vars = conditional
     Δjdd::V
