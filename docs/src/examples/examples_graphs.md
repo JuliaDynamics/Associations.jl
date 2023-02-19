@@ -1,10 +1,5 @@
 # Causal graphs
 
-The causal graph [API](@ref causal_graphs) relies on the
-[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) package. Each
-[`GraphAlgorithm`](@ref) returns some graph that is compatible with Graphs.jl.
-To 
-
 ## [`PCRobust`](@ref)
 
 The PC algorithm is perhaps the most famous algorithm for inferring causal graphs.
@@ -19,7 +14,7 @@ using CairoMakie, GraphMakie
 
 # A function that plots an `n`-variable directed graph.
 function plotgraph(g; labels)
-    with_theme(theme_minimal(), resolution = (300, 250)) do
+    with_theme(theme_minimal(), resolution = (400, 350)) do
         fig = Figure();
         ax = Axis(fig[1, 1])
         graphplot!(ax, g; nlabels = labels)
@@ -30,7 +25,7 @@ end
 
 # Some example data.
 rng = MersenneTwister(1234)
-n = 500
+n = 3000
 a1 = randn(rng, n)
 a2 = randn(rng, n) .+ a1
 a3 = randn(rng, n) .+ a2
