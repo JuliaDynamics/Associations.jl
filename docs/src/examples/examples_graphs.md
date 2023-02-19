@@ -36,7 +36,7 @@ x = [a1, a2, a3, a4, a5]
 # Infer a directed graph using correlation-based independence tests
 pairwise_test = SurrogateTest(PearsonCorrelation())
 conditional_test = SurrogateTest(PartialCorrelation()) 
-alg = PCRobust(pairwise_test, conditional_test; α = 0.5)
+alg = PCRobust(pairwise_test, conditional_test; α = 0.05)
 dg = infer_graph(alg, x)
 ```
 
