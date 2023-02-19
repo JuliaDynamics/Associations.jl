@@ -13,5 +13,5 @@ function independence(test::SurrogateTest{<:HLMS}, x, y)
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nshuffles)
+    return SurrogateTestResult(2, Î, Îs, p, nshuffles)
 end

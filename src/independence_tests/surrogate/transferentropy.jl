@@ -35,7 +35,7 @@ function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingType
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nshuffles)
+    return SurrogateTestResult(length(x), Î, Îs, p, nshuffles)
 end
 
 function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingTypes}, <:TransferEntropyEstimator}, x::AbstractVector...) where {E}
@@ -51,7 +51,7 @@ function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingType
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nshuffles)
+    return SurrogateTestResult(length(x), Î, Îs, p, nshuffles)
 end
 
 function SurrogateTest(measure::TEShannon, est::Nothing, args...; kwargs...)

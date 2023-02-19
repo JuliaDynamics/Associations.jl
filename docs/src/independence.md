@@ -17,16 +17,19 @@ IndependenceTest
 
 ```@docs
 SurrogateTest
+SurrogateTestResult
 ```
 
 ## [`LocalPermutationTest`](@ref)
 
 ```@docs
 LocalPermutationTest
+LocalPermutationTestResult
 ```
 
 ## [`JointDistanceDistributionTest`](@ref)
 
 ```@docs
 JointDistanceDistributionTest
+JDDTestResult
 ```

@@ -14,7 +14,7 @@ function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y) where M
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nshuffles)
+    return SurrogateTestResult(2, Î, Îs, p, nshuffles)
 end
 
 function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y, z) where MEASURE
@@ -29,5 +29,5 @@ function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y, z) wher
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nshuffles)
+    return SurrogateTestResult(3, Î, Îs, p, nshuffles)
 end
