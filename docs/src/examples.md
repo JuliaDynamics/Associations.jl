@@ -22,6 +22,15 @@ Pages = [
 Depth = 3
 ```
 
+## Causal graphs
+
+```@contents
+Pages = [
+    "examples/examples_graphs.md",
+]
+Depth = 3
+```
+
 ## Miscellaneous
 
 ```@contents

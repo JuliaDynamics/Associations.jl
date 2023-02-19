@@ -27,8 +27,11 @@ module CausalityTools
 
     include("utils/utils.jl")
 
-    # # Independence tests must be loaded after everything else has been defined.
+    # Independence tests must be loaded after everything else has been defined.
     include("independence_tests/independence.jl")
+
+    # Causal graph API must be loaded after independence tests.
+    include("causal_graphs/causal_graphs.jl")
 
     include("example_systems/example_systems.jl")
 
