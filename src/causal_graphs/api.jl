@@ -5,6 +5,9 @@ export infer_graph
     GraphAlgorithm
 
 The supertype of all algorithms used to infer causal relationships from graphs.
+Each [`GraphAlgorithm`](@ref) returns some graph that is compatible with the
+[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) package, which can be used
+to explore the inferred graphs further.
 
 Concrete subtypes are:
 
