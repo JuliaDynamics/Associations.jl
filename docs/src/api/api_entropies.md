@@ -12,7 +12,7 @@ association measures can be written as a function of differential entropy terms,
 thus be estimated using [`DifferentialEntropyEstimator`](@ref)s.
 
 ```@docs
-entropy
+ComplexityMeasures.entropy
 ```
 
 ## Definitions
