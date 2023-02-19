@@ -29,7 +29,7 @@ Base.@kwdef struct SymbolicTransferEntropy <: TransferEntropyEstimator
 end
 
 
-function transferentropy(measure::TransferEntropy, est::SymbolicTransferEntropy,
+function estimate(measure::TransferEntropy, est::SymbolicTransferEntropy,
     x::AbstractVector...)
     (; m, τ, lt) = est
     est = SymbolicPermutation(; m, τ, lt)

@@ -34,11 +34,12 @@ TE(X \\to Y) =
 where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
 neighbor searches are performed.
 
-[Lindner2011]: Lindner, M., Vicente, R., Priesemann, V., & Wibral, M. (2011). TRENTOOL:
+[^Lindner2011]:
+    Lindner, M., Vicente, R., Priesemann, V., & Wibral, M. (2011). TRENTOOL:
     A Matlab open source toolbox to analyse information flow in time series data with
     transfer entropy. BMC neuroscience, 12(1), 1-22.
 """
-Base.@kwdef struct Lindner{B} <: DifferentialEntropyEstimator
+Base.@kwdef struct Lindner{B} <: TransferEntropyEstimator
     k::Int = 2 # number of neighbors in joint space.
     w::Int = 0
     base::B = 2
@@ -49,9 +50,26 @@ Base.@kwdef struct Lindner{B} <: DifferentialEntropyEstimator
     end
 end
 
-function transferentropy(measure::TEShannon, est::Lindner, args...)
+function estimate(measure::TEShannon, est::Lindner, x::AbstractVector...)
+    S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
+    return estimate(measure, est, S, T, T⁺, C)
+end
+
+# This method is separate from the one above because when using `SurrogateTest`,
+# `S` is repeatedly shuffled, while the other marginals are not, so we avoid
+# allocating a bunch of new datasets for every shuffle.
+function estimate(measure::TEShannon, est::Lindner,
+        S::AbstractDataset,
+        T::AbstractDataset,
+        T⁺::AbstractDataset,
+        C::AbstractDataset)
     (; k, w, base) = est
-    joint, ST, TT⁺, T = h4_marginals(measure, args...)
+
+    joint = Dataset(S, T, T⁺, C)
+    ST = Dataset(S, T, C)
+    TT⁺ = Dataset(T, T⁺, C)
+    T = Dataset(T, C)
+
     N = length(joint)
     W = Theiler(w)
     metric =  Chebyshev()

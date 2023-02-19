@@ -40,7 +40,7 @@ struct NeighborCloseness <: LocalPermutationClosenessSearch end
 for assessing whether two variables `X` and `Y` are conditionally independendent given a
 third variable `Z` (all of which may be multivariate).
 
-When used with [`independence`](@ref), a test summary is returned.
+When used with [`independence`](@ref), a [`LocalPermutationTestResult`](@ref) is returned.
 
 ## Description
 
@@ -130,48 +130,30 @@ Base.show(io::IO, test::LocalPermutationTest) = print(io,
 )
 
 """
-    LocalPermutationTestResult(M, Msurr, pvalue)
+    LocalPermutationTestResult(m, m_surr, pvalue)
 
-Holds the result of a [`LocalPermutationTestTestResult`](@ref). `M` is the measure computed on
-the original data. `Msurr` is a vector of the measure computed on permuted data, where
-Msurr[i] corresponds to the `i`-th permutation. `pvalue` is the `p`-value for the test.
+Holds the result of a [`LocalPermutationTest`](@ref). `m` is the measure computed on
+the original data. `m_surr` is a vector of the measure computed on permuted data, where
+`m_surr[i]` is the measure compute on the `i`-th permutation. `pvalue` is the one-sided
+`p`-value for the test.
 """
-struct LocalPermutationTestResult{M, MS, P}
-    M::M
-    Msurr::MS
+struct LocalPermutationTestResult{M, MS, P} <: IndependenceTestResult
+    n_vars::Int # 2 vars = pairwise, 3 vars = conditional
+    m::M
+    m_surr::MS
     pvalue::P
     nshuffles::Int
 end
 pvalue(r::LocalPermutationTestResult) = r.pvalue
-quantile(r::LocalPermutationTestResult, q) = quantile(r.Msurr, q)
+quantile(r::LocalPermutationTestResult, q) = quantile(r.m_surr, q)
 
 function Base.show(io::IO, test::LocalPermutationTestResult)
-    α005 = pvalue(test) < 0.05 ?
-        "α = 0.05: ✓ Evidence favors dependence" :
-        "α = 0.05: ✖ Independence cannot be rejected"
-    α001 = pvalue(test) < 0.01 ?
-        "α = 0.01: ✓ Evidence favors dependence" :
-        "α = 0.01: ✖ Independence cannot be rejected"
-    α0001 = pvalue(test) < 0.001 ?
-        "α = 0.001: ✓ Evidence favors dependence" :
-        "α = 0.001: ✖ Independence cannot be rejected"
-
     print(io,
         """\
         `LocalPermutationTest` independence test
-        ----------------------------------------------------------------------------------
-        H₀: "The first two variables are conditionally independent given the 3rd variable"
-        H₁: "The first two variables are conditionally dependent given the 3rd variable"
-        ----------------------------------------------------------------------------------
-        Estimated: $(test.M)
-        Ensemble quantiles ($(test.nshuffles) permutations):
-          (99.9%): $(quantile(test.Msurr, 0.999))
-          (99%):   $(quantile(test.Msurr, 0.99))
-          (95%):   $(quantile(test.Msurr, 0.95))
-        p-value:   $(test.pvalue)
-          $α005
-          $α001
-          $α0001\
+        $(null_hypothesis_text(test::IndependenceTestResult))
+        $(quantiles_text(test))
+        $(pvalue_text_summary(test))
         """
         )
 end
@@ -187,7 +169,7 @@ function independence(test::LocalPermutationTest, x, y, z)
     Î = estimate(measure, est, X, Y, Z)
     Îs = permuted_Îs(X, Y, Z, measure, est, test)
     p = count(Î .<= Îs) / nshuffles
-    return LocalPermutationTestResult(Î, Îs, p, nshuffles)
+    return LocalPermutationTestResult(3, Î, Îs, p, nshuffles)
 end
 
 # This method takes `measure` and `est` explicitly, because for some measures
@@ -225,7 +207,6 @@ end
 function shuffle_without_replacement!(X̂, X, idxs, kperm, rng, Nᵢ, πs)
     N = length(X)
     selected_js = zeros(Int, N)
-    Nᵢ = zeros(Int, kperm)
     shuffle!(πs)
     for i in eachindex(X)
         sample!(rng, idxs[i], Nᵢ)

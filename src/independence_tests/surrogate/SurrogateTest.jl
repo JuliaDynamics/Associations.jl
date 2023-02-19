@@ -13,7 +13,9 @@ export SurrogateTestResult
 
 A generic (conditional) independence test for assessing whether two variables `X` and `Y`
 are independendent, potentially conditioned on a third variable `Z`, based on
-surrogate data. Used with [`independence`](@ref).
+surrogate data.
+
+When used with [`independence`](@ref), a [`SurrogateTestResult`](@ref) is returned.
 
 ## Description
 
@@ -52,7 +54,8 @@ The shuffled variable is always the first variable (`X`). Exceptions are:
 | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |      Yes       |
 | [`CMIShannon`](@ref)                  |    ✖    |     ✓      |      Yes       |
 | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |      Yes       |
-| [`TransferEntropy`](@ref)             |    ✓    |     ✓      |      Yes       |
+| [`TEShannon`](@ref)                   |    ✓    |     ✓      |      Yes       |
+| [`TERenyiJizba`](@ref)                |    ✓    |     ✓      |      Yes       |
 
 ## Examples
 
@@ -92,48 +95,30 @@ Base.show(io::IO, test::SurrogateTest) = print(io,
 )
 
 """
-    SurrogateTestResult(M, Msurr, pvalue)
+    SurrogateTestResult(m, m_surr, pvalue)
 
-Holds the result of a [`SurrogateTestResult`](@ref). `M` is the measure computed on
-the original data. `Msurr` is a vector of the measure computed on permuted data, where
-Msurr[i] corresponds to the `i`-th permutation. `pvalue` is the `p`-value for the test.
+Holds the result of a [`SurrogateTest`](@ref). `m` is the measure computed on
+the original data. `m_surr` is a vector of the measure computed on permuted data, where
+`m_surr[i]` is the measure compute on the `i`-th permutation. `pvalue` is the one-sided
+`p`-value for the test.
 """
-struct SurrogateTestResult{M, MS, P}
-    M::M
-    Msurr::MS
+struct SurrogateTestResult{M, MS, P} <: IndependenceTestResult
+    n_vars::Int # 2 vars = pairwise, 3 vars = conditional
+    m::M
+    m_surr::MS
     pvalue::P
     nshuffles::Int
 end
 pvalue(r::SurrogateTestResult) = r.pvalue
-quantile(r::SurrogateTestResult, q) = quantile(r.Msurr, q)
+quantile(r::SurrogateTestResult, q) = quantile(r.m_surr, q)
 
 function Base.show(io::IO, test::SurrogateTestResult)
-    α005 = pvalue(test) < 0.05 ?
-        "α = 0.05:  ✓ Evidence favors dependence" :
-        "α = 0.05:  ✖ Independence cannot be rejected"
-    α001 = pvalue(test) < 0.01 ?
-        "α = 0.01:  ✓ Evidence favors dependence" :
-        "α = 0.01:  ✖ Independence cannot be rejected"
-    α0001 = pvalue(test) < 0.001 ?
-        "α = 0.001: ✓ Evidence favors dependence" :
-        "α = 0.001: ✖ Independence cannot be rejected"
-
     print(io,
         """\
-        `SurrogateTest` independence test result
-        -----------------------------------------------------------------------------------
-        H₀: "The first two variables are independent (given the 3rd variable, if relevant)"
-        Hₐ: "The first two variables are dependent (given the 3rd variable, if relevant)"
-        -----------------------------------------------------------------------------------
-        Estimated: $(test.M)
-        Ensemble quantiles ($(test.nshuffles) permutations):
-          (99.9%): $(quantile(test.Msurr, 0.999))
-          (99%):   $(quantile(test.Msurr, 0.99))
-          (95%):   $(quantile(test.Msurr, 0.95))
-        p-value:   $(test.pvalue)
-          $α005
-          $α001
-          $α0001\
+        `SurrogateTest` independence test
+        $(null_hypothesis_text(test))
+        $(quantiles_text(test))
+        $(pvalue_text_summary(test))
         """
         )
 end
@@ -154,7 +139,7 @@ function independence(test::SurrogateTest, x, y, z)
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nshuffles)
+    return SurrogateTestResult(3, Î, Îs, p, nshuffles)
 end
 
 function independence(test::SurrogateTest, x, y)
@@ -170,7 +155,7 @@ function independence(test::SurrogateTest, x, y)
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(Î, Îs, p, nshuffles)
+    return SurrogateTestResult(2, Î, Îs, p, nshuffles)
 end
 
 # Concrete implementations

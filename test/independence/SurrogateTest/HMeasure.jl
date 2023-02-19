@@ -1,8 +1,10 @@
 # Analytical tests (in the limit of a lot of samples)
 # ------------------------------------------------------------
-x, y = rand(300), rand(300)
+using Random
+rng = MersenneTwister(1234)
+x, y = rand(rng, 500), rand(rng, 500)
 z = x .+ y
-test = SurrogateTest(HMeasure())
+test = SurrogateTest(HMeasure(); rng)
 α = 0.04 # Some arbitrary significance level.
 
 # We shouldn't be able to reject the null when the variables are independent

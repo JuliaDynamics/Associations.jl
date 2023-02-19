@@ -1,4 +1,6 @@
 export JointDistanceDistributionTest
+export JDDTestResult
+
 using Statistics: mean, std
 using Distributions: TDist
 using Distributions: cdf
@@ -9,6 +11,8 @@ using Distributions: cdf
 
 An independence test for two variables based on the [`JointDistanceDistribution`](@ref)
 (Amigó & Hirata, 2018)[^Amigo2018].
+
+When used with [`independence`](@ref), a [`JDDTestResult`](@ref) is returned.
 
 ## Description
 
@@ -50,8 +54,15 @@ end
 # Performs a one-sided t-test to see if the joint distance distribution is skewed above
 # `measure.μ`, which is the hypothetical mean of the joint distance
 # distribution under the null (defaults to `0.0`).
+"""
+    JDDTestResult(Δjdd, hypothetical_μ, pvalue)
 
-struct JDDTestResult{V, T, P}
+Holds the results of [`JointDistanceDistributionTest`](@ref). `Δjdd` is the
+`Δ`-distribution, `hypothetical_μ` is the hypothetical mean of the `Δ`-distribution
+under the null, and `pvalue` is the p-value for the one-sided t-test.
+"""
+struct JDDTestResult{V, T, P} <: IndependenceTestResult
+    n_vars::Int # 2 vars = pairwise, 3 vars = conditional
     Δjdd::V
     hypothetical_μ::T
     pvalue::P
@@ -60,7 +71,7 @@ end
 pvalue(x::JDDTestResult) = x.pvalue
 
 function Base.show(io::IO, r::JDDTestResult)
-    # TODO: make a function to do this (a pairwise and a conditional version), so this 
+    # TODO: make a function to do this (a pairwise and a conditional version), so this
     # isn't repeated everywhere.
     α005 = r.pvalue < 0.05 ?
         "α = 0.05:  ✓ Evidence favors dependence" :
@@ -99,5 +110,5 @@ function independence(test::JointDistanceDistributionTest, x, y)
     D = TDist(degrees_of_freedom)
     pval = 1 - cdf(D, t)
 
-    return JDDTestResult(Δjdd, test.measure.μ, pval)
+    return JDDTestResult(2, Δjdd, test.measure.μ, pval)
 end

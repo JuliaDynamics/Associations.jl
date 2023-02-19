@@ -29,14 +29,16 @@ The variables ``T^+``, ``T^-``,
 
 ## Compatible estimators
 
-- **[`ProbabilitiesEstimator`](@ref)**: Any probabilities estimator that accepts
-    multivariate input data or has an implementation for [`marginal_encodings`](@ref).
-    Transfer entropy is computed a sum of marginal (discrete) entropy estimates.
-    Example: [`ValueHistogram`](@ref).
-- **[`DifferentialEntropyEstimator`](@ref)**. Any differential entropy
-    estimator that accepts multivariate input data.
-    Transfer entropy is computed a sum of marginal differential entropy estimates.
-    Example: [`Kraskov`](@ref).
+Jizba's formulation of Renyi-type transfer entropy can currently be estimated using
+selected probabilities estimators and differential entropy estimators, which
+under the hood compute the transfer entropy as Jizba's formulation of Rényi conditional
+mutual information.
+
+| Estimator                        | Type                                   | Principle           | [`TERenyiJizba`](@ref) |
+| -------------------------------- | -------------------------------------- | ------------------- | :--------------------: |
+| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)       | Frequencies         |           ✓           |
+| [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)       | Binning (histogram) |           ✓           |
+| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref) | Nearest neighbors   |           ✓           |
 
 [^Jizba2012]:
     Jizba, P., Kleinert, H., & Shefaat, M. (2012). Rényi’s information transfer between
@@ -53,19 +55,4 @@ struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy{E, EMB}
     function TERenyiJizba(e::E; embedding::EMB = EmbeddingTE()) where {E <: Renyi, EMB}
         return new{E, EMB}(e, embedding)
     end
-end
-
-"""
-    escort_distribution(probs, i::Int, q::Real)
-
-The escort distribution for a probability distribution `probs`. For `q > 1`, the
-escort distribution emphasises more probable events and de-emphasises more improbable
-events. For `q < 1`, the situation is reversed.
-
-```math
-\\text{esc}_q(x) = \\dfrac{p^q(x)}{\\sum_{x \\in \\mathcal{X}} p^q(x)}
-```
-"""
-function escort_distribution(probs, i::Int, q)
-    return probs[i]^q / sum(probs .^ q)
 end

@@ -22,5 +22,5 @@ function independence(test::LocalPermutationTest{<:TransferEntropy{<:E}}, x::Abs
     Î = estimate(cmi, est, X, Y, Z)
     Îs = permuted_Îs(X, Y, Z, cmi, est, test)
     p = count(Î .<= Îs) / nshuffles
-    return LocalPermutationTestResult(Î, Îs, p, nshuffles)
+    return LocalPermutationTestResult(length(x), Î, Îs, p, nshuffles)
 end
