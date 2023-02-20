@@ -25,23 +25,21 @@ end
 
 # Some example data.
 rng = MersenneTwister(1234)
-n = 3000
-a1 = randn(rng, n)
-a2 = randn(rng, n) .+ a1
-a3 = randn(rng, n) .+ a2
-a4 = randn(rng, n) .+ a2
-a5 = randn(rng, n) .+ a3 .+ a4
-x = [a1, a2, a3, a4, a5]
+
+# The true graph is X → Y → Z → W
+sys = system(Logistic4Chain(; rng))
+X, Y, Z, W = columns(trajectory(sys, 1000, Ttr = 10000))
+data = [X, Y, Z, W]
 
 # Infer a directed graph using correlation-based independence tests
-pairwise_test = SurrogateTest(PearsonCorrelation())
-conditional_test = SurrogateTest(PartialCorrelation()) 
+pairwise_test = SurrogateTest(TEShannon(), Zhu1(k = 10))
+conditional_test = SurrogateTest(TEShannon(), Zhu1(k = 10)) 
 alg = PCRobust(pairwise_test, conditional_test; α = 0.05)
-dg = infer_graph(alg, x)
+g = infer_graph(alg, data)
 ```
 
 Let's plot the resulting graph:
 
 ```@example causalgraph_corr
-plotgraph(dg; labels = ["n$i" for i = 1:5])
+plotgraph(g; labels = ["a$i" for i = 1:5])
 ```
