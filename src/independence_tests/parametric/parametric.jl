@@ -9,3 +9,5 @@ function t_statistic(x::AbstractVector; hypothetical_μ = 0.0)
 end
 
 include("JointDistanceDistributionTest.jl")
+include("PredictiveAsymmetryTest.jl")
+include("PATest.jl")
