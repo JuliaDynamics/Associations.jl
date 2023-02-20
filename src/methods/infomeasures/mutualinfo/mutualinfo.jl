@@ -99,7 +99,7 @@ distributions from the joint distribution.
 | [`Contingency`](@ref)        | Contingency table   |         ✓          |             ✓              |            ✓             |           ✓           |           ✓            |
 | [`CountOccurrences`](@ref)   | Frequencies         |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
 | [`ValueHistogram`](@ref)     | Binning (histogram) |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
-| [`SymbolicPermuation`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
+| [`SymbolicPermutation`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
 | [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
 """
 function mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)

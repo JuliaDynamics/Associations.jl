@@ -34,6 +34,7 @@ PAGES = [
     "Overview" => "index.md",
     "Association measures" => "measures.md",
     "Independence testing" => "independence.md",
+    "Causal graphs" => "causal_graphs.md",
     "APIs and estimators" => "api.md",
     "Examples" => "examples.md",
     "Predefined systems" => "coupled_systems.md",

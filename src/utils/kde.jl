@@ -1,6 +1,6 @@
 import ComplexityMeasures: ball_volume
 export densities_at_points
-export MultivariateKernel, NormalIsotropic, Epanechnikov
+export MultivariateKernel, NormalIsotropic, EpanechnikovKernel
 export BandwidthRule, Silverman, DiksFang
 export bandwidth
 
@@ -32,8 +32,8 @@ end
 # Statistics 240 Lecture Notes
 # P.B. Stark www.stat.berkeley.edu/∼stark/index.html
 # https://www.stat.berkeley.edu/~stark/Teach/S240/Notes/ch10.pdf
-struct Epanechnikov <: MultivariateKernel end
-function (k::Epanechnikov)(x::SVector{D, T}) where {D, T}
+struct EpanechnikovKernel <: MultivariateKernel end
+function (k::EpanechnikovKernel)(x::SVector{D, T}) where {D, T}
     (D + 2) / (2 * ball_volume(D, 1.0)) * (1 - transpose(x)*x)
 end
 

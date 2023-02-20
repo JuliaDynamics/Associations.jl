@@ -1,0 +1,45 @@
+# Causal graphs
+
+## [`PCRobust`](@ref)
+
+The PC algorithm is perhaps the most famous algorithm for inferring causal graphs.
+Here, we demonstrate the [`PCRobust`](@ref) variant on some random (uncoupled)
+variables.
+
+```@example causalgraph_corr
+using CausalityTools
+using Random
+using Graphs
+using CairoMakie, GraphMakie
+
+# A function that plots an `n`-variable directed graph.
+function plotgraph(g; labels)
+    with_theme(theme_minimal(), resolution = (400, 350)) do
+        fig = Figure();
+        ax = Axis(fig[1, 1])
+        graphplot!(ax, g; nlabels = labels)
+        hidedecorations!(ax); hidespines!(ax)
+        return fig
+    end
+end
+
+# Some example data.
+rng = MersenneTwister(1234)
+
+# The true graph is X → Y → Z → W
+sys = system(Logistic4Chain(; rng))
+X, Y, Z, W = columns(trajectory(sys, 1000, Ttr = 10000))
+data = [X, Y, Z, W]
+
+# Infer a directed graph using correlation-based independence tests
+pairwise_test = SurrogateTest(TEShannon(), Zhu1(k = 10))
+conditional_test = SurrogateTest(TEShannon(), Zhu1(k = 10)) 
+alg = PCRobust(pairwise_test, conditional_test; α = 0.05)
+g = infer_graph(alg, data)
+```
+
+Let's plot the resulting graph:
+
+```@example causalgraph_corr
+plotgraph(g; labels = ["a$i" for i = 1:5])
+```
