@@ -3,10 +3,17 @@ export PATestResult
 
 """
     PATest <: IndependenceTest
+    PATest(measure::PA, est)
 
-A test for directional (conditional) dependence based on the modified [`PA`](@ref) measure.
+A test for directional (conditional) dependence based on the modified [`PA`](@ref) measure,
+estimated using the given estimator `est`. Compatible estimators are listed in
+the docstring for [`PA`](@ref).
 
 When used with [`independence`](@ref), a [`PATestResult`](@ref) summary is returned.
+
+!!! note
+    This is an experimental test. It is part of an ongoing paper submission revision,
+    but is provided here for convenience.
 """
 struct PATest{M <: PA, E <: PA_ESTS} <: IndependenceTest
     measure::M

@@ -10,6 +10,10 @@ export asymmetry
 
 The modified predictive asymmetry measure (Haaga et al., in revision).
 
+!!! note
+    This is an experimental measure. It is part of an ongoing paper submission revision,
+    but is provided here for convenience.
+
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
