@@ -262,3 +262,46 @@ independence(test, x, z)
 
 Now we can confidently reject the null (independence), and conclude that there is
 evidence in the data to support directional dependence from `x` to `z`.
+
+## [[`PATest`](@ref)](@id examples_patest)
+
+The following example demonstrates how to compute the significance of the
+[`PA`](@ref) directional dependence measure using a [`PATest`](@ref).
+We'll use timeseries from a chain of unidirectionally coupled
+logistic maps that are coupled $X \to Y \to Z \to W$.
+
+### Conditional analysis
+
+What happens if we compute$\Delta A_{X \to Z}$? We'd maybe expect there to be 
+some information transfer $X \to Z$, even though the variables are not directly linked,
+because information is transferred through $Y$.
+
+```@example example_patest
+using CausalityTools
+using DelayEmbeddings
+using Random
+rng = MersenneTwister(1234)
+
+sys = system(Logistic4Chain(xi = [0.1, 0.2, 0.3, 0.4]; rng))
+x, y, z, w = columns(trajectory(sys, 1000))
+τx = estimate_delay(x, "mi_min")
+τy = estimate_delay(y, "mi_min")
+test = PATest(PA(ηT = 1:10, τS = estimate_delay(x, "mi_min")), FPVP())
+ΔA_xz = independence(test, x, z)
+```
+
+As expected, the distribution is still significantly skewed towards positive values.
+To determine whether the information flow between $x$ and $z$ is mediated by $y$, we can compute
+the conditional distribution $\Delta A_{X \to Z | Y}$. If these values are still positively
+skewed, we conclude that $Y$ is not a mediating variable. If conditioning on $Y$ causes
+$\Delta A_{X \to Z | Y}$ to not be skewed towards positive values any more, then
+we conclude that $Y$ is a mediating variable and that $X$ and $Z$ are linked $X \to Y \to Z$.
+
+```@example example_patest
+measure = PA(ηT = 1:10, τS = estimate_delay(x, "mi_min"), τC = estimate_delay(y, "mi_min"))
+test = PATest(measure, FPVP())
+ΔA_xzy = independence(test, x, z, y)
+```
+
+We can't reject independence when conditioning on $Y$, so we conclude that $Y$ is a
+variable responsible for transferring information from $X$ to $Z$.

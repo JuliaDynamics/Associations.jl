@@ -55,6 +55,11 @@ of the other dedicated conditional mutual information estimators.
 | [`FPVP`](@ref)                   | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
 | [`MesnerShalisi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
 | [`Rahimzamani`](@ref)            | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
+
+## Examples
+
+- [Computing the asymmetry distribution](@ref examples_pa_asymmetry_dist).
+
 """
 struct PA{N, TS, TC} <: AssociationMeasure
     ηT::N # multiple positive, unique integers
