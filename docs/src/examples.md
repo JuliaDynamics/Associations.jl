@@ -9,6 +9,7 @@ Pages = [
     "examples/examples_transferentropy.md",
     "examples/examples_cross_mappings.md",
     "examples/examples_closeness.md",
+    "examples/examples_predictive_asymmetry.md",
 ]
 Depth = 3
 ```
