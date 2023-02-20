@@ -18,7 +18,7 @@ struct PredictiveAsymmetryTest{M, E, F} <: IndependenceTest
     end
 end
 
-struct PATestResult{A, TF, TB, T, P} <: IndependenceTestResult
+struct PredictiveAsymmetryTestResult{A, TF, TB, T, P} <: IndependenceTestResult
     n_vars::Int # 2 vars = pairwise, 3 vars = conditional
     ΔA::A
     tes_fw::TF
@@ -27,12 +27,12 @@ struct PATestResult{A, TF, TB, T, P} <: IndependenceTestResult
     pvalue::P
 end
 
-pvalue(r::PATestResult) = r.pvalue
+pvalue(r::PredictiveAsymmetryTestResult) = r.pvalue
 
-function Base.show(io::IO, test::PATestResult)
+function Base.show(io::IO, test::PredictiveAsymmetryTestResult)
     print(io,
         """\
-        `PATestResult` independence test
+        `PredictiveAsymmetryTestResult` independence test
         $(null_hypothesis_text(test))
         $(pvalue_text_summary(test))
         """
@@ -71,7 +71,7 @@ function independence(test::PredictiveAsymmetryTest, source, target)
     μ0 = test.f * mean([te_fws; te_bws])
     p = HypothesisTests.pvalue(OneSampleTTest(ΔA, μ0), tail = :right)
 
-    return PATestResult(2, ΔA, te_fws, te_bws, μ0, p)
+    return PredictiveAsymmetryTestResult(2, ΔA, te_fws, te_bws, μ0, p)
 end
 
 function independence(test::PredictiveAsymmetryTest, source, target, cond)
@@ -106,7 +106,7 @@ function independence(test::PredictiveAsymmetryTest, source, target, cond)
    μ0 = test.f * mean([te_fws; te_bws])
    p = HypothesisTests.pvalue(OneSampleTTest(ΔA, μ0), tail = :right)
 
-   return PATestResult(3, ΔA, te_fws, te_bws, μ0, p)
+   return PredictiveAsymmetryTestResult(3, ΔA, te_fws, te_bws, μ0, p)
 end
 
 function pvalue(z, c::Int, n::Int)

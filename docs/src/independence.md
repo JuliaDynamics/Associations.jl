@@ -33,3 +33,10 @@ LocalPermutationTestResult
 JointDistanceDistributionTest
 JDDTestResult
 ```
+
+## [`PATest`](@ref)
+
+```@docs
+PATest
+PATestResult
+```

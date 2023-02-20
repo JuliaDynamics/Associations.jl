@@ -10,3 +10,4 @@ end
 
 include("JointDistanceDistributionTest.jl")
 include("PredictiveAsymmetryTest.jl")
+include("PATest.jl")
