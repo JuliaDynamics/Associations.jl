@@ -12,6 +12,7 @@ x, y, z, w = columns(trajectory(sys, 1000, Ttr = 10000))
 @test_throws ArgumentError PA(τC = 0)
 @test_throws ArgumentError PA(τS = 0)
 
+
 # Single-value embedding parameters
 @test asymmetry(PA(ηT = 1:5, τS = 1, τC = 1), FPVP(), x, y) |> length == 5
 @test asymmetry(PA(ηT = 1:5, τS = 1, τC = 1), FPVP(), x, y, z) |> length == 5
