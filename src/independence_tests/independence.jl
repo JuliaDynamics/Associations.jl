@@ -7,7 +7,7 @@ export IndependenceTest
 
 The supertype for all independence tests.
 """
-abstract type IndependenceTest end
+abstract type IndependenceTest{M} end
 
 # Internal type used to generate summary texts
 abstract type IndependenceTestResult end

@@ -61,7 +61,7 @@ of the other dedicated conditional mutual information estimators.
 - [Computing the asymmetry distribution](@ref examples_pa_asymmetry_dist).
 
 """
-struct PA{N, TS, TC} <: AssociationMeasure
+struct PA{N, TS, TC} <: DirectedAssociationMeasure
     ηT::N # multiple positive, unique integers
     τS::TS # integer or range of positive integers
     τC::TC# integer or range of positive integers
@@ -74,58 +74,58 @@ struct PA{N, TS, TC} <: AssociationMeasure
     end
 end
 
-function embed(measure::PA, x, y)
-    (; ηT, τS, τC) = measure
-    ηT = sort(unique(ηT))
-    τS = sort(unique(τS))
-    nη = length(ηT)
-    nτx = length(τS)
-    jη = repeat([2], nη)
-    js_x = repeat([1], nτx)
-    js = [jη...; 2; jη...;     js_x...; 1; js_x...]
-    τs = [ηT...; 0; .-(ηT)...; τS...; 0; .-(τS)...]
-    joint = genembed(Dataset(x, y), τs, js)
-    T⁺ = joint[:, 1:nη]
-    T⁰ = joint[:, nη+1:nη+1]
-    T⁻ = joint[:, nη+2:2nη+1]
-    iₛ = 2nη+2
-    S⁺ = joint[:, iₛ:(iₛ+nτx-1)]
-    S⁰ = joint[:, (iₛ+nτx):(iₛ+nτx)]
-    S⁻ = joint[:, (iₛ+nτx+1):end]
+# function embed(measure::PA, x, y)
+#     (; ηT, τS, τC) = measure
+#     ηT = sort(unique(ηT))
+#     τS = sort(unique(τS))
+#     nη = length(ηT)
+#     nτx = length(τS)
+#     jη = repeat([2], nη)
+#     js_x = repeat([1], nτx)
+#     js = [jη...; 2; jη...;     js_x...; 1; js_x...]
+#     τs = [ηT...; 0; .-(ηT)...; τS...; 0; .-(τS)...]
+#     joint = genembed(Dataset(x, y), τs, js)
+#     T⁺ = joint[:, 1:nη]
+#     T⁰ = joint[:, nη+1:nη+1]
+#     T⁻ = joint[:, nη+2:2nη+1]
+#     iₛ = 2nη+2
+#     S⁺ = joint[:, iₛ:(iₛ+nτx-1)]
+#     S⁰ = joint[:, (iₛ+nτx):(iₛ+nτx)]
+#     S⁻ = joint[:, (iₛ+nτx+1):end]
 
-    return T⁺, T⁰, T⁻, S⁺, S⁰, S⁻
-end
+#     return T⁺, T⁰, T⁻, S⁺, S⁰, S⁻
+# end
 
-function embed(measure::PA, x, y, z)
-    (; ηT, τS, τC) = measure
-    ηT = sort(unique(ηT))
-    τS = sort(unique(τS))
-    τC = sort(unique(τC))
-    nη = length(ηT)
-    nτx = length(τS)
-    nτz = length(τC)
+# function embed(measure::PA, x, y, z)
+#     (; ηT, τS, τC) = measure
+#     ηT = sort(unique(ηT))
+#     τS = sort(unique(τS))
+#     τC = sort(unique(τC))
+#     nη = length(ηT)
+#     nτx = length(τS)
+#     nτz = length(τC)
 
-    jη = repeat([2], nη)
-    js_x = repeat([1], nτx)
-    js_z = repeat([3], nτz)
+#     jη = repeat([2], nη)
+#     js_x = repeat([1], nτx)
+#     js_z = repeat([3], nτz)
 
-    js = [jη...; 2; jη...;     js_x...; 1; js_x...;   js_z...; 1; js_z...]
-    τs = [ηT...; 0; .-(ηT)...; τS...;   0; .-(τS)...; τC...;   0; .-(τC)...]
-    joint = genembed(Dataset(x, y, z), τs, js)
-    T⁺ = joint[:, 1:nη]
-    T⁰ = joint[:, nη+1:nη+1]
-    T⁻ = joint[:, nη+2:2nη+1]
-    iₛ = 2nη+2
-    S⁺ = joint[:, iₛ:(iₛ+nτx-1)]
-    S⁰ = joint[:, (iₛ+nτx):(iₛ+nτx)]
-    S⁻ = joint[:, (iₛ+nτx+1):(iₛ+2nτx)]
-    ic = iₛ+2nτx+1
-    C⁺ = joint[:, ic:(ic+nτz-1)]
-    C⁰ = joint[:, (ic+nτz):(ic+nτz)]
-    C⁻ = joint[:, (ic+nτz+1):(ic+2nτz)]
+#     js = [jη...; 2; jη...;     js_x...; 1; js_x...;   js_z...; 1; js_z...]
+#     τs = [ηT...; 0; .-(ηT)...; τS...;   0; .-(τS)...; τC...;   0; .-(τC)...]
+#     joint = genembed(Dataset(x, y, z), τs, js)
+#     T⁺ = joint[:, 1:nη]
+#     T⁰ = joint[:, nη+1:nη+1]
+#     T⁻ = joint[:, nη+2:2nη+1]
+#     iₛ = 2nη+2
+#     S⁺ = joint[:, iₛ:(iₛ+nτx-1)]
+#     S⁰ = joint[:, (iₛ+nτx):(iₛ+nτx)]
+#     S⁻ = joint[:, (iₛ+nτx+1):(iₛ+2nτx)]
+#     ic = iₛ+2nτx+1
+#     C⁺ = joint[:, ic:(ic+nτz-1)]
+#     C⁰ = joint[:, (ic+nτz):(ic+nτz)]
+#     C⁻ = joint[:, (ic+nτz+1):(ic+2nτz)]
 
-    return T⁺, T⁰, T⁻, S⁺, S⁰, S⁻, C⁺, C⁰, C⁻
-end
+#     return T⁺, T⁰, T⁻, S⁺, S⁰, S⁻, C⁺, C⁰, C⁻
+# end
 
 """
     asymmetry(measure::PA, est, x, y, [z]) → ΔA
@@ -157,34 +157,149 @@ function estimate(measure::PA, x::AbstractVector...)
     throw(ArgumentError("A valid estimator must be provided as the second argument, try for example `FPVP()`."))
 end
 
-function estimate(measure::PA, est::PA_ESTS, x::AbstractVector, y::AbstractVector)
-    (; ηT, τS, τC) = measure
+# function estimate(measure::PA, est::PA_ESTS, x::AbstractVector, y::AbstractVector)
+#     (; ηT, τS, τC) = measure
 
-    T⁺, T⁰, T⁻, S⁺, S⁰, S⁻ = embed(measure, x, y)
+#     T⁺, T⁰, T⁻, S⁺, S⁰, S⁻ = embed(measure, x, y)
+#     N = length(T⁺)
+#     S⁺⁰ = Dataset(S⁺, S⁰)
+#     S⁻⁰ = Dataset(S⁻, S⁰)
+#     ΔA = zeros(length(ηT))
+#     fw = zeros(length(ηT))
+#     bw = zeros(length(ηT))
+#     T⁺⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
+#     T⁻⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
+
+#     for (i, η) in enumerate(sort(ηT))
+#         fill_target!(T⁺⁰, T⁺, i)
+#         fill_target!(T⁻⁰, T⁻, i)
+#         fw[i] = condmutualinfo(CMIShannon(), est, Dataset(T⁺⁰), S⁻⁰, T⁻)
+#         bw[i] = condmutualinfo(CMIShannon(), est, Dataset(T⁻⁰), S⁺⁰, T⁺)
+#         ΔA[i] = fw[i] - bw[i]
+#     end
+
+#     return ΔA
+# end
+
+# function estimate(measure::PA, est::PA_ESTIMATORS,
+#         x::AbstractVector, y::AbstractVector, z::AbstractVector)
+#     (; ηT, τS, τC) = measure
+#     T⁺, T⁰, T⁻, S⁺, S⁰, S⁻, C⁺, C⁰, C⁻ = embed(measure, x, y, z)
+#     N = length(T⁺)
+#     S⁺⁰ = Dataset(S⁺, S⁰)
+#     S⁻⁰ = Dataset(S⁻, S⁰)
+#     C⁺⁰ = Dataset(C⁺, C⁰)
+#     C⁻⁰ = Dataset(C⁻, C⁰)
+
+#     ΔA = zeros(length(ηT))
+#     fw = zeros(length(ηT))
+#     bw = zeros(length(ηT))
+#     T⁺⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
+#     T⁻⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
+#     TC⁻⁰ = Dataset(T⁻, C⁻⁰)
+#     TC⁺⁰ = Dataset(T⁺, C⁺⁰)
+
+#     for (i, η) in enumerate(sort(ηT))
+#         fill_target!(T⁺⁰, T⁺, i)
+#         fill_target!(T⁻⁰, T⁻, i)
+#         fw[i] = condmutualinfo(CMIShannon(), est, Dataset(T⁺⁰), S⁻⁰, TC⁻⁰)
+#         bw[i] = condmutualinfo(CMIShannon(), est, Dataset(T⁻⁰), S⁺⁰, TC⁺⁰)
+#         ΔA[i] = fw[i] - bw[i]
+#     end
+
+#     return ΔA
+# end
+
+# With instantaneous coupling
+#----------------------------------------------------------------
+function embed(measure::PA, x, y)
+    (; ηT, τS, τC) = measure
+    ηT = sort(unique(ηT))
+    τS = sort(unique([τS; ηT]))
+    nη = length(ηT)
+    nτx = length(τS)
+    jη = repeat([2], nη)
+    js_x = repeat([1], nτx)
+    js = [jη...; 2; jη...;     js_x...; 1; js_x...]
+    τs = [ηT...; 0; .-(ηT)...; τS...; 0; .-(τS)...]
+    joint = genembed(Dataset(x, y), τs, js)
+    T⁺ = joint[:, 1:nη]
+    T⁰ = joint[:, nη+1:nη+1]
+    T⁻ = joint[:, nη+2:2nη+1]
+    iₛ = 2nη+2
+    S⁺ = joint[:, iₛ:(iₛ+nτx-1)]
+    S⁰ = joint[:, (iₛ+nτx):(iₛ+nτx)]
+    S⁻ = joint[:, (iₛ+nτx+1):end]
+
+    return T⁺, T⁰, T⁻, S⁺, S⁰, S⁻
+end
+
+function embed(measure::PA, x, y, z)
+    (; ηT, τS, τC) = measure
+    ηT = sort(unique(ηT))
+    τS = sort(unique([τS; ηT]))
+    τC = sort(unique(τC))
+    nη = length(ηT)
+    nτx = length(τS)
+    nτz = length(τC)
+
+    jη = repeat([2], nη)
+    js_x = repeat([1], nτx)
+    js_z = repeat([3], nτz)
+
+    js = [jη...; 2; jη...;     js_x...; 1; js_x...;   js_z...; 1; js_z...]
+    τs = [ηT...; 0; .-(ηT)...; τS...;   0; .-(τS)...; τC...;   0; .-(τC)...]
+    joint = genembed(Dataset(x, y, z), τs, js)
+    T⁺ = joint[:, 1:nη]
+    T⁰ = joint[:, nη+1:nη+1]
+    T⁻ = joint[:, nη+2:2nη+1]
+    iₛ = 2nη+2
+    S⁺ = joint[:, iₛ:(iₛ+nτx-1)]
+    S⁰ = joint[:, (iₛ+nτx):(iₛ+nτx)]
+    S⁻ = joint[:, (iₛ+nτx+1):(iₛ+2nτx)]
+    ic = iₛ+2nτx+1
+    C⁺ = joint[:, ic:(ic+nτz-1)]
+    C⁰ = joint[:, (ic+nτz):(ic+nτz)]
+    C⁻ = joint[:, (ic+nτz+1):(ic+2nτz)]
+
+    return T⁺, T⁰, T⁻, S⁺, S⁰, S⁻, C⁺, C⁰, C⁻
+end
+
+as_vector(x::Union{AbstractVector{T}}) where T = vec(x)
+as_vector(x::AbstractDataset{1, T}) where T = x[:, 1]
+function estimate(measure::PA, est::PA_ESTS, x, y)
+    (; ηT, τS, τC) = measure
+    X = as_vector(x)
+    Y = as_vector(y)
+
+    T⁺, T⁰, T⁻, S⁺, S⁰, S⁻ = embed(measure, X, Y)
     N = length(T⁺)
-    S⁺⁰ = Dataset(S⁺, S⁰)
-    S⁻⁰ = Dataset(S⁻, S⁰)
+    τŜ = sort(unique([τS; ηT]))
+    S⁺⁰ = Dataset(S⁺[:, findall(x -> x ∈ τS, τŜ)], S⁰)
+    S⁻⁰ = Dataset(S⁻[:, findall(x -> x ∈ τS, τŜ)], S⁰)
     ΔA = zeros(length(ηT))
     fw = zeros(length(ηT))
     bw = zeros(length(ηT))
-    T⁺⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
-    T⁻⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
-
+    Tⁿ⁺⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
+    Tⁿ⁻⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
     for (i, η) in enumerate(sort(ηT))
-        fill_target!(T⁺⁰, T⁺, i)
-        fill_target!(T⁻⁰, T⁻, i)
-        fw[i] = condmutualinfo(CMIShannon(), est, Dataset(T⁺⁰), S⁻⁰, T⁻)
-        bw[i] = condmutualinfo(CMIShannon(), est, Dataset(T⁻⁰), S⁺⁰, T⁺)
+        fill_target!(Tⁿ⁺⁰, T⁺, i)
+        fill_target!(Tⁿ⁻⁰, T⁻, i)
+        fw[i] = condmutualinfo(CMIShannon(), est, Tⁿ⁺⁰, S⁻⁰, T⁻)
+        bw[i] = condmutualinfo(CMIShannon(), est, Tⁿ⁻⁰, S⁺⁰, T⁺)
         ΔA[i] = fw[i] - bw[i]
     end
 
     return ΔA
 end
 
-function estimate(measure::PA, est::PA_ESTIMATORS,
-        x::AbstractVector, y::AbstractVector, z::AbstractVector)
+function estimate(measure::PA, est::PA_ESTIMATORS, x, y, z)
     (; ηT, τS, τC) = measure
-    T⁺, T⁰, T⁻, S⁺, S⁰, S⁻, C⁺, C⁰, C⁻ = embed(measure, x, y, z)
+    X = as_vector(x)
+    Y = as_vector(y)
+    Z = as_vector(z)
+    T⁺, T⁰, T⁻, S⁺, S⁰, S⁻, C⁺, C⁰, C⁻ = embed(measure, X, Y, Z)
+
     N = length(T⁺)
     S⁺⁰ = Dataset(S⁺, S⁰)
     S⁻⁰ = Dataset(S⁻, S⁰)
@@ -196,14 +311,14 @@ function estimate(measure::PA, est::PA_ESTIMATORS,
     bw = zeros(length(ηT))
     T⁺⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
     T⁻⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
-    TC⁻⁰ = Dataset(T⁻, C⁻⁰)
-    TC⁺⁰ = Dataset(T⁺, C⁺⁰)
+    T⁻C⁻⁰ = Dataset(T⁻, C⁻⁰)
+    T⁺C⁺⁰ = Dataset(T⁺, C⁺⁰)
 
     for (i, η) in enumerate(sort(ηT))
         fill_target!(T⁺⁰, T⁺, i)
         fill_target!(T⁻⁰, T⁻, i)
-        fw[i] = condmutualinfo(CMIShannon(), est, Dataset(T⁺⁰), S⁻⁰, TC⁻⁰)
-        bw[i] = condmutualinfo(CMIShannon(), est, Dataset(T⁻⁰), S⁺⁰, TC⁺⁰)
+        fw[i] = condmutualinfo(CMIShannon(), est, T⁺⁰, S⁻⁰, T⁻C⁻⁰)
+        bw[i] = condmutualinfo(CMIShannon(), est, T⁻⁰, S⁺⁰, T⁺C⁺⁰)
         ΔA[i] = fw[i] - bw[i]
     end
 

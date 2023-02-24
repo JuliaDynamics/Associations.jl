@@ -15,7 +15,7 @@ The supertype of all transfer entropy measures. Concrete subtypes are
 - [`TEShannon`](@ref)
 - [`TERenyiJizba`](@ref)
 """
-abstract type TransferEntropy{E, EMB} <: InformationMeasure end
+abstract type TransferEntropy{E, EMB} <: DirectedAssociationMeasure end
 
 """
 The supertype of all dedicated transfer entropy estimators.
