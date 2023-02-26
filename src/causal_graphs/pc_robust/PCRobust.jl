@@ -80,11 +80,13 @@ struct PCRobust{U, C, A, N} <: GraphAlgorithm
 end
 
 include("skeleton.jl")
+include("skeleton_directed.jl")
 include("cpdag.jl")
 
 # TODO: this is only designed for non-directed measures. Use type system?
 function infer_graph(algorithm::PCRobust, x; verbose = false)
     skeleton_graph, separating_sets = skeleton(algorithm, x; verbose)
+    return skeleton_graph
     directed_graph = cpdag(algorithm, skeleton_graph, separating_sets; verbose)
 
     return directed_graph

@@ -46,6 +46,10 @@ considering the case `𝓁 = 0`.
 
 Modifies `graph` in-place.
 
+If `alg.unconditional_test` is a directed test, then edges are considered one-by-one.
+If `alg.unconditional_test` is not a directed test, then edges (`X → Y, `Y → X`)
+are considered simultaneously.
+
 [^Colombo2014]:
     Colombo, D., & Maathuis, M. H. (2014). Order-independent constraint-based causal
     structure learning. J. Mach. Learn. Res., 15(1), 3741-3782.
@@ -88,6 +92,7 @@ Modifies `graph` in-place.
 """
 function skeleton_conditional!(alg::PCRobust, graph, separating_set, x, 𝓁::Int;
         verbose = false)
+
     N = length(x)
     # `a[i]` := adjacent vertices to vertex `i`
     a = [all_neighbors(graph, i) for i in 1:nv(graph)]
@@ -116,7 +121,10 @@ function conditionaltest_and_remove_edge!(alg::PCRobust, x, 𝐒, 𝓁, i, j, gr
         # independence test `i ⫫ j | Sₖ`. If this holds for any variable(s) `Sₖ`,
         # then the variables are taken as independent, and `Sₖ` is assigned to the
         # separating set for the edges i - j (or, equivalently, j - i).
-        for Sₖ in 𝐒
+
+        # Only pick conditional sets with valid sizes
+        conditional_sets = filter(s -> length(s) <= alg.maxdepth, 𝐒)
+        for Sₖ in conditional_sets
             Ŝ = @views Dataset(x[Sₖ]...)
             # If pval > α, then, based on the given the data, we can't reject the hypothesis
             # that `src ⫫ trg | Ŝ`. Therefore, we assume that they *are* independent

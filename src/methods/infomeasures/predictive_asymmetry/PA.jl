@@ -271,6 +271,8 @@ function estimate(measure::PA, est::PA_ESTS, x, y)
     (; ηT, τS, τC) = measure
     X = as_vector(x)
     Y = as_vector(y)
+    measure = redefine(measure, x)
+    (; ηT, τS, τC) = measure
 
     T⁺, T⁰, T⁻, S⁺, S⁰, S⁻ = embed(measure, X, Y)
     N = length(T⁺)
@@ -294,6 +296,7 @@ function estimate(measure::PA, est::PA_ESTS, x, y)
 end
 
 function estimate(measure::PA, est::PA_ESTIMATORS, x, y, z)
+    measure = redefine(measure, x, z)
     (; ηT, τS, τC) = measure
     X = as_vector(x)
     Y = as_vector(y)
@@ -326,8 +329,8 @@ function estimate(measure::PA, est::PA_ESTIMATORS, x, y, z)
 end
 
 # The same also applies for T⁻⁰ and T⁻, just exchange variables
-function fill_target!(T⁺⁰, T⁺, i)
+function fill_target!(T⁺⁰, T⁺, i, k::Int = 1)
     for j in eachindex(T⁺⁰)
-        T⁺⁰[j][1] = T⁺[j, i]
+        T⁺⁰[j][k] = T⁺[j, i]
     end
 end

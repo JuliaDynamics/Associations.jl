@@ -17,8 +17,8 @@ infer_graph
 GraphAlgorithm
 ```
 
-## [`PCRobust`](@ref)
+## [Optimal causation entropy](@ref)
 
 ```@docs
-PCRobust
+OCE
 ```
