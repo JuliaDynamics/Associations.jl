@@ -110,8 +110,6 @@ function select_parents(alg::OCE, τs, js, 𝒫s, x, i::Int; verbose = false)
     ###################################################################
     # Backward elimination
     ###################################################################
-    @show "before backwards elimination"
-    @show parents
     bw_significant = true
     k = 0
     M = length(parents.parents)
