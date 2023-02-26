@@ -7,7 +7,7 @@ using HypothesisTests
 An independence test based on the [`PredictiveAsymmetry`](@ref) directional association
 measure. When used with [`independence`](@ref), a p-value is returned.
 """
-struct PredictiveAsymmetryTest{M, E, F} <: IndependenceTest
+struct PredictiveAsymmetryTest{M, E, F} <: IndependenceTest{M}
     measure::M
     est::E
     f::F

@@ -65,7 +65,7 @@ The shuffled variable is always the first variable (`X`). Exceptions are:
 - [Pairwise test, `MIShannon`, categorical](@ref examples_surrogatetest_mishannon_categorical).
 - [Conditional test, `CMIShannon`, categorical](@ref examples_surrogatetest_cmishannon_categorical).
 """
-struct SurrogateTest{M, E, R, S} <: IndependenceTest
+struct SurrogateTest{M, E, R, S} <: IndependenceTest{M}
     measure::M
     est::E
     rng::R

@@ -97,7 +97,7 @@ The nearest-neighbor approach in Runge (2018) can be reproduced by using the
     Conference on Artificial Intelligence and Statistics (pp. 938-947). PMLR.
 
 """
-struct LocalPermutationTest{M, EST, C, R} <: IndependenceTest
+struct LocalPermutationTest{M, EST, C, R} <: IndependenceTest{M}
     measure::M
     est::EST
     rng::R

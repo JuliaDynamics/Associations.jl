@@ -40,7 +40,7 @@ can be used in practice.
     flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of
     Nonlinear Science 28.7 (2018): 075302.
 """
-struct JointDistanceDistributionTest{M <: JointDistanceDistribution, R} <: IndependenceTest
+struct JointDistanceDistributionTest{M <: JointDistanceDistribution, R} <: IndependenceTest{M}
     measure::M
     rng::R
 

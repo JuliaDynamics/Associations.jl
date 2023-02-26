@@ -1,6 +1,6 @@
 using Graphs: SimpleGraph, SimpleDiGraph, SimpleEdge
-using Graphs: nv, complete_graph, rem_edge!
-using Graphs.SimpleGraphs: adj
+using Graphs: nv, complete_digraph, rem_edge!
+using Graphs.SimpleGraphs: all_neighbors
 using Combinatorics: powerset, combinations
 
 export skeleton
@@ -17,8 +17,12 @@ separating sets `s::Dict{SimpleEdge, Vector{Int}})`.
 function skeleton(alg::PCRobust, x; verbose = false)
 
     N = length(x)
-    max_degree = N - 2
-    graph = complete_graph(N)
+    if alg.maxdepth isa Nothing
+        max_degree = N - 2
+    else
+        max_degree = alg.maxdepth
+    end
+    graph = complete_digraph(N)
     separating_set = Dict{SimpleEdge, Vector{Int}}()
 
     skeleton_unconditional!(alg, graph, x; verbose) # only considers pairs
@@ -42,11 +46,15 @@ considering the case `𝓁 = 0`.
 
 Modifies `graph` in-place.
 
+If `alg.unconditional_test` is a directed test, then edges are considered one-by-one.
+If `alg.unconditional_test` is not a directed test, then edges (`X → Y, `Y → X`)
+are considered simultaneously.
+
 [^Colombo2014]:
     Colombo, D., & Maathuis, M. H. (2014). Order-independent constraint-based causal
     structure learning. J. Mach. Learn. Res., 15(1), 3741-3782.
 """
-function skeleton_unconditional!(alg::PCRobust, graph::SimpleGraph, x; verbose = false)
+function skeleton_unconditional!(alg::PCRobust, graph::SimpleDiGraph, x; verbose = false)
     N = length(x)
     pairs = (Tuple(pair) for pair in combinations(1:N, 2))
     for pair in pairs
@@ -55,9 +63,13 @@ function skeleton_unconditional!(alg::PCRobust, graph::SimpleGraph, x; verbose =
         # that `x[s] ⫫ x[t]`. Therefore, we assume that they *are* independent.
         pval = @views pvalue(independence(alg.unconditional_test, x[s], x[t]))
         if pval > alg.α
-            edge = SimpleEdge(s, t)
-            verbose && println("Skeleton, pairwise: Removing $edge (p = $pval)")
-            rem_edge!(graph, edge)
+            edge1 = SimpleEdge(s, t)
+            edge2 = SimpleEdge(t, s)
+
+            verbose && println("Skeleton, pairwise: Removing $edge1 and $edge2 (p = $pval)")
+            rem_edge!(graph, edge1)
+            rem_edge!(graph, edge2)
+
         end
     end
     return graph
@@ -80,9 +92,10 @@ Modifies `graph` in-place.
 """
 function skeleton_conditional!(alg::PCRobust, graph, separating_set, x, 𝓁::Int;
         verbose = false)
+
     N = length(x)
     # `a[i]` := adjacent vertices to vertex `i`
-    a = adj(graph)
+    a = [all_neighbors(graph, i) for i in 1:nv(graph)]
     ctr = 0
     for (i, aᵢ) in enumerate(a)
         for j in aᵢ
@@ -108,7 +121,10 @@ function conditionaltest_and_remove_edge!(alg::PCRobust, x, 𝐒, 𝓁, i, j, gr
         # independence test `i ⫫ j | Sₖ`. If this holds for any variable(s) `Sₖ`,
         # then the variables are taken as independent, and `Sₖ` is assigned to the
         # separating set for the edges i - j (or, equivalently, j - i).
-        for Sₖ in 𝐒
+
+        # Only pick conditional sets with valid sizes
+        conditional_sets = filter(s -> length(s) <= alg.maxdepth, 𝐒)
+        for Sₖ in conditional_sets
             Ŝ = @views Dataset(x[Sₖ]...)
             # If pval > α, then, based on the given the data, we can't reject the hypothesis
             # that `src ⫫ trg | Ŝ`. Therefore, we assume that they *are* independent
@@ -116,10 +132,14 @@ function conditionaltest_and_remove_edge!(alg::PCRobust, x, 𝐒, 𝓁, i, j, gr
             res = independence(alg.conditional_test, src, trg, Ŝ)
             pval = pvalue(res)
             if pval > alg.α
-                edge = SimpleEdge(i, j)
-                verbose && println("Skeleton (conditional, level 𝓁=$𝓁): Removing $edge (p = $pval)")
-                rem_edge!(graph, edge)
-                separating_set[edge] = Sₖ
+                edge1 = SimpleEdge(i, j)
+                edge2 = SimpleEdge(j, i)
+
+                verbose && println("Skeleton (conditional, level 𝓁=$𝓁): Removing $edge1 and $edge2 (p = $pval)")
+                rem_edge!(graph, edge1)
+                rem_edge!(graph, edge2)
+
+                separating_set[edge1] = Sₖ
                 separating_set[SimpleEdge(j, i)] = Sₖ
                 ctr +=1
                 break

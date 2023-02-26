@@ -7,7 +7,8 @@ export PCRobust
     PCRobust(
         unconditional_test::IndependenceTest,
         conditional_test::IndependenceTest;
-        α = 0.05)
+        α = 0.05,
+        max_depth::Union{Int, Nothing} = nothing)
 
 The "robustified" version (Kalisch & Bühlmann, 2008[^Kalisch2008]) of the PC algorithm
 (Spirtes et al., 2000)[^Spirtes2000]. The `unconditional_test` must be an
@@ -36,6 +37,9 @@ performs the following steps:
     increasing size, which in most cases limits the number of tests needed.  The separating
     sets `S(i, j)`, which records which variables were in the conditioning set that
     rendered variables `i` and `j` independent, are recorded.
+    If `max_depth` is an integer, then this procedure is performed on conditioning
+    sets of sizes `1:max_depth`, and if `max_depth == nothing`, then all possible
+    conditioning set sizes are potentially used.
 4. Create a directed graph `dg` from `g` by replacing every
     undirected edge `X - Y` in `g` by the bidirectional edge `X ↔ Y` (i.e.
     construct two directional edges `X → Y` and `Y → X`). Orientiation rules 0-3
@@ -62,23 +66,27 @@ The resulting directed graph is then returned.
     Spirtes, P., Glymour, C. N., Scheines, R., & Heckerman, D. (2000). Causation, prediction,
     and search. MIT press.
 """
-struct PCRobust{U, C, A} <: GraphAlgorithm
+struct PCRobust{U, C, A, N} <: GraphAlgorithm
     unconditional_test::U
     conditional_test::C
     α::A
+    maxdepth::N
 
     function PCRobust(unconditional_test::U, conditional_test::C;
-            α::A = 0.05, rng = Random.default_rng()) where {U <: IndependenceTest, C <: IndependenceTest, A}
+            α::A = 0.05, maxdepth::N = nothing) where {U <: IndependenceTest, C <: IndependenceTest, A, N <: Union{Int, Nothing}}
         0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
-        new{U, C, A}(unconditional_test, conditional_test, α)
+        new{U, C, A, N}(unconditional_test, conditional_test, α, maxdepth)
     end
 end
 
 include("skeleton.jl")
+include("skeleton_directed.jl")
 include("cpdag.jl")
 
+# TODO: this is only designed for non-directed measures. Use type system?
 function infer_graph(algorithm::PCRobust, x; verbose = false)
     skeleton_graph, separating_sets = skeleton(algorithm, x; verbose)
+    return skeleton_graph
     directed_graph = cpdag(algorithm, skeleton_graph, separating_sets; verbose)
 
     return directed_graph

@@ -31,10 +31,10 @@ Orientiation rules 0-3 are then applied to `dg`:
     Kalisch, M., & Bühlmann, P. (2008). Robustification of the PC-algorithm for directed
     acyclic graphs. Journal of Computational and Graphical Statistics, 17(4), 773-789.
 """
-function cpdag(alg::PCRobust, skeleton::SimpleGraph,
+function cpdag(alg::PCRobust, skeleton::SimpleDiGraph,
         separating_sets::Dict{SimpleEdge, Vector{Int}}; verbose = false)
     # Convert the skeleton to a directed graph where (Xᵢ - Xⱼ) becomes (Xᵢ → Xⱼ, Xⱼ → Xᵢ).
-    dg = SimpleDiGraph(skeleton)
+    dg = skeleton
 
     # Orientiation rules are described in a plethora of books and papers in the literature.
     # I found most of them, including the original paper on the PC algorithm, hard to

@@ -14,7 +14,9 @@ Assumes that the input data are (multivariate) normally distributed.
     gpus. In Proceedings of the 30th International Conference on Scientific and
     Statistical Database Management (pp. 1-10).
 """
-struct CorrelationTest <: IndependenceTest end
+Base.@kwdef struct CorrelationTest{M} <: IndependenceTest{M}
+    measure::M = nothing
+end
 
 """
     CorrelationTestResult(pvalue, ρ, z)

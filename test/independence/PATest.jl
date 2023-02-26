@@ -8,10 +8,17 @@ x, y, z, w = columns(trajectory(sys, 1000, Ttr = 10000))
 
 @test_throws ArgumentError asymmetry(FPVP(), x, y)
 @test_throws ArgumentError estimate(PA(), x, y)
-@test_throws ArgumentError PA(ηT = -1)
-@test_throws ArgumentError PA(τC = 0)
-@test_throws ArgumentError PA(τS = 0)
+@test_throws ArgumentError estimate(PA(ηT = -1), FPVP(), x, y)
+@test_throws ArgumentError estimate(PA(ηT = -1), FPVP(), x, y, z)
+@test_throws ArgumentError estimate(PA(τC = 0), FPVP(), x, y)
+@test_throws ArgumentError estimate(PA(τS = 0), FPVP(), x, y)
+@test_throws ArgumentError estimate(PA(τC = 0), FPVP(), x, y, z)
+@test_throws ArgumentError estimate(PA(τS = 0), FPVP(), x, y, z)
 
+# Embedding optimization
+p = Pecuzal(dmax = 2)
+@test estimate(PA(τS = p), FPVP(), x, y) isa Vector{<:Real}
+@test estimate(PA(τS = p, τC = p), FPVP(), x, y, z) isa Vector{<:Real}
 
 # Single-value embedding parameters
 @test asymmetry(PA(ηT = 1:5, τS = 1, τC = 1), FPVP(), x, y) |> length == 5

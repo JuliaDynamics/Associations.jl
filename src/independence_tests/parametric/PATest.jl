@@ -15,7 +15,7 @@ When used with [`independence`](@ref), a [`PATestResult`](@ref) summary is retur
     This is an experimental test. It is part of an ongoing paper submission revision,
     but is provided here for convenience.
 """
-struct PATest{M <: PA, E <: PA_ESTS} <: IndependenceTest
+struct PATest{M <: PA, E <: PA_ESTS} <: IndependenceTest{M}
     measure::M
     est::E
 end
