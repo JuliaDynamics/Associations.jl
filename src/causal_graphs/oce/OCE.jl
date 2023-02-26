@@ -85,7 +85,7 @@ function Base.show(io::IO, x::OCESelectedParents)
 end
 
 function select_parents(alg::OCE, τs, js, 𝒫s, x, i::Int; verbose = false)
-    println("Finding parents for variable x$i(0)")
+    verbose && println("Finding parents for variable x$i(0)")
     idxs_remaining = 1:length(𝒫s) |> collect
     # Account for the fact that the `𝒫ⱼ ∈ 𝒫s` are embedded. This means that some points are
     # lost from the `xᵢ`s.
@@ -110,8 +110,6 @@ function select_parents(alg::OCE, τs, js, 𝒫s, x, i::Int; verbose = false)
     ###################################################################
     # Backward elimination
     ###################################################################
-    @show "before backwards elimination"
-    @show parents
     bw_significant = true
     k = 0
     M = length(parents.parents)
