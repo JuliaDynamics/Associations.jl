@@ -4,14 +4,11 @@ export infer_graph
 """
     GraphAlgorithm
 
-The supertype of all algorithms used to infer causal relationships from graphs.
-Each [`GraphAlgorithm`](@ref) returns some graph that is compatible with the
-[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl) package, which can be used
-to explore the inferred graphs further.
+The supertype of all causal graph inference algorithms.
 
-Concrete subtypes are:
+## Concrete implementations
 
-- [`PCRobust`](@ref)
+- [`OCE`](@ref): the optimal causation entropy algorithm.
 """
 abstract type GraphAlgorithm end
 
@@ -20,6 +17,6 @@ abstract type GraphAlgorithm end
 
 Infer graph from input data `x` using the given `algorithm`.
 
-Returns a graph `g`, whose type depends on `algorithm`.
+Returns `g`, whose type depends on `algorithm`.
 """
 function infer_graph end
