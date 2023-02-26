@@ -72,7 +72,7 @@ end
 
 # A simple struct that stores information about selected parents.
 Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT}
-    const i::Int
+    i::Int
     parents::P = Vector{Vector{eltype(1.0)}}(undef, 0)
     parents_js::PJ = Vector{Int}(undef, 0)
     parents_τs::PT = Vector{Int}(undef, 0)
