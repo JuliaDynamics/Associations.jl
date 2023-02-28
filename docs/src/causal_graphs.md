@@ -9,12 +9,13 @@ The API for inferring causal graphs is defined by:
 
 ```@docs
 infer_graph
+GraphAlgorithm
 ```
 
-## Algorithms
+## [The PC-algorithm](@ref)
 
 ```@docs
-GraphAlgorithm
+PCRobust
 ```
 
 ## [Optimal causation entropy](@ref)
