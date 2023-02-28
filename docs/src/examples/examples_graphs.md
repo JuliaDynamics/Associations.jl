@@ -6,7 +6,7 @@ Here, we use the [`OCE`](@ref) algorithm to infer a time series graph. We use a
 [`SurrogateTest`](@ref) for the initial step, and a [`LocalPermutationTest`](@ref)
 for the conditional steps.
 
-```@docs
+```@example causalgraph_oce
 using CausalityTools
 using Random
 rng = MersenneTwister(1234)
