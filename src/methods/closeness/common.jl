@@ -3,9 +3,12 @@ const HLMS = Union{HMeasure, LMeasure, MMeasure, SMeasure}
 function estimate(measure::HLMS, x::AbstractVector{T}, y::AbstractVector{T}) where T
 
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
-
-    X = embed(x, dx, τx)
-    Y = embed(y, dy, τy)
+    jsx = ([1 for i = 1:dx]...,)
+    τsx = (collect(0:-τx:-(dx-1)*τx)...,)
+    jsy = ([1 for i = 1:dy]...,)
+    τsy = (collect(0:-τy:-(dy-1)*τy)...,)
+    X = genembed(x, τsx, jsx)
+    Y = genembed(y, τsy, jsy)
     lX, lY = length(X), length(Y)
 
     # TODO: cut the last points of the shortest resulting embedding.
