@@ -27,12 +27,12 @@ Base.@kwdef struct LeonenkoProzantoSavani <: DifferentialEntropyEstimator
     w::Int = 0
 end
 
-function entropy(e::Shannon, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
+function entropy(e::Shannon, est::LeonenkoProzantoSavani, x::AbstractStateSpaceSet{D}) where D
     h = Î(1.0, est, x) # measured in nats
     return h / log(e.base, ℯ) # convert to desired base.
 end
 
-function entropy(e::Renyi, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
+function entropy(e::Renyi, est::LeonenkoProzantoSavani, x::AbstractStateSpaceSet{D}) where D
     if e.q ≈ 1.0
         h = Î(e.q, est, x) # measured in nats
     else
@@ -41,7 +41,7 @@ function entropy(e::Renyi, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) w
     return h / log(e.base, ℯ) # convert to desired base.
 end
 
-function entropy(e::Tsallis, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
+function entropy(e::Tsallis, est::LeonenkoProzantoSavani, x::AbstractStateSpaceSet{D}) where D
     if e.q ≈ 1.0
         h = Î(e.q, est, x) # measured in nats
     else
@@ -52,7 +52,7 @@ end
 
 # TODO: this gives nan??
 # Use notation from original paper
-function Î(q, est::LeonenkoProzantoSavani, x::AbstractDataset{D}) where D
+function Î(q, est::LeonenkoProzantoSavani, x::AbstractStateSpaceSet{D}) where D
     (; k, w) = est
     N = length(x)
     Vₘ = ball_volume(D)

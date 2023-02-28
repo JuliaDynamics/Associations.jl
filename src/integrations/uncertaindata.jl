@@ -3,10 +3,10 @@
 
 import UncertainData:
     resample,
-    UncertainDataset,
-    UncertainIndexDataset,
-    UncertainValueDataset,
-    UncertainIndexValueDataset
+    UncertainStateSpaceSet,
+    UncertainIndexStateSpaceSet,
+    UncertainValueStateSpaceSet,
+    UncertainIndexValueStateSpaceSet
 import .s_measure
 import .jdd
 import .transferentropy; export transferentropy
@@ -16,9 +16,9 @@ import .predictive_asymmetry
 import HypothesisTests.OneSampleTTest
 
 ##################################################
-# Basic resampling for `UncertainDataset`s
+# Basic resampling for `UncertainStateSpaceSet`s
 ##################################################
-const UT = Union{UncertainValueDataset, UncertainIndexDataset, UncertainDataset}
+const UT = Union{UncertainValueStateSpaceSet, UncertainIndexStateSpaceSet, UncertainStateSpaceSet}
 
 s_measure(s::UT, t::UT, args...; kwargs...) =
     s_measure(resample(s), resample(t), args...; kwargs...)
@@ -71,26 +71,26 @@ ccm(s::UT, t::UT, args...; kwargs...) =
     ccm(resample(s), resample(t), args...; kwargs...)
 
 ##########################################################################
-# Basic resampling for `UncertainIndexValueDataset` (no constraints)
+# Basic resampling for `UncertainIndexValueStateSpaceSet` (no constraints)
 ##########################################################################
-const UIVD = UncertainIndexValueDataset
+const UIVD = UncertainIndexValueStateSpaceSet
 
 # TODO: warn about potential index reversals?
 #
 # function warn_about_sampling(s::V, t::W)
 #     if s isa UIVD
-#         @warn "`s` isa UncertainIndexValueDataset. Index reversals may occur. Consider constrained resampling."
+#         @warn "`s` isa UncertainIndexValueStateSpaceSet. Index reversals may occur. Consider constrained resampling."
 #     end
 
 #     if t isa UIVD
-#         @warn "`t` isa UncertainIndexValueDataset. Index reversals may occur. Consider constrained resampling."
+#         @warn "`t` isa UncertainIndexValueStateSpaceSet. Index reversals may occur. Consider constrained resampling."
 #     end
 # end
 
 # function warn_about_sampling(s::V, t::W, c::X)
 #     warn_about_sampling(s, t)
 #     if c isa UIVD
-#         @warn "`c` isa UncertainIndexValueDataset. Index reversals may occur. Consider constrained resampling."
+#         @warn "`c` isa UncertainIndexValueStateSpaceSet. Index reversals may occur. Consider constrained resampling."
 #     end
 # end
 

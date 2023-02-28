@@ -7,7 +7,7 @@ Base.@kwdef struct Faivishevsky{M} <: DifferentialEntropyEstimator
 end
 import ComplexityMeasures.ball_volume
 using Neighborhood: search
-function entropy(e::Shannon, est::Faivishevsky, x::AbstractDataset{D}) where D
+function entropy(e::Shannon, est::Faivishevsky, x::AbstractStateSpaceSet{D}) where D
     (; k, w, metric) = est
     N = length(x)
     tree = KDTree(x, metric)

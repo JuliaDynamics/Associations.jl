@@ -1,7 +1,7 @@
-using DelayEmbeddings: AbstractDataset
+using DelayEmbeddings: AbstractStateSpaceSet
 using ComplexityMeasures: ProbabilitiesEstimator
-const VectorOrDataset{D, T} = Union{AbstractVector{T}, AbstractDataset{D, T}} where {D, T}
-const ArrayOrDataset{D, T, N} = Union{AbstractArray{T, N}, AbstractDataset{D, T}} where {D, T, N}
+const VectorOrStateSpaceSet{D, T} = Union{AbstractVector{T}, AbstractStateSpaceSet{D, T}} where {D, T}
+const ArrayOrStateSpaceSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSpaceSet{D, T}} where {D, T, N}
 
 export DirectedAssociationMeasure
 """

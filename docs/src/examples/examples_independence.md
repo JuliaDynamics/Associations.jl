@@ -66,7 +66,7 @@ using CausalityTools
 X = randn(1000)
 Y = X .+ randn(1000) .* 0.4
 Z = randn(1000) .+ Y
-x, y, z = Dataset.((X, Y, Z))
+x, y, z = StateSpaceSet.((X, Y, Z))
 test = LocalPermutationTest(CMIShannon(base = 2), Kraskov(k = 10), nshuffles = 30)
 test_result = independence(test, x, y, z)
 ```

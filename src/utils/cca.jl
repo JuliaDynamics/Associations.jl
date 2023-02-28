@@ -1,12 +1,12 @@
 using LinearAlgebra: eigen, inv
-using StateSpaceSets: AbstractDataset, Dataset
+using StateSpaceSets: AbstractStateSpaceSet, StateSpaceSet
 using StaticArrays: SUnitRange, SOneTo
 using Statistics: mean, std, cor
 
 export cca_cor
-function cca_cor(x::AbstractDataset{D1}, x̂::AbstractDataset{D2}) where {D1, D2}
+function cca_cor(x::AbstractStateSpaceSet{D1}, x̂::AbstractStateSpaceSet{D2}) where {D1, D2}
     # Sample covariance matrices
-    data = Dataset(x, x̂)
+    data = StateSpaceSet(x, x̂)
     μ, R = fastmean_and_cov(data) # This comes in the Gao2017.jl file and is faster than converting to matrix first.
     Rxx̂ = R[1:D1, (D1+1):(D1+D2)]
     Rx̂x = R[(D1+1):(D1+D2), 1:D1]

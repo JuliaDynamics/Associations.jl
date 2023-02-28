@@ -25,5 +25,5 @@ Base.@kwdef struct LoftsGaarden{M} <: ProbabilitiesEstimator
 end
 
 function entropy(e::Renyi, est::LoftsGaarden, x)
-    ρs = point_densities(est, Dataset(x))
+    ρs = point_densities(est, StateSpaceSet(x))
 end

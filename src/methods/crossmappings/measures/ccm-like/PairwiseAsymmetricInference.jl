@@ -75,5 +75,5 @@ function embed(measure::PairwiseAsymmetricInference, t::AbstractVector, s::Abstr
     js = [2; repeat([1], d)]
     idxs_S̄ = 1:measure.d
     idx_t̄ = measure.d + 1 # column index of time series to be predict
-    return genembed(Dataset(t, s), τs, js), idx_t̄, idxs_S̄
+    return genembed(StateSpaceSet(t, s), τs, js), idx_t̄, idxs_S̄
 end

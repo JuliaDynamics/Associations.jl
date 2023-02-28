@@ -100,24 +100,24 @@ function entropy_joint(measure::JointEntropyShannon, x...)
     # Define p(x...) log p(x...) = 0 if p(x....) = 0; (Cover & Thomas, 2006)
     # We circumvent this definition by directly counting *occurring pairs*.
     # Any non-occurring pair then gets probability zero automatically.
-    X = Dataset(x...)
+    X = StateSpaceSet(x...)
     return entropy(measure.e, CountOccurrences(), X)
 end
 
 function entropy_joint(measure::JointEntropyShannon, est::DifferentialEntropyEstimator, x...)
-    X = Dataset(x...)
+    X = StateSpaceSet(x...)
     return entropy(measure.e, est, X)
 end
 
 function entropy_joint(measure::JointEntropyRenyi, x...)
     # Direct analogue of Shannon version,
     #Golshani, L., Pasha, E., & Yari, G. (2009). Some properties of Rényi entropy and Rényi entropy rate. Information Sciences, 179(14), 2426-2433.
-    X = Dataset(x...)
+    X = StateSpaceSet(x...)
     return entropy(measure.e, CountOccurrences(), X)
 end
 
 function entropy_joint(measure::JointEntropyTsallis, x...)
-    X = Dataset(x...)
+    X = StateSpaceSet(x...)
     return entropy(measure.e, CountOccurrences(), X)
 end
 

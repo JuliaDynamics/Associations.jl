@@ -1,7 +1,7 @@
-import DelayEmbeddings: genembed, AbstractDataset, Dataset
+import DelayEmbeddings: genembed, AbstractStateSpaceSet, StateSpaceSet
 export EmbeddingTE
 
-function rc(x::Union{AbstractDataset, AbstractVector{T}},
+function rc(x::Union{AbstractStateSpaceSet, AbstractVector{T}},
         dim::Union{Int, AbstractVector{Int}},
         τ::Union{Int, AbstractVector{Int}}, forward = false) where T <: Union{Number, AbstractVector}
 
@@ -28,8 +28,8 @@ function rc(x::Union{AbstractDataset, AbstractVector{T}},
     end
 
     # Multiple time series input
-    if (x isa AbstractVector{T} where T <: AbstractVector{N} where N <: Number) || (x isa AbstractDataset)
-        if x isa AbstractDataset
+    if (x isa AbstractVector{T} where T <: AbstractVector{N} where N <: Number) || (x isa AbstractStateSpaceSet)
+        if x isa AbstractStateSpaceSet
             N = length(x)
         elseif x isa AbstractVector
             N = size(x, 1)
@@ -164,7 +164,7 @@ function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVec
     τs = ([lags_Tf; lags_T; lags_S]...,)
 
     # TODO: This only works for single time series at the moment
-    ts = Dataset(source, target)
+    ts = StateSpaceSet(source, target)
 
     # The reconstructed points
     pts = genembed(ts, τs, js)
@@ -203,7 +203,7 @@ function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVec
     τs = ([lags_Tf; lags_T; lags_S; lags_C]...,)
 
     # TODO: This only works for single time series at the moment
-    ts = Dataset(source, target, cond)
+    ts = StateSpaceSet(source, target, cond)
 
     # The reconstructed points
     pts = genembed(ts, τs, js)
@@ -232,7 +232,7 @@ the present/past of the target (`T`), the present/past of the source (`S`), and
 the present/past of any conditioned variables (`C`)?  This information is used by
 the transfer entropy estimators to ensure that marginal distributions are computed correctly.
 
-Indices correspond to variables of the embedding, or, equivalently, colums of a `Dataset`.
+Indices correspond to variables of the embedding, or, equivalently, colums of a `StateSpaceSet`.
 
 - The three-argument constructor assumes there will be no conditional variables.
 - The four-argument constructor assumes there will be conditional variables.

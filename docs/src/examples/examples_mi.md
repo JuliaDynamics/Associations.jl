@@ -68,7 +68,7 @@ one for the [`KSG1`](@ref) estimator and one for the [`KSG2`](@ref) estimator*.
 using CausalityTools
 using LinearAlgebra: det
 using Distributions: MvNormal
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 using CairoMakie
 using Statistics
 
@@ -83,9 +83,9 @@ nreps = 30
 mis_ksg1 = zeros(nreps, length(ks))
 mis_ksg2 = zeros(nreps, length(ks))
 for i = 1:nreps
-    D2 = Dataset([rand(N2) for i = 1:N])
-    X = D2[:, 1] |> Dataset
-    Y = D2[:, 2] |> Dataset
+    D2 = StateSpaceSet([rand(N2) for i = 1:N])
+    X = D2[:, 1] |> StateSpaceSet
+    Y = D2[:, 2] |> StateSpaceSet
     measure = MIShannon(; base = ℯ)
     mis_ksg1[i, :] = map(k -> mutualinfo(measure, KSG1(; k), X, Y), ks)
     mis_ksg2[i, :] = map(k -> mutualinfo(measure, KSG2(; k), X, Y), ks)
@@ -112,7 +112,7 @@ distributed discrete multivariate data. The true mutual information is zero.
 ```@example ex_mutualinfo
 using CausalityTools
 using Statistics
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 using Statistics: mean
 using CairoMakie
 
@@ -134,10 +134,10 @@ function compare_ksg_gkov(;
 
     for (j, L) in enumerate(Ls)
         for i = 1:nreps
-            X = Dataset(float.(rand(1:8, L, 2)))
-            Y = Dataset(float.(rand(1:8, L, 2)))
-            Z = Dataset(rand(L, 2))
-            W = Dataset(rand(L, 2))
+            X = StateSpaceSet(float.(rand(1:8, L, 2)))
+            Y = StateSpaceSet(float.(rand(1:8, L, 2)))
+            Z = StateSpaceSet(rand(L, 2))
+            W = StateSpaceSet(rand(L, 2))
             measure = MIShannon(; base = ℯ)
             mis_ksg1_discrete[i, j] = mutualinfo(measure, est_ksg1, X, Y)
             mis_gkov_discrete[i, j] = mutualinfo(measure, est_gkov, X, Y)
@@ -204,7 +204,7 @@ Let's compare the performance of a subset of the implemented mutual information 
 ```@example ex_mutualinfo
 using CausalityTools
 using LinearAlgebra: det
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 using Distributions: MvNormal
 using LaTeXStrings
 using CairoMakie
@@ -336,7 +336,7 @@ function family1(α, n::Int)
     x = rand(n)
     v = rand(n)
     y = x + α * v
-    return Dataset(x), Dataset(y)
+    return StateSpaceSet(x), StateSpaceSet(y)
 end
 
 # True mutual information values for these data
@@ -357,9 +357,9 @@ fig = plot_results(family1, ifamily1;
 function family2(α, n::Int)
     Σ = [1 α; α 1]
     N2 = MvNormal(zeros(2), Σ)
-    D2 = Dataset([rand(N2) for i = 1:n])
-    X = Dataset(D2[:, 1])
-    Y = Dataset(D2[:, 2])
+    D2 = StateSpaceSet([rand(N2) for i = 1:n])
+    X = StateSpaceSet(D2[:, 1])
+    Y = StateSpaceSet(D2[:, 2])
     return X, Y
 end
 
@@ -402,7 +402,7 @@ end
 function family3(α, n::Int)
     Σ = [7 -5 -1 -3; -5 5 -1 3; -1 -1 3 -1; -3 3 -1 2+α]
     N4 = MvNormal(zeros(4), Σ)
-    D4 = Dataset([rand(N4) for i = 1:n])
+    D4 = StateSpaceSet([rand(N4) for i = 1:n])
     X = D4[:, 1:2]
     Y = D4[:, 3:4]
     return X, Y

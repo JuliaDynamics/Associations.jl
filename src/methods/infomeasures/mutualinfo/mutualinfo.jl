@@ -173,9 +173,9 @@ estimate(est::MutualInformationEstimator, x, y) = estimate(MIShannon(), est, x, 
 # Generic 3H-formulation of mutual information.
 function marginal_entropies_mi3h(measure::MutualInformation, est, x, y)
     e = measure.e
-    X = Dataset(x)
-    Y = Dataset(y)
-    XY = Dataset(X, Y)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    XY = StateSpaceSet(X, Y)
     HX = entropy(e, est, X)
     HY = entropy(e, est, Y)
     HXY = entropy(e, est, XY)
@@ -194,7 +194,7 @@ const WellDefinedMIShannonProbEsts{m, D} = Union{
 function marginal_entropies_mi3h(measure::MutualInformation,
         est::WellDefinedMIShannonProbEsts{m, D}, x, y) where {m, D}
     eX, eY = marginal_encodings(est, x, y)
-    eXY = Dataset(eX, eY)
+    eXY = StateSpaceSet(eX, eY)
     e = measure.e
     HX = entropy(e, CountOccurrences(), eX)
     HY = entropy(e, CountOccurrences(), eY)

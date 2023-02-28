@@ -35,16 +35,16 @@ end
 function estimate(measure::CMIShannon, est::FPVP, x, y, z)
     e = measure.e
     (; k, w, metric_joint, metric_marginals) = est
-    # Ensures that vector-valued inputs are converted to datasets, so that
+    # Ensures that vector-valued inputs are converted to StateSpaceSets, so that
     # building the marginal/joint spaces and neighbor searches are fast.
-    X = Dataset(x)
-    Y = Dataset(y)
-    Z = Dataset(z)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    Z = StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
     N = length(X)
-    joint = Dataset(X, Y, Z)
-    XZ = Dataset(X, Z)
-    YZ = Dataset(Y, Z)
+    joint = StateSpaceSet(X, Y, Z)
+    XZ = StateSpaceSet(X, Z)
+    YZ = StateSpaceSet(Y, Z)
 
     tree_joint = KDTree(joint, metric_joint)
     ds_joint = last.(bulksearch(tree_joint, joint, NeighborNumber(k), Theiler(w))[2])

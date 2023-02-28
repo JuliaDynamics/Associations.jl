@@ -3,7 +3,7 @@ using LabelledArrays: @LArray
 using StaticArrays: SVector
 using DynamicalSystemsBase: DiscreteDynamicalSystem
 using DynamicalSystemsBase: trajectory
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 using Distributions: Normal, Uniform
 
 export ar1_unidir
@@ -107,7 +107,7 @@ function henon_triple(u₀, a, b, c, n::Int, n_transient::Int)
     p = @LArray [a, b, c] (:a, :b, :c)
     o = eom_henon_triple(u₀, p, n + n_transient)
     x, y, z = o[n_transient+1:end, 1], o[n_transient+1:end, 2], o[n_transient+1:end, 3]
-    return Dataset(x, y, z)
+    return StateSpaceSet(x, y, z)
 end
 
 """
@@ -826,7 +826,7 @@ function eom_nontrivial_pegiun(u, p, n)
     O[:, 2] .= O[:, 2] .- mean(O[:, 2])
     O[:, 1] .= O[:, 1] ./ std(O[:, 1])
     O[:, 2] .= O[:, 2] ./ std(O[:, 2])
-    return Dataset(O)
+    return StateSpaceSet(O)
 end
 
 function nontrivial_pegiun(u₀, p₁, p₂, p₃, p₄, p₅, p₆, σ₁, σ₂, n::Int)
@@ -840,7 +840,7 @@ end
 
 """
     nontrivial_pegiun(;u₀ = rand(2), σ₁ = 0.1, σ₂ = 0.1,
-        p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) → Dataset
+        p₁ = 0.7, p₂ = 0.1, p₃ = 0.4, p₄ = 2.4, p₅ = 0.9, p₆ = 4, n = 100) → StateSpaceSet
 
 A 2D discrete autoregressive system with nonlinear, nontrivial coupling from [1] .
 This system is from [1](https://www.amse-aixmarseille.fr/sites/default/files/_dt/greqam/99a42.pdf), and

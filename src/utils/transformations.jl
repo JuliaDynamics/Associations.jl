@@ -1,9 +1,9 @@
 
 """
     rank_transformation(x::AbstractVector)
-    rank_transformation(x::AbstractDataset) → ranks::NTuple{D, Vector}
+    rank_transformation(x::AbstractStateSpaceSet) → ranks::NTuple{D, Vector}
 
-Rank-transform each variable/column of the length-`n` `D`-dimensional dataset `x` and return the
+Rank-transform each variable/column of the length-`n` `D`-dimensional StateSpaceSet `x` and return the
 rank-transformed variables as a `D`-tuple of length-`n` vectors.
 
 Returns the unscaled `ranks`. Divide by `n` to get an *approximation* to the
@@ -25,7 +25,7 @@ never occur, and equal values are assigned different but close ranks. To preserv
 ties, which you might want to do for example when dealing with
 categorical or integer-valued data, use (the much slower) [`empcdf`](@ref).
 """
-function rank_transformation(x::AbstractDataset)
+function rank_transformation(x::AbstractStateSpaceSet)
     s = zeros(Int, length(x)) # re-use for each marginal
     [rank_transformation!(s, xⱼ) for xⱼ in columns(x)]
 end
@@ -52,7 +52,7 @@ end
 
 """
     empirical_cdf(x::AbstractVector{<:Real}) → x̄::Vector
-    empirical_cdf(x::AbstractDataset) → x̄::Dataset
+    empirical_cdf(x::AbstractStateSpaceSet) → x̄::StateSpaceSet
 
 Rank each sample `xᵢ ∈ x`, rescale it the rank to the interval `[0, 1]` and return
 the rescaled ranks `x̄`.
@@ -60,11 +60,11 @@ the rescaled ranks `x̄`.
 function empcdf(x::AbstractVector)
     F̂ = [count(xᵢ .<= x)  for xᵢ in x] / length(x)
 end
-empcdf(x::AbstractDataset{D, T}) where {D, T} =
+empcdf(x::AbstractStateSpaceSet{D, T}) where {D, T} =
     NTuple{D, Vector{eltype(1.0)}}(empcdf(xⱼ) for xⱼ in columns(x))
 
 # # An example worked out by hand.
-# X = Dataset([
+# X = StateSpaceSet([
 #     1 8;
 #     2 2;
 #     3 6;

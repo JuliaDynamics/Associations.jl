@@ -64,17 +64,17 @@ S^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N} \\dfrac{R_i^{(k)}(x)}{R_i^{(k)}(x|y
 
 The algorithm is slightly modified from [^Grassberger1999] to allow univariate timeseries as input.
 
-- If `x` and `y` are [`Dataset`](@ref)s then use `x` and `y` as is and ignore the parameters
+- If `x` and `y` are [`StateSpaceSet`](@ref)s then use `x` and `y` as is and ignore the parameters
     `dx`/`τx` and `dy`/`τy`.
 - If `x` and `y` are scalar time series, then create `dx` and `dy` dimensional embeddings,
     respectively, of both `x` and `y`, resulting in `N` different `m`-dimensional embedding points
     ``X = \\{x_1, x_2, \\ldots, x_N \\}`` and ``Y = \\{y_1, y_2, \\ldots, y_N \\}``.
     `τx` and `τy` control the embedding lags for `x` and `y`.
-- If `x` is a scalar-valued vector and `y` is a [`Dataset`](@ref), or vice versa,
+- If `x` is a scalar-valued vector and `y` is a [`StateSpaceSet`](@ref), or vice versa,
     then create an embedding of the scalar timeseries using parameters `dx`/`τx` or `dy`/`τy`.
 
-In all three cases, input datasets are length-matched by eliminating points at the end of
-the longest dataset (after the embedding step, if relevant) before analysis.
+In all three cases, input StateSpaceSets are length-matched by eliminating points at the end of
+the longest StateSpaceSet (after the embedding step, if relevant) before analysis.
 
 [^Quiroga2000]:
     Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000] “Learning driver-response relationships
@@ -96,19 +96,19 @@ Base.@kwdef struct SMeasure{M, TM} <: AssociationMeasure
 end
 
 """
-    s_measure(measure::SMeasure, x::VectorOrDataset, y::VectorOrDataset)
+    s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
 
 Compute the [`SMeasure`](@ref) from source `x` to target `y`.
 """
-function s_measure(measure::SMeasure, x::VectorOrDataset, y::VectorOrDataset)
+function s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     return estimate(measure, x, y)
 end
 
 # Internal method for use with `independence`
-function estimate(measure::SMeasure, x::AbstractDataset, y::AbstractDataset)
+function estimate(measure::SMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
-    # Match length of datasets by excluding end points.
+    # Match length of StateSpaceSets by excluding end points.
     lx = length(x); ly = length(y)
     lx > ly ? X = x[1:ly, :] : X = x
     ly > lx ? Y = y[1:lx, :] : Y = y

@@ -43,18 +43,18 @@ function marginal_probs_from_μ(seleced_axes, visited_bins, iv::InvariantMeasure
 end
 
 
-function _marginal_encodings(encoder::RectangularBinEncoding, x::VectorOrDataset...)
-    X = Dataset(Dataset.(x)...)
+function _marginal_encodings(encoder::RectangularBinEncoding, x::VectorOrStateSpaceSet...)
+    X = StateSpaceSet(StateSpaceSet.(x)...)
     bins = [vec(encode_as_tuple(encoder, pt))' for pt in X]
     joint_bins = reduce(vcat, bins)
     idxs = size.(x, 2) #each input can have different dimensions
     s = 1
-    encodings = Vector{Dataset}(undef, length(idxs))
+    encodings = Vector{StateSpaceSet}(undef, length(idxs))
     for (i, cidx) in enumerate(idxs)
         variable_subset = s:(s + cidx - 1)
         s += cidx
         y = @views joint_bins[:, variable_subset]
-        encodings[i] = Dataset(y)
+        encodings[i] = StateSpaceSet(y)
     end
 
     return encodings
@@ -72,7 +72,7 @@ function transferentropy(
     # marginals, not a single encoding integer for each bin. Otherwise, we can't
     # properly subset marginals here and relate them to the approximated invariant measure.
     # The bins visited by the orbit are
-    visited_bins_coordinates = Dataset(decode.(Ref(iv.to.encoder), iv.to.bins))
+    visited_bins_coordinates = StateSpaceSet(decode.(Ref(iv.to.encoder), iv.to.bins))
     unique_visited_bins = _marginal_encodings(iv.to.encoder, visited_bins_coordinates)[1]
 
     # # The subset of visited bins with nonzero measure

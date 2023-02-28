@@ -1,5 +1,5 @@
 import ComplexityMeasures: ProbabilitiesEstimator, DifferentialEntropyEstimator
-import StateSpaceSets: AbstractDataset
+import StateSpaceSets: AbstractStateSpaceSet
 
 export Copula
 export empirical_copula_transformation
@@ -23,9 +23,9 @@ so be careful when applying it to categorical/integer-valued data).
 
 ## Description
 
-Assume we have two `Dy`-dimensional and `Dy`-dimensional input [`Dataset`](@ref)s `x` and
+Assume we have two `Dy`-dimensional and `Dy`-dimensional input [`StateSpaceSet`](@ref)s `x` and
 `y`, both containing `N` observations. We can define the `Dx + Dy`-dimensional joint
-dataset `D = [Dx Dy]`. `Copula` returns the negative *copula entropy* of `D`,
+StateSpaceSet `D = [Dx Dy]`. `Copula` returns the negative *copula entropy* of `D`,
 which is equal to the mutual information between `Dx` and `Dy` (Ma & Sun, 2011)[^Ma2011].
 
 [^Ma2011]:
@@ -43,27 +43,27 @@ Base.@kwdef struct Copula <: MutualInformationEstimator
 end
 
 function estimate(measure::MIShannon, est::Copula, x, y)
-    X = Dataset(x)
-    Y = Dataset(y)
-    D = Dataset(X,  Y)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    D = StateSpaceSet(X,  Y)
    -entropy(measure.e, est.est, empirical_copula_transformation(D))
 end
 
 """
 
     empirical_copula_transformation(x::AbstractVector) → empirical_copula::Vector{<:Real}
-    empirical_copula_transformation(x::AbstractDataset{D, T}) → empirical_copula::Dataset{D, T}
+    empirical_copula_transformation(x::AbstractStateSpaceSet{D, T}) → empirical_copula::StateSpaceSet{D, T}
 
 Apply the empirical copula transformation (as described in Pál et al. (2010)[^Pal2010];
 see a summary below) to the each point `xᵢ ∈ x`, where
 the `xᵢ` can be either univariate (`x::AbstractVector`) or multivariate
-(`x::AbstractDataset`) to compute the empirical copula (here called `empirical_copula)`.
+(`x::AbstractStateSpaceSet`) to compute the empirical copula (here called `empirical_copula)`.
 
 ## Description
 
 ## Empirical copula transformation
 
-Assume we have a length-`n` sample of data points ``\\bf{X}_{1:n} = \\{\\bf{X}_1, \\bf{X}_2, \\ldots, \\bf{X}_n \\}`` where ``\\bf{X}_i \\in \\mathbb{R}^d``, which is assumed sampled from some distribution ``\\mu`` with density function ``f``. Let ``X_i^j \\in \\mathbb{R}`` denote the j-th coordinate of ``\\bf{X}_i``. Assume these points are represented as the `d`-dimensional [`Dataset`](@ref) which we call `S` (indexed like a matrix where rows are samples).
+Assume we have a length-`n` sample of data points ``\\bf{X}_{1:n} = \\{\\bf{X}_1, \\bf{X}_2, \\ldots, \\bf{X}_n \\}`` where ``\\bf{X}_i \\in \\mathbb{R}^d``, which is assumed sampled from some distribution ``\\mu`` with density function ``f``. Let ``X_i^j \\in \\mathbb{R}`` denote the j-th coordinate of ``\\bf{X}_i``. Assume these points are represented as the `d`-dimensional [`StateSpaceSet`](@ref) which we call `S` (indexed like a matrix where rows are samples).
 
 The *empirical* cumulative distribution function (CDF) for the j-th column of `S`, based on the sample ``\\bf{X}_{1:n}``, is defined as
 ```math
@@ -96,9 +96,9 @@ The *copula* of ``\\mu`` is the joint distribution ``\\bf{F}(\\bf{X}) = (F_1(X^1
     information based on generalized nearest-neighbor graphs. Advances in Neural
     Information Processing Systems, 23.
 """
-function empirical_copula_transformation(x::AbstractDataset{D, T}) where {D, T}
+function empirical_copula_transformation(x::AbstractStateSpaceSet{D, T}) where {D, T}
     c = rank_transformation(x) ./ length(x)
-    C = Dataset(c...)
+    C = StateSpaceSet(c...)
 end
 
 function empirical_copula_transformation(x::AbstractVector{<:Real})
@@ -116,7 +116,7 @@ end
 #     1 8;
 #     2 9;
 # ]
-# analytical_copula = Dataset([
+# analytical_copula = StateSpaceSet([
 #     0.125  0.75;
 #     0.5    0.25;
 #     0.875  0.625;
@@ -126,4 +126,4 @@ end
 #     0.375  0.875;
 #     0.75   1.0])
 
-# @test copula_transform(Dataset(X)) == analytical_copula
+# @test copula_transform(StateSpaceSet(X)) == analytical_copula

@@ -16,7 +16,7 @@ Base.@kwdef struct Pecuzal
 end
 
 
-function lags_pecuzal(x::Union{Vector, AbstractDataset{1}}, Tmax::Int = 30;
+function lags_pecuzal(x::Union{Vector, AbstractStateSpaceSet{1}}, Tmax::Int = 30;
         w = 0)
 
     Y_d, τ_vals_d, ts_vals_d, Ls_d , ε★_d = pecuzal_embedding(x; τs = 0:Tmax, w,
@@ -36,7 +36,7 @@ function optimize_embedding(method::Pecuzal, s::AbstractVector)
     τS = first(τS[τS .> 0], method.dmax)
     return τS
 end
-function optimize_embedding(method::Pecuzal, s::AbstractDataset{1})
+function optimize_embedding(method::Pecuzal, s::AbstractStateSpaceSet{1})
     τS = unique(lags_pecuzal(s, method.τmax))
     τS = first(τS[τS .> 0], method.dmax)
     return τS

@@ -54,7 +54,7 @@ Base.@kwdef struct Lord <: DifferentialEntropyEstimator
 end
 
 import ComplexityMeasures: entropy
-function entropy(e::Shannon, est::Lord, x::AbstractDataset{D}) where {D}
+function entropy(e::Shannon, est::Lord, x::AbstractStateSpaceSet{D}) where {D}
     (; k, w) = est
     N = length(x)
     tree = KDTree(x, Euclidean())
@@ -129,7 +129,7 @@ to the (precomputed) centroid `c` of the points `{xᵢ, n₁, n₂, …, nₖ}`,
 centered vectors in the pre-allocated vector `C`.
 """
 function center_neighborhood!(C::MVector{K, V}, c, xᵢ,
-        neighbors::AbstractDataset{D}) where {V, K, D}
+        neighbors::AbstractStateSpaceSet{D}) where {V, K, D}
     rezero!(C)
     C[1] .= xᵢ .- c
     for (i, nᵢ) in enumerate(neighbors)
@@ -153,7 +153,7 @@ function hyperellipsoid_matrix!(Λ, directions, extents)
     return Λ
 end
 
-function centroid(xᵢ, neighbors::AbstractDataset{D}, C) where D
+function centroid(xᵢ, neighbors::AbstractStateSpaceSet{D}, C) where D
     L = length(C) + 1
     centroid = MVector{D}(xᵢ)
     for nᵢ in neighbors

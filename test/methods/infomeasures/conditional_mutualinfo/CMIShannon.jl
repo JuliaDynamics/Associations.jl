@@ -1,5 +1,5 @@
 using CausalityTools
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 
 probests = [
     ValueHistogram(RectangularBinning(3))
@@ -31,9 +31,9 @@ diff_mi_estimators = [
 ]
 
 
-x = Dataset(rand(1000, 2))
-y = Dataset(rand(1000, 1))
-z = Dataset(rand(1000, 1))
+x = StateSpaceSet(rand(1000, 2))
+y = StateSpaceSet(rand(1000, 1))
+z = StateSpaceSet(rand(1000, 1))
 
 @test FPVP() isa FPVP
 @test MesnerShalisi() isa MesnerShalisi
@@ -52,10 +52,10 @@ z = Dataset(rand(1000, 1))
 @testset "CMIShannon" begin
     @test m = CMIShannon(base = 2) isa CMIShannon
 
-    x = Dataset(rand(10000, 2))
-    y = Dataset(rand(10000, 1))
-    z = Dataset(rand(10000, 1))
-    w = Dataset(rand(10000, 1))
+    x = StateSpaceSet(rand(10000, 2))
+    y = StateSpaceSet(rand(10000, 1))
+    z = StateSpaceSet(rand(10000, 1))
+    w = StateSpaceSet(rand(10000, 1))
 
     @testset "Defaults" begin
         s, t, c = rand(100), rand(100), rand(100)
@@ -89,7 +89,7 @@ z = Dataset(rand(1000, 1))
         # plug-in estimators. Just check that pluggin in works.
         # ----------------------------------------------------------------
 
-        # Estimators that accept dataset inputs
+        # Estimators that accept StateSpaceSet inputs
         @testset "$(typeof(probests[i]).name.name)" for i in eachindex(probests)
             est = probests[i]
             @test condmutualinfo(CMIShannon(base = 2), est, x, y, z) isa Real # default

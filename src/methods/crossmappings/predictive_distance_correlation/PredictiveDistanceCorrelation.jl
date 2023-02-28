@@ -24,8 +24,8 @@ which is used with [`predict`](@ref) and [`crossmap`](@ref).
 [`PairwiseAsymmetricInference`](@ref), where agreement between predictions and
 and observed values are measured using [`distance_correlation`](@ref).
 
-Assume we want to predict a `target` dataset using
-nearest-neighbor information from a `source` dataset. The PDC algorithm proceeds as
+Assume we want to predict a `target` StateSpaceSet using
+nearest-neighbor information from a `source` StateSpaceSet. The PDC algorithm proceeds as
 follows for each `i ∈ 1, 2, …, N`, where
 `N = length(target) = length(source) = length(cond)`.
 
@@ -49,20 +49,20 @@ Base.@kwdef struct PredictiveDistanceCorrelation <: CrossmapMeasure
     w::Int = 0 # Theiler window
 end
 
-function crossmap(m::PredictiveDistanceCorrelation, T::AbstractDataset, S::AbstractDataset, C::AbstractDataset)
-    TC = Dataset(T, C)
-    T̄C̄ₛ = predict(m, Dataset(TC), S);
+function crossmap(m::PredictiveDistanceCorrelation, T::AbstractStateSpaceSet, S::AbstractStateSpaceSet, C::AbstractStateSpaceSet)
+    TC = StateSpaceSet(T, C)
+    T̄C̄ₛ = predict(m, StateSpaceSet(TC), S);
     ρT̄C̄ₛTC = distance_correlation(T̄C̄ₛ, TC)
     return ρT̄C̄ₛTC
 end
 
-function crossmap(m::PredictiveDistanceCorrelation, T::AbstractDataset, S::AbstractDataset)
+function crossmap(m::PredictiveDistanceCorrelation, T::AbstractStateSpaceSet, S::AbstractStateSpaceSet)
     T̄ₛ = predict(m, T, S);
     ρT̄ₛT = distance_correlation(T̄ₛ, T)
     return ρT̄ₛT
 end
 
-function predict(measure::PredictiveDistanceCorrelation, T̄::AbstractDataset{DT}, S̄::AbstractDataset{DS}) where {DT, DS}
+function predict(measure::PredictiveDistanceCorrelation, T̄::AbstractStateSpaceSet{DT}, S̄::AbstractStateSpaceSet{DS}) where {DT, DS}
     @assert length(S̄) == length(T̄)
     (; d, τ, w) = measure
     # Tree structure must be created for every L, because we can't include data
@@ -91,23 +91,23 @@ function predict(measure::PredictiveDistanceCorrelation, T̄::AbstractDataset{DT
         end
         push!(T̂, t̂)
     end
-    return Dataset(T̂)
+    return StateSpaceSet(T̂)
 end
 
 
 export condmap
 # Experimental: conditional prediction M(S → T | C) (Haaga et al, paper in prep)
-function condmap(m::CrossmapMeasure, t::AbstractDataset, s::AbstractDataset,
-        c::AbstractDataset)
-    T = Dataset(t)
-    S = Dataset(s)
-    C = Dataset(c)
-    TC = Dataset(T, C)
+function condmap(m::CrossmapMeasure, t::AbstractStateSpaceSet, s::AbstractStateSpaceSet,
+        c::AbstractStateSpaceSet)
+    T = StateSpaceSet(t)
+    S = StateSpaceSet(s)
+    C = StateSpaceSet(c)
+    TC = StateSpaceSet(T, C)
 
     # Unconditional and conditional cross map, and their distance
     # correlations.
     T̄ₛ = predict(m, T, S);
-    T̄C̄ₛ = predict(m, Dataset(TC), S);
+    T̄C̄ₛ = predict(m, StateSpaceSet(TC), S);
     ρT̄ₛT = distance_correlation(T̄ₛ, T)
     ρT̄C̄ₛTC = distance_correlation(T̄C̄ₛ, TC)
 
@@ -128,7 +128,7 @@ end
 #     the procedure for cross mapping. *Note* `crossmap` doesn't embed input data,
 #     so the embedding parameters of `m` are ignored.
 # - *`target::AbstractVector`*. A scalar-valued time series.
-# - *`source::AbstractDataset`*. A `Ds`-dimensional source dataset.
+# - *`source::AbstractStateSpaceSet`*. A `Ds`-dimensional source StateSpaceSet.
 
 # ## Description
 

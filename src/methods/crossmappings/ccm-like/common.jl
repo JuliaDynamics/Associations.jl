@@ -1,6 +1,6 @@
 using StatsBase: sample, sample!
 using StateSpaceSets: dimension
-using StateSpaceSets: AbstractDataset
+using StateSpaceSets: AbstractStateSpaceSet
 
 CCMLike = Union{ConvergentCrossMapping, PairwiseAsymmetricInference}
 
@@ -39,7 +39,7 @@ end
 
 # The following methods assume pre-embedded data.
 # =========================================================================================
-function predict(measure::CCMLike, est::CrossmapEstimator, target::AbstractVector, source::AbstractDataset)
+function predict(measure::CCMLike, est::CrossmapEstimator, target::AbstractVector, source::AbstractStateSpaceSet)
     # Ensure equal-length input
     input_check(measure, target, source)
 
@@ -54,7 +54,7 @@ function predict(measure::CCMLike, est::CrossmapEstimator, target::AbstractVecto
     return ρs
 end
 
-function predict(measure::CCMLike, est::CrossmapEstimator{<:Integer}, target::AbstractVector, source::AbstractDataset)
+function predict(measure::CCMLike, est::CrossmapEstimator{<:Integer}, target::AbstractVector, source::AbstractStateSpaceSet)
     # Ensure equal-length input
     input_check(measure, target, source)
     inds = library_indices(measure, est, 1, target, source)

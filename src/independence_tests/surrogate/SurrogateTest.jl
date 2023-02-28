@@ -128,7 +128,7 @@ end
 # conditional mutual information.
 function independence(test::SurrogateTest, x, y, z)
     (; measure, est, rng, surrogate, nshuffles) = test
-    X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
+    X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
     N = length(x)
     Î = estimate(measure,est, X, Y, Z)
@@ -144,7 +144,7 @@ end
 
 function independence(test::SurrogateTest, x, y)
     (; measure, est, rng, surrogate, nshuffles) = test
-    X, Y = Dataset(x), Dataset(y)
+    X, Y = StateSpaceSet(x), StateSpaceSet(y)
     @assert length(X) == length(Y)
     N = length(x)
     Î = estimate(measure,est, X, Y)

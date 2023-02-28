@@ -1,9 +1,9 @@
 using Neighborhood: Euclidean, Chebyshev, KDTree, Theiler, NeighborNumber
 using Neighborhood: bulksearch
 using Distances: evaluate
-using DelayEmbeddings.StateSpaceSets: SubDataset
+using DelayEmbeddings.StateSpaceSets: SubStateSpaceSet
 using LinearAlgebra: det, norm
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 using StaticArrays: MVector, MMatrix, SVector, SMatrix, @SVector
 
 import ComplexityMeasures: entropy, total_outcomes, outcomes, probabilities, probabilities_and_outcomes
@@ -29,7 +29,7 @@ Base.@kwdef struct LocalLikelihood{M} <: ProbabilitiesEstimator
     metric::M = Euclidean()
 end
 
-function point_densities(est::LocalLikelihood, x::AbstractDataset{D}) where D
+function point_densities(est::LocalLikelihood, x::AbstractStateSpaceSet{D}) where D
     (; k, w, metric) = est
     N = length(x)
     # Modified heuristic from Gao et al. (2017): it is sufficient to consider the
@@ -59,7 +59,7 @@ end
 
 """
     point_density!(S₁, S₂, est::LocalLikelihood, xᵢ, bwᵢ,
-        neighborsᵢ::AbstractDataset{D}) where D
+        neighborsᵢ::AbstractStateSpaceSet{D}) where D
 
 Estimate the density around point `xᵢ` using a local likehood estimator, which is
 a generalization of kernel density estimation. This is done by fitting a local gaussian
@@ -70,7 +70,7 @@ The bandwidth  `bwᵢ` is given by the distance from `xᵢ` to its `k`-th neares
 `D`-by-`D` matrix which holds the covariances. Both `S₁` and `S₂` are zeroed every time
 `point_density!` is called.
 """
-function point_density!(S₁, S₂, est::LocalLikelihood, xᵢ, bwᵢ, neighborsᵢ::AbstractDataset{D}, Ntot::Int) where D
+function point_density!(S₁, S₂, est::LocalLikelihood, xᵢ, bwᵢ, neighborsᵢ::AbstractStateSpaceSet{D}, Ntot::Int) where D
     N = length(neighborsᵢ)
     S₀ = 0.0;
     S₁ .= 0.0
@@ -133,7 +133,7 @@ function pt_in_unit_sphere(dim::Int)
     v = u ./ m .* c
     return v
 end
-pts_in_unit_sphere(dim::Int, n::Int) = Dataset([pt_in_unit_sphere(dim) for i = 1:n])
+pts_in_unit_sphere(dim::Int, n::Int) = StateSpaceSet([pt_in_unit_sphere(dim) for i = 1:n])
 
 
 # TODO: implement. not sure how, though. Gao (2017) is not very clear...

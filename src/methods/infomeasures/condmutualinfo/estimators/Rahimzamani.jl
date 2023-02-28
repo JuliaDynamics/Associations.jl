@@ -25,13 +25,13 @@ end
 function estimate(measure::CMIShannon, est::Rahimzamani, x, y, z)
     e = measure.e
     (; k, w, metric) = est
-    X = Dataset(x)
-    Y = Dataset(y)
-    Z = Dataset(z)
-    joint = Dataset(X, Y, Z)
-    XZ = Dataset(x, z)
-    YZ = Dataset(y, z)
-    Z = Dataset(z)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    Z = StateSpaceSet(z)
+    joint = StateSpaceSet(X, Y, Z)
+    XZ = StateSpaceSet(x, z)
+    YZ = StateSpaceSet(y, z)
+    Z = StateSpaceSet(z)
     N = length(joint)
     M = 3
     tree_joint = KDTree(joint, metric)

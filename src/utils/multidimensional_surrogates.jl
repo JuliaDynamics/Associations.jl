@@ -1,7 +1,7 @@
 import TimeseriesSurrogates: surrogenerator
 using TimeseriesSurrogates: RandomShuffle, SurrogateGenerator
 
-function surrogenerator(x::AbstractDataset, rf::RandomShuffle, rng = Random.default_rng())
+function surrogenerator(x::AbstractStateSpaceSet, rf::RandomShuffle, rng = Random.default_rng())
     n = length(x)
     idxs = collect(1:n)
 
@@ -12,7 +12,7 @@ function surrogenerator(x::AbstractDataset, rf::RandomShuffle, rng = Random.defa
     return SurrogateGenerator(rf, x, similar(x), init, rng)
 end
 
-function (sg::SurrogateGenerator{<:RandomShuffle, <:AbstractDataset})()
+function (sg::SurrogateGenerator{<:RandomShuffle, <:AbstractStateSpaceSet})()
     x, s, rng = sg.x, sg.s, sg.rng
     n = length(x)
     permutation = getfield.(Ref(sg.init), (:permutation))

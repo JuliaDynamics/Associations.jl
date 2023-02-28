@@ -27,19 +27,19 @@ respectively.
 struct PearsonCorrelation <: AssociationMeasure end
 
 """
-    pearson_correlation(x::VectorOrDataset, y::VectorOrDataset)
+    pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
 
 Compute the [`PearsonCorrelation`](@ref) between `x` and `y`, which must each be
 1-dimensional.
 """
-function pearson_correlation(x::VectorOrDataset, y::VectorOrDataset)
+function pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     return estimate(PearsonCorrelation(), x, y)
 end
 
 # Common interface for higher-level methods.
 function estimate(measure::PearsonCorrelation,
-        x::VectorOrDataset{1, T},
-        y::VectorOrDataset{1, T}) where T
+        x::VectorOrStateSpaceSet{1, T},
+        y::VectorOrStateSpaceSet{1, T}) where T
     Lx, Ly = length(x), length(y)
     Lx == Ly || throw(ArgumentError("Inputs `x` and `y` must have same length"))
     x̄ = extract_mean(x)
@@ -60,11 +60,11 @@ function estimate(measure::PearsonCorrelation, est::Nothing, x, y)
     return estimate(measure, x, y)
 end
 
-# Silly, but 1-dimensional datasets needs special indexing (because each point is a vector,
+# Silly, but 1-dimensional StateSpaceSets needs special indexing (because each point is a vector,
 # not a value).
-pt_generator(x::AbstractDataset{1}) = (x[1] for x in x)
+pt_generator(x::AbstractStateSpaceSet{1}) = (x[1] for x in x)
 pt_generator(x::AbstractVector) = (x for x in x)
 
 # Ensures type stability.
 extract_mean(x::AbstractVector) = mean(x)
-extract_mean(x::AbstractDataset{1}) = mean(x)[1]
+extract_mean(x::AbstractStateSpaceSet{1}) = mean(x)[1]

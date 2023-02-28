@@ -17,7 +17,7 @@ function estimate(measure::HLMS, x::AbstractVector{T}, y::AbstractVector{T}) whe
     return estimate(measure, x̂, ŷ)
 end
 
-function estimate(measure::HLMS, x::AbstractDataset{D}, y::AbstractVector{T}) where {D, T}
+function estimate(measure::HLMS, x::AbstractStateSpaceSet{D}, y::AbstractVector{T}) where {D, T}
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     Y = embed(y, dy, τy)
@@ -25,7 +25,7 @@ function estimate(measure::HLMS, x::AbstractDataset{D}, y::AbstractVector{T}) wh
     return estimate(measure, X, Y)
 end
 
-function estimate(measure::HLMS, x::AbstractVector{T}, y::AbstractDataset{D}) where {D, T}
+function estimate(measure::HLMS, x::AbstractVector{T}, y::AbstractStateSpaceSet{D}) where {D, T}
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     X = embed(x, dx, τx)

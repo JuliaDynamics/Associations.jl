@@ -22,7 +22,7 @@ end
 function mutualinfo(e::Renyi, est::Gao2015{B, Chebyshev}, x) where {B}
     (; k, w) = est
 
-    joint = Dataset(x...)
+    joint = StateSpaceSet(x...)
     N = length(joint)
     M = length(x)
 
@@ -34,7 +34,7 @@ function mutualinfo(e::Renyi, est::Gao2015{B, Chebyshev}, x) where {B}
 end
 
 
-function lnc_correction(est::Gao2015, x::AbstractDataset{D}, idxs_neighbors)
+function lnc_correction(est::Gao2015, x::AbstractStateSpaceSet{D}, idxs_neighbors)
     (; k, w, base) = est
 
 end
@@ -42,7 +42,7 @@ end
 using Statistics
 using LinearAlgebra
 
-function pca(xᵢ, neighbors::SubDataset{D}) where D
+function pca(xᵢ, neighbors::SubStateSpaceSet{D}) where D
     μ = xᵢ # manually set mean to be xᵢ, so that it is at the center of rotated rectangle.
     M = Matrix(x)
     C = @SMatrix cov(x)

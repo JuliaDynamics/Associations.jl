@@ -20,7 +20,7 @@ In the case of numeric data, using a [`ContingencyMatrix`](@ref) is typically a
 bit slower than other dedicated estimation procedures.
 For example, quantities like discrete Shannon-type [`condmutualinfo`](@ref) are faster to
 estimate using a formulation based on sums of four entropies (the H4-principle). This
-is faster because we can both utilize the blazingly fast [`Dataset`](@ref) structure directly,
+is faster because we can both utilize the blazingly fast [`StateSpaceSet`](@ref) structure directly,
 and we can avoid *explicitly* estimating the entire joint pmf, which demands many
 extra calculation steps. Whatever you use in practice depends on your use case and
 available estimation methods, but you can always fall back to contingency matrices

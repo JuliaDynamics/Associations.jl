@@ -1,7 +1,7 @@
 using SpecialFunctions: gamma, digamma
 using Neighborhood: bulksearch
 using Neighborhood: KDTree, Euclidean, Theiler, NeighborNumber
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 using StateSpaceSets: dimension
 
 export Evans
@@ -18,15 +18,15 @@ Base.@kwdef struct Evans{M} <: MutualInformationEstimator
     metric::M = Chebyshev()
 end
 
-function estimate(def::MIShannonDifferential, est::Evans, x::VectorOrDataset...)
+function estimate(def::MIShannonDifferential, est::Evans, x::VectorOrStateSpaceSet...)
     e = def.e
     @assert length(x) >= 2 ||
-        error("Need at leats two input datasets to compute mutual information between them.")
+        error("Need at leats two input StateSpaceSets to compute mutual information between them.")
 
     (; k, w, metric) = est
 
-    joint = Dataset(x...)
-    marginals = Dataset.(x)
+    joint = StateSpaceSet(x...)
+    marginals = StateSpaceSet.(x)
     N = length(joint)
     D = dimension(joint)
     tree_joint = KDTree(joint, metric)
@@ -39,7 +39,7 @@ function estimate(def::MIShannonDifferential, est::Evans, x::VectorOrDataset...)
     end
 
     mi = 0.0
-    marginal_rs = Dataset(rs...) # so we can index all marginals at once
+    marginal_rs = StateSpaceSet(rs...) # so we can index all marginals at once
     for (i, rs) in enumerate(marginal_rs)
         vⱼ = pball_volume(est, rs_joint[i]; d = D)
         vprod = prod(pball_volume(est, r; d = D) for r in rs)
@@ -55,7 +55,7 @@ end
 mutualinfo(est::Evans, args...; base = 2, kwargs...) =
     mutualinfo(Shannon(; base), est, args...; kwargs...)
 
-# For the marginal dataset `xₘ`, find the distance to the `k`-th nearest neighbor
+# For the marginal StateSpaceSet `xₘ`, find the distance to the `k`-th nearest neighbor
 # of each point `xₘ[i]`, where `i = 1, 2, ..., N = length(xₘ)`.
 function distance_to_kth_neighbors!(est::Evans, rs, xₘ)
     (; k, w, metric) = est

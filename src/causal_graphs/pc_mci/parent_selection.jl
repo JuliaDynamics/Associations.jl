@@ -21,7 +21,7 @@ function select_parents(alg::PCMCI, x)
 end
 
 """
-    select_parents!(alg::PCMCI, 𝒫s::Vector{AbstractDataset}, x, j::Int)
+    select_parents!(alg::PCMCI, 𝒫s::Vector{AbstractStateSpaceSet}, x, j::Int)
 
 Select parents for variable `x[j]`, given the embeddings `𝒫s`, where `𝒫s[j]` is the
 `alg.τmax`-dimensional embedding for `x[j]` where columns correspond to

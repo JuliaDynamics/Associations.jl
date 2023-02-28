@@ -87,8 +87,8 @@ Z(V_i, V_j | \\bf{S}) = \\dfrac{1}{2}
 fishers_z(p̂ᵢⱼ) = 0.5 * log((1 + p̂ᵢⱼ) / (1 - p̂ᵢⱼ))
 
 function independence(test::Correlation, s, t, conds...)
-    S, T, C = Dataset(s), Dataset(t), Dataset(conds...)
-    D = Dataset(S, T, C)
+    S, T, C = StateSpaceSet(s), StateSpaceSet(t), StateSpaceSet(conds...)
+    D = StateSpaceSet(S, T, C)
     cov = fastcov(D)
     return _independence(test, length(D), cov, dimension(C))
 end

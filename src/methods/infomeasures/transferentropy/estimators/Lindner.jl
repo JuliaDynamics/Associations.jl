@@ -57,18 +57,18 @@ end
 
 # This method is separate from the one above because when using `SurrogateTest`,
 # `S` is repeatedly shuffled, while the other marginals are not, so we avoid
-# allocating a bunch of new datasets for every shuffle.
+# allocating a bunch of new StateSpaceSets for every shuffle.
 function estimate(measure::TEShannon, est::Lindner,
-        S::AbstractDataset,
-        T::AbstractDataset,
-        T⁺::AbstractDataset,
-        C::AbstractDataset)
+        S::AbstractStateSpaceSet,
+        T::AbstractStateSpaceSet,
+        T⁺::AbstractStateSpaceSet,
+        C::AbstractStateSpaceSet)
     (; k, w, base) = est
 
-    joint = Dataset(S, T, T⁺, C)
-    ST = Dataset(S, T, C)
-    TT⁺ = Dataset(T, T⁺, C)
-    T = Dataset(T, C)
+    joint = StateSpaceSet(S, T, T⁺, C)
+    ST = StateSpaceSet(S, T, C)
+    TT⁺ = StateSpaceSet(T, T⁺, C)
+    T = StateSpaceSet(T, C)
 
     N = length(joint)
     W = Theiler(w)

@@ -69,5 +69,5 @@ function embed(measure::ConvergentCrossMapping, t::AbstractVector, s::AbstractVe
     js = [repeat([1], d); 2]
     idxs_S̄ = 1:length(js) - 1
     idx_t̄ = length(js)# column index of time series to be predict
-    genembed(Dataset(s, t), τs, js), idx_t̄, idxs_S̄
+    genembed(StateSpaceSet(s, t), τs, js), idx_t̄, idxs_S̄
 end

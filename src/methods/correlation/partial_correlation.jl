@@ -17,7 +17,7 @@ variables removed.
 
 There are several ways of estimating the partial correlation. We follow the
 [matrix inversion method](https://en.wikipedia.org/wiki/Partial_correlation), because
-for [`Dataset`](@ref)s, we can very efficiently compute the required
+for [`StateSpaceSet`](@ref)s, we can very efficiently compute the required
 joint covariance matrix ``\\Sigma`` for the random variables.
 
 Formally, let ``X_1, X_2, \\ldots, X_n`` be a set of ``n`` real-valued random variables.
@@ -41,22 +41,22 @@ where ``\\hat{P} = \\hat{\\Sigma}^{-1}`` is the sample precision matrix.
 struct PartialCorrelation <: AssociationMeasure end
 
 """
-    partial_correlation(x::VectorOrDataset, y::VectorOrDataset,
-        z::VectorOrDataset...)
+    partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
+        z::VectorOrStateSpaceSet...)
 
 Compute the [`PartialCorrelation`](@ref) between `x` and `y`, given `z`.
 """
-function partial_correlation(x::VectorOrDataset, y::VectorOrDataset, z::ArrayOrDataset...)
+function partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::ArrayOrStateSpaceSet...)
     return estimate(PartialCorrelation(), x, y, z...)
 end
 
 # Compatibility with `independence`
-function estimate(::PartialCorrelation, x::VectorOrDataset, y::VectorOrDataset,
-        conds::ArrayOrDataset...)
+function estimate(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
+        conds::ArrayOrStateSpaceSet...)
     dimension(x) == 1 || throw(ArgumentError("Input `x` must be 1-dimensional"))
     dimension(y) == 1 || throw(ArgumentError("Input `y` must be 1-dimensional"))
-    X, Y, Z = Dataset(x), Dataset(y), Dataset(conds...)
-    D = Dataset(X, Y, Z)
+    X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(conds...)
+    D = StateSpaceSet(X, Y, Z)
     cov = fastcov(D)
     precision_matrix = invert_cov(cov)
     return partial_correlation_from_precision(precision_matrix, 1, 2)

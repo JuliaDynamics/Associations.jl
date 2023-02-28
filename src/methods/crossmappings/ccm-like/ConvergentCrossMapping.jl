@@ -8,7 +8,7 @@ export ConvergentCrossMapping, CCM
     ConvergentCrossMapping(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The convergent [cross mapping](@ref cross_mapping_api) (CCM) measure 
+The convergent [cross mapping](@ref cross_mapping_api) (CCM) measure
 (Sugihara et al., 2012)[^Sugihara2012]).
 
 Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
@@ -70,5 +70,5 @@ function embed(measure::ConvergentCrossMapping, t::AbstractVector, s::AbstractVe
     js = [repeat([1], d); 2]
     idxs_S̄ = 1:length(js) - 1
     idx_t̄ = length(js)# column index of time series to be predict
-    genembed(Dataset(s, t), τs, js), idx_t̄, idxs_S̄
+    genembed(StateSpaceSet(s, t), τs, js), idx_t̄, idxs_S̄
 end

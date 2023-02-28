@@ -7,13 +7,13 @@
 #     w::Int = 0
 # end
 
-# function mutualinfo(e::Renyi, est::GaoNaiveMI, x::VectorOrDataset...)
+# function mutualinfo(e::Renyi, est::GaoNaiveMI, x::VectorOrStateSpaceSet...)
 #     e.q == 1 || throw(ArgumentError(
 #         "Renyi entropy with q = $(e.q) not implemented for $(typeof(est)) estimators"
 #     ))
 #     (; k, w, base) = est
 
-#     joint = Dataset(x...)
+#     joint = StateSpaceSet(x...)
 #     D = dimension(joint)
 #     N = length(joint)
 #     M = length(x)
@@ -25,7 +25,7 @@
 #     ds = Vector{Vector{Float64}}(undef, M)
 #     fs = Vector{Float64}(undef, M)
 #     for (i, xᵢ) in enumerate(x)
-#         Xᵢ = Dataset(xᵢ)
+#         Xᵢ = StateSpaceSet(xᵢ)
 #         Dᵢ = dimension(xᵢ)
 #         fᵢ = (k  * gamma(Dᵢ / 2 + 1)) / ( (N - 1) * π^(D / 2))
 #         ds[i] = last.(bulksearch(tree, Xᵢ, NeighborNumber(k), Theiler(w))[2])

@@ -1,7 +1,7 @@
 using Neighborhood: Chebyshev, KDTree, Theiler, NeighborNumber
 using Neighborhood: bulksearch
 using Distances: evaluate
-using DelayEmbeddings.StateSpaceSets: SubDataset
+using DelayEmbeddings.StateSpaceSets: SubStateSpaceSet
 using LinearAlgebra: det
 
 """
@@ -28,7 +28,7 @@ Base.@kwdef struct Gao2017{B, M} <: InformationEstimator
     metric::M = Euclidean()
 end
 
-function Î(q, est::Gao2017, x::AbstractDataset{D}) where D
+function Î(q, est::Gao2017, x::AbstractStateSpaceSet{D}) where D
     (; k, w, metric) = est
     N = length(x)
     tree = KDTree(x, metric)
@@ -46,7 +46,7 @@ Base.@kwdef struct LocalLikelihood{M} <: ProbabilitiesEstimator
     metric::M = Euclidean()
 end
 
-function point_densities(est::LocalLikelihood, x::AbstractDataset{D}) where D
+function point_densities(est::LocalLikelihood, x::AbstractStateSpaceSet{D}) where D
 
     (; k, w, metric) = est
 
@@ -70,7 +70,7 @@ function point_densities(est::LocalLikelihood, x::AbstractDataset{D}) where D
 end
 
 # Compute the local density around point xᵢ, given its `neighborsᵢ`
-function point_density(est::LocalLikelihood, xᵢ, hᵢ, neighborsᵢ::SubDataset{D}) where D
+function point_density(est::LocalLikelihood, xᵢ, hᵢ, neighborsᵢ::SubStateSpaceSet{D}) where D
     S₀ = 0.0
     S₁ = zeros(MVector{D, Float64})
     S₂ = zeros(MMatrix{D, D, Float64})

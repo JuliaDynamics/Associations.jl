@@ -2,10 +2,10 @@ import ComplexityMeasures: symbolize_for_dispersion
 export marginal_encodings
 
 """
-    marginal_encodings(est::ProbabilitiesEstimator, x::VectorOrDataset...)
+    marginal_encodings(est::ProbabilitiesEstimator, x::VectorOrStateSpaceSet...)
 
 Encode/discretize each input vector `xᵢ ∈ x` according to a procedure determined by `est`.
-Any `xᵢ ∈ X` that are multidimensional ([`Dataset`](@ref)s) will be encoded column-wise,
+Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@ref)s) will be encoded column-wise,
 i.e. each column of `xᵢ` is treated as a timeseries and is encoded separately.
 
 This is useful for computing any discrete information theoretic quantity, and is
@@ -29,12 +29,12 @@ way of estimating the [`ContingencyMatrix`](@ref)
 """
 function marginal_encodings end
 
-function marginal_encodings(est, x::VectorOrDataset...)
+function marginal_encodings(est, x::VectorOrStateSpaceSet...)
     return marginally_encode_variable.(Ref(est), x)
 end
 
-function marginally_encode_variable(est, x::AbstractDataset)
-    return Dataset(marginally_encode_variable.(Ref(est), columns(x))...)
+function marginally_encode_variable(est, x::AbstractStateSpaceSet)
+    return StateSpaceSet(marginally_encode_variable.(Ref(est), columns(x))...)
 end
 
 function marginally_encode_variable(est::CountOccurrences, x::AbstractVector)
@@ -67,8 +67,8 @@ end
 # that are not derived from the same joint distribution, which would hugely increase
 # bias, because we're not guaranteed cancellation between entropy terms
 # in higher-level methods.
-function marginal_encodings(est::ValueHistogram{<:RectangularBinning}, x::VectorOrDataset...)
-    X = Dataset(Dataset.(x)...)
+function marginal_encodings(est::ValueHistogram{<:RectangularBinning}, x::VectorOrStateSpaceSet...)
+    X = StateSpaceSet(StateSpaceSet.(x)...)
     encoder = RectangularBinEncoding(est.binning, X)
 
     bins = [vec(encode_as_tuple(encoder, pt))' for pt in X]

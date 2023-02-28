@@ -1,8 +1,8 @@
 using Test
 using CausalityTools
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 n = 1000
-x, y, z, w = rand(n), rand(n), Dataset(rand(n, 3)), Dataset(rand(n + 1, 3))
+x, y, z, w = rand(n), rand(n), StateSpaceSet(rand(n, 3)), StateSpaceSet(rand(n + 1, 3))
 
 τ = -1
 
@@ -45,7 +45,7 @@ end
     @test PairwiseAsymmetricInference() isa CrossmapMeasure
     @test PAI() isa PairwiseAsymmetricInference
 
-    
+
     @test crossmap(PAI(; τ), ExpandingSegment(libsizes = 100), x, y) isa Real
     @test crossmap(PAI(; τ), RandomSegment(libsizes = 100), x, y) isa Real
     @test crossmap(PAI(; τ), RandomVectors(libsizes = 100, replace = false), x, y) isa Real

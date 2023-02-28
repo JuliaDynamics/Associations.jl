@@ -22,14 +22,14 @@ Base.@kwdef struct ParametricCopula{D} <: MutualInformationEstimator
 end
 
 function estimate(measure::MIShannon, est::ParametricCopula, x, y)
-    X = Dataset(x)
-    Y = Dataset(y)
-    D = Dataset(X, Y)
-    Tp = Dataset((copula_transform(c) for c in columns(D))...)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    D = StateSpaceSet(X, Y)
+    Tp = StateSpaceSet((copula_transform(c) for c in columns(D))...)
     -entropy(est.d, Tp; debias = est.debias)
 end
 
-function entropy(d::Normal, x::AbstractDataset{D}; debias = true, base = 2) where D
+function entropy(d::Normal, x::AbstractStateSpaceSet{D}; debias = true, base = 2) where D
     N = length(x)
     Σ = fastcov(x)
     h = 1 / (2 * log(2))
@@ -71,7 +71,7 @@ function inv_cdf_transform(x::AbstractVector, d::Distribution)
     return t
 end
 
-function entropy_debiased(d::Normal, x::AbstractDataset{D}) where D
+function entropy_debiased(d::Normal, x::AbstractStateSpaceSet{D}) where D
     # Strictly speaking, `d` should be a MvNormal, but it doesn't matter here,
     # because the marginal data have already been transformed to be normally distributed.
     # `d` is purely for dispatch.

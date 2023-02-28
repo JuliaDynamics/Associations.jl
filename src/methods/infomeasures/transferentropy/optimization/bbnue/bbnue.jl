@@ -46,7 +46,7 @@ In this implementation, any rectangular binning can be used.
 ## Input data
 
 Multivariate `source`, `target` and `cond` (if given) can be given as univariate
-`AbstractVector`s or as multivariate `Dataset`s or `Vector{AbstractVector}`.
+`AbstractVector`s or as multivariate `StateSpaceSet`s or `Vector{AbstractVector}`.
 For example, if you want to compute
 the BBNUE-transfer entropy from a univariate source to a univariate target,
 potentially conditioned on many different variables, you can do the following:
@@ -58,7 +58,7 @@ s, t = rand(n), rand(n)
 # Variables that might potentially influence `t` along with `s`
 c1, c2, c3 = rand(n), rand(n), rand(n)
 est = NaiveKernel(0.3)
-bbnue(est, s, t, Dataset(c1, c2, c3))
+bbnue(est, s, t, StateSpaceSet(c1, c2, c3))
 ```
 
 ## Variable selection and significance testing
@@ -161,13 +161,13 @@ function optim_te(measure::TransferEntropy, est::ProbOrDiffEst,
             if k == 1 || length(𝒮) == 0
                 Cᵢ = Ω[i]
                 CMI_Y⁺_Cᵢ =
-                    entropy(e, est, Dataset(Y⁺, Dataset(Cᵢ))) -
-                    entropy(e, est, Dataset(Cᵢ))
+                    entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(Cᵢ))) -
+                    entropy(e, est, StateSpaceSet(Cᵢ))
             else
                 Cᵢ = [Ω[i], 𝒮...]
                 CMI_Y⁺_Cᵢ =
-                    entropy(e, est, Dataset(Y⁺, Dataset(Cᵢ...,))) -
-                    entropy(e, est, Dataset(Cᵢ...,))
+                    entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(Cᵢ...,))) -
+                    entropy(e, est, StateSpaceSet(Cᵢ...,))
             end
             CMIs_between_Y⁺_and_candidates[i] = CMI_Y⁺_Cᵢ
         end
@@ -191,20 +191,20 @@ function optim_te(measure::TransferEntropy, est::ProbOrDiffEst,
         # If k > 1, at least one candidate has been selected, so we compute CMI
         else
             # Precompute terms that do not change during surrogate loop
-            H_Y⁺_𝒮 = entropy(e, est, Dataset(Y⁺, Dataset(𝒮...,)))
-            H_𝒮 = entropy(e, est, Dataset(𝒮...))
+            H_Y⁺_𝒮 = entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮...,)))
+            H_𝒮 = entropy(e, est, StateSpaceSet(𝒮...))
 
             # Original TE
             condmutualinfoₖ = H_Y⁺_𝒮 +
-                    entropy(e, est, Dataset([cₖ, 𝒮...,]...,)) -
-                    entropy(e, est, Dataset(Y⁺, Dataset([cₖ, 𝒮...,]...,))) -
+                    entropy(e, est, StateSpaceSet([cₖ, 𝒮...,]...,)) -
+                    entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet([cₖ, 𝒮...,]...,))) -
                     H_𝒮
 
             for i = 1:nsurr
                 surr_cₖ = s() # Surrogate version of cₖ
                 CMI_permutations[i] = H_Y⁺_𝒮 +
-                    entropy(e, est, Dataset([surr_cₖ, 𝒮...]...,)) -
-                    entropy(e, est, Dataset(Y⁺, Dataset([surr_cₖ, 𝒮...]...,))) -
+                    entropy(e, est, StateSpaceSet([surr_cₖ, 𝒮...]...,)) -
+                    entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet([surr_cₖ, 𝒮...]...,))) -
                     H_𝒮
             end
         end
@@ -242,11 +242,11 @@ function optim_te(measure::TransferEntropy, est::ProbOrDiffEst,
         return 0.0, Int[], Int[], idxs_source, idxs_target, idxs_cond
     end
 
-    CE2 = entropy(e, est, Dataset(Y⁺, Dataset(𝒮...,))) -
-        entropy(e, est, Dataset(𝒮...,))
+    CE2 = entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮...,))) -
+        entropy(e, est, StateSpaceSet(𝒮...,))
 
-    CE1 = entropy(e, est, Dataset(Y⁺, Dataset(𝒮_nonX...,))) -
-        entropy(e, est, Dataset(𝒮_nonX...,))
+    CE1 = entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮_nonX...,))) -
+        entropy(e, est, StateSpaceSet(𝒮_nonX...,))
 
     CMI = CE1 - CE2
     return CMI, 𝒮_js, 𝒮_τs, idxs_source, idxs_target, idxs_cond

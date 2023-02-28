@@ -56,9 +56,9 @@ struct GenericKernel{K, B} <: DifferentialEntropyEstimator
         new{K, B}(bandwidth, kernel)
     end
 end
-bandwidth(r::Real, x::AbstractDataset) = r # convenience for manual settings
+bandwidth(r::Real, x::AbstractStateSpaceSet) = r # convenience for manual settings
 
-function entropy(e::Renyi, est::GenericKernel, x::AbstractDataset)
+function entropy(e::Renyi, est::GenericKernel, x::AbstractStateSpaceSet)
     bw = bandwidth(est.bandwidth, x)
     ρs = densities_at_points(est.kernel, x, bw)
     e.q ≈ 1 || error("Renyi entropy with q = $(e.q) not implemented for `GenericKernel`")

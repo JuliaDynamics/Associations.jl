@@ -1,6 +1,6 @@
-# For `HLMS` measures (e.g. ``), mixtures of `Vector` and `Dataset`s are allowed,
+# For `HLMS` measures (e.g. ``), mixtures of `Vector` and `StateSpaceSet`s are allowed,
 # so we need to dispatch explicitly and call `s_measure` manually
-# to avoid automatic conversion to `Dataset`s (which would ignore
+# to avoid automatic conversion to `StateSpaceSet`s (which would ignore
 # embedding parameters if input data are `Vector`s).
 function independence(test::SurrogateTest{<:HLMS}, x, y)
     (; measure, est, rng, surrogate, nshuffles) = test

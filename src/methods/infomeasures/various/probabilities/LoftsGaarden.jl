@@ -27,13 +27,13 @@ Base.@kwdef struct LoftsGaarden{M} <: ProbabilitiesEstimator
     metric::M = Euclidean()
 end
 
-function probabilities_and_outcomes(est::LoftsGaarden, x::AbstractDataset{D}) where D
+function probabilities_and_outcomes(est::LoftsGaarden, x::AbstractStateSpaceSet{D}) where D
     Probabilities(point_densities(est, x)), 1:length(x)
 end
 
-outcome_space(x::AbstractDataset, ::LoftsGaarden) = 1:length(x)
+outcome_space(x::AbstractStateSpaceSet, ::LoftsGaarden) = 1:length(x)
 
-function point_densities(est::LoftsGaarden, x::AbstractDataset{D}) where D
+function point_densities(est::LoftsGaarden, x::AbstractStateSpaceSet{D}) where D
     (; k, w, metric) = est
     N = length(x)
     bᵥ = ComplexityMeasures.ball_volume(D)

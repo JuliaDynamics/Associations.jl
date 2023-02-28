@@ -1,4 +1,4 @@
-using StateSpaceSets: AbstractDataset
+using StateSpaceSets: AbstractStateSpaceSet
 using Distances
 
 export DistanceCorrelation
@@ -23,13 +23,13 @@ struct DistanceCorrelation <: AssociationMeasure end
     distance_correlation(x, y) → dcor ∈ [0, 1]
 
 Compute the empirical/sample distance correlation (Székely et al., 2007)[^Székely2007],
-here called `dcor`, between datasets `x` and `y`.
+here called `dcor`, between StateSpaceSets `x` and `y`.
 
 [^Székely2007]:
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
     dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
 """
-function distance_correlation(x::ArrayOrDataset, y::ArrayOrDataset)
+function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet)
     return estimate(DistanceCorrelation(), x, y)
 end
 
@@ -53,15 +53,15 @@ end
     distance_covariance(x, y) → dcov::Real
 
 Compute the empirical/sample distance covariance (Székely et al., 2007)[^Székely2007]
-between datasets `x` and `y`.
+between StateSpaceSets `x` and `y`.
 
 [^Székely2007]:
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
     dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
 """
-function distance_covariance(X::ArrayOrDataset, Y::ArrayOrDataset)
-    x = Dataset(X)
-    y = Dataset(Y)
+function distance_covariance(X::ArrayOrStateSpaceSet, Y::ArrayOrStateSpaceSet)
+    x = StateSpaceSet(X)
+    y = StateSpaceSet(Y)
     Lx, Ly = length(x), length(y)
     Lx == Ly || throw(ArgumentError("Inputs `x` and `y` must have same length"))
     N = length(x)
@@ -91,22 +91,22 @@ function distance_covariance(X::ArrayOrDataset, Y::ArrayOrDataset)
 
     return 𝒱ₙ²
 end
-distance_covariance(x::ArrayOrDataset) = distance_variance(Dataset(x))
+distance_covariance(x::ArrayOrStateSpaceSet) = distance_variance(StateSpaceSet(x))
 
 """
     distance_variance(x) → dvar::Real
 
 Compute the empirical/sample distance variance (Székely et al., 2007)[^Székely2007]
-for dataset `x`.
+for StateSpaceSet `x`.
 
 [^Székely2007]:
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
     dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
 """
-function distance_variance(X::ArrayOrDataset)
-    x = Dataset(X)
+function distance_variance(X::ArrayOrStateSpaceSet)
+    x = StateSpaceSet(X)
     N = length(x)
-    A = pairwise(Euclidean(), Dataset(x))
+    A = pairwise(Euclidean(), StateSpaceSet(x))
     āₖs = mean(A, dims = 1) # col-wise mean
     āₗs = mean(A, dims = 2) # row-wise mean
     ā = mean(A)

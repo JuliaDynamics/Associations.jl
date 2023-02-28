@@ -1,6 +1,6 @@
 
 # Explicit dispatch for independence for `Contingency` estimator, because we don't
-# want to convert categorical input data to `Datasets`.
+# want to convert categorical input data to `StateSpaceSets`.
 function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y) where MEASURE
     (; measure, est, rng, surrogate, nshuffles) = test
     @assert length(x) == length(y)
