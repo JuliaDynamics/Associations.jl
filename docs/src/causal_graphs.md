@@ -12,12 +12,6 @@ infer_graph
 GraphAlgorithm
 ```
 
-## [The PC-algorithm](@ref)
-
-```@docs
-PCRobust
-```
-
 ## [Optimal causation entropy](@ref)
 
 ```@docs

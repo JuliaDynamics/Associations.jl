@@ -9,8 +9,6 @@ The supertype of all causal graph inference algorithms.
 ## Concrete implementations
 
 - [`OCE`](@ref). The optimal causation entropy algorithm for time series graphs.
-- [`PCRobust`](@ref). The "robustified" version of the PC-algorithm.
-
 """
 abstract type GraphAlgorithm end
 

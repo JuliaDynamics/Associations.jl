@@ -1,6 +1,6 @@
 using Random
 
-export PCRobust
+#export PCRobust
 
 """
     PCRobust <: GraphAlgorithm
@@ -106,5 +106,5 @@ function infer_graph(algorithm::PCRobust, x; verbose = false)
     skeleton_graph, separating_sets = skeleton(algorithm, x; verbose)
     directed_graph = cpdag(algorithm, skeleton_graph, separating_sets; verbose)
 
-    return directed_graph
+    return skeleton_graph, directed_graph
 end

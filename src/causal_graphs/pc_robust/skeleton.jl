@@ -3,7 +3,7 @@ using Graphs: nv, complete_digraph, rem_edge!
 using Graphs.SimpleGraphs: all_neighbors
 using Combinatorics: powerset, combinations
 
-export skeleton
+#export skeleton
 
 """
     skeleton(algorithm::PCRobust, x) → (g, s)
@@ -69,7 +69,6 @@ function skeleton_unconditional!(alg::PCRobust, graph::SimpleDiGraph, x; verbose
             verbose && println("Skeleton, pairwise: Removing $edge1 and $edge2 (p = $pval)")
             rem_edge!(graph, edge1)
             rem_edge!(graph, edge2)
-
         end
     end
     return graph
@@ -99,6 +98,7 @@ function skeleton_conditional!(alg::PCRobust, graph, separating_set, x, 𝓁::In
     ctr = 0
     for (i, aᵢ) in enumerate(a)
         for j in aᵢ
+
             # The powerset of remaining variables (not including variable i or variable j),
             # limited to subsets of cardinality 𝓁 <= C <= 𝓁 + 1.
             𝐒 = powerset(setdiff(aᵢ, j), 𝓁, 𝓁 + 1) |> collect
@@ -115,6 +115,7 @@ function conditionaltest_and_remove_edge!(alg::PCRobust, x, 𝐒, 𝓁, i, j, gr
         verbose = false)
     # If there's at least one available variable to condition on.
     ctr = 0
+
     if length(𝐒) >= 𝓁
         src, trg = @views x[i], x[j]
         # For each subset of variables (not including i and j), perform a conditional
@@ -123,7 +124,11 @@ function conditionaltest_and_remove_edge!(alg::PCRobust, x, 𝐒, 𝓁, i, j, gr
         # separating set for the edges i - j (or, equivalently, j - i).
 
         # Only pick conditional sets with valid sizes
-        conditional_sets = filter(s -> length(s) <= alg.maxdepth, 𝐒)
+        if isnothing(alg.maxdepth)
+            conditional_sets = 𝐒
+        else
+            conditional_sets = filter(s -> length(s) <= alg.maxdepth, 𝐒)
+        end
         for Sₖ in conditional_sets
             Ŝ = @views Dataset(x[Sₖ]...)
             # If pval > α, then, based on the given the data, we can't reject the hypothesis
@@ -131,6 +136,7 @@ function conditionaltest_and_remove_edge!(alg::PCRobust, x, 𝐒, 𝓁, i, j, gr
             # given Ŝ.
             res = independence(alg.conditional_test, src, trg, Ŝ)
             pval = pvalue(res)
+
             if pval > alg.α
                 edge1 = SimpleEdge(i, j)
                 edge2 = SimpleEdge(j, i)
@@ -140,7 +146,7 @@ function conditionaltest_and_remove_edge!(alg::PCRobust, x, 𝐒, 𝓁, i, j, gr
                 rem_edge!(graph, edge2)
 
                 separating_set[edge1] = Sₖ
-                separating_set[SimpleEdge(j, i)] = Sₖ
+                separating_set[edge2] = Sₖ
                 ctr +=1
                 break
             end
