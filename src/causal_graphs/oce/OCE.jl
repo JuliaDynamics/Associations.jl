@@ -162,7 +162,7 @@ function select_first_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ
 end
 
 function select_conditional_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose)
-    P = Dataset(parents.parents...)
+    P = StateSpaceSet(parents.parents...)
     M = length(𝒫s)
     Is = zeros(M)
     pvals = zeros(M)
@@ -197,7 +197,7 @@ function backwards_eliminate!(parents, alg, xᵢ, k; verbose = false)
     M = length(parents.parents)
     P = parents.parents
     Pj = P[k]
-    remaining = Dataset(P...)[:, setdiff(1:M, k)]
+    remaining = StateSpaceSet(P...)[:, setdiff(1:M, k)]
     test = independence(alg.ctest, xᵢ, Pj, remaining)
     τ, j = parents.parents_τs[k], parents.parents_js[k]
     I = test.m

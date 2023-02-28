@@ -102,9 +102,9 @@ end
 # Generic 3H-formulation of mutual information.
 function marginal_entropies_ce2h(measure::ConditionalEntropy, est::ProbabilitiesEstimator, x, y)
     e = measure.e.definition
-    X = Dataset(x)
-    Y = Dataset(y)
-    XY = Dataset(X, Y)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    XY = StateSpaceSet(X, Y)
     HY = entropy(e, est, Y)
     HXY = entropy(e, est, XY)
     return HY, HXY
@@ -122,7 +122,7 @@ const WellDefinedCEProbEsts{m, D} = Union{
 function marginal_entropies_ce2h(measure::ConditionalEntropy,
         est::WellDefinedCEProbEsts{m, D}, x, y) where {m, D}
     eX, eY = marginal_encodings(est, x, y)
-    eXY = Dataset(eX, eY)
+    eXY = StateSpaceSet(eX, eY)
     e = measure.e
     HY = entropy(e, CountOccurrences(), eY)
     HXY = entropy(e, CountOccurrences(), eXY)
@@ -131,9 +131,9 @@ end
 
 function marginal_entropies_ce2h(measure::ConditionalEntropy, est::DifferentialEntropyEstimator, x, y)
     e = measure.e.definition
-    X = Dataset(x)
-    Y = Dataset(y)
-    XY = Dataset(X, Y)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    XY = StateSpaceSet(X, Y)
     HY = entropy(est, Y)
     HXY = entropy(est, XY)
     return HY, HXY

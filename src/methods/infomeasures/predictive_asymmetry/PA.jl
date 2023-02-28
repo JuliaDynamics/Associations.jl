@@ -1,4 +1,4 @@
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 using DelayEmbeddings: genembed
 import DelayEmbeddings: embed
 export PA
@@ -145,7 +145,7 @@ function embed(measure::PA, x, y)
     js_x = repeat([1], nτx)
     js = [jη...; 2; jη...;     js_x...; 1; js_x...]
     τs = [ηT...; 0; .-(ηT)...; τS...; 0; .-(τS)...]
-    joint = genembed(Dataset(x, y), τs, js)
+    joint = genembed(StateSpaceSet(x, y), τs, js)
     T⁺ = joint[:, 1:nη]
     T⁰ = joint[:, nη+1:nη+1]
     T⁻ = joint[:, nη+2:2nη+1]
@@ -175,7 +175,7 @@ function embed(measure::PA, x, y, z)
 
     js = [jη...; 2; jη...;     js_x...; 1; js_x...;   js_z...; 1; js_z...]
     τs = [ηT...; 0; .-(ηT)...; τS...;   0; .-(τS)...; τC...;   0; .-(τC)...]
-    joint = genembed(Dataset(x, y, z), τs, js)
+    joint = genembed(StateSpaceSet(x, y, z), τs, js)
     T⁺ = joint[:, 1:nη]
     T⁰ = joint[:, nη+1:nη+1]
     T⁻ = joint[:, nη+2:2nη+1]
@@ -192,7 +192,7 @@ function embed(measure::PA, x, y, z)
 end
 
 as_vector(x::Union{AbstractVector{T}}) where T = vec(x)
-as_vector(x::AbstractDataset{1, T}) where T = x[:, 1]
+as_vector(x::AbstractStateSpaceSet{1, T}) where T = x[:, 1]
 
 function estimate(measure::PA, est::PA_ESTS, x, y)
     X = as_vector(x)
@@ -204,15 +204,15 @@ function estimate(measure::PA, est::PA_ESTS, x, y)
 
     N = length(T⁺)
     τŜ = sort(unique([τS; ηT]))
-    S⁺⁰ = Dataset(S⁺[:, findall(x -> x ∈ τS, τŜ)], S⁰)
-    S⁻⁰ = Dataset(S⁻[:, findall(x -> x ∈ τS, τŜ)], S⁰)
+    S⁺⁰ = StateSpaceSet(S⁺[:, findall(x -> x ∈ τS, τŜ)], S⁰)
+    S⁻⁰ = StateSpaceSet(S⁻[:, findall(x -> x ∈ τS, τŜ)], S⁰)
     ΔA = zeros(length(ηT))
     fw = zeros(length(ηT))
     bw = zeros(length(ηT))
-    T⁺⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
-    T⁻⁰ = MVector{2}.(Dataset(T⁰, T⁰).data)
-    Tⁿ⁺ = MVector{1}.(Dataset(T⁰).data)
-    Tⁿ⁻ = MVector{1}.(Dataset(T⁰).data)
+    T⁺⁰ = MVector{2}.(StateSpaceSet(T⁰, T⁰).data)
+    T⁻⁰ = MVector{2}.(StateSpaceSet(T⁰, T⁰).data)
+    Tⁿ⁺ = MVector{1}.(StateSpaceSet(T⁰).data)
+    Tⁿ⁻ = MVector{1}.(StateSpaceSet(T⁰).data)
     for (i, η) in enumerate(sort(ηT))
         fill_target!(Tⁿ⁺, T⁺, i)
         fill_target!(Tⁿ⁻, T⁻, i)
@@ -236,16 +236,16 @@ function estimate(measure::PA, est::PA_ESTIMATORS, x, y, z)
 
     N = length(T⁺)
     τŜ = sort(unique([τS; ηT]))
-    S⁺⁰ = Dataset(S⁺[:, findall(x -> x ∈ τS, τŜ)], S⁰)
-    S⁻⁰ = Dataset(S⁻[:, findall(x -> x ∈ τS, τŜ)], S⁰)
+    S⁺⁰ = StateSpaceSet(S⁺[:, findall(x -> x ∈ τS, τŜ)], S⁰)
+    S⁻⁰ = StateSpaceSet(S⁻[:, findall(x -> x ∈ τS, τŜ)], S⁰)
     τĈ = sort(unique([τC; ηT]))
-    C⁺⁰ = Dataset(C⁺[:, findall(x -> x ∈ τC, τĈ)], C⁰)
-    C⁻⁰ = Dataset(C⁻[:, findall(x -> x ∈ τC, τĈ)], C⁰)
+    C⁺⁰ = StateSpaceSet(C⁺[:, findall(x -> x ∈ τC, τĈ)], C⁰)
+    C⁻⁰ = StateSpaceSet(C⁻[:, findall(x -> x ∈ τC, τĈ)], C⁰)
     ΔA = zeros(length(ηT))
     fw = zeros(length(ηT))
     bw = zeros(length(ηT))
-    Tⁿ⁺⁰C⁺⁰ = MVector{2 + dimension(C⁻⁰)}.(Dataset(T⁰, T⁰, C⁻⁰).data)
-    Tⁿ⁻⁰C⁻⁰ = MVector{2 + dimension(C⁺⁰)}.(Dataset(T⁰, T⁰, C⁺⁰).data)
+    Tⁿ⁺⁰C⁺⁰ = MVector{2 + dimension(C⁻⁰)}.(StateSpaceSet(T⁰, T⁰, C⁻⁰).data)
+    Tⁿ⁻⁰C⁻⁰ = MVector{2 + dimension(C⁺⁰)}.(StateSpaceSet(T⁰, T⁰, C⁺⁰).data)
     Tⁿ⁺ = MVector{1}.(T⁰.data)
     Tⁿ⁻ = MVector{1}.(T⁰.data)
 

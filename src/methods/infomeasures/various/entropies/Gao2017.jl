@@ -18,7 +18,7 @@ Base.@kwdef struct Gao2017{B, M} #<: CausalityTools.InformationEstimator
     metric::M = Euclidean()
 end
 
-function Î(q, est::Gao2017, x::AbstractDataset{D}) where D
+function Î(q, est::Gao2017, x::AbstractStateSpaceSet{D}) where D
     (; k, w, metric) = est
     N = length(x)
     tree = KDTree(x, metric)
@@ -36,8 +36,8 @@ import Statistics.cov
 
 # Non-allocating and more than twice as fast as writing a wrapper
 # `f(x) = Statistics.cov(Matrix(x))`.
-# Also accepts SubDatasets, so we can use views on neighbor points.
-function cov(x̄, x::AbstractDataset{D}) where D
+# Also accepts SubStateSpaceSets, so we can use views on neighbor points.
+function cov(x̄, x::AbstractStateSpaceSet{D}) where D
     N = length(x) - 1
     C = @MMatrix zeros(D, D)
     x̄ = mean(x)
@@ -50,8 +50,8 @@ function cov(x̄, x::AbstractDataset{D}) where D
     return SMatrix{D, D}(C)
 end
 # So we don't have to compute the mean twice at every iteration.
-cov(x::AbstractDataset{D}) where D = cov(mean(x), x)
-function mean_and_cov(x::AbstractDataset{D}) where D
+cov(x::AbstractStateSpaceSet{D}) where D = cov(mean(x), x)
+function mean_and_cov(x::AbstractStateSpaceSet{D}) where D
     μ = mean(x)
     Σ = cov(μ, x)
     return μ, Σ

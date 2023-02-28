@@ -64,11 +64,11 @@ Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
 end
 
 """
-    l_measure(measure::LMeasure, x::VectorOrDataset, y::VectorOrDataset)
+    l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
 
 Compute the [`LMeasure`](@ref) from source `x` to target `y`.
 """
-function l_measure(measure::LMeasure, x::VectorOrDataset, y::VectorOrDataset)
+function l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     return estimate(measure, x, y)
 end
 
@@ -77,10 +77,10 @@ function getrank(x, p)
 end
 
 # Internal method for use with `independence`
-function estimate(measure::LMeasure, x::AbstractDataset, y::AbstractDataset)
+function estimate(measure::LMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
-    # Match length of datasets by excluding end points.
+    # Match length of StateSpaceSets by excluding end points.
     lx = length(x); ly = length(y)
     lx > ly ? X = x[1:ly, :] : X = x
     ly > lx ? Y = y[1:lx, :] : Y = y

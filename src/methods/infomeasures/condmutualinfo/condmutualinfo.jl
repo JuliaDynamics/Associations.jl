@@ -41,11 +41,11 @@ const CMI_ESTIMATORS = Union{
     ConditionalMutualInformationEstimator
 }
 function estimate(measure::CMI, est::CMI_ESTIMATORS, x)
-    txt = "`condmutualinfo` takes three input vectors/datasets. Only one was given."
+    txt = "`condmutualinfo` takes three input vectors/StateSpaceSets. Only one was given."
     throw(ArgumentError(txt))
 end
 function estimate(measure::CMI, est::CMI_ESTIMATORS, x, y)
-    txt = "`condmutualinfo` takes three input vectors/datasets. Only two were given."
+    txt = "`condmutualinfo` takes three input vectors/StateSpaceSets. Only two were given."
     throw(ArgumentError(txt))
 end
 
@@ -170,10 +170,10 @@ end
 mi_measure(m::CMIShannon) = MIShannon(m.e)
 # Internal methods for `independence`
 function estimate(measure::CMI, est::MutualInformationEstimator, x, y, z)
-    X = Dataset(x)
-    Y = Dataset(y)
-    Z = Dataset(z)
-    YZ = Dataset(Y, Z)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    Z = StateSpaceSet(z)
+    YZ = StateSpaceSet(Y, Z)
     m = mi_measure(measure)
     return mutualinfo(m, est, X, YZ) - mutualinfo(m, est, X, Z)
 end
@@ -186,12 +186,12 @@ end
 # Generic H4-formulation of CMI
 function marginal_entropies_cmi4h(measure::ConditionalMutualInformation, est, x, y, z)
     e = measure.e
-    Z = Dataset(z)
-    Y = Dataset(y)
-    X = Dataset(x)
-    XZ = Dataset(X, Z)
-    YZ = Dataset(Y, Z)
-    XYZ = Dataset(X, Y, Z)
+    Z = StateSpaceSet(z)
+    Y = StateSpaceSet(y)
+    X = StateSpaceSet(x)
+    XZ = StateSpaceSet(X, Z)
+    YZ = StateSpaceSet(Y, Z)
+    XYZ = StateSpaceSet(X, Y, Z)
 
     HXZ = entropy(e, est, XZ)
     HYZ = entropy(e, est,YZ)
@@ -214,9 +214,9 @@ function marginal_entropies_cmi4h(measure::Union{CMIShannon, CMIRenyiSarbu},
         x, y, z) where {m, D}
     e = measure.e
     eX, eY, eZ = marginal_encodings(est, x, y, z)
-    eXZ = Dataset(eX, eZ)
-    eYZ = Dataset(eY, eZ)
-    eXYZ = Dataset(eX, eY, eZ)
+    eXZ = StateSpaceSet(eX, eZ)
+    eYZ = StateSpaceSet(eY, eZ)
+    eXYZ = StateSpaceSet(eX, eY, eZ)
 
     HXZ = entropy(e, CountOccurrences(), eXZ)
     HYZ = entropy(e, CountOccurrences(), eYZ)

@@ -163,7 +163,7 @@ end
 # KD-trees and do marginal searches for all marginals all the time.
 function independence(test::LocalPermutationTest, x, y, z)
     measure, est, nshuffles = test.measure, test.est, test.nshuffles
-    X, Y, Z = Dataset(x), Dataset(y), Dataset(z)
+    X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
     N = length(X)
     Î = estimate(measure, est, X, Y, Z)

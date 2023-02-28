@@ -4,7 +4,7 @@ export embed
 using Neighborhood: Euclidean, KDTree, NeighborNumber, Theiler
 using Neighborhood: bulksearch
 using StaticArrays: MVector
-using StateSpaceSets: AbstractDataset
+using StateSpaceSets: AbstractStateSpaceSet
 
 export predict
 export crossmap
@@ -69,12 +69,12 @@ function max_segmentlength end
 
 """
     embed(measure::CrossmapMeasure, target::AbstractVector,
-        sources::AbstractVector...) → emb::Dataset{D}
+        sources::AbstractVector...) → emb::StateSpaceSet{D}
 
 Jointly embed the input vector `target`, together with one or more vectors `s ∈ sources`,
 according to the given [`CrossmapMeasure`](@ref).
 
-This produces `emb`, a `D`-dimensional `Dataset` where
+This produces `emb`, a `D`-dimensional `StateSpaceSet` where
 
 - The last column is always the non-lagged `target` variable. Typically, this is
     the variable we're trying to predict.
@@ -87,12 +87,12 @@ function embed(measure::CrossmapMeasure, args...) end
 """
     crossmap(measure::CrossmapMeasure, t::AbstractVector, s::AbstractVector) → ρ::Real
     crossmap(measure::CrossmapMeasure, est, t::AbstractVector, s::AbstractVector) → ρ::Vector
-    crossmap(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractDataset) → ρ
+    crossmap(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → ρ
 
 Compute the cross map estimates between between raw time series `t` and `s` (and return
-the real-valued cross-map statistic `ρ`). If a [`CrossmapEstimator`](@ref) `est` is provided, 
+the real-valued cross-map statistic `ρ`). If a [`CrossmapEstimator`](@ref) `est` is provided,
 cross mapping is done on random subsamples of the data, where subsampling is dictated by `est`
-(a vector of values for `ρ` is returned). 
+(a vector of values for `ρ` is returned).
 
 Alternatively, cross-map between time-aligned time series `t̄` and source embedding `S̄` that
 have been constructed by jointly (pre-embedding) some input data.
@@ -108,7 +108,7 @@ function crossmap end
 
 """
     predict(measure::CrossmapMeasure, t::AbstractVector, s::AbstractVector) → t̂ₛ, t̄, ρ
-    predict(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractDataset) → t̂ₛ
+    predict(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → t̂ₛ
 
 Perform point-wise cross mappings between source embeddings and target time series
 according to the algorithm specified by the given cross-map `measure` (e.g.
@@ -116,7 +116,7 @@ according to the algorithm specified by the given cross-map `measure` (e.g.
 
 - **First method**: Jointly embeds the target `t` and source `s` time series (according to
     `measure`) to obtain time-index aligned target timeseries `t̄` and source embedding
-    `S̄` (which is now a [`Dataset`](@ref)).
+    `S̄` (which is now a [`StateSpaceSet`](@ref)).
     Then calls `predict(measure, t̄, S̄)` (the first method), and returns both the
     predictions `t̂ₛ`, observations `t̄` and their correspondence `ρ` according to `measure`.
 - **Second method**: Returns a vector of predictions `t̂ₛ` (`t̂ₛ` := "predictions of `t̄` based
@@ -136,7 +136,7 @@ weights depend on `measure`.
 *Note: Some [`CrossmapMeasure`](@ref)s may define more general mapping
 procedures. If so, the algorithm is described in their docstring*.
 """
-function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractDataset)
+function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractStateSpaceSet)
     @assert length(S̄) == length(t)
     (; d, τ, w) = measure
     # Tree structure must be created for every L, because we can't include data

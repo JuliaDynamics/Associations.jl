@@ -144,12 +144,12 @@ end
 
 function freqtable_equallength(matrix_dims, x...)
     # Map the input data to integers. This ensures compatibility with *any* input type.
-    # Then, we can simply create a joint `Dataset{length(x), Int}` and use its elements
+    # Then, we can simply create a joint `StateSpaceSet{length(x), Int}` and use its elements
     # as `CartesianIndex`es to update counts.
     lvl = tolevels.(x)
     levels = (first(l) for l in lvl)
     lmaps = [last(l) for l in lvl]
-    X = Dataset(levels...)
+    X = StateSpaceSet(levels...)
 
     freqs = zeros(Int, matrix_dims)
     for ix in to_cartesian(sort(X.data)) # sorted matrix access should be faster.

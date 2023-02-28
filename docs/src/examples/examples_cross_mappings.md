@@ -188,7 +188,7 @@ reproduce_figure_3A_ensemble(ConvergentCrossMapping(d = 3, τ = -1))
 With the [`RandomVectors`](@ref) estimator, the mean of our ensemble `ρ`s seem to look pretty much identical to Figure 3A in Sugihara et al. The [`RandomSegment`](@ref) estimator also performs pretty well, but since subsampled segments are contiguous, there are probably some autocorrelation effects at play.
 
 We can avoid the autocorrelation issue by tuning the `w` parameter of the [`ConvergentCrossMapping`](@ref) measure, which is the 
-[Theiler window](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/dataset/#Theiler-window). Setting the Theiler window to `w > 0`, we can exclude neighbors of a query point `p` that are close to `p` in time, and thus deal with autocorrelation issues that way (the default `w = 0` excludes only the point itself). Let's re-do the analysis with `w = 5`, just for fun.
+[Theiler window](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/StateSpaceSet/#Theiler-window). Setting the Theiler window to `w > 0`, we can exclude neighbors of a query point `p` that are close to `p` in time, and thus deal with autocorrelation issues that way (the default `w = 0` excludes only the point itself). Let's re-do the analysis with `w = 5`, just for fun.
 
 ```@example MAIN_CCM
 reproduce_figure_3A_ensemble(ConvergentCrossMapping(d = 3, τ = -1, w = 5))

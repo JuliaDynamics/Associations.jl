@@ -1,6 +1,6 @@
 #export Pal
 using Neighborhood
-using StateSpaceSets: dimension, AbstractDataset, Dataset
+using StateSpaceSets: dimension, AbstractStateSpaceSet, StateSpaceSet
 export Pal
 
 """
@@ -63,7 +63,7 @@ function entropy(e::Renyi, est::Pal, x)
         q = 0.999999999
     end
 
-    X = Dataset(x)
+    X = StateSpaceSet(x)
     d = dimension(X)
     γ = approximate_γ(est, d)
     h = 1 / (1 - q) * log(Lₚ(est, X) / (γ * n^(1 - p/d)))
@@ -74,7 +74,7 @@ function entropy(e::Shannon, est::Pal, x)
     (; k, w, p, n) = est
     (; base) = e
     q = 1.0 - eps() # approximate Shannon entropy by simply letting q → 1
-    X = Dataset(x)
+    X = StateSpaceSet(x)
     N = length(x)
     d = dimension(X)
     γ = approximate_γ(est, d)
@@ -84,7 +84,7 @@ function entropy(e::Shannon, est::Pal, x)
     return h / log(base, ℯ)
 end
 
-function Lₚ(est::Pal, x::AbstractDataset{D}) where D
+function Lₚ(est::Pal, x::AbstractStateSpaceSet{D}) where D
     (; k, w, p, n) = est
     N = length(x)
     tree = KDTree(x, Euclidean())
@@ -105,6 +105,6 @@ end
 function approximate_γ(est::Pal, d::Int)
     p = est.p
     n = est.n
-    x = Dataset(rand(n, d))
+    x = StateSpaceSet(rand(n, d))
     Lₚ(est, x) / n^(1 - (p/d))
 end

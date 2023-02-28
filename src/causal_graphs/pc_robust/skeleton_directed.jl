@@ -104,7 +104,7 @@ function conditionaltest_and_remove_edge!(
             conditional_sets = 𝐒[length.(𝐒) .<= alg.maxdepth]
         end
         for Sₖ in conditional_sets
-            Ŝ = @views Dataset(x[Sₖ]...)
+            Ŝ = @views StateSpaceSet(x[Sₖ]...)
             # If pval > α, then, based on the given the data, we can't reject the hypothesis
             # that `src ⫫ trg | Ŝ`. Therefore, we assume that they *are* independent
             # given Ŝ.

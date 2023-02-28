@@ -1,6 +1,6 @@
 using Neighborhood: KDTree, NeighborNumber, WithinRange, Theiler, Chebyshev
 using Neighborhood: bulksearch, isearch
-using StateSpaceSets: AbstractDataset, Dataset
+using StateSpaceSets: AbstractStateSpaceSet, StateSpaceSet
 using StateSpaceSets: dimension
 using SpecialFunctions: digamma
 using ComplexityMeasures: maxdists, volume_minimal_rect
@@ -51,13 +51,13 @@ function estimate(measure::TEShannon, est::Zhu1, x::AbstractVector...)
     return estimate(measure, est, S, T, T⁺, C)
 end
 
-function estimate(measure::TEShannon, est::Zhu1, S::AbstractDataset, T::AbstractDataset, T⁺::AbstractDataset, C::AbstractDataset)
+function estimate(measure::TEShannon, est::Zhu1, S::AbstractStateSpaceSet, T::AbstractStateSpaceSet, T⁺::AbstractStateSpaceSet, C::AbstractStateSpaceSet)
     (; k, w) = est
 
-    joint = Dataset(S, T, T⁺, C)
-    ST = Dataset(S, T, C)
-    TT⁺ = Dataset(T, T⁺, C)
-    T = Dataset(T, C)
+    joint = StateSpaceSet(S, T, T⁺, C)
+    ST = StateSpaceSet(S, T, C)
+    TT⁺ = StateSpaceSet(T, T⁺, C)
+    T = StateSpaceSet(T, C)
     DS = dimension(S)
     DT = dimension(T)
     DT⁺ = dimension(T⁺)
@@ -100,7 +100,7 @@ function estimate(measure::TEShannon, est::Zhu1, S::AbstractDataset, T::Abstract
 
 end
 
-function volumes(x::AbstractDataset, nn_idxs, N::Int)
+function volumes(x::AbstractStateSpaceSet, nn_idxs, N::Int)
     T = eltype(0.0)
     volumes = zeros(T, N)
     for (i, (xᵢ, nn_idxsᵢ)) in enumerate(zip(x, nn_idxs))

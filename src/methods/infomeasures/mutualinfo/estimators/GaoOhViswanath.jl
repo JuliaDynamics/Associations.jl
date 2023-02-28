@@ -36,14 +36,14 @@ Base.@kwdef struct GaoOhViswanath{MJ, MM} <: MutualInformationEstimator
     metric_marginals::MM = Euclidean()
 end
 
-function estimate(measure::MIShannon, est::GaoOhViswanath, x::VectorOrDataset...)
+function estimate(measure::MIShannon, est::GaoOhViswanath, x::VectorOrStateSpaceSet...)
     e = measure.e
 
     @assert length(x) >= 2 ||
-        error("Need at leats two input datasets to compute mutual information between them.")
+        error("Need at leats two input StateSpaceSets to compute mutual information between them.")
     (; k, w, metric_joint, metric_marginals) = est
-    joint = Dataset(x...)
-    marginals = Dataset.(x)
+    joint = StateSpaceSet(x...)
+    marginals = StateSpaceSet.(x)
     M = length(x)
     N = length(joint)
 
@@ -59,7 +59,7 @@ function estimate(measure::MIShannon, est::GaoOhViswanath, x::VectorOrDataset...
     for (m, xₘ) in enumerate(marginals)
         marginal_inrangecount!(est, ns[m], xₘ,  ds)
     end
-    marginal_nₖs = Dataset(ns...)
+    marginal_nₖs = StateSpaceSet(ns...)
 
     bvₘs = prod(ball_volume(dimension(xₘ)) for xₘ in marginals)
 

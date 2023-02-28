@@ -1,7 +1,7 @@
 using Neighborhood: Chebyshev, KDTree, NeighborNumber, Theiler
 using Neighborhood: bulksearch, inrangecount
 using SpecialFunctions: digamma
-using DelayEmbeddings: AbstractDataset, Dataset
+using DelayEmbeddings: AbstractStateSpaceSet, StateSpaceSet
 using DelayEmbeddings: dimension
 using Statistics: mean
 export KraskovStögbauerGrassberger1, KSG1
@@ -28,8 +28,8 @@ Kraskov et al. (2004)[^Kraskov2004].
 
 ## Description
 
-Let the joint dataset ``X := \\{\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m \\}`` be defined by the
-concatenation of the marginal datasets ``\\{ \\bf{X}_k \\}_{k=1}^m``, where each ``\\bf{X}_k``
+Let the joint StateSpaceSet ``X := \\{\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m \\}`` be defined by the
+concatenation of the marginal StateSpaceSets ``\\{ \\bf{X}_k \\}_{k=1}^m``, where each ``\\bf{X}_k``
 is potentially multivariate. Let ``\\bf{x}_1, \\bf{x}_2, \\ldots, \\bf{x}_N`` be the points
 in the joint space ``X``.
 
@@ -52,13 +52,13 @@ struct KraskovStögbauerGrassberger1{MJ, MM} <: MutualInformationEstimator
     end
 end
 
-function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::VectorOrDataset...)
+function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::VectorOrStateSpaceSet...)
     e = measure.e
     @assert length(x) >= 2 ||
-        error("Need at leats two input datasets to compute mutual information between them.")
+        error("Need at leats two input StateSpaceSets to compute mutual information between them.")
     (; k, w, metric_joint, metric_marginals) = est
-    joint = Dataset(x...)
-    marginals = Dataset.(x)
+    joint = StateSpaceSet(x...)
+    marginals = StateSpaceSet.(x)
     M = length(x)
     N = length(joint)
 
@@ -74,7 +74,7 @@ function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::Vec
     for (m, xₘ) in enumerate(marginals)
         marginal_inrangecount!(est, ns[m], xₘ, ds)
     end
-    marginal_nₖs = Dataset(ns...)
+    marginal_nₖs = StateSpaceSet(ns...)
     mi = digamma(k) +
         (M - 1) * digamma(N) -
         mean(sum(digamma.(nₖ)) for nₖ in marginal_nₖs)

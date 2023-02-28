@@ -9,13 +9,13 @@ abstract type MultivariateKernel end
     Parzen <: MultivariateKernel
     Parzen(h)
 
-The Parzen kernel. For a given `d`-dimensional dataset `x` and a query point `xᵢ`, it
+The Parzen kernel. For a given `d`-dimensional StateSpaceSet `x` and a query point `xᵢ`, it
 computes the number of points within a hypercube of radius `h` centered on `pᵢ`.
 
 To use it, do `p = Parzen(0.2); p(x, xᵢ)`.
 """
 struct Parzen{B} <: MultivariateKernel; h::B; end
-#(p::Parzen)(x::AbstractDataset, xᵢ, h) = (p .- xᵢ for p in D) ./ p.h
+#(p::Parzen)(x::AbstractStateSpaceSet, xᵢ, h) = (p .- xᵢ for p in D) ./ p.h
 
 using SpecialFunctions
 using LinearAlgebra
@@ -49,16 +49,16 @@ end
 # -----------------------------------------
 
 """
-    densities_at_points(kernel::MultivariateKernel, x::AbstractDataset, bandwidth)
+    densities_at_points(kernel::MultivariateKernel, x::AbstractStateSpaceSet, bandwidth)
 
 Compute the local densities at each point `xᵢ ∈ x` using the given multivariate `kernel`
 and `bandwidth`.
 """
-function densities_at_points(kernel::MultivariateKernel, x::AbstractDataset, bandwidth)
+function densities_at_points(kernel::MultivariateKernel, x::AbstractStateSpaceSet, bandwidth)
     ρs = [density_at_point(kernel, x, bandwidth, xᵢ, i) for (i, xᵢ) in enumerate(x)]
 end
 
-function density_at_point(kernel, x::AbstractDataset{D}, bandwidth, xᵢ, i) where D
+function density_at_point(kernel, x::AbstractStateSpaceSet{D}, bandwidth, xᵢ, i) where D
     ρᵢ = 0.0
     @inbounds for j in eachindex(x)
         if j != i
@@ -71,14 +71,14 @@ end
 
 
 """
-    probability(k::MultivariateKernel, data::AbstractDataset, xᵢ; h) → p̂(xᵢ)
+    probability(k::MultivariateKernel, data::AbstractStateSpaceSet, xᵢ; h) → p̂(xᵢ)
 
 Compute `p̂(xᵢ)`, the kernel density estimate of the probability `p(xᵢ)`, given some
 (multivariate) `data` and the query point `xᵢ`.
 
 This is fast if `xᵢ` is an `SVector`.
 """
-function probability(kernel::MultivariateKernel, data::AbstractDataset{D, T}, xᵢ;
+function probability(kernel::MultivariateKernel, data::AbstractStateSpaceSet{D, T}, xᵢ;
         h::Real = silvermans_rule(data)) where {D, T}
     n = length(data)
     return 1 / (n * h^D) * sum(kernel((x - p) / h) for p in data)
@@ -90,7 +90,7 @@ The supertype for all kernel density bandwidth rules.
 abstract type BandwidthRule end
 
 """
-    bandwidth(heuristic::BandwidthRule, x::AbstractDataset)
+    bandwidth(heuristic::BandwidthRule, x::AbstractStateSpaceSet)
 
 Compute the bandwidth for a kernel density estimator for the input data `x` using
 the given `heuristic`.
@@ -117,7 +117,7 @@ as ``h = cn^{-\\dfrac{2}{7}}``, where ``n`` is the number of data points
 Base.@kwdef struct DiksFang{C} <: BandwidthRule
     c::C = 4.8
 end
-function bandwidth(heuristic::DiksFang{C}, x::AbstractDataset) where C
+function bandwidth(heuristic::DiksFang{C}, x::AbstractStateSpaceSet) where C
     heuristic.c * length(x)^(-2/7)
 end
 
@@ -131,11 +131,11 @@ following the rules outlined in [this paper](https://hal.archives-ouvertes.fr/ha
 """
 struct Silverman <: BandwidthRule end
 
-function bandwidth(heuristic::Silverman, x::AbstractDataset)
+function bandwidth(heuristic::Silverman, x::AbstractStateSpaceSet)
     silvermans_rule(x)
 end
 
-function silvermans_rule(data::AbstractDataset{D, T}) where {D, T}
+function silvermans_rule(data::AbstractStateSpaceSet{D, T}) where {D, T}
     N = length(data)
     M = vcat(columns(data)...)
     iqr = quantile(M, 0.75) - quantile(M, 0.25)

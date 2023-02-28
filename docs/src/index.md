@@ -34,8 +34,8 @@ with runnable code examples.
 Input data for CausalityTools are given as:
 
 - Univariate *timeseries*, which are given as standard Julia `Vector`s.
-- Multivariate timeseries, *datasets*, or *state space sets*, which are given as
-    [`Dataset`](@ref)s. Many methods convert *timeseries* inputs to [`Dataset`](@ref)
+- Multivariate timeseries, *StateSpaceSets*, or *state space sets*, which are given as
+    [`StateSpaceSet`](@ref)s. Many methods convert *timeseries* inputs to [`StateSpaceSet`](@ref)
     for faster internal computations.
 - Categorical data can be used with [`ContingencyMatrix`](@ref) to compute various
     information theoretic measures and is represented using any iterable whose elements
@@ -43,7 +43,7 @@ Input data for CausalityTools are given as:
     `Vector{String}`, `{Vector{Int}}`, or `Vector{Tuple{Int, String}}`.
 
 ```@docs
-Dataset
+StateSpaceSet
 ```
 
 ## Pull requests and issues

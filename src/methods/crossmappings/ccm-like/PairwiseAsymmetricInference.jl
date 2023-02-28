@@ -7,8 +7,8 @@ export PairwiseAsymmetricInference, PAI
     PairwiseAsymmetricInference(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The pairwise asymmetric inference (PAI) [cross mapping](@ref cross_mapping_api) 
-measure (McCracken & Weigel (2014)[^McCracken2014]) is a version of 
+The pairwise asymmetric inference (PAI) [cross mapping](@ref cross_mapping_api)
+measure (McCracken & Weigel (2014)[^McCracken2014]) is a version of
 [`ConvergentCrossMapping`](@ref) that searches for neighbors in
 *mixed* embeddings (i.e. both source and target variables included); otherwise, the
 algorithms are identical.
@@ -76,5 +76,5 @@ function embed(measure::PairwiseAsymmetricInference, t::AbstractVector, s::Abstr
     js = [2; repeat([1], d)]
     idxs_S̄ = 1:measure.d
     idx_t̄ = measure.d + 1 # column index of time series to be predict
-    return genembed(Dataset(t, s), τs, js), idx_t̄, idxs_S̄
+    return genembed(StateSpaceSet(t, s), τs, js), idx_t̄, idxs_S̄
 end

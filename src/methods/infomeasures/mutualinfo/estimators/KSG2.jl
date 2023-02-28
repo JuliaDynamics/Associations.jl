@@ -1,7 +1,7 @@
 using Neighborhood: Chebyshev, KDTree, Theiler, NeighborNumber
 using Neighborhood: bulksearch
 using SpecialFunctions: digamma
-using DelayEmbeddings: Dataset, AbstractDataset
+using DelayEmbeddings: StateSpaceSet, AbstractStateSpaceSet
 using Statistics: mean
 export KraskovStögbauerGrassberger2, KSG2
 
@@ -27,8 +27,8 @@ Kraskov et al. (2004)[^Kraskov2004].
 
 ## Description
 
-Let the joint dataset ``X := \\{\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m \\}`` be defined by the
-concatenation of the marginal datasets ``\\{ \\bf{X}_k \\}_{k=1}^m``, where each ``\\bf{X}_k``
+Let the joint StateSpaceSet ``X := \\{\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m \\}`` be defined by the
+concatenation of the marginal StateSpaceSets ``\\{ \\bf{X}_k \\}_{k=1}^m``, where each ``\\bf{X}_k``
 is potentially multivariate. Let ``\\bf{x}_1, \\bf{x}_2, \\ldots, \\bf{x}_N`` be the points
 in the joint space ``X``.
 
@@ -75,14 +75,14 @@ struct KraskovStögbauerGrassberger2{MJ, MM} <: MutualInformationEstimator
 end
 const KSG2 = KraskovStögbauerGrassberger2
 
-function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::VectorOrDataset...)
+function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::VectorOrStateSpaceSet...)
     e = measure.e
     @assert length(x) >= 2 ||
-        error("Need at leats two input datasets to compute mutual information between them.")
+        error("Need at leats two input StateSpaceSets to compute mutual information between them.")
 
     (; k, w, metric_joint, metric_marginals) = est
-    joint = Dataset(x...)
-    marginals = Dataset.(x)
+    joint = StateSpaceSet(x...)
+    marginals = StateSpaceSet.(x)
     M = length(x)
     N = length(joint)
 
@@ -98,9 +98,9 @@ function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::Vec
         eval_dists_to_knns!(ϵs[m], xₘ, idxs, est.metric_marginals)
         marginal_inrangecount!(est, ns[m], xₘ, idxs, ds, m)
     end
-    ϵ_maxes = [maximum(x) for x in Dataset(ϵs...)]
+    ϵ_maxes = [maximum(x) for x in StateSpaceSet(ϵs...)]
     #@show all(ϵ_maxes .== ds)
-    marginal_nₖs = Dataset(ns...)
+    marginal_nₖs = StateSpaceSet(ns...)
 
     #@show M
     mi = digamma(k) -
@@ -118,7 +118,7 @@ function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::Vec
 end
 
 function marginal_inrangecount!(est::KraskovStögbauerGrassberger2, ns::Vector{Int},
-        xₘ::AbstractDataset, knn_idxs, ds, m)
+        xₘ::AbstractStateSpaceSet, knn_idxs, ds, m)
     @assert length(ns) == length(xₘ)
     N = length(xₘ)
     tree = KDTree(xₘ, est.metric_marginals)

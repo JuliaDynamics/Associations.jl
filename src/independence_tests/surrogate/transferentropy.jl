@@ -25,7 +25,7 @@ function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingType
 
     cmi = te_to_cmi(measure)
     Ŝ, T⁺, S, T, C = marginals_and_surrogenerator(measure.embedding, surrogate, x...; rng)
-    TC = Dataset(T, C)
+    TC = StateSpaceSet(T, C)
     @assert length(T⁺) == length(S) == length(TC)
     Î = estimate(cmi, est, T⁺, S, TC)
     Îs = zeros(nshuffles)
@@ -47,7 +47,7 @@ function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingType
     Îs = zeros(nshuffles)
     for b in 1:nshuffles
         # TE(ŝ -> t) := I(t⁺; ŝ⁻ | t⁻, c⁻)
-        Îs[b] = estimate(measure, est, Dataset(Ŝ()), T, T⁺, C)
+        Îs[b] = estimate(measure, est, StateSpaceSet(Ŝ()), T, T⁺, C)
     end
     p = count(Î .<= Îs) / nshuffles
 

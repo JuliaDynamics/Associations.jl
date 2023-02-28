@@ -47,7 +47,7 @@ function mvnormal_entropies(estimators, Ls;
     Σ = diagm(repeat([r], d))
     N = MvNormal(μ, Σ)    
     Hs = [[zeros(nreps) for L in Ls] for est in estimators]
-    data = [Dataset([rand(rng, N) for i = 1:maximum(Ls)]) for i = 1:nreps]
+    data = [StateSpaceSet([rand(rng, N) for i = 1:maximum(Ls)]) for i = 1:nreps]
     for (e, est) in enumerate(estimators)
         for (l, L) in enumerate(Ls)
             for i = 1:nreps

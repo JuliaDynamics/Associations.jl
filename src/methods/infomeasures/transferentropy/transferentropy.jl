@@ -1,4 +1,4 @@
-using StateSpaceSets: AbstractDataset, Dataset
+using StateSpaceSets: AbstractStateSpaceSet, StateSpaceSet
 using StateSpaceSets: dimension
 
 export transferentropy
@@ -60,9 +60,9 @@ Since estimates of ``TE^*(S \\to T)`` and ``TE^*(S \\to T | C)`` are just a spec
 conditional mutual information where input data are marginals of a particular form of
 [delay embedding](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/reconstruction/),
 *any* combination of variables, e.g. ``S = (A, B)``, ``T = (C, D)``,
-``C = (D, E, F)`` are valid inputs (given as `Dataset`s).
+``C = (D, E, F)`` are valid inputs (given as `StateSpaceSet`s).
 In practice, however, `s`, `t` and `c` are most often timeseries, and if
- `s`, `t` and `c` are [`Dataset`](@ref)s, it is assumed that the data are
+ `s`, `t` and `c` are [`StateSpaceSet`](@ref)s, it is assumed that the data are
 pre-embedded and the embedding step is skipped.
 
 ## Compatible estimators
@@ -127,13 +127,13 @@ end
 
 function estimate(measure::TransferEntropy, est::TE_ESTIMATORS, x...)
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
-    # dataset. The horizontal concatenation of C with T then just returns T.
+    # StateSpaceSet. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
     S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
     cmi = te_to_cmi(measure)
     # TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻).
-    return condmutualinfo(cmi, est, T⁺, S, Dataset(T, C))
+    return condmutualinfo(cmi, est, T⁺, S, StateSpaceSet(T, C))
 end
 
 # When using any estimator except dedicatd `TransferEntropyEstimator`s,
@@ -153,10 +153,10 @@ end
 
 function h4_marginals(measure::TransferEntropy, x...)
     S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
-    joint = Dataset(S, T, T⁺, C)
-    ST = Dataset(S, T, C)
-    TT⁺ = Dataset(T, T⁺, C)
-    T = Dataset(T, C)
+    joint = StateSpaceSet(S, T, T⁺, C)
+    ST = StateSpaceSet(S, T, C)
+    TT⁺ = StateSpaceSet(T, T⁺, C)
+    T = StateSpaceSet(T, C)
     return joint, ST, TT⁺, T
 end
 

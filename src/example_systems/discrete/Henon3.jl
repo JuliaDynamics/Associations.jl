@@ -1,7 +1,7 @@
 using LabelledArrays: @LArray
 using StaticArrays: SVector, MVector
 using DynamicalSystemsBase: DiscreteDynamicalSystem
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 
 export Henon3
 

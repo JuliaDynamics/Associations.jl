@@ -2,7 +2,7 @@
 using Test
 # Analytical tests
 # -----------------
-a = Dataset(repeat([1], 100))
+a = StateSpaceSet(repeat([1], 100))
 # TODO: export this method?
 @test CausalityTools.distance_variance(a) == 0.0
 

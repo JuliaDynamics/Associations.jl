@@ -12,7 +12,7 @@ function independence(test::LocalPermutationTest{<:TransferEntropy{<:E}}, x::Abs
     measure, est, nshuffles = test.measure, test.est, test.nshuffles
     # Below, the T variable also includes any conditional variables.
     S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
-    TC = Dataset(T, C)
+    TC = StateSpaceSet(T, C)
     @assert length(T⁺) == length(S) == length(TC)
     N = length(x)
 

@@ -7,8 +7,8 @@ ests = [
 ]
 
 
-x = Dataset(rand(300, 2))
-y = Dataset(rand(300, 1))
+x = StateSpaceSet(rand(300, 2))
+y = StateSpaceSet(rand(300, 1))
 @testset "MIShannon" begin
     @test MIShannon(base = 2) isa MIShannon
 

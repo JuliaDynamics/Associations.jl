@@ -1,5 +1,5 @@
 export GaussianCMI
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 
 """
     GaussianCMI <: MutualInformationEstimator
@@ -27,7 +27,7 @@ Base.@kwdef struct GaussianCMI <: MutualInformationEstimator
 end
 
 function estimate(measure::CMIShannon, est::GaussianCMI, x, y, z)
-    YZ = Dataset(y, z)
+    YZ = StateSpaceSet(y, z)
 
     mi_est = GaussianMI()
     MI_x_yz = estimate(MIShannon(), mi_est, x, YZ)

@@ -12,7 +12,7 @@ a mixture of both (Gao et al., 2017).
 
 !!! note "Explicitly convert your discrete data to floats"
     Even though the `GaoKannanOhViswanath` estimator is designed to handle discrete data,
-    our implementation demands that all input data are `Dataset`s whose data points
+    our implementation demands that all input data are `StateSpaceSet`s whose data points
     are floats. If you have discrete data, such as strings or symbols, encode them using
     integers and convert those integers to floats before passing them to
     [`mutualinfo`](@ref).
@@ -61,14 +61,14 @@ end
 # TODO: We here extend the estimator to multiple variables (i.e. the multi-information),
 # which was not treated in Gao et al., (2017).
 
-# Note: input datasets must have the same type. Remind the user ot convert in the
+# Note: input StateSpaceSets must have the same type. Remind the user ot convert in the
 # docstring.
 function estimate(measure::MIShannon, est::GaoKannanOhViswanath, x, y)
     e = measure.e
     (; k, w) = est
-    X = Dataset(x)
-    Y = Dataset(y)
-    joint = Dataset(X, Y)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    joint = StateSpaceSet(X, Y)
 
     N = length(joint)
     M = length(x)

@@ -1,5 +1,5 @@
 export GaussianMI
-using StateSpaceSets: Dataset
+using StateSpaceSets: StateSpaceSet
 using StateSpaceSets: dimension, standardize
 using LinearAlgebra: eigvals
 
@@ -12,7 +12,7 @@ using LinearAlgebra: eigvals
 ## Description
 
 Given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
-`GaussianMI` first constructs the ``d_x + d_y``-dimensional joint [`Dataset`](@ref) `XY`.
+`GaussianMI` first constructs the ``d_x + d_y``-dimensional joint [`StateSpaceSet`](@ref) `XY`.
 If `normalize == true`, then we follow the approach in Vejmelka & Palus
 (2008)[^Vejmelka2008] and transform each column in `XY` to have zero mean and unit
 standard deviation. If `normalize == false`, then the algorithm proceeds without
@@ -24,7 +24,7 @@ computed. The mutual information estimate
 `GaussianMI` assumes the input variables are distributed according to normal
 distributions with zero means and unit standard deviations.
 Therefore, given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
-`GaussianMI` first constructs the joint [`Dataset`](@ref) `XY`, then transforms each
+`GaussianMI` first constructs the joint [`StateSpaceSet`](@ref) `XY`, then transforms each
 column in `XY` to have zero mean and unit standard deviation, and finally computes
 the `\\Sigma`, the correlation matrix for `XY`.
 
@@ -61,12 +61,12 @@ Base.@kwdef struct GaussianMI <: MutualInformationEstimator
 end
 
 function estimate(measure::MIShannon, est::GaussianMI, x, y)
-    X = Dataset(x)
-    Y = Dataset(y)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
     DX = dimension(X)
     DY = dimension(Y)
 
-    XY = Dataset(X, Y)
+    XY = StateSpaceSet(X, Y)
     if est.normalize
         Σ = fastcor(standardize(XY))
         σ = eigvals(Σ)

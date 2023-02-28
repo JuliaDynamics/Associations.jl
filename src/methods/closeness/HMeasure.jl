@@ -50,19 +50,19 @@ Base.@kwdef struct HMeasure{M, TM} <: AssociationMeasure
 end
 
 """
-    h_measure(measure::HMeasure, x::VectorOrDataset, y::VectorOrDataset)
+    h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
 
 Compute the [`HMeasure`](@ref) from source `x` to target `y`.
 """
-function h_measure(measure::HMeasure, x::VectorOrDataset, y::VectorOrDataset)
+function h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     return estimate(measure, x, y)
 end
 
 # Internal method for use with `independence`
-function estimate(measure::HMeasure, x::AbstractDataset, y::AbstractDataset)
+function estimate(measure::HMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
-    # Match length of datasets by excluding end points.
+    # Match length of StateSpaceSets by excluding end points.
     lx = length(x); ly = length(y)
     lx > ly ? X = x[1:ly, :] : X = x
     ly > lx ? Y = y[1:lx, :] : Y = y

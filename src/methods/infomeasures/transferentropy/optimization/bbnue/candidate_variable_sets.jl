@@ -157,8 +157,8 @@ function candidate_embedding(source, target, cond;
         maxlag = maxlag,
         include_instantaneous = include_instantaneous)
 
-    # TODO: This is more efficient if not using datasets. Re-do manually.
-    data = Dataset([source..., target..., cond...,]...,)
+    # TODO: This is more efficient if not using StateSpaceSets. Re-do manually.
+    data = StateSpaceSet([source..., target..., cond...,]...,)
     ℰ = genembed(data, ((τs...)...,), ((js...)...,))
 
     # Get all variables except the target future (which are the last columns of ℰ)
@@ -192,8 +192,8 @@ function candidate_embedding(source, target;
         maxlag = maxlag,
         include_instantaneous = include_instantaneous)
 
-    # TODO: This is more efficient if not using datasets. Re-do manually.
-    data = Dataset([source..., target...,]...,)
+    # TODO: This is more efficient if not using StateSpaceSets. Re-do manually.
+    data = StateSpaceSet([source..., target...,]...,)
     ℰ = genembed(data, ((τs...)...,), ((js...)...,))
 
     # Get all variables except the target future (which are the last columns of ℰ)
@@ -211,4 +211,4 @@ end
 
 process_input(ts::Vector{T}) where T <: Number = [ts]
 process_input(ts::AbstractVector{V}) where V <: Vector{N} where N <: Number = ts
-process_input(ts::Dataset) = [columns(ts)...,]
+process_input(ts::StateSpaceSet) = [columns(ts)...,]

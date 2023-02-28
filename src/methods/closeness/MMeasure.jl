@@ -49,19 +49,19 @@ Base.@kwdef struct MMeasure{M, TM} <: AssociationMeasure
 end
 
 """
-    m_measure(measure::MMeasure, x::VectorOrDataset, y::VectorOrDataset)
+    m_measure(measure::MMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
 
 Compute the [`MMeasure`](@ref) from source `x` to target `y`.
 """
-function m_measure(measure::MMeasure, x::VectorOrDataset, y::VectorOrDataset)
+function m_measure(measure::MMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     return estimate(measure, x, y)
 end
 
 # Internal method for use with `independence`
-function estimate(measure::MMeasure, x::AbstractDataset, y::AbstractDataset)
+function estimate(measure::MMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
-    # Match length of datasets by excluding end points.
+    # Match length of StateSpaceSets by excluding end points.
     lx = length(x); ly = length(y)
     lx > ly ? X = x[1:ly, :] : X = x
     ly > lx ? Y = y[1:lx, :] : Y = y
