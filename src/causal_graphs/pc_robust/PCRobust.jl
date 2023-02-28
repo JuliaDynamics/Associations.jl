@@ -68,6 +68,11 @@ performs the following steps:
 The resulting directed graph (a `SimpleDiGraph` from
 [Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl)) is then returned.
 
+
+## Examples
+
+- [Inferring a causal graph from a chain of logistic maps](@ref pc_robust_example)
+
 !!! info
     The "PC" algorithm is named after the *first names* of the authors, **P**eter Spirtes
     and **C**lark Glymour.

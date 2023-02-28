@@ -2,11 +2,9 @@ export OCE
 
 """
     OCE <: GraphAlgorithm
-    OCE(
-        utest::IndependenceTest = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3)),
-        ctest::C = LocalPermutationTest(CMIShannon(), FPVP(k = 3, w = 3)),
-        τmax::T = 5,
-        α = 0.05
+    OCE(; utest::IndependenceTest = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3)),
+          ctest::C = LocalPermutationTest(CMIShannon(), FPVP(k = 3, w = 3)),
+          τmax::T = 5, α = 0.05
     )
 
 The optimal causation entropy (OCE) algorithm for causal discovery (Sun et al.,
@@ -26,9 +24,13 @@ The OCE algorithm has three steps to determine the parents of a variable `xᵢ`.
 
 ## Returns
 
-When used with [`infer_graph`](@ref), it returns a list of parents for each input variable.
-In the future, this will return a labelled, directed graph with all the detected
-associations.
+When used with [`infer_graph`](@ref), it returns a vector `p`, where `p[i]` are the
+parents for each input variable. In the future, this will return a labelled, directed
+graph with all the detected associations.
+
+## Examples
+
+- [Inferring time series graph from a chain of logistic maps](@ref oce_example)
 
 [^Sun2015]:
     Sun, J., Taylor, D., & Bollt, E. M. (2015). Causal network inference by optimal
