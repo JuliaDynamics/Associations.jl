@@ -6,11 +6,14 @@ export l_measure
 
 """
     LMeasure <: AssociationMeasure
-    LMeasure(; K::Int = 2, dx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1)
+    LMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
 The `LMeasure` (Chicharro & Andrzejak, 2009)[^^Chicharro20093] is a pairwise association
 measure. It quantifies the probability with which close state of a target
 timeseries/embedding are mapped to close states of a source timeseries/embedding.
+
+Note that `τx` and `τy` are negative by convention. See docstring for [`SMeasure`](@ref)
+for an explanation.
 
 ## Usage
 
@@ -53,8 +56,8 @@ Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
     K::Int = 2
     metric::M = Euclidean()
     tree_metric::TM = Euclidean()
-    τx::Int = 1
-    τy::Int = 1
+    τx::Int = -1
+    τy::Int = -1
     dx::Int = 2
     dy::Int = 2
     w::Int = 0
