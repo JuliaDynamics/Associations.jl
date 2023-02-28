@@ -16,7 +16,7 @@ The "robustified" version (Kalisch & Bühlmann, 2008[^Kalisch2008]) of the PC al
 and `conditional_test` must be an [`IndependenceTest`](@ref) with a valid conditional
 [`AssociationMeasure`](@ref).
 
-!!! info Directional measures will not give meaningful answers
+!!! info "Directional measures will not give meaningful answers"
     During the skeleton search phase, if a significance association between two nodes are
     is found, then a bidirectional edge is drawn between them. The generic implementation of
     `PCRobust` therefore doesn't currently handle directional measures such as
