@@ -18,7 +18,7 @@ end
 
 """
     JointDistanceDistribution <: AssociationMeasure end
-    JointDistanceDistribution(; metric = Euclidean(), B = 10, D = 2, τ = 1, μ = 0.0)
+    JointDistanceDistribution(; metric = Euclidean(), B = 10, D = 2, τ = -1, μ = 0.0)
 
 The joint distance distribution (JDD) measure (Amigó & Hirata, 2018)[^Amigo2018].
 
@@ -34,10 +34,25 @@ The joint distance distribution (JDD) measure (Amigó & Hirata, 2018)[^Amigo2018
 - **`B::Int`**: The number of equidistant subintervals to divide the interval `[0, 1]` into
     when comparing the normalised distances.
 - **`D::Int`**: Embedding dimension.
-- **`τ::Int`**: Embedding delay.
+- **`τ::Int`**: Embedding delay. By convention, `τ` is negative.
 - **`μ`**: The hypothetical mean value of the joint distance distribution if there
     is no coupling between `x` and `y` (default is `μ = 0.0`).
 
+## Description
+
+From input time series ``x(t)`` and ``y(t)``, we first construct the delay embeddings (note
+the positive sign in the embedding lags; therefore the input parameter
+`τ` is by convention negative).
+
+```math
+\\begin{align*}
+\\{\\bf{x}_i \\} &= \\{(x_i, x_{i+\\tau}, \\ldots, x_{i+(d_x - 1)\\tau}) \\} \\\\
+\\{\\bf{y}_i \\} &= \\{(y_i, y_{i+\\tau}, \\ldots, y_{i+(d_y - 1)\\tau}) \\} \\\\
+\\end{align*}
+```
+
+The algorithm then proceeds to analyze the distribution of distances between points
+of these embeddings, as described in Amigó & Hirata (2018)[^Amigo2018].
 
 ## Examples
 
@@ -53,7 +68,7 @@ Base.@kwdef struct JointDistanceDistribution{M, T} <: AssociationMeasure
     metric::M = Euclidean()
     B::Int = 5
     D::Int = 3
-    τ::Int = 1
+    τ::Int = -1
     μ::T = 0.0
 end
 

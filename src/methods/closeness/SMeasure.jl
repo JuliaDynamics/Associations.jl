@@ -6,17 +6,13 @@ export s_measure
 
 """
     SMeasure < AssociationMeasure
-    SMeasure(; K::Int = 2, dx::Int = 2, my::Int = 2, τx::Int = 1, τy::Int = 1, w::Int = 0)
-
-The `HMeasure` (Grassberger et al., 1999)[^Grassberger1999] is a pairwise association
-measure. It quantifies the probability with which close state of a target
-timeseries/embedding are mapped to close states of a source timeseries/embedding.
-
-## Description
+    SMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
 `SMeasure` is a bivariate association measure from Grassberger et al. (1999)[^Grassberger1999]
 and Quiroga et al. (2000) [^Quiroga2000] that measure directional dependence
 between two input (potentially multivariate) time series.
+
+Note that `τx` and `τy` are negative; see explanation below.
 
 ## Usage
 
@@ -27,22 +23,33 @@ between two input (potentially multivariate) time series.
 
 The steps of the algorithm are:
 
+0. From input time series ``x(t)`` and ``y(t)``, construct the delay embeddings (note
+    the positive sign in the embedding lags; therefore inputs parameters
+    `τx` and `τy` are by convention negative).
+
+```math
+\\begin{align*}
+\\{\\bf{x}_i \\} &= \\{(x_i, x_{i+\\tau_x}, \\ldots, x_{i+(d_x - 1)\\tau_x}) \\} \\\\
+\\{\\bf{y}_i \\} &= \\{(y_i, y_{i+\\tau_y}, \\ldots, y_{i+(d_y - 1)\\tau_y}) \\} \\\\
+\\end{align*}
+```
+
 1. Let ``r_{i,j}`` and ``s_{i,j}`` be the indices of the `K`-th nearest neighbors
-    of ``x_i`` and ``y_i``, respectively. Neighbors closed than `w` time indices
+    of ``\\bf{x}_i `` and ``\\bf{y}_i``, respectively. Neighbors closed than `w` time indices
     are excluded during searches (i.e. `w` is the Theiler window).
 
 2. Compute the the mean squared Euclidean distance to the ``K`` nearest neighbors
     for each ``x_i``, using the indices ``r_{i, j}``.
 
 ```math
-R_i^{(k)}(x) = \\dfrac{1}{k} \\sum_{i=1}^{k}(x_i, x_{r_{i,j}})^2
+R_i^{(k)}(x) = \\dfrac{1}{k} \\sum_{i=1}^{k}(\\bf{x}_i, \\bf{x}_{r_{i,j}})^2
 ```
 
 - Compute the y-conditioned mean squared Euclidean distance to the ``K`` nearest
     neighbors for each ``x_i``, now using the indices ``s_{i,j}``.
 
 ```math
-R_i^{(k)}(x|y) = \\dfrac{1}{k} \\sum_{i=1}^{k}(x_i, x_{s_{i,j}})^2
+R_i^{(k)}(x|y) = \\dfrac{1}{k} \\sum_{i=1}^{k}(\\bf{x}_i, \\bf{x}_{s_{i,j}})^2
 ```
 
 - Define the following measure of independence, where ``0 \\leq S \\leq 1``, and
@@ -81,8 +88,8 @@ Base.@kwdef struct SMeasure{M, TM} <: AssociationMeasure
     K::Int = 2
     metric::M = SqEuclidean()
     tree_metric::TM = Euclidean()
-    τx::Int = 1
-    τy::Int = 1
+    τx::Int = -1
+    τy::Int = -1
     dx::Int = 2
     dy::Int = 2
     w::Int = 0
