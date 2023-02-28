@@ -16,6 +16,18 @@ The "robustified" version (Kalisch & Bühlmann, 2008[^Kalisch2008]) of the PC al
 and `conditional_test` must be an [`IndependenceTest`](@ref) with a valid conditional
 [`AssociationMeasure`](@ref).
 
+!!! info Directional measures will not give meaningful answers
+    During the skeleton search phase, if a significance association between two nodes are
+    is found, then a bidirectional edge is drawn between them. The generic implementation of
+    `PCRobust` therefore doesn't currently handle directional measures such as
+    [`TEShannon`](@ref). The reason is that if a  directional relationship `X → Y` exists
+    between two nodes `X` and `Y`, then the algorithm would first draw a bidirectional
+    arrow between `X` and `Y` when analysing the direction
+    `X → Y`, and then removing it again when analysing in the direction `Y → X` (a similar
+    situation would also occur for the conditional stage). This will be fixed in a
+    future release. For now, use nondirectional measures, e.g. [`MIShannon`](@ref) and
+    [`CMIShannon`](@ref)!
+
 ## Description
 
 When used with [`infer_graph`](@ref) on some input data `x`, the `PCRobust` algorithm
@@ -53,7 +65,8 @@ performs the following steps:
         `X - W → Z`, and `X - Z` but there is no edge between `Y` and `W`, turn the
         undirected `X - Z` edge into the directed edge `X → Z`.
 
-The resulting directed graph is then returned.
+The resulting directed graph (a `SimpleDiGraph` from
+[Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl)) is then returned.
 
 !!! info
     The "PC" algorithm is named after the *first names* of the authors, **P**eter Spirtes
@@ -80,7 +93,7 @@ struct PCRobust{U, C, A, N} <: GraphAlgorithm
 end
 
 include("skeleton.jl")
-include("skeleton_directed.jl")
+#include("skeleton_directed.jl")
 include("cpdag.jl")
 
 # TODO: this is only designed for non-directed measures. Use type system?
