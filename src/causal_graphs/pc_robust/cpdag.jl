@@ -34,7 +34,7 @@ Orientiation rules 0-3 are then applied to `dg`:
 function cpdag(alg::PCRobust, skeleton::SimpleDiGraph,
         separating_sets::Dict{SimpleEdge, Vector{Int}}; verbose = false)
     # Convert the skeleton to a directed graph where (Xᵢ - Xⱼ) becomes (Xᵢ → Xⱼ, Xⱼ → Xᵢ).
-    dg = skeleton
+    dg = copy(skeleton)
 
     # Orientiation rules are described in a plethora of books and papers in the literature.
     # I found most of them, including the original paper on the PC algorithm, hard to

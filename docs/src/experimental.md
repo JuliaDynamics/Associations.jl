@@ -11,9 +11,3 @@ they appear as part of the public API. Use them wisely.
 ```@docs
 predictive_asymmetry
 ```
-
-## Automated embedding for transfer entropy
-
-```@docs
-bbnue
-```
