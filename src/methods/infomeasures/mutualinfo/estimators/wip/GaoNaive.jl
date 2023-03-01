@@ -39,6 +39,6 @@
 
 #     mi /= N
 
-#     return mi / log(base, ℯ)
+#     return mi / log(ℯ, base)
 
 # end

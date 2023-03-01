@@ -10,7 +10,7 @@ in that paper is called the *mutual entropy*.
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
 
 
 ## Description
@@ -63,7 +63,7 @@ function estimate(
             mi += pxyᵢⱼ^q / (px[i]^(q - 1) * py[j]^(q - 1))
         end
     end
-    return (1 / (q - 1) * (1 - mi) / (1-q)) / log(e.base, ℯ)
+    return (1 / (q - 1) * (1 - mi) / (1-q)) / log(ℯ, e.base)
 end
 
 function estimate(measure::MITsallisFuruichi, est::ProbabilitiesEstimator, x, y)

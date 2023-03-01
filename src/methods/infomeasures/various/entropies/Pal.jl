@@ -67,7 +67,7 @@ function entropy(e::Renyi, est::Pal, x)
     d = dimension(X)
     γ = approximate_γ(est, d)
     h = 1 / (1 - q) * log(Lₚ(est, X) / (γ * n^(1 - p/d)))
-    return h / log(base, ℯ)
+    return h / log(ℯ, base)
 end
 
 function entropy(e::Shannon, est::Pal, x)
@@ -81,7 +81,7 @@ function entropy(e::Shannon, est::Pal, x)
     L = Lₚ(est, X)
     f = L / (γ * N^(1 - p/d))
     h = (1 / (1 - q)) * log(f)
-    return h / log(base, ℯ)
+    return h / log(ℯ, base)
 end
 
 function Lₚ(est::Pal, x::AbstractStateSpaceSet{D}) where D

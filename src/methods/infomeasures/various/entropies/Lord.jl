@@ -111,7 +111,7 @@ function entropy(e::Shannon, est::Lord, x::AbstractStateSpaceSet{D}) where {D}
     end
     h = - h / N
 
-    return h / log(e.base, ℯ)
+    return h / log(ℯ, e.base)
 end
 entropy(est::Lord, args...) = entropy(Shannon(), est, args...)
 

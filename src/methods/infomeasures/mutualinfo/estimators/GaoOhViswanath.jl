@@ -67,7 +67,7 @@ function estimate(measure::MIShannon, est::GaoOhViswanath, x::VectorOrStateSpace
         (M - 1) * log(N) +
         log(bvₘs / ball_volume(dimension(joint))) -
         (1 / N) * sum(sum(log.(nₖ)) for nₖ in marginal_nₖs)
-    return mi / log(e.base, ℯ)
+    return mi / log(ℯ, e.base)
 end
 
 function marginal_inrangecount!(est::GaoOhViswanath, ns, xₘ, ds)

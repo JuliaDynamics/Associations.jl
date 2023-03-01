@@ -24,7 +24,7 @@ end
 function estimate(measure::CMIRenyiPoczos, est::PoczosSchneiderCMI, x, y, z)
     e = measure.e
     c = log(Q3(e, est, x, y, z)) / (e.q-1)
-    return c / log(e.base, ℯ)
+    return c / log(ℯ, e.base)
 end
 
 function Q3(e::EntropyDefinition, est::PoczosSchneiderCMI, x, y, z)

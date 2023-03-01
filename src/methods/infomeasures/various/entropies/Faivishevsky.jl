@@ -23,5 +23,5 @@ function entropy(e::Shannon, est::Faivishevsky, x::AbstractStateSpaceSet{D}) whe
     end
     f *= 1 / (N - 1)
     h = digamma(N) + ball_volume(D) + f
-    return h / log(e.base, ℯ)
+    return h / log(ℯ, e.base)
 end

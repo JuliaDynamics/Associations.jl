@@ -63,5 +63,5 @@ function estimate(measure::CMIShannon, est::FPVP, x, y, z)
     end
     condmi /= N
 
-    return condmi / log(e.base, ℯ)
+    return condmi / log(ℯ, e.base)
 end

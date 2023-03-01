@@ -108,5 +108,5 @@ function estimate(measure::MIShannon, est::GaoKannanOhViswanath, x, y)
     end
     h /= N
 
-    return h / log(e.base, ℯ)
+    return h / log(ℯ, e.base)
 end
