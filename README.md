@@ -5,27 +5,26 @@
 [![](https://img.shields.io/badge/docs-dev_(master)-blue.svg)](https://juliadynamics.github.io/CausalityTools.jl/dev/)
 [![codecov](https://codecov.io/gh/JuliaDynamics/CausalityTools.jl/branch/master/graph/badge.svg?token=0b71n6x6AP)](https://codecov.io/gh/JuliaDynamics/CausalityTools.jl)
 
-`CausalityTools.jl` provides methods for causal inference and detection of dynamical coupling based on time series.
+CausalityTools.jl is a package for quantifying associations and dynamical coupling
+between datasets, independence testing and causal inference.
 
-Check out the [documentation](https://juliadynamics.github.io/CausalityTools.jl/dev) for more information!
+All further information is provided in the
+[documentation](https://juliadynamics.github.io/CausalityTools.jl/dev), which you can either
+find online or build locally by running the `docs/make.jl` file.
 
-## Key tools
+## Key features
 
-- A easy-to-use framework for estimating information theoretic measures, such as transfer entropy, predictive asymmetry, generalized entropy and mutual information.
-- Convergent cross mapping, pairwise asymmetric inference, S-measure and joint distance distribution.
-- Surrogate data generation.
+- Association measures from conventional statistics, information theory and dynamical
+    systems theory, for example distance correlation, mutual information, transfer entropy,
+    convergent cross mapping and a lot more!
+- A dedicated API for independence testing, which comes with automatic compatibility with
+    every measure-estimator combination you can think of. For example, we offer the generic
+    `SurrogateTest`, which is fully compatible with
+    [TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl),
+    and the `LocalPermutationTest` for conditional indepencence testing.
+- A dedicated API for causal network inference based on these measures and independence
+    tests.
 
 ## Installation
 
-CausalityTools.jl is a registered julia package, you can therefore add the latest tagged release
-by running the following lines in the Julia console.
-
-```julia
-import Pkg; Pkg.add("CausalityTools")
-```
-
-For the latest development version of the package, add the package by referring directly to the GitHub repository.
-
-```julia
-import Pkg; Pkg.add(url="https://github.com/juliadynamics/CausalityTools.jl/", rev="master")
-```
+To install the package, run `import Pkg; Pkg.add("CausalityTools")`.

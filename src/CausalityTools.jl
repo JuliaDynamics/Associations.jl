@@ -1,7 +1,14 @@
+
 module CausalityTools
+    # Use the README as the module docs
+    @doc let
+        path = joinpath(dirname(@__DIR__), "README.md")
+        include_dependency(path)
+        read(path, String)
+    end CausalityTools
+
     using Reexport
 
-    # StateSpaceSets and embeddings.
     using StateSpaceSets
     using DelayEmbeddings: embed, genembed
     export embed, genembed
@@ -12,11 +19,7 @@ module CausalityTools
     export trajectory
     export DiscreteDynamicalSystem, ContinuousDynamicalSystem
     @reexport using StateSpaceSets
-
-    # Probabilities and entropies
     @reexport using ComplexityMeasures
-
-    # Null distributions
     @reexport using TimeseriesSurrogates
 
     include("core.jl")
@@ -24,7 +27,6 @@ module CausalityTools
     include("methods/crossmappings/crossmappings.jl")
     include("methods/closeness/closeness.jl")
     include("methods/correlation/correlation.jl")
-    #include("example_systems/ExampleSystems.jl")
 
     include("utils/utils.jl")
 

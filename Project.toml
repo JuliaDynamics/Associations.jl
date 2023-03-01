@@ -2,7 +2,7 @@ name = "CausalityTools"
 uuid = "5520caf5-2dd7-5c5d-bfcb-a00e56ac49f7"
 authors = ["Kristian Agasøster Haaga <kahaaga@gmail.com>", "Tor Einar Møller <temolle@gmail.com>", "George Datseris <datseris.george@gmail.com>"]
 repo = "https://github.com/kahaaga/CausalityTools.jl.git"
-version = "2.0.0"
+version = "2.0.1"
 
 [deps]
 Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
