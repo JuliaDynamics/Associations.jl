@@ -64,5 +64,5 @@ function estimate(measure::CMIShannon, est::FPVP, x, y, z)
     # The "unit" is nats.
     condmi /= N
 
-    return _convert_logunit(condmi, ℯ, base)
+    return _convert_logunit(condmi, ℯ, e.base)
 end

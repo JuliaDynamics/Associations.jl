@@ -78,5 +78,5 @@ function estimate(measure::MIShannon, est::GaussianMI, x, y)
         mi = 0.5 * log((det(Σx) * det(Σy)) / det(Σ))
     end
 
-    return convert_logunit(mi, ℯ, e.base)
+    return convert_logunit(mi, ℯ, measure.e.base)
 end
