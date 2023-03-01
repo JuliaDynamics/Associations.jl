@@ -364,7 +364,7 @@ function family2(α, n::Int)
 end
 
 function ifamily2(α; base = ℯ)
-    return (-0.5 * log(1 - α^2)) / log(base, ℯ)
+    return (-0.5 * log(1 - α^2)) / log(ℯ, base)
 end
 
 αs = 0.05:0.05:0.95
@@ -396,7 +396,7 @@ function ifamily3(α; base = ℯ)
     Σ = [7 -5 -1 -3; -5 5 -1 3; -1 -1 3 -1; -3 3 -1 2+α]
     Σx = Σ[1:2, 1:2]; Σy = Σ[3:4, 3:4]
     mi = 0.5*log(det(Σx) * det(Σy) / det(Σ))
-    return mi / log(base, ℯ)
+    return mi / log(ℯ, base)
 end
 
 function family3(α, n::Int)

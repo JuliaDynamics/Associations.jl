@@ -4,15 +4,6 @@
 CausalityTools
 ```
 
-## Quantifying associations
-
-`CausalityTools` is a Julia package that provides algorithms for detecting
-associations, dynamical influences and *causal inference* from data.
-The core function for quantifying associations is [`independence`](@ref),
-which performs either a parametric or nonparametric (conditional)
-[`IndependenceTest`](@ref) using some form of
-[association measure](@ref association_measure).
-
 ## Goals
 
 Causal inference, and quantification of association in general, is fundamental to
@@ -21,13 +12,22 @@ association measures in the scientific literature. However, beyond the most basi
 most methods aren't readily available for practical use. Most scientific papers don't
 provide code, which makes reproducing them difficult or impossible, without
 investing significant time and resources into deciphering and understanding the original
-papers to the point where an implementation is possible.
+papers to the point where an implementation is possible. To make reliable inferences,
+proper independence tests are also crucial.
 
 Our main goal with this package is to provide an easily extendible library of
-association measures, and an as-complete-as-possible set of their estimators.
+association measures, a as-complete-as-possible set of their estimators.
 We also want to lower the entry-point to the field of association
 quantification, independence testing and causal inference, by providing well-documented
 implementations of literature methods with runnable code examples.
+
+## Quantifying associations
+
+The core function for quantifying associations is [`independence`](@ref),
+which performs either a parametric or nonparametric (conditional)
+[`IndependenceTest`](@ref) using some form of
+[association measure](@ref association_measure). These tests, in turn, can be
+used with some [`GraphAlgorithm`](@ref) to infer causal graphs.
 
 ## Input data
 

@@ -123,7 +123,8 @@ function entropy(e::Renyi, est::LocalLikelihood, x)
     N = length(x)
     ρs = point_densities(est, x)
     ĴkLNN = sum(ρs .^ (e.q - 1)) / (bias(e, est, x) * N)
-    return (ĴkLNN / (e.q - 1) ) / log(e.base, ℯ)
+    h = ĴkLNN / (e.q - 1)
+    return _convert_logunit(h, ℯ, e.base)
 end
 
 function pt_in_unit_sphere(dim::Int)

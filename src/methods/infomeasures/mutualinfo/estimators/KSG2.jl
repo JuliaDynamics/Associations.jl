@@ -102,7 +102,6 @@ function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::Vec
     #@show all(ϵ_maxes .== ds)
     marginal_nₖs = StateSpaceSet(ns...)
 
-    #@show M
     mi = digamma(k) -
         # The commented-out term appears in Kraskov (2004), but that gives
         # erroneous estimates that do not align with what they show in the
@@ -113,8 +112,7 @@ function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::Vec
         (M-1) - #(M - 1) / k  -
         mean(sum(digamma.(nₖ)) for nₖ in marginal_nₖs) +
         (M - 1) * digamma(N)
-
-    return mi / log(e.base, ℯ)
+    return convert_logunit(mi, ℯ, e.base)
 end
 
 function marginal_inrangecount!(est::KraskovStögbauerGrassberger2, ns::Vector{Int},

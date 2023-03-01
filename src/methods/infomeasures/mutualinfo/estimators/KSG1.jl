@@ -78,7 +78,7 @@ function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::Vec
     mi = digamma(k) +
         (M - 1) * digamma(N) -
         mean(sum(digamma.(nₖ)) for nₖ in marginal_nₖs)
-    return mi / log(e.base, ℯ)
+    return convert_logunit(mi, ℯ, e.base)
 end
 const KSG1 = KraskovStögbauerGrassberger1
 

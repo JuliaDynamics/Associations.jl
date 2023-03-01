@@ -70,12 +70,13 @@ function estimate(measure::MIShannon, est::GaussianMI, x, y)
     if est.normalize
         Σ = fastcor(standardize(XY))
         σ = eigvals(Σ)
-        return -0.5 * sum(log(σᵢ) for σᵢ in σ) / log(measure.e.base, ℯ)
+        mi -0.5 * sum(log(σᵢ) for σᵢ in σ)
     else
         Σ = fastcor(XY)
         Σx = Σ[1:DX, 1:DX]
         Σy = Σ[DX+1:end, DX+1:end]
         mi = 0.5 * log((det(Σx) * det(Σy)) / det(Σ))
-        return mi
     end
+
+    return convert_logunit(mi, ℯ, measure.e.base)
 end

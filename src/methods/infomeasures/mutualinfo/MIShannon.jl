@@ -1,4 +1,6 @@
 using ComplexityMeasures: log_with_base
+using Accessors
+
 export MIShannon
 
 """
@@ -11,7 +13,6 @@ The Shannon mutual information ``I^S(X; Y)``.
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
 - Use with [`mutualinfo`](@ref) to compute the raw mutual information.
-
 
 ## Discrete definition
 
@@ -104,6 +105,24 @@ function estimate(measure::MIShannon, pxy::ContingencyMatrix{T, 2}) where {T}
 end
 
 function estimate(measure::MIShannon, est::ProbOrDiffEst, x, y)
-    HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
-    return HX + HY - HXY
+    # Due to inconsistent API in ComplexityMeasures.jl, we have to treat
+    # DifferentialEntropyEstimator here. Because all measures in this package
+    # have their own `base` field, it will conflict with `est.base` for
+    # `DifferentialEntropyEstimator`s. In these cases, we use `measure.base`,
+    # and override the estimator base, by simply creating a copy of the
+    # estimator with one field modified.
+    if est isa DifferentialEntropyEstimator && :base in fieldnames(typeof(est))
+        if est.base != measure.e.base
+            mb = measure.e.base
+            eb = est.base
+            modified_est = Accessors.@set est.base = measure.e.base
+            HX, HY, HXY = marginal_entropies_mi3h(measure, modified_est, x, y)
+        else
+            HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
+        end
+    else
+        HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
+    end
+    mi = HX + HY - HXY
+    return mi
 end

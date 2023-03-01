@@ -30,8 +30,8 @@ function estimate(measure::CMIShannon, est::GaussianCMI, x, y, z)
     YZ = StateSpaceSet(y, z)
 
     mi_est = GaussianMI()
-    MI_x_yz = estimate(MIShannon(), mi_est, x, YZ)
-    MI_x_z = estimate(MIShannon(), mi_est, x, z)
+    MI_x_yz = estimate(MIShannon(measure.e), mi_est, x, YZ)
+    MI_x_z = estimate(MIShannon(measure.e), mi_est, x, z)
 
-    return (MI_x_yz - MI_x_z) / log(measure.e.base, ℯ)
+    return MI_x_yz - MI_x_z
 end

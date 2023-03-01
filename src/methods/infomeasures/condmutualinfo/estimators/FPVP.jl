@@ -61,7 +61,8 @@ function estimate(measure::CMIShannon, est::FPVP, x, y, z)
         condmi -= digamma(inrangecount(tree_yz, YZ[i], dᵢ))
         condmi += digamma(inrangecount(tree_z, Z[i], dᵢ))
     end
+    # The "unit" is nats.
     condmi /= N
 
-    return condmi / log(e.base, ℯ)
+    return _convert_logunit(condmi, ℯ, e.base)
 end

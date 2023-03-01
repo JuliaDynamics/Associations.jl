@@ -9,7 +9,7 @@ The discrete Rényi mutual information from Sarbu (2014)[^Sarbu2014].
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
 
 ## Description
 
@@ -64,7 +64,7 @@ function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}
     if mi == 0
         return 0.0
     else
-        return (1 / (q - 1) * log(mi)) / log(e.base, ℯ)
+        return _convert_logunit(1 / (q - 1) * log(mi), ℯ, e.base)
     end
 end
 

@@ -39,7 +39,7 @@ function entropy(d::Normal, x::AbstractStateSpaceSet{D}; debias = true, base = 2
     else
         h *= log((2*π*ℯ)^D * det(Σ))
     end
-    return h / log(base, ℯ)
+    return _convert_logunit(h, ℯ, e.base)
 end
 
 

@@ -29,7 +29,7 @@ end
 
 function entropy(e::Shannon, est::LeonenkoProzantoSavani, x::AbstractStateSpaceSet{D}) where D
     h = Î(1.0, est, x) # measured in nats
-    return h / log(e.base, ℯ) # convert to desired base.
+    return _convert_logunit(h, ℯ, e.base)
 end
 
 function entropy(e::Renyi, est::LeonenkoProzantoSavani, x::AbstractStateSpaceSet{D}) where D
@@ -38,7 +38,7 @@ function entropy(e::Renyi, est::LeonenkoProzantoSavani, x::AbstractStateSpaceSet
     else
         h = log(Î(e.q, est, x)) / (1 - e.q) # measured in nats
     end
-    return h / log(e.base, ℯ) # convert to desired base.
+    return _convert_logunit(h, ℯ, e.base)
 end
 
 function entropy(e::Tsallis, est::LeonenkoProzantoSavani, x::AbstractStateSpaceSet{D}) where D
@@ -47,7 +47,7 @@ function entropy(e::Tsallis, est::LeonenkoProzantoSavani, x::AbstractStateSpaceS
     else
         h = (Î(e.q, est, x) - 1) / (1 - e.q) # measured in nats
     end
-    return h / log(e.base, ℯ) # convert to desired base.
+    return _convert_logunit(h, ℯ, e.base)
 end
 
 # TODO: this gives nan??
@@ -80,7 +80,7 @@ function entropy(e::Renyi, 𝒩::MvNormal; base = 2)
         D = length(𝒩.μ)
         h = dentropy(𝒩) - (D / 2) * (1 + log(q) / (1 - q))
     end
-    return h / log(base, ℯ)
+    return _convert_logunit(h, ℯ, base)
 end
 
 # Eq. 15 in Nielsen & Nock (2011); https://arxiv.org/pdf/1105.3259.pdf
@@ -90,5 +90,5 @@ function entropy(e::Tsallis, 𝒩::MvNormal; base = 2)
     D = length(𝒩.μ)
     hr = entropy(Renyi(q = q), 𝒩; base)
     h = (exp((1 - q) * hr) - 1) / (1 - q)
-    return h / log(base, ℯ)
+    return _convert_logunit(h, ℯ, base)
 end
