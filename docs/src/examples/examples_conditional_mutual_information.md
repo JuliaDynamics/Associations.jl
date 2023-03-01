@@ -139,6 +139,8 @@ taking the sum of entropy terms.
 #### [`CMIShannon`](@ref) with [`Kraskov`](@ref)
 
 ```@example
+using CausalityTools
+using Distributions
 n = 1000
 # A chain X → Y → Z
 x = rand(Epanechnikov(0.5, 1.0), n)
@@ -157,6 +159,8 @@ taking the sum of entropy terms.
 #### [`CMIShannon`](@ref) with [`ValueHistogram`](@ref)
 
 ```@example
+using CausalityTools
+using Distributions
 n = 1000
 # A chain X → Y → Z
 x = rand(Epanechnikov(0.5, 1.0), n)
