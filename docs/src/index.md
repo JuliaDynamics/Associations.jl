@@ -1,8 +1,8 @@
 ![CausalityTools.jl static logo](assets/logo-large.png)
 
-!!! info
-    You are reading the development version of the documentation of
-    CausalityTools.jl that will become version 2.0.
+```@docs
+CausalityTools
+```
 
 ## Quantifying associations
 
@@ -25,9 +25,9 @@ papers to the point where an implementation is possible.
 
 Our main goal with this package is to provide an easily extendible library of
 association measures, and an as-complete-as-possible set of their estimators.
-We also want to lower the entry-point to the field of causal inference and association
-quantification, by providing well-documented implementations of literature methods
-with runnable code examples.
+We also want to lower the entry-point to the field of association
+quantification, independence testing and causal inference, by providing well-documented
+implementations of literature methods with runnable code examples.
 
 ## Input data
 
