@@ -99,5 +99,5 @@ function estimate(measure::TEShannon, est::Lindner,
 
     # Convert to target base *after* digamma computations, because the digamma function
     # is a function of the natural log.
-    return _convert_logunit(te, ℯ, e.base)
+    return _convert_logunit(te, ℯ, measure.e.base)
 end

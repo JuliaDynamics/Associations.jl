@@ -64,7 +64,7 @@ function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}
     if mi == 0
         return 0.0
     else
-        return _convert_logunit(1 / (q - 1) * log(mi), ℯ, base)
+        return _convert_logunit(1 / (q - 1) * log(mi), ℯ, e.base)
     end
 end
 

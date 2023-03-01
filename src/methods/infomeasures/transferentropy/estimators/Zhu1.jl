@@ -95,7 +95,7 @@ function estimate(measure::TEShannon, est::Zhu1, S::AbstractStateSpaceSet, T::Ab
     te = mean_volumes(vJ, vST, vTT⁺, vT, N) +
         mean_digamma(kST, kTT⁺, kT, k, N, DS, DT, DT⁺)
     # Convert to target unit *after* computations, which all use natural logs.
-    return _convert_logunit(te, ℯ, e.base)
+    return _convert_logunit(te, ℯ, measure.e.base)
 end
 
 function volumes(x::AbstractStateSpaceSet, nn_idxs, N::Int)
