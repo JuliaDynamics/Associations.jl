@@ -63,7 +63,8 @@ function estimate(
             mi += pxyᵢⱼ^q / (px[i]^(q - 1) * py[j]^(q - 1))
         end
     end
-    return (1 / (q - 1) * (1 - mi) / (1-q)) / log(ℯ, e.base)
+    mi = (1 / (q - 1) * (1 - mi) / (1-q))
+    return _convert_logunit(mi, ℯ, e.base)
 end
 
 function estimate(measure::MITsallisFuruichi, est::ProbabilitiesEstimator, x, y)

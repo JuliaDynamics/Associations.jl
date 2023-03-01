@@ -39,6 +39,6 @@
 
 #     mi /= N
 
-#     return mi / log(ℯ, base)
+#     return _convert_logunit(mi, ℯ, e.base)
 
 # end

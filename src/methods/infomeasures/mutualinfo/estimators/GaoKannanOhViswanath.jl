@@ -80,7 +80,7 @@ function estimate(measure::MIShannon, est::GaoKannanOhViswanath, x, y)
     ds_x = last.(bulksearch(tree_x, X, NeighborNumber(k), Theiler(w))[2])
     ds_y = last.(bulksearch(tree_y, Y, NeighborNumber(k), Theiler(w))[2])
 
-    h = 0.0
+    mi = 0.0
     for i = 1:N
         # The notation for ρ_{i, xy} in the paper in unclear. They claim in the paper that
         # the estimator reduces to the KSG1 estimator when k̂ == k, i.e. when Therefore,
@@ -95,7 +95,7 @@ function estimate(measure::MIShannon, est::GaoKannanOhViswanath, x, y)
             dmax = ds_joint[i]
             k̂ = k
         end
-        h += digamma(k̂) + log(N)
+        mi += digamma(k̂) + log(N)
 
         # They claim in the paper that the estimator reduces to the KSG1 estimator when
         # k̂ == k. However, it only does so when using `digamma`. Their estimator uses
@@ -103,10 +103,10 @@ function estimate(measure::MIShannon, est::GaoKannanOhViswanath, x, y)
         # inrangecount includes the point itself, so we don't need to add 1 inside log
         nx = inrangecount(tree_x, X[i], dmax) - 1
         ny = inrangecount(tree_y, Y[i], dmax) - 1
-        h -= log(nx)
-        h -= log(ny)
+        mi -= log(nx)
+        mi -= log(ny)
     end
-    h /= N
-
-    return h / log(ℯ, e.base)
+    # The "unit" is nats.
+    mi /= N
+    return _convert_logunit(mi, ℯ, e.base)
 end

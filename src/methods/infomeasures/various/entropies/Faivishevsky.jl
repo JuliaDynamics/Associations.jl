@@ -22,6 +22,7 @@ function entropy(e::Shannon, est::Faivishevsky, x::AbstractStateSpaceSet{D}) whe
         end
     end
     f *= 1 / (N - 1)
+    # The unit is nats
     h = digamma(N) + ball_volume(D) + f
-    return h / log(ℯ, e.base)
+    return _convert_logunit(h, ℯ, e.base)
 end

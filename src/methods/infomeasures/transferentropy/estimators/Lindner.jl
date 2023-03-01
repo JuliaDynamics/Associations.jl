@@ -94,9 +94,10 @@ function estimate(measure::TEShannon, est::Lindner,
         te += digamma(n_T[i] + 1) - digamma(n_TT⁺[i] + 1) - digamma(n_ST[i])
     end
     te /= N
+    # The "unit" is nats
     te += digamma(k)
 
     # Convert to target base *after* digamma computations, because the digamma function
     # is a function of the natural log.
-    return te / log(ℯ, base)
+    return _convert_logunit(te, ℯ, e.base)
 end

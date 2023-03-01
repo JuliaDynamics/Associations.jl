@@ -53,7 +53,8 @@ function estimate(measure::CMIShannon, est::Rahimzamani, x, y, z)
         condmi -= log(inrangecount(tree_yz, YZ[i], dmax))
         condmi += log(inrangecount(tree_z, Z[i], dmax))
     end
+    # The "unit" is nats
     condmi /= N
 
-    return condmi / log(ℯ, e.base)
+    return _convert_logunit(condmi, ℯ, e.base)
 end

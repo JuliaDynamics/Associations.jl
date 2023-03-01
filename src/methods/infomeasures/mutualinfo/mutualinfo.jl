@@ -119,6 +119,12 @@ compatible with multivariate data. See examples
 [here](@ref example_mi_DifferentialEntropyEstimator). If `measure` is not given, then the
 default is `MIShannon()`.
 
+!!! note
+    [`DifferentialEntropyEstimator`](@ref)s have their own `base` field which is not
+    used here. Instead, this method creates a copy of `est` internally,
+    where `est.base` is replaced by `measure.e.base`. Therefore, use `measure` to
+    control the "unit" of the mutual information.
+
 ## Estimators
 
 Some [`MutualInformation`](@ref) measures can be computed using a [`DifferentialEntropyEstimator`](@ref),

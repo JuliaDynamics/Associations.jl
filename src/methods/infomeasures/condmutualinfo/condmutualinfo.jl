@@ -119,6 +119,12 @@ The [`DifferentialEntropyEstimator`](@ref) `est` must must support multivariate 
 No bias correction is performed. If `measure` is not given, then the default is
 `CMIShannon()`.
 
+!!! note
+    [`DifferentialEntropyEstimator`](@ref)s have their own `base` field which is not
+    used here. Instead, this method creates a copy of `est` internally,
+    where `est.base` is replaced by `measure.e.base`. Therefore, use `measure` to
+    control the "unit" of the mutual information.
+
 ## Estimators
 
 | Estimator                        | Principle         | [`CMIShannon`](@ref) |

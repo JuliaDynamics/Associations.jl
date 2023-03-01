@@ -50,7 +50,7 @@ function estimate(def::MIShannonDifferential, est::Evans, x::VectorOrStateSpaceS
     #@show -digamma(k)
     #@show digamma(N)
     #@show -(mi / N)
-    return I / log(ℯ, e.base)
+    return _convert_logunit(I, ℯ, e.base)
 end
 mutualinfo(est::Evans, args...; base = 2, kwargs...) =
     mutualinfo(Shannon(; base), est, args...; kwargs...)

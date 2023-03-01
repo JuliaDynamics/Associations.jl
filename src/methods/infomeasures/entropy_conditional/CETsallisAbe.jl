@@ -48,7 +48,7 @@ function estimate(measure::CETsallisAbe, c::ContingencyMatrix{T, 2}) where {T}
     ce = (hjoint - hy) / (1 + (1 - q)*hy)
 
     if q == 1 # if shannon, normalize
-        return ce / log(ℯ, base)
+        return _convert_logunit(ce, ℯ, base)
     else
         return ce
     end
@@ -61,7 +61,7 @@ function estimate(measure::CETsallisAbe, est::ProbabilitiesEstimator, x, y)
     HY, HXY = marginal_entropies_ce2h(measure, est, x, y)
     ce = (HXY - HY) / (1 + (1 - q)*HY)
     if q == 1 # if shannon, normalize
-        return ce / log(ℯ, base)
+        return _convert_logunit(ce, ℯ, e.base)
     else
         return ce
     end

@@ -127,7 +127,8 @@ function entropy_joint(measure::JointEntropyShannon, c::ContingencyMatrix{T, 2})
     for pij in c
         h += pij * log(pij)
     end
-    return (-h) / log(ℯ, base)
+    h = -h
+    return _convert_logunit(h, ℯ, base)
 end
 
 
@@ -142,7 +143,8 @@ function entropy_joint(measure::JointEntropyTsallis, c::ContingencyMatrix{T, 2})
     for pij in c
         h += pij^q * logq(pij, q)
     end
-    return (-h) / log(ℯ, base)
+    h = -h
+    return _convert_logunit(h, ℯ, base)
 end
 
 
@@ -153,5 +155,6 @@ function entropy_joint(measure::JointEntropyRenyi, c::ContingencyMatrix{T, 2}) w
     for pij in c
         h += pij^q * logq(pij, q)
     end
-    return (-h) / log(ℯ, base)
+    h = -h
+    return _convert_logunit(h, ℯ, base)
 end

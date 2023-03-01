@@ -23,8 +23,9 @@ end
 
 function estimate(measure::CMIRenyiPoczos, est::PoczosSchneiderCMI, x, y, z)
     e = measure.e
+    # The "unit" is nats.
     c = log(Q3(e, est, x, y, z)) / (e.q-1)
-    return c / log(ℯ, e.base)
+    return _convert_logunit(c, ℯ, base)
 end
 
 function Q3(e::EntropyDefinition, est::PoczosSchneiderCMI, x, y, z)

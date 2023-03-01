@@ -109,9 +109,9 @@ function entropy(e::Shannon, est::Lord, x::AbstractStateSpaceSet{D}) where {D}
             h += log(kᵢ * γ / (f * ϵᵢ^D * prod(Σ ./ σ₁)) )
         end
     end
+    # The "unit" is nats
     h = - h / N
-
-    return h / log(ℯ, e.base)
+    return _convert_logunit(h, ℯ, e.base)
 end
 entropy(est::Lord, args...) = entropy(Shannon(), est, args...)
 

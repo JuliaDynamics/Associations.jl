@@ -50,7 +50,7 @@ function estimate(measure::CMIShannon, est::MesnerShalisi, x, y, z)
         condmi -= log(inrangecount(tree_yz, YZ[i], dmax + eps()))
         condmi += log(inrangecount(tree_z, Z[i], dmax + eps()))
     end
+    # The "unit" is nats.
     condmi /= N
-
-    return condmi / log(e.base, ℯ)
+    return _convert_logunit(condmi, ℯ, base)
 end

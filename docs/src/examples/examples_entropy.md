@@ -35,7 +35,7 @@ using Random; rng = MersenneTwister(12345678)
 using CairoMakie
 
 analytical_entropy(; d::Int, r, base = 2) = 
-    0.5*log(det(2*pi*ℯ*diagm(repeat([r], d)))) / log(base, ℯ) # convert to desired base
+    0.5*log(det(2*pi*ℯ*diagm(repeat([r], d)))) / log(ℯ, base) # convert to desired base
 
 function mvnormal_entropies(estimators, Ls; 
         d = 3,
