@@ -1,8 +1,9 @@
 # Changelog
 
-## 2.0.1
+## 2.1
 
 - Updated readme.
+- Fixed bug related to `DifferentialEntropyEstimator` "unit" conversion.
 
 ## 2.0.0
 
