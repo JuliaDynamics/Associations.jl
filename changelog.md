@@ -5,7 +5,7 @@
 - Updated readme.
 - Fixed bug related to `DifferentialEntropyEstimator` "unit" conversion.
 
-## 2.0.0
+## 2.0
 
 The entire package has been completely redesigned. Previous methods are deprecated,
 and will disappear completely in a v2.X release.
