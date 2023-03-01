@@ -164,7 +164,7 @@ or a mixture of both. Typically, these estimators apply bias correction.
 | [`GaoOhViswanath`](@ref)       | Continuous |         ✓          |
 """
 function mutualinfo(measure::MIShannon, est::MutualInformationEstimator, x, y)
-    return estimate(MIShannon(), est, x, y)
+    return estimate(MIShannon(measure.e), est, x, y)
 end
 
 # Internal method for compatibility with `independence`

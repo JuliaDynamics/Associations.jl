@@ -113,8 +113,7 @@ function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::Vec
         (M-1) - #(M - 1) / k  -
         mean(sum(digamma.(nₖ)) for nₖ in marginal_nₖs) +
         (M - 1) * digamma(N)
-
-    return mi / log(e.base, ℯ)
+    return mi / log(ℯ, e.base)
 end
 
 function marginal_inrangecount!(est::KraskovStögbauerGrassberger2, ns::Vector{Int},
