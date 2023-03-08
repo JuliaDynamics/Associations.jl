@@ -100,28 +100,31 @@ function select_parents(alg::OCE, τs, js, 𝒫s, x, i::Int; verbose = false)
     ###################################################################
     # 1. Can we find a significant pairwise association?
     significant_pairwise = select_first_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose)
-    # 2. Continue until there are no more significant conditional pairwise associations
-    significant_cond = true
-    k = 0
-    verbose && println("Conditional tests")
-    while significant_cond
-        k += 1
-        significant_cond = select_conditional_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose)
-    end
 
-    ###################################################################
-    # Backward elimination
-    ###################################################################
-    bw_significant = true
-    k = 0
-    M = length(parents.parents)
-    verbose && println("Backwards elimination")
-    k = 1
-    while length(parents.parents) >= 1 && k < length(parents.parents)
-        verbose && println("\tk=$k, length(parents) = $(length(parents.parents))")
-        bw_significant = backwards_eliminate!(parents, alg, xᵢ, k; verbose)
-        if bw_significant
+    if significant_pairwise
+        # 2. Continue until there are no more significant conditional pairwise associations
+        significant_cond = true
+        k = 0
+        verbose && println("Conditional tests")
+        while significant_cond
             k += 1
+            significant_cond = select_conditional_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose)
+        end
+
+        ###################################################################
+        # Backward elimination
+        ###################################################################
+        bw_significant = true
+        k = 0
+        M = length(parents.parents)
+        verbose && println("Backwards elimination")
+        k = 1
+        while length(parents.parents) >= 1 && k < length(parents.parents)
+            verbose && println("\tk=$k, length(parents) = $(length(parents.parents))")
+            bw_significant = backwards_eliminate!(parents, alg, xᵢ, k; verbose)
+            if bw_significant
+                k += 1
+            end
         end
     end
     return parents
@@ -163,6 +166,7 @@ end
 
 function select_conditional_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose)
     P = StateSpaceSet(parents.parents...)
+
     M = length(𝒫s)
     Is = zeros(M)
     pvals = zeros(M)
