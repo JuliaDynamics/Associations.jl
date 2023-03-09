@@ -15,9 +15,10 @@ The optimal causation entropy (OCE) algorithm for causal discovery (Sun et al.,
 The OCE algorithm has three steps to determine the parents of a variable `xᵢ`.
 1. Perform pairwise association tests using `utest` and select the variable `xⱼ(-τ)`
     that has the highest significant (i.e. with associated p-value below `α`)
-    association with `xᵢ(0)`.
+    association with `xᵢ(0)`. Assign it to the set of selected parents `P`.
 2. Perform conditional independence tests using `ctest`, finding the parent
-    `Pₖ` that has the highest association with `xᵢ` given the already selected parents.
+    `Pₖ` that has the highest association with `xᵢ` given the already selected parents,
+    and add it to `P`.
     Repeat until no more variables with significant association are found.
 3. Backwards elimination of parents `Pₖ` of `xᵢ(0)` for which `xᵢ(0) ⫫ Pₖ | P - {Pₖ}`,
     where `P` is the set of parent nodes found in the previous steps.
