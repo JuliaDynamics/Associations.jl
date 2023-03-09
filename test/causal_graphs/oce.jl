@@ -1,13 +1,12 @@
 using CausalityTools
 using Test
-using Random
+using StableRNGs
 
-rng = MersenneTwister(1234)
+rng = StableRNG(123)
 sys = system(Logistic4Chain(; rng))
-x, y, z, w = columns(trajectory(sys, 150, Ttr = 1000))
-X = [x, y, z, w]
+X = columns(trajectory(sys, 350, Ttr = 10000))
 
-parents = infer_graph(OCE(τmax = 1), X)
+parents = infer_graph(OCE(τmax = 2), X)
 @test all(x ∉ parents[1].parents_js for x in (2, 3, 4))
 @test all(x ∉ parents[2].parents_js for x in (3, 4))
 @test all(x ∉ parents[3].parents_js for x in (4))
