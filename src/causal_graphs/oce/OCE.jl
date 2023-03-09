@@ -68,7 +68,6 @@ function select_parents(alg::OCE, x; verbose = false)
     end
     # Find the parents of each variable.
     parents = [select_parents(alg, τs, js, 𝒫s, x, k; verbose) for k in eachindex(x)]
-
     return parents
 end
 
@@ -80,15 +79,21 @@ Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT}
     parents_τs::PT = Vector{Int}(undef, 0)
 end
 
+function selected(o::OCESelectedParents)
+    js, τs = o.parents_js, o.parents_τs
+    @assert length(js) == length(τs)
+    return join(["x$(js[i])($(τs[i]))" for i in eachindex(js)], ", ")
+end
+
+
 function Base.show(io::IO, x::OCESelectedParents)
     s = ["x$(x.parents_js[i])($(x.parents_τs[i]))" for i in eachindex(x.parents)]
-    all = "Parents for x$(x.i)(0): $(join(s, ", "))"
+    all = "x$(x.i)(0) ← $(join(s, ", "))"
     show(io, all)
 end
 
 function select_parents(alg::OCE, τs, js, 𝒫s, x, i::Int; verbose = false)
-    verbose && println("Finding parents for variable x$i(0)")
-    idxs_remaining = 1:length(𝒫s) |> collect
+    verbose && println("\nInferring parents for x$i(0)...")
     # Account for the fact that the `𝒫ⱼ ∈ 𝒫s` are embedded. This means that some points are
     # lost from the `xᵢ`s.
     xᵢ = @views x[i][alg.τmax+1:end]
@@ -99,31 +104,37 @@ function select_parents(alg::OCE, τs, js, 𝒫s, x, i::Int; verbose = false)
     # Forward search
     ###################################################################
     # 1. Can we find a significant pairwise association?
-    significant_pairwise = select_first_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose)
+    verbose && println("˧ Querying pairwise associations...")
+
+    significant_pairwise = select_first_parent!(parents, alg, τs, js, 𝒫s, xᵢ, i; verbose)
 
     if significant_pairwise
+        verbose && println("˧ Querying new variables conditioned on already selected variables...")
         # 2. Continue until there are no more significant conditional pairwise associations
         significant_cond = true
         k = 0
-        verbose && println("Conditional tests")
         while significant_cond
             k += 1
-            significant_cond = select_conditional_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose)
+            significant_cond = select_conditional_parent!(parents, alg, τs, js, 𝒫s, xᵢ, i; verbose)
         end
 
         ###################################################################
         # Backward elimination
         ###################################################################
-        bw_significant = true
-        k = 0
-        M = length(parents.parents)
-        verbose && println("Backwards elimination")
-        k = 1
-        while length(parents.parents) >= 1 && k < length(parents.parents)
-            verbose && println("\tk=$k, length(parents) = $(length(parents.parents))")
-            bw_significant = backwards_eliminate!(parents, alg, xᵢ, k; verbose)
-            if bw_significant
-                k += 1
+        if !(length(parents.parents) >= 2)
+            return parents
+        end
+
+        verbose && println("˧ Backwards elimination...")
+
+        eliminate = true
+        ks_remaining = Set(1:length(parents.parents))
+        while eliminate && length(ks_remaining) >= 2
+            for k in ks_remaining
+                eliminate = backwards_eliminate!(parents, alg, xᵢ, k; verbose)
+                if eliminate
+                    filter!(x -> x == k, ks_remaining)
+                end
             end
         end
     end
@@ -131,8 +142,12 @@ function select_parents(alg::OCE, τs, js, 𝒫s, x, i::Int; verbose = false)
 end
 
 # Pairwise associations
-function select_first_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose = false)
+function select_first_parent!(parents, alg, τs, js, 𝒫s, xᵢ, i; verbose = false)
     M = length(𝒫s)
+
+    if isempty(𝒫s)
+        return false
+    end
 
     # Association measure values and the associated p-values
     Is, pvals = zeros(M), zeros(M)
@@ -143,7 +158,8 @@ function select_first_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ
     end
 
     if all(pvals .>= alg.α)
-        verbose && println("\tCouldn't find any significant pairwise associations.")
+        s = ["x$i(0) ⫫ x$j(t$τ) | ∅)" for (τ, j) in zip(τs, js)]
+        verbose && println("\t$(join(s, "\n\t"))")
         return false
     end
     # Select the variable that has the highest significant association with xᵢ.
@@ -152,21 +168,27 @@ function select_first_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ
     idx = findfirst(x -> x == Imax, Is)
 
     if Is[idx] > 0
-        verbose && println("\tFound significant pairwise association with: x$(js[idx])($(τs[idx]))")
+        verbose && println("\tx$i(0) !⫫ x$(js[idx])($(τs[idx])) | ∅")
         push!(parents.parents, 𝒫s[idx])
         push!(parents.parents_js, js[idx])
         push!(parents.parents_τs, τs[idx])
-        deleteat!(idxs_remaining, idx)
+        deleteat!(𝒫s, idx)
+        deleteat!(js, idx)
+        deleteat!(τs, idx)
         return true
     else
-        verbose && println("\tCouldn't find any significant pairwise associations.")
+        s = ["x$i(0) ⫫ x$j($τ) | ∅)" for (τ, j) in zip(τs, js)]
+        verbose && println("\t$(join(s, "\n\t"))")
         return false
     end
 end
 
-function select_conditional_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s, xᵢ; verbose)
-    P = StateSpaceSet(parents.parents...)
+function select_conditional_parent!(parents, alg, τs, js, 𝒫s, xᵢ, i; verbose)
+    if isempty(𝒫s)
+        return false
+    end
 
+    P = StateSpaceSet(parents.parents...)
     M = length(𝒫s)
     Is = zeros(M)
     pvals = zeros(M)
@@ -178,21 +200,27 @@ function select_conditional_parent!(parents, idxs_remaining, alg, τs, js, 𝒫s
     # Select the variable that has the highest significant association with xᵢ.
     # "Significant" means a p-value strictly less than the significance level α.
     if all(pvals .>= alg.α)
-        verbose && println("\tCouldn't find any significant pairwise associations.")
+        s = ["x$i(0) ⫫ x$j($τ) | $(selected(parents))" for (τ, j) in zip(τs, js)]
+        verbose && println("\t$(join(s, "\n\t"))")
         return false
     end
     Imax = maximum(Is[pvals .< alg.α])
     idx = findfirst(x -> x == Imax, Is)
 
     if Is[idx] > 0
-        verbose && println("\tSignificant conditional association with: x$(js[idx])($(τs[idx]))")
-        push!(parents.parents, 𝒫s[idxs_remaining[idx]])
-        push!(parents.parents_js, js[idxs_remaining[idx]])
-        push!(parents.parents_τs, τs[idxs_remaining[idx]])
-        deleteat!(idxs_remaining, idx)
+        τ = τs[idx]
+        j = js[idx]
+        verbose && println("\tx$i(0) !⫫ x$j($τ) | $(selected(parents))")
+        push!(parents.parents, 𝒫s[idx])
+        push!(parents.parents_js, js[idx])
+        push!(parents.parents_τs, τs[idx])
+        deleteat!(𝒫s, idx)
+        deleteat!(τs, idx)
+        deleteat!(js, idx)
         return true
     else
-        verbose && println("\tCouldn't find any significant conditional associations.")
+        s = ["x$i(1) ⫫ x$j($τ) | $(selected(parents)))" for (τ, j) in zip(τs, js)]
+        verbose && println("\t$(join(s, "\n\t"))")
         return false
     end
 end
@@ -205,17 +233,25 @@ function backwards_eliminate!(parents, alg, xᵢ, k; verbose = false)
     test = independence(alg.ctest, xᵢ, Pj, remaining)
     τ, j = parents.parents_τs[k], parents.parents_js[k]
     I = test.m
-    # If p-value >= α, then we can't reject the null, i.e. the statistic I is, in
-    # the frequentist hypothesis testingworld, indistringuishable from zero.
+    # If p-value >= α, then we can't reject the null, i.e. the statistic I is
+    # indistinguishable from zero, so we claim independence.
     if test.pvalue >= alg.α
-        verbose && println("\tEliminating k = $k")
+        τ = parents.parents_τs[k]
+        j = parents.parents_τs[j]
+        s = join(["x$(js[i])($(τs[i]))" for i in idxs], ", ")
+        r = "Removing x$(js[k])($(τs[k])) from parent set"
+        verbose && println("\tx$j($τ) ⫫ x$(js[k])($(τs[k])) | $s → $r")
         deleteat!(parents.parents, k)
         deleteat!(parents.parents_js, k)
         deleteat!(parents.parents_τs, k)
-        return false
+        return true # a variable was removed, so we decrement `k_remaining` in parent function
     else
-        verbose && println("\tpvalue(test)=$(pvalue(test)) > alg.α = $(alg.α)")
-        verbose && println("\tNot eliminating anything")
-        return true
+        idxs = setdiff(1:M, k)
+        τs = parents.parents_τs
+        js = parents.parents_js
+        s = join(["x$(js[i])($(τs[i]))" for i in idxs], ", ")
+        r = "Keeping x$(js[k])($(τs[k])) in parent set"
+        verbose && println("\tx$j($τ) !⫫ x$(js[k])($(τs[k])) | $s → $r")
+        return false
     end
 end
