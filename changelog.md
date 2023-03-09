@@ -2,6 +2,8 @@
 
 ## 2.1
 
+- Bugfix for `OCE` for certain conditional variable cases.
+- Improve docstring for `OCE`.
 - Updated readme.
 - Fixed bug related to `DifferentialEntropyEstimator` "unit" conversion.
 
