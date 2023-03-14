@@ -82,5 +82,6 @@ end
 include("parametric/parametric.jl")
 include("local_permutation/LocalPermutationTest.jl")
 include("surrogate/SurrogateTest.jl")
+include("asymmetry/AsymmetryTest.jl")
 # TODO: rename/find suitable generic name before including
 # include("correlation/correlation.jl). Perhaps `ParametricTest`?
