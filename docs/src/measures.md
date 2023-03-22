@@ -2,29 +2,30 @@
 
 ## Overview
 
-| Type                   | Measure                               | Pairwise | Conditional | Function version                 |
-| ---------------------- | ------------------------------------- | :------: | :---------: | -------------------------------- |
-| Correlation            | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      | [`pearson_correlation`](@ref)    |
-| Correlation            | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      | [`distance_correlation`](@ref)   |
-| Closeness              | [`SMeasure`](@ref)                    |    ✓    |     ✖      | [`s_measure`](@ref)              |
-| Closeness              | [`HMeasure`](@ref)                    |    ✓    |     ✖      | [`h_measure`](@ref)              |
-| Closeness              | [`MMeasure`](@ref)                    |    ✓    |     ✖      | [`m_measure`](@ref)              |
-| Closeness (ranks)      | [`LMeasure`](@ref)                    |    ✓    |     ✖      | [`l_measure`](@ref)              |
-| Closeness              | [`JointDistanceDistribution`](@ref)   |    ✓    |     ✖      | [`jdd`](@ref)                    |
-| Cross-mapping          | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      | [`crossmap`](@ref)               |
-| Cross-mapping          | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      | [`crossmap`](@ref)               |
-| Conditional recurrence | [`Recurrence`](@ref)                  |    ✓    |     ✖      | [`conditional_recurrence`](@ref) |
-| Shared information     | [`MIShannon`](@ref)                   |    ✓    |     ✖      | [`mutualinfo`](@ref)             |
-| Shared information     | [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      | [`mutualinfo`](@ref)             |
-| Shared information     | [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      | [`mutualinfo`](@ref)             |
-| Shared information     | [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      | [`mutualinfo`](@ref)             |
-| Shared information     | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      | [`partial_correlation`](@ref)    |
-| Shared information     | [`CMIShannon`](@ref)                  |    ✖    |     ✓      | [`condmutualinfo`](@ref)         |
-| Shared information     | [`CMIRenyiSarbu`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)         |
-| Shared information     | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)         |
-| Information transfer   | [`TEShannon`](@ref)                   |    ✓    |     ✓      | [`transferentropy`](@ref)        |
-| Information transfer   | [`TERenyiJizba`](@ref)                |    ✓    |     ✓      | [`transferentropy`](@ref)        |
-| Information asymmetry  | [`PA`](@ref)                          |    ✓    |     ✓      | [`asymmetry`](@ref)              |
+| Type                   | Measure                               | Pairwise | Conditional | Function version               |
+| ---------------------- | ------------------------------------- | :------: | :---------: | ------------------------------ |
+| Correlation            | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      | [`pearson_correlation`](@ref)  |
+| Correlation            | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      | [`distance_correlation`](@ref) |
+| Closeness              | [`SMeasure`](@ref)                    |    ✓    |     ✖      | [`s_measure`](@ref)            |
+| Closeness              | [`HMeasure`](@ref)                    |    ✓    |     ✖      | [`h_measure`](@ref)            |
+| Closeness              | [`MMeasure`](@ref)                    |    ✓    |     ✖      | [`m_measure`](@ref)            |
+| Closeness (ranks)      | [`LMeasure`](@ref)                    |    ✓    |     ✖      | [`l_measure`](@ref)            |
+| Closeness              | [`JointDistanceDistribution`](@ref)   |    ✓    |     ✖      | [`jdd`](@ref)                  |
+| Cross-mapping          | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      | [`crossmap`](@ref)             |
+| Cross-mapping          | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      | [`crossmap`](@ref)             |
+| Conditional recurrence | [`MCR`](@ref)                         |    ✓    |     ✖      | [`mcr`](@ref)                  |
+| Conditional recurrence | [`RMCD`](@ref)                        |    ✓    |     ✓      | [`rmcd`](@ref)                 |
+| Shared information     | [`MIShannon`](@ref)                   |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information     | [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information     | [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information     | [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information     | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      | [`partial_correlation`](@ref)  |
+| Shared information     | [`CMIShannon`](@ref)                  |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Shared information     | [`CMIRenyiSarbu`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Shared information     | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Information transfer   | [`TEShannon`](@ref)                   |    ✓    |     ✓      | [`transferentropy`](@ref)      |
+| Information transfer   | [`TERenyiJizba`](@ref)                |    ✓    |     ✓      | [`transferentropy`](@ref)      |
+| Information asymmetry  | [`PA`](@ref)                          |    ✓    |     ✓      | [`asymmetry`](@ref)            |
 
 ## Correlation measures
 
@@ -105,7 +106,8 @@ PairwiseAsymmetricInference
 ## Recurrence-based
 
 ```@docs
-Recurrence
+MCR
+RMCD
 ```
 
 ## [Information measures](@id information_measures)
