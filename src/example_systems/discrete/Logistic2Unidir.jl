@@ -9,7 +9,7 @@ export Logistic2Unidir
 
 """
     Logistic2Unidir <: DiscreteDefinition
-    Logistic2Unidir(; xi = [0.5, 0.5], c_xy = 0.1, σ = 0.05, r₁ = 3.78, r₂ = 3.66,
+    Logistic2Unidir(; xi = [0.5, 0.5], c_xy = 0.1, σ_xy = 0.05, r₁ = 3.78, r₂ = 3.66,
         rng = Random.default_rng())
 
 A bivariate system consisting of two 1D noisy logistic maps which are undirectionally
@@ -30,14 +30,14 @@ with
 
 ```math
 \\begin{aligned}
-f(x,y) = \\dfrac{y + \\frac{c_{xy}(x \\xi )}{2}}{1 + \\frac{c_{xy}}{2}(1+ \\sigma )}
+f(x,y) = \\dfrac{y + \\frac{c_{xy}(x \\xi )}{2}}{1 + \\frac{c_{xy}}{2}(1+ \\sigma_{xy} )}
 \\end{aligned}
 ```
 
 The parameter `c_xy` controls how strong the dynamical forcing is. If `σ > 0`,
 dynamical noise masking the influence of  `x` on `y` equivalent to
-``\\sigma \\cdot \\xi`` is added at each iteration. Here,``\\xi`` is a draw from a
-flat distribution on ``[0, 1]``. Thus, setting `σ = 0.05` is equivalent to
+``\\sigma_{xy} \\cdot \\xi`` is added at each iteration. Here,``\\xi`` is a draw from a
+flat distribution on ``[0, 1]``. Thus, setting `σ_xy = 0.05` is equivalent to
 add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
 range of values of the logistic map.
 
