@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2
+
+- Added `MCR` and `RMCD` recurrence based association measures, along with 
+    the corresponding `mcr` and `rmcd` methods.
+
 ## 2.1
 
 - Bugfix for `OCE` for certain conditional variable cases.
