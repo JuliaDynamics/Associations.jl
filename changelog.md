@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.1
+
+- `infer_graph` now accepts the `verbose` keyword.
+- Fixed a bug in backwards elimination step of `OCE` algorithm that was caused due
+    to an undefined variable.
+
 ## 2.2
 
 - Added `MCR` and `RMCD` recurrence based association measures, along with 
