@@ -47,8 +47,8 @@ Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
     α = 0.05
 end
 
-function infer_graph(alg::OCE, x)
-    parents = select_parents(alg, x)
+function infer_graph(alg::OCE, x; verbose = true)
+    parents = select_parents(alg, x; verbose)
     return parents
 end
 
@@ -233,29 +233,35 @@ function backwards_eliminate!(parents, alg, xᵢ, k; verbose = false)
     M = length(parents.parents)
     P = parents.parents
     Pj = P[k]
-    remaining = StateSpaceSet(P...)[:, setdiff(1:M, k)]
+    remaining_idxs = setdiff(1:M, k)
+    remaining = StateSpaceSet(P...)[:, remaining_idxs]
     test = independence(alg.ctest, xᵢ, Pj, remaining)
-    τ, j = parents.parents_τs[k], parents.parents_js[k]
-    I = test.m
+
+    if verbose
+        τ, j = parents.parents_τs[k], parents.parents_js[k] # Variable currently considered
+        τs = parents.parents_τs
+        js = parents.parents_js
+        src_var = "x$j($τ)"
+        targ_var = "x$(js[k])($(τs[k]))"
+        cond_var = join(["x$(js[i])($(τs[i]))" for i in remaining_idxs], ", ")
+
+        if test.pvalue >= alg.α
+            outcome_msg = "Removing x$(j)($τ) from parent set"
+            println("\t$src_var ⫫ $targ_var | $cond_var → $outcome_msg")
+        else
+            outcome_msg = "Keeping x$(j)($τ) in parent set"
+            println("\t$src_var !⫫ $targ_var | $cond_var → $outcome_msg")
+        end
+    end
+
     # If p-value >= α, then we can't reject the null, i.e. the statistic I is
-    # indistinguishable from zero, so we claim independence.
+    # indistinguishable from zero, so we claim independence and remove the variable.
     if test.pvalue >= alg.α
-        τ = parents.parents_τs[k]
-        j = parents.parents_τs[j]
-        s = join(["x$(js[i])($(τs[i]))" for i in idxs], ", ")
-        r = "Removing x$(js[k])($(τs[k])) from parent set"
-        verbose && println("\tx$j($τ) ⫫ x$(js[k])($(τs[k])) | $s → $r")
         deleteat!(parents.parents, k)
         deleteat!(parents.parents_js, k)
         deleteat!(parents.parents_τs, k)
-        return true # a variable was removed, so we decrement `k_remaining` in parent function
+        return true
     else
-        idxs = setdiff(1:M, k)
-        τs = parents.parents_τs
-        js = parents.parents_js
-        s = join(["x$(js[i])($(τs[i]))" for i in idxs], ", ")
-        r = "Keeping x$(js[k])($(τs[k])) in parent set"
-        verbose && println("\tx$j($τ) !⫫ x$(js[k])($(τs[k])) | $s → $r")
         return false
     end
 end
