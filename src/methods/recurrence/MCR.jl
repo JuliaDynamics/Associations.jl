@@ -19,6 +19,12 @@ To use any `r` that is not a real number, you have to do `using RecurrenceAnalys
 The `metric` is any valid metric
 from [Distances.jl](https://github.com/JuliaStats/Distances.jl).
 
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+    association.
+- Use with [`mcr`](@ref) to compute the raw MCR for pairwise association.
+
 ## Description
 
 For input variables `X` and `Y`, the conditional probability of recurrence
