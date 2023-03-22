@@ -104,21 +104,27 @@ function estimate(measure::RMCD, x, y, z)
     rXYZ = rX .* rY .* rZ
 
     Irmcd = 0.0
-    # The recurrence matrices are symmetric, so we flip indexing here relative to the
-    # paper for efficiency.
+    # The recurrence matrices are not symmetric for all recurrence types, so we stick
+    # to the original indexing in the paper. This could have been optimized by flipping
+    # dimensions if symmetric matrices were guaranteed
     for i = 1:N
-        joint = @views sum(rXYZ[:, i])
-        marginals = @views (joint * sum(rZ[:, i])) / (sum(rXZ[:, i]) * sum(rYZ[:, i]))
+        joint = @views sum(rXYZ[i, :])
+        marginals = @views (joint * sum(rZ[i, :])) / (sum(rXZ[i, :]) * sum(rYZ[i, :]))
+        if marginals != 0
+
         for j = 1:N
-            if marginals != 0
-                Irmcd += rXYZ[j, i] * log(base, marginals)
+                Irmcd += rXYZ[i, j] * log(base, marginals)
             end
         end
         Irmcd /= N
     end
     Irmcd /= N
-
-    return Irmcd
+    # Handle round-off error
+    if Irmcd < 0.0
+        return 0.0
+    else
+        return Irmcd
+    end
 end
 
 # Similar, but analogous to mutual information
@@ -131,17 +137,25 @@ function estimate(measure::RMCD, x, y)
     rXY = rX .* rY
 
     Irmd = 0.0
+    # The recurrence matrices are not symmetric for all recurrence types, so we stick
+    # to the original indexing in the paper. This could have been optimized by flipping
+    # dimensions if symmetric matrices were guaranteed
     for i = 1:N
-        joint = @views sum(rXY[:, i])
-        marginals = @views (sum(rX[:, i]) * sum(rY[:, i])) / joint
+        joint = @views sum(rXY[i, :])
+        marginals = @views (sum(rX[i, :]) * sum(rY[i, :])) / joint
         for j = 1:N
             if marginals != 0
-                Irmd += rXY[j, i] * log(base, marginals)
+                Irmd += rXY[i, j] * log(base, marginals)
             end
         end
         Irmd /= N
     end
     Irmd /= N
 
-    return Irmd
+    # Handle round-off error
+    if Irmd < 0.0
+        return 0.0
+    else
+        return Irmd
+    end
 end
