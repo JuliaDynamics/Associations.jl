@@ -18,6 +18,15 @@ To use any `r` that is not a real number, you have to do `using RecurrenceAnalys
 The `metric` is any valid metric
 from [Distances.jl](https://github.com/JuliaStats/Distances.jl).
 
+Both the pairwise and conditional RMCD is non-negative, but due to round-off error,
+negative values may occur. If that happens, an RMCD value of `0.0` is returned.
+
+## Usage
+
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+    or conditional association.
+- Use with [`rmcd`](@ref) to compute the raw RMCD for pairwise or conditional association.
+
 ## Description
 
 The RMCD measure is defined by
