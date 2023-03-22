@@ -1,6 +1,7 @@
 [deps]
 ComplexityMeasures = "ed8fcbec-b94c-44b6-89df-898894ad9591"
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
+Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 DynamicalSystemsBase = "6e36e845-645a-534a-86f2-f5d4aa5a06b4"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
