@@ -13,3 +13,7 @@ const CMI_MEASURES = Union{
 function dispatch(measure::CMI_MEASURES, est, x, y, z)
     condmutualinfo(measure, est, x, y, z)
 end
+
+function dispatch(measure::CMIShannon, est, x, y)
+    mutualinfo(MIShannon(; base = measure.base), est, x, y)
+end
