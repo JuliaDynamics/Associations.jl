@@ -25,3 +25,12 @@ Pages = [
 ]
 Depth = 3
 ```
+
+## Recurrence API
+
+```@contents
+Pages = [
+    "api/api_recurrence.md",
+]
+Depth = 3
+```
