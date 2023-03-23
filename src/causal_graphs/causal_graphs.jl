@@ -5,5 +5,4 @@ include("pc_robust/PCRobust.jl")
 include("oce/OCE.jl")
 #nclude("pc_pa/PCPA.jl")
 #include("pc_mci/PCMCI.jl")
-
-include("OptimalAsymmetry.jl")
+include("opa/OPA.jl")

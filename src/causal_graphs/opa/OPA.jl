@@ -4,6 +4,7 @@ using DelayEmbeddings: estimate_delay
 using Statistics: median, mean
 using Combinatorics: combinations
 using Random: default_rng
+import Graphs.SimpleGraphs: SimpleDiGraph
 
 export OPA
 # TODO: does one even need to make the embeddings completely symmetric? isn't it enough
@@ -37,6 +38,20 @@ influences ``X^{(i)}`` by:
     `Pₖ` that has the highest association with ``X^{(i)}`` given ``X^{(i)}``'s past
     and the already selected parents.
 3. Repeat until no more variables with significant association are found.
+
+## Returns
+
+When used with [`infer_graph`](@ref), a vector of [`OPASelectedParents`](@ref) is
+returned, where the `i`-th element of this vector contains the parents for node `i`.
+You can convert this vector to a directed graph by using [`SimpleDiGraph`](@ref),
+for example
+
+```julia
+x = [rand(100) for i = 1:4]
+p = infer_graph(OPA(τmax = 3, m = 6), x)
+dg = SimpleDiGraph(p)
+collect(edges(dg))
+```
 """
 Base.@kwdef struct OPA{MP, MC, A, K, EP, EC, N, R}
     τmax::Int = 0
@@ -70,14 +85,31 @@ function select_parents(alg::OPA, x; verbose = false)
     return parents
 end
 
+"""
+    OPASelectedParents(i, js, τs)
 
-Base.@kwdef mutable struct OPASelectedParents{P, PJ, PT}
+Parent node indices `js` and lags `τs` that have been found to influence node `i` using
+the [`OPA`](@ref) algorithm.
+"""
+Base.@kwdef mutable struct OPASelectedParents{PJ, PT}
     i::Int
-    parents::P = Vector{Vector{eltype(1.0)}}(undef, 0)
     js::PJ = Vector{Int}(undef, 0)
     τs::PT = Vector{Int}(undef, 0)
 end
 
+function SimpleDiGraph(v::Vector{<:CausalityTools.OPASelectedParents})
+    N = length(v)
+    g = SimpleDiGraph(N)
+    for k = 1:N
+        parents = v[k]
+        for (j, τ) in zip(parents.js, parents.τs)
+            if j != k # avoid self-loops
+                add_edge!(g, j, k)
+            end
+        end
+    end
+    return g
+end
 
 function selected(o::OPASelectedParents)
     js, τs = o.js, o.τs
@@ -85,25 +117,22 @@ function selected(o::OPASelectedParents)
     return join(["x$(js[i])($(τs[i]))" for i in eachindex(js)], ", ")
 end
 
-# TODO: make a variant that first both pairwise and conditional
-# checks without significance testing, then
-# performs gradually descending PA signifiacnce testing until significant case is found.
-
 function Base.show(io::IO, x::OPASelectedParents)
     s = ["x$j($τ)" for (j, τ) in zip(x.js, x.τs)]
     if isempty(x.js)
         all = "Evolution of x$(x.i) affected by ∅"
     else
-        all = "Evolution of x$(x.i) affected by ← $(join(s, ", "))"
+        all = "Evolution of x$(x.i) affected by $(join(s, ", "))"
     end
     show(io, all)
 end
 
-# TODO:
-# Optimise first step by perhaps computing raw mutul information. First,
+# Potential optimization:
+# Optimize first step by perhaps computing raw mutul information. First,
 # find the variable that maximizes MI, then run a cascade of signifiacnce
 # tests (using asymmetry) until a significant variable is selected.
-
+# Asymmetry is typically highest at small prediction lags, so it might be beneficial
+# to look there first.
 function select_parents(alg::OPA, x, i::Int; verbose = false)
     (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng) = alg
 
@@ -113,17 +142,17 @@ function select_parents(alg::OPA, x, i::Int; verbose = false)
 
     # Nodes can be self-causal
     idxs = 1:length(x) # setdiff(1:length(x), i)
-    js = Int[]
-    τs = Int[]
+    Pjs = Int[]
+    Pτs = Int[]
     for j in idxs
         if j == i # it makes no sense to compare xi(0) to xi(0), or does it? depends on..
             # Because nodes can be self-causal and the zero lag is never included in the
             # Y⁺/Y^-, this is valid
-            append!(τs, 0:τmax)
-            append!(js, repeat([j], τmax + 1))
+            append!(Pτs, 0:τmax)
+            append!(Pjs, repeat([j], τmax + 1))
         else
-            append!(τs, 0:τmax)
-            append!(js, repeat([j], τmax + 1))
+            append!(Pτs, 0:τmax)
+            append!(Pjs, repeat([j], τmax + 1))
         end
     end
 
@@ -136,15 +165,15 @@ function select_parents(alg::OPA, x, i::Int; verbose = false)
     # 1. Can we find a significant pairwise association?
     verbose && println("˧ Querying for pairwise directional association...")
 
-    significant_pairwise = select_first_parent!(alg, parents, x, i, js, τs; verbose)
+    significant_pairwise = select_first_parent!(alg, parents, x, i, Pjs, Pτs; verbose)
     if significant_pairwise
         verbose && println("˧ Querying new variables conditioned on already selected variables...")
         # 2. Continue until there are no more significant conditional pairwise associations
         significant_cond = true
         k = 0
-        while significant_cond && !isempty(js)
+        while significant_cond && !isempty(Pjs)
             k += 1
-            significant_cond = select_conditional_parent!(alg, parents, x, i, js, τs; verbose)
+            significant_cond = select_conditional_parent!(alg, parents, x, i, Pjs, Pτs; verbose)
         end
 
         verbose && println("˧ Backwards elimination...")
@@ -203,14 +232,21 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
     idx_max = argmax((maximum(Δ) for Δ in Δs))
     result = test_results[idx_max]
 
+    # Additional verification using randomization
+    #surrotest = SurrogateTest(measure_pairwise, est_pairwise; nshuffles = 50, rng)
+    #chosen_xj = ShiftedArrays.circshift(x[js[idx_max]], τs[idx_max])
+    #sr = independence(surrotest, chosen_xj, xᵢ)
 
-    if pvalue(result) < α && maximum(fws[idx_max]) > 0
-        verbose && println("  x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
-        push!(parents.js, js[idx_max])
-        push!(parents.τs, τs[idx_max])
-        deleteat!(js, idx_max)
-        deleteat!(τs, idx_max)
-        return true
+    if pvalue(result) < α && mean(fws[idx_max]) > 0
+        #if pvalue(sr) < α
+            #println("Asymmetry + surro significant for x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
+            verbose && println("  x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
+            push!(parents.js, js[idx_max])
+            push!(parents.τs, τs[idx_max])
+            deleteat!(js, idx_max)
+            deleteat!(τs, idx_max)
+            return true
+        #end
     end
 
 
@@ -245,16 +281,23 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
         end
     end
     test_results = [bootstrap_right(f, Δ, 0.0; n = n_bootstrap, rng) for Δ in Δs]
-    idx_max = argmax((maximum(Δ) for Δ in Δs))
+    idx_max = argmax((mean(Δ) for Δ in Δs)) # or maximum?
     result = test_results[idx_max]
 
+    # Additional verification using randomization
+    #surrotest = LocalPermutationTest(measure_cond, est_cond; nshuffles = 50, rng)
+    #chosen_xj = ShiftedArrays.circshift(x[js[idx_max]], τs[idx_max])
+    #sr = independence(surrotest, chosen_xj, xᵢ, C⁻)
+
     if pvalue(result) < α && mean(fws[idx_max]) > 0
-        verbose && println("  x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
-        push!(parents.js, js[idx_max])
-        push!(parents.τs, τs[idx_max])
-        deleteat!(js, idx_max)
-        deleteat!(τs, idx_max)
-        return true
+        #if pvalue(sr) < α
+            verbose && println("  x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
+            push!(parents.js, js[idx_max])
+            push!(parents.τs, τs[idx_max])
+            deleteat!(js, idx_max)
+            deleteat!(τs, idx_max)
+            return true
+        #end
     end
 
     # No significant links were found.
