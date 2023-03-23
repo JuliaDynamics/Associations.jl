@@ -63,3 +63,87 @@ function eom_logistic2bidir(u, p::Logistic2Bidir, t)
     dy = r₂ * (f_xy) * (1 - f_xy)
     return SVector{2}(dx, dy)
 end
+
+
+Base.@kwdef struct Logistic3CommonCause{V, C1, C2, R1, R2, R3, Σx, Σy, R} <: DiscreteDefinition
+    xi::V = [0.5, 0.5, 0.5]
+    c_zx::C1 = 0.1
+    c_zy::C2 = 0.1
+    rx::R1 = 4.0
+    ry::R2 = 4.0
+    rz::R3 = 4.0
+    σ_zx::Σy = 0.05
+    σ_zy::Σx = 0.05
+    rng::R = Random.default_rng()
+end
+
+function system(definition::Logistic3CommonCause)
+    return DiscreteDynamicalSystem(eom_logistic3_commoncause, definition.xi, definition)
+end
+
+function eom_logistic3_commoncause(u, p::Logistic3CommonCause, t)
+    (; xi, c_zx, c_zy, rx, ry, rz, σ_zx, σ_zy, rng) = p
+    x, y, z = u
+    f_zx = (x +  c_zx*(z + σ_zx * rand(rng)) ) / (1 + c_zx*(1+σ_zx))
+    f_zy = (y +  c_zy*(z + σ_zy * rand(rng)) ) / (1 + c_zy*(1+σ_zy))
+    dx = rx * (f_zx) * (1 - f_zx)
+    dy = ry * (f_zy) * (1 - f_zy)
+    dz = rz * z * (1 - z)
+    return SVector{3}(dx, dy, dz)
+end
+
+Base.@kwdef struct Logistic3CommonForcing{V, C1, C2, R1, R2, R3, Σx, Σy, R} <: DiscreteDefinition
+    xi::V = [0.5, 0.5, 0.5]
+    c_xz::C1 = 0.3
+    c_yz::C2 = 0.3
+    rx::R1 = 4.0
+    ry::R2 = 4.0
+    rz::R3 = 4.0
+    σ_xz::Σy = 0.05
+    σ_yz::Σx = 0.05
+    rng::R = Random.default_rng()
+end
+
+function system(definition::Logistic3CommonForcing)
+    return DiscreteDynamicalSystem(eom_logistic3_commonforcing, definition.xi, definition)
+end
+
+function eom_logistic3_commonforcing(u, p::Logistic3CommonForcing, t)
+    (; xi, c_xz, c_yz, rx, ry, rz, σ_xz, σ_yz, rng) = p
+    x, y, z = u
+    f_xy_z = (z +  c_xz*(x + σ_xz * rand(rng)) + c_yz*(y + σ_yz * rand(rng))) / (1 + c_xz*(1+σ_yz) + c_yz*(1+σ_yz))
+    dx = rx * x * (1 - x)
+    dy = ry * y * (1 - y)
+    dz = rz * (f_xy_z) * (1 - f_xy_z)
+    return SVector{3}(dx, dy, dz)
+end
+
+export Logistic3CommonForcing
+export Logistic3BidirExogenous
+
+Base.@kwdef struct Logistic3BidirExogenous{V, C1, C2, R1, R2, R3, Σx, Σy, R} <: DiscreteDefinition
+    xi::V = [0.5, 0.5]
+    c_xy::C1 = 0.1
+    c_yx::C2 = 0.1
+    rx::R1 = 4.0
+    ry::R2 = 4.0
+    rz::R3 = 4.0
+    σ_xy::Σx = 0.05
+    σ_yx::Σy = 0.05
+    rng::R = Random.default_rng()
+end
+
+function system(definition::Logistic3BidirExogenous)
+    return DiscreteDynamicalSystem(eom_logistic3bidirexo, definition.xi, definition)
+end
+
+function eom_logistic3bidirexo(u, p::Logistic3BidirExogenous, t)
+    (; xi, c_xy, c_yx, rx, ry, rz, σ_xy, σ_yx, rng) = p
+    x, y, z = u
+    f_xy = (y +  c_xy*(x + σ_xy * rand(rng)) ) / (1 + c_xy*(1+σ_xy))
+    f_yx = (x +  c_yx*(y + σ_yx * rand(rng)) ) / (1 + c_yx*(1+σ_yx))
+    dx = rx * (f_yx) * (1 - f_yx)
+    dy = ry * (f_xy) * (1 - f_xy)
+    dz = rz
+    return SVector{3}(dx, dy, dz)
+end
