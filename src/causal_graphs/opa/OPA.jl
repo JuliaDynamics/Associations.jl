@@ -127,7 +127,7 @@ function Base.show(io::IO, x::OPASelectedParents)
     show(io, all)
 end
 
-# Potential optimization:
+# Potential optimization (not sure if it holds analytically, though)
 # Optimize first step by perhaps computing raw mutul information. First,
 # find the variable that maximizes MI, then run a cascade of signifiacnce
 # tests (using asymmetry) until a significant variable is selected.
@@ -141,13 +141,11 @@ function select_parents(alg::OPA, x, i::Int; verbose = false)
     verbose && println("=======================================")
 
     # Nodes can be self-causal
-    idxs = 1:length(x) # setdiff(1:length(x), i)
+    idxs = 1:length(x)
     Pjs = Int[]
     Pτs = Int[]
     for j in idxs
-        if j == i # it makes no sense to compare xi(0) to xi(0), or does it? depends on..
-            # Because nodes can be self-causal and the zero lag is never included in the
-            # Y⁺/Y^-, this is valid
+        if j == i
             append!(Pτs, 0:τmax)
             append!(Pjs, repeat([j], τmax + 1))
         else
@@ -228,27 +226,31 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
         end
     end
 
+    # Select the variable that has the highest significant association with xᵢ.
+    # "Significant" means a p-value strictly less than the significance level α,
+    # and simultanously positive mean forward measure.
     test_results = [bootstrap_right(f, Δ, 0.0; n = n_bootstrap, rng) for Δ in Δs]
-    idx_max = argmax((maximum(Δ) for Δ in Δs))
-    result = test_results[idx_max]
+    pvals = pvalue.(test_results)
+    Is = [mean(Δ) for Δ in Δs]
+    Is_fw = [mean(fw) for fw in fws]
+    condition = pvals .< alg.α .&& Is_fw .> 0.0 # todo add keyword for latter case
 
-    # Additional verification using randomization
-    #surrotest = SurrogateTest(measure_pairwise, est_pairwise; nshuffles = 50, rng)
-    #chosen_xj = ShiftedArrays.circshift(x[js[idx_max]], τs[idx_max])
-    #sr = independence(surrotest, chosen_xj, xᵢ)
-
-    if pvalue(result) < α && mean(fws[idx_max]) > 0
-        #if pvalue(sr) < α
-            #println("Asymmetry + surro significant for x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
-            verbose && println("  x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
-            push!(parents.js, js[idx_max])
-            push!(parents.τs, τs[idx_max])
-            deleteat!(js, idx_max)
-            deleteat!(τs, idx_max)
-            return true
-        #end
+    if !any(condition)
+        s = ["x$i(0) ⇍ x($j) | ∅" for j in filter(j -> j != i, js)]
+        verbose && println("  $(join(s, "\n  "))")
+        return false
     end
+    Imax = maximum(Is[condition])
+    idx_max = findfirst(x -> x == Imax, Is)
 
+    if !isnothing(idx_max)
+        verbose && println("  x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
+        push!(parents.js, js[idx_max])
+        push!(parents.τs, τs[idx_max])
+        deleteat!(js, idx_max)
+        deleteat!(τs, idx_max)
+        return true
+    end
 
     # We found no significant pairwise associations
     s = ["x$i(0) ⇍ x($j) | ∅" for j in filter(j -> j != i, js)]
@@ -280,24 +282,31 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
             fws[ix][i] = fw
         end
     end
+
+    # Select the variable that has the highest significant association with xᵢ.
+    # "Significant" means a p-value strictly less than the significance level α,
+    # and simultanously positive mean forward measure.
     test_results = [bootstrap_right(f, Δ, 0.0; n = n_bootstrap, rng) for Δ in Δs]
-    idx_max = argmax((mean(Δ) for Δ in Δs)) # or maximum?
-    result = test_results[idx_max]
+    pvals = pvalue.(test_results)
+    Is = [mean(Δ) for Δ in Δs]
+    Is_fw = [mean(fw) for fw in fws]
 
-    # Additional verification using randomization
-    #surrotest = LocalPermutationTest(measure_cond, est_cond; nshuffles = 50, rng)
-    #chosen_xj = ShiftedArrays.circshift(x[js[idx_max]], τs[idx_max])
-    #sr = independence(surrotest, chosen_xj, xᵢ, C⁻)
+    condition = pvals .< alg.α .&& Is_fw .> 0.0 # todo add keyword for latter case
+    if !any(condition)
+        s = ["x$i(0) ⇍ x($j) | ∅" for j in filter(j -> j != i, js)]
+        verbose && println("  $(join(s, "\n  "))")
+        return false
+    end
 
-    if pvalue(result) < α && mean(fws[idx_max]) > 0
-        #if pvalue(sr) < α
-            verbose && println("  x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
-            push!(parents.js, js[idx_max])
-            push!(parents.τs, τs[idx_max])
-            deleteat!(js, idx_max)
-            deleteat!(τs, idx_max)
-            return true
-        #end
+    Imax = maximum(Is[condition])
+    idx_max = findfirst(x -> x == Imax, Is)
+    if !isnothing(idx_max)
+        verbose && println("  x$i(0) ← x$(js[idx_max])($(τs[idx_max]))")
+        push!(parents.js, js[idx_max])
+        push!(parents.τs, τs[idx_max])
+        deleteat!(js, idx_max)
+        deleteat!(τs, idx_max)
+        return true
     end
 
     # No significant links were found.
@@ -335,7 +344,6 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
 
             Δs = zeros(m) # allocating outside is fine, because we overwrite.
             fws = zeros(m) # allocating outside is fine, because we overwrite.
-            bws = zeros(m) # allocating outside is fine, because we overwrite.
 
             C⁻, C⁺ = lag_for_asymmetry(x, τs_remaining[comb], js_remaining[comb])
             for i in 1:m
@@ -344,14 +352,13 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
                 bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
                 Δs[i] = fw - bw
                 fws[i] = fw
-                bws[i] = bw
             end
             # If p-value >= α, then we can't reject the null, i.e. the statistic I is
             # indistinguishable from zero, so we claim independence.
             result = bootstrap_right(f, Δs, 0.0; tail = :right)
 
             if verbose
-                if pvalue(result) < α && mean(fws) > 0
+                if pvalue(result) < α #&& mean(fws) > 0
                     j = parents.js[q]
                     τ = parents.τs[q]
                     r = "Removing x$j($τ) from parent set"
@@ -375,179 +382,3 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
     end
     return false
 end
-
-
-
-# # Strategy
-# # Find the variable that maximizes MI
-# # Then perform asymmetry-based significance testing to find the first variable
-# # that has significant.
-# function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = false)
-#     (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f) = alg
-#     xᵢ = x[i]
-#     # Generate all candidates
-#     @assert length(τs) == length(js)
-
-#     pairwise_I = zeros(length(τs))
-#     for (l, (j, τ)) in enumerate(zip(js, τs))
-#         pairwise_I[l] = estimate(measure_pairwise, est_pairwise, x[j], xᵢ)
-#     end
-
-#     sort_idxs = sortperm(pairwise_I, rev = true)
-#     for ix in sort_idxs
-#         test = AsymmetryTest(measure_pairwise, est_pairwise;
-#             τS = τs[ix], condition_on_target = false, n_bootstrap, f)
-#         result = independence(test, x[js[ix]], xᵢ) # condition on unlagged xᵢ
-#         if pvalue(result) < α &&  mean(result.Δ) > 0
-#             verbose && println("  x$i(0) ← x$(js[ix])($(τs[ix]))")
-#             push!(parents.js, js[ix])
-#             push!(parents.τs, τs[ix])
-#             deleteat!(js, ix)
-#             deleteat!(τs, ix)
-#             return true
-#         end
-#     end
-
-#     # We found no significant pairwise associations
-#     s = ["x$i(0) ⇍ x($j) | ∅" for j in filter(j -> j != i, js)]
-#     verbose && println("  $(join(s, "\n  "))")
-#     return false
-# end
-
-# function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = false)
-#     (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f) = alg
-#     @assert length(parents.js) == length(parents.τs)
-#     xᵢ = x[i]
-#     N = length(xᵢ)
-
-#     # Account for circularly shifting the data.
-#     maxlag = maximum([parents.τs; alg.m])
-#     idxs = (maxlag + 1):(N - maxlag)
-
-#     C⁻, C⁺ = lag_for_asymmetry(x, parents.τs, parents.js)
-#     conditional_Is = zeros(length(τs))
-
-#     for (l, (j, τ)) in enumerate(zip(js, τs))
-#         X⁻, X⁺ = lag_for_asymmetry(x[j], τ)
-#         conditional_Is[l] = dispatch(measure_cond, est_cond, X⁻[idxs], xᵢ[idxs], C⁻[idxs])
-#     end
-
-#     sort_idxs = sortperm(conditional_Is, rev = true)
-
-#     Δs = zeros(m) # allocating outside is fine, because we overwrite.
-#     fws = zeros(m) # allocating outside is fine, because we overwrite.
-
-#     for ix in sort_idxs
-#         if conditional_Is[ix] < 0
-#             s = ["x$i(1) ⇍ x$j($τ) | $(selected(parents))" for (τ, j) in zip(τs, js)]
-#             verbose && println("  $(join(s, "\n  "))")
-#             continue
-#         end
-#         # Compute asymmetry for the variable with currently highest association with the target.
-#         X⁻, X⁺ = lag_for_asymmetry(x[js[ix]], τs[ix])
-#         for i in 1:m
-#             Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)])
-#             fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
-#             bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
-#             Δs[i] = fw - bw
-#             fws[i] = fw
-#         end
-
-#         # Check for positive skew.
-#         result = bootstrap_right(f, Δs, 0.0; n = n_bootstrap)
-#         if pvalue(result) < α && mean(result) > 0
-#             verbose && println("  x$i(0) ← x$(js[ix])($(τs[ix]))")
-#             push!(parents.js, js[ix])
-#             push!(parents.τs, τs[ix])
-#             deleteat!(js, ix)
-#             deleteat!(τs, ix)
-#             return true
-#         end
-#     end
-#     # No significant links were found.
-#     s = ["x$i(1) ⇍ x$j($τ) | $(selected(parents)))" for (τ, j) in zip(τs, js)]
-#     verbose && println("  $(join(s, "\n  "))")
-#     return false
-# end
-
-
-
-# function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_remaining; verbose = false)
-#     (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng) = alg
-#     M = length(parents.js)
-
-#     js_remaining = parents.js[setdiff(1:M, q)]
-#     τs_remaining = parents.τs[setdiff(1:M, q)]
-#     if isempty(js_remaining) || q > length(parents.js)
-#         return false
-#     end
-#     xᵢ = x[i]
-#     # Account for circularly shifting the data.
-#     maxlag = maximum([parents.τs; m])
-#     idxs = (maxlag + 1):(length(xᵢ) - maxlag)
-
-#     # See if x becomes independent of the target, given some subset of the other parents,
-#     # on conditioning sets of gradually increasing size, starting from 1.
-#     X⁻, X⁺ = lag_for_asymmetry(x[parents.js[q]], parents.τs[q])
-#     #Y⁻, Y⁺ = lag_for_asymmetry(xᵢ, 0:1)
-
-#     max_combolength = length(js_remaining)
-
-#     for cl in 1:max_combolength
-#         combs = combinations(1:max_combolength, cl) |> collect # returns combinations of increasing size
-
-#         # Pre-compute raw forward CMI (can be done per conditioning set size too for speed-up)
-#         conditional_Is = zeros(length(combs))
-
-#         for (k, comb) in enumerate(combs)
-#             C⁻, C⁺ = lag_for_asymmetry(x, τs_remaining[comb], js_remaining[comb])
-#             conditional_Is[k] = dispatch(measure_cond, est_cond, X⁻[idxs], xᵢ[idxs], C⁻[idxs])
-#         end
-
-#         sort_idxs = sortperm(conditional_Is, rev = true)
-#         Δs = zeros(m) # allocating outside is fine, because we overwrite.
-#         fws = zeros(m) # allocating outside is fine, because we overwrite.
-#         bws = zeros(m) # allocating outside is fine, because we overwrite.
-#         for ix in sort_idxs
-#             comb = combs[ix]
-#             if conditional_Is[ix] < 0
-#                 j, τ = parents.js[q], parents.τs[q]
-#                 s = join(["x$j($τ)" for (j, τ) in zip(js_remaining[comb], τs_remaining[comb])], ", ")
-#                 r = "Keeping x$j($τ) in parent set"
-#                 verbose && println("  x$i(0) ← x$j($τ) | $s ... $r")
-#                 continue
-#             end
-#             C⁻, C⁺ = lag_for_asymmetry(x, τs_remaining[comb], js_remaining[comb])
-#             for i in 1:m
-#                 Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, abs(i))
-#                 fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
-#                 bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
-#                 Δs[i] = fw - bw
-#                 fws[i] = fw
-#                 bws[i] = bw
-#             end
-
-#             # If p-value >= α, then we can't reject the null, i.e. the statistic I is
-#             # indistinguishable from zero, so we claim independence.
-#             test = bootstrap_right(f, Δs, 0.0; tail = :right)
-#             if pvalue(test) >= alg.α# || mean(fws) < 0
-#                 j = parents.js[q]
-#                 τ = parents.τs[q]
-#                 r = "Removing x$j($τ) from parent set"
-#                 s = join(["x$j($τ)" for (j, τ) in zip(js_remaining[comb], τs_remaining[comb])], ", ")
-#                 verbose && println("  x$i(0) ⇍ x$j($τ) | $s ... $r")
-#                 deleteat!(parents.js, q)
-#                 deleteat!(parents.τs, q)
-#                 return true # a variable was removed
-#             else
-#                 # Keeping all parents...
-#                 j = parents.js[q]
-#                 τ = parents.τs[q]
-#                 s = join(["x$j($τ)" for (j, τ) in zip(js_remaining[comb], τs_remaining[comb])], ", ")
-#                 r = "Keeping x$j($τ) in parent set"
-#                 verbose && println("  x$i(0) ← x$j($τ) | $s ... $r")
-#             end
-#         end
-#     end
-#     return false
-# end
