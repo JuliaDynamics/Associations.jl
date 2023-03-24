@@ -220,7 +220,7 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
         # Compute asymmetry for the variable with currently highest association with the target.
         X⁻, X⁺ = lag_for_asymmetry(x[j], τ)
         for i in 1:m
-            Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, abs(i))
+            Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)])
             fw = @views dispatch(measure_pairwise, est_pairwise, X⁻[idxs], Yⁿ⁺[idxs])
             bw = @views dispatch(measure_pairwise, est_pairwise, X⁺[idxs], Yⁿ⁻[idxs])
             Δs[ix][i] = fw - bw
@@ -273,7 +273,7 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
         # Compute asymmetry for the variable with currently highest association with the target.
         X⁻, X⁺ = lag_for_asymmetry(x[j], τ)
         for i in 1:m
-            Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, abs(i))
+            Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)])
             fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
             bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
             Δs[ix][i] = fw - bw
@@ -339,7 +339,7 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
 
             C⁻, C⁺ = lag_for_asymmetry(x, τs_remaining[comb], js_remaining[comb])
             for i in 1:m
-                Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, abs(i))
+                Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)])
                 fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
                 bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
                 Δs[i] = fw - bw
