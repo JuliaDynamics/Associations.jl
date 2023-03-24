@@ -105,30 +105,17 @@ function independence(test::AsymmetryTest, x, y)
     N = length(x)
 
     X⁻, X⁺ = lag_for_asymmetry(x, τS)
-
-    if condition_on_target
-        maxlag = maximum(abs.([ηT...; τT...; τS...]))
-        Y⁻, Y⁺ = lag_for_asymmetry(y, τT)
-    else
-        maxlag = maximum(abs.([ηT...; τS...]))
-    end
-
     # Account for circularly shifting the data.
+    maxlag = maximum(abs.([ηT...; τS...]))
     idxs = (maxlag + 1):(N - maxlag)
 
     Δ = zeros(length(ηT))
     fws = zeros(length(ηT))
     bws = zeros(length(ηT))
     for i in ηT
-        Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(y, [0, abs(i)]) # verify this
-        # TODO: make a version that doesn't use conditioning.
-        if condition_on_target
-            fw = @views dispatch(measure, est, X⁻[idxs], Yⁿ⁺[idxs], Y⁻[idxs])
-            bw = @views dispatch(measure, est, X⁺[idxs], Yⁿ⁻[idxs], Y⁺[idxs])
-        else
-            fw = @views dispatch(measure, est, X⁻[idxs], Yⁿ⁺[idxs])
-            bw = @views dispatch(measure, est, X⁺[idxs], Yⁿ⁻[idxs])
-        end
+        Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(y, [0, abs(i)]) # 0 included to also capture instantaneous coupling
+        fw = @views dispatch(measure, est, X⁻[idxs], Yⁿ⁺[idxs])
+        bw = @views dispatch(measure, est, X⁺[idxs], Yⁿ⁻[idxs])
         Δ[i] = fw - bw
         fws[i] = fw
         bws[i] = bw
@@ -166,7 +153,7 @@ function independence(test::AsymmetryTest, x, y, z)
     bws = zeros(length(ηT))
 
     for i in ηT
-        Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(y, [0, abs(i)])
+        Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(y, [0, abs(i)]) # 0 included to also capture instantaneous coupling
         fw = @views dispatch(measure, est, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
         bw = @views dispatch(measure, est, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
         Δ[i] = fw - bw
@@ -181,7 +168,7 @@ function independence(test::AsymmetryTest, x, y, z)
     return AsymmetryTestResult(3, Δ, fws, bws, p, test)
 end
 
-# Used for asymmetry test
+# Used for asymmetry test (is this needed?) Can we just demand that a dataset should be the third input?
 function independence(test::AsymmetryTest, x, y, z::Tuple{AbstractVector})
     (; measure, est, ηT, τS, τT, τC, k, f, n_bootstrap, condition_on_target, rng) = test
     N = length(x)
@@ -208,7 +195,7 @@ function independence(test::AsymmetryTest, x, y, z::Tuple{AbstractVector})
     bws = zeros(length(ηT))
 
     for i in ηT
-        Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(y, [0, abs(i)])
+        Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(y, [0, abs(i)]) # 0 included to also capture instantaneous coupling
         fw = @views dispatch(measure, est, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
         bw = @views dispatch(measure, est, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
         Δ[i] = fw - bw
@@ -294,3 +281,5 @@ function bootstrap_right(f::Function, x, x0; n::Int = 100, tail = :right,
     end
     return BootstrapRightTailed(x, x̂s, x0, f, pval)
 end
+
+include("crossmap.jl")
