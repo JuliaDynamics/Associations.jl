@@ -83,6 +83,20 @@ Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT}
     parents_τs::PT = Vector{Int}(undef, 0)
 end
 
+function SimpleDiGraph(v::Vector{<:CausalityTools.OCESelectedParents})
+    N = length(v)
+    g = SimpleDiGraph(N)
+    for k = 1:N
+        parents = v[k]
+        for (j, τ) in zip(parents.parents_js, parents.parents_τs)
+            #if j != k # avoid self-loops
+                add_edge!(g, j, k)
+            #end
+        end
+    end
+    return g
+end
+
 function selected(o::OCESelectedParents)
     js, τs = o.parents_js, o.parents_τs
     @assert length(js) == length(τs)
