@@ -89,9 +89,9 @@ function SimpleDiGraph(v::Vector{<:CausalityTools.OCESelectedParents})
     for k = 1:N
         parents = v[k]
         for (j, τ) in zip(parents.parents_js, parents.parents_τs)
-            #if j != k # avoid self-loops
+            if j != k # avoid self-loops
                 add_edge!(g, j, k)
-            #end
+            end
         end
     end
     return g
