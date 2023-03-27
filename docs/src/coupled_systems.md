@@ -12,8 +12,6 @@ SystemDefinition
 DiscreteDefinition
 ContinuousDefinition
 system
-CausalityTools.SimpleDiGraph
-CausalityTools.SimpleWeightedDiGraph
 ```
 
 ## Discrete systems
