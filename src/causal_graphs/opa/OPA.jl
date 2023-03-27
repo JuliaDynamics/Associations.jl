@@ -18,7 +18,9 @@ export OPA
         n_bootstrap::N = 3000,
         rng = Random.default_rng())
 
-The optimal predictive asymmetry algorithm (`OPA`) for inferring causal graphs.
+The naive variant of the optimal predictive asymmetry algorithm (`OPA`) for inferring
+causal graphs. Performs no pre-checks for the forward measure (i.e. full asymemtry
+is computed for all possible variables).
 
 ## Description
 
@@ -60,8 +62,8 @@ Base.@kwdef struct OPA{MP, MC, A, K, EP, EC, N, R}
     k::K = 1.0 # exponential decay constant
     measure_pairwise::MP = MIShannon()
     measure_cond::MC = CMIShannon()
-    est_pairwise::EP = KSG2(k = 3, w = 0)
-    est_cond::EC = FPVP(k = 3, w = 0)
+    est_pairwise::EP = KSG2(k = 3, w = 3)
+    est_cond::EC = FPVP(k = 3, w = 3)
     n_bootstrap::N = 3000
     # TODO: maximum number of conditional discoveries.
     f::Function = mean
@@ -97,7 +99,7 @@ Base.@kwdef mutable struct OPASelectedParents{PJ, PT}
     τs::PT = Vector{Int}(undef, 0)
 end
 
-function SimpleDiGraph(v::Vector{<:CausalityTools.OPASelectedParents})
+function SimpleGraphs.SimpleDiGraph(v::Vector{<:CausalityTools.OPASelectedParents})
     N = length(v)
     g = SimpleDiGraph(N)
     for k = 1:N
@@ -146,8 +148,8 @@ function select_parents(alg::OPA, x, i::Int; verbose = false)
     Pτs = Int[]
     for j in idxs
         if j == i
-            append!(Pτs, 0:τmax)
-            append!(Pjs, repeat([j], τmax + 1))
+            #append!(Pτs, 0:τmax)
+            #append!(Pjs, repeat([j], τmax + 1))
         else
             append!(Pτs, 0:τmax)
             append!(Pjs, repeat([j], τmax + 1))
@@ -175,20 +177,13 @@ function select_parents(alg::OPA, x, i::Int; verbose = false)
         end
 
         verbose && println("˧ Backwards elimination...")
-        # The last added variables are probably more likely to be removed, so we
-        # reverse the order in which we check the variables.
-        idxs_vars_remaining = reverse(1:length(parents.js) |> collect)
 
-        eliminate = true
-        while eliminate && length(idxs_vars_remaining) >= 2
-            for q in idxs_vars_remaining
-                #TODO perhaps do the backwards check while doing forward search?
-                eliminate = backwards_eliminate!(alg, parents, x, i, q, idxs_vars_remaining; verbose)
-                if eliminate
-                    deleteat!(idxs_vars_remaining, q)
-                end
-                eliminate && break
-            end
+        idxs_vars_remaining = 1:length(parents.js) |> collect
+        n_initial = length(idxs_vars_remaining)
+        q = 0
+        while length(idxs_vars_remaining) >= 2 && q < n_initial
+            q += 1
+            backwards_eliminate!(alg, parents, x, i, q, idxs_vars_remaining; verbose)
         end
     end
 
@@ -224,6 +219,7 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
             Δs[ix][i] = fw - bw
             fws[ix][i] = fw
         end
+        Δs[ix] = scale_exponentially(Δs[ix]; k)
     end
 
     # Select the variable that has the highest significant association with xᵢ.
@@ -281,6 +277,7 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
             Δs[ix][i] = fw - bw
             fws[ix][i] = fw
         end
+        Δs[ix] = scale_exponentially(Δs[ix]; k)
     end
 
     # Select the variable that has the highest significant association with xᵢ.
@@ -341,29 +338,28 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
         combs = combinations(1:max_combolength, cl) |> collect # returns combinations of increasing size
 
         for (k, comb) in enumerate(combs)
-
             Δs = zeros(m) # allocating outside is fine, because we overwrite.
             fws = zeros(m) # allocating outside is fine, because we overwrite.
 
             C⁻, C⁺ = lag_for_asymmetry(x, τs_remaining[comb], js_remaining[comb])
             for i in 1:m
-                Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)])
+                Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)]) # the unlagged xᵢ may now be a parent, so don't include it
                 fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
                 bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
                 Δs[i] = fw - bw
                 fws[i] = fw
             end
+            Δs = scale_exponentially(Δs; k)
             # If p-value >= α, then we can't reject the null, i.e. the statistic I is
             # indistinguishable from zero, so we claim independence.
             result = bootstrap_right(f, Δs, 0.0; tail = :right)
-
             if verbose
-                if pvalue(result) < α #&& mean(fws) > 0
+                if pvalue(result) >= α && mean(fws) > 0
                     j = parents.js[q]
                     τ = parents.τs[q]
                     r = "Removing x$j($τ) from parent set"
                     s = join(["x$j($τ)" for (j, τ) in zip(js_remaining[comb], τs_remaining[comb])], ", ")
-                    verbose && println("  x$i(0) ⇍ x$j($τ) | $s ... $r")
+                    verbose && println("  x$i(0) ⫫ x$j($τ) | $s ... $r")
                 else
                     j = parents.js[q]
                     τ = parents.τs[q]
@@ -373,9 +369,10 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
                 end
             end
             # A parent became independent of the target conditional on the remaining parents
-            if pvalue(result) >= α
+            if pvalue(result) >= α || mean(fws) < 0
                 deleteat!(parents.js, q)
                 deleteat!(parents.τs, q)
+                deleteat!(idxs_vars_remaining, q)
                 return true
             end
         end
