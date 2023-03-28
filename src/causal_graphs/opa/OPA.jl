@@ -148,8 +148,8 @@ function select_parents(alg::OPA, x, i::Int; verbose = false)
     Pτs = Int[]
     for j in idxs
         if j == i
-            #append!(Pτs, 0:τmax)
-            #append!(Pjs, repeat([j], τmax + 1))
+            append!(Pτs, 0:τmax)
+            append!(Pjs, repeat([j], τmax + 1))
         else
             append!(Pτs, 0:τmax)
             append!(Pjs, repeat([j], τmax + 1))
