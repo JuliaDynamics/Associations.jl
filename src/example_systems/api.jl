@@ -1,6 +1,13 @@
 export SystemDefinition, DiscreteDefinition, ContinuousDefinition, LaggedDiscreteDefinition
 export system
 
+import Graphs.SimpleGraphs: SimpleDiGraph
+import SimpleWeightedGraphs: SimpleWeightedDiGraph
+using Graphs: edges
+export SimpleDiGraph
+export SimpleWeightedDiGraph
+export edges
+
 """
     SystemDefinition
 
@@ -81,4 +88,25 @@ function update_states!(def::LaggedDiscreteDefinition{SVector{N, MVector{D, T}}}
         end
         def.past_states[var][1] = xnew[var]
     end
+end
+
+"""
+    SimpleWeightedDiGraph(system::SystemDefinition)
+
+Create a weighted graph (a `SimpleWeightedGraphs.SimpleWeightedDiGraph` instance) from
+the example `system`. Edges represent coupling between the variables, while
+edge weights is the coupling strength between the variables.
+"""
+function SimpleWeightedDiGraph(sys::SystemDefinition)
+    throw(error("SimpleWeightedDiGraph not implemented for $(typeof(sys)) yet."))
+end
+
+"""
+    SimpleDiGraph(system::SystemDefinition)
+
+Create a directed graph (a `Graphs.SimpleDiGraph` instance) from
+the example `system`. Edges represent coupling between the variables.
+"""
+function SimpleDigraph(sys::SystemDefinition)
+    throw(error("SimpleDiGraph not implemented for $(typeof(sys)) yet."))
 end
