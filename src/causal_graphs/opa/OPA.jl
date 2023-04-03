@@ -59,7 +59,7 @@ dg = SimpleDiGraph(p)
 collect(edges(dg))
 ```
 """
-Base.@kwdef struct OPA{MP, MC, A, K, EP, EC, N, R}
+Base.@kwdef struct OPA{MP, MC, A, K, EP, EC, N, R, EL} <: GraphAlgorithm
     τmax::Int = 1
     m::Int = 5
     α::A = 0.05
