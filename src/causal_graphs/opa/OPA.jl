@@ -348,7 +348,7 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
     Ylagged = [lag_for_asymmetry(xᵢ, [0, abs(i)]) for i = 1:m] # the unlagged xᵢ may now be a parent, so don't include it
 
     # Go through conditioning sets of increasing size.
-    for cl in 1:max_combolength
+    for cl in max_combolength:max_combolength # actually, for now, just do maximum size.
         combs = combinations(1:max_combolength, cl) |> collect # returns combinations of increasing size
 
         for (k, comb) in enumerate(combs)
