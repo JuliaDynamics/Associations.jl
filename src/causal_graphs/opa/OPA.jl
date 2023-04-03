@@ -16,7 +16,8 @@ export OPA
         est_pairwise::EP = KSG2(k = 3, w = 3)
         est_cond::EC = FPVP(k = 3, w = 3)
         n_bootstrap::N = 3000,
-        rng = Random.default_rng())
+        rng = Random.default_rng(),
+        eliminate = true)
 
 The naive variant of the optimal predictive asymmetry algorithm (`OPA`) for inferring
 causal graphs. Performs no pre-checks for the forward measure (i.e. full asymemtry
@@ -40,6 +41,9 @@ influences ``X^{(i)}`` by:
     `Pₖ` that has the highest association with ``X^{(i)}`` given ``X^{(i)}``'s past
     and the already selected parents.
 3. Repeat until no more variables with significant association are found.
+4. If `eliminate == true`, then perform a backwards elimination step analogous to the
+    elimination step in the [`OCE`](@ref) algorithm. If `eliminate == false`, then
+    this step is skipped.
 
 ## Returns
 
@@ -68,6 +72,7 @@ Base.@kwdef struct OPA{MP, MC, A, K, EP, EC, N, R}
     # TODO: maximum number of conditional discoveries.
     f::Function = mean
     rng::R = Random.default_rng()
+    eliminate::EL = false
 end
 
 function infer_graph(alg::OPA, x; verbose = false)
@@ -136,7 +141,7 @@ end
 # Asymmetry is typically highest at small prediction lags, so it might be beneficial
 # to look there first.
 function select_parents(alg::OPA, x, i::Int; verbose = false)
-    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng) = alg
+    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng, eliminate) = alg
 
     verbose && println("\n=======================================")
     verbose && println("Finding parents for variable x$i ....")
@@ -176,14 +181,16 @@ function select_parents(alg::OPA, x, i::Int; verbose = false)
             significant_cond = select_conditional_parent!(alg, parents, x, i, Pjs, Pτs; verbose)
         end
 
-        verbose && println("˧ Backwards elimination...")
+        if eliminate
+            verbose && println("˧ Backwards elimination...")
 
-        idxs_vars_remaining = 1:length(parents.js) |> collect
-        n_initial = length(idxs_vars_remaining)
-        q = 0
-        while length(idxs_vars_remaining) >= 2 && q < n_initial
-            q += 1
-            backwards_eliminate!(alg, parents, x, i, q, idxs_vars_remaining; verbose)
+            idxs_vars_remaining = 1:length(parents.js) |> collect
+            n_initial = length(idxs_vars_remaining)
+            q = 0
+            while length(idxs_vars_remaining) >= 2 && q < n_initial
+                q += 1
+                backwards_eliminate!(alg, parents, x, i, q, idxs_vars_remaining; verbose)
+            end
         end
     end
 
@@ -195,7 +202,7 @@ end
 # Then perform asymmetry-based significance testing to find the first variable
 # that has significant.
 function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = false)
-    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng) = alg
+    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng, eliminate) = alg
     xᵢ = x[i]
     N = length(xᵢ)
 
@@ -255,7 +262,7 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
 end
 
 function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = false)
-    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng) = alg
+    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng, eliminate) = alg
     @assert length(parents.js) == length(parents.τs)
     xᵢ = x[i]
     N = length(xᵢ)
@@ -312,9 +319,8 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
     return false
 end
 
-
 function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_remaining; verbose = false)
-    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng) = alg
+    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng, eliminate) = alg
     M = length(parents.js)
 
     js_remaining = parents.js[setdiff(1:M, q)]
