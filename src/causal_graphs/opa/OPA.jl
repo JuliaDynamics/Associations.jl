@@ -220,12 +220,13 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
     # Account for circularly shifting the data.
     maxlag = maximum([parents.τs; alg.m])
     idxs = (maxlag + 1):(N - maxlag)
+    Ylagged = [lag_for_asymmetry(xᵢ, [0, abs(i)]) for i in 1:m]
 
     for (ix, (j, τ)) in enumerate(zip(js, τs))
         # Compute asymmetry for the variable with currently highest association with the target.
         X⁻, X⁺ = lag_for_asymmetry(x[j], τ)
         for i in 1:m
-            Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)])
+            Yⁿ⁻, Yⁿ⁺ = Ylagged[i]
             fw = @views dispatch(measure_pairwise, est_pairwise, X⁻[idxs], Yⁿ⁺[idxs])
             bw = @views dispatch(measure_pairwise, est_pairwise, X⁺[idxs], Yⁿ⁻[idxs])
             Δs[ix][i] = fw - bw
@@ -279,11 +280,12 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
 
     Δs = [zeros(m) for i in eachindex(js)] # allocating outside is fine, because we overwrite.
     fws = [zeros(m) for i in eachindex(js)] # allocating outside is fine, because we overwrite.
+    Ylagged = [lag_for_asymmetry(xᵢ, [0, abs(i)]) for i = 1:m]
     for (ix, (j, τ)) in enumerate(zip(js, τs))
         # Compute asymmetry for the variable with currently highest association with the target.
         X⁻, X⁺ = lag_for_asymmetry(x[j], τ)
         for i in 1:m
-            Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)])
+            Yⁿ⁻, Yⁿ⁺ = Ylagged[i]
             fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
             bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
             Δs[ix][i] = fw - bw
@@ -343,6 +345,7 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
     X⁻, X⁺ = lag_for_asymmetry(x[parents.js[q]], parents.τs[q])
 
     max_combolength = length(js_remaining)
+    Ylagged = [lag_for_asymmetry(xᵢ, [0, abs(i)]) for i = 1:m] # the unlagged xᵢ may now be a parent, so don't include it
 
     # Go through conditioning sets of increasing size.
     for cl in 1:max_combolength
@@ -354,7 +357,7 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
 
             C⁻, C⁺ = lag_for_asymmetry(x, τs_remaining[comb], js_remaining[comb])
             for i in 1:m
-                Yⁿ⁻, Yⁿ⁺ = lag_for_asymmetry(xᵢ, [0, abs(i)]) # the unlagged xᵢ may now be a parent, so don't include it
+                Yⁿ⁻, Yⁿ⁺ = Ylagged[i]
                 fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
                 bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
                 Δs[i] = fw - bw
