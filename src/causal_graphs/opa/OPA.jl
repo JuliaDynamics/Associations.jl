@@ -17,11 +17,20 @@ export OPA
         est_cond::EC = FPVP(k = 3, w = 3)
         n_bootstrap::N = 3000,
         rng = Random.default_rng(),
-        eliminate = true)
+        eliminate = true,
+        stop_predlag::Int = 0)
 
-The naive variant of the optimal predictive asymmetry algorithm (`OPA`) for inferring
+The naive variant of the optimal predictive asymmetry (PA) algorithm (`OPA`) for inferring
 causal graphs. Performs no pre-checks for the forward measure (i.e. full asymemtry
 is computed for all possible variables).
+
+## Keyword arguments
+
+- **`stop_predlag::Int`**: During significance testing loops, stop testing if a negative
+    predictive asymmetry is found at a prediction lag `η <= stop_predlag`. PA typically
+    drops off rapidly after the first few prediction lags, so this can save some
+    computation time, at the expense of potentially higher false negative rates. If
+    `stop_predlag <= 0`, then the entire test is always performed (no skipping).
 
 ## Description
 
@@ -73,6 +82,7 @@ Base.@kwdef struct OPA{MP, MC, A, K, EP, EC, N, R, EL} <: GraphAlgorithm
     f::Function = mean
     rng::R = Random.default_rng()
     eliminate::EL = false
+    stop_predlag::Int = 1
 end
 
 function infer_graph(alg::OPA, x; verbose = false)
@@ -146,7 +156,8 @@ end
 # Asymmetry is typically highest at small prediction lags, so it might be beneficial
 # to look there first.
 function select_parents(alg::OPA, x, i::Int; verbose = false)
-    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng, eliminate) = alg
+    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap,
+        f, rng, eliminate, stop_predlag) = alg
 
     verbose && println("\n=======================================")
     verbose && println("Finding parents for variable x$i ....")
@@ -207,7 +218,8 @@ end
 # Then perform asymmetry-based significance testing to find the first variable
 # that has significant.
 function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = false)
-    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng, eliminate) = alg
+    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap,
+        f, rng, eliminate, stop_predlag) = alg
     xᵢ = x[i]
     N = length(xᵢ)
 
@@ -229,6 +241,11 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
             Yⁿ⁻, Yⁿ⁺ = Ylagged[i]
             fw = @views dispatch(measure_pairwise, est_pairwise, X⁻[idxs], Yⁿ⁺[idxs])
             bw = @views dispatch(measure_pairwise, est_pairwise, X⁺[idxs], Yⁿ⁻[idxs])
+            if stop_predlag > 0 && i <= stop_predlag && fw - bw < 0
+                Δs[ix] .= 0.0
+                fws[ix] .= 0.0
+                break
+            end
             Δs[ix][i] = fw - bw
             fws[ix][i] = fw
         end
@@ -268,7 +285,9 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
 end
 
 function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = false)
-    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng, eliminate) = alg
+    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap,
+        f, rng, eliminate, stop_predlag) = alg
+
     @assert length(parents.js) == length(parents.τs)
     xᵢ = x[i]
     N = length(xᵢ)
@@ -288,6 +307,11 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
             Yⁿ⁻, Yⁿ⁺ = Ylagged[i]
             fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
             bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
+            if stop_predlag > 0 && i <= stop_predlag && fw - bw < 0
+                Δs[ix] .= 0.0
+                fws[ix] .= 0.0
+                break
+            end
             Δs[ix][i] = fw - bw
             fws[ix][i] = fw
         end
@@ -326,10 +350,12 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
     return false
 end
 
-function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_remaining; verbose = false)
-    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap, f, rng, eliminate) = alg
-    M = length(parents.js)
+function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_remaining;
+        verbose = false)
+    (; τmax, m, α, k, measure_pairwise, measure_cond, est_pairwise, est_cond, n_bootstrap,
+        f, rng, eliminate, stop_predlag) = alg
 
+    M = length(parents.js)
     js_remaining = parents.js[setdiff(1:M, q)]
     τs_remaining = parents.τs[setdiff(1:M, q)]
     if isempty(js_remaining) || q > length(parents.js)
@@ -360,6 +386,11 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
                 Yⁿ⁻, Yⁿ⁺ = Ylagged[i]
                 fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
                 bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
+                if stop_predlag > 0 && i <= stop_predlag && fw - bw < 0
+                    Δs[ix] .= 0.0
+                    fws[ix] .= 0.0
+                    break
+                end
                 Δs[i] = fw - bw
                 fws[i] = fw
             end
