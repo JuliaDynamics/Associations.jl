@@ -232,7 +232,7 @@ function select_first_parent!(alg::OPA, parents, x, i::Int, js, τs; verbose = f
             Δs[ix][i] = fw - bw
             fws[ix][i] = fw
         end
-        Δs[ix] = scale_exponentially(Δs[ix]; k)
+        #Δs[ix] = scale_exponentially(Δs[ix]; k)
     end
 
     # Select the variable that has the highest significant association with xᵢ.
@@ -291,7 +291,7 @@ function select_conditional_parent!(alg::OPA, parents, x, i::Int, js, τs; verbo
             Δs[ix][i] = fw - bw
             fws[ix][i] = fw
         end
-        Δs[ix] = scale_exponentially(Δs[ix]; k)
+        #Δs[ix] = scale_exponentially(Δs[ix]; k)
     end
 
     # Select the variable that has the highest significant association with xᵢ.
@@ -363,7 +363,7 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
                 Δs[i] = fw - bw
                 fws[i] = fw
             end
-            Δs = scale_exponentially(Δs; k)
+            #Δs = scale_exponentially(Δs; k)
             # If p-value >= α, then we can't reject the null, i.e. the statistic I is
             # indistinguishable from zero, so we claim independence.
             result = bootstrap_right(f, Δs, 0.0; tail = :right)
