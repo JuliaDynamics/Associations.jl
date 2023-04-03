@@ -80,6 +80,11 @@ function infer_graph(alg::OPA, x; verbose = false)
     return parents
 end
 
+function infer_graph(alg::OPA, x::AbstractDataset; verbose = false)
+    parents = select_parents(alg, columns(x); verbose)
+    return parents
+end
+
 """
     select_parents(alg::OPA, x)
 
