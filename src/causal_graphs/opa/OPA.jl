@@ -399,7 +399,7 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
             # indistinguishable from zero, so we claim independence.
             result = bootstrap_right(f, Δs, 0.0; tail = :right)
             if verbose
-                if pvalue(result) >= α && mean(fws) > 0
+                if pvalue(result) >= α || mean(fws) <= 0
                     j = parents.js[q]
                     τ = parents.τs[q]
                     r = "Removing x$j($τ) from parent set"
@@ -414,7 +414,7 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
                 end
             end
             # A parent became independent of the target conditional on the remaining parents
-            if pvalue(result) >= α || mean(fws) < 0
+            if pvalue(result) >= α || mean(fws) <= 0
                 deleteat!(parents.js, q)
                 deleteat!(parents.τs, q)
                 deleteat!(idxs_vars_remaining, q)
