@@ -11,11 +11,11 @@ export OPA
 # to just test *one* time step in the non-causal direction?
 """
     OPA(; τmax = 1, m::Int = 5, α = 0.05,
-        measure_pairwise::MP = MIShannon()
-        measure_cond::MC = CMIShannon()
-        est_pairwise::EP = KSG2(k = 3, w = 3)
-        est_cond::EC = FPVP(k = 3, w = 3)
-        n_bootstrap::N = 3000,
+        measure_pairwise = MIShannon(),
+        measure_cond = CMIShannon(),
+        est_pairwise = KSG2(k = 3, w = 3),
+        est_cond = FPVP(k = 3, w = 3),
+        n_bootstrap = 3000,
         rng = Random.default_rng(),
         eliminate = true,
         stop_predlag::Int = 0)
