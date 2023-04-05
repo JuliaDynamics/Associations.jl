@@ -105,6 +105,10 @@ function SimpleDiGraph(v::Vector{<:CausalityTools.OCESelectedParents})
     end
     return g
 end
+
+function select_parents(alg::OCE, x, i::Int; verbose = false)
+    τs, js, 𝒫s = prepare_embeddings(alg, x, i)
+
     verbose && println("\nInferring parents for x$i(0)...")
     # Account for the fact that the `𝒫ⱼ ∈ 𝒫s` are embedded. This means that some points are
     # lost from the `xᵢ`s.
