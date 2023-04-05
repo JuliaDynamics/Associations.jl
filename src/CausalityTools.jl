@@ -56,28 +56,19 @@ module CausalityTools
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "2.0.0"
+    version_number = "2.3.0"
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - An overall overhaul of the API and documentation. See the online documentation
-        for a full overview.
-    - There are now three conceptual levels of funcationality: 1) association measures,
-        2) independence testing based on these measures, and 3) causal graph inference.
-
-    Other changes:
-    - A plethora of new methods and estimators for information theoretic quantities have
-        been added. See the online documentation for an overview.
-    - Syntax for many methods have changed. Estimators, which
-        also contains analysis parameters, are now always the first argument.
-    - All information-based methods in the DynamicalSystems.jl organization that are
-        more complex than those in `ComplexityMeasures.jl` have been moved to CausalityTools.jl.
-        This include `mutualinfo`, `condmutualinfo` and `transferentropy`.
-    - TransferEntropy.jl has been discontinued, and all its functionality has been moved to
-        CausalityTools.jl. `conditional_mutualinfo` has been renamed to `condmutualinfo`.
-    - The `Kraskov1` and `Kraskov2` mutual information estimators have been renamed to
-        `KraskovStögbauerGrassberger1` (`KSG1` for short) and
-        `KraskovStögbauerGrassberger2` (`KSG2` for short).
+    - Significant speed-ups for `OCE` by sorting on maximal measure, thus avoiding
+    unnecessary significance tests.
+    - Default parameters for `OCE` default lag parameter have changed. Now, `τmax = 1`, since
+        that is the only case considered in the original paper. We also use the
+        `MesnerShalisi` CMI estimator for the conditional step, because in contrast to
+        the `FPVP` estimator, it has been shown to be consistent.
+    - Source code for `OCE` has been drastically simplified by merging the pairwise
+        and conditional parent finding steps.
+    - `OCE` result can now be converted to a `SimpleDiGraph` from Graphs.jl.
     """
 
     if display_update

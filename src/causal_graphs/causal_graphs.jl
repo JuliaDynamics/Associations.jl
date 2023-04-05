@@ -1,3 +1,8 @@
+import Graphs.SimpleGraphs: SimpleDiGraph
+import Graphs: edges
+export SimpleDiGraph
+export edges
+
 include("api.jl")
 
 # Concrete implementations

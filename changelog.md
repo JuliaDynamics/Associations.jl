@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.3.0
+
+- Significant speed-ups for `OCE` by sorting on maximal measure, thus avoiding
+    unnecessary significance tests.
+- Default parameters for `OCE` default lag parameter have changed. Now, `τmax = 1`, since
+    that is the only case considered in the original paper. We also use the
+    `MesnerShalisi` CMI estimator for the conditional step, because in contrast to
+    the `FPVP` estimator, it has been shown to be consistent.
+- Source code for `OCE` has been drastically simplified by merging the pairwise
+    and conditional parent finding steps.
+- `OCE` result can now be converted to a `SimpleDiGraph` from Graphs.jl.
+
 ## 2.2.1
 
 - `infer_graph` now accepts the `verbose` keyword.
