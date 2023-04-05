@@ -8,6 +8,7 @@ for the conditional steps.
 
 ```@example causalgraph_oce
 using CausalityTools
+using Graphs
 using Random
 rng = MersenneTwister(1234)
 
@@ -21,7 +22,11 @@ ctest = LocalPermutationTest(CMIShannon(), FPVP(k = 5))
 
 # Infer graph
 alg = OCE(; utest, ctest, α = 0.05, τmax = 3)
-infer_graph(alg, [x, y, z, w])
+parents = infer_graph(alg, [x, y, z, w])
+
+# Convert to graph and inspect edges
+g = SimpleDiGraph(parents)
+collect(edges(g))
 ```
 
 The algorithm nicely recovers the true causal directions.
