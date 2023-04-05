@@ -47,8 +47,8 @@ Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
 end
 
 function infer_graph(alg::OCE, x; verbose = true)
-    parents = select_parents(alg, x; verbose)
-    return parents
+    return select_parents(alg, x; verbose)
+end
 end
 
 """
