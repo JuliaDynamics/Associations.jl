@@ -35,10 +35,10 @@ GaussianCMI
 FPVP
 ```
 
-### [`MesnerShalisi`](@ref)
+### [`MesnerShalizi`](@ref)
 
 ```@docs
-MesnerShalisi
+MesnerShalizi
 ```
 
 ### [`PoczosSchneiderCMI`](@ref)

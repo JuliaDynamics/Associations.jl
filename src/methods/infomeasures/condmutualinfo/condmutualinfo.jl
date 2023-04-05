@@ -27,7 +27,7 @@ The supertype of all conditional mutual information estimators.
 - [`FPVP`](@ref).
 - [`PoczosSchneiderCMI`](@ref).
 - [`Rahimzamani`](@ref).
-- [`MesnerShalisi`](@ref).
+- [`MesnerShalizi`](@ref).
 """
 abstract type ConditionalMutualInformationEstimator end
 const CMIEstimator = ConditionalMutualInformationEstimator
@@ -62,7 +62,7 @@ mixed.
 | Estimator                    | Principle         | [`CMIShannon`](@ref) | [`CMIRenyiPoczos`](@ref) |
 | ---------------------------- | ----------------- | :------------------: | :----------------------: |
 | [`FPVP`](@ref)               | Nearest neighbors |          ✓          |            x             |
-| [`MesnerShalisi`](@ref)      | Nearest neighbors |          ✓          |            x             |
+| [`MesnerShalizi`](@ref)      | Nearest neighbors |          ✓          |            x             |
 | [`Rahimzamani`](@ref)        | Nearest neighbors |          ✓          |            x             |
 | [`PoczosSchneiderCMI`](@ref) | Nearest neighbors |          x           |            ✓            |
 """

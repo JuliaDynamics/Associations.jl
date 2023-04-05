@@ -18,7 +18,7 @@ x, y, z, w = columns(trajectory(sys, 400, Ttr = 10000))
 
 # Independence tests for unconditional and conditional stages.
 utest = SurrogateTest(MIShannon(), KSG2(k = 3, w = 1); rng, nshuffles = 150)
-ctest = LocalPermutationTest(CMIShannon(), MesnerShalisi(k = 3, w = 1); rng, nshuffles = 150)
+ctest = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 1); rng, nshuffles = 150)
 
 # Infer graph
 alg = OCE(; utest, ctest, α = 0.05, τmax = 1)
