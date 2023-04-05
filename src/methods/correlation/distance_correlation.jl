@@ -36,14 +36,20 @@ struct DistanceCorrelation <: AssociationMeasure end
 
 """
     distance_correlation(x, y) → dcor ∈ [0, 1]
-    distance_correlation(x, y, z) → pdcor ∈ [0, 1]
+    distance_correlation(x, y, z) → pdcor
 
 Compute the empirical/sample distance correlation (Székely et al., 2007)[^Székely2007],
-here called `dcor`, between StateSpaceSets `x` and `y`.
+here called `dcor`, between StateSpaceSets `x` and `y`. Alternatively, compute the
+partial distance correlation `pdcor` (Székely and Rizzo, 2014)[^Székely2014].
+
+See also: [`DistanceCorrelation`](@ref).
 
 [^Székely2007]:
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
     dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
+[^Székely2014]:
+    Székely, G. J., & Rizzo, M. L. (2014). Partial distance correlation with methods for
+    dissimilarities.
 """
 function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet)
     return estimate(DistanceCorrelation(), x, y)
