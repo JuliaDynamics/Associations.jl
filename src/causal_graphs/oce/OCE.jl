@@ -134,25 +134,11 @@ function select_parents(alg::OCE, x, i::Int; verbose = false)
         ###################################################################
         # Backward elimination
         ###################################################################
-        if !(length(parents.parents) >= 2)
-            return parents
-        end
-
-        verbose && println("˧ Backwards elimination...")
-
-        eliminate = true
-        ks_remaining = Set(1:length(parents.parents))
-        while eliminate && length(ks_remaining) >= 2
-            for k in ks_remaining
-                eliminate = backwards_eliminate!(parents, alg, xᵢ, k; verbose)
-                if eliminate
-                    filter!(x -> x == k, ks_remaining)
-                end
-            end
-        end
+        backwards_eliminate!(alg, parents, xᵢ, i; verbose)
     end
     return parents
 end
+
 
 function prepare_embeddings(alg::OCE, x, i)
     # Preliminary parents
