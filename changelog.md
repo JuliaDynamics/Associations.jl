@@ -4,6 +4,8 @@
 
 - Added partial distance correlation measure. To compute it, simply provide a
     third input argument to `distance_correlation`.
+- `DistanceCorrelation` is now compatible with both `SurrogateTest` and
+    `LocalPermutationTest` in its conditional form.
 
 ## 2.3.1
 

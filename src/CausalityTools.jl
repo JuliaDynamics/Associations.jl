@@ -62,6 +62,8 @@ module CausalityTools
     \nUpdate message: CausalityTools v$(version_number)\n
     - Added partial distance correlation measure. To compute it, simply provide a
         third input argument to `distance_correlation`.
+    - `DistanceCorrelation` is now compatible with both `SurrogateTest` and
+        `LocalPermutationTest` in its conditional form.
     """
 
     if display_update
