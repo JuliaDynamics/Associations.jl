@@ -154,11 +154,15 @@ function prepare_embeddings(alg::OCE, x, i)
 end
 
 
-function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i; verbose = true)
-    # If there are no potential parents to pick from, return immediately.
-    isempty(𝒫s) && return false
+function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i::Int; verbose = true)
+    # Have any parents been identified yet?
     pairwise = isempty(parents.parents)
 
+    # If there are no potential parents to pick from, return immediately.
+    isempty(𝒫s) && return false
+
+    # Configure estimation and independence testing function calls, which differ in the
+    # number of arguments depending on whether we're doing the pairwise or conditional case.
     if !pairwise
         P = StateSpaceSet(parents.parents...)
         f = (measure, est, xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ, P)
@@ -168,15 +172,15 @@ function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i; verbose = tr
         findep = (test, xᵢ, Pix) -> independence(test, xᵢ, Pix)
     end
 
-
-    # First compute the measure without significance testing
+    # Compute the measure without significance testing first. This avoids unnecessary
+    # independence testing, which takes a lot of time.
     Is = zeros(length(𝒫s))
     for (i, Pⱼ) in enumerate(𝒫s)
         Is[i] = f(alg.utest.measure, alg.utest.est, xᵢ, Pⱼ)
     end
 
-    # Sort variables according to maximal measure and select the first that gives
-    # significant association.
+    # Sort variables according to maximal measure and select the first lagged variable that
+    # gives significant association with the target variable.
     maximize_sortidxs = sortperm(Is, rev = true)
     n_checked = 0
     n_potential_vars = length(𝒫s)
@@ -212,41 +216,73 @@ function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i; verbose = tr
         s = ["x$i(0) ⫫ x$j($τ) | ∅)" for (τ, j) in zip(τs, js)]
         println("\t$(join(s, "\n\t"))")
     end
+    return false
 end
 
-function backwards_eliminate!(parents, alg, xᵢ, k; verbose = false)
+"""
+    backwards_eliminate!(alg::OCE, parents::OCESelectedParents, x, i; verbose)
+
+Algorithm 2.2 in Sun et al. (2015). Perform backward elimination for the `i`-th variable
+in `x`, given the previously inferred `parents`, which were deduced using parameters in
+`alg`. Modifies `parents` in-place.
+"""
+function backwards_eliminate!(alg::OCE, parents::OCESelectedParents, xᵢ, i::Int; verbose)
+    length(parents.parents) < 2 && return parents
+
+    verbose && println("˧ Backwards elimination...")
+    n_initial = length(parents.parents_js)
+    q = 0
+    variable_was_eliminated = true
+    while variable_was_eliminated && length(parents.parents_js) >= 2 && q < n_initial
+        q += 1
+        variable_was_eliminated = eliminate_loop!(alg, parents, xᵢ, i; verbose)
+    end
+    return parents
+end
+
+"""
+    eliminate_loop!(alg::OCE, parents::OCESelectedParents, xᵢ; verbose = false)
+
+Inner portion of algorithm 2.2 in Sun et al. (2015). This method is called in an external
+while-loop that handles the variable elimination step in their line 3.
+"""
+function eliminate_loop!(alg::OCE, parents::OCESelectedParents, xᵢ, i; verbose = false)
+    isempty(parents.parents) && return false
     M = length(parents.parents)
     P = parents.parents
-    Pj = P[k]
-    remaining_idxs = setdiff(1:M, k)
-    remaining = StateSpaceSet(P...)[:, remaining_idxs]
-    test = independence(alg.ctest, xᵢ, Pj, remaining)
+    variable_was_eliminated = false
+    for k in eachindex(P)
+        Pj = P[k]
+        remaining_idxs = setdiff(1:M, k)
+        remaining = StateSpaceSet(P[remaining_idxs]...)
+        test = independence(alg.ctest, xᵢ, Pj, remaining)
 
-    if verbose
-        τ, j = parents.parents_τs[k], parents.parents_js[k] # Variable currently considered
-        τs = parents.parents_τs
-        js = parents.parents_js
-        src_var = "x$j($τ)"
-        targ_var = "x$(js[k])($(τs[k]))"
-        cond_var = join(["x$(js[i])($(τs[i]))" for i in remaining_idxs], ", ")
+        if verbose
+            τ, j = parents.parents_τs[k], parents.parents_js[k] # Variable currently considered
+            τs = parents.parents_τs
+            js = parents.parents_js
+            src_var = "x$j($τ)"
+            targ_var = "x$i(0)"
+            cond_var = join(["x$(js[r])($(τs[r]))" for r in remaining_idxs], ", ")
 
+            if test.pvalue >= alg.α
+                outcome_msg = "Removing x$(j)($τ) from parent set"
+                println("\t$src_var ⫫ $targ_var | $cond_var → $outcome_msg")
+            else
+                outcome_msg = "Keeping x$(j)($τ) in parent set"
+                println("\t$src_var !⫫ $targ_var | $cond_var → $outcome_msg")
+            end
+        end
+
+        # A parent became independent of the target conditional on the remaining parents
         if test.pvalue >= alg.α
-            outcome_msg = "Removing x$(j)($τ) from parent set"
-            println("\t$src_var ⫫ $targ_var | $cond_var → $outcome_msg")
-        else
-            outcome_msg = "Keeping x$(j)($τ) in parent set"
-            println("\t$src_var !⫫ $targ_var | $cond_var → $outcome_msg")
+            deleteat!(parents.parents, k)
+            deleteat!(parents.parents_js, k)
+            deleteat!(parents.parents_τs, k)
+            variable_was_eliminated = true
+            break
         end
     end
 
-    # If p-value >= α, then we can't reject the null, i.e. the statistic I is
-    # indistinguishable from zero, so we claim independence and remove the variable.
-    if test.pvalue >= alg.α
-        deleteat!(parents.parents, k)
-        deleteat!(parents.parents_js, k)
-        deleteat!(parents.parents_τs, k)
-        return true
-    else
-        return false
-    end
+    return variable_was_eliminated
 end
