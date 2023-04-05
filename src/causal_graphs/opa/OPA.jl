@@ -13,8 +13,8 @@ export OPA
     OPA(; τmax = 1, m::Int = 5, α = 0.05,
         measure_pairwise = MIShannon(),
         measure_cond = CMIShannon(),
-        est_pairwise = KSG2(k = 3, w = 3),
-        est_cond = FPVP(k = 3, w = 3),
+        est_pairwise = KSG2(k = 5, w = 1),
+        est_cond = MesnerShalisi(k = 5, w = 1),
         n_bootstrap = 3000,
         rng = Random.default_rng(),
         eliminate = true,
@@ -75,8 +75,8 @@ Base.@kwdef struct OPA{MP, MC, A, K, EP, EC, N, R, EL} <: GraphAlgorithm
     k::K = 1.0 # exponential decay constant
     measure_pairwise::MP = MIShannon()
     measure_cond::MC = CMIShannon()
-    est_pairwise::EP = KSG2(k = 3, w = 1)
-    est_cond::EC = Rahimzamani(k = 3, w = 1)
+    est_pairwise::EP = KSG2(k = 20, w = 1)
+    est_cond::EC = MesnerShalisi(k = 20, w = 1)
     n_bootstrap::N = 3000
     # TODO: maximum number of conditional discoveries.
     f::Function = mean
