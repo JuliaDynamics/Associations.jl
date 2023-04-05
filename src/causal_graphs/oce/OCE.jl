@@ -85,7 +85,6 @@ function selected(o::OCESelectedParents)
     return join(["x$(js[i])($(τs[i]))" for i in eachindex(js)], ", ")
 end
 
-
 function Base.show(io::IO, x::OCESelectedParents)
     s = ["x$(x.parents_js[i])($(x.parents_τs[i]))" for i in eachindex(x.parents)]
     all = "x$(x.i)(0) ← $(join(s, ", "))"
@@ -122,16 +121,14 @@ function select_parents(alg::OCE, x, i::Int; verbose = false)
     # 1. Can we find a significant pairwise association?
     verbose && println("˧ Querying pairwise associations...")
 
-    significant_pairwise = select_first_parent!(parents, alg, τs, js, 𝒫s, xᵢ, i; verbose)
+    significant_pairwise = select_parent!(alg, parents, τs, js, 𝒫s, xᵢ, i; verbose)
 
     if significant_pairwise
         verbose && println("˧ Querying new variables conditioned on already selected variables...")
         # 2. Continue until there are no more significant conditional pairwise associations
         significant_cond = true
-        k = 0
         while significant_cond
-            k += 1
-            significant_cond = select_conditional_parent!(parents, alg, τs, js, 𝒫s, xᵢ, i; verbose)
+            significant_cond = select_parent!(alg, parents, τs, js, 𝒫s, xᵢ, i; verbose)
         end
 
         ###################################################################
@@ -157,87 +154,77 @@ function select_parents(alg::OCE, x, i::Int; verbose = false)
     return parents
 end
 
-# Pairwise associations
-function select_first_parent!(parents, alg, τs, js, 𝒫s, xᵢ, i; verbose = false)
-    M = length(𝒫s)
-
-    if isempty(𝒫s)
-        return false
+function prepare_embeddings(alg::OCE, x, i)
+    # Preliminary parents
+    τs = Iterators.flatten([-1:-1:-alg.τmax |> collect for xᵢ in x]) |> collect
+    js = Iterators.flatten([fill(i, alg.τmax) for i in eachindex(x)]) |> collect
+    embeddings = [genembed(xᵢ, -1:-1:-alg.τmax) for xᵢ in x]
+    T = typeof(1.0)
+    𝒫s = Vector{Vector{T}}(undef, 0)
+    for emb in embeddings
+        append!(𝒫s, columns(emb))
     end
-
-    # Association measure values and the associated p-values
-    Is, pvals = zeros(M), zeros(M)
-    for (i, Pj) in enumerate(𝒫s)
-        test = independence(alg.utest, xᵢ, Pj)
-        Is[i] = test.m
-        pvals[i] = pvalue(test)
-    end
-
-    if all(pvals .>= alg.α)
-        s = ["x$i(0) ⫫ x$j(t$τ) | ∅)" for (τ, j) in zip(τs, js)]
-        verbose && println("\t$(join(s, "\n\t"))")
-        return false
-    end
-    # Select the variable that has the highest significant association with xᵢ.
-    # "Significant" means a p-value strictly less than the significance level α.
-    Imax = maximum(Is[pvals .< alg.α])
-    idx = findfirst(x -> x == Imax, Is)
-
-    if Is[idx] > 0
-        verbose && println("\tx$i(0) !⫫ x$(js[idx])($(τs[idx])) | ∅")
-        push!(parents.parents, 𝒫s[idx])
-        push!(parents.parents_js, js[idx])
-        push!(parents.parents_τs, τs[idx])
-        deleteat!(𝒫s, idx)
-        deleteat!(js, idx)
-        deleteat!(τs, idx)
-        return true
-    else
-        s = ["x$i(0) ⫫ x$j($τ) | ∅)" for (τ, j) in zip(τs, js)]
-        verbose && println("\t$(join(s, "\n\t"))")
-        return false
-    end
+    return τs, js, 𝒫s
 end
 
-function select_conditional_parent!(parents, alg, τs, js, 𝒫s, xᵢ, i; verbose)
-    if isempty(𝒫s)
-        return false
-    end
 
-    P = StateSpaceSet(parents.parents...)
-    M = length(𝒫s)
-    Is = zeros(M)
-    pvals = zeros(M)
-    for (i, Pj) in enumerate(𝒫s)
-        test = independence(alg.ctest, xᵢ, Pj, P)
-        Is[i] = test.m
-        pvals[i] = pvalue(test)
-    end
-    # Select the variable that has the highest significant association with xᵢ.
-    # "Significant" means a p-value strictly less than the significance level α.
-    if all(pvals .>= alg.α)
-        s = ["x$i(0) ⫫ x$j($τ) | $(selected(parents))" for (τ, j) in zip(τs, js)]
-        verbose && println("\t$(join(s, "\n\t"))")
-        return false
-    end
-    Imax = maximum(Is[pvals .< alg.α])
-    idx = findfirst(x -> x == Imax, Is)
+function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i; verbose = true)
+    # If there are no potential parents to pick from, return immediately.
+    isempty(𝒫s) && return false
+    pairwise = isempty(parents.parents)
 
-    if Is[idx] > 0
-        τ = τs[idx]
-        j = js[idx]
-        verbose && println("\tx$i(0) !⫫ x$j($τ) | $(selected(parents))")
-        push!(parents.parents, 𝒫s[idx])
-        push!(parents.parents_js, js[idx])
-        push!(parents.parents_τs, τs[idx])
-        deleteat!(𝒫s, idx)
-        deleteat!(τs, idx)
-        deleteat!(js, idx)
-        return true
+    if !pairwise
+        P = StateSpaceSet(parents.parents...)
+        f = (measure, est, xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ, P)
+        findep = (test, xᵢ, Pix) -> independence(test, xᵢ, Pix, P)
     else
+        f = (measure, est, xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ)
+        findep = (test, xᵢ, Pix) -> independence(test, xᵢ, Pix)
+    end
+
+
+    # First compute the measure without significance testing
+    Is = zeros(length(𝒫s))
+    for (i, Pⱼ) in enumerate(𝒫s)
+        Is[i] = f(alg.utest.measure, alg.utest.est, xᵢ, Pⱼ)
+    end
+
+    # Sort variables according to maximal measure and select the first that gives
+    # significant association.
+    maximize_sortidxs = sortperm(Is, rev = true)
+    n_checked = 0
+    n_potential_vars = length(𝒫s)
+    while n_checked < n_potential_vars
+        n_checked += 1
+        ix = maximize_sortidxs[n_checked]
+        if Is[ix] > 0
+            # findep takes into account the conditioning set too if it is non-empty.
+            result = findep(alg.utest, xᵢ, 𝒫s[ix])
+            if pvalue(result) < alg.α
+                if verbose && !pairwise
+                    println("\tx$i(0) !⫫ x$(js[ix])($(τs[ix])) | $(selected(parents))")
+                elseif verbose && pairwise
+                    println("\tx$i(0) !⫫ x$(js[ix])($(τs[ix])) | ∅")
+                end
+                push!(parents.parents, 𝒫s[ix])
+                push!(parents.parents_js, js[ix])
+                push!(parents.parents_τs, τs[ix])
+                deleteat!(𝒫s, ix)
+                deleteat!(js, ix)
+                deleteat!(τs, ix)
+                return true
+            end
+        end
+    end
+    # If we reach this stage, no variables have been selected. Print an informative message.
+    if verbose && !pairwise
+        # No more associations were found
         s = ["x$i(1) ⫫ x$j($τ) | $(selected(parents)))" for (τ, j) in zip(τs, js)]
-        verbose && println("\t$(join(s, "\n\t"))")
-        return false
+        println("\t$(join(s, "\n\t"))")
+    end
+    if verbose && pairwise
+        s = ["x$i(0) ⫫ x$j($τ) | ∅)" for (τ, j) in zip(τs, js)]
+        println("\t$(join(s, "\n\t"))")
     end
 end
 
