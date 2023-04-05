@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.0
+
+- Added partial distance correlation measure. To compute it, simply provide a
+    third input argument to `distance_correlation`.
+
 ## 2.3.1
 
 - The `MesnerShalisi` estimator is now deprecated and renamed to `MesnerShalizi` (with
