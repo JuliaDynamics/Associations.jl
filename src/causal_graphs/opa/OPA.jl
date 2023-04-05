@@ -18,7 +18,7 @@ export OPA
         n_bootstrap = 3000,
         rng = Random.default_rng(),
         eliminate = true,
-        stop_predlag::Int = 0)
+        stop_predlag::Int = 1)
 
 The naive variant of the optimal predictive asymmetry (PA) algorithm (`OPA`) for inferring
 causal graphs. Performs no pre-checks for the forward measure (i.e. full asymemtry
