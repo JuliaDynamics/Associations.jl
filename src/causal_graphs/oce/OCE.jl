@@ -1,3 +1,6 @@
+using Graphs: add_edge!
+using Graphs.SimpleGraphs: SimpleDiGraph
+
 export OCE
 
 """
@@ -89,7 +92,19 @@ function Base.show(io::IO, x::OCESelectedParents)
     show(io, all)
 end
 
-function select_parents(alg::OCE, τs, js, 𝒫s, x, i::Int; verbose = false)
+function SimpleDiGraph(v::Vector{<:CausalityTools.OCESelectedParents})
+    N = length(v)
+    g = SimpleDiGraph(N)
+    for k = 1:N
+        parents = v[k]
+        for (j, τ) in zip(parents.parents_js, parents.parents_τs)
+            if j != k # avoid self-loops
+                add_edge!(g, j, k)
+            end
+        end
+    end
+    return g
+end
     verbose && println("\nInferring parents for x$i(0)...")
     # Account for the fact that the `𝒫ⱼ ∈ 𝒫s` are embedded. This means that some points are
     # lost from the `xᵢ`s.
