@@ -3,9 +3,8 @@ export OCE
 """
     OCE <: GraphAlgorithm
     OCE(; utest::IndependenceTest = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3)),
-          ctest::C = LocalPermutationTest(CMIShannon(), FPVP(k = 3, w = 3)),
-          τmax::T = 5, α = 0.05
-    )
+          ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalisi(k = 3, w = 3)),
+          τmax::T = 1, α = 0.05)
 
 The optimal causation entropy (OCE) algorithm for causal discovery (Sun et al.,
 2015)[^Sun2015].
@@ -24,7 +23,7 @@ The OCE algorithm has three steps to determine the parents of a variable `xᵢ`.
     where `P` is the set of parent nodes found in the previous steps.
 
 `τmax` indicates the maximum lag `τ` between the target variable `xᵢ(0)` and
-its potential parents `xⱼ(-τ)`.
+its potential parents `xⱼ(-τ)`. Sun et al. 2015's method is based on `τmax = 1`.
 
 ## Returns
 
