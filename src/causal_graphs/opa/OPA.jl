@@ -373,22 +373,22 @@ function backwards_eliminate!(alg::OPA, parents, x, i::Int, q::Int, idxs_vars_re
     max_combolength = length(js_remaining)
     Ylagged = [lag_for_asymmetry(xᵢ, [0, abs(i)]) for i = 1:m] # the unlagged xᵢ may now be a parent, so don't include it
 
+    Δs = zeros(m) # allocating outside loop is fine, because we overwrite.
+    fws = zeros(m) # allocating outsideloop is fine, because we overwrite.
+
     # Go through conditioning sets of increasing size.
     for cl in max_combolength:max_combolength # actually, for now, just do maximum size.
         combs = combinations(1:max_combolength, cl) |> collect # returns combinations of increasing size
 
         for (k, comb) in enumerate(combs)
-            Δs = zeros(m) # allocating outside is fine, because we overwrite.
-            fws = zeros(m) # allocating outside is fine, because we overwrite.
-
             C⁻, C⁺ = lag_for_asymmetry(x, τs_remaining[comb], js_remaining[comb])
             for i in 1:m
                 Yⁿ⁻, Yⁿ⁺ = Ylagged[i]
                 fw = @views dispatch(measure_cond, est_cond, X⁻[idxs], Yⁿ⁺[idxs], C⁻[idxs])
                 bw = @views dispatch(measure_cond, est_cond, X⁺[idxs], Yⁿ⁻[idxs], C⁺[idxs])
                 if stop_predlag > 0 && i <= stop_predlag && fw - bw < 0
-                    Δs[ix] .= 0.0
-                    fws[ix] .= 0.0
+                    Δs .= 0.0
+                    fws .= 0.0
                     break
                 end
                 Δs[i] = fw - bw
