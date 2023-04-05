@@ -177,7 +177,7 @@ function distance_covariance(X::ArrayOrStateSpaceSet, Y::ArrayOrStateSpaceSet, Z
     Lx, Ly, Lz = length(X), length(Y), length(Z)
     Lx == Ly == Lz || throw(ArgumentError("Input X, Y and Z must have same lengths."))
     N = Lx
-    N >= 4 || throw(ArgumentError("Partial distance correlation is defined for 4 or more points. Got $N"))
+    N >= 4 || throw(ArgumentError("Partial distance covariance is defined for 4 or more points. Got $N"))
 
     Xds = pairwise(Euclidean(), StateSpaceSet(X))
     Yds = pairwise(Euclidean(), StateSpaceSet(Y))
