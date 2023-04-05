@@ -41,9 +41,9 @@ graph with all the detected associations.
     causation entropy. SIAM Journal on Applied Dynamical Systems, 14(1), 73-106.
 """
 Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
-    utest::U = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3))
-    ctest::C = LocalPermutationTest(CMIShannon(), FPVP(k = 3, w = 3))
-    τmax::T = 5
+    utest::U = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3), nshuffles = 100)
+    ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalisi(k = 3, w = 3), nshuffles = 100)
+    τmax::T = 1
     α = 0.05
 end
 
