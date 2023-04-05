@@ -56,12 +56,12 @@ module CausalityTools
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "2.3.1"
+    version_number = "2.4.0"
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - The `MesnerShalisi` estimator is now deprecated and renamed to `MesnerShalizi` (with
-    correct spelling).
+    - Added partial distance correlation measure. To compute it, simply provide a
+        third input argument to `distance_correlation`.
     """
 
     if display_update
