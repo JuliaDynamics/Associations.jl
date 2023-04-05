@@ -1,5 +1,6 @@
 using StateSpaceSets: AbstractStateSpaceSet
 using Distances
+using LinearAlgebra
 
 export DistanceCorrelation
 export distance_correlation
@@ -8,7 +9,8 @@ export distance_correlation
     DistanceCorrelation
 
 The distance correlation (Székely et al., 2007)[^Székely2007] measure quantifies
-potentially nonlinear associations between pairs of variables.
+potentially nonlinear associations between pairs of variables. If applied to
+three variables, the partial distance correlation is computed.
 
 ## Usage
 
@@ -33,6 +35,11 @@ function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet)
     return estimate(DistanceCorrelation(), x, y)
 end
 
+function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet,
+        z::ArrayOrStateSpaceSet)
+    return estimate(DistanceCorrelation(), x, y, z)
+end
+
 # Common interface for higher-level methods.
 function estimate(measure::DistanceCorrelation, X, Y)
     # TODO: Future optimization: this could be quicker if we only compute distances once
@@ -47,7 +54,6 @@ function estimate(measure::DistanceCorrelation, X, Y)
         return 0.0
     end
 end
-
 
 """
     distance_covariance(x, y) → dcov::Real
@@ -120,4 +126,77 @@ function distance_variance(X::ArrayOrStateSpaceSet)
     𝒱ₙ² /= N^2
 
     return 𝒱ₙ²
+end
+
+export ucenter
+
+function ucenter(x::ArrayOrStateSpaceSet) # operates on points
+    length(x) >= 4 || throw(ArgumentError("Partial distance correlation is defined for 4 or more points. Got $(length(x))"))
+    ds = pairwise(Euclidean(), StateSpaceSet(x))
+    return ucenter_distancematrix(ds)
+end
+
+function ucenter_distancematrix(ds)
+    N = size(ds, 1)
+    āₖs = mean(ds, dims = 1) # col-wise mean
+    āₗs = mean(ds, dims = 2) # row-wise mean
+    Aₖₗ = zeros(size(ds))
+    ā = mean(ds)
+    for l = 1:N
+        for k = 1:N
+            Aₖₗ[k, l] = ds[k, l] - āₖs[l] - āₗs[k] + ā
+        end
+    end
+    return Aₖₗ
+end
+
+
+function compute_prod(X̃, Ỹ)
+    size(X̃) == size(Ỹ) || throw(ArgumentError("Matrices must have same size."))
+    N = size(X̃, 1)
+    X̃Ỹ = 0.0
+    for j = 1:N
+        for i = 1:N
+            if j != i
+                X̃Ỹ += X̃[i, j] * Ỹ[i, j]
+            end
+        end
+    end
+    return X̃Ỹ * 1/(N*(N-3))
+end
+
+# Common interface for higher-level methods.
+function estimate(measure::DistanceCorrelation, X, Y, Z)
+    Lx, Ly, Lz = length(X), length(Y), length(Z)
+    Lx == Ly == Lz || throw(ArgumentError("Input X, Y and Z must have same lengths."))
+    N = Lx
+
+    Ã = ucenter(X)
+    B̃ = ucenter(Y)
+    C̃ = ucenter(Z)
+    ÃB̃ = compute_prod(Ã, B̃)
+    ÃC̃ = compute_prod(Ã, C̃)
+    B̃C̃ = compute_prod(B̃, C̃)
+    Ãsq = sqrt(Ã ⋅ Ã)
+    B̃sq = sqrt(B̃ ⋅ B̃)
+    C̃sq = sqrt(C̃ ⋅ C̃)
+
+    Rxy = ÃB̃ / (Ãsq ⋅ B̃sq)
+    Rxz = ÃC̃ / (Ãsq ⋅ C̃sq)
+    Ryz = B̃C̃ / (B̃sq ⋅ C̃sq)
+
+    if Rxy ^ 2 != 1.0 && Ryz ^ 2 != 1.0
+        return (Rxy - Rxz * Rxy) / (sqrt(1 - Rxz^2) * sqrt(1 - Ryz^2))
+    else
+        PzX = Ã - (Ã ⋅ C̃) / (C̃ ⋅ C̃)*C̃
+        PzY = B̃ - (B̃ ⋅ C̃) / (C̃ ⋅ C̃)*C̃
+        # Assuming notation in paper means determinant.
+        PzXsq = det(PzX)
+        PzYsq = det(PzY)
+        if PzXsq * PzYsq != 0.0
+            return (PzX ⋅ PzY) / (PzXsq * PzYsq)
+        else
+            return 0.0
+        end
+    end
 end
