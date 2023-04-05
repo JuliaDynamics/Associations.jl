@@ -60,6 +60,10 @@ function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet,
     return estimate(DistanceCorrelation(), x, y, z)
 end
 
+function estimate(m::DistanceCorrelation, est::Nothing, args...)
+    return estimate(m, args...)
+end
+
 # Common interface for higher-level methods.
 function estimate(measure::DistanceCorrelation, X, Y)
     # TODO: Future optimization: this could be quicker if we only compute distances once
