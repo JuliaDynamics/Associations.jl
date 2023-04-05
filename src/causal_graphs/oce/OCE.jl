@@ -31,8 +31,8 @@ its potential parents `xⱼ(-τ)`. Sun et al. 2015's method is based on `τmax =
 ## Returns
 
 When used with [`infer_graph`](@ref), it returns a vector `p`, where `p[i]` are the
-parents for each input variable. In the future, this will return a labelled, directed
-graph with all the detected associations.
+parents for each input variable. This result can be converted to a `SimpleDiGraph`
+from Graphs.jl (see [example](@ref oce_example)).
 
 ## Examples
 
