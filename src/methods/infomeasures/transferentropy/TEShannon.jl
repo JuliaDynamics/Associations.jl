@@ -54,7 +54,7 @@ which all boil down to computing conditional mutual information, except for
 | [`GaoKannanOhViswanath`](@ref)   | [`MutualInformationEstimator`](@ref)            | Mixed               |         ✓          |
 | [`GaoOhViswanath`](@ref)         | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |
 | [`FPVP`](@ref)                   | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |
-| [`MesnerShalisi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |
+| [`MesnerShalizi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |
 | [`Rahimzamani`](@ref)            | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |
 | [`Zhu1`](@ref)                   | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |
 | [`Lindner`](@ref)                | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |

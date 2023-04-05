@@ -6,7 +6,7 @@ export OCE
 """
     OCE <: GraphAlgorithm
     OCE(; utest::IndependenceTest = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3)),
-          ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalisi(k = 3, w = 3)),
+          ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3)),
           τmax::T = 1, α = 0.05)
 
 The optimal causation entropy (OCE) algorithm for causal discovery (Sun et al.,
@@ -44,7 +44,7 @@ from Graphs.jl (see [example](@ref oce_example)).
 """
 Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
     utest::U = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3), nshuffles = 100)
-    ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalisi(k = 3, w = 3), nshuffles = 100)
+    ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3), nshuffles = 100)
     τmax::T = 1
     α = 0.05
 end

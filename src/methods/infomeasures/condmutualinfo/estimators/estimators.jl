@@ -1,7 +1,7 @@
 include("FPVP.jl")
 include("Rahimzamani.jl")
 include("PoczosSchneiderCMI.jl")
-include("MesnerShalisi.jl")
+include("MesnerShalizi.jl")
 include("GaussianCMI.jl")
 
 # Definition is actually never used, but we need to define it, so that calling `estimate`

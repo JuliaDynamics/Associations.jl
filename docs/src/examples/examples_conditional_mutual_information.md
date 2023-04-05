@@ -42,7 +42,7 @@ z = (z ./ std(z)) .+ y
 condmutualinfo(FPVP(k = 5), x, z, y) # defaults to `CMIShannon()`
 ```
 
-#### [`CMIShannon`](@ref) with [`MesnerShalisi`](@ref)
+#### [`CMIShannon`](@ref) with [`MesnerShalizi`](@ref)
 
 ```@example mi_demonstration
 using CausalityTools
@@ -59,7 +59,7 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-condmutualinfo(MesnerShalisi(k = 10), x, z, y) # defaults to `CMIShannon()`
+condmutualinfo(MesnerShalizi(k = 10), x, z, y) # defaults to `CMIShannon()`
 ```
 
 #### [`CMIShannon`](@ref) with [`Rahimzamani`](@ref)
