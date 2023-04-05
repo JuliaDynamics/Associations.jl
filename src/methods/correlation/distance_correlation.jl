@@ -21,7 +21,7 @@ is computed.
     coefficient.
 
 !!! warn
-    A partial distance correlation `I = distance_correlation(X, Y, Z)` doesn't
+    A partial distance correlation `distance_correlation(X, Y, Z) = 0` doesn't
     always guarantee conditional independence `X ⫫ Y | Z`. See Székely and Rizzo (2014)
     for in-depth discussion.
 
@@ -77,9 +77,11 @@ end
 
 """
     distance_covariance(x, y) → dcov::Real
+    distance_covariance(x, y, z) → pdcov::Real
 
 Compute the empirical/sample distance covariance (Székely et al., 2007)[^Székely2007]
-between StateSpaceSets `x` and `y`.
+between StateSpaceSets `x` and `y`. Alternatively, compute the partial distance
+covariance `pdcov`.
 
 [^Székely2007]:
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
