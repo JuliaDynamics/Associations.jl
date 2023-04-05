@@ -56,19 +56,12 @@ module CausalityTools
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "2.3.0"
+    version_number = "2.3.1"
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - Significant speed-ups for `OCE` by sorting on maximal measure, thus avoiding
-    unnecessary significance tests.
-    - Default parameters for `OCE` default lag parameter have changed. Now, `τmax = 1`, since
-        that is the only case considered in the original paper. We also use the
-        `MesnerShalisi` CMI estimator for the conditional step, because in contrast to
-        the `FPVP` estimator, it has been shown to be consistent.
-    - Source code for `OCE` has been drastically simplified by merging the pairwise
-        and conditional parent finding steps.
-    - `OCE` result can now be converted to a `SimpleDiGraph` from Graphs.jl.
+    - The `MesnerShalisi` estimator is now deprecated and renamed to `MesnerShalizi` (with
+    correct spelling).
     """
 
     if display_update

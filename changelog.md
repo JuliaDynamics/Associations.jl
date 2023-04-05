@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.1
+
+- The `MesnerShalisi` estimator is now deprecated and renamed to `MesnerShalizi` (with
+    correct spelling).
+
 ## 2.3.0
 
 - Significant speed-ups for `OCE` by sorting on maximal measure, thus avoiding
