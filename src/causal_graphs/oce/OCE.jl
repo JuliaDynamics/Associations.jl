@@ -63,17 +63,8 @@ parents of each `xᵢ ∈ x`, assuming that `x` must be integer-indexable, i.e.
 """
 function select_parents(alg::OCE, x; verbose = false)
 
-    # Preliminary parents
-    τs = Iterators.flatten([-1:-1:-alg.τmax |> collect for xᵢ in x]) |> collect
-    js = Iterators.flatten([fill(i, alg.τmax) for i in eachindex(x)]) |> collect
-    embeddings = [genembed(xᵢ, -1:-1:-alg.τmax) for xᵢ in x]
-    T = typeof(1.0)
-    𝒫s = Vector{Vector{T}}(undef, 0)
-    for emb in embeddings
-        append!(𝒫s, columns(emb))
-    end
     # Find the parents of each variable.
-    parents = [select_parents(alg, τs, js, 𝒫s, x, k; verbose) for k in eachindex(x)]
+    parents = [select_parents(alg, x, k; verbose) for k in eachindex(x)]
     return parents
 end
 
