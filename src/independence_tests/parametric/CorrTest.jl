@@ -46,6 +46,11 @@ For the pairwise case, the procedure is identical, but set ``\\bf{Z} = \\emptyse
 Assumes that the input data are (multivariate) normally distributed. Then
 ``Cor(X, Y | \\bf{Z}) = 0`` implies ``X \\indep Y | \\bf{Z}``, so ``d = 0``.
 
+## Examples
+
+- [This](@ref examples_corrtest) uses `CorrTest` to check independence relationships
+    between normally distributed data.
+
 [^Levy1978]:
     Levy, K. J., & Narula, S. C. (1978). Testing hypotheses concerning partial
     correlations: Some methods and discussion. International Statistical Review/Revue Internationale de Statistique, 215-218.
