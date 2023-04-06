@@ -34,6 +34,13 @@ JointDistanceDistributionTest
 JDDTestResult
 ```
 
+## [`CorrTest`](@ref)
+
+```@docs
+CorrTest
+CorrTestResult
+```
+
 ## [`PATest`](@ref)
 
 ```@docs
