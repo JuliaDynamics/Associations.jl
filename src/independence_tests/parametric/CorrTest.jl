@@ -14,6 +14,9 @@ import HypothesisTests: pvalue
 An independence test based correlation (for two variables) and partial
 correlation (for three variables), as described in Schmidt et al. (2018)[^Schmidt2018].
 
+Assumes that the input data are (multivariate) normally distributed. Then
+`ρ(X, Y) = 0` implies `X ⫫ Y ` and `ρ(X, Y | 𝐙) = 0` implies `X ⫫ Y | 𝐙`.
+
 ## Description
 
 The null hypothesis is ``H_0 := Cor(X, Y | \\bf{Z}) = 0``. We use
@@ -40,11 +43,6 @@ p(X, Y | Z) = 2(1 - \\phi(\\sqrt{n - d - 3}Z(\\hat{\\rho}_{XY|\\bf{Z}}))),
 
 where ``d`` is the dimension of ``\\bf{Z}`` and ``n`` is the number of samples.
 For the pairwise case, the procedure is identical, but set ``\\bf{Z} = \\emptyset``.
-
-## Assumptions
-
-Assumes that the input data are (multivariate) normally distributed. Then
-``Cor(X, Y | \\bf{Z}) = 0`` implies ``X \\indep Y | \\bf{Z}``, so ``d = 0``.
 
 ## Examples
 
