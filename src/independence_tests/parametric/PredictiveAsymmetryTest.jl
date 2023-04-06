@@ -108,11 +108,3 @@ function independence(test::PredictiveAsymmetryTest, source, target, cond)
 
    return PredictiveAsymmetryTestResult(3, ΔA, te_fws, te_bws, μ0, p)
 end
-
-function pvalue(z, c::Int, n::Int)
-    N = Normal(0, 1)
-    x = sqrt(n - c - 3) * abs(z)
-    return 2*(1 - cdf(N, x))
-end
-
-fishers_z(p̂ᵢⱼ) = 0.5 * log((1 + p̂ᵢⱼ) / (1 - p̂ᵢⱼ))
