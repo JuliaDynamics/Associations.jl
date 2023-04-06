@@ -305,3 +305,41 @@ test = PATest(measure, FPVP())
 
 We can't reject independence when conditioning on $Y$, so we conclude that $Y$ is a
 variable responsible for transferring information from $X$ to $Z$.
+
+## [[`CorrTest`](@ref)](@id examples_corrtest)
+
+```@example corrtest_example
+using CausalityTools
+using StableRNGs
+rng = StableRNG(1234)
+
+# Some normally distributed data
+X = randn(rng, 1000) 
+Y = 0.5*randn(rng, 1000) .+ X
+Z = 0.5*randn(rng, 1000) .+ Y
+W = randn(rng, 1000)
+```
+
+Let's test a few independence relationships. For example, we expect that `X ⫫ W`.
+We also expect dependence `X !⫫ Z`, but this dependence should vanish when
+conditioning on the intermediate variable, so we expect `X ⫫ Z | Y`.
+
+```@example corrtest_example
+independence(CorrTest(), X, W)
+```
+
+As expected, the outcome is that we can't reject the null hypothesis that `X ⫫ W`.
+
+```@example corrtest_example
+independence(CorrTest(), X, Z)
+```
+
+However, we *can* reject the  null hypothesis that `X ⫫ Z`, so the evidence favors
+the alternative hypothesis `X !⫫ Z`.
+
+```@example corrtest_example
+independence(CorrTest(), X, Z, Y)
+```
+
+As expected, the correlation between `X` and `Z` significantly vanishes when conditioning
+on `Y`, because `Y` is solely responsible for the observed correlation between `X` and `Y`.
