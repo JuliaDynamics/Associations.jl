@@ -32,7 +32,7 @@ To test the null hypothesis against the alternative hypothesis
 ``H_1 := Cor(X, Y | \\bf{Z}) > 0``, calculate
 
 ```math
-\\hat{Z} = \\dfrac{Z(\\hat{\\rho}_{XY|\\bf{Z}}) - Z(0)}{\\sqrt{1/(n - d - 3)}},
+\\hat{Z} = \\dfrac{1}{2}\\dfrac{Z(\\hat{\\rho}_{XY|\\bf{Z}}) - Z(0)}{\\sqrt{1/(n - d - 3)}},
 ```
 
 and compute the two-sided p-value (Schmidt et al., 2018)
