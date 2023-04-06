@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.5.0
+
+- New independence test: `CorrTest`, based on (partial) correlations.
+
 ## 2.4.0
 
 - Added partial distance correlation measure. To compute it, simply provide a

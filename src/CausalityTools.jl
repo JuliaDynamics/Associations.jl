@@ -56,14 +56,11 @@ module CausalityTools
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "2.4.0"
+    version_number = "2.5.0"
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - Added partial distance correlation measure. To compute it, simply provide a
-        third input argument to `distance_correlation`.
-    - `DistanceCorrelation` is now compatible with both `SurrogateTest` and
-        `LocalPermutationTest` in its conditional form.
+    - New independence test: `CorrTest`, based on (partial) correlations.
     """
 
     if display_update
