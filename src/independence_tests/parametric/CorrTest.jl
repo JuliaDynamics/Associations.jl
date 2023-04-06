@@ -32,7 +32,7 @@ To test the null hypothesis against the alternative hypothesis
 ``H_1 := Cor(X, Y | \\bf{Z}) > 0``, calculate
 
 ```math
-\\hat{Z} = \\dfrac{Z(\\hat{\\rho}_{XY|\\bf{Z}}) - Z(0)}{\\sqrt{1/(n - d - 3)}},
+\\hat{Z} = \\dfrac{1}{2}\\dfrac{Z(\\hat{\\rho}_{XY|\\bf{Z}}) - Z(0)}{\\sqrt{1/(n - d - 3)}},
 ```
 
 and compute the two-sided p-value (Schmidt et al., 2018)
@@ -106,19 +106,6 @@ end
 
 const VectorOr1D{D} = Union{AbstractVector, AbstractDataset{D}} where D
 function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrStateSpaceSet...)
-    X = StateSpaceSet(x)
-    Y = StateSpaceSet(y)
-    if isempty(z)
-        D = StateSpaceSet(X, Y)
-    else
-        Z = StateSpaceSet(z...)
-        D = StateSpaceSet(X, Y, Z)
-    end
-    cov = fastcov(D)
-    return corrtest(test, length(D), cov, isempty(z) ? 0 : dimension(D))
-end
-
-function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrStateSpaceSet...)
     if isempty(z)
         ρ = estimate(PearsonCorrelation(), x, y)
         z = fishers_z(ρ)
@@ -136,16 +123,6 @@ function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrSt
         pval = pvalue(test, z, dimension(Z), length(x))
         return CorrTestResult(ρ, z, pval)
     end
-end
-
-function corrtest(test::CorrTest, N::Int, cov, dim_cond::Int)
-    # For computing partial correlations, we follow the matrix inversion
-    # approach outlined in https://en.wikipedia.org/wiki/Partial_correlation.
-    # If the determinant of the covariance matrix is zero, then the
-    # Moore-Penrose pseudo-inverse is used.
-    z = fishers_z(ρ)
-    pval = pvalue(test, z, dim_cond, N)
-    return CorrTestResult(pval, ρ, z)
 end
 
 """
