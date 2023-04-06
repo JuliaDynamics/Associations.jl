@@ -19,7 +19,7 @@ Assumes that the input data are (multivariate) normally distributed. Then
 
 ## Description
 
-The null hypothesis is `H₀ := ρ(X, Y | 𝐙) = 0``. We use
+The null hypothesis is `H₀ := ρ(X, Y | 𝐙) = 0`. We use
 the approach in Levy & Narula (1978)[^Levy1978] and compute the Z-transformation
 of the observed (partial) correlation coefficient ``\\hat{\\rho}_{XY|\\bf{Z}}``:
 
@@ -29,7 +29,7 @@ Z(\\hat{\\rho}_{XY|\\bf{Z}}) =
 ```
 
 To test the null hypothesis against the alternative hypothesis
-``H_1 := ρ(X, Y | 𝐙) > 0``, calculate
+`H₁ := ρ(X, Y | 𝐙) > 0`, calculate
 
 ```math
 \\hat{Z} = \\dfrac{1}{2}\\dfrac{Z(\\hat{\\rho}_{XY|\\bf{Z}}) - Z(0)}{\\sqrt{1/(n - d - 3)}},
@@ -38,7 +38,7 @@ To test the null hypothesis against the alternative hypothesis
 and compute the two-sided p-value (Schmidt et al., 2018)
 
 ```math
-p(X, Y | Z) = 2(1 - \\phi(\\sqrt{n - d - 3}Z(\\hat{\\rho}_{XY|\\bf{Z}}))),
+p(X, Y | \\bf{Z}) = 2(1 - \\phi(\\sqrt{n - d - 3}Z(\\hat{\\rho}_{XY|\\bf{Z}}))),
 ```
 
 where ``d`` is the dimension of ``\\bf{Z}`` and ``n`` is the number of samples.
