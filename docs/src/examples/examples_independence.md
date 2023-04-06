@@ -317,7 +317,7 @@ rng = StableRNG(1234)
 X = randn(rng, 1000) 
 Y = 0.5*randn(rng, 1000) .+ X
 Z = 0.5*randn(rng, 1000) .+ Y
-W = randn(rng, 1000)
+W = randn(rng, 1000);
 ```
 
 Let's test a few independence relationships. For example, we expect that `X ⫫ W`.
