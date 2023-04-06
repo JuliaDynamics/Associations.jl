@@ -1,4 +1,6 @@
 export CorrTest
+export CorrTestResult
+
 import HypothesisTests: pvalue
 
 # Note: HypothesisTests already defines CorrelationTest.
