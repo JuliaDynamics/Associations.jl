@@ -16,6 +16,9 @@ In practices, for each `X ↔ Y`, we construct two directional edges `X → Y` a
 
 Orientiation rules 0-3 are then applied to `dg`. We use the rules as stated in
 Colombo & Maathuis, 2014.
+
+- Rule 0 (orients v-structures): `X ↔ Y ↔ Z` becomes `X → Y ← Z` if `Y` is not in the
+    separating set `S(X, Z)`.
 - Rule 1 (prevents new v-structures): `X → Y ↔ Z` becomes `X → Y → Z` if `X` and `Z`
     are not adjacent.
 - Rule 2 (avoids cycles): `X → Y → Z ↔ X` becomes X → Y → Z ← X`
@@ -25,11 +28,6 @@ Colombo & Maathuis, 2014.
     Y  |  W  becomes  Y  |  W
      ↘ | ↙             ↘ ↓ ↙
        Z                 Z
-
-
-- Rule 0 (orients v-structures): `X ↔ Y ↔ Z` becomes `X → Y ← Z` if `Y` is not in the
-    separating set `S(X, Z)`.
-
 
 [^Kalisch2008]:
     Kalisch, M., & Bühlmann, P. (2008). Robustification of the PC-algorithm for directed
