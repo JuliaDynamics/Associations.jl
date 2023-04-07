@@ -1,25 +1,35 @@
 using Random
 
-#export PCRobust
+export PC
 
 """
-    PCRobust <: GraphAlgorithm
-    PCRobust(
-        unconditional_test::IndependenceTest,
-        conditional_test::IndependenceTest;
-        α = 0.05,
-        max_depth::Union{Int, Nothing} = nothing)
+    PC <: GraphAlgorithm
+    PC(unconditional_test, conditional_test; α = 0.05, max_depth = nothing,
+        maxiters_orient = ∞)
 
-The "robustified" version (Kalisch & Bühlmann, 2008[^Kalisch2008]) of the PC algorithm
-(Spirtes et al., 2000)[^Spirtes2000]. The `unconditional_test` must be an
-[`IndependenceTest`](@ref) with a valid pairwise [`AssociationMeasure`](@ref),
-and `conditional_test` must be an [`IndependenceTest`](@ref) with a valid conditional
-[`AssociationMeasure`](@ref).
+The PC algorithm (Spirtes et al., 2000)[^Spirtes2000], implemented as described in
+Kalisch & Bühlmann (2008)[^Kalisch2008].
+
+## Arguments
+
+- **`unconditional_test`**: An [`IndependenceTest`](@ref) that uses a pairwise,
+    nondirectional [`AssociationMeasure`](@ref) measure, e.g. [`CorrTest`](@ref)
+    or [`SurrogateTest`](@ref) with the [`MIShannon`](@ref) measure.
+- **`conditional_test`**: An [`IndependenceTest`](@ref) that uses a conditional,
+    nondirectional [`AssociationMeasure`](@ref), , e.g. [`CorrTest`](@ref)
+    or [`SurrogateTest`](@ref) with the [`CMIShannon`](@ref) measure.
+
+## Keyword arguments
+
+- **`α::Real ∈ (0, 1)`**. The significance level of the test.
+- **`max_depth::Union{Int, Nothing} = nothing`**. The significance level of the test.
+- **`maxiters_orient::Real`**. The maximum number of times to apply the orientation
+    rules. By default, there is not limit (i.e. `maxiters_orient = ∞`)
 
 !!! info "Directional measures will not give meaningful answers"
     During the skeleton search phase, if a significance association between two nodes are
     is found, then a bidirectional edge is drawn between them. The generic implementation of
-    `PCRobust` therefore doesn't currently handle directional measures such as
+    `PC` therefore doesn't currently handle directional measures such as
     [`TEShannon`](@ref). The reason is that if a  directional relationship `X → Y` exists
     between two nodes `X` and `Y`, then the algorithm would first draw a bidirectional
     arrow between `X` and `Y` when analysing the direction
@@ -30,7 +40,7 @@ and `conditional_test` must be an [`IndependenceTest`](@ref) with a valid condit
 
 ## Description
 
-When used with [`infer_graph`](@ref) on some input data `x`, the `PCRobust` algorithm
+When used with [`infer_graph`](@ref) on some input data `x`, the `PC` algorithm
 performs the following steps:
 
 1. Initialize an empty fully connected graph `g` with `N` nodes, where `N` is the number
@@ -84,16 +94,22 @@ The resulting directed graph (a `SimpleDiGraph` from
     Spirtes, P., Glymour, C. N., Scheines, R., & Heckerman, D. (2000). Causation, prediction,
     and search. MIT press.
 """
-struct PCRobust{U, C, A, N} <: GraphAlgorithm
+struct PC{U, C, A, N} <: GraphAlgorithm
     unconditional_test::U
     conditional_test::C
     α::A
     maxdepth::N
+    maxiters_orient::Int
 
-    function PCRobust(unconditional_test::U, conditional_test::C;
-            α::A = 0.05, maxdepth::N = nothing) where {U <: IndependenceTest, C <: IndependenceTest, A, N <: Union{Int, Nothing}}
+    function PC(
+            unconditional_test::IndependenceTest,
+            conditional_test::IndependenceTest;
+            α::A = 0.05, maxdepth::N = nothing,
+            maxiters_orient::Int = 500) where {A, N <: Union{Int, Nothing}}
         0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
-        new{U, C, A, N}(unconditional_test, conditional_test, α, maxdepth)
+        U = typeof(unconditional_test)
+        C = typeof(conditional_test)
+        new{U, C, A, N}(unconditional_test, conditional_test, α, maxdepth, maxiters_orient)
     end
 end
 
@@ -102,9 +118,9 @@ include("skeleton.jl")
 include("cpdag.jl")
 
 # TODO: this is only designed for non-directed measures. Use type system?
-function infer_graph(algorithm::PCRobust, x; verbose = false)
-    skeleton_graph, separating_sets = skeleton(algorithm, x; verbose)
-    directed_graph = cpdag(algorithm, skeleton_graph, separating_sets; verbose)
+function infer_graph(algorithm::PC, x; verbose = false)
+    sg, separating_sets = skeleton(algorithm, x; verbose)
+    dg = cpdag(algorithm, sg, separating_sets; verbose)
 
-    return skeleton_graph, directed_graph
+    return sg, dg
 end

@@ -3,7 +3,7 @@ using Graphs: add_edge!, outneighbors
 using Combinatorics: permutations
 
 # TODO: this is only designed for non-directed measures. Use type system?
-function infer_graph(algorithm::PCRobust{<:IndependenceTest{<:DirectedAssociationMeasure}}, x; verbose = false)
+function infer_graph(algorithm::PC{<:IndependenceTest{<:DirectedAssociationMeasure}}, x; verbose = false)
     skeleton_graph, separating_sets = skeleton(algorithm, x; verbose)
     #return skeleton_graph
     #return skeleton_graph = skeleton(algorithm, x; verbose)
@@ -13,7 +13,7 @@ function infer_graph(algorithm::PCRobust{<:IndependenceTest{<:DirectedAssociatio
 end
 
 
-function skeleton(alg::PCRobust{<:IndependenceTest{<:DirectedAssociationMeasure}},
+function skeleton(alg::PC{<:IndependenceTest{<:DirectedAssociationMeasure}},
         x; verbose = false)
 
     N = length(x)
@@ -35,7 +35,7 @@ end
 
 
 function skeleton_unconditional!(
-        alg::PCRobust{<:IndependenceTest{<:DirectedAssociationMeasure}},
+        alg::PC{<:IndependenceTest{<:DirectedAssociationMeasure}},
         graph::SimpleDiGraph,
         x;
         verbose = false)
@@ -59,7 +59,7 @@ function skeleton_unconditional!(
 end
 
 function skeleton_conditional!(
-        alg::PCRobust{<:IndependenceTest{<:DirectedAssociationMeasure}},
+        alg::PC{<:IndependenceTest{<:DirectedAssociationMeasure}},
         graph,
         separating_set, x, 𝓁::Int;
         verbose = false)
@@ -85,7 +85,7 @@ function skeleton_conditional!(
 end
 
 function conditionaltest_and_remove_edge!(
-        alg::PCRobust{<:IndependenceTest{<:DirectedAssociationMeasure}},
+        alg::PC{<:IndependenceTest{<:DirectedAssociationMeasure}},
         x, 𝐒, 𝓁, i, j, graph, separating_set;
         verbose = false)
     # If there's at least one available variable to condition on.
