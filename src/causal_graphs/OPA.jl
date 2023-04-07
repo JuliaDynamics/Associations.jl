@@ -8,8 +8,7 @@ export OPA
 """
     OPA(τmax = 1, m::Int = 5, m = 5, α = 0.05, est = FPVP(), k = 0.5)
 
-The optimal predictive asymmetry (OPA) for inferring causal graphs. Only infers the presence
-of time-lagged dependencies, but does not give information about the exact lags.
+The optimal predictive asymmetry (OPA) for inferring causal graphs (Haaga et al., in prep).
 
 ## Description
 
