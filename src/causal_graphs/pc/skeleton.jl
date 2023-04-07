@@ -45,8 +45,8 @@ considering the case `𝓁 = 0`.
 
 Modifies `graph` in-place.
 
-If `alg.unconditional_test` is a directed test, then edges are considered one-by-one.
-If `alg.unconditional_test` is not a directed test, then edges (`X → Y, `Y → X`)
+If `alg.pairwise_test` is a directed test, then edges are considered one-by-one.
+If `alg.pairwise_test` is not a directed test, then edges (`X → Y, `Y → X`)
 are considered simultaneously.
 
 [^Colombo2014]:
@@ -60,7 +60,7 @@ function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, x; verbose = fal
         s, t = pair
         # If pval > α, then, based on the given the data, we can't reject the hypothesis
         # that `x[s] ⫫ x[t]`. Therefore, we assume that they *are* independent.
-        indep_test = independence(alg.unconditional_test, x[s], x[t])
+        indep_test = independence(alg.pairwise_test, x[s], x[t])
         pval = pvalue(indep_test)
         if pval > alg.α
             edge1 = SimpleEdge(s, t)

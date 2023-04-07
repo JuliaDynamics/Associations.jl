@@ -4,7 +4,7 @@ export PC
 
 """
     PC <: GraphAlgorithm
-    PC(unconditional_test, conditional_test;
+    PC(pairwise_test, conditional_test;
         α = 0.05, max_depth = Inf, maxiters_orient = Inf)
 
 The PC algorithm (Spirtes et al., 2000)[^Spirtes2000], which is named
@@ -13,12 +13,12 @@ which is implemented as described in Kalisch & Bühlmann (2008)[^Kalisch2008].
 
 ## Arguments
 
-- **`unconditional_test`**: An [`IndependenceTest`](@ref) that uses a pairwise,
-    nondirectional [`AssociationMeasure`](@ref) measure, e.g. [`CorrTest`](@ref)
-    or [`SurrogateTest`](@ref) with the [`MIShannon`](@ref) measure.
+- **`pairwise_test`**: An [`IndependenceTest`](@ref) that uses a pairwise,
+    nondirectional [`AssociationMeasure`](@ref) measure (e.g. a parametric
+    [`CorrTest`](@ref), or [`SurrogateTest`](@ref) with the [`MIShannon`](@ref) measure).
 - **`conditional_test`**: An [`IndependenceTest`](@ref) that uses a conditional,
-    nondirectional [`AssociationMeasure`](@ref), , e.g. [`CorrTest`](@ref)
-    or [`SurrogateTest`](@ref) with the [`CMIShannon`](@ref) measure.
+    nondirectional [`AssociationMeasure`](@ref) (e.g. [`CorrTest`](@ref),
+    or [`SurrogateTest`](@ref) with the [`CMIShannon`](@ref) measure).
 
 ## Keyword arguments
 
@@ -49,7 +49,7 @@ performs the following steps:
 1. Initialize an empty fully connected graph `g` with `N` nodes, where `N` is the number
     of variables and `x[i]` is the data for the `i`-th node.
 2. Reduce the fully connected `g` to a skeleton graph by performing pairwise
-    [`independence`](@ref) tests between all vertices using `unconditional_test`. Remove
+    [`independence`](@ref) tests between all vertices using `pairwise_test`. Remove
     any edges where adjacent vertices are found to be independent according to the test
     (i.e. the null hypothesis of independence cannot be rejected at significance level
     `1 - α`).
@@ -94,21 +94,21 @@ The resulting directed graph (a `SimpleDiGraph` from
     and search. MIT press.
 """
 struct PC{U, C, A, N, MO} <: GraphAlgorithm
-    unconditional_test::U
+    pairwise_test::U
     conditional_test::C
     α::A
     maxdepth::N
     maxiters_orient::MO
 
     function PC(
-            unconditional_test::IndependenceTest,
-            conditional_test::IndependenceTest;
+            pairwise_test,
+            conditional_test;
             α::A = 0.05, maxdepth::N = Inf,
             maxiters_orient::MO = Inf) where {A, N, MO}
         0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
-        U = typeof(unconditional_test)
+        U = typeof(pairwise_test)
         C = typeof(conditional_test)
-        new{U, C, A, N, MO}(unconditional_test, conditional_test, α, maxdepth, maxiters_orient)
+        new{U, C, A, N, MO}(pairwise_test, conditional_test, α, maxdepth, maxiters_orient)
     end
 end
 
@@ -116,9 +116,19 @@ include("skeleton.jl")
 #include("skeleton_directed.jl")
 include("cpdag.jl")
 
-# TODO: this is only designed for non-directed measures. Use type system?
 function infer_graph(algorithm::PC, x; verbose = false)
+    check_input(algorithm)
     sg, separating_sets = skeleton(algorithm, x; verbose)
     dg = cpdag(algorithm, sg, separating_sets; verbose)
     return dg
+end
+
+function check_input(alg::PC)
+    u = alg.pairwise_test
+    c = alg.conditional_test
+    if u.measure isa DirectedAssociationMeasure || c.measure isa DirectedAssociationMeasure
+        s = "Directional measures will not give meaningful answers. See PC docstring"*
+            " for more information."
+        throw(ArgumentError(s))
+    end
 end

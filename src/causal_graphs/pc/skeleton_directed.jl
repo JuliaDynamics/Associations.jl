@@ -46,7 +46,7 @@ function skeleton_unconditional!(
         s, t = pair
         # If pval > α, then, based on the given the data, we can't reject the hypothesis
         # that `x[s] ⫫ x[t]`. Therefore, we assume that they *are* independent.
-        pval = @views pvalue(independence(alg.unconditional_test, x[s], x[t]))
+        pval = @views pvalue(independence(alg.pairwise_test, x[s], x[t]))
         if pval < alg.α
             @show s, t, pval, alg.α
             edge = SimpleEdge(s, t)
