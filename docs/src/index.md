@@ -21,13 +21,11 @@ We also want to lower the entry-point to the field of association
 quantification, independence testing and causal inference, by providing well-documented
 implementations of literature methods with runnable code examples.
 
-## Quantifying associations
-
 The core function for quantifying associations is [`independence`](@ref),
 which performs either a parametric or nonparametric (conditional)
 [`IndependenceTest`](@ref) using some form of
 [association measure](@ref association_measure). These tests, in turn, can be
-used with some [`GraphAlgorithm`](@ref) to infer causal graphs.
+used with some [`GraphAlgorithm`](@ref) and [`infer_graph`](@ref) to infer causal graphs.
 
 ## Input data
 
