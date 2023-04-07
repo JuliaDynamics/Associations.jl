@@ -15,9 +15,8 @@ Return a tuple of the undirected skeleton graph `g::SimpleGraph`, and the
 separating sets `s::Dict{SimpleEdge, Vector{Int}})`.
 """
 function skeleton(alg::PC, x; verbose = false)
-
     N = length(x)
-    if alg.maxdepth isa Nothing
+    if alg.maxdepth == Inf
         max_degree = N - 2
     else
         max_degree = alg.maxdepth

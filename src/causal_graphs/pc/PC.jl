@@ -4,11 +4,12 @@ export PC
 
 """
     PC <: GraphAlgorithm
-    PC(unconditional_test, conditional_test; α = 0.05, max_depth = nothing,
-        maxiters_orient = ∞)
+    PC(unconditional_test, conditional_test;
+        α = 0.05, max_depth = Inf, maxiters_orient = Inf)
 
-The PC algorithm (Spirtes et al., 2000)[^Spirtes2000], implemented as described in
-Kalisch & Bühlmann (2008)[^Kalisch2008].
+The PC algorithm (Spirtes et al., 2000)[^Spirtes2000], which is named
+named after the *first names* of the authors, **P**eter Spirtes and **C**lark Glymour,
+which is implemented as described in Kalisch & Bühlmann (2008)[^Kalisch2008].
 
 ## Arguments
 
@@ -21,10 +22,12 @@ Kalisch & Bühlmann (2008)[^Kalisch2008].
 
 ## Keyword arguments
 
-- **`α::Real ∈ (0, 1)`**. The significance level of the test.
-- **`max_depth::Union{Int, Nothing} = nothing`**. The significance level of the test.
+- **`α::Real`**. The significance level of the test.
+- **`max_depth`**. The maximum level of conditional indendence tests to be
+    performed. By default, there is no limit (i.e. `max_depth = Inf`), meaning that
+    maximum depth is `N - 2`, where `N` is the number of input variables.
 - **`maxiters_orient::Real`**. The maximum number of times to apply the orientation
-    rules. By default, there is not limit (i.e. `maxiters_orient = ∞`)
+    rules. By default, there is not limit (i.e. `maxiters_orient = Inf`).
 
 !!! info "Directional measures will not give meaningful answers"
     During the skeleton search phase, if a significance association between two nodes are
@@ -78,14 +81,10 @@ performs the following steps:
 The resulting directed graph (a `SimpleDiGraph` from
 [Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl)) is then returned.
 
-
 ## Examples
 
-- [Inferring a causal graph from a chain of logistic maps](@ref pc_robust_example)
-
-!!! info
-    The "PC" algorithm is named after the *first names* of the authors, **P**eter Spirtes
-    and **C**lark Glymour.
+- [PC algorithm with parametric independence tests](@ref pc_examples_corr)
+- [PC algorithm with nonparametric independence tests](@ref pc_examples_nonparametric)
 
 [^Kalisch2008]:
     Kalisch, M., & Bühlmann, P. (2008). Robustification of the PC-algorithm for directed
@@ -94,22 +93,22 @@ The resulting directed graph (a `SimpleDiGraph` from
     Spirtes, P., Glymour, C. N., Scheines, R., & Heckerman, D. (2000). Causation, prediction,
     and search. MIT press.
 """
-struct PC{U, C, A, N} <: GraphAlgorithm
+struct PC{U, C, A, N, MO} <: GraphAlgorithm
     unconditional_test::U
     conditional_test::C
     α::A
     maxdepth::N
-    maxiters_orient::Int
+    maxiters_orient::MO
 
     function PC(
             unconditional_test::IndependenceTest,
             conditional_test::IndependenceTest;
-            α::A = 0.05, maxdepth::N = nothing,
-            maxiters_orient::Int = 500) where {A, N <: Union{Int, Nothing}}
+            α::A = 0.05, maxdepth::N = Inf,
+            maxiters_orient::MO = Inf) where {A, N, MO}
         0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
         U = typeof(unconditional_test)
         C = typeof(conditional_test)
-        new{U, C, A, N}(unconditional_test, conditional_test, α, maxdepth, maxiters_orient)
+        new{U, C, A, N, MO}(unconditional_test, conditional_test, α, maxdepth, maxiters_orient)
     end
 end
 
@@ -121,6 +120,5 @@ include("cpdag.jl")
 function infer_graph(algorithm::PC, x; verbose = false)
     sg, separating_sets = skeleton(algorithm, x; verbose)
     dg = cpdag(algorithm, sg, separating_sets; verbose)
-
-    return sg, dg
+    return dg
 end
