@@ -8,3 +8,6 @@ x, y, z, w = columns(trajectory(sys, 1000, Ttr = 10000))
 @test estimate(PMI(), estd, x, w, z) >= 0
 # Test that multivariate marginals work too.
 @test estimate(PMI(), esth, x, w, Dataset(z, y)) >= 0
+
+@test pmi(PMI(base = 3), esth, x, w, z) >= 0
+@test pmi(esth, x, w, z) >= 0
