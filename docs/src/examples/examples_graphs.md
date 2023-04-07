@@ -1,16 +1,37 @@
 # Causal graphs
 
+Before introducing the causal graph examples, let's create a function that can plot
+directed graphs that we'll use below.
+
+```@example graph_examples
+using Graphs, CairoMakie, GraphMakie
+
+function plotgraph(g)
+    f, ax, p = graphplot(g,
+        nlabels = repr.(1:nv(g)),
+        nlabels_color = [:red for i in 1:nv(g)],
+    )
+    offsets = 0.05 * (p[:node_pos][] .- p[:node_pos][][1])
+    offsets[1] = Point2f(0, 0.2)
+    p.nlabels_offset[] = offsets
+    autolimits!(ax)
+    hidedecorations!(ax)
+    hidespines!(ax)
+    ax.aspect = DataAspect()
+    return f
+end
+```
+
 ## [Optimal causation entropy](@id oce_example)
 
 Here, we use the [`OCE`](@ref) algorithm to infer a time series graph. We use a
 [`SurrogateTest`](@ref) for the initial step, and a [`LocalPermutationTest`](@ref)
 for the conditional steps.
 
-```@example causalgraph_oce
+```@example graph_examples
 using CausalityTools
-using Graphs
-using Random
-rng = MersenneTwister(1234)
+using StableRNGs
+rng = StableRNG(123)
 
 # An example system where `X → Y → Z → W`.
 sys = system(Logistic4Chain(; rng))
@@ -29,7 +50,12 @@ g = SimpleDiGraph(parents)
 collect(edges(g))
 ```
 
-The algorithm nicely recovers the true causal directions.
+The algorithm nicely recovers the true causal directions. We can also plot the graph using
+the function we made above.
+
+```@example graph_examples
+plotgraph(g)
+```
 
 ## [PC-algorithm](@id pc_examples)
 
@@ -44,30 +70,9 @@ We'll reproduce the first example from
 also use a parametric correlation test to infer the skeleton graph for some 
 normally distributed data.
 
-```@example example_graphs_pc
+```@example graph_examples
 using CausalityTools
 using StableRNGs
-using Graphs
-using CairoMakie, GraphMakie
-
-function plotgraph(g)
-    colors = [:black for i in 1:nv(g)]
-    colors[1] = :red
-    colors[2] = :green
-    f, ax, p = graphplot(g,
-        nlabels = repr.(1:nv(g)),
-        nlabels_color = colors,
-    )
-    offsets = 0.05 * (p[:node_pos][] .- p[:node_pos][][1])
-    offsets[1] = Point2f(0, 0.2)
-    p.nlabels_offset[] = offsets
-    autolimits!(ax)
-    hidedecorations!(ax)
-    hidespines!(ax)
-    ax.aspect = DataAspect()
-    return f
-end
-
 rng = StableRNG(123)
 n = 500
 v = randn(rng, n)
@@ -98,7 +103,7 @@ with the Shannon mutual information [`MIShannon`](@ref) measure and the
 [`LocalPermutationTest`](@ref) with conditional mutual information [`CMIShannon`](@ref)
 and the [`MesnerShalizi`](@ref).
 
-```@example example_graphs_pc
+```@example graph_examples
 rng = StableRNG(123)
 
 # Use fewer observations, because MI/CMI takes longer to estimate
