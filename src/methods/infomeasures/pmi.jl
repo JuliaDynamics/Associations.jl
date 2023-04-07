@@ -1,13 +1,34 @@
+export PMI
+export pmi
+
 """
     PMI <: AssociationMeasure
 
 The partial mutual information (PMI) measure of association.
+
+## Estimation
+
+PMI can be estimated using any estimator that implements [`marginal_encodings`](@ref).
+
+## Properties
+
+For the discrete case, the following identities hold in theory (when estimating PMI, they
+may not).
+
+- `PMI(X, Y, Z) >= CMI(X, Y, Z)` (where CMI is the Shannon CMI). Holds in theory, but
+    when estimating PMI, the identity may not hold.
+- `PMI(X, Y, Z) >= 0`. Holds both in theory and for estimation using
+    [`ProbabilitiesEstimator`](@ref)s.
+- `X ⫫ Y | Z => PMI(X, Y, Z) = CMI(X, Y, Z) = 0` (in theory, but not necessarily for
+    estimation).
 """
 Base.@kwdef struct PMI <: AssociationMeasure
     base::Real = 2
 end
 
-export PMI
+function pmi(x...)
+    return estimate(PMI(), x...)
+end
 
 function estimate(measure::PMI, est::Contingency{<:ProbabilitiesEstimator}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
@@ -45,18 +66,13 @@ function estimate(
                 pyzⱼₖ = pyz[j, k]
                 pxzᵢₖ = pxz[i, k]
                 pxyzᵢⱼₖ = pxyz[i, j, k]
-                @show i, j, k, pmi
-                if pzₖ > 0.0
-                    part1 = (pxyzᵢⱼₖ / pzₖ) / ((pxzᵢₖ / pzₖ ) * (pyzⱼₖ / pzₖ))
-                    part2 = (pxzᵢₖ / pzₖ) * sum(pyzⱼₖ > 0 ? py[j] * (pxyzᵢⱼₖ / pyzⱼₖ) : 0 for j = 1:dy)
-                    part3 = (pyzⱼₖ / pzₖ) * sum(pxzᵢₖ > 0 ? px[i] * (pxyzᵢⱼₖ / pxzᵢₖ) : 0 for i = 1:dx)
-                else
-                    part1 = 0.0
-                    part2 = 0.0
-                    part3 = 0.0
-                end
-                if part1 > 0 && part2 > 0 && part3 > 0
-                    pmi += pxyzᵢⱼₖ * (logb(part1) + logb(part2) + logb(part3))
+                sy = sum(pyzⱼₖ > 0 ? py[j] * (pxyz[i, j, k]/ pyz[j, k]) : 0 for j = 1:dy)
+                sx = sum(pxzᵢₖ > 0 ? px[i] * (pxyz[i, j, k] / pxz[i, k]) : 0 for i = 1:dx)
+
+                sxy = sy * sx
+                pxy_z = pxyzᵢⱼₖ / pzₖ
+                if sxy > 0 && pxy_z > 0
+                    pmi += pxyzᵢⱼₖ * logb(pxy_z / (sy * sx))
                 end
             end
         end
