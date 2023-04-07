@@ -53,13 +53,20 @@ end
 # Compatibility with `independence`
 function estimate(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
         conds::ArrayOrStateSpaceSet...)
-    dimension(x) == 1 || throw(ArgumentError("Input `x` must be 1-dimensional"))
-    dimension(y) == 1 || throw(ArgumentError("Input `y` must be 1-dimensional"))
-    X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(conds...)
+    X, Y, Z = construct_partialcor_datasets(x, y, conds...)
     D = StateSpaceSet(X, Y, Z)
     cov = fastcov(D)
     precision_matrix = invert_cov(cov)
     return partial_correlation_from_precision(precision_matrix, 1, 2)
+end
+
+function construct_partialcor_datasets(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
+        conds::ArrayOrStateSpaceSet...)
+    dimension(x) == 1 || throw(ArgumentError("Input `x` must be 1-dimensional"))
+    dimension(y) == 1 || throw(ArgumentError("Input `y` must be 1-dimensional"))
+    X, Y = StateSpaceSet(x), StateSpaceSet(y)
+    Z = StateSpaceSet(conds...)
+    return X, Y, Z
 end
 
 function estimate(measure::PartialCorrelation, est::Nothing, x, y, z)

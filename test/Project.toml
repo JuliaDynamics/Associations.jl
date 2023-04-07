@@ -1,4 +1,5 @@
 [deps]
+CausalInference = "8e462317-f959-576b-b3c1-403f26cec956"
 ComplexityMeasures = "ed8fcbec-b94c-44b6-89df-898894ad9591"
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"

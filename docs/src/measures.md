@@ -1,11 +1,15 @@
 # [Association measures](@id association_measure)
 
+```@docs
+AssociationMeasure
+```
+
 ## Overview
 
 | Type                   | Measure                               | Pairwise | Conditional | Function version               |
 | ---------------------- | ------------------------------------- | :------: | :---------: | ------------------------------ |
 | Correlation            | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      | [`pearson_correlation`](@ref)  |
-| Correlation            | [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      | [`distance_correlation`](@ref) |
+| Correlation            | [`DistanceCorrelation`](@ref)         |    ✓    |     ✓      | [`distance_correlation`](@ref) |
 | Closeness              | [`SMeasure`](@ref)                    |    ✓    |     ✖      | [`s_measure`](@ref)            |
 | Closeness              | [`HMeasure`](@ref)                    |    ✓    |     ✖      | [`h_measure`](@ref)            |
 | Closeness              | [`MMeasure`](@ref)                    |    ✓    |     ✖      | [`m_measure`](@ref)            |
