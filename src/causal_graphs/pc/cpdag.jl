@@ -45,7 +45,7 @@ function cpdag(alg::PC, skeleton_graph::SimpleDiGraph,
     verbose && println("Orienting v-structures...")
     # Convert the skeleton to a directed graph.
     dg = orient_vstructures(alg, skeleton_graph, separating_sets; verbose)
-    return dg
+
     edge_was_redirected = trues(4)
     i = 1
     for i = 1:10
