@@ -91,3 +91,11 @@ end
 
 alg = PC(CorrTest(), CorrTest(), maxdepth = 1)
 @test infer_graph(alg, X) isa SimpleDiGraph
+
+x, y, z = rand(rng, 50), rand(rng, 50), rand(rng, 50)
+X = [x, y, z]
+tt = SurrogateTest(TEShannon(), KSG2())
+ct = CorrTest()
+@test_throws ArgumentError infer_graph(PC(ct, tt), X)
+@test_throws ArgumentError infer_graph(PC(tt, ct), X)
+@test_throws ArgumentError infer_graph(PC(tt, tt), X)
