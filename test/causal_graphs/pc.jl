@@ -1,29 +1,48 @@
 using Test
 using Graphs: SimpleDiGraph
 using StableRNGs
-using
 rng = StableRNG(123)
 
-function plotgraph(g)
-    colors = [:black for i in 1:nv(g)]
-    colors[1] = :red
-    colors[2] = :green
-    f, ax, p = graphplot(g,
-        nlabels = repr.(1:nv(g)),
-        nlabels_color = colors,
-    )
-    offsets = 0.05 * (p[:node_pos][] .- p[:node_pos][][1])
-    offsets[1] = Point2f(0, 0.2)
-    p.nlabels_offset[] = offsets
-    autolimits!(ax)
-    hidedecorations!(ax)
-    hidespines!(ax)
-    ax.aspect = DataAspect()
-    return f
-end
+# -------------------------------------------------------------------------------
+# "Analytical" tests
+# -------------------------------------------------------------------------------
+# Compare with CausalInference.jl, which already does more rigorous testing.
+# Test cases 1 and 2 are taken from the documentation of CausalInference.jl.
+# Tets case 3 is custom made.
+# We only test using a correlation test (`CausalInference.gausscitest`),
+# which we replicate here by using a `CorrTest` both for the unconditional and
+# conditional case.
+# -------------------------------------------------------------------------------
+α = 0.01
+alg = PC(CorrTest(), CorrTest(); α)
 
-# Compare with CausalInference.jl
 n = 10000
+
+# Case 1
+x = randn(rng, n)
+v = x + randn(rng, n)*0.25
+w = x + randn(rng, n)*0.25
+z = v + w + randn(rng, n)*0.25
+s = z + randn(rng, n)*0.25
+X = [x, v, w, z, s]
+df = (x=x, v=v, w=w, z=z, s=s)
+dg_ct = infer_graph(alg, X; verbose = true)
+dg_ci = pcalg(df, α, gausscitest)
+@test dg_ct == dg_ci
+
+# Case 2
+v = randn(rng, n)
+x = v + randn(rng, n)*0.25
+w = x + randn(rng, n)*0.25
+z = v + w + randn(rng, n)*0.25
+s = z + randn(rng, n)*0.25
+X = [x, v, w, z, s]
+df = (x=x, v=v, w=w, z=z, s=s)
+dg_ct = infer_graph(alg, X; verbose = true)
+dg_ci = pcalg(df, α, gausscitest)
+@test dg_ct == dg_ci
+
+# Case 3
 x = randn(rng, n)
 y = x + 0.2*randn(rng, n)
 z = x + 0.2*randn(rng, n)
@@ -33,22 +52,42 @@ r = w + 0.2*randn(rng, n)
 X = [x, y, z, w, q, r]
 df = (x=x, y=y, z=z, w=w, q=q, r=r)
 
-alg = PC(CorrTest(), CorrTest(), α = 0.01)
-sg, dg = infer_graph(alg, X; verbose = true)
+dg_ct = infer_graph(alg, X; verbose = true)
+dg_ci = pcalg(df, α, gausscitest)
+@test dg_ct == dg_ci
 
-# Test with different common independence tests (not exhaustive, because it takes too
-# long for the tests to run then).
-x, y, z = rand(rng, 70), rand(70), rand(70)
-alg = PC(utest, ctest)
+# -------------------------------------------------------------------------------
+# Test that different combinations of independence tests work. For this,
+# we can use much shorter time series, because the purpose is just to rule
+# out implementation errors, not to check that the correct result is obtained.
+# -------------------------------------------------------------------------------
+x, y, z = rand(rng, 50), rand(rng, 50), rand(rng, 50)
+α = 0.01
+X = [x, y, z]
+nshuffles = 3
 
-g = infer_graph(alg, x)
-@test g isa SimpleDiGraph
+utests = [
+    CorrTest(),
+    SurrogateTest(PearsonCorrelation(); nshuffles, rng),# nonparametric version of CorrTest
+    SurrogateTest(MIShannon(), KSG2(); nshuffles, rng),
+    SurrogateTest(DistanceCorrelation(); nshuffles, rng),
+    ];
+ctests = [
+    CorrTest(),
+    SurrogateTest(PartialCorrelation(); nshuffles, rng), # nonparametric version of CorrTest
+    LocalPermutationTest(CMIShannon(), KSG2(); nshuffles, rng),
+    LocalPermutationTest(DistanceCorrelation(); nshuffles, rng),
+]
 
-# Example from CausalInference.jl docs
-x = randn(rng, n)
-v = x + randn(rng, n)*0.25
-w = x + randn(rng, n)*0.25
-z = v + w + randn(rng, n)*0.25
-s = z + randn(rng, n)*0.25
-X = [x, v, w, z, s]
-df = (x=x, v=v, w=w, z=z, s=s)
+tn(x) = Base.typename(typeof(x)).wrapper
+for i in eachindex(combos)
+    u, c = combos[i]
+    @testset "PC algorithm. Pairwise: $(tn(u)). Conditional: $(tn(c))" begin
+        alg = PC(u, c; α = α, maxiters_orient = 10)
+        g = infer_graph(alg, X)
+        @test g isa SimpleDiGraph
+    end
+end
+
+alg = PC(CorrTest(), CorrTest(), maxdepth = 1)
+@test infer_graph(alg, X) isa SimpleDiGraph
