@@ -16,7 +16,7 @@ PMI(X; Y | Z) = D(p(x, y, z) || p^{*}(x|z) p^{*}(y|z) p(z)),
 
 where ``p(x, y, z)`` is the joint distribution for ``X``, ``Y`` and ``Z``, and
 ``D(\\cdot, \\cdot)`` is the extended Kullback-Leibler divergence from
-``p(x, y, z)`` to ``p^{*}(x|z) p^{*}(y|z) p(z)``. See Zhao et al., 2016 for details.
+``p(x, y, z)`` to ``p^{*}(x|z) p^{*}(y|z) p(z)``. See Zhao et al. (2016) for details.
 
 ## Estimation
 
