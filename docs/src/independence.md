@@ -40,10 +40,3 @@ JDDTestResult
 CorrTest
 CorrTestResult
 ```
-
-## [`PATest`](@ref)
-
-```@docs
-PATest
-PATestResult
-```

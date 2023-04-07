@@ -56,11 +56,11 @@ module CausalityTools
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "2.5.0"
+    version_number = "2.6.0"
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - New independence test: `CorrTest`, based on (partial) correlations.
+    - New causal graph inference algorithm: `PC`.
     """
 
     if display_update

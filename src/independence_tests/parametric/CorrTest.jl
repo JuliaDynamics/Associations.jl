@@ -13,6 +13,7 @@ import HypothesisTests: pvalue
 
 An independence test based correlation (for two variables) and partial
 correlation (for three variables), as described in Schmidt et al. (2018)[^Schmidt2018].
+Uses [`PearsonCorrelation`](@ref) and [`PartialCorrelation`](@ref) internally.
 
 Assumes that the input data are (multivariate) normally distributed. Then
 `ρ(X, Y) = 0` implies `X ⫫ Y ` and `ρ(X, Y | 𝐙) = 0` implies `X ⫫ Y | 𝐙`.

@@ -6,7 +6,7 @@ using Combinatorics: powerset, combinations
 #export skeleton
 
 """
-    skeleton(algorithm::PCRobust, x) → (g, s)
+    skeleton(algorithm::PC, x) → (g, s)
 
 Infer the skeleton graph for the variables `x` using the provided `algorithm`.
 `x` must be some iterable where the `i`-th variable can be accessed as `x[i]`.
@@ -14,10 +14,9 @@ Infer the skeleton graph for the variables `x` using the provided `algorithm`.
 Return a tuple of the undirected skeleton graph `g::SimpleGraph`, and the
 separating sets `s::Dict{SimpleEdge, Vector{Int}})`.
 """
-function skeleton(alg::PCRobust, x; verbose = false)
-
+function skeleton(alg::PC, x; verbose = false)
     N = length(x)
-    if alg.maxdepth isa Nothing
+    if alg.maxdepth == Inf
         max_degree = N - 2
     else
         max_degree = alg.maxdepth
@@ -33,7 +32,7 @@ function skeleton(alg::PCRobust, x; verbose = false)
 end
 
 """
-    skeleton_unconditional!(alg::PCRobust, g::SimpleGraph, x)
+    skeleton_unconditional!(alg::PC, g::SimpleGraph, x)
 
 Perform pairwise independence tests between all vertices in the `graph`, where
 each vertex is represented by the data `x[i]`, and remove any edges in `graph`
@@ -46,26 +45,26 @@ considering the case `𝓁 = 0`.
 
 Modifies `graph` in-place.
 
-If `alg.unconditional_test` is a directed test, then edges are considered one-by-one.
-If `alg.unconditional_test` is not a directed test, then edges (`X → Y, `Y → X`)
+If `alg.pairwise_test` is a directed test, then edges are considered one-by-one.
+If `alg.pairwise_test` is not a directed test, then edges (`X → Y, `Y → X`)
 are considered simultaneously.
 
 [^Colombo2014]:
     Colombo, D., & Maathuis, M. H. (2014). Order-independent constraint-based causal
     structure learning. J. Mach. Learn. Res., 15(1), 3741-3782.
 """
-function skeleton_unconditional!(alg::PCRobust, graph::SimpleDiGraph, x; verbose = false)
+function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, x; verbose = false)
     N = length(x)
     pairs = (Tuple(pair) for pair in combinations(1:N, 2))
     for pair in pairs
         s, t = pair
         # If pval > α, then, based on the given the data, we can't reject the hypothesis
         # that `x[s] ⫫ x[t]`. Therefore, we assume that they *are* independent.
-        pval = @views pvalue(independence(alg.unconditional_test, x[s], x[t]))
+        indep_test = independence(alg.pairwise_test, x[s], x[t])
+        pval = pvalue(indep_test)
         if pval > alg.α
             edge1 = SimpleEdge(s, t)
             edge2 = SimpleEdge(t, s)
-
             verbose && println("Skeleton, pairwise: Removing $edge1 and $edge2 (p = $pval)")
             rem_edge!(graph, edge1)
             rem_edge!(graph, edge2)
@@ -75,12 +74,13 @@ function skeleton_unconditional!(alg::PCRobust, graph::SimpleDiGraph, x; verbose
 end
 
 """
-    skeleton_conditional!(alg::PCRobust, graph, x, conditional_test::IndependenceTest)
+    skeleton_conditional!(alg::PC, graph, x, conditional_test::IndependenceTest)
 
 Thin the skeleton `graph`, where each vertex is represented by the data `x[i]`,
-by using the conditional independence `test`. Whenever `x[i] ⫫ x[j] | x[S]` for
+by using `conditional_test`. Whenever `x[i] ⫫ x[j] | x[S]` for
 some set of variables not including `i` and `j`, the edge between `i` and `j` is
-removed. This is essentially algorithm 3.2 in Colombo & Maathuis (2014), for
+removed, and `S` is stored in the separating set for `i` and `j`.
+This is essentially algorithm 3.2 in Colombo & Maathuis (2014), for
 the cases `𝓁 >= 1`.
 
 Modifies `graph` in-place.
@@ -89,7 +89,7 @@ Modifies `graph` in-place.
     Colombo, D., & Maathuis, M. H. (2014). Order-independent constraint-based causal
     structure learning. J. Mach. Learn. Res., 15(1), 3741-3782.
 """
-function skeleton_conditional!(alg::PCRobust, graph, separating_set, x, 𝓁::Int;
+function skeleton_conditional!(alg::PC, graph, separating_set, x, 𝓁::Int;
         verbose = false)
 
     N = length(x)
@@ -98,7 +98,6 @@ function skeleton_conditional!(alg::PCRobust, graph, separating_set, x, 𝓁::In
     ctr = 0
     for (i, aᵢ) in enumerate(a)
         for j in aᵢ
-
             # The powerset of remaining variables (not including variable i or variable j),
             # limited to subsets of cardinality 𝓁 <= C <= 𝓁 + 1.
             𝐒 = powerset(setdiff(aᵢ, j), 𝓁, 𝓁 + 1) |> collect
@@ -111,7 +110,7 @@ function skeleton_conditional!(alg::PCRobust, graph, separating_set, x, 𝓁::In
     return graph, ctr
 end
 
-function conditionaltest_and_remove_edge!(alg::PCRobust, x, 𝐒, 𝓁, i, j, graph, separating_set;
+function conditionaltest_and_remove_edge!(alg::PC, x, 𝐒, 𝓁, i, j, graph, separating_set;
         verbose = false)
     # If there's at least one available variable to condition on.
     ctr = 0

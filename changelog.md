@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.6.0
+
+- New causal graph inference algorithm: `PC`.
+
 ## 2.5.0
 
 - New independence test: `CorrTest`, based on (partial) correlations.

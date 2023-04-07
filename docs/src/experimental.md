@@ -11,3 +11,10 @@ they appear as part of the public API. Use them wisely.
 ```@docs
 predictive_asymmetry
 ```
+
+### [`PATest`](@ref)
+
+```@docs
+PATest
+PATestResult
+```

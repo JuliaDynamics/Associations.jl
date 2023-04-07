@@ -1,5 +1,9 @@
 # [Association measures](@id association_measure)
 
+```@docs
+AssociationMeasure
+```
+
 ## Overview
 
 | Type                   | Measure                               | Pairwise | Conditional | Function version               |
