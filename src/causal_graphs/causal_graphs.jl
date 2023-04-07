@@ -1,7 +1,12 @@
+import Graphs.SimpleGraphs: SimpleDiGraph
+import Graphs: edges
+export SimpleDiGraph
+export edges
+
 include("api.jl")
 
 # Concrete implementations
-include("pc_robust/PCRobust.jl")
+include("pc/PC.jl")
 include("oce/OCE.jl")
 include("OPA.jl")
 #nclude("pc_pa/PCPA.jl")

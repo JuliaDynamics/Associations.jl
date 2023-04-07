@@ -1,25 +1,34 @@
+export MesnerShalizi
 export MesnerShalisi
-
 """
-    MesnerShalisi <: ConditionalMutualInformationEstimator
-    MesnerShalisi(k = 1, w = 0)
+    MesnerShalizi <: ConditionalMutualInformationEstimator
+    MesnerShalizi(k = 1, w = 0)
 
-The `MesnerShalisi` estimator is an estimator for conditional mutual information for data
+The `MesnerShalizi` estimator is an estimator for conditional mutual information for data
 that can be mixtures of discrete and continuous data (Mesner & Shalisi et al.,
-2020)[^MesnerShalisi2020].
+2020)[^MesnerShalizi2020].
 
-[^MesnerShalisi2020]:
+[^MesnerShalizi2020]:
     Mesner, O. C., & Shalizi, C. R. (2020). Conditional mutual information estimation for
     mixed, discrete and continuous data. IEEE Transactions on Information Theory, 67(1),
     464-484.
 """
-Base.@kwdef struct MesnerShalisi{M} <: ConditionalMutualInformationEstimator
+Base.@kwdef struct MesnerShalizi{M} <: ConditionalMutualInformationEstimator
     k::Int = 1
     w::Int = 0
     metric::M = Chebyshev()
 end
 
-function estimate(measure::CMIShannon, est::MesnerShalisi, x, y, z)
+function MesnerShalisi(args...; kwargs...)
+    Base.depwarn(
+        "The `MesnerShalisi` estimator is deprecated due to a type. " *
+        "Please use `MesnerShalizi` instead`.",
+        :MesnerShalisi,
+    )
+    return MesnerShalizi(args...; kwargs...)
+end
+
+function estimate(measure::CMIShannon, est::MesnerShalizi, x, y, z)
     e = measure.e
     (; k, w, metric) = est
     X = StateSpaceSet(x)

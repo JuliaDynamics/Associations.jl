@@ -34,9 +34,9 @@ JointDistanceDistributionTest
 JDDTestResult
 ```
 
-## [`PATest`](@ref)
+## [`CorrTest`](@ref)
 
 ```@docs
-PATest
-PATestResult
+CorrTest
+CorrTestResult
 ```

@@ -53,7 +53,7 @@ of the other dedicated conditional mutual information estimators.
 | [`GaoKannanOhViswanath`](@ref)   | [`MutualInformationEstimator`](@ref)            | Mixed               |    ✓    |     ✓      |
 | [`GaoOhViswanath`](@ref)         | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
 | [`FPVP`](@ref)                   | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
-| [`MesnerShalisi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
+| [`MesnerShalizi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
 | [`Rahimzamani`](@ref)            | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
 
 ## Examples

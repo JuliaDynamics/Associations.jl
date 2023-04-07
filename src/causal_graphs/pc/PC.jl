@@ -1,25 +1,38 @@
 using Random
 
-#export PCRobust
+export PC
 
 """
-    PCRobust <: GraphAlgorithm
-    PCRobust(
-        unconditional_test::IndependenceTest,
-        conditional_test::IndependenceTest;
-        α = 0.05,
-        max_depth::Union{Int, Nothing} = nothing)
+    PC <: GraphAlgorithm
+    PC(pairwise_test, conditional_test;
+        α = 0.05, max_depth = Inf, maxiters_orient = Inf)
 
-The "robustified" version (Kalisch & Bühlmann, 2008[^Kalisch2008]) of the PC algorithm
-(Spirtes et al., 2000)[^Spirtes2000]. The `unconditional_test` must be an
-[`IndependenceTest`](@ref) with a valid pairwise [`AssociationMeasure`](@ref),
-and `conditional_test` must be an [`IndependenceTest`](@ref) with a valid conditional
-[`AssociationMeasure`](@ref).
+The PC algorithm (Spirtes et al., 2000)[^Spirtes2000], which is named
+named after the *first names* of the authors, **P**eter Spirtes and **C**lark Glymour,
+which is implemented as described in Kalisch & Bühlmann (2008)[^Kalisch2008].
+
+## Arguments
+
+- **`pairwise_test`**: An [`IndependenceTest`](@ref) that uses a pairwise,
+    nondirectional [`AssociationMeasure`](@ref) measure (e.g. a parametric
+    [`CorrTest`](@ref), or [`SurrogateTest`](@ref) with the [`MIShannon`](@ref) measure).
+- **`conditional_test`**: An [`IndependenceTest`](@ref) that uses a conditional,
+    nondirectional [`AssociationMeasure`](@ref) (e.g. [`CorrTest`](@ref),
+    or [`SurrogateTest`](@ref) with the [`CMIShannon`](@ref) measure).
+
+## Keyword arguments
+
+- **`α::Real`**. The significance level of the test.
+- **`max_depth`**. The maximum level of conditional indendence tests to be
+    performed. By default, there is no limit (i.e. `max_depth = Inf`), meaning that
+    maximum depth is `N - 2`, where `N` is the number of input variables.
+- **`maxiters_orient::Real`**. The maximum number of times to apply the orientation
+    rules. By default, there is not limit (i.e. `maxiters_orient = Inf`).
 
 !!! info "Directional measures will not give meaningful answers"
     During the skeleton search phase, if a significance association between two nodes are
     is found, then a bidirectional edge is drawn between them. The generic implementation of
-    `PCRobust` therefore doesn't currently handle directional measures such as
+    `PC` therefore doesn't currently handle directional measures such as
     [`TEShannon`](@ref). The reason is that if a  directional relationship `X → Y` exists
     between two nodes `X` and `Y`, then the algorithm would first draw a bidirectional
     arrow between `X` and `Y` when analysing the direction
@@ -30,13 +43,13 @@ and `conditional_test` must be an [`IndependenceTest`](@ref) with a valid condit
 
 ## Description
 
-When used with [`infer_graph`](@ref) on some input data `x`, the `PCRobust` algorithm
+When used with [`infer_graph`](@ref) on some input data `x`, the `PC` algorithm
 performs the following steps:
 
 1. Initialize an empty fully connected graph `g` with `N` nodes, where `N` is the number
     of variables and `x[i]` is the data for the `i`-th node.
 2. Reduce the fully connected `g` to a skeleton graph by performing pairwise
-    [`independence`](@ref) tests between all vertices using `unconditional_test`. Remove
+    [`independence`](@ref) tests between all vertices using `pairwise_test`. Remove
     any edges where adjacent vertices are found to be independent according to the test
     (i.e. the null hypothesis of independence cannot be rejected at significance level
     `1 - α`).
@@ -68,14 +81,10 @@ performs the following steps:
 The resulting directed graph (a `SimpleDiGraph` from
 [Graphs.jl](https://github.com/JuliaGraphs/Graphs.jl)) is then returned.
 
-
 ## Examples
 
-- [Inferring a causal graph from a chain of logistic maps](@ref pc_robust_example)
-
-!!! info
-    The "PC" algorithm is named after the *first names* of the authors, **P**eter Spirtes
-    and **C**lark Glymour.
+- [PC algorithm with parametric independence tests](@ref pc_examples_corr)
+- [PC algorithm with nonparametric independence tests](@ref pc_examples_nonparametric)
 
 [^Kalisch2008]:
     Kalisch, M., & Bühlmann, P. (2008). Robustification of the PC-algorithm for directed
@@ -84,16 +93,22 @@ The resulting directed graph (a `SimpleDiGraph` from
     Spirtes, P., Glymour, C. N., Scheines, R., & Heckerman, D. (2000). Causation, prediction,
     and search. MIT press.
 """
-struct PCRobust{U, C, A, N} <: GraphAlgorithm
-    unconditional_test::U
+struct PC{U, C, A, N, MO} <: GraphAlgorithm
+    pairwise_test::U
     conditional_test::C
     α::A
     maxdepth::N
+    maxiters_orient::MO
 
-    function PCRobust(unconditional_test::U, conditional_test::C;
-            α::A = 0.05, maxdepth::N = nothing) where {U <: IndependenceTest, C <: IndependenceTest, A, N <: Union{Int, Nothing}}
+    function PC(
+            pairwise_test,
+            conditional_test;
+            α::A = 0.05, maxdepth::N = Inf,
+            maxiters_orient::MO = Inf) where {A, N, MO}
         0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
-        new{U, C, A, N}(unconditional_test, conditional_test, α, maxdepth)
+        U = typeof(pairwise_test)
+        C = typeof(conditional_test)
+        new{U, C, A, N, MO}(pairwise_test, conditional_test, α, maxdepth, maxiters_orient)
     end
 end
 
@@ -101,10 +116,19 @@ include("skeleton.jl")
 #include("skeleton_directed.jl")
 include("cpdag.jl")
 
-# TODO: this is only designed for non-directed measures. Use type system?
-function infer_graph(algorithm::PCRobust, x; verbose = false)
-    skeleton_graph, separating_sets = skeleton(algorithm, x; verbose)
-    directed_graph = cpdag(algorithm, skeleton_graph, separating_sets; verbose)
+function infer_graph(algorithm::PC, x; verbose = false)
+    check_input(algorithm)
+    sg, separating_sets = skeleton(algorithm, x; verbose)
+    dg = cpdag(algorithm, sg, separating_sets; verbose)
+    return dg
+end
 
-    return skeleton_graph, directed_graph
+function check_input(alg::PC)
+    u = alg.pairwise_test
+    c = alg.conditional_test
+    if u.measure isa DirectedAssociationMeasure || c.measure isa DirectedAssociationMeasure
+        s = "Directional measures will not give meaningful answers. See PC docstring"*
+            " for more information."
+        throw(ArgumentError(s))
+    end
 end

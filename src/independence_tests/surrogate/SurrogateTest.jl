@@ -39,7 +39,7 @@ The shuffled variable is always the first variable (`X`). Exceptions are:
 | Measure                               | Pairwise | Conditional | Requires `est` |
 | ------------------------------------- | :------: | :---------: | :------------: |
 | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      |       No       |
-| [`DistanceCorrelation`](@ref)         |    ✓    |     ✖      |       No       |
+| [`DistanceCorrelation`](@ref)         |    ✓    |     ✓      |       No       |
 | [`SMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
 | [`HMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
 | [`MMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
