@@ -88,11 +88,6 @@ function estimate(measure::PMI, est::Contingency{<:Nothing}, x...)
     return estimate(measure, contingency_matrix(x...))
 end
 
-# p and q must have the same outcome space.
-function extended_kl_div(p, q)
-
-end
-
 function estimate(
         measure::PMI,
         pxyz::ContingencyMatrix{T, 3}) where T
