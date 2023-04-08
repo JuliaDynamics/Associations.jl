@@ -1,6 +1,6 @@
 export independence, cit
 export IndependenceTest
-
+export point_estimate
 
 """
     IndependenceTest <: IndependenceTest
@@ -79,6 +79,15 @@ function null_hypothesis_text(test::IndependenceTestResult)
         return ""
     end
 end
+
+"""
+    point_estimate(r::IndependenceTestResult)
+
+Return the point estimate for the result of an [`IndependenceTest`](@ref). The quantity
+returned depends on the test.
+"""
+function point_estimate end
+
 include("parametric/parametric.jl")
 include("local_permutation/LocalPermutationTest.jl")
 include("surrogate/SurrogateTest.jl")

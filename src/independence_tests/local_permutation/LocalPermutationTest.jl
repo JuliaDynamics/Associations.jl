@@ -136,6 +136,11 @@ Holds the result of a [`LocalPermutationTest`](@ref). `m` is the measure compute
 the original data. `m_surr` is a vector of the measure computed on permuted data, where
 `m_surr[i]` is the measure compute on the `i`-th permutation. `pvalue` is the one-sided
 `p`-value for the test.
+
+## Implements
+
+- **`pvalue`**. Returns the p-value for the test.
+- **`point_estimate`**. Returns `m`, the measure estimated on the original data.
 """
 struct LocalPermutationTestResult{M, MS, P} <: IndependenceTestResult
     n_vars::Int # 2 vars = pairwise, 3 vars = conditional
@@ -146,6 +151,7 @@ struct LocalPermutationTestResult{M, MS, P} <: IndependenceTestResult
 end
 pvalue(r::LocalPermutationTestResult) = r.pvalue
 quantile(r::LocalPermutationTestResult, q) = quantile(r.m_surr, q)
+point_estimate(r::LocalPermutationTestResult) = r.M
 
 function Base.show(io::IO, test::LocalPermutationTestResult)
     print(io,

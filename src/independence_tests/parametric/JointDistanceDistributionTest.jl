@@ -60,6 +60,11 @@ end
 Holds the results of [`JointDistanceDistributionTest`](@ref). `Δjdd` is the
 `Δ`-distribution, `hypothetical_μ` is the hypothetical mean of the `Δ`-distribution
 under the null, and `pvalue` is the p-value for the one-sided t-test.
+
+## Implements
+
+- **`pvalue`**. Returns a p-value for the test.
+- **`point_estimate`**. Returns the mean of the estimated `Δ` distribution.
 """
 struct JDDTestResult{V, T, P} <: IndependenceTestResult
     n_vars::Int # 2 vars = pairwise, 3 vars = conditional
@@ -69,6 +74,7 @@ struct JDDTestResult{V, T, P} <: IndependenceTestResult
 end
 
 pvalue(x::JDDTestResult) = x.pvalue
+point_estimate(x::JDDTestResult) = mean(x.Δjdd)
 
 function Base.show(io::IO, r::JDDTestResult)
     # TODO: make a function to do this (a pairwise and a conditional version), so this

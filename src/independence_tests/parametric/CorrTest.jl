@@ -69,6 +69,11 @@ end
 A simple struct that holds the results of a [`CorrTest`](@ref) test: the (partial)
 correlation coefficient `ρ`, Fisher's `z`, and `pvalue` - the two-sided
 p-value for the test.
+
+## Implements
+
+- **`pvalue`**. Returns the p-value for the test.
+- **`point_estimate`**. Returns the estimated (partial) correlation coefficient `ρ`.
 """
 struct CorrTestResult{R, Z, P}
     ρ::R
@@ -76,6 +81,7 @@ struct CorrTestResult{R, Z, P}
     pvalue::P
 end
 pvalue(r::CorrTestResult) = r.pvalue
+point_estimate(r::CorrTestResult) = r.ρ
 
 function Base.show(io::IO, test::CorrTestResult)
     α005 = pvalue(test) < 0.05 ?
