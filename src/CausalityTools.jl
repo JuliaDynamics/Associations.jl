@@ -56,11 +56,11 @@ module CausalityTools
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "2.6.0"
+    version_number = "2.7.0"
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - New causal graph inference algorithm: `PC`.
+    - New association measure: `PMI` (part mutual information).
     """
 
     if display_update
