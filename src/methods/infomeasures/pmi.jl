@@ -97,14 +97,11 @@ function estimate(
 
     # The sums go over *states*, so these are what we iterate over.
     dx, dy, dz = size(pxyz)
-    pyxz = probabilities(pxyz, dims = [3, 1, 2])
     px = probabilities(pxyz, dims = [1])
     py = probabilities(pxyz, dims = [2])
-    pz = probabilities(pxyz, dims = [2])
-    pxz = probabilities(pxyz, dims = [1, 3])
-    pxy = probabilities(pxyz, dims = [1, 2])
+    pz = probabilities(pxyz, dims = [3])
     pyz = probabilities(pxyz, dims = [2, 3])
-    pz = probabilities(pxyz, dims = 3)
+    pxz = probabilities(pxyz, dims = [1, 3])
 
     pmi = 0.0
     logb = log_with_base(measure.base)
