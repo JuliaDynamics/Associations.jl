@@ -14,7 +14,7 @@ test_teshannon = LocalPermutationTest(TEShannon(), FPVP())
 
 @test independence(test_teshannon, x, y, z) isa LocalPermutationTestResult
 
-test_kperm_toolarge = LocalPermutationTest(CMIShannon(), FPVP(), kperm = 200, rng)
+test_kperm_toolarge = LocalPermutationTest(CMIShannon(), FPVP(); kperm = 200, rng)
 @test_throws ArgumentError independence(test_kperm_toolarge, x, y, z)
 
 # CMI
