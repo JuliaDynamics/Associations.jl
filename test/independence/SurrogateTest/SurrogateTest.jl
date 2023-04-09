@@ -10,6 +10,7 @@ include("crossmappings.jl")
 
 # Conditional measures
 include("ConditionalMutualInformation.jl")
+include("pmi.jl")
 
 # Pairwise + conditional
 include("TransferEntropyConditional.jl")

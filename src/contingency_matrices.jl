@@ -1,6 +1,6 @@
 import Base: size, getindex, setindex
 import ComplexityMeasures: probabilities, outcomes
-using StatsBase: levelsmap
+import StatsBase: levelsmap
 
 export ContingencyMatrix
 export probabilities, outcomes, frequencies
@@ -125,7 +125,7 @@ function contingency_matrix(x...)
     end
 
     # The frequency matrix dimensions are dictated by the number of unique occurring values
-    Ωs = unique.(x)
+    Ωs = unique_elements.(x)
     matrix_dims = length.(Ωs);
 
     # Get marginal probabilities and outcomes
@@ -140,6 +140,9 @@ function contingency_matrix(x...)
         freqs,
     )
 end
+
+unique_elements(x) = unique(x)
+unique_elements(x::AbstractStateSpaceSet) = unique(x.data)
 
 
 function freqtable_equallength(matrix_dims, x...)
@@ -180,7 +183,7 @@ The single-argument method allocated a `levels` vector internally.
 """
 function tolevels!(levels, x)
     @assert length(levels) == length(x)
-    lmap = levelsmap(x)
+    lmap = _levelsmap(x)
     for i in eachindex(x)
         levels[i] = lmap[x[i]]
     end
@@ -188,13 +191,17 @@ function tolevels!(levels, x)
 end
 
 function tolevels(x)
-    lmap = levelsmap(x)
+    lmap = _levelsmap(x)
     levels = zeros(Int, length(x))
     for i in eachindex(x)
         levels[i] = lmap[x[i]]
     end
     return levels, lmap
 end
+
+# Ugly hack, because levelsmap doesn't work out-of-the-box for statespacesets.
+_levelsmap(x) = levelsmap(x)
+_levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 
 # The following commented-out code below is equivalent to theabove, but muuuch faster.
 # I keep the comments here for, so when I revisit this, I understand *why* it works.

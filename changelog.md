@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.7.1
+
+- Fixed an import warning.
+
+## 2.7.0
+
+- New association measure: `PMI` (part mutual information).
+
 ## 2.6.0
 
 - New causal graph inference algorithm: `PC`.
