@@ -13,7 +13,7 @@ function skeleton_contemporaneous(alg::PCMCIPlus, X, parents)
             end
         end
         for (j, τ) in parentsᵢ
-            add_undirected_edge!(dg, d[(i, 0)], d[(j, τ)])
+            add_edge!(dg, d[(j, τ)], d[(i, 0)])
         end
     end
     return dg
