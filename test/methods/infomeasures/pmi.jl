@@ -1,7 +1,31 @@
 using StableRNGs
-estd = Contingency(Dispersion(m = 2, c = 3))
-esth = Contingency(ValueHistogram(5))
 rng = StableRNG(123)
+
+ed = Dispersion(m = 2, c = 2)
+vh = ValueHistogram(2)
+sp = SymbolicPermutation(m=2)
+estd = Contingency(ed)
+esth = Contingency(vh)
+ests = Contingency(sp)
+
+sys = system(Logistic4Chain(xi = rand(rng, 4); rng))
+x, y, z, w = columns(trajectory(sys, 50, Ttr = 10000))
+ZW = StateSpaceSet(z, w)
+@test pmi(estd, x, y, z) >= 0
+@test pmi(esth, x, y, z) >= 0
+@test pmi(ests, x, y, z) >= 0
+@test pmi(estd, x, y, z) >= 0
+@test pmi(ed, x, y, z) >= 0
+@test pmi(vh, x, y, z) >= 0
+@test pmi(sp, x, y, z) >= 0
+@test pmi(estd, x, y, ZW) >= 0
+@test pmi(esth, x, y, ZW) >= 0
+@test pmi(ests, x, y, ZW) >= 0
+@test pmi(estd, x, y, ZW) >= 0
+@test pmi(ed, x, y, ZW) >= 0
+@test pmi(vh, x, y, ZW) >= 0
+@test pmi(sp, x, y, ZW) >= 0
+
 
 sys = system(Logistic4Chain(xi = rand(rng, 4); rng))
 x, y, z, w = columns(trajectory(sys, 1000, Ttr = 10000))
@@ -16,3 +40,19 @@ x = rand(rng, 1:3, 20000)
 y = rand(rng, 1:3, 20000)
 z = rand(rng, 1:3, 20000)
 @test round(pmi(CountOccurrences(), x, y, z), digits = 3) == 0
+
+# Independence tests
+x = rand(rng, 50)
+y = rand(rng, 50)
+z = rand(rng, 50)
+X = StateSpaceSet(x)
+Y = StateSpaceSet(y)
+Z = StateSpaceSet(z)
+
+nshuffles = 5
+lptest = LocalPermutationTest(PMI(), SymbolicPermutation(); nshuffles, rng)
+sutest = SurrogateTest(PMI(), SymbolicPermutation(); nshuffles, rng)
+@test independence(lptest, x, y, z) isa LocalPermutationTestResult
+@test independence(lptest, X, Y, Z) isa LocalPermutationTestResult
+@test independence(sutest, x, y, z) isa SurrogateTestResult
+@test independence(sutest, X, Y, Z) isa SurrogateTestResult
