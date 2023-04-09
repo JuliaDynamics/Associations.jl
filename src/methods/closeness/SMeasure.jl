@@ -1,5 +1,8 @@
-using NearestNeighbors, Distances, Neighborhood, DelayEmbeddings
+using Neighborhood: searchstructure, bulkisearch
+using Neighborhood: NeighborNumber, Theiler
+using StateSpaceSets: AbstractStateSpaceSet
 using Distances: SqEuclidean, Euclidean
+using Distances: pairwise, evaluate
 
 export SMeasure
 export s_measure
