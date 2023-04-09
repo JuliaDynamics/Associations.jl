@@ -12,6 +12,7 @@ Pages = [
     "api/api_mutualinfo.md",
     "api/api_condmutualinfo.md",
     "api/api_transferentropy.md",
+    "api/api_pmi.md",
     "api/api_predictive_asymmetry.md",
 ]
 Depth = 3

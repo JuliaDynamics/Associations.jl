@@ -1,9 +1,12 @@
+using StateSpaceSets
+
 mx = 3
 my = 2
 mz = 4
 x = rand(1:mx, 1000)
 y = rand(1:my, 1000)
 z = rand(2:mz+1, 1000) # ensure that starting at something other than 1 also works
+X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
 
 # Basics
 # -------------------------------------------------------------------------------------
@@ -23,6 +26,17 @@ c3 = contingency_matrix(x, y, z)
 @test sum(c3) ≈ 1.0
 
 
+C = contingency_matrix(X, Y, Z)
+C2 = contingency_matrix(X, Y)
+@test frequencies(C, dims = 1:2) isa AbstractArray{Int, 2}
+@test frequencies(C, dims = 2) isa AbstractArray{Int, 1}
+@test frequencies(C) isa AbstractArray{Int, 3}
+@test probabilities(C, dims = 1:2) isa Probabilities{<:Real, 2}
+@test probabilities(C, dims = 2) isa Probabilities{<:Real, 1}
+@test probabilities(C) isa Probabilities{<:Real, 3}
+@test size(C2) == (3, 2)
+@test sum(C2) ≈ 1.0
+
 # Discretizing data before computing the contingency matrix
 # -------------------------------------------------------------------------------------
 u = rand(1000)
@@ -33,6 +47,10 @@ w = rand(1000)
 probests = [
     SymbolicPermutation(m = 3),
     Dispersion(),
+    ValueHistogram(3),
+    Contingency(SymbolicPermutation(m = 3)),
+    Contingency(Dispersion()),
+    Contingency(ValueHistogram(3)),
 ]
 
 @testset "Contingency table: with $(probests[i]) discretization" for i in eachindex(probests)
