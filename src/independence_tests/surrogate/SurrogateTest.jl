@@ -56,6 +56,7 @@ The shuffled variable is always the first variable (`X`). Exceptions are:
 | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |      Yes       |
 | [`TEShannon`](@ref)                   |    ✓    |     ✓      |      Yes       |
 | [`TERenyiJizba`](@ref)                |    ✓    |     ✓      |      Yes       |
+| [`PMI`](@ref)                         |    ✖    |     ✓      |      Yes       |
 
 ## Examples
 
@@ -165,3 +166,4 @@ include("hlms_measure.jl")
 include("crossmapping.jl")
 include("mutualinfo.jl")
 include("condmutualinfo.jl")
+include("pmi.jl")
