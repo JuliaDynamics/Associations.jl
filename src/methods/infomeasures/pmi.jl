@@ -3,6 +3,7 @@ export pmi
 
 """
     PMI <: AssociationMeasure
+    PMI(; base = 2)
 
 The partial mutual information (PMI) measure of association (Zhao et al., 2016)[^Zhao2016].
 
@@ -76,21 +77,24 @@ function pmi(x...)
     return estimate(PMI(), x...)
 end
 
-function estimate(measure::PMI, est::ProbabilitiesEstimator, x...)
-    return estimate(measure, contingency_matrix(est, x...))
-end
-
 function estimate(measure::PMI, est::Contingency{<:ProbabilitiesEstimator}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
 end
 
 function estimate(measure::PMI, est::Contingency{<:Nothing}, x...)
-    return estimate(measure, contingency_matrix(x...))
+    return estimate(measure, contingency_matrix(CountOccurrences(), x...))
+end
+
+# We explicitly need to construct a contingency matrix, because unlike for e.g. CMI,
+# there's no obvious way to rewrite PMI in terms of sums of entropies.
+function estimate(measure::PMI, est::ProbabilitiesEstimator, x...)
+    return estimate(measure, Contingency(est), x...)
 end
 
 function estimate(
         measure::PMI,
         pxyz::ContingencyMatrix{T, 3}) where T
+
     # The sums go over *states*, so these are what we iterate over.
     dx, dy, dz = size(pxyz)
     pyxz = probabilities(pxyz, dims = [3, 1, 2])
