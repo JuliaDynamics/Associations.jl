@@ -1,5 +1,8 @@
-using NearestNeighbors, Distances, Neighborhood, StateSpaceSets
+using Neighborhood: searchstructure, bulkisearch
+using Neighborhood: NeighborNumber, Theiler
+using StateSpaceSets: AbstractStateSpaceSet
 using Distances: SqEuclidean, Euclidean
+using Distances: pairwise, evaluate
 
 export LMeasure
 export l_measure
