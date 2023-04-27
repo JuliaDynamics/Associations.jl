@@ -1,4 +1,4 @@
-# The uncertainty handling framework in this file will be added 
+# The uncertainty handling framework in this file will be added
 # as part of a 1.X release. Can be ignored for now.
 
 using CausalityTools, UncertainData
@@ -15,7 +15,6 @@ uvals_x = [UncertainValue(Normal, vals_x[i], stds_x[i]) for i = 1:n]
 uvals_y = [UncertainValue(Normal, vals_y[i], stds_y[i]) for i = 1:n]
 uvals_z = [UncertainValue(Normal, vals_z[i], stds_z[i]) for i = 1:n]
 
-X = UncertainValueDataset(uvals_x)
-Y = UncertainValueDataset(uvals_y)
-Z = UncertainValueDataset(uvals_z)
-
+X = UncertainValueStateSpaceSet(uvals_x)
+Y = UncertainValueStateSpaceSet(uvals_y)
+Z = UncertainValueStateSpaceSet(uvals_z)

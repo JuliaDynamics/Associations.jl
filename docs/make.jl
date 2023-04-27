@@ -4,14 +4,11 @@ CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== 
 CI && Pkg.activate(@__DIR__)
 CI && Pkg.instantiate()
 ENV["GKSwstype"] = "100" # allow local builds without output
-using DelayEmbeddings
-using TransferEntropy
 using Documenter
 using DocumenterTools: Themes
 using CausalityTools
-using DynamicalSystems
-using HypothesisTests
-using Distributions
+using ComplexityMeasures
+using StateSpaceSets
 
 # %% JuliaDynamics theme.
 # download the themes
@@ -35,45 +32,26 @@ ENV["JULIA_DEBUG"] = "Documenter"
 
 PAGES = [
     "Overview" => "index.md",
-    "surrogate.md",
-
-    "Distance based" => [
-        "joint_distance_distribution.md",
-        "s_measure.md",
-        "cross_mapping.md",
-        "pairwise_asymmetric_inference.md"
-    ],
-    "Information/entropy based" => [
-        "mutualinfo.md",
-        "conditional_mutualinfo.md",
-        "TransferEntropy.md",
-        "predictive_asymmetry.md",
-        "generalized_entropy.md",
-        "info_estimators.md",
-    ],
-    "Complexity based" => [
-        "complexity/compression_complexity.md",
-        "complexity/dynamical_complexity.md",
-        "complexity/interventional_complexity_causality.md",
-    ],
-
-    "example_systems.md",
-    "Utilities" => [
-        "invariant_measure.md",
-        "dataset.md",
-    ],
- ]
+    "Association measures" => "measures.md",
+    "Independence testing" => "independence.md",
+    "Causal graphs" => "causal_graphs.md",
+    "APIs and estimators" => "api.md",
+    "Examples" => "examples.md",
+    "Predefined systems" => "coupled_systems.md",
+    "Experimental" => "experimental.md",
+]
 
 makedocs(
-    modules = [CausalityTools, Entropies, TransferEntropy, DelayEmbeddings],
+    modules = [CausalityTools, ComplexityMeasures, StateSpaceSets],
     format = Documenter.HTML(
         prettyurls = CI,
+        sidebar_sitename = false,
         assets = [
             asset("https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap", class=:css),
         ],
         ),
     sitename = "CausalityTools.jl",
-    authors = "Kristian Agasøster Haaga, Tor Einar Møller, George Datseris",
+    authors = "Kristian Agasøster Haaga, David Diego, Tor Einar Møller, George Datseris",
     pages = PAGES
 )
 
