@@ -1,9 +1,10 @@
 using Statistics
 export dynamical_complexity
+
 """
 # Instantaneous dynamical complexity
 
-    dynamical_complexity(Xⁱ, X⁻, algorithm::CompressionComplexityAlgorithm)
+    dynamical_complexity(Xⁱ, X⁻, algorithm::CompressionComplexityEstimator)
 
 Compute the dynamical complexity (DC) of `Xⁱ` given `X⁻` (eq. 1 in Kathpalia & Nagaraj,
 2019):
@@ -52,7 +53,7 @@ dynamical_complexity(Xⁱ, X⁻, alg)
 
 # Average dynamical complexity
 
-    dynamical_complexity(f::Function, x, algorithm::CompressionComplexityAlgorithm,
+    dynamical_complexity(f::Function, x, algorithm::CompressionComplexityEstimator,
         w::Int, L::Int, step::Int)
 
 Using a constant-width sliding window, compute the instantaneous dynamical complexities of
@@ -68,7 +69,7 @@ DC(X) = \\dfrac{1}{N}\\sum_{i=1}^{N}DC(Xⁱ|X⁻).
 The (constant) width of the sliding window is `w + L`, where `L` is the width of the
 *present* segment, and `w` is the width of the segment immediately preceding it.
 
-    dynamical_complexity(f::Function, x, y, algorithm::CompressionComplexityAlgorithm,
+    dynamical_complexity(f::Function, x, y, algorithm::CompressionComplexityEstimator,
         w::Int, L::Int, step::Int)
 
 The same as above, but conditioned on a second time series `y`, e.g.
@@ -98,18 +99,18 @@ dynamical_complexity(Statistics.mean, x, y, alg, w, L, step)
 function dynamical_complexity end
 
 function dynamical_complexity(Xⁱ::AbstractVector{J}, X⁻::AbstractVector{J},
-        algorithm::CompressionComplexityAlgorithm) where {J <: Integer}
+        algorithm::CompressionComplexityEstimator) where {J <: Integer}
     return compression_complexity([X⁻; Xⁱ], algorithm) -
         compression_complexity(X⁻, algorithm)
 end
 
 function dynamical_complexity(Xⁱ::AbstractVector{J}, X⁻::AbstractVector{J}, Y⁻::AbstractVector{J},
-    algorithm::CompressionComplexityAlgorithm) where {J <: Integer}
+    algorithm::CompressionComplexityEstimator) where {J <: Integer}
     return compression_complexity([X⁻; Xⁱ], [Y⁻; Xⁱ], algorithm) -
         compression_complexity(X⁻, Y⁻, algorithm)
 end
 
-function dynamical_complexity(x, algorithm::CompressionComplexityAlgorithm,
+function dynamical_complexity(x, algorithm::CompressionComplexityEstimator,
         w::Integer,
         L::Integer,
         step::Integer)
@@ -127,7 +128,7 @@ end
 
 
 function dynamical_complexity(x, y,
-        algorithm::CompressionComplexityAlgorithm,
+        algorithm::CompressionComplexityEstimator,
         w::Integer,
         L::Integer,
         step::Integer)
@@ -145,14 +146,14 @@ function dynamical_complexity(x, y,
 end
 
 dynamical_complexity(f::Function, x,
-    algorithm::CompressionComplexityAlgorithm,
+    algorithm::CompressionComplexityEstimator,
     w::Integer,
     L::Integer,
     step::Integer) =
         f(dynamical_complexity(x, algorithm, w, L, step))
 
 dynamical_complexity(f::Function, x, y,
-    algorithm::CompressionComplexityAlgorithm,
+    algorithm::CompressionComplexityEstimator,
     w::Integer,
     L::Integer,
     step::Integer) =

@@ -2,7 +2,7 @@ export CCCEstimator, CompressionComplexityCausalityEstimator
 
 """
     CompressionComplexityCausalityEstimator(
-        algorithm::CompressionComplexityAlgorithm = EffortToCompress(),
+        algorithm::CompressionComplexityEstimator = EffortToCompress(),
         w::In = 15,
         L::Int = 30)
 

@@ -1,6 +1,6 @@
-using StatsBase
-using DelayEmbeddings
-using Entropies
+using StatsBase: countmap
+using StateSpaceSets: AbstractStateSpaceSet
+using StaticArrays: SVector, SA
 export get_windows
 
 
@@ -8,7 +8,7 @@ allidentical(x) = all(xᵢ -> xᵢ == first(x), x)
 
 haszeroentropy(x) = allidentical(x) || length(x) == 1
 
-histogram(x) = StatsBase.countmap(x)
+histogram(x) = countmap(x)
 
 function vecints_to_int(x::AbstractVector{J}, base) where J <: Integer
     s = zero(J)
@@ -18,13 +18,12 @@ function vecints_to_int(x::AbstractVector{J}, base) where J <: Integer
     return s
 end
 
-
 """
-    symbol_pairs(x::AbstractVector{J}) where J <: Integer → Vector{SVector{2, J}}
+    sequential_symbol_pairs(x::AbstractVector{J}) where J <: Integer → Vector{SVector{2, J}}
 
 Create a sequence of two-letter symbol pairs from an integer valued time series.
 """
-function symbol_pairs(x::AbstractVector{J}) where {J}
+function sequential_symbol_pairs(x::AbstractVector{J}) where {J}
     pairs = zeros(SVector{2, J}, length(x) - 1)
 
     for i in 1:length(x) - 1
@@ -34,13 +33,13 @@ function symbol_pairs(x::AbstractVector{J}) where {J}
 end
 
 """
-    symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Integer} → Vector{SVector{2, Tuple{J, J}}}
+    sequential_symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Integer} → Vector{SVector{2, Tuple{J, J}}}
 
 Generate symbol pairs from the integer-valued, same-length vectors `x` and `y`.
 The `i`-th element of the returned vector is the `SVector`
 `SA[(x[i], x[i+1]), (y[i], y[i+1])]`.
 """
-function symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Integer}
+function sequential_symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Integer}
     length(x) == length(y) || throw(ArgumentError("lengths of `x` and `y` must be equal"))
     length(x) >= 2 || throw(ArgumentError("Lengths of x and y must be >= 2"))
 
@@ -52,20 +51,21 @@ function symbol_pairs(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: In
 end
 
 """
-    symbol_sequence(x::Dataset{D, T}, alphabet_size) where {D <: Integer, T <: Integer} ⇥ Vector{Int}
+    symbol_sequence(x::AbstractStateSpaceSet{D, T}, alphabet_size) where {D <: Integer, T <: Integer} ⇥ Vector{Int}
 
 Create an encoded one-dimensional integer symbol sequence from a integer-valued , assuming that the alphabet used for the original symbolization
 has `alphabet_size` possible symbols.
 
 In the context of the effort-to-compress algorithm, `x` would typically
-be a sub-dataset as obtained by `view(d::Dataset, indices)`.
+be a sub-StateSpaceSet as obtained by `view(d::StateSpaceSet, indices)`.
 """
-function symbol_sequence(x::AbstractDataset{D, T}, alphabet_size::J) where {D, T, J <: Integer}
+function symbol_sequence(x::AbstractStateSpaceSet{D, T}, alphabet_size::J) where {D, T, J <: Integer}
     return [vecints_to_int(xᵢ, alphabet_size) for xᵢ in x]
 end
 
-function get_windows(x, window_length::Int, step::Int = 1)
-    [i:i+window_length for i in 1:step:(length(x) - window_length)]
-end
+# function get_windows(x, window_length::Int, step::Int = 1)
+#     [i:i+window_length for i in 1:step:(length(x) - window_length)]
+# end
 
-get_windows(x, sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm}) = get_windows(x, sw.width, sw.step)
+# get_windows(x, sw::ConstantWidthSlidingWindow{<:CompressionComplexityEstimator}) = 
+#     get_windows(x, sw.width, sw.step)

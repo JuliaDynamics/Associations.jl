@@ -28,6 +28,7 @@ module CausalityTools
     include("methods/closeness/closeness.jl")
     include("methods/correlation/correlation.jl")
     include("methods/recurrence/methods.jl")
+    include("methods/compression/compression.jl")
 
     include("utils/utils.jl")
 

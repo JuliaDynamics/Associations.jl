@@ -1,8 +1,11 @@
 # This file implements 2-variable joint effort-to-compress (ETC).
 # TODO: it is also possible to compute joint ETC for more than two sequences, but it
 # is probably best to use generated functions for this. I'm leaving it for future work.
+import ComplexityMeasures: complexity, complexity_normalized
+using ComplexityMeasures
+using StaticArrays
+using StateSpaceSets: StateSpaceSet
 
-using StatsBase, Entropies, StaticArrays
 function replacement_value(x::Vector{SVector{2, Tuple{J, J}}}, pair_to_replace) where {J <: Integer}
     max_x₁ = zero(J)
     max_x₂ = zero(J)
@@ -97,7 +100,7 @@ end
 
 function compress(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Int}
     # This is a sequence of SVector{2, Tuple{Int, Int}}
-    seq = symbol_pairs(x, y)
+    seq = sequential_symbol_pairs(x, y)
 
     # This is a two-letter symbol pair (two integers)
     pair_to_replace = pair_to_be_replaced(seq)
@@ -109,15 +112,12 @@ function compress(x::AbstractVector{J}, y::AbstractVector{J}) where {J <: Int}
     non_sequential_recursive_pair_substitution(seq, pair_to_replace, symbol_to_replace_with)
 end
 
-function compression_complexity(
+function complexity(algorithm::EffortToCompress,
         x::AbstractVector{J},
         y::AbstractVector{J},
-        algorithm::EffortToCompress
     ) where J <: Integer
     length(x) == length(y) || throw(ArgumentError("lengths of `x` and `y` must be equal"))
-    # Store original length before substituting, so that we don't normalize to
-    # the length of the compressed time series.
-    L = length(x) - 1
+
 
     # Edge case: one-element vectors return zero regardless of normalization (avoids
     # division by zero).
@@ -125,40 +125,56 @@ function compression_complexity(
         return 0.0
     end
 
-    N = 0.0
-    while !haszeroentropy(Dataset(x, y))
+    N = 0
+    while !haszeroentropy(StateSpaceSet(x, y))
         x, y = compress(x, y)
         N += 1
     end
 
-    return algorithm.normalize ? (N / L) : N
+    return N
 end
 
-function compression_complexity(
+function complexity(algorithm::EffortToCompress, x::AbstractStateSpaceSet{D1, T}, y::AbstractStateSpaceSet{D2, T}, 
+        ax::Int, ay::Int) where {D1, D2, T}
+    ax >= 2 && ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
+    encoded_x = symbol_sequence(x, ax)
+    encoded_y = symbol_sequence(y, ay)
+
+    return compression_complexity(algorithm, encoded_x, encoded_y)
+end
+
+function complexity_normalized(algorithm::EffortToCompress, 
         x::AbstractVector{J},
         y::AbstractVector{J},
-        sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm}) where {J <: Integer}
-    return @views [compression_complexity(
-            x[window],
-            y[window],
-            sw.estimator) for window in get_windows(x, sw)]
+    ) where J <: Integer
+
+    # Store original length before substituting, so that we don't normalize to
+    # the length of the compressed time series.
+    L = length(x) - 1
+
+    # The number of compression steps until a zero-entropy sequence is obtained.
+    N = complexity(algorithm, x, y)
+
+    return N / L
 end
 
-function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T}, algorithm::EffortToCompress, ax::Int, ay::Int) where {D1, D2, T}
-    ax >= 2 &&  ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
-    encoded_x = symbol_sequence(x, ax)
-    encoded_y = symbol_sequence(y, ay)
-
-    return compression_complexity(encoded_x, encoded_y, algorithm)
-end
-
-function compression_complexity(x::AbstractDataset{D1, T}, y::AbstractDataset{D2, T},
-        sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm}, ax::Int, ay::Int) where {D1, D2, T}
-    ax >= 2 &&  ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
-    encoded_x = symbol_sequence(x, ax)
-    encoded_y = symbol_sequence(y, ay)
-    return @views [compression_complexity(
-            encoded_x[window],
-            encoded_y[window],
-            sw.estimator) for window in get_windows(x, sw)]
-end
+# function compression_complexity(
+#         sw::ConstantWidthSlidingWindow{<:CompressionComplexityEstimator},
+#         x::AbstractVector{J},
+#         y::AbstractVector{J},
+#         ) where {J <: Integer}
+#     return @views [compression_complexity(sw.estimator,
+#             x[window],
+#             y[window],
+#             ) for window in get_windows(x, sw)]
+# end
+# function compression_complexity(sw::ConstantWidthSlidingWindow{<:CompressionComplexityEstimator}, x::AbstractStateSpaceSet{D1, T}, 
+#         y::AbstractStateSpaceSet{D2, T}, ax::Int, ay::Int) where {D1, D2, T}
+#     ax >= 2 &&  ay >= 2 || throw(ArgumentError("Alphabet sizes must be at least 2."))
+#     encoded_x = symbol_sequence(x, ax)
+#     encoded_y = symbol_sequence(y, ay)
+#     return @views [compression_complexity(
+#             encoded_x[window],
+#             encoded_y[window],
+#             sw.estimator) for window in get_windows(x, sw)]
+# end

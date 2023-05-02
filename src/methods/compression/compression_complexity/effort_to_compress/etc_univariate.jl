@@ -1,4 +1,5 @@
-using DelayEmbeddings, StaticArrays
+using StaticArrays
+import ComplexityMeasures: complexity
 
 function replacement_value(x::Vector{SVector{2, J}}) where {J <: Int}
     max_x = 0
@@ -87,8 +88,6 @@ function non_sequential_recursive_pair_substitution(pairs, pair_to_replace,
     return compressed_x
 end
 
-
-
 function compress(x::Vector{SVector{2, J}}) where {J <: Int}
     # This is a two-letter symbol pair (two integers)
     pair_to_replace = pair_to_be_replaced(x)
@@ -100,18 +99,27 @@ function compress(x::Vector{SVector{2, J}}) where {J <: Int}
     non_sequential_recursive_pair_substitution(x, pair_to_replace, symbol_to_replace_with)
 end
 
-function compression_complexity(x, algorithm::EffortToCompress)
+function complexity(algorithm::EffortToCompress, x::AbstractVector{Int})
     seq = copy(x)
     N = 0.0
     while !haszeroentropy(seq)
-        seq = compress(symbol_pairs(seq))
-        N += 1
+        @show sequential_symbol_pairs(seq)
+        seq = compress(sequential_symbol_pairs(seq))
+        # The last compressed sequence has length 2, so we increment *after* compression to
+        # ensure we count the last compression step.
+        N += 1 
     end
-    return algorithm.normalize ? N / (length(x) - 1) : N
+    return N
 end
 
-function compression_complexity(x::AbstractVector{J}, sw::ConstantWidthSlidingWindow{<:CompressionComplexityAlgorithm}) where J <: Int
-    return @views [compression_complexity(
-            x[window],
-            sw.estimator) for window in get_windows(x, sw)]
+function complexity_normalized(algorithm::EffortToCompress, x::AbstractVector{Int})
+    L = length(x) - 1
+    N = complexity(algorithm, x)
+    return N / L
 end
+
+# function compression_complexity(sw::ConstantWidthSlidingWindow{<:CompressionComplexityEstimator}, 
+#         x::AbstractVector{J}, ) where J <: Int
+#     return @views [compression_complexity(sw.estimator,
+#             x[window]) for window in get_windows(x, sw)]
+# end
