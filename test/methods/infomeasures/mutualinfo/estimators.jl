@@ -89,3 +89,13 @@ y = StateSpaceSet(rand(rng, 1000, 1))
     end
 
 end
+
+@testset "GaussianMI" begin
+    # The other estimator tests only compute whether the estimators run "at all".
+    # For some special cases of the Gaussian we can also compare with a closed form solution.
+
+    x′ = StateSpaceSet(2. .* x.data .+ [SVector(1.)])
+    y′ = StateSpaceSet(3. .* y.data .- [SVector(1.)])
+    @test (  mutualinfo(GaussianMI(normalize=false), x , y)
+           ≈ mutualinfo(GaussianMI(normalize=true) , x′, y′))
+end
