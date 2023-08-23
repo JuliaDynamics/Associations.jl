@@ -19,9 +19,7 @@ standard deviation. If `normalize == false`, then the algorithm proceeds without
 normalization.
 
 Next, the `C_{XY}`, the correlation matrix for the (normalized) joint data `XY` is
-computed. The mutual information estimate
-
-`GaussianMI` assumes the input variables are distributed according to normal
+computed. The mutual information estimate `GaussianMI` assumes the input variables are distributed according to normal
 distributions with zero means and unit standard deviations.
 Therefore, given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
 `GaussianMI` first constructs the joint [`StateSpaceSet`](@ref) `XY`, then transforms each
@@ -38,16 +36,16 @@ The mutual information estimated (for `normalize == false`) is then estimated as
 where we ``\\Sigma_X`` and ``\\Sigma_Y`` appear in ``\\Sigma`` as
 
 ```math
-\\Sigma = \\begin{matrix}
+\\Sigma = \\begin{bmatrix}
 \\Sigma_{X} & \\Sigma^{'}\\\\
 \\Sigma^{'} & \\Sigma_{Y}
-\\end{matrix}.
+\\end{bmatrix}.
 ```
 
 If `normalize == true`, then the mutual information is estimated as
 
 ```math
-\\hat{I}^S_{Gaussian}(X; Y) = -\\dfrac{1}{2} \\sum{i = 1}^{d_x + d_y} \\sigma_i,
+\\hat{I}^S_{Gaussian}(X; Y) = -\\dfrac{1}{2} \\sum_{i = 1}^{d_x + d_y} \\sigma_i,
 ```
 
 where ``\\sigma_i`` are the eigenvalues for ``\\Sigma``.
@@ -70,7 +68,7 @@ function estimate(measure::MIShannon, est::GaussianMI, x, y)
     if est.normalize
         Σ = fastcor(standardize(XY))
         σ = eigvals(Σ)
-        mi -0.5 * sum(log(σᵢ) for σᵢ in σ)
+        mi = -0.5 * sum(log(σᵢ) for σᵢ in σ)
     else
         Σ = fastcor(XY)
         Σx = Σ[1:DX, 1:DX]
