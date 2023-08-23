@@ -5,7 +5,8 @@ using LinearAlgebra: det
 
 k = 5
 ests_mi = [
-    GaussianMI(),
+    GaussianMI(normalize=true),
+    GaussianMI(normalize=false),
     KSG1(; k),
     KSG2(; k),
     GaoKannanOhViswanath(; k),
