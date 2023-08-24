@@ -99,27 +99,49 @@ end
         x′ = StateSpaceSet(2. .* x.data .+ [SVector(1.)])
         y′ = StateSpaceSet(3. .* y.data .- [SVector(1.)])
         @test (  mutualinfo(GaussianMI(normalize=false), x , y)
-               ≈ mutualinfo(GaussianMI(normalize=true) , x′, y′))
+                 ≈ mutualinfo(GaussianMI(normalize=true) , x′, y′))
     end
 
     @testset "Compare with analytic eq" begin
         # Test based on https://en.wikipedia.org/wiki/Mutual_information#Linear_correlation.
         # We choose parameters arbitrarily:
-        σ_1 = 0.5
-        σ_2 = 1.5
-        ρ = 0.5
+        @testset "normalize=false"
+            σ_1 = 1.0
+            σ_2 = 1.0
+            ρ = 0.5
 
-        μ = [1.5; 2.5]
-        Σ = [σ_1^2 ρ*σ_1*σ_2;
-             ρ*σ_1*σ_2 σ_2^2]
+            μ = [0.; 0.]
+            Σ = [σ_1^2 ρ*σ_1*σ_2;
+                ρ*σ_1*σ_2 σ_2^2]
 
-        seed!(rng, 1)
-        xys = rand(rng, MvNormal(μ, Σ), 10_000)
+            seed!(rng, 1)
+            xys = rand(rng, MvNormal(μ, Σ), 1_000_000)
+            # Notice that MIShannon.base is `2` by default, but math expects `ℯ`.
+            @test estimate(
+                MIShannon(; base=ℯ),
+                GaussianMI(normalize=false),
+                StateSpaceSet(xys[1:1, :]'),
+                StateSpaceSet(xys[2:2, :]')
+            ) ≈ -1/2 * log(1 - ρ^2)  atol=1e-3
+        end
+        @testset "normalize=true"
+            σ_1 = 0.5
+            σ_2 = 1.5
+            ρ = 0.5
 
-        @test mutualinfo(
-            GaussianMI(normalize=true),
-            StateSpaceSet(xys[1:1, :]'),
-            StateSpaceSet(xys[2:2, :]')
-        ) ≈ -1/2 * log(1 - ρ^2)  atol=1e-3
+            μ = [1.5; 2.5]
+            Σ = [σ_1^2 ρ*σ_1*σ_2;
+                ρ*σ_1*σ_2 σ_2^2]
+
+            seed!(rng, 1)
+            xys = rand(rng, MvNormal(μ, Σ), 1_000_000)
+            # Notice that MIShannon.base is `2` by default, but math expects `ℯ`.
+            @test estimate(
+                MIShannon(; base=ℯ),
+                GaussianMI(normalize=true),
+                StateSpaceSet(xys[1:1, :]'),
+                StateSpaceSet(xys[2:2, :]')
+            ) ≈ -1/2 * log(1 - ρ^2)  atol=1e-3
+        end
     end
 end
