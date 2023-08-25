@@ -105,7 +105,7 @@ end
     @testset "Compare with analytic eq" begin
         # Test based on https://en.wikipedia.org/wiki/Mutual_information#Linear_correlation.
         # We choose parameters arbitrarily:
-        @testset "normalize=false"
+        @testset "normalize=false" begin
             σ_1 = 1.0
             σ_2 = 1.0
             ρ = 0.5
@@ -124,7 +124,7 @@ end
                 StateSpaceSet(xys[2:2, :]')
             ) ≈ -1/2 * log(1 - ρ^2)  atol=1e-3
         end
-        @testset "normalize=true"
+        @testset "normalize=true" begin
             σ_1 = 0.5
             σ_2 = 1.5
             ρ = 0.5
