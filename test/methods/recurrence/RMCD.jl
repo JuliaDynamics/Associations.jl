@@ -35,7 +35,7 @@ Z = rand(rng, n, 2) |> StateSpaceSet
 
 # Test on a dynamical system.
 sys = system(Logistic4Chain(; xi = rand(rng, 4), rng))
-x, y, z, w = columns(trajectory(sys, 1000, Ttr = 10000));
+x, y, z, w = columns(first(trajectory(sys, 1000, Ttr = 10000)));
 test = SurrogateTest(RMCD(r = 0.5); rng)
 α = 0.05
 @test pvalue(independence(test, x, z, y)) < α

@@ -9,7 +9,7 @@ esth = Contingency(vh)
 ests = Contingency(sp)
 
 sys = system(Logistic4Chain(xi = rand(rng, 4); rng))
-x, y, z, w = columns(trajectory(sys, 50, Ttr = 10000))
+x, y, z, w = columns(first(trajectory(sys, 50, Ttr = 10000)))
 ZW = StateSpaceSet(z, w)
 @test pmi(estd, x, y, z) >= 0
 @test pmi(esth, x, y, z) >= 0
@@ -28,7 +28,7 @@ ZW = StateSpaceSet(z, w)
 
 
 sys = system(Logistic4Chain(xi = rand(rng, 4); rng))
-x, y, z, w = columns(trajectory(sys, 1000, Ttr = 10000))
+x, y, z, w = columns(first(trajectory(sys, 1000, Ttr = 10000)))
 @test estimate(PMI(), estd, x, w, z) >= 0
 # Test that multivariate marginals work too.
 @test estimate(PMI(), esth, x, w, Dataset(z, y)) >= 0

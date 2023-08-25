@@ -4,7 +4,7 @@ using Random
 
 rng = MersenneTwister(1234)
 sys = system(Logistic4Chain(; rng))
-x, y, z, w = columns(trajectory(sys, 1000, Ttr = 10000))
+x, y, z, w = columns(first(trajectory(sys, 1000, Ttr = 10000)))
 
 @test_throws ArgumentError asymmetry(FPVP(), x, y)
 @test_throws ArgumentError estimate(PA(), x, y)

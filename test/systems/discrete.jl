@@ -17,20 +17,20 @@ using DynamicalSystemsBase: DiscreteDynamicalSystem
 @test Nonlinear3() isa DiscreteDefinition
 
 n = 50
-@test trajectory(system(Anishchenko()), n) isa StateSpaceSet
-@test trajectory(system(AR1Unidir()), n) isa StateSpaceSet
-@test trajectory(system(AR1Bidir()), n) isa StateSpaceSet
-@test trajectory(system(Henon2()), n) isa StateSpaceSet
-@test trajectory(system(Henon3()), n) isa StateSpaceSet
-@test trajectory(system(Ikeda2()), n) isa StateSpaceSet
-@test trajectory(system(ChaoticMaps3()), n) isa StateSpaceSet
-@test trajectory(system(ChaoticNoisyLinear2()), n) isa StateSpaceSet
-@test trajectory(system(Logistic2Unidir()), n) isa StateSpaceSet
-@test trajectory(system(Logistic2Bidir()), n) isa StateSpaceSet
-@test trajectory(system(Logistic3CommonDriver()), n) isa StateSpaceSet
-@test trajectory(system(Logistic4Chain()), n) isa StateSpaceSet
-@test trajectory(system(Nonlinear3()), n) isa StateSpaceSet
-@test trajectory(system(Peguin2()), n) isa StateSpaceSet
-@test trajectory(system(UlamLattice()), n) isa StateSpaceSet
-@test trajectory(system(Var1()), n) isa StateSpaceSet
-@test trajectory(system(Verdes3()), n) isa StateSpaceSet
+@test trajectory(system(Anishchenko()), n)[1] isa StateSpaceSet
+@test trajectory(system(AR1Unidir()), n)[1] isa StateSpaceSet
+@test trajectory(system(AR1Bidir()), n)[1] isa StateSpaceSet
+@test trajectory(system(Henon2()), n)[1] isa StateSpaceSet
+@test trajectory(system(Henon3()), n)[1] isa StateSpaceSet
+@test trajectory(system(Ikeda2()), n)[1] isa StateSpaceSet
+@test trajectory(system(ChaoticMaps3()), n)[1] isa StateSpaceSet
+@test trajectory(system(ChaoticNoisyLinear2()), n)[1] isa StateSpaceSet
+@test trajectory(system(Logistic2Unidir()), n)[1] isa StateSpaceSet
+@test trajectory(system(Logistic2Bidir()), n)[1] isa StateSpaceSet
+@test trajectory(system(Logistic3CommonDriver()), n)[1] isa StateSpaceSet
+@test trajectory(system(Logistic4Chain()), n)[1] isa StateSpaceSet
+@test trajectory(system(Nonlinear3()), n)[1] isa StateSpaceSet
+@test trajectory(system(Peguin2()), n)[1] isa StateSpaceSet
+@test trajectory(system(UlamLattice()), n)[1] isa StateSpaceSet
+@test trajectory(system(Var1()), n)[1] isa StateSpaceSet
+@test trajectory(system(Verdes3()), n)[1] isa StateSpaceSet
