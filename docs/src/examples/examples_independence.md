@@ -14,7 +14,7 @@ We start by generating some time series and configuring the test.
 ```@example quickstart_jddtest_logistic
 using CausalityTools
 sys = system(Logistic2Bidir(c_xy = 0.5, c_yx = 0.4))
-x, y = columns(trajectory(sys, 2000, Ttr = 10000))
+x, y = columns(first(trajectory(sys, 2000, Ttr = 10000)))
 measure = JointDistanceDistribution(D = 5, B = 5)
 test = JointDistanceDistributionTest(measure)
 ```
@@ -38,7 +38,7 @@ What happens in the example above if there is no coupling?
 
 ```@example quickstart_jddtest_logistic
 sys = system(Logistic2Bidir(c_xy = 0.00, c_yx = 0.0))
-x, y = columns(trajectory(sys, 1000, Ttr = 10000));
+x, y = columns(first(trajectory(sys, 1000, Ttr = 10000)));
 rxy = independence(test, x, y)
 ryx = independence(test, y, x)
 pvalue(rxy), pvalue(ryx)
@@ -95,7 +95,7 @@ of four coupled logistic maps that are linked `X → Y → Z → W`.
 using CausalityTools
 using Random; rng = Random.default_rng()
 s = system(Logistic4Chain(; xi = rand(4)))
-x, y, z, w = columns(trajectory(s, 2000))
+x, y, z, w = columns(first(trajectory(s, 2000)))
 test = LocalPermutationTest(TEShannon(), FPVP(), nshuffles = 50)
 test_result = independence(test, x, z)
 ```
@@ -216,7 +216,7 @@ where `x` drives `y`.
 ```@example surrogatecit_te
 using CausalityTools
 sys = system(Logistic2Unidir(c_xy = 0.5)) # x affects y, but not the other way around.
-x, y = columns(trajectory(sys, 1000, Ttr = 10000))
+x, y = columns(first(trajectory(sys, 1000, Ttr = 10000)))
 
 test = SurrogateTest(TEShannon(), KSG1(k = 4))
 independence(test, x, y)
@@ -283,7 +283,7 @@ using Random
 rng = MersenneTwister(1234)
 
 sys = system(Logistic4Chain(xi = [0.1, 0.2, 0.3, 0.4]; rng))
-x, y, z, w = columns(trajectory(sys, 1000))
+x, y, z, w = columns(first(trajectory(sys, 1000)))
 τx = estimate_delay(x, "mi_min")
 τy = estimate_delay(y, "mi_min")
 test = PATest(PA(ηT = 1:10, τS = estimate_delay(x, "mi_min")), FPVP())
