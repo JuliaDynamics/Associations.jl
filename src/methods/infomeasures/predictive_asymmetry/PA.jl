@@ -130,7 +130,7 @@ function redefine_lags(measure::PA, s, c)
     return PA(; ηT = measure.ηT, τS = τS, τC = τC)
 end
 
-function embed(measure::PA, x, y)
+function embed_for_pa(measure::PA, x, y)
     (; ηT, τS, τC) = measure
 
     ηT = sort(unique(ηT))
@@ -152,12 +152,12 @@ function embed(measure::PA, x, y)
     iₛ = 2nη+2
     S⁺ = joint[:, iₛ:(iₛ+nτx-1)]
     S⁰ = joint[:, (iₛ+nτx):(iₛ+nτx)]
-    S⁻ = joint[:, (iₛ+nτx+1):end]
+    S⁻ = joint[:, (iₛ+nτx+1):size(joint, 2)]
 
     return T⁺, T⁰, T⁻, S⁺, S⁰, S⁻
 end
 
-function embed(measure::PA, x, y, z)
+function embed_for_pa(measure::PA, x, y, z)
     (; ηT, τS, τC) = measure
     ηT = sort(unique(ηT))
     τS = sort(unique([τS; ηT]))
@@ -199,8 +199,7 @@ function estimate(measure::PA, est::PA_ESTS, x, y)
     Y = as_vector(y)
     measure = redefine_lags(measure, x)
     (; ηT, τS, τC) = measure
-
-    T⁺, T⁰, T⁻, S⁺, S⁰, S⁻ = embed(measure, X, Y)
+    T⁺, T⁰, T⁻, S⁺, S⁰, S⁻ = embed_for_pa(measure, X, Y)
 
     N = length(T⁺)
     τŜ = sort(unique([τS; ηT]))
@@ -232,7 +231,7 @@ function estimate(measure::PA, est::PA_ESTIMATORS, x, y, z)
     X = as_vector(x)
     Y = as_vector(y)
     Z = as_vector(z)
-    T⁺, T⁰, T⁻, S⁺, S⁰, S⁻, C⁺, C⁰, C⁻ = embed(measure, X, Y, Z)
+    T⁺, T⁰, T⁻, S⁺, S⁰, S⁻, C⁺, C⁰, C⁻ = embed_for_pa(measure, X, Y, Z)
 
     N = length(T⁺)
     τŜ = sort(unique([τS; ηT]))
