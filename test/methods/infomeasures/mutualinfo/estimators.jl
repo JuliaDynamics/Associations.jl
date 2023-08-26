@@ -1,11 +1,13 @@
 using Random
+import Random: seed!
 rng = MersenneTwister(1234)
 using Distributions: MvNormal
 using LinearAlgebra: det
 
 k = 5
 ests_mi = [
-    GaussianMI(),
+    GaussianMI(normalize=true),
+    GaussianMI(normalize=false),
     KSG1(; k),
     KSG2(; k),
     GaoKannanOhViswanath(; k),
@@ -87,4 +89,59 @@ y = StateSpaceSet(rand(rng, 1000, 1))
         estimated_bits_kr = mutualinfo(MIShannon(; base = 2), Kraskov(), X, Y)
     end
 
+end
+
+@testset "GaussianMI" begin
+    # The other estimator tests only compute whether the estimators run "at all".
+    # For some special cases of the Gaussian we can also compare with a closed form solution.
+
+    @testset "Normalized equals unnormalized" begin
+        x′ = StateSpaceSet(2. .* x.data .+ [SVector(1.)])
+        y′ = StateSpaceSet(3. .* y.data .- [SVector(1.)])
+        @test (  mutualinfo(GaussianMI(normalize=false), x , y)
+                 ≈ mutualinfo(GaussianMI(normalize=true) , x′, y′))
+    end
+
+    @testset "Compare with analytic eq" begin
+        # Test based on https://en.wikipedia.org/wiki/Mutual_information#Linear_correlation.
+        # We choose parameters arbitrarily:
+        @testset "normalize=false" begin
+            σ_1 = 1.0
+            σ_2 = 1.0
+            ρ = 0.5
+
+            μ = [0.; 0.]
+            Σ = [σ_1^2 ρ*σ_1*σ_2;
+                ρ*σ_1*σ_2 σ_2^2]
+
+            seed!(rng, 1)
+            xys = rand(rng, MvNormal(μ, Σ), 1_000_000)
+            # Notice that MIShannon.base is `2` by default, but math expects `ℯ`.
+            @test estimate(
+                MIShannon(; base=ℯ),
+                GaussianMI(normalize=false),
+                StateSpaceSet(xys[1:1, :]'),
+                StateSpaceSet(xys[2:2, :]')
+            ) ≈ -1/2 * log(1 - ρ^2)  atol=1e-3
+        end
+        @testset "normalize=true" begin
+            σ_1 = 0.5
+            σ_2 = 1.5
+            ρ = 0.5
+
+            μ = [1.5; 2.5]
+            Σ = [σ_1^2 ρ*σ_1*σ_2;
+                ρ*σ_1*σ_2 σ_2^2]
+
+            seed!(rng, 1)
+            xys = rand(rng, MvNormal(μ, Σ), 1_000_000)
+            # Notice that MIShannon.base is `2` by default, but math expects `ℯ`.
+            @test estimate(
+                MIShannon(; base=ℯ),
+                GaussianMI(normalize=true),
+                StateSpaceSet(xys[1:1, :]'),
+                StateSpaceSet(xys[2:2, :]')
+            ) ≈ -1/2 * log(1 - ρ^2)  atol=1e-3
+        end
+    end
 end
