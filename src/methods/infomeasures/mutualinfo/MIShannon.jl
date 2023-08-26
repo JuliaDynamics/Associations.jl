@@ -61,7 +61,7 @@ I^S(X; Y) = h^S(X) + h_q^S(Y) - h^S(X, Y),
 
 where ``h^S(\\cdot)`` and ``h^S(\\cdot, \\cdot)`` are the marginal and joint
 differential Shannon entropies. This definition is used by [`mutualinfo`](@ref) when
-called with a [`DifferentialEntropyEstimator`](@ref).
+called with a [`DifferentialInformationEstimator`](@ref).
 
 See also: [`mutualinfo`](@ref).
 """
@@ -104,14 +104,14 @@ function estimate(measure::MIShannon, pxy::ContingencyMatrix{T, 2}) where {T}
     return mi
 end
 
-function estimate(measure::MIShannon, est::ProbOrDiffEst, x, y)
+function estimate(measure::MIShannon, est::DiscreteOrDifferentialInformationEstimator, x, y)
     # Due to inconsistent API in ComplexityMeasures.jl, we have to treat
-    # DifferentialEntropyEstimator here. Because all measures in this package
+    # DifferentialInformationEstimator here. Because all measures in this package
     # have their own `base` field, it will conflict with `est.base` for
-    # `DifferentialEntropyEstimator`s. In these cases, we use `measure.base`,
+    # `DifferentialInformationEstimator`s. In these cases, we use `measure.base`,
     # and override the estimator base, by simply creating a copy of the
     # estimator with one field modified.
-    if est isa DifferentialEntropyEstimator && :base in fieldnames(typeof(est))
+    if est isa DifferentialInformationEstimator && :base in fieldnames(typeof(est))
         if est.base != measure.e.base
             mb = measure.e.base
             eb = est.base

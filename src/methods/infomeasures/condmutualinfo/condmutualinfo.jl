@@ -36,7 +36,7 @@ condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
 
 const CMI_ESTIMATORS = Union{
     ProbabilitiesEstimator,
-    DifferentialEntropyEstimator,
+    DifferentialInformationEstimator,
     MutualInformationEstimator,
     ConditionalMutualInformationEstimator
 }
@@ -111,16 +111,16 @@ function estimate(est::ProbabilitiesEstimator, x, y, z)
 end
 
 """
-    condmutualinfo([measure::CMI], est::DifferentialEntropyEstimator, x, y, z) → cmi::Real
+    condmutualinfo([measure::CMI], est::DifferentialInformationEstimator, x, y, z) → cmi::Real
 
 Estimate the mutual information between `x` and `y` conditioned on `z`, using
 the differential version of the given conditional mutual information (CMI) `measure`.
-The [`DifferentialEntropyEstimator`](@ref) `est` must must support multivariate data.
+The [`DifferentialInformationEstimator`](@ref) `est` must must support multivariate data.
 No bias correction is performed. If `measure` is not given, then the default is
 `CMIShannon()`.
 
 !!! note
-    [`DifferentialEntropyEstimator`](@ref)s have their own `base` field which is not
+    [`DifferentialInformationEstimator`](@ref)s have their own `base` field which is not
     used here. Instead, this method creates a copy of `est` internally,
     where `est.base` is replaced by `measure.e.base`. Therefore, use `measure` to
     control the "unit" of the mutual information.
@@ -136,11 +136,11 @@ No bias correction is performed. If `measure` is not given, then the default is
 | [`Lord`](@ref)                   | Nearest neighbors |          ✓          |
 | [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |          ✓          |
 """
-function condmutualinfo(measure::CMI, est::DifferentialEntropyEstimator, x, y, z)
+function condmutualinfo(measure::CMI, est::DifferentialInformationEstimator, x, y, z)
     return estimate(measure, est, x, y, z)
 end
 
-function estimate(est::DifferentialEntropyEstimator, x, y, z)
+function estimate(est::DifferentialInformationEstimator, x, y, z)
     return estimate(CMIShannon(), est, x, y, z)
 end
 

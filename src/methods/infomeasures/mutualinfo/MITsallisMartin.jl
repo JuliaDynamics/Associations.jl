@@ -9,7 +9,7 @@ The discrete Tsallis mutual information from Martin et al. (2005)[^Martin2004].
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
 
 ## Description
 
@@ -75,6 +75,6 @@ function estimate(measure::MITsallisMartin, est::ProbabilitiesEstimator, x, y)
 end
 
 
-function estimate(::MITsallisMartin, est::DifferentialEntropyEstimator, args...)
+function estimate(::MITsallisMartin, est::DifferentialInformationEstimator, args...)
     throw(ArgumentError("MITsallisMartin not implemented for $(typeof(est))"))
 end

@@ -74,12 +74,12 @@ function entropy_conditional(measure::ConditionalEntropy, est::ProbabilitiesEsti
 end
 
 """
-    entropy_conditional([measure::ConditionalEntropy], est::DifferentialEntropyEstimator, x, y)
+    entropy_conditional([measure::ConditionalEntropy], est::DifferentialInformationEstimator, x, y)
 
 Estimate the entropy of `x` conditioned on `y`, using the differential/continuous
 version of the given conditional entropy (CE) `measure`.  The CE is computed the difference of
 the joint entropy and the marginal entropy of `y`, using
-the [`DifferentialEntropyEstimator`](@ref) `est`, which must be compatible with multivariate data.
+the [`DifferentialInformationEstimator`](@ref) `est`, which must be compatible with multivariate data.
 No bias correction is applied.
 If `measure` is not given, then the default is `CEShannon()`.
 
@@ -95,7 +95,7 @@ If `measure` is not given, then the default is `CEShannon()`.
 | [`Lord`](@ref)                   | Nearest neighbors |         ✓          |           x           |              x              |
 | [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |           x           |              x              |
 """
-function entropy_conditional(measure::ConditionalEntropy, est::DifferentialEntropyEstimator, x, y)
+function entropy_conditional(measure::ConditionalEntropy, est::DifferentialInformationEstimator, x, y)
     return estimate(measure, est, x, y)
 end
 
@@ -129,7 +129,7 @@ function marginal_entropies_ce2h(measure::ConditionalEntropy,
     return HY, HXY
 end
 
-function marginal_entropies_ce2h(measure::ConditionalEntropy, est::DifferentialEntropyEstimator, x, y)
+function marginal_entropies_ce2h(measure::ConditionalEntropy, est::DifferentialInformationEstimator, x, y)
     e = measure.e.definition
     X = StateSpaceSet(x)
     Y = StateSpaceSet(y)

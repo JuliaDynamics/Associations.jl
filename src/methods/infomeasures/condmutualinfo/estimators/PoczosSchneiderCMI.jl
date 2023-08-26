@@ -28,7 +28,7 @@ function estimate(measure::CMIRenyiPoczos, est::PoczosSchneiderCMI, x, y, z)
     return _convert_logunit(c, ℯ, e.base)
 end
 
-function Q3(e::EntropyDefinition, est::PoczosSchneiderCMI, x, y, z)
+function Q3(e::InformationMeasure, est::PoczosSchneiderCMI, x, y, z)
     q = e.q
     (; k, w, metric) = est
     @assert length(x) == length(y) == length(z)

@@ -1,6 +1,6 @@
 export Faivishevsky
 #https://proceedings.neurips.cc/paper/2008/file/3dc4876f3f08201c7c76cb71fa1da439-Paper.pdf
-Base.@kwdef struct Faivishevsky{M} <: DifferentialEntropyEstimator
+Base.@kwdef struct Faivishevsky{M} <: DifferentialInformationEstimator
     k::Int = 1 # todo: remove. it isn't used.
     w::Int = 0
     metric::M = Euclidean()

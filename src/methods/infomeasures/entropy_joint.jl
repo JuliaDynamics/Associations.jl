@@ -1,4 +1,4 @@
-using ComplexityMeasures: EntropyDefinition
+using ComplexityMeasures: InformationMeasure
 
 export entropy_joint
 export JointEntropy
@@ -7,8 +7,8 @@ export JointEntropyShannon
 export JointEntropyTsallis
 
 """
-    entropy_joint(e::EntropyDefinition, x, y)
-    entropy_joint(e::EntropyDefinition, c::ContingencyMatrix)
+    entropy_joint(e::InformationMeasure, x, y)
+    entropy_joint(e::InformationMeasure, c::ContingencyMatrix)
 
 Compute the joint entropy of type `e` (e.g. [`Shannon`](@ref)) of the input variables
 `x` and `y`, or from the pre-computed contingency matrix `c` (see
@@ -40,7 +40,7 @@ Given two two discrete random variables ``X`` and ``Y`` with ranges ``\\mathcal{
     Furuichi, S. (2006). Information theoretical properties of Tsallis entropies. Journal
     of Mathematical Physics, 47(2), 023302.
 """
-function entropy_joint(e::EntropyDefinition, args...)
+function entropy_joint(e::InformationMeasure, args...)
     throw(ArgumentError("Joint entropy not defined and/or implemented for $e with $(args)"))
 end
 
@@ -104,7 +104,7 @@ function entropy_joint(measure::JointEntropyShannon, x...)
     return entropy(measure.e, CountOccurrences(), X)
 end
 
-function entropy_joint(measure::JointEntropyShannon, est::DifferentialEntropyEstimator, x...)
+function entropy_joint(measure::JointEntropyShannon, est::DifferentialInformationEstimator, x...)
     X = StateSpaceSet(x...)
     return entropy(measure.e, est, X)
 end

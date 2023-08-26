@@ -9,7 +9,7 @@ Jizba et al. (2012)[^Jizba2012].
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
 
 ## Definition
 
@@ -72,6 +72,6 @@ function estimate(measure::MIRenyiJizba, est::ProbabilitiesEstimator, x, y)
     return HX + HY - HXY
 end
 
-function estimate(::MIRenyiJizba, est::DifferentialEntropyEstimator, args...)
+function estimate(::MIRenyiJizba, est::DifferentialInformationEstimator, args...)
     throw(ArgumentError("MIRenyiJizba not implemented for $(typeof(est))"))
 end

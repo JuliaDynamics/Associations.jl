@@ -38,7 +38,7 @@ mutual information.
 | -------------------------------- | -------------------------------------- | ------------------- | :--------------------: |
 | [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)       | Frequencies         |           ✓           |
 | [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)       | Binning (histogram) |           ✓           |
-| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref) | Nearest neighbors   |           ✓           |
+| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialInformationEstimator`](@ref) | Nearest neighbors   |           ✓           |
 
 [^Jizba2012]:
     Jizba, P., Kleinert, H., & Shefaat, M. (2012). Rényi’s information transfer between

@@ -3,13 +3,13 @@
 
 The entropies API is defined by
 
-- [`EntropyDefinition`](@ref)
+- [`InformationMeasure`](@ref)
 - [`entropy`](@ref)
-- [`DifferentialEntropyEstimator`](@ref)
+- [`DifferentialInformationEstimator`](@ref)
 
 The entropies API is re-exported from [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl). Why? Continuous/differential versions of many information theoretic
 association measures can be written as a function of differential entropy terms, and can
-thus be estimated using [`DifferentialEntropyEstimator`](@ref)s.
+thus be estimated using [`DifferentialInformationEstimator`](@ref)s.
 
 ```@docs
 ComplexityMeasures.entropy
@@ -18,7 +18,7 @@ ComplexityMeasures.entropy
 ## Definitions
 
 ```@docs
-EntropyDefinition
+InformationMeasure
 Shannon
 Renyi
 Tsallis
@@ -27,15 +27,15 @@ Curado
 StretchedExponential
 ```
 
-## [`DifferentialEntropyEstimator`](@ref)s
+## [`DifferentialInformationEstimator`](@ref)s
 
-CausalityTools.jl reexports [`DifferentialEntropyEstimator`](@ref)s from
+CausalityTools.jl reexports [`DifferentialInformationEstimator`](@ref)s from
 [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl).
 Why? Any information-based measure that can be written as a function of differential entropies
-can be estimated using a [`DifferentialEntropyEstimator`](@ref)s. 
+can be estimated using a [`DifferentialInformationEstimator`](@ref)s. 
 
 ```@docs
-DifferentialEntropyEstimator
+DifferentialInformationEstimator
 ```
 
 ### Overview
@@ -45,7 +45,7 @@ provided by CausalityTools. Hence, some entropy estimators are missing from the 
 here (see [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl) for
 details).
 
-Each [`DifferentialEntropyEstimator`](@ref)s uses a specialized technique to approximate relevant
+Each [`DifferentialInformationEstimator`](@ref)s uses a specialized technique to approximate relevant
 densities/integrals, and is often tailored to one or a few types of generalized entropy.
 For example, [`Kraskov`](@ref) estimates the [`Shannon`](@ref) entropy.
 

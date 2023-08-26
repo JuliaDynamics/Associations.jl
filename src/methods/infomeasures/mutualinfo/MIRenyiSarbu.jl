@@ -74,6 +74,6 @@ function estimate(::MIRenyiSarbu, est::ProbabilitiesEstimator, x, y)
 end
 
 
-function estimate(::MIRenyiSarbu, est::DifferentialEntropyEstimator, args...)
+function estimate(::MIRenyiSarbu, est::DifferentialInformationEstimator, args...)
     throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est))"))
 end

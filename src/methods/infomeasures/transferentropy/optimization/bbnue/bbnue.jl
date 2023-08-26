@@ -6,14 +6,14 @@ export bbnue
 # Keep this for when a common interface for optimized variable selection methods has been established
 # """
 #export BBNUE
-#     BBNUE(est) <: TransferDifferentialEntropyEstimator
+#     BBNUE(est) <: TransferDifferentialInformationEstimator
 
 # The bootstrap-based non-uniform embedding estimator (BB-NUE) for conditional transfer entropy (Montalto et al., 2014).
 # Uses the estimator `est` to compute relevant marginal entropies. (e.g. `VisitationFrequency(RectangularBinning(3))`)
 
 # [^Montalto2014]: Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
 # """
-# struct BBNUE{E} <: TransferDifferentialEntropyEstimator
+# struct BBNUE{E} <: TransferDifferentialInformationEstimator
 #     est::E
 # end
 
@@ -35,7 +35,7 @@ minimally redundant variables from the the past of `target`, present/past of `so
 and (if given) the present/past of `cond`, that contribute most to `target`'s future.
 This implementation uses a conditional entropy minimization criterion for selecting variables,
 which is what Montalto et al. (2014)[^Montalto2014] uses for their bin-estimator.
-This implementation accepts *any* [`DifferentialEntropyEstimator`](@ref) or
+This implementation accepts *any* [`DifferentialInformationEstimator`](@ref) or
 [`ProbabilitiesEstimator`](@ref) that accepts multivariate data or that implements
 [`marginal_encodings`](@ref).
 
@@ -117,7 +117,7 @@ te_xy, te_yx
     Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established
     and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
 """
-function bbnue(measure::TransferEntropy, est::ProbOrDiffEst, x...;
+function bbnue(measure::TransferEntropy, est::DiscreteOrDifferentialInformationEstimator, x...;
         η = 1, include_instantaneous = true,
         method_delay = "ac_min", maxlag::Union{Int, Float64} = 0.05,
         α = 0.05, nsurr = 19, surr::TimeseriesSurrogates.Surrogate = RandomShuffle())
@@ -133,11 +133,11 @@ function bbnue(measure::TransferEntropy, est::ProbOrDiffEst, x...;
         α, nsurr, surr)
 end
 
-bbnue(est::ProbOrDiffEst, x...; kwargs...) =
+bbnue(est::DiscreteOrDifferentialInformationEstimator, x...; kwargs...) =
     bbnue(TEShannon(), est, x...; kwargs...)
 
 
-function optim_te(measure::TransferEntropy, est::ProbOrDiffEst,
+function optim_te(measure::TransferEntropy, est::DiscreteOrDifferentialInformationEstimator,
         Ω, Y⁺, τs, js, idxs_source, idxs_target, idxs_cond;
         α = 0.05, nsurr = 100, surr::Surrogate = RandomShuffle())
     e = measure.e
