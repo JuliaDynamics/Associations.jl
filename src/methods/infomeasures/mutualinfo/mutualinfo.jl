@@ -99,7 +99,7 @@ distributions from the joint distribution.
 | [`Contingency`](@ref)        | Contingency table   |         ✓          |             ✓              |            ✓             |           ✓           |           ✓            |
 | [`CountOccurrences`](@ref)   | Frequencies         |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
 | [`ValueHistogram`](@ref)     | Binning (histogram) |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
-| [`SymbolicPermutation`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
+| [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
 | [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
 """
 function mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)
@@ -191,7 +191,7 @@ end
 # Override some definitions, because the estimator behaviour need to be adjusted
 # for multiple input variables.
 const WellDefinedMIShannonProbEsts{m, D} = Union{
-    SymbolicPermutation{m},
+    OrdinalPatterns{m},
     ValueHistogram{<:FixedRectangularBinning{D}},
     ValueHistogram{<:RectangularBinning{T}},
     Dispersion

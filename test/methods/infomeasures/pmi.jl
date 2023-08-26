@@ -3,7 +3,7 @@ rng = StableRNG(123)
 
 ed = Dispersion(m = 2, c = 2)
 vh = ValueHistogram(2)
-sp = SymbolicPermutation(m=2)
+sp = OrdinalPatterns(m=2)
 estd = Contingency(ed)
 esth = Contingency(vh)
 ests = Contingency(sp)
@@ -34,7 +34,7 @@ x, y, z, w = columns(first(trajectory(sys, 1000, Ttr = 10000)))
 @test estimate(PMI(), esth, x, w, Dataset(z, y)) >= 0
 
 @test pmi(PMI(base = 3), esth, x, w, z) >= 0
-@test pmi(SymbolicPermutation(m = 3), x, w, z) >= 0
+@test pmi(OrdinalPatterns(m = 3), x, w, z) >= 0
 
 x = rand(rng, 1:3, 20000)
 y = rand(rng, 1:3, 20000)
@@ -50,8 +50,8 @@ Y = StateSpaceSet(y)
 Z = StateSpaceSet(z)
 
 nshuffles = 5
-lptest = LocalPermutationTest(PMI(), SymbolicPermutation(); nshuffles, rng)
-sutest = SurrogateTest(PMI(), SymbolicPermutation(); nshuffles, rng)
+lptest = LocalPermutationTest(PMI(), OrdinalPatterns(); nshuffles, rng)
+sutest = SurrogateTest(PMI(), OrdinalPatterns(); nshuffles, rng)
 @test independence(lptest, x, y, z) isa LocalPermutationTestResult
 @test independence(lptest, X, Y, Z) isa LocalPermutationTestResult
 @test independence(sutest, x, y, z) isa SurrogateTestResult

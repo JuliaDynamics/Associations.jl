@@ -9,7 +9,7 @@ z = rand(["a", "b"], 200)
 
 # With discretization using a probabilities estimator
 a, b, c = rand(100), rand(100), rand(100)
-est = SymbolicPermutation(m = 2)
+est = OrdinalPatterns(m = 2)
 s1 = condmutualinfo(CMIShannon(), Contingency(est), a, b, c)
 s2 = condmutualinfo(CMIShannon(), est, a, b, c)
 @test s1 >= 0.0
