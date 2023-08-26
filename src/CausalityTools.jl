@@ -23,6 +23,11 @@ module CausalityTools
     @reexport using TimeseriesSurrogates
 
     include("core.jl")
+
+    # API
+    include("information/core.jl")
+
+    # Specific implementations
     include("methods/infomeasures/infomeasures.jl")
     include("methods/crossmappings/crossmappings.jl")
     include("methods/closeness/closeness.jl")
