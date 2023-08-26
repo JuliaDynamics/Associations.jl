@@ -1,5 +1,14 @@
 # Changelog
 
+## 2.8.0
+
+Moved to DynamicalSystemsBase v3.0 (`trajectory` now returns both the data and the time
+indices).
+
+### Bugfixes
+
+- Fixed bug in `GaussianMI` that occurred when the keyword `normalize` was set to `true`.
+
 ## 2.7.1
 
 - Fixed an import warning.
