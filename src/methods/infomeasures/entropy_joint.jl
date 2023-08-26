@@ -104,7 +104,7 @@ function entropy_joint(measure::JointEntropyShannon, x...)
     return entropy(measure.e, CountOccurrences(), X)
 end
 
-function entropy_joint(measure::JointEntropyShannon, est::DifferentialInformationEstimator, x...)
+function entropy_joint(measure::JointEntropyShannon, est::DifferentialInfoEstimator, x...)
     X = StateSpaceSet(x...)
     return entropy(measure.e, est, X)
 end

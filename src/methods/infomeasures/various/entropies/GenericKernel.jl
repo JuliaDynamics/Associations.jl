@@ -1,7 +1,7 @@
 export GenericKernel
 
 """
-    GenericKernel <: DifferentialInformationEstimator
+    GenericKernel <: DifferentialInfoEstimator
     GenericKernel(bandwidth = Silverman(), kernel::MultivariateKernel = NormalIsotropic())
 
 A generic, multivariate plug-in estimator for entropies based on kernel density estimation
@@ -47,7 +47,7 @@ is estimated by replacing the expectation with the sample average ([^Diks2017])
     Diks, C., & Fang, H. (2017). Transfer entropy for nonparametric granger causality
     detection: an evaluation of different resampling methods. Entropy, 19(7), 372.
 """
-struct GenericKernel{K, B} <: DifferentialInformationEstimator
+struct GenericKernel{K, B} <: DifferentialInfoEstimator
     bandwidth::B
     kernel::K
     function GenericKernel(

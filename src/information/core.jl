@@ -5,7 +5,7 @@
 export InformationMeasure
 export InformationMeasureEstimator
 
-const DiscreteOrDifferentialInformationEstimator = Union{DiscreteInfoEstimator, DifferentialInfoEstimator}
+const DiscreteOrDifferentialInfoEstimator = Union{DiscreteInfoEstimator, DifferentialInfoEstimator}
 
 """
     InformationMeasure <: AssociationMeasure

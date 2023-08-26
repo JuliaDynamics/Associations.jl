@@ -67,6 +67,6 @@ function estimate(measure::CETsallisAbe, est::ProbabilitiesEstimator, x, y)
     end
 end
 
-function estimate(measure::CETsallisAbe, est::DifferentialInformationEstimator, x, y)
+function estimate(measure::CETsallisAbe, est::DifferentialInfoEstimator, x, y)
     throw(ArgumentError("CETsallisAbe not implemented for $(typeof(est))"))
 end

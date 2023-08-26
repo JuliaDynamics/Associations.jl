@@ -5,7 +5,7 @@ using DelayEmbeddings.StateSpaceSets: SubStateSpaceSet
 using LinearAlgebra: det
 
 """
-    Gao2017 <: DifferentialInformationEstimator
+    Gao2017 <: DifferentialInfoEstimator
     Gao2017(k = 1, w = 1)
 
 The `Gao2017` estimator (Gao et al. ,2017)[^Gao2017] can be used to estimate

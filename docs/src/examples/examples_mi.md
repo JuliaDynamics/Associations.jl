@@ -184,11 +184,11 @@ axislegend(position = :rb)
 fig
 ```
 
-### [Estimation using [`DifferentialInformationEstimator`](@ref)s](@id example_mi_DifferentialInformationEstimator)
+### [Estimation using [`DifferentialInfoEstimator`](@ref)s](@id example_mi_DifferentialInfoEstimator)
 
 #### Simple example
 
-We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialInformationEstimator`](@ref).
+We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialInfoEstimator`](@ref).
 Note that this doesn't apply any bias correction.
 
 ```@example mi_demonstration
@@ -197,7 +197,7 @@ x, y = rand(1000), rand(1000)
 mutualinfo(Kraskov(k = 3), x, y)
 ```
 
-#### [`DifferentialInformationEstimator`](@ref) comparison
+#### [`DifferentialInfoEstimator`](@ref) comparison
 
 Let's compare the performance of a subset of the implemented mutual information estimators. We'll use example data from Lord et al., where the analytical mutual information is known.
 

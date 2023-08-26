@@ -1,13 +1,13 @@
 using SpecialFunctions: gamma
 using Neighborhood: bulksearch
 using Neighborhood: Euclidean, Theiler
-import ComplexityMeasures: DifferentialInformationEstimator
+import ComplexityMeasures: DifferentialInfoEstimator
 import ComplexityMeasures: entropy
 
 export LeonenkoProzantoSavani
 
 """
-    LeonenkoProzantoSavani <: DifferentialInformationEstimator
+    LeonenkoProzantoSavani <: DifferentialInfoEstimator
     LeonenkoProzantoSavani(k = 1, w = 0)
 
 The `LeonenkoProzantoSavani` estimator computes the [`Shannon`](@ref), [`Renyi`](@ref), or
@@ -22,7 +22,7 @@ when searching for neighbours).
     Leonenko, N., Pronzato, L., & Savani, V. (2008). A class of Rényi information
     estimators for multidimensional densities. The Annals of Statistics, 36(5), 2153-2182.
 """
-Base.@kwdef struct LeonenkoProzantoSavani <: DifferentialInformationEstimator
+Base.@kwdef struct LeonenkoProzantoSavani <: DifferentialInfoEstimator
     k::Int = 1
     w::Int = 0
 end

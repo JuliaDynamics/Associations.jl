@@ -72,6 +72,6 @@ function estimate(measure::MIRenyiJizba, est::ProbabilitiesEstimator, x, y)
     return HX + HY - HXY
 end
 
-function estimate(::MIRenyiJizba, est::DifferentialInformationEstimator, args...)
+function estimate(::MIRenyiJizba, est::DifferentialInfoEstimator, args...)
     throw(ArgumentError("MIRenyiJizba not implemented for $(typeof(est))"))
 end

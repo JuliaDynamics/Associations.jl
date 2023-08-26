@@ -93,7 +93,7 @@ end
 
 const VALID_PA_ESTIMATORS = Union{
     ProbabilitiesEstimator,
-    DifferentialInformationEstimator,
+    DifferentialInfoEstimator,
     MutualInformationEstimator,
     ConditionalMutualInformationEstimator,
     TransferEntropyEstimator

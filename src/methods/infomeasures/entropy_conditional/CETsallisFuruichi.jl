@@ -56,6 +56,6 @@ function estimate(measure::CETsallisFuruichi, c::ContingencyMatrix{T, 2}) where 
 end
 
 
-function estimate(measure::CETsallisFuruichi, est::DiscreteOrDifferentialInformationEstimator, x, y)
+function estimate(measure::CETsallisFuruichi, est::DiscreteOrDifferentialInfoEstimator, x, y)
     throw(ArgumentError("CETsallisFurichi not implemented for $(typeof(est))"))
 end

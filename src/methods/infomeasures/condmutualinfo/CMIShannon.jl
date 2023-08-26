@@ -53,14 +53,14 @@ function estimate(measure::CMIShannon, est::ProbabilitiesEstimator, x, y, z)
 end
 
 
-function estimate(measure::CMIShannon, est::DifferentialInformationEstimator, x, y, z)
+function estimate(measure::CMIShannon, est::DifferentialInfoEstimator, x, y, z)
     # Due to inconsistent API in ComplexityMeasures.jl, we have to treat
-    # DifferentialInformationEstimator here. Because all measures in this package
+    # DifferentialInfoEstimator here. Because all measures in this package
     # have their own `base` field, it will conflict with `est.base` for
-    # `DifferentialInformationEstimator`s. In these cases, we use `measure.base`,
+    # `DifferentialInfoEstimator`s. In these cases, we use `measure.base`,
     # and override the estimator base, by simply creating a copy of the
     # estimator with one field modified.
-    if est isa DifferentialInformationEstimator && :base in fieldnames(typeof(est))
+    if est isa DifferentialInfoEstimator && :base in fieldnames(typeof(est))
         if est.base != measure.e.base
             mb = measure.e.base
             eb = est.base

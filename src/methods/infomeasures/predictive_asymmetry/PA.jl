@@ -40,13 +40,13 @@ of the other dedicated conditional mutual information estimators.
 | [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |    ✓    |     ✓      |
 | [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |    ✓    |     ✓      |
 | [`Dispersion`](@ref)             | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |    ✓    |     ✓      |
-| [`Kraskov`](@ref)                | [`DifferentialInformationEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`Zhu`](@ref)                    | [`DifferentialInformationEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`ZhuSingh`](@ref)               | [`DifferentialInformationEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`Gao`](@ref)                    | [`DifferentialInformationEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`Goria`](@ref)                  | [`DifferentialInformationEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`Lord`](@ref)                   | [`DifferentialInformationEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialInformationEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
+| [`Kraskov`](@ref)                | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
+| [`Zhu`](@ref)                    | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
+| [`ZhuSingh`](@ref)               | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
+| [`Gao`](@ref)                    | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
+| [`Goria`](@ref)                  | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
+| [`Lord`](@ref)                   | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
+| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
 | [`GaussanMI`](@ref)              | [`MutualInformationEstimator`](@ref)            | Parametric          |    ✓    |     ✓      |
 | [`KSG1`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
 | [`KSG2`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
@@ -93,7 +93,7 @@ end
 
 const PA_ESTS = Union{
     ProbabilitiesEstimator,
-    DifferentialInformationEstimator,
+    DifferentialInfoEstimator,
     MutualInformationEstimator,
     ConditionalMutualInformationEstimator
 }

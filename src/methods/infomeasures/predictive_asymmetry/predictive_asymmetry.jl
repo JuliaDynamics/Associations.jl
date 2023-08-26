@@ -33,7 +33,7 @@ end
 
 const PA_ESTIMATORS = Union{
     ProbabilitiesEstimator,
-    DifferentialInformationEstimator,
+    DifferentialInfoEstimator,
     MutualInformationEstimator,
     ConditionalMutualInformationEstimator,
     TransferEntropyEstimator

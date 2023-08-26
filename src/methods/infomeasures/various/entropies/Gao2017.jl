@@ -2,7 +2,7 @@ import Statistics.cov
 using StaticArrays: SMatrix, @MMatrix, @MVector
 
 """
-    Gao2017 <: DifferentialInformationEstimator
+    Gao2017 <: DifferentialInfoEstimator
     Gao2017(k = 1, w = 1, base = 2)
 
 A resubstitution estimator from Gao et al. (2017). Can be used both for entropy

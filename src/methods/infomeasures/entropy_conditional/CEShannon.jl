@@ -43,7 +43,7 @@ H^S(X | Y) = h^S(X, Y) - h^S(Y),
 where ``h^S(\\cdot`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref)
 differential entropy and Shannon joint differential entropy, respectively. This is the
 definition used when calling [`entropy_conditional`](@ref) with a
-[`DifferentialInformationEstimator`](@ref).
+[`DifferentialInfoEstimator`](@ref).
 """
 struct CEShannon{E} <: ConditionalEntropy
     e::E
@@ -73,7 +73,7 @@ function estimate(measure::CEShannon, c::ContingencyMatrix{T, 2}) where {T}
     return -ce
 end
 
-function estimate(measure::CEShannon, est::DiscreteOrDifferentialInformationEstimator, x, y)
+function estimate(measure::CEShannon, est::DiscreteOrDifferentialInfoEstimator, x, y)
     HY, HXY = marginal_entropies_ce2h(measure, est, x, y)
     return HXY - HY
 end

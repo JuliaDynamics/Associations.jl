@@ -129,9 +129,9 @@ z = (z ./ std(z)) .+ y
 condmutualinfo(CMIShannon(base = 2), KSG1(k = 5), x, z, y)
 ```
 
-### Estimation using [`DifferentialInformationEstimator`](@ref)s
+### Estimation using [`DifferentialInfoEstimator`](@ref)s
 
-Any [`DifferentialInformationEstimator`](@ref) can also be used to compute conditional
+Any [`DifferentialInfoEstimator`](@ref) can also be used to compute conditional
 mutual information using a sum of entropies. However, the naive
 application of these estimators don't perform any bias application when
 taking the sum of entropy terms.

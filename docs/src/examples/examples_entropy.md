@@ -63,7 +63,7 @@ We'll also need a function to summarize the estimates.
 
 ```@example ex_entropy_estimators
 # A helper to get the estimator name for plotting.
-getname(est::DifferentialInformationEstimator) = typeof(est).name.name  |> string
+getname(est::DifferentialInfoEstimator) = typeof(est).name.name  |> string
 function medians_and_quantiles(Hs, Ls; q = 0.95)
     medians = [zeros(length(Ls)) for est in estimators]
     lb = [zeros(length(Ls)) for est in estimators]

@@ -62,7 +62,7 @@ y = StateSpaceSet(rand(rng, 1000, 1))
     end
 
     # ----------------------------------------------------------------
-    # `DifferentialInformationEstimator`s`
+    # `DifferentialInfoEstimator`s`
     # ----------------------------------------------------------------
     @testset "$(typeof(ests_diffent[i]).name.name)" for i in eachindex(ests_diffent)
         est = ests_diffent[i]

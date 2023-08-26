@@ -22,7 +22,7 @@ struct Phase <: InstantaneousSignalProperty end
         source::InstantaneousSignalProperty = Phase(),
         target::InstantaneousSignalProperty = Phase(),
         cond::InstantaneousSignalProperty = Phase())
-    ) <: TransferDifferentialInformationEstimator
+    ) <: TransferDifferentialInfoEstimator
 
 Compute transfer entropy on instantaneous phases/amplitudes of relevant signals, which are
 obtained by first applying the Hilbert transform to each signal, then extracting the

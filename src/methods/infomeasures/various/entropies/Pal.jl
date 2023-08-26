@@ -4,7 +4,7 @@ using StateSpaceSets: dimension, AbstractStateSpaceSet, StateSpaceSet
 export Pal
 
 """
-    Pal <: <: DifferentialInformationEstimator
+    Pal <: <: DifferentialInfoEstimator
     Pal(; k = 1, w = 0, p = 1.0, n::Int = 10000)
 
 A [`Shannon`](@ref] and [`Renyi`](@ref) differential entropy estimator (Pàl et al., 2010).
@@ -48,7 +48,7 @@ unit cube, as they describe in the end of section 3 of their paper.
     information based on generalized nearest-neighbor graphs. Advances in Neural
     Information Processing Systems, 23.
 """
-Base.@kwdef struct Pal{P} <: DifferentialInformationEstimator
+Base.@kwdef struct Pal{P} <: DifferentialInfoEstimator
     k::Int = 1
     w::Int = 0
     p::P = 2.0

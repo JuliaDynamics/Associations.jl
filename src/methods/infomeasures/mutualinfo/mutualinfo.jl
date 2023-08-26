@@ -39,7 +39,7 @@ abstract type MIH3 <: MutualInformationDefinition end
 
 #= """
     mutualinfo(measure::MutualInformation, est::MutualInformationEstimator, x, y)
-    mutualinfo(measure::MutualInformation, est::DifferentialInformationEstimator, x, y)
+    mutualinfo(measure::MutualInformation, est::DifferentialInfoEstimator, x, y)
     mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)
     mutualinfo(measure::MutualInformation, c::ContingencyMatrix)
 
@@ -111,23 +111,23 @@ function estimate(est::ProbabilitiesEstimator, x, y)
 end
 
 """
-    mutualinfo([measure::MutualInformation], est::DifferentialInformationEstimator, x, y)
+    mutualinfo([measure::MutualInformation], est::DifferentialInfoEstimator, x, y)
 
 Estimate the mutual information `measure` between `x` and `y` by a sum of three
-entropy terms, without any bias correction, using any [`DifferentialInformationEstimator`](@ref)
+entropy terms, without any bias correction, using any [`DifferentialInfoEstimator`](@ref)
 compatible with multivariate data. See examples
-[here](@ref example_mi_DifferentialInformationEstimator). If `measure` is not given, then the
+[here](@ref example_mi_DifferentialInfoEstimator). If `measure` is not given, then the
 default is `MIShannon()`.
 
 !!! note
-    [`DifferentialInformationEstimator`](@ref)s have their own `base` field which is not
+    [`DifferentialInfoEstimator`](@ref)s have their own `base` field which is not
     used here. Instead, this method creates a copy of `est` internally,
     where `est.base` is replaced by `measure.e.base`. Therefore, use `measure` to
     control the "unit" of the mutual information.
 
 ## Estimators
 
-Some [`MutualInformation`](@ref) measures can be computed using a [`DifferentialInformationEstimator`](@ref),
+Some [`MutualInformation`](@ref) measures can be computed using a [`DifferentialInfoEstimator`](@ref),
 provided it supports multivariate input data. These estimators compute mutual information as a sum of
 of entropy terms (with different dimensions), without any bias correction.
 
@@ -141,12 +141,12 @@ of entropy terms (with different dimensions), without any bias correction.
 | [`Lord`](@ref)                   | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 | [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 """
-function mutualinfo(est::DifferentialInformationEstimator, x, y)
+function mutualinfo(est::DifferentialInfoEstimator, x, y)
     return estimate(est, x, y)
 end
 
 # Internal method for compatibility with `independence`
-estimate(est::DifferentialInformationEstimator, x, y) = estimate(MIShannon(), est, x, y)
+estimate(est::DifferentialInfoEstimator, x, y) = estimate(MIShannon(), est, x, y)
 
 """
     mutualinfo([measure::MutualInformation], est::MutualInformationEstimator, x, y)

@@ -75,6 +75,6 @@ function estimate(measure::MITsallisMartin, est::ProbabilitiesEstimator, x, y)
 end
 
 
-function estimate(::MITsallisMartin, est::DifferentialInformationEstimator, args...)
+function estimate(::MITsallisMartin, est::DifferentialInfoEstimator, args...)
     throw(ArgumentError("MITsallisMartin not implemented for $(typeof(est))"))
 end
