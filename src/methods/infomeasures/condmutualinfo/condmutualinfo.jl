@@ -13,7 +13,7 @@ The supertype of all conditional mutual information measures. Concrete subtypes 
 - [`CMIRenyiJizba`](@ref)
 - [`CMIRenyiPoczos`](@ref)
 """
-abstract type ConditionalMutualInformation{E} <: InformationMeasure end
+abstract type ConditionalMutualInformation{E} <: MultivariateInformationMeasure end
 const CMI{E} = ConditionalMutualInformation{E}
 
 """

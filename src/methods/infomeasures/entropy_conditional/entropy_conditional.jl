@@ -5,12 +5,12 @@ export ConditionalEntropyDefinition
 """
 The supertype for all conditional entropies.
 """
-abstract type ConditionalEntropy <: InformationMeasure end
+abstract type ConditionalEntropy <: MultivariateInformationMeasure end
 
 """
 The supertype for all conditional entropy definitions.
 """
-abstract type ConditionalEntropyDefinition <: Definition end
+abstract type ConditionalEntropyDefinition <: MultivariateInformationMeasure end
 
 # Measures
 include("CEShannon.jl")

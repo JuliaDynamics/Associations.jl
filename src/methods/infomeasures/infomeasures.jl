@@ -42,7 +42,7 @@ Rényi-based mutual information.
 
 - [`CMIRenyiSarbu`](@ref). Discrete Rényi CMI.
 """
-abstract type InformationMeasure <: AssociationMeasure end
+abstract type MultivariateInformationMeasure <: AssociationMeasure end
 
 """
     estimate(e::EntropyDefinition, est::InformationMeasureEstimator, input::VectorOrStateSpaceSet...)
@@ -50,7 +50,7 @@ abstract type InformationMeasure <: AssociationMeasure end
 Given some `input` data, estimate some information measure using the given
 [`InformationMeasureEstimator`](@ref), with respect to the generalized entropy `e`.
 """
-function estimate(measure::InformationMeasure, args...; kwargs...) end
+function estimate(measure::MultivariateInformationMeasure, args...; kwargs...) end
 
 # Contingency matrices and its computation based on various probabilites
 # estimators

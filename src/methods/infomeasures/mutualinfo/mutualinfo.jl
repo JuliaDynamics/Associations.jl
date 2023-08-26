@@ -14,7 +14,7 @@ The supertype of all mutual information measures. Concrete subtypes are
 - [`MIRenyiJizba`](@ref)
 - [`MIRenyiSarbu`](@ref)
 """
-abstract type MutualInformation{E} <: InformationMeasure end
+abstract type MutualInformation{E} <: MultivariateInformationMeasure end
 
 """
     MutualInformationEstimator
