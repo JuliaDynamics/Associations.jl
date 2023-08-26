@@ -5,7 +5,7 @@ using Random
 rng = Random.MersenneTwister(1234)
 sys = system(Logistic4Chain(; xi = [0.1, 0.2, 0.3, 0.4], rng));
 n = 500
-x, y, z, w = columns(trajectory(sys, n, Ttr = 10000));
+x, y, z, w = columns(first(trajectory(sys, n, Ttr = 10000)));
 
 α = 0.04 # Arbitrary significance level 1 - α = 0.96
 

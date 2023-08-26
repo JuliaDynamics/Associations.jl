@@ -29,7 +29,7 @@ using Random
 rng = MersenneTwister(1234)
 
 sys = system(Logistic4Chain(xi = [0.1, 0.2, 0.3, 0.4]; rng))
-x, y, z, w = columns(trajectory(sys, 1000))
+x, y, z, w = columns(first(trajectory(sys, 1000)))
 τx = estimate_delay(x, "mi_min")
 τy = estimate_delay(y, "mi_min")
 est = FPVP(; k = 3, w = 5)

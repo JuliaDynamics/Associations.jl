@@ -6,7 +6,7 @@ using Graphs.SimpleGraphs: SimpleEdge
 
 rng = StableRNG(123)
 sys = system(Logistic4Chain(; rng))
-X = columns(trajectory(sys, 60, Ttr = 10000))
+X = columns(first(trajectory(sys, 60, Ttr = 10000)))
 utest = SurrogateTest(MIShannon(), KSG1(k = 10, w = 1); rng, nshuffles = 30)
 ctest = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 10, w = 1); rng, nshuffles = 30)
 alg = OCE(; utest, ctest, τmax = 2)
@@ -16,7 +16,7 @@ parents = infer_graph(alg, X; verbose = true)
 
 rng = StableRNG(123)
 sys = system(Logistic2Bidir(; rng))
-X = columns(trajectory(sys, 300, Ttr = 10000))
+X = columns(first(trajectory(sys, 300, Ttr = 10000)))
 utest = SurrogateTest(MIShannon(), KSG1(k = 10, w = 1); rng, nshuffles = 100)
 ctest = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 10, w = 1); rng, nshuffles = 100)
 parents = infer_graph(OCE(; utest, ctest, τmax = 1), X; verbose = true)

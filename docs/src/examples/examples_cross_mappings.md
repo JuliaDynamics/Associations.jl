@@ -131,7 +131,7 @@ end
 
 function reproduce_figure_3A_naive(measure::CrossmapMeasure)
     sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.02, βyx = 0.32);
-    x, y = columns(trajectory(sys_bidir, 3100, Ttr = 10000));
+    x, y = columns(first(trajectory(sys_bidir, 3100, Ttr = 10000)));
     libsizes = [20:2:50; 55:5:200; 300:50:500; 600:100:900; 1000:500:3000]
     est = ExpandingSegment(; libsizes);
     ρs_x̂y = crossmap(measure, est, x, y)
@@ -155,7 +155,7 @@ It is not clear from the paper exactly *what* they plot in their Figure 3A, if t
 ```@example MAIN_CCM
 function reproduce_figure_3A_ensemble(measure::CrossmapMeasure)
     sys_bidir = logistic_sugi(; u0 = [0.4, 0.2], rx = 3.8, ry = 3.5, βxy = 0.02, βyx = 0.1);
-    x, y = columns(trajectory(sys_bidir, 10000, Ttr = 10000));
+    x, y = columns(first(trajectory(sys_bidir, 10000, Ttr = 10000)));
     # Note: our time series are 1000 points long. When embedding, some points are
     # lost, so we must use slightly less points for the segments than 
     # there are points in the original time series.
@@ -214,7 +214,7 @@ function reproduce_figure_3B()
         for (j, βyx) in enumerate(βyxs)
             sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.7, βxy, βyx);
             # Generate 1000 points. Randomly select a 400-pt long segment.
-            x, y = columns(trajectory(sys_bidir, 400, Ttr = 10000));
+            x, y = columns(first(trajectory(sys_bidir, 400, Ttr = 10000)));
             ensemble = Ensemble(CCM(d = 3, w = 5, τ = -1), RandomVectors(libsizes = 100), nreps = 50)
             ρx̂ys[i, j] = mean(crossmap(ensemble, x, y))
             ρŷxs[i, j] = mean(crossmap(ensemble, y, x))
@@ -269,7 +269,7 @@ using CairoMakie, Printf
 # Create 500-point long time series for Sugihara et al. (2012)'s example for figure 3.
 # -----------------------------------------------------------------------------------------
 sys_unidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.00, βyx = 0.32);
-x, y = columns(trajectory(sys_unidir, 500, Ttr = 10000));
+x, y = columns(first(trajectory(sys_unidir, 500, Ttr = 10000)));
 
 # -----------------------------------------------------------------------------------------
 # Cross map.
@@ -369,7 +369,7 @@ function reproduce_figure_8_mccraken(;
     for (i, a) in enumerate(as)
         for (j, b) in enumerate(bs)
             s = nonlinear_sindriver(; a, b, c,  Δt)
-            x, y = columns(trajectory(s, 1000, Ttr = 10000))
+            x, y = columns(first(trajectory(s, 1000, Ttr = 10000)))
             Δreps = zeros(nreps)
             for i = 1:nreps
                 # Ensure we're subsampling at the same time indices. 
@@ -387,7 +387,7 @@ function reproduce_figure_8_mccraken(;
     # -----------------------------------------------------------------------------------------
     sys = nonlinear_sindriver(; a = 1.0, b = 1.0, c, Δt)
     npts = 500
-    orbit = trajectory(sys, npts, Ttr = 10000)
+    orbit = first(trajectory(sys, npts, Ttr = 10000))
     x, y = columns(orbit)
     with_theme(theme_minimal(),
         markersize = 5) do

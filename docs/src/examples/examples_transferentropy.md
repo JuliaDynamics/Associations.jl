@@ -107,7 +107,7 @@ function ulam_system(dx, x, p, t)
 end
 
 ds = DiscreteDynamicalSystem(ulam_system, rand(100) .- 0.5, [0.04])
-trajectory(ds, 1000; Ttr = 1000);
+first(trajectory(ds, 1000; Ttr = 1000));
 
 εs = 0.02:0.02:1.0
 base = 2
@@ -117,7 +117,7 @@ est = ValueHistogram(0.2)
 
 for (i, ε) in enumerate(εs)
     set_parameter!(ds, 1, ε)
-    tr = trajectory(ds, 2000; Ttr = 5000)
+    tr = first(trajectory(ds, 2000; Ttr = 5000))
     X1 = tr[:, 1]; X2 = tr[:, 2]
     @assert !any(isnan, X1)
     @assert !any(isnan, X2)
@@ -154,7 +154,7 @@ est = ValueHistogram(0.2) # use same bin-width as before
 
 for (i, ε) in enumerate(εs)
     set_parameter!(ds, 1, ε)
-    tr = trajectory(ds, 500; Ttr = 5000)
+    tr = first(trajectory(ds, 500; Ttr = 5000))
     X1 = tr[:, 1]; X2 = tr[:, 2]
     @assert !any(isnan, X1)
     @assert !any(isnan, X2)

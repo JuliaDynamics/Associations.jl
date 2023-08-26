@@ -1,6 +1,8 @@
 using Test
 using Graphs: SimpleDiGraph
 using StableRNGs
+using CausalInference: pgalg
+using Combinatorics
 rng = StableRNG(123)
 
 # -------------------------------------------------------------------------------
@@ -80,12 +82,13 @@ ctests = [
 ]
 
 tn(x) = Base.typename(typeof(x)).wrapper
-for i in eachindex(combos)
-    u, c = combos[i]
-    @testset "PC algorithm. Pairwise: $(tn(u)). Conditional: $(tn(c))" begin
-        alg = PC(u, c; α = α, maxiters_orient = 10)
-        g = infer_graph(alg, X)
-        @test g isa SimpleDiGraph
+for u in utests
+    for c in ctests
+        @testset "PC algorithm. Pairwise: $(tn(u)). Conditional: $(tn(c))" begin
+            alg = PC(u, c; α = α, maxiters_orient = 10)
+            g = infer_graph(alg, X)
+            @test g isa SimpleDiGraph
+        end
     end
 end
 

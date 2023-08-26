@@ -25,3 +25,4 @@ TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
 
 [compat]
 julia = "^1.6"
+DynamicalSystemsBase = "3"

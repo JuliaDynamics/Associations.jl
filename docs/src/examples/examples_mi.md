@@ -538,8 +538,8 @@ for i in 1 : length(c)
         # for a given coupling strength and random initial conditions
         s_logistic = system(Logistic2Unidir(; xi = rand(2), c_xy = c[i]))
         s_ar = system(AR1Unidir(xi = rand(2), c_xy = c[i]))
-        lmap = trajectory(s_logistic, npts - 1, Ttr = 500)
-        ar1 = trajectory(s_ar, npts - 1)
+        lmap = first(trajectory(s_logistic, npts - 1, Ttr = 500))
+        ar1 = first(trajectory(s_ar, npts - 1))
         
         # Compute the MI between the two coupled components of each system
         tmp[k, 1] = mutualinfo(MIShannon(), estimator, lmap[:, 1], lmap[:, 2])
