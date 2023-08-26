@@ -26,13 +26,13 @@ both. Each estimator uses a specialized technique to approximate relevant
 densities/integrals and/or probabilities, and is typically tailored to a specific
 type of [`MutualInformation`](@ref) (mostly [`MIShannon`](@ref)).
 """
-abstract type MutualInformationEstimator <: InformationMeasureEstimator end
+abstract type MutualInformationEstimator <: MultivariateInformationMeasureEstimator end
 
 # There are many ways of defining mutual information. Moreover, the definitions
-# differ for different types of base `EntropyDefinition`s. Therefore, we dispatch
+# differ for different types of base `InformationMeasure`s. Therefore, we dispatch
 # on subtypes of `MutualInformationDefinition`.
 """ The supertype for mutual information definitions. """
-abstract type MutualInformationDefinition <: Definition end
+abstract type MutualInformationDefinition <: MultivariateInformationMeasure end
 
 """ The supertype for all H3-type (three entropies) decomposition of mutual information. """
 abstract type MIH3 <: MutualInformationDefinition end

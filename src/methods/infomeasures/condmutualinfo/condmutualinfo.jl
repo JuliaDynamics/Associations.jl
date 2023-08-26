@@ -17,7 +17,7 @@ abstract type ConditionalMutualInformation{E} <: MultivariateInformationMeasure 
 const CMI{E} = ConditionalMutualInformation{E}
 
 """
-    ConditionalMutualInformationEstimator <: InformationEstimator
+    ConditionalMutualInformationEstimator <: MultivariateInformationEstimator
     CMIEstimator # alias
 
 The supertype of all conditional mutual information estimators.
@@ -29,7 +29,7 @@ The supertype of all conditional mutual information estimators.
 - [`Rahimzamani`](@ref).
 - [`MesnerShalizi`](@ref).
 """
-abstract type ConditionalMutualInformationEstimator end
+abstract type ConditionalMutualInformationEstimator <: MultivariateInformationEstimator end
 const CMIEstimator = ConditionalMutualInformationEstimator
 
 condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
