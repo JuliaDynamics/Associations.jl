@@ -20,11 +20,7 @@ Base.@kwdef struct MesnerShalizi{M} <: ConditionalMutualInformationEstimator
 end
 
 function MesnerShalisi(args...; kwargs...)
-    Base.depwarn(
-        "The `MesnerShalisi` estimator is deprecated due to a type. " *
-        "Please use `MesnerShalizi` instead`.",
-        :MesnerShalisi,
-    )
+    # Silently deprecate.
     return MesnerShalizi(args...; kwargs...)
 end
 
