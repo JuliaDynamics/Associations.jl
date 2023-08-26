@@ -1,3 +1,6 @@
+using ComplexityMeasures: InformationMeasure
+using StateSpaceSets: AbstractStateSpaceSet
+
 export GenericKernel
 
 """
@@ -47,20 +50,23 @@ is estimated by replacing the expectation with the sample average ([^Diks2017])
     Diks, C., & Fang, H. (2017). Transfer entropy for nonparametric granger causality
     detection: an evaluation of different resampling methods. Entropy, 19(7), 372.
 """
-struct GenericKernel{K, B} <: DifferentialInfoEstimator
+struct GenericKernel{I, K, B} <: DifferentialInfoEstimator{I}
+    definition::I
     bandwidth::B
     kernel::K
-    function GenericKernel(
-            bandwidth::B = DiksFang(4.8),
-            kernel::K = NormalIsotropic()) where {B, K}
-        new{K, B}(bandwidth, kernel)
-    end
 end
+function GenericKernel(definition = Renyi(); bandwidth::B = DiksFang(4.8),
+        kernel::K = NormalIsotropic()) where {B, K}
+    new{K, B}(bandwidth, kernel)
+end
+
 bandwidth(r::Real, x::AbstractStateSpaceSet) = r # convenience for manual settings
 
-function entropy(e::Renyi, est::GenericKernel, x::AbstractStateSpaceSet)
+function entropy(est::GenericKernel{<:Renyi}, x::AbstractStateSpaceSet)
+    q = est.definition.q
+    base = est.definition.base
     bw = bandwidth(est.bandwidth, x)
     ρs = densities_at_points(est.kernel, x, bw)
-    e.q ≈ 1 || error("Renyi entropy with q = $(e.q) not implemented for `GenericKernel`")
-    return sum(log0.(e.base, ρs)) / length(x)
+    q ≈ 1 || error("Renyi entropy with q = $(q) not implemented for `GenericKernel`")
+    return sum(log0.(base, ρs)) / length(x)
 end

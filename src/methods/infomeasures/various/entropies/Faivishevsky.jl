@@ -1,17 +1,22 @@
+using Distances: Euclidean
+
 export Faivishevsky
-#https://proceedings.neurips.cc/paper/2008/file/3dc4876f3f08201c7c76cb71fa1da439-Paper.pdf
-Base.@kwdef struct Faivishevsky{M} <: DifferentialInfoEstimator
-    k::Int = 1 # todo: remove. it isn't used.
-    w::Int = 0
-    metric::M = Euclidean()
+# https://proceedings.neurips.cc/paper_files/paper/2008/file/3dc4876f3f08201c7c76cb71fa1da439-Paper.pdf
+struct Faivishevsky{I, M} <: DifferentialInfoEstimator{I}
+    definition::I
+    w::Int
 end
+function Faivishevsky(definition = Shannon(); w = 0)
+    return Faivishevsky(definition, w)
+end
+
 import ComplexityMeasures.ball_volume
 using Neighborhood: search
 function entropy(e::Shannon, est::Faivishevsky, x::AbstractStateSpaceSet{D}) where D
     (; k, w, metric) = est
     N = length(x)
-    tree = KDTree(x, metric)
-    idxs, ϵs  = bulksearch(tree, x, NeighborNumber(N-1), Theiler(w))
+    tree = KDTree(x, Euclidean())
+    idxs, ϵs = bulksearch(tree, x, NeighborNumber(N-1), Theiler(w))
 
     f = 0.0
     for k = 1:N-1 # loop over neighbor numbers
