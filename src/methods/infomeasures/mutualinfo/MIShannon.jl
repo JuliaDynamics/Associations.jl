@@ -49,7 +49,7 @@ I^S(X; Y) = H^S(X) + H_q^S(Y) - H^S(X, Y),
 
 where ``H^S(\\cdot)`` and ``H^S(\\cdot, \\cdot)`` are the marginal and joint discrete
 Shannon entropies. This definition is used by [`mutualinfo`](@ref) when called with a
-[`ProbabilitiesEstimator`](@ref).
+[`OutcomeSpace`](@ref).
 
 ## Differential mutual information
 
@@ -76,7 +76,7 @@ struct MIShannon{E <: Shannon} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MIShannon, est::Contingency{<:ProbabilitiesEstimator}, x...)
+function estimate(measure::MIShannon, est::Contingency{<:OutcomeSpace}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
 end
 

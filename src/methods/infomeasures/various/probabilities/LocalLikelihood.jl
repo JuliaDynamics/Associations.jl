@@ -10,7 +10,7 @@ import ComplexityMeasures: entropy, total_outcomes, outcomes, probabilities, pro
 
 export LocalLikelihood
 """
-    LocalLikelihood <: ProbabilitiesEstimator
+    LocalLikelihood <: OutcomeSpace
     LocalLikelihood(k = 5, w = 0, metric = Euclidean())
 
 The `LocalLikelihood` estimator estimates the density around a given query point
@@ -23,7 +23,7 @@ simply sum-normalized to 1.
 
 The [`outcome_space`](@ref) for `LocalLikelihood` is the set of input points.
 """
-Base.@kwdef struct LocalLikelihood{M} <: ProbabilitiesEstimator
+Base.@kwdef struct LocalLikelihood{M} <: OutcomeSpace
     k::Int = 5
     w::Int = 0
     metric::M = Euclidean()
@@ -118,7 +118,7 @@ probabilities(est::LocalLikelihood, x) = Probabilities(point_densities(est, x))
 outcomes(est::LocalLikelihood, x) = x
 total_outcomes(x, est::LocalLikelihood) = length(x)
 
-function entropy(e::Renyi, est::LocalLikelihood, x)
+function information(e::Renyi, est::LocalLikelihood, x)
     !(e.q ≈ 1.0) || error("Renyi entropy for $(typeof(est)) estimator not defined for q = $(e.q) (i.e. Shannon entropy not defined)")
     N = length(x)
     ρs = point_densities(est, x)

@@ -88,10 +88,10 @@ function transferentropy(
     p_TTf = marginal_probs_from_μ(cols_TTf, positive_measure_bins, iv, inds_non0measure)
     p_joint = iv.ρ[inds_non0measure]
 
-    te = entropy(e, Probabilities(p_ST)) +
-        entropy(e, Probabilities(p_TTf)) -
-        entropy(e, Probabilities(p_T)) -
-        entropy(e, Probabilities(p_joint))
+    te = information(e, Probabilities(p_ST)) +
+        information(e, Probabilities(p_TTf)) -
+        information(e, Probabilities(p_T)) -
+        information(e, Probabilities(p_joint))
 end
 
 transferentropy(est::TransferOperator{<:RectangularBinning}, s, t; kwargs...) =

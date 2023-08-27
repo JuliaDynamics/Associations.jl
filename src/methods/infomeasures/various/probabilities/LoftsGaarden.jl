@@ -2,7 +2,7 @@ export LoftsGaarden
 import ComplexityMeasures: outcome_space
 
 """
-    Loftsgaarden <: ProbabilitiesEstimator
+    Loftsgaarden <: OutcomeSpace
 
 The `Loftsgaarden` probabilities estimator is based on the `k`-th nearest neighbor
 density estimatio from Loftsgaarden & Quesenberry (1965).
@@ -21,7 +21,7 @@ not have same probabilities (due to having different neighbors).
     Loftsgaarden, D. O., & Quesenberry, C. P. (1965). A nonparametric estimate of a
     multivariate density function. The Annals of Mathematical Statistics, 36(3), 1049-1051.
 """
-Base.@kwdef struct LoftsGaarden{M} <: ProbabilitiesEstimator
+Base.@kwdef struct LoftsGaarden{M} <: OutcomeSpace
     k::Int = 5
     w::Int = 0
     metric::M = Euclidean()

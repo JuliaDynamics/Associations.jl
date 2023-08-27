@@ -149,9 +149,9 @@ z = rand(FDist(5, 2), n)
 condmutualinfo(CMIShannon(), Kraskov(k = 5), x, z, y)
 ```
 
-### Estimation using [`ProbabilitiesEstimator`](@ref)s
+### Estimation using [`OutcomeSpace`](@ref)s
 
-Any [`ProbabilitiesEstimator`](@ref) can also be used to compute conditional
+Any [`OutcomeSpace`](@ref) can also be used to compute conditional
 mutual information using a sum of entropies. However, the naive
 application of these estimators don't perform any bias application when
 taking the sum of entropy terms.

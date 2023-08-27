@@ -9,7 +9,7 @@ ests = [
 # they compute something.
 x = rand(100)
 y = rand(100)
-@testset "$(typeof(ests[i]).name)" for i in eachindex(ests)
+@testset "$(typeof(ests[i]).name.name)" for i in eachindex(ests)
     est = ests[i]
     @test entropy_conditional(CEShannon(), est, x, y) >= 0
     @test entropy_conditional(CETsallisAbe(), est, x, y) isa Real

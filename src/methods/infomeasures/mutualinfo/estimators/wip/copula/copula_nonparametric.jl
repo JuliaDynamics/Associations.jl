@@ -1,4 +1,4 @@
-import ComplexityMeasures: ProbabilitiesEstimator, DifferentialInfoEstimator
+import ComplexityMeasures: OutcomeSpace, DifferentialInfoEstimator
 import StateSpaceSets: AbstractStateSpaceSet
 
 export Copula
@@ -12,7 +12,7 @@ A non-parametric copula-based mutual information estimator.
 
 It is typically many times faster to compute mutual information using `Copula` than
 with other [`MutualInformationEstimator`](@ref)s, [`DifferentialInfoEstimator`](@ref)s,
-or [`ProbabilitiesEstimator`](@ref)s, because `Copula` only needs to compute the
+or [`OutcomeSpace`](@ref)s, because `Copula` only needs to compute the
 entropy of a single (multivariate) variable, whereas the other methods explicitly
 computes the entropy of several variables.
 
@@ -38,7 +38,7 @@ which is equal to the mutual information between `Dx` and `Dy` (Ma & Sun, 2011)[
     Information Processing Systems, 23.
 """
 Base.@kwdef struct Copula <: MutualInformationEstimator
-    est::Union{ProbabilitiesEstimator, DifferentialInfoEstimator} = Kraskov(k = 5)
+    est::Union{OutcomeSpace, DifferentialInfoEstimator} = Kraskov(k = 5)
     exact::Bool = false
 end
 
@@ -46,7 +46,7 @@ function estimate(measure::MIShannon, est::Copula, x, y)
     X = StateSpaceSet(x)
     Y = StateSpaceSet(y)
     D = StateSpaceSet(X,  Y)
-   -entropy(measure.e, est.est, empirical_copula_transformation(D))
+   -information(measure.e, est.est, empirical_copula_transformation(D))
 end
 
 """

@@ -32,7 +32,7 @@ Base.@kwdef struct PredictiveAsymmetry{E, B, F, D1, D2, D3, D4, T1, T2, T3} <: A
 end
 
 const PA_ESTIMATORS = Union{
-    ProbabilitiesEstimator,
+    OutcomeSpace,
     DifferentialInfoEstimator,
     MutualInformationEstimator,
     ConditionalMutualInformationEstimator,

@@ -47,12 +47,12 @@ function entropy_conditional(measure::ConditionalEntropy, c::ContingencyMatrix)
 end
 
 """
-    entropy_conditional([measure::ConditionalEntropy], est::ProbabilitiesEstimator, x, y)
+    entropy_conditional([measure::ConditionalEntropy], est::OutcomeSpace, x, y)
 
 Estimate the entropy of `x` conditioned on `y`, using the discrete version of the given
 conditional entropy (CE) `measure`. The CE is computed the difference of
 the joint entropy and the marginal entropy of `y`, using
-the [`ProbabilitiesEstimator`](@ref) `est`, which must compatible with multivariate data
+the [`OutcomeSpace`](@ref) `est`, which must compatible with multivariate data
 (that is, have an implementation for [`marginal_encodings`](@ref)).
 No bias correction is applied. If `measure` is not given, then the default is `CEShannon()`.
 
@@ -69,7 +69,7 @@ distribution.
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |           ✓           |              x              |
 | [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |           ✓           |              x              |
 """
-function entropy_conditional(measure::ConditionalEntropy, est::ProbabilitiesEstimator, x, y)
+function entropy_conditional(measure::ConditionalEntropy, est::OutcomeSpace, x, y)
     return estimate(measure, est, x, y)
 end
 
@@ -93,20 +93,19 @@ If `measure` is not given, then the default is `CEShannon()`.
 | [`Gao`](@ref)                    | Nearest neighbors |         ✓          |           x           |              x              |
 | [`Goria`](@ref)                  | Nearest neighbors |         ✓          |           x           |              x              |
 | [`Lord`](@ref)                   | Nearest neighbors |         ✓          |           x           |              x              |
-| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |           x           |              x              |
 """
 function entropy_conditional(measure::ConditionalEntropy, est::DifferentialInfoEstimator, x, y)
     return estimate(measure, est, x, y)
 end
 
 # Generic 3H-formulation of mutual information.
-function marginal_entropies_ce2h(measure::ConditionalEntropy, est::ProbabilitiesEstimator, x, y)
+function marginal_entropies_ce2h(measure::ConditionalEntropy, est::OutcomeSpace, x, y)
     e = measure.e.definition
     X = StateSpaceSet(x)
     Y = StateSpaceSet(y)
     XY = StateSpaceSet(X, Y)
-    HY = entropy(e, est, Y)
-    HXY = entropy(e, est, XY)
+    HY = information(e, est, Y)
+    HXY = information(e, est, XY)
     return HY, HXY
 end
 
@@ -124,8 +123,8 @@ function marginal_entropies_ce2h(measure::ConditionalEntropy,
     eX, eY = marginal_encodings(est, x, y)
     eXY = StateSpaceSet(eX, eY)
     e = measure.e
-    HY = entropy(e, CountOccurrences(), eY)
-    HXY = entropy(e, CountOccurrences(), eXY)
+    HY = information(e, CountOccurrences(), eY)
+    HXY = information(e, CountOccurrences(), eXY)
     return HY, HXY
 end
 
@@ -134,7 +133,7 @@ function marginal_entropies_ce2h(measure::ConditionalEntropy, est::DifferentialI
     X = StateSpaceSet(x)
     Y = StateSpaceSet(y)
     XY = StateSpaceSet(X, Y)
-    HY = entropy(est, Y)
-    HXY = entropy(est, XY)
+    HY = information(est, Y)
+    HXY = information(est, XY)
     return HY, HXY
 end

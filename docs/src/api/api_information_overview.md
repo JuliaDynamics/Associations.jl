@@ -29,7 +29,7 @@ package for something useful, or publish something based on it!
 
 Information measures are either estimated using one of the following basic estimator types,
 
-- [`ProbabilitiesEstimator`](@ref)s,
+- [`OutcomeSpace`](@ref)s,
 - [`DifferentialInfoEstimator`](@ref)s,
 
 or using measure-specific estimators:

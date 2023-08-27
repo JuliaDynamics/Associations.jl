@@ -416,9 +416,9 @@ fig = plot_results(family3, ifamily3;
 
 We see that the [`Lord`](@ref) estimator, which estimates local volume elements using a singular-value decomposition (SVD) of local neighborhoods, outperforms the other estimators by a large margin.
 
-### [Estimation using [`ProbabilitiesEstimator`](@ref)s](@id example_mi_ProbabilitiesEstimator)
+### [Estimation using [`OutcomeSpace`](@ref)s](@id example_mi_OutcomeSpace)
 
-We can also use [`ProbabilitiesEstimator`](@ref) to estimate Shannon mutual information.
+We can also use [`OutcomeSpace`](@ref) to estimate Shannon mutual information.
 This does not apply any bias correction.
 
 #### Discrete [`MIShannon`](@ref) with [`ValueHistogram`](@ref)

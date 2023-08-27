@@ -17,7 +17,7 @@ abstract type ConditionalMutualInformation{E} <: MultivariateInformationMeasure 
 const CMI{E} = ConditionalMutualInformation{E}
 
 """
-    ConditionalMutualInformationEstimator <: MultivariateInformationEstimator
+    ConditionalMutualInformationEstimator <: MultivariateInformationMeasureEstimator
     CMIEstimator # alias
 
 The supertype of all conditional mutual information estimators.
@@ -29,13 +29,13 @@ The supertype of all conditional mutual information estimators.
 - [`Rahimzamani`](@ref).
 - [`MesnerShalizi`](@ref).
 """
-abstract type ConditionalMutualInformationEstimator <: MultivariateInformationEstimator end
+abstract type ConditionalMutualInformationEstimator <: MultivariateInformationMeasureEstimator end
 const CMIEstimator = ConditionalMutualInformationEstimator
 
 condmutualinfo(args...; kwargs...) = estimate(args...; kwargs...)
 
 const CMI_ESTIMATORS = Union{
-    ProbabilitiesEstimator,
+    OutcomeSpace,
     DifferentialInfoEstimator,
     MutualInformationEstimator,
     ConditionalMutualInformationEstimator
@@ -83,14 +83,14 @@ include("estimators/estimators.jl")
 
 # Default to Shannon mutual information.
 """
-    condmutualinfo([measure::CMI], est::ProbabilitiesEstimator, x, y, z) → cmi::Real ∈ [0, a)
+    condmutualinfo([measure::CMI], est::OutcomeSpace, x, y, z) → cmi::Real ∈ [0, a)
 
 Estimate the conditional mutual information (CMI) `measure` between `x` and `y` given `z`
 using a sum of entropy terms, without any bias correction, using the provided
-[`ProbabilitiesEstimator`](@ref) `est`.
+[`OutcomeSpace`](@ref) `est`.
 If `measure` is not given, then the default is `CMIShannon()`.
 
-With a [`ProbabilitiesEstimator`](@ref), the returned `cmi` is guaranteed to be
+With a [`OutcomeSpace`](@ref), the returned `cmi` is guaranteed to be
 non-negative.
 
 ## Estimators
@@ -102,11 +102,11 @@ non-negative.
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |          ✓          |           ✓            |
 | [`Dispersion`](@ref)         | Dispersion patterns |          ✓          |           ✓            |
 """
-function condmutualinfo(measure::CMI, est::ProbabilitiesEstimator, x, y, z)
+function condmutualinfo(measure::CMI, est::OutcomeSpace, x, y, z)
     return estimate(measure, est, x, y, z)
 end
 
-function estimate(est::ProbabilitiesEstimator, x, y, z)
+function estimate(est::OutcomeSpace, x, y, z)
     return estimate(CMIShannon(), est, x, y, z)
 end
 
@@ -134,7 +134,6 @@ No bias correction is performed. If `measure` is not given, then the default is
 | [`Gao`](@ref)                    | Nearest neighbors |          ✓          |
 | [`Goria`](@ref)                  | Nearest neighbors |          ✓          |
 | [`Lord`](@ref)                   | Nearest neighbors |          ✓          |
-| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |          ✓          |
 """
 function condmutualinfo(measure::CMI, est::DifferentialInfoEstimator, x, y, z)
     return estimate(measure, est, x, y, z)
@@ -199,10 +198,10 @@ function marginal_entropies_cmi4h(measure::ConditionalMutualInformation, est, x,
     YZ = StateSpaceSet(Y, Z)
     XYZ = StateSpaceSet(X, Y, Z)
 
-    HXZ = entropy(e, est, XZ)
-    HYZ = entropy(e, est,YZ)
-    HXYZ = entropy(e, est, XYZ)
-    HZ = entropy(e, est, Z)
+    HXZ = information(e, est, XZ)
+    HYZ = information(e, est,YZ)
+    HXYZ = information(e, est, XYZ)
+    HZ = information(e, est, Z)
     return HXZ, HYZ, HXYZ, HZ
 end
 
@@ -224,9 +223,9 @@ function marginal_entropies_cmi4h(measure::Union{CMIShannon, CMIRenyiSarbu},
     eYZ = StateSpaceSet(eY, eZ)
     eXYZ = StateSpaceSet(eX, eY, eZ)
 
-    HXZ = entropy(e, CountOccurrences(), eXZ)
-    HYZ = entropy(e, CountOccurrences(), eYZ)
-    HXYZ = entropy(e, CountOccurrences(), eXYZ)
-    HZ = entropy(e, CountOccurrences(), eZ)
+    HXZ = information(e, CountOccurrences(), eXZ)
+    HYZ = information(e, CountOccurrences(), eYZ)
+    HXYZ = information(e, CountOccurrences(), eXYZ)
+    HZ = information(e, CountOccurrences(), eZ)
     return HXZ, HYZ, HXYZ, HZ
 end

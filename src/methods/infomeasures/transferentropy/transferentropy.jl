@@ -74,30 +74,29 @@ any estimator that can be used for [`ConditionalMutualInformation`](@ref) is, in
 also a valid transfer entropy estimator. [`TransferEntropyEstimator`](@ref)s are the
 exception - they compute transfer entropy directly.
 
-| Estimator                        | Type                                            | Principle           | [`TEShannon`](@ref) | [`TERenyiJizba`](@ref) |
-| -------------------------------- | ----------------------------------------------- | ------------------- | :-----------------: | :--------------------: |
-| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |         ✓          |           ✓            |
-| [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |         ✓          |           ✓            |
-| [`Dispersion`](@ref)             | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |         ✓          |           ✖            |
-| [`Kraskov`](@ref)                | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
-| [`Zhu`](@ref)                    | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
-| [`ZhuSingh`](@ref)               | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
-| [`Gao`](@ref)                    | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
-| [`Goria`](@ref)                  | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
-| [`Lord`](@ref)                   | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖            |
-| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✓            |
-| [`GaussanMI`](@ref)              | [`MutualInformationEstimator`](@ref)            | Parametric          |         ✓          |           ✖            |
-| [`KSG1`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖            |
-| [`KSG2`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖            |
-| [`GaoKannanOhViswanath`](@ref)   | [`MutualInformationEstimator`](@ref)            | Mixed               |         ✓          |           ✖            |
-| [`GaoOhViswanath`](@ref)         | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖            |
-| [`FPVP`](@ref)                   | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖            |
-| [`MesnerShalizi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖            |
-| [`Rahimzamani`](@ref)            | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖            |
-| [`Zhu1`](@ref)                   | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |           ✖            |
-| [`Lindner`](@ref)                | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |           ✖            |
-| [`Hilbert`](@ref)                | [`TransferEntropyEstimator`](@ref)              | Hilbert transform   |         ✓          |           ✖            |
-| [`SymbolicTransferEntropy`](@ref)| [`TransferEntropyEstimator`](@ref)              | Hilbert transform   |         ✓          |           ✖            |
+| Estimator                         | Type                                            | Principle           | [`TEShannon`](@ref) | [`TERenyiJizba`](@ref) |
+| --------------------------------- | ----------------------------------------------- | ------------------- | :-----------------: | :--------------------: |
+| [`CountOccurrences`](@ref)        | [`OutcomeSpace`](@ref)                | Frequencies         |         ✓          |           ✓           |
+| [`ValueHistogram`](@ref)          | [`OutcomeSpace`](@ref)                | Binning (histogram) |         ✓          |           ✓           |
+| [`Dispersion`](@ref)              | [`OutcomeSpace`](@ref)                | Dispersion patterns |         ✓          |           ✖           |
+| [`Kraskov`](@ref)                 | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |         ✓          |           ✖           |
+| [`Zhu`](@ref)                     | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |         ✓          |           ✖           |
+| [`ZhuSingh`](@ref)                | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |         ✓          |           ✖           |
+| [`Gao`](@ref)                     | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |         ✓          |           ✖           |
+| [`Goria`](@ref)                   | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |         ✓          |           ✖           |
+| [`Lord`](@ref)                    | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |         ✓          |           ✖           |
+| [`GaussanMI`](@ref)               | [`MutualInformationEstimator`](@ref)            | Parametric          |         ✓          |           ✖           |
+| [`KSG1`](@ref)                    | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖           |
+| [`KSG2`](@ref)                    | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖           |
+| [`GaoKannanOhViswanath`](@ref)    | [`MutualInformationEstimator`](@ref)            | Mixed               |         ✓          |           ✖           |
+| [`GaoOhViswanath`](@ref)          | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |           ✖           |
+| [`FPVP`](@ref)                    | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖           |
+| [`MesnerShalizi`](@ref)           | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖           |
+| [`Rahimzamani`](@ref)             | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |         ✓          |           ✖           |
+| [`Zhu1`](@ref)                    | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |           ✖           |
+| [`Lindner`](@ref)                 | [`TransferEntropyEstimator`](@ref)              | Nearest neighbors   |         ✓          |           ✖           |
+| [`Hilbert`](@ref)                 | [`TransferEntropyEstimator`](@ref)              | Hilbert transform   |         ✓          |           ✖           |
+| [`SymbolicTransferEntropy`](@ref) | [`TransferEntropyEstimator`](@ref)              | Hilbert transform   |         ✓          |           ✖           |
 
 """
 function transferentropy end
@@ -108,7 +107,7 @@ const TE_ESTIMATORS = Union{
     ConditionalMutualInformationEstimator,
     MutualInformationEstimator,
     DifferentialInfoEstimator,
-    ProbabilitiesEstimator,
+    OutcomeSpace,
 }
 
 # Embedding optimization

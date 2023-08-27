@@ -37,17 +37,16 @@ which all boil down to computing conditional mutual information, except for
 
 | Estimator                        | Type                                            | Principle           | [`TEShannon`](@ref) |
 | -------------------------------- | ----------------------------------------------- | ------------------- | :-----------------: |
-| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |         ✓          |
-| [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |         ✓          |
-| [`SymbolicPermuation`](@ref)     | [`ProbabilitiesEstimator`](@ref)                | Ordinal patterns    |         ✓          |
-| [`Dispersion`](@ref)             | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |         ✓          |
+| [`CountOccurrences`](@ref)       | [`OutcomeSpace`](@ref)                | Frequencies         |         ✓          |
+| [`ValueHistogram`](@ref)         | [`OutcomeSpace`](@ref)                | Binning (histogram) |         ✓          |
+| [`SymbolicPermuation`](@ref)     | [`OutcomeSpace`](@ref)                | Ordinal patterns    |         ✓          |
+| [`Dispersion`](@ref)             | [`OutcomeSpace`](@ref)                | Dispersion patterns |         ✓          |
 | [`Kraskov`](@ref)                | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |
 | [`Zhu`](@ref)                    | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |
 | [`ZhuSingh`](@ref)               | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |
 | [`Gao`](@ref)                    | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |
 | [`Goria`](@ref)                  | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |
 | [`Lord`](@ref)                   | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |
-| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |         ✓          |
 | [`GaussanMI`](@ref)              | [`MutualInformationEstimator`](@ref)            | Parametric          |         ✓          |
 | [`KSG1`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |
 | [`KSG2`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |         ✓          |
@@ -77,7 +76,7 @@ end
 #             ConditionalMutualInformationEstimator,
 #             MutualInformationEstimator,
 #             DifferentialInfoEstimator,
-#             ProbabilitiesEstimator
+#             OutcomeSpace
 #         },
 #         x...; kwargs...)
 #     N = length(first(x))

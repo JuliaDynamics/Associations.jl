@@ -35,26 +35,25 @@ can be used for [`ConditionalMutualInformation`](@ref) can therefore, in princip
 be used with the predictive asymmetry. We recommend to use [`FPVP`](@ref), or one
 of the other dedicated conditional mutual information estimators.
 
-| Estimator                        | Type                                            | Principle           | Pairwise | Conditional |
-| -------------------------------- | ----------------------------------------------- | ------------------- | :------: | :---------: |
-| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |    ✓    |     ✓      |
-| [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |    ✓    |     ✓      |
-| [`Dispersion`](@ref)             | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |    ✓    |     ✓      |
-| [`Kraskov`](@ref)                | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`Zhu`](@ref)                    | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`ZhuSingh`](@ref)               | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`Gao`](@ref)                    | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`Goria`](@ref)                  | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`Lord`](@ref)                   | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialInfoEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |
-| [`GaussanMI`](@ref)              | [`MutualInformationEstimator`](@ref)            | Parametric          |    ✓    |     ✓      |
-| [`KSG1`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
-| [`KSG2`](@ref)                   | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
-| [`GaoKannanOhViswanath`](@ref)   | [`MutualInformationEstimator`](@ref)            | Mixed               |    ✓    |     ✓      |
-| [`GaoOhViswanath`](@ref)         | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
-| [`FPVP`](@ref)                   | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
-| [`MesnerShalizi`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
-| [`Rahimzamani`](@ref)            | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
+| Estimator                      | Type                                            | Principle           | Pairwise | Conditional |
+| ------------------------------ | ----------------------------------------------- | ------------------- | :------: | :---------: |
+| [`CountOccurrences`](@ref)     | [`OutcomeSpace`](@ref)                | Frequencies         |    ✓    |     ✓      |
+| [`ValueHistogram`](@ref)       | [`OutcomeSpace`](@ref)                | Binning (histogram) |    ✓    |     ✓      |
+| [`Dispersion`](@ref)           | [`OutcomeSpace`](@ref)                | Dispersion patterns |    ✓    |     ✓      |
+| [`Kraskov`](@ref)              | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |    ✓    |     ✓      |
+| [`Zhu`](@ref)                  | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |    ✓    |     ✓      |
+| [`ZhuSingh`](@ref)             | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |    ✓    |     ✓      |
+| [`Gao`](@ref)                  | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |    ✓    |     ✓      |
+| [`Goria`](@ref)                | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |    ✓    |     ✓      |
+| [`Lord`](@ref)                 | [`DifferentialInfoEstimator`](@ref)             | Nearest neighbors   |    ✓    |     ✓      |
+| [`GaussanMI`](@ref)            | [`MutualInformationEstimator`](@ref)            | Parametric          |    ✓    |     ✓      |
+| [`KSG1`](@ref)                 | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
+| [`KSG2`](@ref)                 | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
+| [`GaoKannanOhViswanath`](@ref) | [`MutualInformationEstimator`](@ref)            | Mixed               |    ✓    |     ✓      |
+| [`GaoOhViswanath`](@ref)       | [`MutualInformationEstimator`](@ref)            | Continuous          |    ✓    |     ✓      |
+| [`FPVP`](@ref)                 | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
+| [`MesnerShalizi`](@ref)        | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
+| [`Rahimzamani`](@ref)          | [`ConditionalMutualInformationEstimator`](@ref) | Nearest neighbors   |    ✓    |     ✓      |
 
 ## Examples
 
@@ -92,7 +91,7 @@ function asymmetry(args...; kwargs...)
 end
 
 const PA_ESTS = Union{
-    ProbabilitiesEstimator,
+    OutcomeSpace,
     DifferentialInfoEstimator,
     MutualInformationEstimator,
     ConditionalMutualInformationEstimator

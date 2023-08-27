@@ -40,7 +40,7 @@ end
 # TODO: implement
 multiplicative_bias(est::Gao2017) = 1.0
 
-Base.@kwdef struct LocalLikelihood{M} <: ProbabilitiesEstimator
+Base.@kwdef struct LocalLikelihood{M} <: OutcomeSpace
     k::Int = 1
     w::Int = 0
     metric::M = Euclidean()

@@ -3,20 +3,20 @@
 
 The probabilities API is defined by
 
-- [`ProbabilitiesEstimator`](@ref), and its subtypes.
+- [`OutcomeSpace`](@ref), and its subtypes.
 - [`probabilities`](@ref)
 - [`probabilities_and_outcomes`](@ref)
 
 See also [contingency tables](@ref contingency_table_api) for a multivariate version.
 
 The probabilities API is re-exported from [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl). Why? Most discrete information theoretic association measures are estimated
-using some sort of [`ProbabilitiesEstimator`](@ref)s, because their formulas are simply functions
+using some sort of [`OutcomeSpace`](@ref)s, because their formulas are simply functions
 of probability mass functions.
 
 ## Probabilities
 
 ```@docs
-ProbabilitiesEstimator
+OutcomeSpace
 probabilities
 probabilities!
 Probabilities

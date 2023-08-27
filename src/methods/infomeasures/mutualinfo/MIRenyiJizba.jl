@@ -36,7 +36,7 @@ struct MIRenyiJizba{E <: Renyi} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MIRenyiJizba, est::Contingency{<:ProbabilitiesEstimator}, x...)
+function estimate(measure::MIRenyiJizba, est::Contingency{<:OutcomeSpace}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
 end
 
@@ -67,7 +67,7 @@ function estimate(measure::MIRenyiJizba, pxy::ContingencyMatrix{T, 2}) where {T}
     return (1 / (1 / q)) * mi
 end
 
-function estimate(measure::MIRenyiJizba, est::ProbabilitiesEstimator, x, y)
+function estimate(measure::MIRenyiJizba, est::OutcomeSpace, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
     return HX + HY - HXY
 end

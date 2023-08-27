@@ -38,7 +38,7 @@ struct MITsallisMartin{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MITsallisMartin, est::Contingency{<:ProbabilitiesEstimator}, x...)
+function estimate(measure::MITsallisMartin, est::Contingency{<:OutcomeSpace}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
 end
 
@@ -68,7 +68,7 @@ function estimate(
     return f * (1 - mi)
 end
 
-function estimate(measure::MITsallisMartin, est::ProbabilitiesEstimator, x, y)
+function estimate(measure::MITsallisMartin, est::OutcomeSpace, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
     q = measure.e.q
     return HX + HY - (1 - q) * HX * HY - HXY

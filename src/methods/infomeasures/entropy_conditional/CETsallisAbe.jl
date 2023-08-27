@@ -42,7 +42,7 @@ function estimate(measure::CETsallisAbe, c::ContingencyMatrix{T, 2}) where {T}
     hjoint = 1 / (1 - q) * (sum(pxy .^ 2) - 1)
 
     # The marginal Tsallis entropy for the second variable
-    hy = entropy(Tsallis(; q, base), py)
+    hy = information(Tsallis(; q, base), py)
 
     # Equation 13 in Abe & Rajagopal (2001)
     ce = (hjoint - hy) / (1 + (1 - q)*hy)
@@ -54,7 +54,7 @@ function estimate(measure::CETsallisAbe, c::ContingencyMatrix{T, 2}) where {T}
     end
 end
 
-function estimate(measure::CETsallisAbe, est::ProbabilitiesEstimator, x, y)
+function estimate(measure::CETsallisAbe, est::OutcomeSpace, x, y)
     e = measure.e.definition
     q, base = e.q, e.base
 

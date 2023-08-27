@@ -36,7 +36,7 @@ and (if given) the present/past of `cond`, that contribute most to `target`'s fu
 This implementation uses a conditional entropy minimization criterion for selecting variables,
 which is what Montalto et al. (2014)[^Montalto2014] uses for their bin-estimator.
 This implementation accepts *any* [`DifferentialInfoEstimator`](@ref) or
-[`ProbabilitiesEstimator`](@ref) that accepts multivariate data or that implements
+[`OutcomeSpace`](@ref) that accepts multivariate data or that implements
 [`marginal_encodings`](@ref).
 
 Montalto et al.'s bin-estimator corresponds to using the `VisitationFrequency` estimator
@@ -161,13 +161,13 @@ function optim_te(measure::TransferEntropy, est::DiscreteOrDifferentialInfoEstim
             if k == 1 || length(𝒮) == 0
                 Cᵢ = Ω[i]
                 CMI_Y⁺_Cᵢ =
-                    entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(Cᵢ))) -
-                    entropy(e, est, StateSpaceSet(Cᵢ))
+                    information(e, est, StateSpaceSet(Y⁺, StateSpaceSet(Cᵢ))) -
+                    information(e, est, StateSpaceSet(Cᵢ))
             else
                 Cᵢ = [Ω[i], 𝒮...]
                 CMI_Y⁺_Cᵢ =
-                    entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(Cᵢ...,))) -
-                    entropy(e, est, StateSpaceSet(Cᵢ...,))
+                    information(e, est, StateSpaceSet(Y⁺, StateSpaceSet(Cᵢ...,))) -
+                    information(e, est, StateSpaceSet(Cᵢ...,))
             end
             CMIs_between_Y⁺_and_candidates[i] = CMI_Y⁺_Cᵢ
         end
@@ -191,20 +191,20 @@ function optim_te(measure::TransferEntropy, est::DiscreteOrDifferentialInfoEstim
         # If k > 1, at least one candidate has been selected, so we compute CMI
         else
             # Precompute terms that do not change during surrogate loop
-            H_Y⁺_𝒮 = entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮...,)))
-            H_𝒮 = entropy(e, est, StateSpaceSet(𝒮...))
+            H_Y⁺_𝒮 = information(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮...,)))
+            H_𝒮 = information(e, est, StateSpaceSet(𝒮...))
 
             # Original TE
             condmutualinfoₖ = H_Y⁺_𝒮 +
-                    entropy(e, est, StateSpaceSet([cₖ, 𝒮...,]...,)) -
-                    entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet([cₖ, 𝒮...,]...,))) -
+                    information(e, est, StateSpaceSet([cₖ, 𝒮...,]...,)) -
+                    information(e, est, StateSpaceSet(Y⁺, StateSpaceSet([cₖ, 𝒮...,]...,))) -
                     H_𝒮
 
             for i = 1:nsurr
                 surr_cₖ = s() # Surrogate version of cₖ
                 CMI_permutations[i] = H_Y⁺_𝒮 +
-                    entropy(e, est, StateSpaceSet([surr_cₖ, 𝒮...]...,)) -
-                    entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet([surr_cₖ, 𝒮...]...,))) -
+                    information(e, est, StateSpaceSet([surr_cₖ, 𝒮...]...,)) -
+                    information(e, est, StateSpaceSet(Y⁺, StateSpaceSet([surr_cₖ, 𝒮...]...,))) -
                     H_𝒮
             end
         end
@@ -242,11 +242,11 @@ function optim_te(measure::TransferEntropy, est::DiscreteOrDifferentialInfoEstim
         return 0.0, Int[], Int[], idxs_source, idxs_target, idxs_cond
     end
 
-    CE2 = entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮...,))) -
-        entropy(e, est, StateSpaceSet(𝒮...,))
+    CE2 = information(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮...,))) -
+        information(e, est, StateSpaceSet(𝒮...,))
 
-    CE1 = entropy(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮_nonX...,))) -
-        entropy(e, est, StateSpaceSet(𝒮_nonX...,))
+    CE1 = information(e, est, StateSpaceSet(Y⁺, StateSpaceSet(𝒮_nonX...,))) -
+        information(e, est, StateSpaceSet(𝒮_nonX...,))
 
     CMI = CE1 - CE2
     return CMI, 𝒮_js, 𝒮_τs, idxs_source, idxs_target, idxs_cond

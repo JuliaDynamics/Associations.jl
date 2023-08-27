@@ -43,18 +43,18 @@ function estimate(measure::CMIRenyiJizba, est::Contingency, x, y, z)
     pz = probabilities(c, dims = 3)
     pxyz = probabilities(c)
     e = measure.e
-    return entropy(e, pxz) + entropy(e, pyz) - entropy(e, pz) - entropy(e, pxyz)
+    return information(e, pxz) + information(e, pyz) - information(e, pz) - information(e, pxyz)
 end
 
 function _contingency_matrix(measure::CMIRenyiJizba,
-        est::Contingency{<:ProbabilitiesEstimator}, x, y, z)
+        est::Contingency{<:OutcomeSpace}, x, y, z)
     return contingency_matrix(est.est, x, y, z)
 end
 function _contingency_matrix(measure::CMIRenyiJizba, est::Contingency{<:Nothing}, x, y, z)
     return contingency_matrix(x, y, z)
 end
 
-function estimate(measure::CMIRenyiJizba, est::ProbabilitiesEstimator, x, y, z)
+function estimate(measure::CMIRenyiJizba, est::OutcomeSpace, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h(measure, est, x, y, z)
     return HXZ + HYZ - HXYZ - HZ
 end

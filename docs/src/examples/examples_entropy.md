@@ -166,7 +166,6 @@ estimators = [
     ZhuSingh(; k),
     Zhu(; k),
     Goria(; k),
-    LeonenkoProzantoSavani(; k),
     Lord(; k = k*5)
 ]
 

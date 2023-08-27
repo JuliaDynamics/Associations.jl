@@ -18,7 +18,6 @@ diff_entropy_estimators = [
     KozachenkoLeonenko(),
     ZhuSingh(; k),
     Zhu(; k),
-    LeonenkoProzantoSavani(; k),
     Lord(; k = k*5),
 ]
 

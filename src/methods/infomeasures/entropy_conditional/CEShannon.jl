@@ -30,7 +30,7 @@ H^S(X | Y) = H^S(X, Y) - H^S(Y),
 
 where ``H^S(\\cdot`` and ``H^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref) entropy and
 Shannon joint entropy, respectively. This is the definition used when calling
-[`entropy_conditional`](@ref) with a [`ProbabilitiesEstimator`](@ref).
+[`entropy_conditional`](@ref) with a [`OutcomeSpace`](@ref).
 
 ## Differential definition
 

@@ -26,10 +26,10 @@ function estimate(measure::MIShannon, est::ParametricCopula, x, y)
     Y = StateSpaceSet(y)
     D = StateSpaceSet(X, Y)
     Tp = StateSpaceSet((copula_transform(c) for c in columns(D))...)
-    -entropy(est.d, Tp; debias = est.debias)
+    -information(est.d, Tp; debias = est.debias)
 end
 
-function entropy(d::Normal, x::AbstractStateSpaceSet{D}; debias = true, base = 2) where D
+function information(d::Normal, x::AbstractStateSpaceSet{D}; debias = true, base = 2) where D
     N = length(x)
     Σ = fastcov(x)
     h = 1 / (2 * log(2))

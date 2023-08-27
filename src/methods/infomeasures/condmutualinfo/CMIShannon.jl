@@ -47,7 +47,7 @@ struct CMIShannon{E <: Shannon} <: ConditionalMutualInformation{E}
     end
 end
 
-function estimate(measure::CMIShannon, est::ProbabilitiesEstimator, x, y, z)
+function estimate(measure::CMIShannon, est::OutcomeSpace, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h(measure, est, x, y, z)
     return HXZ + HYZ - HXYZ - HZ
 end
@@ -76,7 +76,7 @@ function estimate(measure::CMIShannon, est::DifferentialInfoEstimator, x, y, z)
     return cmi
 end
 
-function estimate(measure::CMIShannon, est::Contingency{<:ProbabilitiesEstimator}, x...)
+function estimate(measure::CMIShannon, est::Contingency{<:OutcomeSpace}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
 end
 

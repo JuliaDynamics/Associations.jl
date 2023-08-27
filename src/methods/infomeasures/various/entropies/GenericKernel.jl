@@ -62,7 +62,7 @@ end
 
 bandwidth(r::Real, x::AbstractStateSpaceSet) = r # convenience for manual settings
 
-function entropy(est::GenericKernel{<:Renyi}, x::AbstractStateSpaceSet)
+function information(est::GenericKernel{<:Renyi}, x::AbstractStateSpaceSet)
     q = est.definition.q
     base = est.definition.base
     bw = bandwidth(est.bandwidth, x)

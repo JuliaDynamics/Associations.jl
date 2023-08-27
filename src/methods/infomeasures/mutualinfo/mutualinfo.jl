@@ -40,7 +40,7 @@ abstract type MIH3 <: MutualInformationDefinition end
 #= """
     mutualinfo(measure::MutualInformation, est::MutualInformationEstimator, x, y)
     mutualinfo(measure::MutualInformation, est::DifferentialInfoEstimator, x, y)
-    mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)
+    mutualinfo(measure::MutualInformation, est::OutcomeSpace, x, y)
     mutualinfo(measure::MutualInformation, c::ContingencyMatrix)
 
 Estimate the mutual information `measure` (either [`MIShannon`](@ref) or
@@ -76,12 +76,12 @@ is `MIShannon()`.
 mutualinfo(c::ContingencyMatrix) = estimate(MIShannon(), c)
 
 """
-    mutualinfo([measure::MutualInformation], est::ProbabilitiesEstimator, x, y) → mi::Real ∈ [0, a]
+    mutualinfo([measure::MutualInformation], est::OutcomeSpace, x, y) → mi::Real ∈ [0, a]
 
 Estimate the mutual information between `x` and `y` using the discrete version of the
-given `measure`, using the given [`ProbabilitiesEstimator`](@ref) `est` (which must accept
+given `measure`, using the given [`OutcomeSpace`](@ref) `est` (which must accept
 multivariate data and have an implementation for [`marginal_encodings`](@ref)).
-See examples [here](@ref example_mi_ProbabilitiesEstimator).
+See examples [here](@ref example_mi_OutcomeSpace).
 If `measure` is not given, then the default is `MIShannon()`.
 
 ## Estimators
@@ -102,11 +102,11 @@ distributions from the joint distribution.
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
 | [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
 """
-function mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)
+function mutualinfo(measure::MutualInformation, est::OutcomeSpace, x, y)
     return estimate(measure, est, x, y)
 end
 
-function estimate(est::ProbabilitiesEstimator, x, y)
+function estimate(est::OutcomeSpace, x, y)
     estimate(MIShannon(), est, x, y)
 end
 
@@ -139,7 +139,6 @@ of entropy terms (with different dimensions), without any bias correction.
 | [`Gao`](@ref)                    | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 | [`Goria`](@ref)                  | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 | [`Lord`](@ref)                   | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
-| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |              x              |             x             |           x            |           x            |
 """
 function mutualinfo(est::DifferentialInfoEstimator, x, y)
     return estimate(est, x, y)
@@ -182,9 +181,9 @@ function marginal_entropies_mi3h(measure::MutualInformation, est, x, y)
     X = StateSpaceSet(x)
     Y = StateSpaceSet(y)
     XY = StateSpaceSet(X, Y)
-    HX = entropy(e, est, X)
-    HY = entropy(e, est, Y)
-    HXY = entropy(e, est, XY)
+    HX = information(e, est, X)
+    HY = information(e, est, Y)
+    HXY = information(e, est, XY)
     return HX, HY, HXY
 end
 
@@ -202,8 +201,8 @@ function marginal_entropies_mi3h(measure::MutualInformation,
     eX, eY = marginal_encodings(est, x, y)
     eXY = StateSpaceSet(eX, eY)
     e = measure.e
-    HX = entropy(e, CountOccurrences(), eX)
-    HY = entropy(e, CountOccurrences(), eY)
-    HXY = entropy(e, CountOccurrences(), eXY)
+    HX = information(e, CountOccurrences(), eX)
+    HY = information(e, CountOccurrences(), eY)
+    HXY = information(e, CountOccurrences(), eXY)
     return HX, HY, HXY
 end

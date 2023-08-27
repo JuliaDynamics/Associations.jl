@@ -92,7 +92,7 @@ function check_ηs(ηs)
 end
 
 const VALID_PA_ESTIMATORS = Union{
-    ProbabilitiesEstimator,
+    OutcomeSpace,
     DifferentialInfoEstimator,
     MutualInformationEstimator,
     ConditionalMutualInformationEstimator,

@@ -19,7 +19,7 @@ end
 
 # Base.@deprecate bbnue(
 #     source::AbstractVector, target::AbstractVector,
-#     est::Union{ProbabilitiesEstimator, DifferentialInfoEstimator};
+#     est::Union{OutcomeSpace, DifferentialInfoEstimator};
 #     base = 2, η = 1,
 #     include_instantaneous = true,
 #     method_delay = "ac_min",
@@ -29,7 +29,7 @@ end
 #     ) bbnue(TEShannon(; base), est, source, target; η, include_instantaneous,
 #         method_delay, maxlag, α, nsurr, surr)
 # Base.@deprecate bbnue(source::AbstractVector, target::AbstractVector, cond::AbstractVector,
-#     est::Union{ProbabilitiesEstimator, DifferentialInfoEstimator};
+#     est::Union{OutcomeSpace, DifferentialInfoEstimator};
 #     η, include_instantaneous, method_delay, maxlag, α, nsurr,
 #     surr) bbnue(TEShannon(; base), est, source, target, cond; η, include_instantaneous,
 #         method_delay, maxlag, α, nsurr, surr)

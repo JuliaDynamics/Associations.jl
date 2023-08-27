@@ -40,7 +40,7 @@ struct MITsallisFuruichi{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MITsallisFuruichi, est::Contingency{<:ProbabilitiesEstimator}, x...)
+function estimate(measure::MITsallisFuruichi, est::Contingency{<:OutcomeSpace}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
 end
 
@@ -67,7 +67,7 @@ function estimate(
     return _convert_logunit(mi, ℯ, e.base)
 end
 
-function estimate(measure::MITsallisFuruichi, est::ProbabilitiesEstimator, x, y)
+function estimate(measure::MITsallisFuruichi, est::OutcomeSpace, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
     q = measure.e.q
     return HX + HY - HXY

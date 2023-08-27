@@ -1,8 +1,7 @@
-import ComplexityMeasures: symbolize_for_dispersion
 export marginal_encodings
 
 """
-    marginal_encodings(est::ProbabilitiesEstimator, x::VectorOrStateSpaceSet...)
+    marginal_encodings(est::OutcomeSpace, x::VectorOrStateSpaceSet...)
 
 Encode/discretize each input vector `xᵢ ∈ x` according to a procedure determined by `est`.
 Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@ref)s) will be encoded column-wise,
@@ -47,7 +46,7 @@ function marginally_encode_variable(est::OrdinalPatterns{m}, x::AbstractVector) 
 end
 
 function marginally_encode_variable(est::Dispersion, x::AbstractVector)
-    return symbolize_for_dispersion(est, x)
+    return ComplexityMeasures.symbolize(est, x)
 end
 
 function marginally_encode_variable(

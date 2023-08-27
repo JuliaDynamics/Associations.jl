@@ -21,7 +21,7 @@ where ``p(x, y, z)`` is the joint distribution for ``X``, ``Y`` and ``Z``, and
 
 ## Estimation
 
-PMI can be estimated using any [`ProbabilitiesEstimator`](@ref) that implements
+PMI can be estimated using any [`OutcomeSpace`](@ref) that implements
 [`marginal_encodings`](@ref). This allows estimation of 3D contingency matrices, from
 which relevant probabilities for the PMI formula are extracted. See also [`pmi`](@ref).
 
@@ -33,7 +33,7 @@ may not).
 - `PMI(X, Y, Z) >= CMI(X, Y, Z)` (where CMI is the Shannon CMI). Holds in theory, but
     when estimating PMI, the identity may not hold.
 - `PMI(X, Y, Z) >= 0`. Holds both in theory and for estimation using
-    [`ProbabilitiesEstimator`](@ref)s.
+    [`OutcomeSpace`](@ref)s.
 - `X ⫫ Y | Z => PMI(X, Y, Z) = CMI(X, Y, Z) = 0` (in theory, but not necessarily for
     estimation).
 
@@ -47,12 +47,12 @@ Base.@kwdef struct PMI <: AssociationMeasure
 end
 
 """
-    pmi([measure::CMI], est::ProbabilitiesEstimator, x, y, z) → pmi_est::Real ∈ [0, a)
+    pmi([measure::CMI], est::OutcomeSpace, x, y, z) → pmi_est::Real ∈ [0, a)
 
 Estimate the part mutual information ([`PMI`](@ref); Zhao et al. (2016)[^Zhao2016]).
 
 If `measure` is not given, then the default is `PMI(; base = 2)`.
-With a [`ProbabilitiesEstimator`](@ref), the returned `pmi_est` is guaranteed to be
+With a [`OutcomeSpace`](@ref), the returned `pmi_est` is guaranteed to be
 non-negative.
 
 ## Estimators
@@ -77,7 +77,7 @@ function pmi(x...)
     return estimate(PMI(), x...)
 end
 
-function estimate(measure::PMI, est::Contingency{<:ProbabilitiesEstimator}, x...)
+function estimate(measure::PMI, est::Contingency{<:OutcomeSpace}, x...)
     return estimate(measure, contingency_matrix(est.est, x...))
 end
 
@@ -87,7 +87,7 @@ end
 
 # We explicitly need to construct a contingency matrix, because unlike for e.g. CMI,
 # there's no obvious way to rewrite PMI in terms of sums of entropies.
-function estimate(measure::PMI, est::ProbabilitiesEstimator, x...)
+function estimate(measure::PMI, est::OutcomeSpace, x...)
     return estimate(measure, Contingency(est), x...)
 end
 

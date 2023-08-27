@@ -12,7 +12,7 @@ end
 
 import ComplexityMeasures.ball_volume
 using Neighborhood: search
-function entropy(e::Shannon, est::Faivishevsky, x::AbstractStateSpaceSet{D}) where D
+function information(e::Shannon, est::Faivishevsky, x::AbstractStateSpaceSet{D}) where D
     (; k, w, metric) = est
     N = length(x)
     tree = KDTree(x, Euclidean())
