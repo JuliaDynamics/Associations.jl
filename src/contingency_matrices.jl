@@ -24,7 +24,7 @@ that also keep track of raw frequencies.
 The contingency matrix can be constructed directyly from an `N`-dimensional `frequencies`
 array. Alternatively, the [`contingency_matrix`](@ref) function performs counting for
 you; this works on both raw categorical data, or by first discretizing data using a
-a [`ProbabilitiesEstimator`](@ref).
+a [`OutcomeSpace`](@ref).
 
 ## Description
 
@@ -96,7 +96,7 @@ end
 
 """
     contingency_matrix(x, y, [z, ...]) → c::ContingencyMatrix
-    contingency_matrix(est::ProbabilitiesEstimator, x, y, [z, ...]) → c::ContingencyMatrix
+    contingency_matrix(est::OutcomeSpace, x, y, [z, ...]) → c::ContingencyMatrix
 
 Estimate a multidimensional contingency matrix `c` from input data `x, y, …`, where the
 input data can be of any and different types, as long as `length(x) == length(y) == …`.
@@ -104,104 +104,19 @@ input data can be of any and different types, as long as `length(x) == length(y)
 For already discretized data, use the first method. For continuous data, you want to
 discretize the data before computing the contingency table. You can do
 this manually and then use the first method. Alternatively, you can provide a
-[`ProbabilitiesEstimator`](@ref) as the first
+[`OutcomeSpace`](@ref) as the first
 argument to the constructor. Then the input variables `x, y, …` are discretized
 *separately* according to `est` (*enforcing the same outcome space for all variables*),
 by calling [`marginal_encodings`](@ref).
 """
 function contingency_matrix end
 
-function contingency_matrix(est::ProbabilitiesEstimator, x...)
+function contingency_matrix(est::OutcomeSpace, x...)
     # Enforce identical outcome space for all variables.
     encodings = marginal_encodings(est, x...)
     return contingency_matrix(encodings...)
 end
 
-# For this to work generically, we must map unique elements to integers.
-function contingency_matrix(x...)
-    Ls = length.(x);
-    if !all(Ls .== maximum(Ls))
-        throw(ArgumentError("Input data must have equal lengths. Got lengths $Ls."))
-    end
-
-    # The frequency matrix dimensions are dictated by the number of unique occurring values
-    Ωs = unique_elements.(x)
-    matrix_dims = length.(Ωs);
-
-    # Get marginal probabilities and outcomes
-    #pΩs = [probabilities_and_outcomes(CountOccurrences(), xᵢ) for xᵢ in x]
-    freqs, lmaps = freqtable_equallength(matrix_dims, x...)
-
-    # TODO: Inverse map from integer-encoded outcomes to the original outcomes.
-    # marginal_outcomes = [map(k -> lmap[k], last(pΩ)) for (pΩ, lmap) in zip(pΩs, lmaps)]
-    probs = freqs ./ maximum(Ls)
-    return ContingencyMatrix(
-        probs,
-        freqs,
-    )
-end
-
-unique_elements(x) = unique(x)
-unique_elements(x::AbstractStateSpaceSet) = unique(x.data)
-
-
-function freqtable_equallength(matrix_dims, x...)
-    # Map the input data to integers. This ensures compatibility with *any* input type.
-    # Then, we can simply create a joint `StateSpaceSet{length(x), Int}` and use its elements
-    # as `CartesianIndex`es to update counts.
-    lvl = tolevels.(x)
-    levels = (first(l) for l in lvl)
-    lmaps = [last(l) for l in lvl]
-    X = StateSpaceSet(levels...)
-
-    freqs = zeros(Int, matrix_dims)
-    for ix in to_cartesian(sort(X.data)) # sorted matrix access should be faster.
-        freqs[ix] += 1
-    end
-    return freqs, lmaps
-end
-
-function to_cartesian(x)
-    (CartesianIndex.(xᵢ...) for xᵢ in x)
-end
-
-"""
-    tolevels!(levels, x) → levels, dict
-    tolevels(x) → levels, dict
-
-Apply the bijective map ``f : \\mathcal{Q} \\to \\mathbb{N}^+`` to each `x[i]` and store
-the result in `levels[i]`, where `levels` is a pre-allocated integer vector such that
-`length(x) == length(levels)`.
-
-``\\mathcal{Q}`` can be any space, and each ``q \\in \\mathcal{Q}`` is mapped to a unique
-integer  in the range `1, 2, …, length(unique(x))`. This is useful for integer-encoding
-categorical data such as strings, or other complex data structures.
-
-The single-argument method allocated a `levels` vector internally.
-
-`dict` gives the inverse mapping.
-"""
-function tolevels!(levels, x)
-    @assert length(levels) == length(x)
-    lmap = _levelsmap(x)
-    for i in eachindex(x)
-        levels[i] = lmap[x[i]]
-    end
-    return levels, lmap
-end
-
-function tolevels(x)
-    lmap = _levelsmap(x)
-    levels = zeros(Int, length(x))
-    for i in eachindex(x)
-        levels[i] = lmap[x[i]]
-    end
-    return levels, lmap
-end
-
-# Ugly hack, because levelsmap doesn't work out-of-the-box for statespacesets.
-_levelsmap(x) = levelsmap(x)
-_levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 
 # The following commented-out code below is equivalent to theabove, but muuuch faster.
 # I keep the comments here for, so when I revisit this, I understand *why* it works.

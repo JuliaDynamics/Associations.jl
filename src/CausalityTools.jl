@@ -25,7 +25,7 @@ module CausalityTools
     include("core.jl")
 
     # API
-    include("information/core.jl")
+    include("information/information.jl")
 
     # Specific implementations
     include("methods/infomeasures/infomeasures.jl")

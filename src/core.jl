@@ -1,5 +1,5 @@
 using DelayEmbeddings: AbstractStateSpaceSet
-using ComplexityMeasures: ProbabilitiesEstimator
+using ComplexityMeasures: OutcomeSpace
 const VectorOrStateSpaceSet{D, T} = Union{AbstractVector{T}, AbstractStateSpaceSet{D, T}} where {D, T}
 const ArrayOrStateSpaceSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSpaceSet{D, T}} where {D, T, N}
 

@@ -2,10 +2,10 @@
 # (multivariate) probability mass functions or probability densities. This is
 # the same approach as taken in ComplexityMeasures.jl.
 
-export InformationMeasure
-export InformationMeasureEstimator
+export MultivariateInformationMeasure
+export MultivariateInformationMeasureEstimator
 
-const DiscreteOrDifferentialInfoEstimator = Union{DiscreteInfoEstimator, DifferentialInfoEstimator}
+const DiscreteOrDifferentialInfoEstimator = Union{OutcomeSpace, DiscreteInfoEstimator, DifferentialInfoEstimator}
 
 """
     InformationMeasure <: AssociationMeasure
@@ -35,6 +35,8 @@ Rényi-based mutual information.
 - [`CMIRenyiSarbu`](@ref). Discrete Rényi CMI.
 """
 abstract type MultivariateInformationMeasure <: AssociationMeasure end
+
+abstract type MultivariateInformationMeasureEstimator end
 
 """
     estimate(e::InformationMeasure, est::InformationMeasureEstimator, input::VectorOrStateSpaceSet...)
