@@ -50,7 +50,7 @@ Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
 end
 
 function infer_graph(alg::OCE, x; verbose = true)
-    print_status(OCEInfoMessage(); verbose)
+        print_status(OCEInfoMessage(); verbose)
     return select_parents(alg, x; verbose)
 end
 
@@ -79,18 +79,6 @@ Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT}
     parents::P = Vector{Vector{eltype(1.0)}}(undef, 0)
     parents_js::PJ = Vector{Int}(undef, 0)
     parents_τs::PT = Vector{Int}(undef, 0)
-end
-
-function selected(o::OCESelectedParents)
-    js, τs = o.parents_js, o.parents_τs
-    @assert length(js) == length(τs)
-    return join(["x$(js[i])($(τs[i]))" for i in eachindex(js)], ", ")
-end
-
-function Base.show(io::IO, x::OCESelectedParents)
-    s = ["x$(x.parents_js[i])($(x.parents_τs[i]))" for i in eachindex(x.parents)]
-    all = "x$(x.i)(0) ← $(join(s, ", "))"
-    show(io, all)
 end
 
 function SimpleDiGraph(v::Vector{<:CausalityTools.OCESelectedParents})
@@ -122,12 +110,12 @@ function select_parents(alg::OCE, x, i::Int; verbose = false)
     # Forward search
     ###################################################################
     # 1. Can we find a significant pairwise association?
-    verbose && println("˧ Querying pairwise associations...")
+    verbose && printstyled("˧ Querying pairwise associations...\n"; color = :light_black)
 
     significant_pairwise = select_parent!(alg, parents, τs, js, 𝒫s, xᵢ, i; verbose)
 
     if significant_pairwise
-        verbose && println("˧ Querying new variables conditioned on already selected variables...")
+        verbose && printstyled("˧ Querying new variables conditioned on already selected variables...\n"; color = :light_black)
         # 2. Continue until there are no more significant conditional pairwise associations
         significant_cond = true
         while significant_cond
@@ -230,59 +218,6 @@ function update_parents_and_selected!(parents::OCESelectedParents, 𝒫s, τs, j
     deleteat!(τs, ix)
 end
 
-###################################################################
-# Pretty printing
-###################################################################
-struct OCEInfoMessage end
-function print_status(::OCEInfoMessage; verbose = true)
-    if verbose
-        printstyled("Optimal causation entropy (OCE)\n"; bold = true)
-        printstyled("Notation:\n"; underline = true, color = :default)
-        printstyled("* xᵢ(τ) (target variable at lag τ)\n"; color = :magenta)
-        printstyled("* pⱼ(τ) (candidate variable at lag τ)\n"; color = :cyan)
-        printstyled("* 𝒫 (parent set)\n"; color = :green)
-    end
-end
-
-struct NoVariablesSelected end
-function print_status(::NoVariablesSelected, parents::OCESelectedParents,
-        τs, js, i::Int; verbose = true)
-
-    pairwise = pairwise_test(parents)
-
-    if verbose
-        for (τ, j) in zip(τs, js)
-            printstyled("  x$i(0)"; color = :magenta)
-            printstyled(" ⫫ "; color = :default)
-            printstyled("x$j($τ)"; color = :cyan)
-            printstyled(" | "; color = :default)
-            if pairwise
-                printstyled("∅\n"; color = :green)
-            else
-                # No more associations were found
-                printstyled("{$(selected(parents)))}\n"; color = :green)
-            end
-        end
-    end
-end
-
-struct IndependenceStatus end
-function print_status(::IndependenceStatus, parents::OCESelectedParents,
-        τs, js, ix::Int, i::Int; verbose)
-    pairwise = pairwise_test(parents)
-
-    if verbose
-        printstyled("  x$i(0)"; color = :magenta)
-        printstyled(" !⫫ "; color = :default)
-        printstyled("x$(js[ix])($(τs[ix]))"; color = :cyan)
-        printstyled(" | "; color = :default)
-        if pairwise
-            printstyled("∅\n"; color = :green)
-        else
-            printstyled("{$(selected(parents))}\n"; color = :green)
-        end
-    end
-end
 
 """
     backwards_eliminate!(alg::OCE, parents::OCESelectedParents, x, i; verbose)
@@ -294,7 +229,7 @@ in `x`, given the previously inferred `parents`, which were deduced using parame
 function backwards_eliminate!(alg::OCE, parents::OCESelectedParents, xᵢ, i::Int; verbose)
     length(parents.parents) < 2 && return parents
 
-    verbose && println("˧ Backwards elimination...")
+    verbose && printstyled("˧ Backwards elimination...\n", color = :light_black)
     n_initial = length(parents.parents_js)
     q = 0
     variable_was_eliminated = true
@@ -312,6 +247,7 @@ Inner portion of algorithm 2.2 in Sun et al. (2015). This method is called in an
 while-loop that handles the variable elimination step in their line 3.
 """
 function eliminate_loop!(alg::OCE, parents::OCESelectedParents, xᵢ, i; verbose = false)
+    print_status(EliminationStartInfo(), parents, i; verbose)
     isempty(parents.parents) && return false
     M = length(parents.parents)
     P = parents.parents
@@ -321,23 +257,7 @@ function eliminate_loop!(alg::OCE, parents::OCESelectedParents, xᵢ, i; verbose
         remaining_idxs = setdiff(1:M, k)
         remaining = StateSpaceSet(P[remaining_idxs]...)
         test = independence(alg.ctest, xᵢ, Pj, remaining)
-
-        if verbose
-            τ, j = parents.parents_τs[k], parents.parents_js[k] # Variable currently considered
-            τs = parents.parents_τs
-            js = parents.parents_js
-            src_var = "x$j($τ)"
-            targ_var = "x$i(0)"
-            cond_var = join(["x$(js[r])($(τs[r]))" for r in remaining_idxs], ", ")
-
-            if test.pvalue >= alg.α
-                outcome_msg = "Removing x$(j)($τ) from parent set"
-                println("\t$src_var ⫫ $targ_var | $cond_var → $outcome_msg")
-            else
-                outcome_msg = "Keeping x$(j)($τ) in parent set"
-                println("\t$src_var !⫫ $targ_var | $cond_var → $outcome_msg")
-            end
-        end
+        print_status(EliminationStep(), test, alg, parents, i, remaining_idxs, k; verbose)
 
         # A parent became independent of the target conditional on the remaining parents
         if test.pvalue >= alg.α
@@ -348,6 +268,200 @@ function eliminate_loop!(alg::OCE, parents::OCESelectedParents, xᵢ, i; verbose
             break
         end
     end
-
+    print_status(EliminationEndInfo(), parents, i; verbose)
     return variable_was_eliminated
+end
+
+
+###################################################################
+# Pretty printing
+# -----------------------------------------------------------------
+# We use the function `print_status` for printing everywhere,
+# and just make dummy types like `OCEInfoMessage` to guide where
+# in the procedure we are when printing.
+###################################################################
+
+function print_status(args...; verbose = true, kwargs...)
+    if verbose
+        _print_status(args...; kwargs...)
+    end
+end
+
+# Creating strings with integer subscripts: https://stackoverflow.com/a/46709534
+function subscript(i::Integer)
+    if i<0
+        error("$i is negative")
+    else
+        join('₀'+d for d in reverse(digits(i)))
+    end
+end
+
+function add_subscript(s::AbstractString, i)
+    return s * subscript(i)
+end
+
+function print_condvars(parents::OCESelectedParents)
+    τs = parents.parents_τs
+    js = parents.parents_js
+    n_selected = length(parents.parents)
+    printstyled("{", color = :light_black)
+    for r in 1:n_selected
+        print_lagged(add_subscript("x", js[r]), τs[r]; color = :green)
+        r < n_selected && printstyled(", "; color = :light_black)
+    end
+    printstyled("}", color = :light_black)
+end
+
+struct OCEInfoMessage end
+function _print_status(::OCEInfoMessage)
+    printstyled("Inferring parents using optimal causation entropy (OCE)\n"; bold = true)
+    printstyled("Notation:\n"; underline = true, color = :default)
+    printstyled("  a ⫫ b | c  := `a` is conditionally independent of `b`, given `c`\n";
+        color = :default)
+    printstyled("  a !⫫ b | c := `a` is conditionally dependent of `b`, given `c`\n";
+        color = :default)
+
+    # Target var
+    print_lagged("* xᵢ", "τ"; color =  :magenta)
+    printstyled(" := target variable at lag "; color = :default)
+    printstyled("τ\n", color = :light_blue)
+
+    # Candidate var.
+    print_lagged("* pⱼ", "τ"; color = :cyan)
+    printstyled(" := candidate variable at lag "; color = :default)
+    printstyled("τ\n", color = :light_blue)
+
+    # Parent set
+    print_lagged("* 𝒫ᵢ", "τ"; color = :green)
+    printstyled(" := parent set of "; color = :default)
+    print_lagged("xᵢ", "τ"; color = :magenta)
+    print("\n")
+end
+
+function print_lagged(varᵢ::AbstractString, τ;
+        color = :default,
+        lag_color = :light_blue,
+        parentheses_color = :light_black)
+    printstyled("$varᵢ"; color)
+    printstyled("("; color = parentheses_color)
+    printstyled("$τ"; color = lag_color)
+    printstyled(")"; color = parentheses_color)
+end
+
+struct NoVariablesSelected end
+function _print_status(::NoVariablesSelected, parents::OCESelectedParents,
+        τs, js, i::Int)
+
+    pairwise = pairwise_test(parents)
+
+    for (τ, j) in zip(τs, js)
+        print_lagged("  $(add_subscript("x", i))", 0; color = :magenta)
+        printstyled(" ⫫ "; color = :light_black)
+        print_lagged("$(add_subscript("x", j))", τ; color = :cyan)
+        printstyled(" | "; color = :light_black)
+        if pairwise
+            printstyled("∅\n"; color = :green)
+        else
+            # No more associations were found
+            print_parent_set(parents, i; indent = "", print_name = false)
+        end
+    end
+end
+
+struct IndependenceStatus end
+function _print_status(::IndependenceStatus, parents::OCESelectedParents,
+        τs, js, ix::Int, i::Int)
+    pairwise = pairwise_test(parents)
+    print_lagged("  $(add_subscript("x", i))", 0; color = :magenta)
+    #printstyled((0)"; color = :magenta)
+    printstyled(" !⫫ "; color = :light_black)
+    v = add_subscript("x", js[ix])
+    print_lagged(v, τs[ix]; color = :cyan)
+
+    printstyled(" | "; color = :light_black)
+    if pairwise
+        printstyled("∅\n"; color = :green)
+    else # todo: fix subscripts
+        print_parent_set(parents, i; indent = "", print_name = false)
+    end
+end
+
+# --------------------------
+# Backwards elimination step
+# --------------------------
+struct EliminationStartInfo end
+function _print_status(::EliminationStartInfo, parents::OCESelectedParents, i::Integer)
+    printstyled("  Before elimination, parents of "; color = :light_black)
+    print_lagged(add_subscript("x", i), 0; color = :magenta)
+    printstyled(" are\n"; color = :light_black)
+    print_parent_set(parents, i; indent = "  ", print_name = true)
+    printstyled("  Commencing with backward elimination...\n"; color = :light_black)
+end
+
+struct EliminationEndInfo end
+function _print_status(::EliminationEndInfo, parents, i::Integer)
+    printstyled("  After elimination, parents of "; color = :light_black)
+    print_lagged(add_subscript("x", i), 0; color = :magenta)
+    printstyled(" are\n"; color = :light_black)
+    print_parent_set(parents, i; indent = "  ", print_name = true)
+end
+
+function print_parent_set(parents::OCESelectedParents, i::Integer;
+        indent = "", print_name = false)
+    print_name && print_lagged(indent*add_subscript("𝒫", i), 0; color = :green)
+    print_name && printstyled(" = "; color = :light_black)
+    print_condvars(parents)
+    print("\n")
+end
+
+struct EliminationStep end
+function _print_status(::EliminationStep, test, alg, parents::OCESelectedParents, i::Integer,
+        remaining_idxs, k::Integer)
+
+    τ = parents.parents_τs[k]
+    j = parents.parents_js[k] # Variable currently considered
+
+    if test.pvalue >= alg.α
+        depsymb = " !⫫ "
+        action = "Removing"
+        tofrom = "from"
+    else
+        depsymb = " ⫫ "
+        action = "Keeping"
+        tofrom = "in"
+    end
+    print_lagged(add_subscript("  x", i), 0; color = :magenta)
+    printstyled(depsymb; color = :light_black)
+    print_lagged(add_subscript("x", j), τ; color = :cyan)
+    printstyled(" | "; color = :light_black)
+    # TODO: replace with `print_convar_elimination`
+    print_condvar_elimination(EliminationStep(), parents, remaining_idxs)
+    printstyled(" → $action "; color = :light_black)
+    print_lagged(add_subscript("x", j), τ; color = :cyan)
+    printstyled(" $tofrom parent set\n"; color = :light_black)
+end
+
+function print_condvar_elimination(::EliminationStep, parents::OCESelectedParents,
+        remaining_idxs)
+    τs = parents.parents_τs
+    js = parents.parents_js
+    n_remaining = length(remaining_idxs)
+    printstyled("{", color = :light_black)
+    for r in remaining_idxs
+        print_lagged(add_subscript("x", js[r]), τs[r]; color = :green)
+        if r < n_remaining
+            printstyled(", "; color = :light_black)
+        end
+    end
+    printstyled("}", color = :light_black)
+end
+
+# --------------------------
+# Return type
+# --------------------------
+function Base.show(io::IO, x::OCESelectedParents)
+    #n_vars = length(x.parents)
+    s = ["x$(x.parents_js[i])($(x.parents_τs[i]))" for i in eachindex(x.parents)]
+    all = "x$(x.i)(0) ← $(join(s, ", "))"
+    show(io, all)
 end
