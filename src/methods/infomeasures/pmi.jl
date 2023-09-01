@@ -80,8 +80,7 @@ function pmi(args...)
     return estimate(PMI(), args...)
 end
 
-function estimate(measure::PMI, est::Contingency{<:ProbabilitiesEstimator},
-        x::VecOrSSSet, y::VecOrSSSet, z::VecOrSSSet)
+function estimate(measure::PMI, est::Contingency{<:ProbabilitiesEstimator}, x, y, z)
     return estimate(measure, contingency_matrix(est.est, x, y, z))
 end
 
@@ -91,8 +90,7 @@ end
 
 # We explicitly need to construct a contingency matrix, because unlike for e.g. CMI,
 # there's no obvious way to rewrite PMI in terms of sums of entropies.
-function estimate(measure::PMI, est::ProbabilitiesEstimator,
-        x::VecOrSSSet, y::VecOrSSSet, z::VecOrSSSet)
+function estimate(measure::PMI, est::ProbabilitiesEstimator, x, y, z)
     return estimate(measure, Contingency(est), x, y, z)
 end
 
