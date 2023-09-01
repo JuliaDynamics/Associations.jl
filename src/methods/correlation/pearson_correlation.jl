@@ -27,19 +27,19 @@ respectively.
 struct PearsonCorrelation <: AssociationMeasure end
 
 """
-    pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
+    pearson_correlation(x::VecOrSSSet, y::VecOrSSSet)
 
 Compute the [`PearsonCorrelation`](@ref) between `x` and `y`, which must each be
 1-dimensional.
 """
-function pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
+function pearson_correlation(x::VecOrSSSet, y::VecOrSSSet)
     return estimate(PearsonCorrelation(), x, y)
 end
 
 # Common interface for higher-level methods.
 function estimate(measure::PearsonCorrelation,
-        x::VectorOrStateSpaceSet{1, T},
-        y::VectorOrStateSpaceSet{1, T}) where T
+        x::VecOrSSSet{1, T},
+        y::VecOrSSSet{1, T}) where T
     Lx, Ly = length(x), length(y)
     Lx == Ly || throw(ArgumentError("Inputs `x` and `y` must have same length"))
     x̄ = extract_mean(x)

@@ -9,7 +9,7 @@ defined in (Póczos & Schneider, 2012)[^Póczos2012].
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information. 
+- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information.
 
 ## Definition
 
@@ -37,3 +37,6 @@ struct CMIRenyiPoczos{E <: Renyi} <: ConditionalMutualInformation{E}
         new{E}(e)
     end
 end
+
+min_inputs_vars(::CMIRenyiPoczos) = 3
+max_inputs_vars(::CMIRenyiPoczos) = 3

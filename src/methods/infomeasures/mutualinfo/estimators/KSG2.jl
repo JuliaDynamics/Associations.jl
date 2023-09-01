@@ -75,14 +75,16 @@ struct KraskovStögbauerGrassberger2{MJ, MM} <: MutualInformationEstimator
 end
 const KSG2 = KraskovStögbauerGrassberger2
 
-function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::VectorOrStateSpaceSet...)
+function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger2, x::VecOrSSSet...)
+    verify_number_of_inputs_vars(measure, length(x))
+
     e = measure.e
     @assert length(x) >= 2 ||
         error("Need at leats two input StateSpaceSets to compute mutual information between them.")
 
     (; k, w, metric_joint, metric_marginals) = est
     joint = StateSpaceSet(x...)
-    marginals = StateSpaceSet.(x)
+    marginals = map(xᵢ -> StateSpaceSet(xᵢ), x)
     M = length(x)
     N = length(joint)
 

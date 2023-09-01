@@ -76,12 +76,12 @@ struct MIShannon{E <: Shannon} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MIShannon, est::Contingency{<:ProbabilitiesEstimator}, x...)
-    return estimate(measure, contingency_matrix(est.est, x...))
+function estimate(measure::MIShannon, est::Contingency{<:ProbabilitiesEstimator}, x, y)
+    return estimate(measure, contingency_matrix(est.est, x, y))
 end
 
-function estimate(measure::MIShannon, est::Contingency{<:Nothing}, x...)
-    return estimate(measure, contingency_matrix(x...))
+function estimate(measure::MIShannon, est::Contingency{<:Nothing}, x, y)
+    return estimate(measure, contingency_matrix(x, y))
 end
 
 function estimate(measure::MIShannon, pxy::ContingencyMatrix{T, 2}) where {T}

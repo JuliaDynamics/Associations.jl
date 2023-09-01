@@ -18,7 +18,7 @@ Base.@kwdef struct Evans{M} <: MutualInformationEstimator
     metric::M = Chebyshev()
 end
 
-function estimate(def::MIShannonDifferential, est::Evans, x::VectorOrStateSpaceSet...)
+function estimate(def::MIShannonDifferential, est::Evans, x::VecOrSSSet...)
     e = def.e
     @assert length(x) >= 2 ||
         error("Need at leats two input StateSpaceSets to compute mutual information between them.")

@@ -51,6 +51,7 @@ Base.@kwdef struct Lindner{B} <: TransferEntropyEstimator
 end
 
 function estimate(measure::TEShannon, est::Lindner, x::AbstractVector...)
+    verify_number_of_inputs_vars(measure, length(x))
     S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
     return estimate(measure, est, S, T, T⁺, C)
 end

@@ -27,8 +27,8 @@ Returns a test `summary`, whose type depends on `test`.
 - [`LocalPermutationTest`](@ref).
 - [`JointDistanceDistributionTest`](@ref).
 """
-function independence(test, args...; kwargs...)
-    error("No concrete implementation for $(typeof(test)) test yet")
+function independence(test::IndependenceTest, x...)
+    throw(ArgumentError("No concrete implementation for $(typeof(test)) test yet"))
 end
 
 function pvalue_text_summary(test::IndependenceTestResult)

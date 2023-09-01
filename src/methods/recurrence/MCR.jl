@@ -58,6 +58,8 @@ Base.@kwdef struct MCR{R, M} <: AssociationMeasure
     metric::M = Euclidean()
 end
 
+max_inputs_vars(::MCR) = 3
+
 function estimate(measure::MCR, x, y)
     (; r, metric) = measure
     N = length(x)

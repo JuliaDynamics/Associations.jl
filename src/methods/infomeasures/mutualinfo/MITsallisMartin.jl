@@ -9,7 +9,7 @@ The discrete Tsallis mutual information from Martin et al. (2005)[^Martin2004].
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
 
 ## Description
 
@@ -38,12 +38,12 @@ struct MITsallisMartin{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MITsallisMartin, est::Contingency{<:ProbabilitiesEstimator}, x...)
-    return estimate(measure, contingency_matrix(est.est, x...))
+function estimate(measure::MITsallisMartin, est::Contingency{<:ProbabilitiesEstimator}, x, y)
+    return estimate(measure, contingency_matrix(est.est, x, y))
 end
 
-function estimate(measure::MITsallisMartin, est::Contingency{<:Nothing}, x...)
-    return estimate(measure, contingency_matrix(x...))
+function estimate(measure::MITsallisMartin, est::Contingency{<:Nothing}, x, y)
+    return estimate(measure, contingency_matrix(x, y))
 end
 
 # This is definition 3 in Martin et al. (2004), but with pᵢ replaced by the joint

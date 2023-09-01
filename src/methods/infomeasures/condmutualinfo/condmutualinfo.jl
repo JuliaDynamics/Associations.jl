@@ -16,6 +16,9 @@ The supertype of all conditional mutual information measures. Concrete subtypes 
 abstract type ConditionalMutualInformation{E} <: InformationMeasure end
 const CMI{E} = ConditionalMutualInformation{E}
 
+min_inputs_vars(::CMI) = 3
+max_inputs_vars(::CMI) = 3
+
 """
     ConditionalMutualInformationEstimator <: InformationEstimator
     CMIEstimator # alias

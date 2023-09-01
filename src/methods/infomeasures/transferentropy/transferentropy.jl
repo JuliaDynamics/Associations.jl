@@ -17,6 +17,8 @@ The supertype of all transfer entropy measures. Concrete subtypes are
 """
 abstract type TransferEntropy{E, EMB} <: DirectedAssociationMeasure end
 
+max_inputs_vars(::TransferEntropy) = 3
+
 """
 The supertype of all dedicated transfer entropy estimators.
 """

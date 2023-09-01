@@ -72,6 +72,8 @@ struct TEShannon{E <: Shannon, EMB} <: TransferEntropy{E, EMB}
     # TODO: add constructor that automatically determines the embedding.
 end
 
+max_inputs_vars(::TEShannon) = 3
+
 # function transferentropy(
 #         est::Union{
 #             ConditionalMutualInformationEstimator,

@@ -164,6 +164,10 @@ end
 # KD-trees and do marginal searches for all marginals all the time.
 function independence(test::LocalPermutationTest, x, y, z)
     measure, est, nshuffles = test.measure, test.est, test.nshuffles
+
+    # Make sure that the measure is compatible with the input data.
+    verify_number_of_inputs_vars(measure, 3)
+
     X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
     N = length(X)
@@ -178,6 +182,7 @@ end
 # computing the test statistic.
 function permuted_Îs(X, Y, Z, measure, est, test)
     rng, kperm, nshuffles, replace, w = test.rng, test.kperm, test.nshuffles, test.replace, test.w
+
     N = length(X)
     test.kperm < N || throw(ArgumentError("kperm must be smaller than input data length"))
 

@@ -43,7 +43,7 @@ function marginal_probs_from_μ(seleced_axes, visited_bins, iv::InvariantMeasure
 end
 
 
-function _marginal_encodings(encoder::RectangularBinEncoding, x::VectorOrStateSpaceSet...)
+function _marginal_encodings(encoder::RectangularBinEncoding, x::VecOrSSSet...)
     X = StateSpaceSet(StateSpaceSet.(x)...)
     bins = [vec(encode_as_tuple(encoder, pt))' for pt in X]
     joint_bins = reduce(vcat, bins)

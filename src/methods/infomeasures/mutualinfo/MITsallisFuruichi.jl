@@ -40,12 +40,12 @@ struct MITsallisFuruichi{E <: Tsallis} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MITsallisFuruichi, est::Contingency{<:ProbabilitiesEstimator}, x...)
-    return estimate(measure, contingency_matrix(est.est, x...))
+function estimate(measure::MITsallisFuruichi, est::Contingency{<:ProbabilitiesEstimator}, x, y)
+    return estimate(measure, contingency_matrix(est.est, x, y))
 end
 
-function estimate(measure::MITsallisFuruichi, est::Contingency{<:Nothing}, x...)
-    return estimate(measure, contingency_matrix(x...))
+function estimate(measure::MITsallisFuruichi, est::Contingency{<:Nothing}, x, y)
+    return estimate(measure, contingency_matrix(x, y))
 end
 
 function estimate(

@@ -46,6 +46,9 @@ Base.@kwdef struct PMI <: AssociationMeasure
     base::Real = 2
 end
 
+min_inputs_vars(::PMI) = 3
+max_inputs_vars(::PMI) = 3
+
 """
     pmi([measure::CMI], est::ProbabilitiesEstimator, x, y, z) → pmi_est::Real ∈ [0, a)
 
@@ -69,26 +72,28 @@ non-negative.
     quantifying direct associations in networks. Proceedings of the National Academy
     of Sciences, 113(18), 5130-5135.
 """
-function pmi(measure::PMI, x...)
-    return estimate(measure, x...)
+function pmi(measure::PMI, args...)
+    return estimate(measure, args...)
 end
 
-function pmi(x...)
-    return estimate(PMI(), x...)
+function pmi(args...)
+    return estimate(PMI(), args...)
 end
 
-function estimate(measure::PMI, est::Contingency{<:ProbabilitiesEstimator}, x...)
-    return estimate(measure, contingency_matrix(est.est, x...))
+function estimate(measure::PMI, est::Contingency{<:ProbabilitiesEstimator},
+        x::VecOrSSSet, y::VecOrSSSet, z::VecOrSSSet)
+    return estimate(measure, contingency_matrix(est.est, x, y, z))
 end
 
-function estimate(measure::PMI, est::Contingency{<:Nothing}, x...)
-    return estimate(measure, contingency_matrix(CountOccurrences(), x...))
+function estimate(measure::PMI, est::Contingency{<:Nothing}, x, y, z)
+    return estimate(measure, contingency_matrix(CountOccurrences(), x, y, z))
 end
 
 # We explicitly need to construct a contingency matrix, because unlike for e.g. CMI,
 # there's no obvious way to rewrite PMI in terms of sums of entropies.
-function estimate(measure::PMI, est::ProbabilitiesEstimator, x...)
-    return estimate(measure, Contingency(est), x...)
+function estimate(measure::PMI, est::ProbabilitiesEstimator,
+        x::VecOrSSSet, y::VecOrSSSet, z::VecOrSSSet)
+    return estimate(measure, Contingency(est), x, y, z)
 end
 
 function estimate(

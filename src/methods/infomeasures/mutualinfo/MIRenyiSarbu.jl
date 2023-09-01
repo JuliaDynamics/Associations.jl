@@ -40,12 +40,12 @@ struct MIRenyiSarbu{E <: Renyi} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MIRenyiSarbu, est::Contingency{<:ProbabilitiesEstimator}, x...)
-    return estimate(measure, contingency_matrix(est.est, x...))
+function estimate(measure::MIRenyiSarbu, est::Contingency{<:ProbabilitiesEstimator}, x, y)
+    return estimate(measure, contingency_matrix(est.est, x, y))
 end
 
-function estimate(measure::MIRenyiSarbu, est::Contingency{<:Nothing}, x...)
-    return estimate(measure, contingency_matrix(x...))
+function estimate(measure::MIRenyiSarbu, est::Contingency{<:Nothing}, x, y)
+    return estimate(measure, contingency_matrix(x, y))
 end
 
 function estimate(measure::MIRenyiSarbu, pxy::ContingencyMatrix{T, 2}) where {T}

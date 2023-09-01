@@ -40,19 +40,22 @@ where ``\\hat{P} = \\hat{\\Sigma}^{-1}`` is the sample precision matrix.
 """
 struct PartialCorrelation <: AssociationMeasure end
 
+min_inputs_vars(::PartialCorrelation) = 3
+max_inputs_vars(::PartialCorrelation) = Inf
+
 """
-    partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
-        z::VectorOrStateSpaceSet...)
+    partial_correlation(x::VecOrSSSet, y::VecOrSSSet,
+        z::VecOrSSSet...)
 
 Compute the [`PartialCorrelation`](@ref) between `x` and `y`, given `z`.
 """
-function partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::ArrayOrStateSpaceSet...)
+function partial_correlation(x::VecOrSSSet, y::VecOrSSSet, z::ArrayOrSSSet...)
     return estimate(PartialCorrelation(), x, y, z...)
 end
 
 # Compatibility with `independence`
-function estimate(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
-        conds::ArrayOrStateSpaceSet...)
+function estimate(::PartialCorrelation, x::VecOrSSSet, y::VecOrSSSet,
+        conds::ArrayOrSSSet...)
     X, Y, Z = construct_partialcor_datasets(x, y, conds...)
     D = StateSpaceSet(X, Y, Z)
     cov = fastcov(D)
@@ -60,8 +63,8 @@ function estimate(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrSta
     return partial_correlation_from_precision(precision_matrix, 1, 2)
 end
 
-function construct_partialcor_datasets(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
-        conds::ArrayOrStateSpaceSet...)
+function construct_partialcor_datasets(x::VecOrSSSet, y::VecOrSSSet,
+        conds::ArrayOrSSSet...)
     dimension(x) == 1 || throw(ArgumentError("Input `x` must be 1-dimensional"))
     dimension(y) == 1 || throw(ArgumentError("Input `y` must be 1-dimensional"))
     X, Y = StateSpaceSet(x), StateSpaceSet(y)

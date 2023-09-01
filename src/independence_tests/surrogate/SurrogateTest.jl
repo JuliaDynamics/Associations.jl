@@ -129,6 +129,10 @@ end
 # conditional mutual information.
 function independence(test::SurrogateTest, x, y, z)
     (; measure, est, rng, surrogate, nshuffles) = test
+
+    # Make sure that the measure is compatible with the input data.
+    verify_number_of_inputs_vars(measure, 3)
+
     X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
     N = length(x)
@@ -145,6 +149,10 @@ end
 
 function independence(test::SurrogateTest, x, y)
     (; measure, est, rng, surrogate, nshuffles) = test
+
+    # Make sure that the measure is compatible with the input data.
+    verify_number_of_inputs_vars(measure, 2)
+
     X, Y = StateSpaceSet(x), StateSpaceSet(y)
     @assert length(X) == length(Y)
     N = length(x)

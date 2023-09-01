@@ -99,11 +99,11 @@ Base.@kwdef struct SMeasure{M, TM} <: AssociationMeasure
 end
 
 """
-    s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
+    s_measure(measure::SMeasure, x::VecOrSSSet, y::VecOrSSSet)
 
 Compute the [`SMeasure`](@ref) from source `x` to target `y`.
 """
-function s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
+function s_measure(measure::SMeasure, x::VecOrSSSet, y::VecOrSSSet)
     return estimate(measure, x, y)
 end
 
