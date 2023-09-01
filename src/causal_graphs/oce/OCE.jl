@@ -153,60 +153,89 @@ function prepare_embeddings(alg::OCE, x, i)
     return τs, js, 𝒫s
 end
 
-
-function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i::Int; verbose = true)
-    # Have any parents been identified yet?
+function pairwise_test(parents::OCESelectedParents)
+    # Have any parents been identified yet? If not, then we're doing pairwise tests.
     pairwise = isempty(parents.parents)
 
+    return pairwise
+end
+
+function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i::Int; verbose = true)
     # If there are no potential parents to pick from, return immediately.
     isempty(𝒫s) && return false
 
-    # Configure estimation and independence testing function calls, which differ in the
-    # number of arguments depending on whether we're doing the pairwise or conditional case.
-    if !pairwise
-        P = StateSpaceSet(parents.parents...)
-        f = (measure, est, xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ, P)
-        findep = (test, xᵢ, Pix) -> independence(test, xᵢ, Pix, P)
-    else
-        f = (measure, est, xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ)
-        findep = (test, xᵢ, Pix) -> independence(test, xᵢ, Pix)
-    end
+    # Anonymous two-argument functions for computing raw measure and performing
+    # independence tests, taking care of conditioning on parents when necessary.
+    compute_raw_measure, test_independence = rawmeasure_and_independencetest(alg, parents)
 
     # Compute the measure without significance testing first. This avoids unnecessary
     # independence testing, which takes a lot of time.
     Is = zeros(length(𝒫s))
     for (i, Pⱼ) in enumerate(𝒫s)
-        Is[i] = f(alg.utest.measure, alg.utest.est, xᵢ, Pⱼ)
+        Is[i] = compute_raw_measure(xᵢ, Pⱼ)
     end
 
-    # Sort variables according to maximal measure and select the first lagged variable that
-    # gives significant association with the target variable.
-    maximize_sortidxs = sortperm(Is, rev = true)
-    n_checked = 0
-    n_potential_vars = length(𝒫s)
+    # First sort variables according to maximal measure. Then, we select the first lagged
+    # variable that gives significant association with the target variable.
+    idxs_that_maximize_measure = sortperm(Is, rev = true)
+
+    n_checked, n_potential_vars = 0, length(𝒫s)
     while n_checked < n_potential_vars
         n_checked += 1
-        ix = maximize_sortidxs[n_checked]
+        ix = idxs_that_maximize_measure[n_checked]
         if Is[ix] > 0
-            # findep takes into account the conditioning set too if it is non-empty.
-            result = findep(alg.utest, xᵢ, 𝒫s[ix])
+            result = test_independence(xᵢ, 𝒫s[ix])
             if pvalue(result) < alg.α
-                if verbose && !pairwise
-                    println("\tx$i(0) !⫫ x$(js[ix])($(τs[ix])) | $(selected(parents))")
-                elseif verbose && pairwise
-                    println("\tx$i(0) !⫫ x$(js[ix])($(τs[ix])) | ∅")
-                end
-                push!(parents.parents, 𝒫s[ix])
-                push!(parents.parents_js, js[ix])
-                push!(parents.parents_τs, τs[ix])
-                deleteat!(𝒫s, ix)
-                deleteat!(js, ix)
-                deleteat!(τs, ix)
+                print_status(IndependenceStatus(), parents, τs, js, ix, i; verbose)
+                update_parents_and_selected!(parents, 𝒫s, τs, js, ix)
                 return true
             end
         end
     end
-    # If we reach this stage, no variables have been selected. Print an informative message.
+
+    # If we reach this stage, no variables have been selected.
+    print_status(NoVariablesSelected(), parents, τs, js, i; verbose)
+    return false
+end
+
+# For pairwise cases, we don't need to condition on any parents. For conditional
+# cases, we must condition on the parents that have already been selected (`P`).
+# The measures, estimators and independence tests are different for the pairwise
+# and conditional case.
+# This just defines the functions `compute_raw_measure` and
+# `test_independence` so that they only need two input arguments, ensuring
+# that `P` is always conditioned on when relevant. The two functions are returned.
+function rawmeasure_and_independencetest(alg, parents::OCESelectedParents)
+    if pairwise_test(parents)
+        measure, est = alg.utest.measure, alg.utest.est
+        compute_raw_measure = (xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ)
+        test_independence = (xᵢ, Pix) -> independence(alg.utest, xᵢ, Pix)
+    else
+        measure, est = alg.ctest.measure, alg.ctest.est
+        P = StateSpaceSet(parents.parents...)
+        compute_raw_measure = (xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ, P)
+        test_independence = (xᵢ, Pix) -> independence(alg.ctest, xᵢ, Pix, P)
+    end
+    return compute_raw_measure, test_independence
+end
+
+function update_parents_and_selected!(parents::OCESelectedParents, 𝒫s, τs, js, ix::Int)
+    push!(parents.parents, 𝒫s[ix])
+    push!(parents.parents_js, js[ix])
+    push!(parents.parents_τs, τs[ix])
+    deleteat!(𝒫s, ix)
+    deleteat!(js, ix)
+    deleteat!(τs, ix)
+end
+
+###################################################################
+# Pretty printing
+###################################################################
+struct NoVariablesSelected end
+function print_status(::NoVariablesSelected, parents::OCESelectedParents,
+        τs, js, i::Int; verbose = true)
+
+    pairwise = pairwise_test(parents)
     if verbose && !pairwise
         # No more associations were found
         s = ["x$i(1) ⫫ x$j($τ) | $(selected(parents)))" for (τ, j) in zip(τs, js)]
@@ -216,7 +245,18 @@ function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i::Int; verbose
         s = ["x$i(0) ⫫ x$j($τ) | ∅)" for (τ, j) in zip(τs, js)]
         println("\t$(join(s, "\n\t"))")
     end
-    return false
+end
+
+struct IndependenceStatus end
+function print_status(::IndependenceStatus, parents::OCESelectedParents,
+        τs, js, ix::Int, i::Int; verbose)
+    if verbose
+        if pairwise_test(parents)
+            println("\tx$i(0) !⫫ x$(js[ix])($(τs[ix])) | ∅")
+        else
+            println("\tx$i(0) !⫫ x$(js[ix])($(τs[ix])) | $(selected(parents))")
+        end
+    end
 end
 
 """
