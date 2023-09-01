@@ -105,7 +105,7 @@ function Base.show(io::IO, test::CorrTestResult)
 end
 
 const VectorOr1D{D} = Union{AbstractVector, AbstractDataset{D}} where D
-function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrSSSet...)
+function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrStateSpaceSet...)
     if isempty(z)
         ρ = estimate(PearsonCorrelation(), x, y)
         z = fishers_z(ρ)

@@ -2,7 +2,7 @@
 export s_measure
 
 """
-    s_measure(measure::SMeasure, x::VecOrSSSet, y::VecOrSSSet) → s ∈ [0, 1]
+    s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet) → s ∈ [0, 1]
 
 Compute the given `measure` to quantify the directional dependence between
 univariate/multivariate time series `x` and `y`.
@@ -29,7 +29,7 @@ s_measure(m, x, y)
 ```
 
 """
-function s_measure(x::VecOrSSSet, y::VecOrSSSet; kwargs...)
+function s_measure(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet; kwargs...)
     if !isempty(kwargs)
         @warn(
             "Providing keywords to `s_measure` is deprecated. " *

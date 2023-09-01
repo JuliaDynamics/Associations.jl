@@ -44,18 +44,18 @@ min_inputs_vars(::PartialCorrelation) = 3
 max_inputs_vars(::PartialCorrelation) = Inf
 
 """
-    partial_correlation(x::VecOrSSSet, y::VecOrSSSet,
-        z::VecOrSSSet...)
+    partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
+        z::VectorOrStateSpaceSet...)
 
 Compute the [`PartialCorrelation`](@ref) between `x` and `y`, given `z`.
 """
-function partial_correlation(x::VecOrSSSet, y::VecOrSSSet, z::ArrayOrSSSet...)
+function partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::ArrayOrStateSpaceSet...)
     return estimate(PartialCorrelation(), x, y, z...)
 end
 
 # Compatibility with `independence`
-function estimate(::PartialCorrelation, x::VecOrSSSet, y::VecOrSSSet,
-        conds::ArrayOrSSSet...)
+function estimate(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
+        conds::ArrayOrStateSpaceSet...)
     X, Y, Z = construct_partialcor_datasets(x, y, conds...)
     D = StateSpaceSet(X, Y, Z)
     cov = fastcov(D)
@@ -63,8 +63,8 @@ function estimate(::PartialCorrelation, x::VecOrSSSet, y::VecOrSSSet,
     return partial_correlation_from_precision(precision_matrix, 1, 2)
 end
 
-function construct_partialcor_datasets(x::VecOrSSSet, y::VecOrSSSet,
-        conds::ArrayOrSSSet...)
+function construct_partialcor_datasets(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
+        conds::ArrayOrStateSpaceSet...)
     dimension(x) == 1 || throw(ArgumentError("Input `x` must be 1-dimensional"))
     dimension(y) == 1 || throw(ArgumentError("Input `y` must be 1-dimensional"))
     X, Y = StateSpaceSet(x), StateSpaceSet(y)

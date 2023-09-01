@@ -67,11 +67,11 @@ Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
 end
 
 """
-    l_measure(measure::LMeasure, x::VecOrSSSet, y::VecOrSSSet)
+    l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
 
 Compute the [`LMeasure`](@ref) from source `x` to target `y`.
 """
-function l_measure(measure::LMeasure, x::VecOrSSSet, y::VecOrSSSet)
+function l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     return estimate(measure, x, y)
 end
 

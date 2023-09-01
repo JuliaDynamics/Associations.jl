@@ -54,11 +54,11 @@ Base.@kwdef struct HMeasure{M, TM} <: AssociationMeasure
 end
 
 """
-    h_measure(measure::HMeasure, x::VecOrSSSet, y::VecOrSSSet)
+    h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
 
 Compute the [`HMeasure`](@ref) from source `x` to target `y`.
 """
-function h_measure(measure::HMeasure, x::VecOrSSSet, y::VecOrSSSet)
+function h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     return estimate(measure, x, y)
 end
 

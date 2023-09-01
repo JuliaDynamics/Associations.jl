@@ -53,12 +53,12 @@ See also: [`DistanceCorrelation`](@ref).
     Székely, G. J., & Rizzo, M. L. (2014). Partial distance correlation with methods for
     dissimilarities.
 """
-function distance_correlation(x::ArrayOrSSSet, y::ArrayOrSSSet)
+function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet)
     return estimate(DistanceCorrelation(), x, y)
 end
 
-function distance_correlation(x::ArrayOrSSSet, y::ArrayOrSSSet,
-        z::ArrayOrSSSet)
+function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet,
+        z::ArrayOrStateSpaceSet)
     return estimate(DistanceCorrelation(), x, y, z)
 end
 
@@ -93,7 +93,7 @@ covariance `pdcov`.
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
     dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
 """
-function distance_covariance(X::ArrayOrSSSet, Y::ArrayOrSSSet)
+function distance_covariance(X::ArrayOrStateSpaceSet, Y::ArrayOrStateSpaceSet)
     x = StateSpaceSet(X)
     y = StateSpaceSet(Y)
     Lx, Ly = length(x), length(y)
@@ -125,7 +125,7 @@ function distance_covariance(X::ArrayOrSSSet, Y::ArrayOrSSSet)
 
     return 𝒱ₙ²
 end
-distance_covariance(x::ArrayOrSSSet) = distance_variance(StateSpaceSet(x))
+distance_covariance(x::ArrayOrStateSpaceSet) = distance_variance(StateSpaceSet(x))
 
 """
     distance_variance(x) → dvar::Real
@@ -137,7 +137,7 @@ for StateSpaceSet `x`.
     Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
     dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
 """
-function distance_variance(X::ArrayOrSSSet)
+function distance_variance(X::ArrayOrStateSpaceSet)
     x = StateSpaceSet(X)
     N = length(x)
     A = pairwise(Euclidean(), StateSpaceSet(x))
@@ -187,7 +187,7 @@ function inner_prod(a, b)
     return 1 / (N * (N - 3)) * ab
 end
 
-function distance_covariance(X::ArrayOrSSSet, Y::ArrayOrSSSet, Z::ArrayOrSSSet)
+function distance_covariance(X::ArrayOrStateSpaceSet, Y::ArrayOrStateSpaceSet, Z::ArrayOrStateSpaceSet)
     Lx, Ly, Lz = length(X), length(Y), length(Z)
     Lx == Ly == Lz || throw(ArgumentError("Input X, Y and Z must have same lengths."))
     N = Lx

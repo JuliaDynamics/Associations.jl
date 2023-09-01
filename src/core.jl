@@ -1,7 +1,7 @@
 using DelayEmbeddings: AbstractStateSpaceSet
 using ComplexityMeasures: ProbabilitiesEstimator
-const VecOrSSSet{D, T} = Union{AbstractVector{T}, AbstractStateSpaceSet{D, T}} where {D, T}
-const ArrayOrSSSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSpaceSet{D, T}} where {D, T, N}
+const VectorOrStateSpaceSet{D, T} = Union{AbstractVector{T}, AbstractStateSpaceSet{D, T}} where {D, T}
+const ArrayOrStateSpaceSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSpaceSet{D, T}} where {D, T, N}
 
 export AssociationMeasure
 export DirectedAssociationMeasure

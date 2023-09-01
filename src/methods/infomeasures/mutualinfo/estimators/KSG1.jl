@@ -52,7 +52,7 @@ struct KraskovStögbauerGrassberger1{MJ, MM} <: MutualInformationEstimator
     end
 end
 
-function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::VecOrSSSet...)
+function estimate(measure::MIShannon, est::KraskovStögbauerGrassberger1, x::VectorOrStateSpaceSet...)
     verify_number_of_inputs_vars(measure, length(x))
 
     e = measure.e

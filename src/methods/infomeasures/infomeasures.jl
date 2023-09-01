@@ -45,7 +45,7 @@ Rényi-based mutual information.
 abstract type InformationMeasure <: AssociationMeasure end
 
 """
-    estimate(e::EntropyDefinition, est::InformationMeasureEstimator, input::VecOrSSSet...)
+    estimate(e::EntropyDefinition, est::InformationMeasureEstimator, input::VectorOrStateSpaceSet...)
 
 Given some `input` data, estimate some information measure using the given
 [`InformationMeasureEstimator`](@ref), with respect to the generalized entropy `e`.

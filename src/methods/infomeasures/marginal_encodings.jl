@@ -2,7 +2,7 @@ import ComplexityMeasures: symbolize_for_dispersion
 export marginal_encodings
 
 """
-    marginal_encodings(est::ProbabilitiesEstimator, x::VecOrSSSet...)
+    marginal_encodings(est::ProbabilitiesEstimator, x::VectorOrStateSpaceSet...)
 
 Encode/discretize each input vector `xᵢ ∈ x` according to a procedure determined by `est`.
 Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@ref)s) will be encoded column-wise,
@@ -29,7 +29,7 @@ way of estimating the [`ContingencyMatrix`](@ref)
 """
 function marginal_encodings end
 
-function marginal_encodings(est, x::VecOrSSSet...)
+function marginal_encodings(est, x::VectorOrStateSpaceSet...)
     return marginally_encode_variable.(Ref(est), x)
 end
 
@@ -67,7 +67,7 @@ end
 # that are not derived from the same joint distribution, which would hugely increase
 # bias, because we're not guaranteed cancellation between entropy terms
 # in higher-level methods.
-function marginal_encodings(est::ValueHistogram{<:RectangularBinning}, x::VecOrSSSet...)
+function marginal_encodings(est::ValueHistogram{<:RectangularBinning}, x::VectorOrStateSpaceSet...)
     X = StateSpaceSet(StateSpaceSet.(x)...)
     encoder = RectangularBinEncoding(est.binning, X)
 
