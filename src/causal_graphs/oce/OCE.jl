@@ -50,12 +50,14 @@ Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
 end
 
 function infer_graph(alg::OCE, x; verbose = true)
+    print_status(OCEInfoMessage(); verbose)
     return select_parents(alg, x; verbose)
 end
 
 function infer_graph(alg::OCE, x::AbstractDataset; verbose = true)
     return infer_graph(alg, columns(x); verbose)
 end
+
 
 """
     select_parents(alg::OCE, x)
@@ -108,7 +110,8 @@ end
 function select_parents(alg::OCE, x, i::Int; verbose = false)
     τs, js, 𝒫s = prepare_embeddings(alg, x, i)
 
-    verbose && println("\nInferring parents for x$i(0)...")
+    verbose && printstyled("\nInferring parents for "; color = :default)
+    verbose && printstyled("x$i(0)\n"; color = :magenta)
     # Account for the fact that the `𝒫ⱼ ∈ 𝒫s` are embedded. This means that some points are
     # lost from the `xᵢ`s.
     xᵢ = @views x[i][alg.τmax+1:end]
@@ -138,7 +141,6 @@ function select_parents(alg::OCE, x, i::Int; verbose = false)
     end
     return parents
 end
-
 
 function prepare_embeddings(alg::OCE, x, i)
     # Preliminary parents
@@ -231,30 +233,53 @@ end
 ###################################################################
 # Pretty printing
 ###################################################################
+struct OCEInfoMessage end
+function print_status(::OCEInfoMessage; verbose = true)
+    if verbose
+        printstyled("Optimal causation entropy (OCE)\n"; bold = true)
+        printstyled("Notation:\n"; underline = true, color = :default)
+        printstyled("* xᵢ(τ) (target variable at lag τ)\n"; color = :magenta)
+        printstyled("* pⱼ(τ) (candidate variable at lag τ)\n"; color = :cyan)
+        printstyled("* 𝒫 (parent set)\n"; color = :green)
+    end
+end
+
 struct NoVariablesSelected end
 function print_status(::NoVariablesSelected, parents::OCESelectedParents,
         τs, js, i::Int; verbose = true)
 
     pairwise = pairwise_test(parents)
-    if verbose && !pairwise
-        # No more associations were found
-        s = ["x$i(1) ⫫ x$j($τ) | $(selected(parents)))" for (τ, j) in zip(τs, js)]
-        println("\t$(join(s, "\n\t"))")
-    end
-    if verbose && pairwise
-        s = ["x$i(0) ⫫ x$j($τ) | ∅)" for (τ, j) in zip(τs, js)]
-        println("\t$(join(s, "\n\t"))")
+
+    if verbose
+        for (τ, j) in zip(τs, js)
+            printstyled("  x$i(0)"; color = :magenta)
+            printstyled(" ⫫ "; color = :default)
+            printstyled("x$j($τ)"; color = :cyan)
+            printstyled(" | "; color = :default)
+            if pairwise
+                printstyled("∅\n"; color = :green)
+            else
+                # No more associations were found
+                printstyled("{$(selected(parents)))}\n"; color = :green)
+            end
+        end
     end
 end
 
 struct IndependenceStatus end
 function print_status(::IndependenceStatus, parents::OCESelectedParents,
         τs, js, ix::Int, i::Int; verbose)
+    pairwise = pairwise_test(parents)
+
     if verbose
-        if pairwise_test(parents)
-            println("\tx$i(0) !⫫ x$(js[ix])($(τs[ix])) | ∅")
+        printstyled("  x$i(0)"; color = :magenta)
+        printstyled(" !⫫ "; color = :default)
+        printstyled("x$(js[ix])($(τs[ix]))"; color = :cyan)
+        printstyled(" | "; color = :default)
+        if pairwise
+            printstyled("∅\n"; color = :green)
         else
-            println("\tx$i(0) !⫫ x$(js[ix])($(τs[ix])) | $(selected(parents))")
+            printstyled("{$(selected(parents))}\n"; color = :green)
         end
     end
 end
