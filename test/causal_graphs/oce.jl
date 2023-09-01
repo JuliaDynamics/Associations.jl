@@ -38,3 +38,7 @@ function at_least_one_true_positive(true_edges, estimated_graph)
 end
 
 @test at_least_one_true_positive([SimpleEdge(1, 2), SimpleEdge(2, 1)], g)
+
+# printing
+@test occursin(repr("text/plain", parents[1]), "x₁")
+@test occursin(repr("text/plain", parents[2]), "x₂")

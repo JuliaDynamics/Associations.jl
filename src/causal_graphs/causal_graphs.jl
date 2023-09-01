@@ -4,6 +4,7 @@ export SimpleDiGraph
 export edges
 
 include("api.jl")
+include("printing.jl")
 
 # Concrete implementations
 include("pc/PC.jl")
