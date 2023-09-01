@@ -9,7 +9,7 @@ Jizba et al. (2012)[^Jizba2012].
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information. 
+- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
 
 ## Definition
 
@@ -36,12 +36,12 @@ struct MIRenyiJizba{E <: Renyi} <: MutualInformation{E}
     end
 end
 
-function estimate(measure::MIRenyiJizba, est::Contingency{<:ProbabilitiesEstimator}, x...)
-    return estimate(measure, contingency_matrix(est.est, x...))
+function estimate(measure::MIRenyiJizba, est::Contingency{<:ProbabilitiesEstimator}, x, y)
+    return estimate(measure, contingency_matrix(est.est, x, y))
 end
 
-function estimate(measure::MIRenyiJizba, est::Contingency{<:Nothing}, x...)
-    return estimate(measure, contingency_matrix(x...))
+function estimate(measure::MIRenyiJizba, est::Contingency{<:Nothing}, x, y)
+    return estimate(measure, contingency_matrix(x, y))
 end
 
 function estimate(measure::MIRenyiJizba, pxy::ContingencyMatrix{T, 2}) where {T}

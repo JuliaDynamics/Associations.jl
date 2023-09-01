@@ -31,6 +31,8 @@ Base.@kwdef struct PredictiveAsymmetry{E, B, F, D1, D2, D3, D4, T1, T2, T3} <: A
     τC::T3 = -1
 end
 
+max_inputs_vars(::PredictiveAsymmetry) = 3
+
 const PA_ESTIMATORS = Union{
     ProbabilitiesEstimator,
     DifferentialEntropyEstimator,

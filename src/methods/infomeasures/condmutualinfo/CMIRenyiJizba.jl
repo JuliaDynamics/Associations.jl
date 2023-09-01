@@ -36,6 +36,9 @@ struct CMIRenyiJizba{E <: Renyi} <: ConditionalMutualInformation{E}
     end
 end
 
+min_inputs_vars(::CMIRenyiJizba) = 3
+max_inputs_vars(::CMIRenyiJizba) = 3
+
 function estimate(measure::CMIRenyiJizba, est::Contingency, x, y, z)
     c = _contingency_matrix(measure, est, x, y, z)
     pxz = probabilities(c, dims = [1, 3])

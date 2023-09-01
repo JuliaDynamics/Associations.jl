@@ -9,7 +9,7 @@ The Rényi conditional mutual information from Sarbu (2014)[^Sarbu2014]).
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information. 
+- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information.
 
 ## Discrete description
 
@@ -41,12 +41,15 @@ struct CMIRenyiSarbu{E <: Renyi} <: ConditionalMutualInformation{E}
     end
 end
 
-function estimate(measure::CMIRenyiSarbu, est::Contingency{<:ProbabilitiesEstimator}, x...)
-    return estimate(measure, contingency_matrix(est.est, x...))
+min_inputs_vars(::CMIRenyiSarbu) = 3
+max_inputs_vars(::CMIRenyiSarbu) = 3
+
+function estimate(measure::CMIRenyiSarbu, est::Contingency{<:ProbabilitiesEstimator}, x, y, z)
+    return estimate(measure, contingency_matrix(est.est, x, y, z))
 end
 
-function estimate(measure::CMIRenyiSarbu, est::Contingency{<:Nothing}, x...)
-    return estimate(measure, contingency_matrix(x...))
+function estimate(measure::CMIRenyiSarbu, est::Contingency{<:Nothing}, x, y, z)
+    return estimate(measure, contingency_matrix(x, y, z))
 end
 
 function estimate(

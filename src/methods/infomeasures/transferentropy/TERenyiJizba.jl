@@ -56,3 +56,5 @@ struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy{E, EMB}
         return new{E, EMB}(e, embedding)
     end
 end
+
+max_inputs_vars(::TERenyiJizba) = 3

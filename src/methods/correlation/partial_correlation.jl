@@ -40,6 +40,9 @@ where ``\\hat{P} = \\hat{\\Sigma}^{-1}`` is the sample precision matrix.
 """
 struct PartialCorrelation <: AssociationMeasure end
 
+min_inputs_vars(::PartialCorrelation) = 3
+max_inputs_vars(::PartialCorrelation) = Inf
+
 """
     partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
         z::VectorOrStateSpaceSet...)

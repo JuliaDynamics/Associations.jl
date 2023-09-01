@@ -34,6 +34,8 @@ is computed.
 """
 struct DistanceCorrelation <: AssociationMeasure end
 
+max_inputs_vars(::DistanceCorrelation) = 3
+
 """
     distance_correlation(x, y) → dcor ∈ [0, 1]
     distance_correlation(x, y, z) → pdcor
