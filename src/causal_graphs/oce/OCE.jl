@@ -66,7 +66,6 @@ parents of each `xᵢ ∈ x`, assuming that `x` must be integer-indexable, i.e.
 `x[i]` yields the `i`-th variable.
 """
 function select_parents(alg::OCE, x; verbose = false)
-
     # Find the parents of each variable.
     parents = [select_parents(alg, x, k; verbose) for k in eachindex(x)]
     return parents
@@ -277,6 +276,9 @@ end
 # We use the function `print_status` for printing everywhere,
 # and just make dummy types like `OCEInfoMessage` to guide where
 # in the procedure we are when printing.
+#
+# TODO: this can be done in a more systematic way with less code, but I'll wait until we
+# have a few more graph inference algorithms to see what the best way to do this is.
 #########################################################################################
 
 function print_status(args...; verbose = true, kwargs...)
@@ -294,17 +296,17 @@ function _print_status(::OCEInfoMessage)
     printstyled("  a !⫫ b | c := `a` is conditionally dependent of `b`, given `c`\n";
         color = :default)
 
-    # Target var
+    # Target variable.
     print_lagged("* xᵢ", "τ"; color =  TARGET_COLOR)
     printstyled(" := target variable at lag "; color = :default)
     printstyled("τ\n", color = LAG_COLOR)
 
-    # Candidate var.
+    # Candidate variable.
     print_lagged("* pⱼ", "τ"; color = SOURCE_COLOR)
     printstyled(" := candidate variable at lag "; color = :default)
     printstyled("τ\n", color = LAG_COLOR)
 
-    # Parent set
+    # Parent set.
     print_lagged("* 𝒫ᵢ", "τ"; color = CONDITIONAL_COLOR)
     printstyled(" := parent set of "; color = :default)
     print_lagged("xᵢ", "τ"; color = TARGET_COLOR)
@@ -336,7 +338,6 @@ function _print_status(::IndependenceStatus, parents::OCESelectedParents,
         τs, js, ix::Int, i::Int)
     pairwise = pairwise_test(parents)
     print_lagged("  $(add_subscript("x", i))", 0; color = TARGET_COLOR)
-    #printstyled((0)"; color = TARGET_COLOR)
     printstyled(" !⫫ "; color = SYMBOL_COLOR)
     v = add_subscript("x", js[ix])
     print_lagged(v, τs[ix]; color = SOURCE_COLOR)
@@ -397,7 +398,6 @@ function _print_status(::EliminationStep, test, alg, parents::OCESelectedParents
     printstyled(depsymb; color = SYMBOL_COLOR)
     print_lagged(add_subscript("x", j), τ; color = SOURCE_COLOR)
     printstyled(" | "; color = SYMBOL_COLOR)
-    # TODO: replace with `print_convar_elimination`
     print_condvar_elimination(EliminationStep(), parents, remaining_idxs)
     printstyled(" → $action "; color = SYMBOL_COLOR)
     print_lagged(add_subscript("x", j), τ; color = SOURCE_COLOR)
