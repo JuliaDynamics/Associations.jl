@@ -15,7 +15,7 @@ export ChuaCircuitsBidir6
         c12 = 0.1, c21 = 0.1, m₀ = -1/7, m₁ = 2/7)
 
 Initialize a bidirectionally coupled system consisting of two driven Chua
-circuits, X₁ and X₂ (Murali &  Lakshmanan, 1993)[^Murali1993].
+circuits, X₁ and X₂ [Murali1993](@citet).
 
 ## Description
 
@@ -38,11 +38,6 @@ be tuned individually for each subsystem.
 where ``h(x) = M_1x + 0.5(M_0 - M_1)(|x+1| - |x - 1|)`` and ``\\epsilon_1, \\epsilon_2``
 are noise terms that at each integration step is drawn independently from the normal
 distributions `n1` and `n2`, respectively.
-
-[^Murali1993]:
-    Murali, K., and M. Lakshmanan. "Chaotic dynamics of the driven Chua's
-    circuit." IEEE Transactions on Circuits and Systems I Fundamental
-    Theory and Applications 40.11 (1993): 836-840.
 """
 Base.@kwdef struct ChuaCircuitsBidir6{V,A1,A2,B1,B2,F1,F2,W1,W2,S1,S2,E1,E2,M0,M1,R}<: ContinuousDefinition
     xi::V = [0.1, 0.1, 0.2, 0.15, 0.15, 0.22]

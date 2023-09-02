@@ -3,7 +3,7 @@ export TERenyiJizba
 """
     TERenyiJizba() <: TransferEntropy
 
-The Rényi transfer entropy from Jizba et al. (2012)[^Jizba2012].
+The Rényi transfer entropy from [Jizba2012](@citet).
 
 ## Usage
 
@@ -39,11 +39,6 @@ mutual information.
 | [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)       | Frequencies         |           ✓           |
 | [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)       | Binning (histogram) |           ✓           |
 | [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref) | Nearest neighbors   |           ✓           |
-
-[^Jizba2012]:
-    Jizba, P., Kleinert, H., & Shefaat, M. (2012). Rényi’s information transfer between
-    financial time series. Physica A: Statistical Mechanics and its Applications, 391(10),
-    2971-2989.
 """
 struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy{E, EMB}
     e::E

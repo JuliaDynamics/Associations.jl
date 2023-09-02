@@ -12,18 +12,10 @@ export FPVP
 The Frenzel-Pompe-Vejmelka-Paluš (or `FPVP` for short) estimator is used to estimate the
 differential conditional mutual information using a `k`-th nearest neighbor approach that is
 analogous to that of the [`KraskovStögbauerGrassberger1`](@ref) mutual information estimator
-(Frenzel & Pompe, 2007[^Frenzel2007]; Vejmelka & Paluš, 2008[^Vejmelka2008]).
+([Frenzel2007](@citet); [Vejmelka2008](@citet)).
 
 `w` is the Theiler window, which controls the number of temporal neighbors that are excluded
 during neighbor searches.
-
-[^Frenzel2007]:
-    Frenzel, S., & Pompe, B. (2007). Partial mutual information for coupling analysis of
-    multivariate time series. Physical review letters, 99(20), 204101.
-    `w` is the Theiler window.
-[^Vejmelka2008]:
-    Vejmelka, M., & Paluš, M. (2008). Inferring the directionality of coupling with
-    conditional mutual information. Physical Review E, 77(2), 026214.
 """
 Base.@kwdef struct FPVP{MJ, MM} <: ConditionalMutualInformationEstimator
     k::Int = 1

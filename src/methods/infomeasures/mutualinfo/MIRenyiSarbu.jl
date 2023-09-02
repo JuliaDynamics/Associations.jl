@@ -4,7 +4,7 @@ export MIRenyiSarbu
     MIRenyiSarbu <: MutualInformation
     MIRenyiSarbu(; base = 2, q = 1.5)
 
-The discrete Rényi mutual information from Sarbu (2014)[^Sarbu2014].
+The discrete Rényi mutual information from [Sarbu2014](@citet).
 
 ## Usage
 
@@ -25,11 +25,6 @@ I(X, Y)^R_q =
     \\dfrac{p(x, y)^q}{\\left( p(x)\\cdot p(y) \\right)^{q-1}}
 \\right)
 ```
-
-[^Sarbu2014]: Sarbu, S. (2014, May). Rényi information transfer: Partial Rényi transfer
-    entropy and partial Rényi mutual information. In 2014 IEEE International Conference
-    on Acoustics, Speech and Signal Processing (ICASSP) (pp. 5666-5670). IEEE.
-
 See also: [`mutualinfo`](@ref).
 """
 struct MIRenyiSarbu{E <: Renyi} <: MutualInformation{E}

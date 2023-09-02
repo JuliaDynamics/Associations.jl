@@ -36,9 +36,9 @@ struct NeighborCloseness <: LocalPermutationClosenessSearch end
         replace = true,
         w::Int = 0)
 
-`LocalPermutationTest` is a generic conditional independence test (Runge, 2018)[^Runge2018]
-for assessing whether two variables `X` and `Y` are conditionally independendent given a
-third variable `Z` (all of which may be multivariate).
+`LocalPermutationTest` is a generic conditional independence test
+[Runge2018LocalPerm](@cite) for assessing whether two variables `X` and `Y` are
+conditionally independendent given a third variable `Z` (all of which may be multivariate).
 
 When used with [`independence`](@ref), a [`LocalPermutationTestResult`](@ref) is returned.
 
@@ -92,11 +92,6 @@ The nearest-neighbor approach in Runge (2018) can be reproduced by using the
 
 - [Example using `CMIShannon`](@ref example_localpermtest_cmishannon).
 - [Example using `TEShannon`](@ref example_localpermtest_teshannon).
-
-[^Runge2018]: Runge, J. (2018, March). Conditional independence testing based on a
-    nearest-neighbor estimator of conditional mutual information. In International
-    Conference on Artificial Intelligence and Statistics (pp. 938-947). PMLR.
-
 """
 struct LocalPermutationTest{M, EST, C, R} <: IndependenceTest{M}
     measure::M

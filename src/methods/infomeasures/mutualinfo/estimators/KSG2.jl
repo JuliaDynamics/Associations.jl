@@ -11,8 +11,7 @@ export KraskovStögbauerGrassberger2, KSG2
     KraskovStögbauerGrassberger2(; k::Int = 1, w = 0, metric_marginals = Chebyshev())
 
 The `KraskovStögbauerGrassberger2` mutual information estimator (you can use `KSG2` for
-short) is the ``I^{(2)}`` `k`-th nearest neighbor estimator from
-Kraskov et al. (2004)[^Kraskov2004].
+short) is the ``I^{(2)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@cite).
 
 ## Keyword arguments
 
@@ -53,10 +52,6 @@ then estimated as
     (m - 1)\\psi{(N)} -
     \\dfrac{1}{N} \\sum_{i = 1}^N \\sum_{j = 1}^m \\psi{(\\theta_i^j + 1)}
 ```
-
-[^Kraskov2004]:
-    Kraskov, A., Stögbauer, H., & Grassberger, P. (2004). Estimating mutual information.
-    Physical review E, 69(6), 066138.
 """
 struct KraskovStögbauerGrassberger2{MJ, MM} <: MutualInformationEstimator
     k::Int

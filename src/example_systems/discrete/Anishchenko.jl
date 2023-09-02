@@ -8,7 +8,7 @@ export Anishchenko
     Anishchenko <: DiscreteDefinition
     Anishchenko(;u₀ = rand(2), α =3.277, s=0.1, ω=0.5*(sqrt(5)-1)) → DiscreteDynamicalSystem
 
-Initialise the system defined by eq. 13 in Anishchenko & Strelkova (1998)[^Anishchenko1998],
+Initialise the system defined by eq. 13 in [Anishchenko1998](@cite),
 which can give strange, nonchaotic attractors.
 
 ## Equations of motion
@@ -19,10 +19,6 @@ dx &= \\alpha (1-s \\cos (2 \\pi \\phi )) \\cdot x(1-x) \\\\
 dϕ &= (\\phi + \\omega ) \\mod{1}
 \\end{aligned}
 ```
-
-[^Anishchenko1998]:
-    Anishchenko, Vadim S., and Galina I. Strelkova. "Irregular attractors."
-    Discrete dynamics in Nature and Society 2.1 (1998): 53-72.
 """
 Base.@kwdef struct Anishchenko{V, A, S, Ω} <: DiscreteDefinition
     xi::V = [0.2, 0.3]

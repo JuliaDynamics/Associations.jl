@@ -6,7 +6,7 @@ using Graphs: nv, edges, has_edge, inneighbors
     cpdag(alg::PC, skeleton::SimpleDiGraph, separating_sets::Dict{Edge, Vector{Int}}) → dg::SimpleDiGraph
 
 Orient edges in the `skeleton` graph using the given `separating_sets` using
-algorithm 2 in Kalisch & Bühlmann (2008[^Kalisch2008]) and return the directed graph `cpdag`.
+algorithm 2 in [Kalisch2008](@citet) and return the directed graph `cpdag`.
 
 ## Description
 
@@ -28,10 +28,6 @@ Colombo & Maathuis, 2014.
     Y  |  W  becomes  Y  |  W
      ↘ | ↙             ↘ ↓ ↙
        Z                 Z
-
-[^Kalisch2008]:
-    Kalisch, M., & Bühlmann, P. (2008). Robustification of the PC-algorithm for directed
-    acyclic graphs. Journal of Computational and Graphical Statistics, 17(4), 773-789.
 """
 function cpdag(alg::PC, skeleton_graph::SimpleDiGraph,
         separating_sets::Dict{SimpleEdge, Vector{Int}}; verbose = false)

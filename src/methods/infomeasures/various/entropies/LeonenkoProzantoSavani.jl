@@ -12,15 +12,11 @@ export LeonenkoProzantoSavani
 
 The `LeonenkoProzantoSavani` estimator computes the [`Shannon`](@ref), [`Renyi`](@ref), or
 [`Tsallis`](@ref) [`entropy`](@ref) using the `k`-th nearest-neighbor approach
-from Leonenko et al. (2008)[^LeonenkoProsantoSavani2008].
+from [LeonenkoProsantoSavani2008](@citet).
 
 `w` is the Theiler window, which determines if temporal neighbors are excluded
 during neighbor searches (defaults to `0`, meaning that only the point itself is excluded
 when searching for neighbours).
-
-[^LeonenkoProsantoSavani2008]:
-    Leonenko, N., Pronzato, L., & Savani, V. (2008). A class of Rényi information
-    estimators for multidimensional densities. The Annals of Statistics, 36(5), 2153-2182.
 """
 Base.@kwdef struct LeonenkoProzantoSavani <: DifferentialEntropyEstimator
     k::Int = 1

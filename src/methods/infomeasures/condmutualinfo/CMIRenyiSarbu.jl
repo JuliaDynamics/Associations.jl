@@ -4,7 +4,7 @@ export CMIRenyiSarbu
     CMIRenyiSarbu <: ConditionalMutualInformation
     CMIRenyiSarbu(; base = 2, definition = CMIRenyiSarbuSarbu())
 
-The Rényi conditional mutual information from Sarbu (2014)[^Sarbu2014]).
+The Rényi conditional mutual information from [Sarbu2014](@citet).
 
 ## Usage
 
@@ -26,10 +26,6 @@ I(X, Y; Z)^R_q =
     \\dfrac{p(x, y|z)^q}{\\left( p(x|z)\\cdot p(y|z) \\right)^{q-1}}
 \\right)
 ```
-
-[^Sarbu2014]: Sarbu, S. (2014, May). Rényi information transfer: Partial Rényi transfer
-    entropy and partial Rényi mutual information. In 2014 IEEE International Conference
-    on Acoustics, Speech and Signal Processing (ICASSP) (pp. 5666-5670). IEEE.
 
 See also: [`condmutualinfo`](@ref).
 """

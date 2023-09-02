@@ -10,8 +10,7 @@ export OCESelectedParents
           ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3)),
           τmax::T = 1, α = 0.05)
 
-The optimal causation entropy (OCE) algorithm for causal discovery (Sun et al.,
-2015)[^Sun2015].
+The optimal causation entropy (OCE) algorithm for causal discovery [Sun2015](@citet).
 
 ## Description
 
@@ -43,10 +42,6 @@ Input data must either be a `Vector{Vector{<:Real}}`, or a `StateSpaceSet`.
 ## Examples
 
 - [Inferring time series graph from a chain of logistic maps](@ref oce_example)
-
-[^Sun2015]:
-    Sun, J., Taylor, D., & Bollt, E. M. (2015). Causal network inference by optimal
-    causation entropy. SIAM Journal on Applied Dynamical Systems, 14(1), 73-106.
 """
 Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
     utest::U = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3), nshuffles = 100)

@@ -11,7 +11,7 @@ export bbnue
 # The bootstrap-based non-uniform embedding estimator (BB-NUE) for conditional transfer entropy (Montalto et al., 2014).
 # Uses the estimator `est` to compute relevant marginal entropies. (e.g. `VisitationFrequency(RectangularBinning(3))`)
 
-# [^Montalto2014]: Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
+# [Montalto2014](@cite): Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
 # """
 # struct BBNUE{E} <: TransferDifferentialEntropyEstimator
 #     est::E
@@ -26,7 +26,7 @@ export bbnue
 
 Estimate transfer entropy (TE) from `source` to `target` (conditioned on `cond` if given)
 for prediction lag `η`, using the bootstrap-based non-uniform embedding (BBNUE)
-method from Montalta et al. (2004) [^Montalto2014].
+method from [Montalto2014](@citet).
 
 ## Implementation details
 
@@ -34,7 +34,7 @@ The BBNUE method uses a bootstrap-based criterion to identify the most relevant 
 minimally redundant variables from the the past of `target`, present/past of `source`,
 and (if given) the present/past of `cond`, that contribute most to `target`'s future.
 This implementation uses a conditional entropy minimization criterion for selecting variables,
-which is what Montalto et al. (2014)[^Montalto2014] uses for their bin-estimator.
+which is what Montalto et al. (2014)[Montalto2014](@cite) uses for their bin-estimator.
 This implementation accepts *any* [`DifferentialEntropyEstimator`](@ref) or
 [`ProbabilitiesEstimator`](@ref) that accepts multivariate data or that implements
 [`marginal_encodings`](@ref).
@@ -112,10 +112,6 @@ te_xy = bbnue(est, x, y, surr = RandomShuffle(), nsurr = 50)
 te_yx = bbnue(est, y, x, surr = RandomShuffle(), nsurr = 50)
 te_xy, te_yx
 ```
-
-[^Montalto2014]:
-    Montalto, A.; Faes, L.; Marinazzo, D. MuTE: A MATLAB toolbox to compare established
-    and novel estimators of the multivariate transfer entropy. PLoS ONE 2014, 9, e109462.
 """
 function bbnue(measure::TransferEntropy, est::ProbOrDiffEst, x...;
         η = 1, include_instantaneous = true,

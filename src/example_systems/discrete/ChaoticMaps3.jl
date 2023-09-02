@@ -5,8 +5,8 @@ export ChaoticMaps3
     ChaoticMaps3() <: DiscreteDefinition
     ChaoticMaps3(; ui = [0.2, 0.1, 0.3], r = 3.4, c_xy = 0.5, c_xz = 0.5, c_yz = 0.3)
 
-A model consisting of three coupled 1D maps, where ``x \\to y`` and ``x \\to z`` (Chen et
-al., 2004)[^Chen2004].
+A model consisting of three coupled 1D maps, where ``x \\to y`` and ``x \\to z``
+[Chen2004](@cite).
 
 ## Equations of motion
 
@@ -20,10 +20,6 @@ z(t) &= r z(t-1)( 1 - z(t-1)^2 ) e^{-z(t-1)^2} + c_{xz} x(t-1) + c_{yz} y(t-1)
 
 The parameters `r`, `c_xy` and `c_yz` do not appear in the original paper,
 but are added here for explorative purposes.
-
-[^Chen2004]:
-    Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger
-    causality." Physics Letters A 324.1 (2004): 26-35
 """
 Base.@kwdef struct ChaoticMaps3{R, V, C1 ,C2, C3} <: DiscreteDefinition
     r::R = 3.4

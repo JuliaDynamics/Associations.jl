@@ -923,16 +923,10 @@ end
     repressilator(;u₀ = rand(6), α = 10.0, α₀ = 0.0, β = 100.0,
         n = 2) → ContinuousDynamicalSystem
 
-A six-dimensional repressilator (or repression-driven oscillator) from Elowitz & Leibler
-(2000)[^Elowitz2000]. The equations are scaled to be non-dimensional.
+A six-dimensional repressilator (or repression-driven oscillator) [Elowitz2000](@citet).
 
-Used in Sun & Bollt (2014) to study the performance of the causation entropy algorithm.
-
-[^Elowitz2000]: Elowitz, M. B., & Leibler, S. (2000). A synthetic oscillatory network of
-    transcriptional regulators. Nature, 403(6767), 335-338.
-[^Sun2014]: Sun, J., Cafaro, C., & Bollt, E. M. (2014). Identifying the coupling structure
-    in complex systems through the optimal causation entropy principle. Entropy, 16(6),
-    3416-3433.
+The equations are scaled to be non-dimensional. Used in [Sun2014](@cite) to study the
+performance of the causation entropy algorithm.
 """
 function repressilator(;u₀ = rand(6), α = 10.0, α₀ = 0.0, β = 100.0, n = 2)
     @warn "`repressilator` is deprecated in CausalityTools v2. "*
@@ -1009,7 +1003,8 @@ end
     lorenzdiffusive(; ui = rand(6), C₁₂::Real = 5, C₂₁::Real = 0,
         R::Real = 28.0, ϵ₁::Real = -0.02, ϵ₂::Real = 0.03)
 
-A dynamical system consisting of two diffusively coupled 3D Lorenz systems[^Martini2011].
+A dynamical system consisting of two diffusively coupled 3D Lorenz systems
+[Martini2011](@cite).
 
 The coupling magnitude from subsystem 1 to subsystem 2 is controlled by `C₁₂`, and the
 coupling from subsystem 2 to subsystem 1 is controlled by `C₂₁`. The parameters `ϵ₁` and `ϵ₂`
@@ -1027,8 +1022,6 @@ add small deviations to the control parameter `R`.
 \\dot{y_3} &= y_1y_2 - 8/3y_3
 \\end{aligned}
 ```
-
-[^Martini2011]: Martini, M., Kranz, T. A., Wagner, T., & Lehnertz, K. (2011). Inferring directional interactions from transient signals with symbolic transfer entropy. Physical review E, 83(1), 011919.
 """
 function lorenzdiffusive(; ui = rand(6), C₁₂::Real = 5, C₂₁::Real = 0,
         R::Real = 28.0, ϵ₁::Real = -0.02, ϵ₂::Real = 0.03)

@@ -5,7 +5,7 @@ export pmi
     PMI <: AssociationMeasure
     PMI(; base = 2)
 
-The partial mutual information (PMI) measure of association (Zhao et al., 2016)[^Zhao2016].
+The partial mutual information (PMI) measure of association [Zhao2016](@cite).
 
 ## Definition
 
@@ -36,11 +36,6 @@ may not).
     [`ProbabilitiesEstimator`](@ref)s.
 - `X ⫫ Y | Z => PMI(X, Y, Z) = CMI(X, Y, Z) = 0` (in theory, but not necessarily for
     estimation).
-
-[^Zhao2016]:
-    Zhao, J., Zhou, Y., Zhang, X., & Chen, L. (2016). Part mutual information for
-    quantifying direct associations in networks. Proceedings of the National Academy
-    of Sciences, 113(18), 5130-5135.
 """
 Base.@kwdef struct PMI <: AssociationMeasure
     base::Real = 2
@@ -52,7 +47,7 @@ max_inputs_vars(::PMI) = 3
 """
     pmi([measure::CMI], est::ProbabilitiesEstimator, x, y, z) → pmi_est::Real ∈ [0, a)
 
-Estimate the part mutual information ([`PMI`](@ref); Zhao et al. (2016)[^Zhao2016]).
+Estimate the part mutual information ([`PMI`](@ref); [Zhao2016](@citet)).
 
 If `measure` is not given, then the default is `PMI(; base = 2)`.
 With a [`ProbabilitiesEstimator`](@ref), the returned `pmi_est` is guaranteed to be
@@ -66,11 +61,6 @@ non-negative.
 | [`ValueHistogram`](@ref)      | Binning (histogram) |          ✓    |
 | [`SymbolicPermutation`](@ref) | Ordinal patterns    |          ✓    |
 | [`Dispersion`](@ref)          | Dispersion patterns |          ✓    |
-
-[^Zhao2016]:
-    Zhao, J., Zhou, Y., Zhang, X., & Chen, L. (2016). Part mutual information for
-    quantifying direct associations in networks. Proceedings of the National Academy
-    of Sciences, 113(18), 5130-5135.
 """
 function pmi(measure::PMI, args...)
     return estimate(measure, args...)

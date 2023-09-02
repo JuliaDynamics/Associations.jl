@@ -5,7 +5,7 @@ export GaoOhViswanath
     GaoOhViswanath <: MutualInformationEstimator
 
 The `GaoOhViswanath` mutual information estimator, also called the bias-improved-KSG
-estimator, or BI-KSG, by Gao et al. (2018)[^Gao2018], is given by
+estimator, or BI-KSG, by [Gao2018](@cite), is given by
 
 ```math
 \\begin{align*}
@@ -24,10 +24,6 @@ estimator, or BI-KSG, by Gao et al. (2018)[^Gao2018], is given by
 
 where ``c_{d, 2} = \\dfrac{\\pi^{\\frac{d}{2}}}{\\Gamma{(\\dfrac{d}{2} + 1)}}`` is the
 volume of a ``d``-dimensional unit ``\\mathcal{l}_2``-ball.
-
-[^Gao2018]:
-    Gao, W., Oh, S., & Viswanath, P. (2018). Demystifying fixed k-nearest neighbor
-    information estimators. IEEE Transactions on Information Theory, 64(8), 5629-5661.
 """
 Base.@kwdef struct GaoOhViswanath{MJ, MM} <: MutualInformationEstimator
     k::Int = 1

@@ -4,7 +4,7 @@ export MITsallisFuruichi
     MITsallisFuruichi <: MutualInformation
     MITsallisFuruichi(; base = 2, q = 1.5)
 
-The discrete Tsallis mutual information from Furuichi (2006)[^Furuichi2006], which
+The discrete Tsallis mutual information from Furuichi (2006)[Furuichi2006](@cite), which
 in that paper is called the *mutual entropy*.
 
 ## Usage
@@ -25,10 +25,6 @@ I_q^T(X; Y) = H_q^T(X) - H_q^T(X | Y) = H_q^T(X) + H_q^T(Y) - H_q^T(X, Y),
 where ``H^T(\\cdot)`` and ``H^T(\\cdot, \\cdot)`` are the marginal and joint Tsallis
 entropies, and `q` is the [`Tsallis`](@ref)-parameter.
 ```
-
-[^Furuichi2006]:
-    Furuichi, S. (2006). Information theoretical properties of Tsallis entropies.
-    Journal of Mathematical Physics, 47(2), 023302.
 
 See also: [`mutualinfo`](@ref).
 """

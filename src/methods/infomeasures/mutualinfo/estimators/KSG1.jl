@@ -12,8 +12,7 @@ export KraskovStögbauerGrassberger1, KSG1
     KraskovStögbauerGrassberger1(; k::Int = 1, w = 0, metric_marginals = Chebyshev())
 
 The `KraskovStögbauerGrassberger1` mutual information estimator (you can use `KSG1` for
-short) is the ``I^{(1)}`` `k`-th nearest neighbor estimator from
-Kraskov et al. (2004)[^Kraskov2004].
+short) is the ``I^{(1)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@citet).
 
 ## Keyword arguments
 
@@ -32,10 +31,6 @@ Let the joint StateSpaceSet ``X := \\{\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m \
 concatenation of the marginal StateSpaceSets ``\\{ \\bf{X}_k \\}_{k=1}^m``, where each ``\\bf{X}_k``
 is potentially multivariate. Let ``\\bf{x}_1, \\bf{x}_2, \\ldots, \\bf{x}_N`` be the points
 in the joint space ``X``.
-
-[^Kraskov2004]:
-    Kraskov, A., Stögbauer, H., & Grassberger, P. (2004). Estimating mutual information.
-    Physical review E, 69(6), 066138.
 """
 struct KraskovStögbauerGrassberger1{MJ, MM} <: MutualInformationEstimator
     k::Int

@@ -38,12 +38,8 @@ are controlled by ``\\sigma_{xy}``, ``\\sigma_{yz}``, and ``\\sigma_{zw}``, resp
 are drawn from independent uniform distributions over the unit interval.
 
 With default parameters and all dynamical noise terms set to zero, this is the system
-from Ye et al. (2015)[^Ye2015] (but note that for some initial conditions,
+from [Ye2015](@cite) (but note that for some initial conditions,
 this system wanders off to ``\\pm \\infty`` for some of the variables).
-
-[^Ye2015]:
-    Ye, Hao, et al. "Distinguishing time-delayed causal interactions using
-    convergent cross mapping." Scientific reports 5 (2015): 14750
 """
 Base.@kwdef struct Logistic4Chain{V, RX, RY, RZ, RW, C1, C2, C3, Σ1, Σ2, Σ3, RNG} <: DiscreteDefinition
     xi::V = [0.1, 0.2, 0.3, 0.4]

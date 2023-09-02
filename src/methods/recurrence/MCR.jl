@@ -9,7 +9,7 @@ export mcr
     MCR(; r, metric = Euclidean())
 
 An association measure based on mean conditional probabilities of recurrence
-(MCR) introduced by Romano et al. (2007)[^Romano2007].
+(MCR) introduced by [Romano2007](@citet).
 
 `r` is  mandatory keyword which specifies the recurrence threshold when constructing
 recurrence matrices. It can be instance of
@@ -39,7 +39,7 @@ where ``R_{i, j}^X`` is the recurrence matrix and ``J_{R_{i, j}}^{X, Y}`` is the
 recurrence matrix, constructed using the given `metric`. The measure ``M(Y | X)`` is
 defined analogously.
 
-Romano et al. (2007)'s interpretation of this quantity is that if `X` drives `Y`, then
+[Romano2007](@citet)'s interpretation of this quantity is that if `X` drives `Y`, then
 `M(X|Y) > M(Y|X)`, if `Y` drives `X`, then `M(Y|X) > M(X|Y)`, and if coupling is symmetric,
  then `M(Y|X) = M(X|Y)`.
 
@@ -47,11 +47,6 @@ Romano et al. (2007)'s interpretation of this quantity is that if `X` drives `Y`
 
 `X` and `Y` can be either both univariate timeseries, or both multivariate
 [`StateSpaceSet`](@ref)s.
-
-[^Romano2007]:
-    Romano, M. C., Thiel, M., Kurths, J., & Grebogi, C. (2007). Estimation of the
-    direction of the coupling by conditional probabilities of recurrence. Physical Review
-    E, 76(3), 036211.
 """
 Base.@kwdef struct MCR{R, M} <: AssociationMeasure
     r::R

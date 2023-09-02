@@ -3,8 +3,7 @@ export MIRenyiJizba
 """
     MIRenyiJizba <: MutualInformation
 
-The Rényi mutual information ``I_q^{R_{J}}(X; Y)`` defined in
-Jizba et al. (2012)[^Jizba2012].
+The Rényi mutual information ``I_q^{R_{J}}(X; Y)`` defined in [Jizba2012](@cite).
 
 ## Usage
 
@@ -19,11 +18,6 @@ I_q^{R_{J}}(X; Y) = S_q^{R}(X) + S_q^{R}(Y) - S_q^{R}(X, Y),
 
 where ``S_q^{R}(\\cdot)`` and ``S_q^{R}(\\cdot, \\cdot)`` the [`Rényi`](@ref) entropy and
 the joint Rényi entropy.
-
-[^Jizba2012]:
-    Jizba, P., Kleinert, H., & Shefaat, M. (2012). Rényi's information transfer between
-    financial time series. Physica A: Statistical Mechanics and its Applications,
-    391(10), 2971-2989.
 """
 struct MIRenyiJizba{E <: Renyi} <: MutualInformation{E}
     e::E

@@ -26,16 +26,8 @@ so be careful when applying it to categorical/integer-valued data).
 Assume we have two `Dy`-dimensional and `Dy`-dimensional input [`StateSpaceSet`](@ref)s `x` and
 `y`, both containing `N` observations. We can define the `Dx + Dy`-dimensional joint
 StateSpaceSet `D = [Dx Dy]`. `Copula` returns the negative *copula entropy* of `D`,
-which is equal to the mutual information between `Dx` and `Dy` (Ma & Sun, 2011)[^Ma2011].
-
-[^Ma2011]:
-    Ma, J., & Sun, Z. (2011). Mutual information is copula entropy. Tsinghua Science &
-    Technology, 16(1), 51-54.
-
-[^Pal2010]:
-    Pál, D., Póczos, B., & Szepesvári, C. (2010). Estimation of Rényi entropy and mutual
-    information based on generalized nearest-neighbor graphs. Advances in Neural
-    Information Processing Systems, 23.
+which is equal to the mutual information between `Dx` and `Dy` ([Ma2011](@citet);
+[Pál2010](@citet)).
 """
 Base.@kwdef struct Copula <: MutualInformationEstimator
     est::Union{ProbabilitiesEstimator, DifferentialEntropyEstimator} = Kraskov(k = 5)
@@ -54,7 +46,7 @@ end
     empirical_copula_transformation(x::AbstractVector) → empirical_copula::Vector{<:Real}
     empirical_copula_transformation(x::AbstractStateSpaceSet{D, T}) → empirical_copula::StateSpaceSet{D, T}
 
-Apply the empirical copula transformation (as described in Pál et al. (2010)[^Pal2010];
+Apply the empirical copula transformation (as described in [Pal2010](@cite);
 see a summary below) to the each point `xᵢ ∈ x`, where
 the `xᵢ` can be either univariate (`x::AbstractVector`) or multivariate
 (`x::AbstractStateSpaceSet`) to compute the empirical copula (here called `empirical_copula)`.
@@ -90,11 +82,6 @@ In summary, we've defined the empirical copula *transformation* ``\\hat{\\bf{F}}
 ## Empirical copula
 
 The *copula* of ``\\mu`` is the joint distribution ``\\bf{F}(\\bf{X}) = (F_1(X^1), F_2(X^2), \\ldots, F_d(X^d))``. The *empirical copula* (note the lack of "transformation" here) is the set of `d`-dimensional empirical-copula-transformed points ``\\hat{\\bf{Z}} = \\{\\bf{Z}_1, \\bf{Z}_2, \\ldots, \\bf{Z}_n \\} = \\{ \\hat{\\bf{F}}(\\bf{X_1}), \\hat{\\bf{F}}(\\bf{X_2}), \\ldots, \\hat{\\bf{F}}(\\bf{X_n}) \\}``. Note that ``\\hat{\\bf{Z}}`` is an *approximation* of a sample ``\\{\\bf{Z}_1,\\bf{Z}_2, \\ldots, \\bf{Z}_n\\} = \\{\\bf{F}(\\bf{X}_1), \\bf{F}(\\bf{X}_2), \\ldots, \\bf{F}(\\bf{X}_n)\\}`` from the true copula of ``\\mu`` (which we in general don't know, given only some sample points).
-
-[^Pal2010]:
-    Pál, D., Póczos, B., & Szepesvári, C. (2010). Estimation of Rényi entropy and mutual
-    information based on generalized nearest-neighbor graphs. Advances in Neural
-    Information Processing Systems, 23.
 """
 function empirical_copula_transformation(x::AbstractStateSpaceSet{D, T}) where {D, T}
     c = rank_transformation(x) ./ length(x)

@@ -11,7 +11,7 @@ export MMeasure
     MMeasure <: AssociationMeasure
     MMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
-The `MMeasure` (Andrzejak et al., 2003)[^Andrzejak2003] is a pairwise association
+The `MMeasure` [Andrzejak2003](@cite) is a pairwise association
 measure. It quantifies the probability with which close state of a target
 timeseries/embedding are mapped to close states of a source timeseries/embedding.
 
@@ -35,11 +35,6 @@ M^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N}
 where ``R_i(x)`` is computed as for [`HMeasure`](@ref), while ``R_i^k(x)`` and
 ``R_i^{(k)}(x|y)`` is computed as for [`SMeasure`](@ref).
 Parameters also have the same meaning as for [`SMeasure`](@ref)/[`HMeasure`](@ref).
-
-[^Andrzejak2003]:
-    Andrzejak, R. G., Kraskov, A., Stögbauer, H., Mormann, F., & Kreuz, T. (2003).
-    Bivariate surrogate techniques: necessity, strengths, and caveats. Physical review E,
-    68(6), 066202.
 """
 Base.@kwdef struct MMeasure{M, TM} <: AssociationMeasure
     K::Int = 2

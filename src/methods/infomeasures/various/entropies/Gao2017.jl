@@ -5,12 +5,7 @@ using StaticArrays: SMatrix, @MMatrix, @MVector
     Gao2017 <: DifferentialEntropyEstimator
     Gao2017(k = 1, w = 1, base = 2)
 
-A resubstitution estimator from Gao et al. (2017). Can be used both for entropy
-estimation and
-
-[^Gao2017]: Gao, W., Oh, S., & Viswanath, P. (2017, June). Density functional estimators
-    with k-nearest neighbor bandwidths. In 2017 IEEE International Symposium on Information
-    Theory (ISIT) (pp. 1351-1355). IEEE.
+A resubstitution Shannon entropy estimator from [Gao2017](@citet).
 """
 Base.@kwdef struct Gao2017{B, M} #<: CausalityTools.InformationEstimator
     k::Int = 1

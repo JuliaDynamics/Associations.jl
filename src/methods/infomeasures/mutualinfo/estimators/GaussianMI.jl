@@ -14,7 +14,7 @@ using LinearAlgebra: eigvals
 Given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
 `GaussianMI` first constructs the ``d_x + d_y``-dimensional joint [`StateSpaceSet`](@ref) `XY`.
 If `normalize == true`, then we follow the approach in Vejmelka & Palus
-(2008)[^Vejmelka2008] and transform each column in `XY` to have zero mean and unit
+(2008)[Vejmelka2008](@cite) and transform each column in `XY` to have zero mean and unit
 standard deviation. If `normalize == false`, then the algorithm proceeds without
 normalization.
 
@@ -49,10 +49,6 @@ If `normalize == true`, then the mutual information is estimated as
 ```
 
 where ``\\sigma_i`` are the eigenvalues for ``\\Sigma``.
-
-[^Vejmelka2008]:
-    Vejmelka, M., & Paluš, M. (2008). Inferring the directionality of coupling with
-    conditional mutual information. Physical Review E, 77(2), 026214.
 """
 Base.@kwdef struct GaussianMI <: MutualInformationEstimator
     normalize::Bool = false

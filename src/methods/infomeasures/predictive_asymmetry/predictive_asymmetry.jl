@@ -6,16 +6,11 @@ export PredictiveAsymmetryTest
     PredictiveAsymmetry(ηs = 1:15; normalize = false, f = 1.0,
         dTf = 1, dT = 1, dS = 1, τT = -1, τS = -1, base = 2)
 
-The predictive asymmetry measure (Haaga et al., 2020)[^Haaga2020].
+The predictive asymmetry measure [Haaga2020](@cite).
 
 !!! info "Experimental!"
     This is a method that does not yet appear in a peer-reviewed scientific journal.
     Feel free to use, but consider it experimental for now.
-
-[^Haaga2020]:
-    Haaga, Kristian Agasøster, David Diego, Jo Brendryen, and Bjarte Hannisdal.
-    "A simple test for causality in complex systems."
-    arXiv preprint arXiv:2005.01860 (2020).
 """
 Base.@kwdef struct PredictiveAsymmetry{E, B, F, D1, D2, D3, D4, T1, T2, T3} <: AssociationMeasure
     ηs::E = 1:15

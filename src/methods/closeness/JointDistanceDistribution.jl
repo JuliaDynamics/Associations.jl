@@ -20,12 +20,14 @@ end
     JointDistanceDistribution <: AssociationMeasure end
     JointDistanceDistribution(; metric = Euclidean(), B = 10, D = 2, τ = -1, μ = 0.0)
 
-The joint distance distribution (JDD) measure (Amigó & Hirata, 2018)[^Amigo2018].
+The joint distance distribution (JDD) measure [Amigo2018](@citet).
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
-- Use with [`jdd`](@ref) to compute the joint distance distribution `Δ` from Amigó & Hirata (2018).
+- Use with [`independence`](@ref) to perform a formal hypothesis test for directional
+    dependence.
+- Use with [`jdd`](@ref) to compute the joint distance distribution `Δ` from
+    [Amigo2018](@citet)
 
 ## Keyword arguments
 
@@ -52,17 +54,12 @@ the positive sign in the embedding lags; therefore the input parameter
 ```
 
 The algorithm then proceeds to analyze the distribution of distances between points
-of these embeddings, as described in Amigó & Hirata (2018)[^Amigo2018].
+of these embeddings, as described in [Amigo2018](@citet).
 
 ## Examples
 
 * [Computing the JDD](@ref quickstart_jdd)
 * [Independence testing using JDD](@ref quickstart_jddtest)
-
-[^Amigo2018]:
-    Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate
-    flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of
-    Nonlinear Science 28.7 (2018): 075302.
 """
 Base.@kwdef struct JointDistanceDistribution{M, T} <: AssociationMeasure
     metric::M = Euclidean()

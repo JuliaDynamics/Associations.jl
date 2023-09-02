@@ -40,7 +40,7 @@ end
         dTf = 1, dT = 1, dS = 1, τT = -1, τS = -1, [dC = 1, τC = -1],
         normalize::Bool = false, f::Real = 1.0, base = 2) → Vector{Float64}
 
-Compute the predictive asymmetry[^Haaga2020] 𝔸(`s` → `t`) for source time series `s` and
+Compute the predictive asymmetry [Haaga2020](@cite) 𝔸(`s` → `t`) for source time series `s` and
 target time series `t` over prediction lags `ηs`, using the given `estimator` and embedding
 parameters `dTf`, `dT`, `dS`, `τT`, `τS` (see also [`EmbeddingTE`](@ref))
 
@@ -56,7 +56,7 @@ Returns a vector containing the predictive asymmetry for each value of `ηs`.
 If `normalize == true` (the default), then compute the normalized predictive asymmetry 𝒜.
 In this case, for each ``\\eta`` in `ηs`, compute 𝒜(η) by normalizing 𝔸(η) to some fraction `f` of the
 mean transfer entropy over prediction lags ``-\\eta, ..., \\eta`` (exluding lag 0).
-Haaga et al. (2020)[^Haaga2020] uses a normalization with `f=1.0` as a built-in hypothesis test,
+[Haaga2020](@citet) uses a normalization with `f=1.0` as a built-in hypothesis test,
 avoiding more computationally costly surrogate testing.
 
 ## Estimators
@@ -78,11 +78,6 @@ x, y = rand(100), rand(100)
     This is a method that does not yet appear in a peer-reviewed scientific journal.
     Feel free to use, but consider it experimental for now. It will reappear in
     a 2.X release in new form once published in a peer-reviewed journal.
-
-[^Haaga2020]:
-    Haaga, Kristian Agasøster, David Diego, Jo Brendryen, and Bjarte Hannisdal.
-    "A simple test for causality in complex systems."
-    arXiv preprint arXiv:2005.01860 (2020).
 """
 function predictive_asymmetry end
 

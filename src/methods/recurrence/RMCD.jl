@@ -6,7 +6,7 @@ export rmcd
     RMCD <: AssociationMeasure
     RMCD(; r, metric = Euclidean(), base = 2)
 
-The recurrence measure of conditional dependence, or RMCD (Ramos et al., 2017)[^Ramos2017],
+The recurrence measure of conditional dependence, or RMCD [Ramos2017](@cite),
 is a recurrence-based measure that mimics the conditional mutual
 information, but uses recurrence probabilities.
 
@@ -47,7 +47,7 @@ when ``X``, ``Y`` and ``Z`` are mutually independent.
 
 Our implementation allows dropping the third/last argument, in which
 case the following mutual information-like quantitity is computed (not
-discussed in Ramos et al., 2017).
+discussed in [Ramos2017](@citet).
 
 ```math
 
@@ -59,11 +59,6 @@ I_{RMCD}(X; Y) = \\dfrac{1}{N}
     \\right)
 \\right]
 ```
-
-[^Ramos2017]:
-    Ramos, A. M., Builes-Jaramillo, A., Poveda, G., Goswami, B., Macau, E. E.,
-    Kurths, J., & Marwan, N. (2017). Recurrence measure of conditional dependence and
-    applications. Physical Review E, 95(5), 052206.
 """
 Base.@kwdef struct RMCD{R, M, B} <: AssociationMeasure
     r::R

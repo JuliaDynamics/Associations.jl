@@ -12,10 +12,10 @@ export Repressilator6
     Repressilator6(; xi = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6], α = 10.0, α₀ = 0.0, β = 100.0,
         n = 2) → ContinuousDynamicalSystem
 
-A six-dimensional repressilator (or repression-driven oscillator) from Elowitz & Leibler
-(2000)[^Elowitz2000].
+A six-dimensional repressilator (or repression-driven oscillator) from
+[Elowitz2000](@citet).
 
-Used in Sun & Bollt (2014)[^Sun2014] to study the performance of the causation entropy
+Used in [Sun2014](@citet) to study the performance of the causation entropy
 algorithm.
 
 ## Description
@@ -30,12 +30,6 @@ algorithm.
 \\dfrac{dp_3}{dt} &= -\\beta(p_3 - m_3) \\\\
 \\end{align*}
 ```
-
-[^Elowitz2000]: Elowitz, M. B., & Leibler, S. (2000). A synthetic oscillatory network of
-    transcriptional regulators. Nature, 403(6767), 335-338.
-[^Sun2014]: Sun, J., Cafaro, C., & Bollt, E. M. (2014). Identifying the coupling structure
-    in complex systems through the optimal causation entropy principle. Entropy, 16(6),
-    3416-3433.
 """
 Base.@kwdef struct Repressilator6{V, A, A0, B, N} <: ContinuousDefinition
     xi::V = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6]

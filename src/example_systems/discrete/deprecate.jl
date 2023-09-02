@@ -248,7 +248,7 @@ end
 """
     anishchenko1(;u₀ = rand(2), α =3.277, s=0.1, ω=0.5*(sqrt(5)-1)) → DiscreteDynamicalSystem
 
-Initialise the system defined by eq. 13 in Anishchenko & Strelkova (1998)[^Anishchenko1998],
+Initialise the system defined by eq. 13 in [Anishchenko1998](@cite),
 which can give strange, nonchaotic attractors.
 
 ## Equations of motion
@@ -259,10 +259,6 @@ dx &= \\alpha (1-s \\cos (2 \\pi \\phi )) \\cdot x(1-x) \\\\
 dϕ &= (\\phi + \\omega ) \\mod{1}
 \\end{aligned}
 ```
-
-[^Anishchenko1998]:
-    Anishchenko, Vadim S., and Galina I. Strelkova. "Irregular attractors."
-    Discrete dynamics in Nature and Society 2.1 (1998): 53-72.
 """
 anishchenko1(;u₀ = rand(2), α =3.277, s=0.1, ω=0.5*(sqrt(5)-1)) =
     anishchenko1(u₀, α, s, ω)
@@ -343,8 +339,7 @@ end
 """
     linearmap1(;u₀ = [1, rand(2)], c = 0.5) → DiscreteDynamicalSystem
 
-[^Chen2004]:
-    Chen, Yonghong, et al. "Analyzing multiple nonlinear time series with extended Granger causality." Physics Letters A 324.1 (2004): 26-35
+Linear map from [Chen2004](@citet).
 """
 linearmap1(;u₀ = rand(2), c = 0.5) = linearmap1(u₀, c)
 
@@ -887,7 +882,7 @@ end
 """
     ulam(D::Int = 10; u₀ = rand(D), ε::Real = 0.10) → DiscreteDynamicalSystem
 
-A lattice of `D` unidirectionally coupled ulam maps[^Schreiber2000] defined as
+A lattice of `D` unidirectionally coupled ulam maps [Schreiber2000](@cite) defined as
 
 ```math
 x^{m}_{t+1} = f(\\epsilon x^{m-1}_{t} + (1 - \\epsilon) x_{t}^{m}),
@@ -896,9 +891,6 @@ x^{m}_{t+1} = f(\\epsilon x^{m-1}_{t} + (1 - \\epsilon) x_{t}^{m}),
 where ``m = 1, 2, \\ldots, D`` and ``f(x) = 2 - x^2``. In this system, information transfer
 happens only in the direction of increasing ``m``.
 
-[^Schreiber2000]:
-    Schreiber, Thomas. "Measuring information transfer." Physical review letters 85.2
-    (2000): 461.
 """
 function ulam(D::Int = 10; u₀ = rand(D), ε::Real = 0.10)
     @warn "`ulam` is deprecated in CausalityTools v2. "*
@@ -967,7 +959,7 @@ end
         σx = 0.0, σy = 0.0, σz = 0.0) → DiscreteDynamicalSystem
 
 Intitialise a 3D system where the response X is a highly nonlinear combination
-of Y and Z (Verdes, 2005)[^Verdes2005]. The forcings Y and Z involve sines and cosines, and
+of Y and Z [Verdes2005](@cite). The forcings Y and Z involve sines and cosines, and
 have different periods, which controlled by `ωy` and `ωz`.
 
 The equations of motion are
@@ -981,10 +973,6 @@ z(t+1) &= \\dfrac{(1 - \\dfrac{\\sin(2\\pi)}{\\omega z}t)}{2} + ηz
 ```
 where ηx, ηy, ηz is gaussian noise with mean 0 and standard deviation `σx`, `σy`
 and `σz`.
-
-[^Verdes2005]:
-    Verdes, P. F. "Assessing causality from multivariate time series." Physical
-    Review E 72.2 (2005): 026222.
 """
 verdes(;u₀ = rand(3),
     ωy = 315, ωz = 80,

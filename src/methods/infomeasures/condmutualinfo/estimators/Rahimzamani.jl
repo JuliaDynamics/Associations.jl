@@ -6,15 +6,10 @@ export Rahimzamani
 
 The `Rahimzamani` estimator, short for Rahimzamani-Asnani-Viswanath-Kannan,
 is an estimator for Shannon conditional mutual information for data that can be mixtures of
-discrete and continuous data (Rahimzamani et al., 2018)[^Rahimzamani2018].
+discrete and continuous data [Rahimzamani2018](@cite).
 
 This is very similar to the [`GaoKannanOhViswanath`](@ref) mutual information estimator,
 but has been expanded to the conditional case.
-
-[^Rahimzamani2018]:
-    Rahimzamani, A., Asnani, H., Viswanath, P., & Kannan, S. (2018). Estimators for
-    multivariate information measures in general probability spaces. Advances in Neural
-    Information Processing Systems, 31.
 """
 Base.@kwdef struct Rahimzamani{M} <: ConditionalMutualInformationEstimator
     k::Int = 1

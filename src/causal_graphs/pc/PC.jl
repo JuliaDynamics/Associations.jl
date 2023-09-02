@@ -7,9 +7,9 @@ export PC
     PC(pairwise_test, conditional_test;
         α = 0.05, max_depth = Inf, maxiters_orient = Inf)
 
-The PC algorithm (Spirtes et al., 2000)[^Spirtes2000], which is named
+The PC algorithm [Spirtes2000](@cite), which is named
 named after the *first names* of the authors, **P**eter Spirtes and **C**lark Glymour,
-which is implemented as described in Kalisch & Bühlmann (2008)[^Kalisch2008].
+which is implemented as described in [Kalisch2008](@citet).
 
 ## Arguments
 
@@ -85,13 +85,6 @@ The resulting directed graph (a `SimpleDiGraph` from
 
 - [PC algorithm with parametric independence tests](@ref pc_examples_corr)
 - [PC algorithm with nonparametric independence tests](@ref pc_examples_nonparametric)
-
-[^Kalisch2008]:
-    Kalisch, M., & Bühlmann, P. (2008). Robustification of the PC-algorithm for directed
-    acyclic graphs. Journal of Computational and Graphical Statistics, 17(4), 773-789.
-[^Spirtes2000]:
-    Spirtes, P., Glymour, C. N., Scheines, R., & Heckerman, D. (2000). Causation, prediction,
-    and search. MIT press.
 """
 struct PC{U, C, A, N, MO} <: GraphAlgorithm
     pairwise_test::U

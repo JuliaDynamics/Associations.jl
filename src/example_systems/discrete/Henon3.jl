@@ -10,7 +10,7 @@ export Henon3
     Henon3(; a = 0.1, b = 0.3, c = 0.1, xi = [0.1, 0.2, 0.3])
 
 `Henon3` is a [`DiscreteDefinition`](@ref) definition for a lagged discrete dynamical
-system consisting of three coupled 1D Henon maps (Papana et al., 2013)[^Papana2013].
+system consisting of three coupled 1D Henon maps [Papana2013](@cite).
 
 ## Equations of motion
 
@@ -25,10 +25,6 @@ x_3(t+1) &= c x_2(t) x_3(t) - (1 - c) x_3(t)^2 + b x_3(t-1)
 Here ``c`` is the coupling constant. The system becomes completely synchronized
 for ``c >= 0.7``. The initial condition `xi` is repeated over the first two time steps
 before iteration starts.
-
-[^Papana2013]:
-    Papana, A., Kyrtsou, C., Kugiumtzis, D., & Diks, C. (2013). Simulation study of
-    direct causality measures in multivariate time series. Entropy, 15(7), 2635–2661.
 """
 struct Henon3{P, T, S, A, B, C} <: LaggedDiscreteDefinition{P}
     past_states::P

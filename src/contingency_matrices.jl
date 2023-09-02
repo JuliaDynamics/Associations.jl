@@ -305,9 +305,9 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 
 # Then, the joint probabilities are computed according to `method`, which controls
 # which prior assumptions about the joint relationship is assumed
-# (Fernandes et al., 2010)[^Fernandes2010].
+# (Fernandes et al., 2010)[Fernandes2010](@cite).
 
-# [^Fernandes2010]: Fernandes, A. D., & Gloor, G. B. (2010). Mutual information is
+# [Fernandes2010](@cite): Fernandes, A. D., & Gloor, G. B. (2010). Mutual information is
 #     critically dependent on prior assumptions: would the correct estimate of mutual
 #     information please identify itself?. Bioinformatics, 26(9), 1135-1139.
 
@@ -328,7 +328,7 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 # - [`NaiveJointFrequency`](@ref).
 # - [`MultiplicativeJointFrequency`](@ref).
 
-# [^Fernandes2010]: Fernandes, A. D., & Gloor, G. B. (2010). Mutual information is
+# [Fernandes2010](@cite): Fernandes, A. D., & Gloor, G. B. (2010). Mutual information is
 #     critically dependent on prior assumptions: would the correct estimate of mutual
 #     information please identify itself?. Bioinformatics, 26(9), 1135-1139.
 # """
@@ -341,7 +341,7 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 # Takes the joint frequencies naively as the observed sample counts, divided by the
 # total number of samples.
 
-# [^Fernandes2010]: Fernandes, A. D., & Gloor, G. B. (2010). Mutual information is
+# [Fernandes2010](@cite): Fernandes, A. D., & Gloor, G. B. (2010). Mutual information is
 #     critically dependent on prior assumptions: would the correct estimate of mutual
 #     information please identify itself?. Bioinformatics, 26(9), 1135-1139.
 # """
@@ -353,9 +353,9 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 
 # Represents the assumption of independence of contingency table frequencies,
 # such that the joint probabilities are given by the outer product of
-# the marginal frequencies (e.g. row-sums and column sums in the 2D case)[^Fernandes2010].
+# the marginal frequencies (e.g. row-sums and column sums in the 2D case)[Fernandes2010](@cite).
 
-# [^Fernandes2010]: Fernandes, A. D., & Gloor, G. B. (2010). Mutual information is
+# [Fernandes2010](@cite): Fernandes, A. D., & Gloor, G. B. (2010). Mutual information is
 #     critically dependent on prior assumptions: would the correct estimate of mutual
 #     information please identify itself?. Bioinformatics, 26(9), 1135-1139.
 # """

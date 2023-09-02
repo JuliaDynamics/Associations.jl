@@ -27,7 +27,7 @@ estimate for the entropy. We support the following resubstitution estimates.
 H(X) = \\int_{\\mathcal{X}} f(x) \\log f(x) dx = \\mathbb{E}[-\\log(f(X))]
 ```
 
-is estimated by replacing the expectation with the sample average ([^Diks2017])
+is estimated by replacing the expectation with the sample average ([Diks2017](@cite))
 
 ```math
 \\hat{H}(X) = -\\dfrac{1}{N}\\sum_{i = 1}^N \\log \\hat{f}(x).
@@ -43,7 +43,7 @@ is estimated by replacing the expectation with the sample average ([^Diks2017])
 - [`Silverman`](@ref)
 - [`DiksFang`](@ref)
 
-[^Diks2017].
+[Diks2017](@cite).
     Diks, C., & Fang, H. (2017). Transfer entropy for nonparametric granger causality
     detection: an evaluation of different resampling methods. Entropy, 19(7), 372.
 """

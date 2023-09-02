@@ -13,7 +13,7 @@ export Logistic3CommonDriver
 
 A discrete dynamical system consisting of three coupled 1D logistic maps
 representing the response of two independent dynamical variables to the
-forcing from a common driver (Runge, 2018)[^Runge2018].
+forcing from a common driver [Runge2018](@cite).
 The dynamical influence goes in the directions ``Z \\to X`` and ``Z \\to Y``.
 
 ## Equations of motion
@@ -32,11 +32,6 @@ Dynamical noise may be added to each of the dynamical variables by tuning the
 parameters `σz`, `σx` and `σz`. Default values for the parameters
 `r₁`, `r₂` and `r₃` are set such that the system exhibits chaotic behaviour,
 with `r₁ = r₂ = r₃ = 4`.
-
-[^Runge2018]:
-    Runge, Jakob. Causal network reconstruction from time series: From theoretical
-    assumptions to practical estimation, Chaos 28, 075310 (2018);
-    doi: 10.1063/1.5025050
 """
 Base.@kwdef struct Logistic3CommonDriver{V, R, Σx, Σy, Σz, RNG} <: DiscreteDefinition
     xi::V = [0.1, 0.2, 0.3]

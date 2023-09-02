@@ -11,7 +11,7 @@ export l_measure
     LMeasure <: AssociationMeasure
     LMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
-The `LMeasure` (Chicharro & Andrzejak, 2009)[^^Chicharro20093] is a pairwise association
+The `LMeasure` [Chicharro2009](@cite) is a pairwise association
 measure. It quantifies the probability with which close state of a target
 timeseries/embedding are mapped to close states of a source timeseries/embedding.
 
@@ -50,10 +50,6 @@ G_i^{(k)}(x|y) = \\dfrac{1}{K}\\sum_{j=1}^{K} g_{i,w_{i, j}},
 ```
 
 where ``w_{i,j}`` is the index of the ``j``-th nearest neighbor of ``\\bf{y_i}``.
-
-[^Chicharro2009]:
-    Chicharro, D., & Andrzejak, R. G. (2009). Reliable detection of directional couplings
-    using rank statistics. Physical Review E, 80(2), 026217.
 """
 Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
     K::Int = 2

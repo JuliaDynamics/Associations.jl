@@ -1,36 +1,15 @@
 cd(@__DIR__)
-using Pkg
-CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== nothing
-CI && Pkg.activate(@__DIR__)
-CI && Pkg.instantiate()
-ENV["GKSwstype"] = "100" # allow local builds without output
-using Documenter
-using DocumenterTools: Themes
+# Doc-specific (remaining packages are imported  in `build_docs_with_style.jl`, which is
+# downloaded)
+using DocumenterCitations
+import Downloads
+
+# Packages used in the doc build.
 using CausalityTools
 using ComplexityMeasures
 using StateSpaceSets
 
-# %% JuliaDynamics theme.
-# download the themes
-using DocumenterTools: Themes
-for file in ("juliadynamics-lightdefs.scss", "juliadynamics-darkdefs.scss", "juliadynamics-style.scss")
-    download("https://raw.githubusercontent.com/JuliaDynamics/doctheme/master/$file", joinpath(@__DIR__, file))
-end
-# create the themes
-for w in ("light", "dark")
-    header = read(joinpath(@__DIR__, "juliadynamics-style.scss"), String)
-    theme = read(joinpath(@__DIR__, "juliadynamics-$(w)defs.scss"), String)
-    write(joinpath(@__DIR__, "juliadynamics-$(w).scss"), header*"\n"*theme)
-end
-# compile the themes
-Themes.compile(joinpath(@__DIR__, "juliadynamics-light.scss"), joinpath(@__DIR__, "src/assets/themes/documenter-light.css"))
-Themes.compile(joinpath(@__DIR__, "juliadynamics-dark.scss"), joinpath(@__DIR__, "src/assets/themes/documenter-dark.css"))
-
-# %% Build docs
-cd(@__DIR__)
-ENV["JULIA_DEBUG"] = "Documenter"
-
-PAGES = [
+pages = [
     "Overview" => "index.md",
     "Association measures" => "measures.md",
     "Independence testing" => "independence.md",
@@ -39,26 +18,23 @@ PAGES = [
     "Examples" => "examples.md",
     "Predefined systems" => "coupled_systems.md",
     "Experimental" => "experimental.md",
+    "References" => "references.md",
 ]
 
-makedocs(
-    modules = [CausalityTools, ComplexityMeasures, StateSpaceSets],
-    format = Documenter.HTML(
-        prettyurls = CI,
-        sidebar_sitename = false,
-        assets = [
-            asset("https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap", class=:css),
-        ],
-        ),
-    sitename = "CausalityTools.jl",
-    authors = "Kristian Agasøster Haaga, David Diego, Tor Einar Møller, George Datseris",
-    pages = PAGES
+Downloads.download(
+    "https://raw.githubusercontent.com/JuliaDynamics/doctheme/master/build_docs_with_style.jl",
+    joinpath(@__DIR__, "build_docs_with_style.jl")
+)
+include("build_docs_with_style.jl")
+
+bibliography = CitationBibliography(
+    joinpath(@__DIR__, "refs.bib");
+    style=:authoryear
 )
 
-if CI
-    deploydocs(
-        repo = "github.com/JuliaDynamics/CausalityTools.jl.git",
-        target = "build",
-        push_preview = true
-    )
-end
+build_docs_with_style(pages, CausalityTools, ComplexityMeasures, StateSpaceSets;
+    expandfirst = ["index.md"],
+    bib = bibliography,
+    pages = pages,
+    authors = "Kristian Agasøster Haaga, David Diego, Tor Einar Møller, George Datseris",
+)
