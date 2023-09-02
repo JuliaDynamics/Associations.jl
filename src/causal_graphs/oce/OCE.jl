@@ -2,6 +2,7 @@ using Graphs: add_edge!
 using Graphs.SimpleGraphs: SimpleDiGraph
 
 export OCE
+export OCESelectedParents
 
 """
     OCE <: GraphAlgorithm
@@ -34,6 +35,11 @@ When used with [`infer_graph`](@ref), it returns a vector `p`, where `p[i]` are 
 parents for each input variable. This result can be converted to a `SimpleDiGraph`
 from Graphs.jl (see [example](@ref oce_example)).
 
+## Usage
+
+`OCE` is used with [`infer_graph`](@ref) to infer the parents of the input data.
+Input data must either be a `Vector{Vector{<:Real}}`, or a `StateSpaceSet`.
+
 ## Examples
 
 - [Inferring time series graph from a chain of logistic maps](@ref oce_example)
@@ -47,6 +53,40 @@ Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
     ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3), nshuffles = 100)
     τmax::T = 1
     α = 0.05
+end
+
+"""
+    OCESelectedParents
+
+A simple struct for storing the parents of a single variable `xᵢ` inferred by the
+[`OCE`](@ref) algorithm. When using [`OCE`](@ref) with [`infer_graph`](@ref),
+a `Vector{OCESelectedParents}` is returned - one per variable in the input data.
+
+## Assumptions and notation
+
+Assumes the input `x` is a `Vector{Vector{<:Real}}` or a `StateSpaceSet` (for which
+each column is treated as a variable). It contains the following fields, where
+we use the notation `xₖ(τ)` to indicate the `k`-th variable lagged by time-lag `τ`. For
+example, `x₂(-3)` is the variable `x[2]` lagged by 3 time steps.
+
+## Fields
+
+- `i`: The index of the target variable (i.e. `xᵢ(0)` is the target).
+- `all_idxs`: The possible *variable* indices of parent variables (i.e. `1:M`,
+    where `M` is the number of input variables).
+- `parents_js`: The *variable* indices of the selected parent variables --- one per selected
+    parent.
+- `parents_τs`: The *lags* for the selected parent variables --- one per selected parent.
+- `parents`: A vector containing the raw, time-lagged data for each selected parent
+    variables. Let `τ = parents_τs[k]` and `j = parents_js[k]`. Then `parents[k]` is
+    the raw data for the variable `xⱼ(-τ)`.
+"""
+Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT, A}
+    i::Int
+    all_idxs::A
+    parents::P = Vector{Vector{eltype(1.0)}}(undef, 0)
+    parents_js::PJ = Vector{Int}(undef, 0)
+    parents_τs::PT = Vector{Int}(undef, 0)
 end
 
 function infer_graph(alg::OCE, x; verbose = true)
@@ -71,28 +111,6 @@ function select_parents(alg::OCE, x; verbose = false)
     return parents
 end
 
-# A simple struct that stores information about selected parents.
-Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT}
-    i::Int
-    parents::P = Vector{Vector{eltype(1.0)}}(undef, 0)
-    parents_js::PJ = Vector{Int}(undef, 0)
-    parents_τs::PT = Vector{Int}(undef, 0)
-end
-
-function SimpleDiGraph(v::Vector{<:CausalityTools.OCESelectedParents})
-    N = length(v)
-    g = SimpleDiGraph(N)
-    for k = 1:N
-        parents = v[k]
-        for (j, τ) in zip(parents.parents_js, parents.parents_τs)
-            if j != k # avoid self-loops
-                add_edge!(g, j, k)
-            end
-        end
-    end
-    return g
-end
-
 function select_parents(alg::OCE, x, i::Int; verbose = false)
     τs, js, 𝒫s = prepare_embeddings(alg, x, i)
 
@@ -102,7 +120,10 @@ function select_parents(alg::OCE, x, i::Int; verbose = false)
     # lost from the `xᵢ`s.
     xᵢ = @views x[i][alg.τmax+1:end]
     N = length(τs)
-    parents = OCESelectedParents(i = i)
+
+    # `x` is always a vector of input variables at this stage, so we can do `length(x)`
+    # to get the number of variables
+    parents = OCESelectedParents(i = i, all_idxs = 1:length(x))
 
     ###################################################################
     # Forward search
@@ -139,13 +160,6 @@ function prepare_embeddings(alg::OCE, x, i)
         append!(𝒫s, columns(emb))
     end
     return τs, js, 𝒫s
-end
-
-function pairwise_test(parents::OCESelectedParents)
-    # Have any parents been identified yet? If not, then we're doing pairwise tests.
-    pairwise = isempty(parents.parents)
-
-    return pairwise
 end
 
 function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i::Int; verbose = true)
@@ -269,6 +283,16 @@ function eliminate_loop!(alg::OCE, parents::OCESelectedParents, xᵢ, i; verbose
     return variable_was_eliminated
 end
 
+"""
+    pairwise_test(p::OCESelectedParents) → pairwise::Bool
+
+If the parent set is empty, return `true` (a pairwise test should be performed). If the
+parent set is nonempty, return `false` (a conditional test should performed).
+"""
+function pairwise_test(p::OCESelectedParents)
+    pairwise = isempty(p.parents)
+    return pairwise
+end
 
 #########################################################################################
 # Pretty printing
@@ -468,4 +492,21 @@ function Base.print(io::IO, ::MIME"text/plain", parents::OCESelectedParents)
     print_lagged(add_subscript("x", parents.i), 0; color = TARGET_COLOR)
     printstyled(" ← "; color = SYMBOL_COLOR)
     print_condvars(parents)
+end
+
+#########################################################################################
+# Compatibility with Graphs.jl
+#########################################################################################
+function SimpleDiGraph(v::Vector{<:CausalityTools.OCESelectedParents})
+    N = length(v)
+    g = SimpleDiGraph(N)
+    for k = 1:N
+        parents = v[k]
+        for (j, τ) in zip(parents.parents_js, parents.parents_τs)
+            if j != k # avoid self-loops
+                add_edge!(g, j, k)
+            end
+        end
+    end
+    return g
 end
