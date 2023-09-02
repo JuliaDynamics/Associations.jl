@@ -30,6 +30,7 @@ GraphAlgorithm
 
 ```@docs
 OCE
+OCESelectedParents
 ```
 
 ## [PC](@ref)
