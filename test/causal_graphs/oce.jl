@@ -14,6 +14,11 @@ parents = infer_graph(alg, X; verbose = true)
 @test parents isa Vector{<:OCESelectedParents}
 @test SimpleDiGraph(parents) isa SimpleDiGraph
 
+# Convenience method for `StateSpaceSet`s.
+d = first(trajectory(sys, 50, Ttr = 10000))
+parents = infer_graph(alg, d; verbose = true)
+@test parents isa Vector{<:OCESelectedParents}
+
 rng = StableRNG(123)
 sys = system(Logistic2Bidir(; rng))
 X = columns(first(trajectory(sys, 200, Ttr = 10000)))
