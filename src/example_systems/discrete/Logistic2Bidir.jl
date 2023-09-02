@@ -12,7 +12,7 @@ export Logistic2Bidir
         rng = Random.default_rng())
 
 A bivariate system consisting of two 1D noisy logistic maps which are bidirectionally
-interacting (Diego et al., 2019)[^Diego2019].
+interacting [Diego2019](@cite).
 
 ## Equations of motion
 
@@ -31,10 +31,6 @@ processes, we use the dynamical noise terms ``\\xi_{xy}^t`` and ``\\xi_{yx}^t``,
 uniform distribution with support on ``[0, 1]``. If ``\\sigma_{xy} > 0``, then the influence
 of ``x`` on ``y`` is masked by dynamical noise equivalent to ``\\sigma_{xy} \\xi_{xy}^{t}`` at
 the ``t``-th iteration of the map, and vice versa for ``\\sigma_{yx}``.
-
-[^Diego2019]:
-    Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy
-    computation using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
 """
 Base.@kwdef struct Logistic2Bidir{V, C1, C2, R1, R2, Σx, Σy, R} <: DiscreteDefinition
     xi::V = [0.5, 0.5]

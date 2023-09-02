@@ -40,7 +40,7 @@ where adjacent vertices are found to be independent according to the given indep
 `test`. The null hypothesis of independence is rejected
 whenever the p-value is below `α`.
 
-This is essentially algorithm 3.2 in Colombo & Maathuis (2014), but only
+This is essentially algorithm 3.2 in [Colombo2014](@citet), but only
 considering the case `𝓁 = 0`.
 
 Modifies `graph` in-place.
@@ -48,10 +48,6 @@ Modifies `graph` in-place.
 If `alg.pairwise_test` is a directed test, then edges are considered one-by-one.
 If `alg.pairwise_test` is not a directed test, then edges (`X → Y, `Y → X`)
 are considered simultaneously.
-
-[^Colombo2014]:
-    Colombo, D., & Maathuis, M. H. (2014). Order-independent constraint-based causal
-    structure learning. J. Mach. Learn. Res., 15(1), 3741-3782.
 """
 function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, x; verbose = false)
     N = length(x)
@@ -80,14 +76,10 @@ Thin the skeleton `graph`, where each vertex is represented by the data `x[i]`,
 by using `conditional_test`. Whenever `x[i] ⫫ x[j] | x[S]` for
 some set of variables not including `i` and `j`, the edge between `i` and `j` is
 removed, and `S` is stored in the separating set for `i` and `j`.
-This is essentially algorithm 3.2 in Colombo & Maathuis (2014), for
+This is essentially algorithm 3.2 in [Colombo2014](@citet), for
 the cases `𝓁 >= 1`.
 
 Modifies `graph` in-place.
-
-[^Colombo2014]:
-    Colombo, D., & Maathuis, M. H. (2014). Order-independent constraint-based causal
-    structure learning. J. Mach. Learn. Res., 15(1), 3741-3782.
 """
 function skeleton_conditional!(alg::PC, graph, separating_set, x, 𝓁::Int;
         verbose = false)

@@ -4,8 +4,8 @@ export CMIRenyiJizba
 """
     CMIRenyiJizba <: ConditionalMutualInformation
 
-The Rényi conditional mutual information ``I_q^{R_{J}}(X; Y | Z`` defined in Jizba et
-al. (2012)[^Jizba2012].
+The Rényi conditional mutual information ``I_q^{R_{J}}(X; Y | Z`` defined in
+[Jizba2012](@citet).
 
 ## Usage
 
@@ -19,11 +19,6 @@ I_q^{R_{J}}(X; Y | Z) = I_q^{R_{J}}(X; Y, Z) - I_q^{R_{J}}(X; Z),
 ```
 
 where ``I_q^{R_{J}}(X; Z)`` is the [`MIRenyiJizba`](@ref) mutual information.
-
-[^Jizba2012]:
-    Jizba, P., Kleinert, H., & Shefaat, M. (2012). Rényi’s information transfer between
-    financial time series. Physica A: Statistical Mechanics and its Applications,
-    391(10), 2971-2989.
 """
 struct CMIRenyiJizba{E <: Renyi} <: ConditionalMutualInformation{E}
     e::E

@@ -13,7 +13,7 @@ export Logistic2Unidir
         rng = Random.default_rng())
 
 A bivariate system consisting of two 1D noisy logistic maps which are undirectionally
-coupled `x → y` (Diego et al., 2019)[^Diego2019].
+coupled `x → y` [Diego2019](@cite).
 
 ## Equations of motion
 
@@ -40,10 +40,6 @@ dynamical noise masking the influence of  `x` on `y` equivalent to
 flat distribution on ``[0, 1]``. Thus, setting `σ_xy = 0.05` is equivalent to
 add dynamical noise corresponding to a maximum of ``5 \\%`` of the possible
 range of values of the logistic map.
-
-[^Diego2019]:
-    Diego, David, Kristian Agasøster Haaga, and Bjarte Hannisdal. "Transfer entropy
-    computation using the Perron-Frobenius operator." Physical Review E 99.4 (2019): 042212.
 """
 Base.@kwdef struct Logistic2Unidir{V, C, R1, R2, Σy, R} <: DiscreteDefinition
     xi::V = [0.5, 0.5]

@@ -7,7 +7,7 @@ export PairwiseAsymmetricInference, PAI
     PairwiseAsymmetricInference(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The pairwise asymmetric inference (PAI) measure (McCracken & Weigel (2014)[^McCracken2014])
+The pairwise asymmetric inference (PAI) measure [McCracken2014](@cite)
 is a version of [`ConvergentCrossMapping`](@ref) that searches for neighbors in
 *mixed* embeddings (i.e. both source and target variables included); otherwise, the
 algorithms are identical.
@@ -40,10 +40,6 @@ With this convention, `τ < 0` implies "past/present values of source used to pr
 target", and `τ > 0` implies "future/present values of source used to predict target".
 The latter case may not be meaningful for many applications, so by default, a warning
 will be given if `τ > 0` (`embed_warn = false` turns off warnings).
-
-[^McCracken2014]:
-    McCracken, J. M., & Weigel, R. S. (2014). Convergent cross-mapping and pairwise
-    asymmetric inference. Physical Review E, 90(6), 062903.
 """
 Base.@kwdef struct PairwiseAsymmetricInference <: CrossmapMeasure
     d::Int = 2

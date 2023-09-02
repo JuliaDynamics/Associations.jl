@@ -4,8 +4,7 @@ export SymbolicTransferEntropy
     SymbolicTransferEntropy <: TransferEntropyEstimator
     SymbolicTransferEntropy(; m = 3, τ = 1, lt = ComplexityMeasures.isless_rand
 
-A convenience estimator for symbolic transfer entropy (Stanieck & Lenertz,
-2008)[^Stanieck2008].
+A convenience estimator for symbolic transfer entropy [Staniek2008](@cite).
 
 ## Description
 
@@ -17,10 +16,6 @@ input time series into integer time series using [`OrdinalPatternEncoding`](@ref
 
 Transfer entropy is then estimated as usual on the encoded timeseries with
 [`transferentropy`](@ref) and the [`CountOccurrences`](@ref) naive frequency estimator.
-
-[^Stanieck2008]:
-    Staniek, M., & Lehnertz, K. (2008). Symbolic transfer entropy. Physical review letters,
-    100(15), 158101.
 """
 Base.@kwdef struct SymbolicTransferEntropy <: TransferEntropyEstimator
     m::Int = 3

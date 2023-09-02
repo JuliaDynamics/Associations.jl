@@ -10,7 +10,7 @@ export pai
     This syntax is deprecated. It will continue to work for CausalityTools v1.X, but will
     be removed in CausalityTools v2. See [here](@ref cross_mapping_api) for updated syntax.
 
-Compute the cross mapping [^Sugihara2012] between `x` and `y`, which is the correspondence (computed using
+Compute the cross mapping [Sugihara2012](@cite) between `x` and `y`, which is the correspondence (computed using
 `correspondence measure`) between the values ``y(t)`` and the cross-map estimated values ``ỹ(t) | M_x``.
 
 Returns the correspondence between original and cross mapped values (the default is
@@ -27,14 +27,11 @@ during the nearest neighbors search (the default `r = 0` excludes only the predi
 If `bootstrap_method` is specified, then `nreps` different bootstrapped estimates of
 `correspondence_measure(y(t), ỹ(t) | M_x)` are returned. The following bootstrap methods are available:
 - `bootstrap_method = :random` selects training sets of length `L` consisting of randomly selected
-    points from the embedding ``M_x``  (time ordering does not matter). This is method 3 from Luo
-    et al. (2015)[^Luo2015], which critiqued the original Sugihara et al. methodology.
+    points from the embedding ``M_x``  (time ordering does not matter). This is method 3 from
+    [Luo2015](@citet), which critiqued the original [Sugihara2012](@cite)'s methodology.
 - `bootstrap_method = :segment` selects training sets consisting of time-contiguous segments
     (each of lenght `L`) of embedding vectors in ``M_x`` (time ordering matters). This is
-    method 2 from Luo et al. (2015)[^Luo2015].
-
-[^Sugihara2012]: Sugihara, George, et al. "Detecting causality in complex ecosystems." Science (2012): 1227079.[http://science.sciencemag.org/content/early/2012/09/19/science.1227079](http://science.sciencemag.org/content/early/2012/09/19/science.1227079)
-[^Luo2015]: "Questionable causality: Cosmic rays to temperature." Proceedings of the National Academy of Sciences Aug 2015, 112 (34) E4638-E4639; DOI: 10.1073/pnas.1510571112 Ming Luo, Holger Kantz, Ngar-Cheung Lau, Wenwen Huang, Yu Zhou
+    method 2 from [Luo2015](@citet).
 """
 function crossmap(x, y, d, τ; correspondence_measure = Statistics.cor, r = 0)
     @warn """\
@@ -72,11 +69,11 @@ end
     This syntax is deprecated. It will continue to work for CausalityTools v1.X, but will
     be removed in CausalityTools v2. See [here](@ref cross_mapping_api) for updated syntax.
 
-Compute the pairwise asymmetric inference (PAI; McCracken, 2014)[^McCracken2014] between `x` and `y`.
+Compute the pairwise asymmetric inference (PAI; [McCracken2014](@citet)) between `x` and `y`.
 Returns the correspondence between original and cross mapped values (the default is
 `ρ = correspondence_measure(y(t), ỹ(t) | M_xy)`).
 
-PAI is a modification to Sugihara et al. (2012)'s CCM algorithm[^Sugihara2012], where instead of
+PAI is a modification to [Sugihara2012](@citet)'s CCM algorithm, where instead of
 using completely out-of-sample prediction when trying to predict ``y(t)``, values about *both* variables
 are included in the embedding used to make predictions. Specifically, PAI computes the
 correspondence between the values ``y(t)`` and the cross-map estimated values ``ỹ(t) | M_xy``,
@@ -90,15 +87,11 @@ If `bootstrap_method` is specified, then `nreps` different bootstrapped estimate
 `correspondence_measure(y(t), ỹ(t) | M_x)` are returned. The following bootstrap methods are available:
 
 - `bootstrap_method = :random` selects training sets of length `L` consisting of randomly selected
-    points from the embedding ``M_x``  (time ordering does not matter). This is method 3 from Luo
-    et al. (2015)[^Luo2015], which critiqued the original Sugihara et al. methodology.
+    points from the embedding ``M_x``  (time ordering does not matter). This is method 3 from
+    [Luo2015](@cite), which critiqued the original [Sugihara2012](@citet) methodology.
 - `bootstrap_method = :segment` selects training sets consisting of time-contiguous segments
     (each of lenght `L`) of embedding vectors in ``M_x`` (time ordering matters). This is
-    method 2 from Luo et al. (2015)[^Luo2015].
-
-[^McCracken2014]: McCracken, James M., and Robert S. Weigel. "Convergent cross-mapping and pairwise asymmetric inference." Physical Review E 90.6 (2014): 062903.
-[^Sugihara2012]: Sugihara, George, et al. "Detecting causality in complex ecosystems." Science (2012): 1227079.[http://science.sciencemag.org/content/early/2012/09/19/science.1227079](http://science.sciencemag.org/content/early/2012/09/19/science.1227079)
-[^Luo2015]: "Questionable causality: Cosmic rays to temperature." Proceedings of the National Academy of Sciences Aug 2015, 112 (34) E4638-E4639; DOI: 10.1073/pnas.1510571112 Ming Luo, Holger Kantz, Ngar-Cheung Lau, Wenwen Huang, Yu Zhou
+    method 2 from Luo et al. (2015)[Luo2015](@cite).
 """
 function pai(x, y, d, τ; correspondence_measure = Statistics.cor, r = 0)
     @warn """\

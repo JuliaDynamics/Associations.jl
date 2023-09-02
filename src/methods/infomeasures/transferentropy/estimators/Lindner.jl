@@ -8,7 +8,7 @@ export Lindner
     Lindner <: TransferEntropyEstimator
     Lindner(k = 1, w = 0, base = 2)
 
-The `Lindner` transfer entropy estimator (Lindner et al., 2011)[^Lindner2011], which is
+The `Lindner` transfer entropy estimator [Lindner2011](@cite), which is
 also used in the Trentool MATLAB toolbox, and is based on nearest neighbor searches.
 
 `w` is the Theiler window, which determines if temporal neighbors are excluded
@@ -33,11 +33,6 @@ TE(X \\to Y) =
 
 where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
 neighbor searches are performed.
-
-[^Lindner2011]:
-    Lindner, M., Vicente, R., Priesemann, V., & Wibral, M. (2011). TRENTOOL:
-    A Matlab open source toolbox to analyse information flow in time series data with
-    transfer entropy. BMC neuroscience, 12(1), 1-22.
 """
 Base.@kwdef struct Lindner{B} <: TransferEntropyEstimator
     k::Int = 2 # number of neighbors in joint space.

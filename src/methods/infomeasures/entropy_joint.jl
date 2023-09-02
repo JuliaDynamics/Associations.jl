@@ -21,24 +21,18 @@ Given two two discrete random variables ``X`` and ``Y`` with ranges ``\\mathcal{
 
 - [`JointEntropyShannon`](@ref):
     ``H^S(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y) \\log p(x, y)``
-    (Cover & Thomas, 2006)[^CoverThomas2006].
+    (Cover & Thomas, 2006)[CoverThomas2006](@cite).
 - [`JointEntropyRenyi`](@ref):
     ``H_q^R(X, Y) = -\\dfrac{1}{1-\\alpha} \\log \\sum_{i = 1}^N p_i^q``
-    (Golshani et al., 2009)[^Golshani2009].
+    (Golshani et al., 2009)[Golshani2009](@cite).
 - [`JointEntropyTsallis`](@ref):
     ``H_q^T(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y)^q \\log_q p(x, y)``
-    (Furuichi, 2006)[^Furuichi2006],
+    (Furuichi, 2006)[Furuichi2006](@cite),
     where ``log_q(x, q) = \\dfrac{x^{1-q} - 1}{1-q}`` is the q-logarithm.
 
-[^CoverThomas2006]:
-    Thomas M. Cover and Joy A. Thomas. 2006. Elements of Information Theory (Wiley Series
-    in Telecommunications and Signal Processing). Wiley-Interscience, USA.
-[^Golshani2009]:
-    Golshani, L., Pasha, E., & Yari, G. (2009). Some properties of Rényi
-    entropy and Rényi entropy rate. Information Sciences, 179(14), 2426-2433.
-[^Furuichi2006]:
-    Furuichi, S. (2006). Information theoretical properties of Tsallis entropies. Journal
-    of Mathematical Physics, 47(2), 023302.
+The expressions for Shannon joint entropy is from [CoverThomas2006](@citet),
+for Rényi joint entropy from [Golshani2009](@citet), and for Tsallis joint entropy
+from [Furuichi2006](@citet).
 """
 function entropy_joint(e::EntropyDefinition, args...)
     throw(ArgumentError("Joint entropy not defined and/or implemented for $e with $(args)"))
@@ -133,7 +127,7 @@ end
 
 
 # ``H_q^T(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y)^q \\log_q p(x, y)``
-# (Furuichi, 2006)[^Furuichi2006],
+# (Furuichi, 2006)[Furuichi2006](@cite),
 # where ``log_q(x, q) = \\dfrac{x^{1-q} - 1}{1-q}`` is the q-logarithm.
 
 function entropy_joint(measure::JointEntropyTsallis, c::ContingencyMatrix{T, 2}) where {T}

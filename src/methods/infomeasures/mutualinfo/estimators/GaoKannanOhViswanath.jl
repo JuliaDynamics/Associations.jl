@@ -8,7 +8,7 @@ export GaoKannanOhViswanath
 
 The `GaoKannanOhViswanath` (Shannon) estimator is designed for estimating
 mutual information between variables that may be either discrete, continuous or
-a mixture of both (Gao et al., 2017).
+a mixture of both [GaoKannanOhViswanath2017](@cite).
 
 !!! note "Explicitly convert your discrete data to floats"
     Even though the `GaoKannanOhViswanath` estimator is designed to handle discrete data,
@@ -30,7 +30,7 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
 
 
 !!! warn "Implementation note"
-    In Gao et al., (2017), they claim (roughly speaking) that the estimator
+    In [GaoKannanOhViswanath2017](@citet), they claim (roughly speaking) that the estimator
     reduces to the [`KraskovStögbauerGrassberger1`](@ref) estimator for continuous-valued data.
     However, [`KraskovStögbauerGrassberger1`](@ref) uses the digamma function, while `GaoKannanOhViswanath`
     uses the logarithm instead, so the estimators are not exactly equivalent
@@ -49,10 +49,6 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
 
 
 See also: [`mutualinfo`](@ref).
-
-[^GaoKannanOhViswanath2017]:
-    Gao, W., Kannan, S., Oh, S., & Viswanath, P. (2017). Estimating mutual information for
-    discrete-continuous mixtures. Advances in neural information processing systems, 30.
 """
 Base.@kwdef struct GaoKannanOhViswanath <: MutualInformationEstimator
     k::Int = 1

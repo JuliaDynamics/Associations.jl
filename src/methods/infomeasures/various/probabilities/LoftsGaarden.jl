@@ -16,10 +16,6 @@ distribution over the sample points is then normalized to form probabilities.
 The outcome space `Ω` for `LoftsGaarden` is the indices of the input data, `1:length(x)`.
 The reason to not return the data points themselves is because duplicate data points may
 not have same probabilities (due to having different neighbors).
-
-[^Loftsgaarden1965]:
-    Loftsgaarden, D. O., & Quesenberry, C. P. (1965). A nonparametric estimate of a
-    multivariate density function. The Annals of Mathematical Statistics, 36(3), 1049-1051.
 """
 Base.@kwdef struct LoftsGaarden{M} <: ProbabilitiesEstimator
     k::Int = 5

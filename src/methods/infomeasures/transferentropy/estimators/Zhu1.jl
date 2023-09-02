@@ -11,27 +11,18 @@ export Zhu1
     Zhu1 <: TransferEntropyEstimator
     Zhu1(k = 1, w = 0, base = MathConstants.e)
 
-The `Zhu1` transfer entropy estimator (Zhu et al., 2015)[^Zhu2015].
+The `Zhu1` transfer entropy estimator [Zhu2015](@cite).
 
 Assumes that the input data have been normalized as described in (Zhu et al., 2015).
 
 This estimator approximates probabilities within hyperrectangles
 surrounding each point `xᵢ ∈ x` using using `k` nearest neighbor searches. However,
 it also considers the number of neighbors falling on the borders of these hyperrectangles.
-This estimator is an extension to the entropy estimator in Singh et al. (2003).
+This estimator is an extension to the entropy estimator in [Singh2003](@citet).
 
 `w` is the Theiler window, which determines if temporal neighbors are excluded
 during neighbor searches (defaults to `0`, meaning that only the point itself is excluded
 when searching for neighbours).
-
-[^Zhu2015]:
-    Zhu, J., Bellanger, J. J., Shu, H., & Le Bouquin Jeannès, R. (2015). Contribution to
-    transfer entropy estimation via the k-nearest-neighbors approach. Entropy, 17(6),
-    4173-4201.
-[^Singh2003]:
-    Singh, H., Misra, N., Hnizdo, V., Fedorowicz, A., & Demchuk, E. (2003). Nearest
-    neighbor estimates of entropy. American journal of mathematical and management
-    sciences, 23(3-4), 301-321.
 """
 Base.@kwdef struct Zhu1 <: TransferEntropyEstimator
     k::Int = 2

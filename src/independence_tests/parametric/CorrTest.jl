@@ -12,7 +12,9 @@ import HypothesisTests: pvalue
     CorrTest()
 
 An independence test based correlation (for two variables) and partial
-correlation (for three variables), as described in Schmidt et al. (2018)[^Schmidt2018].
+correlation (for three variables) ([Levy1978](@citet)@; as described in
+[Schmidt2018](@citet)).
+
 Uses [`PearsonCorrelation`](@ref) and [`PartialCorrelation`](@ref) internally.
 
 Assumes that the input data are (multivariate) normally distributed. Then
@@ -21,7 +23,7 @@ Assumes that the input data are (multivariate) normally distributed. Then
 ## Description
 
 The null hypothesis is `H₀ := ρ(X, Y | 𝐙) = 0`. We use
-the approach in Levy & Narula (1978)[^Levy1978] and compute the Z-transformation
+the approach in Levy & Narula (1978)[Levy1978](@cite) and compute the Z-transformation
 of the observed (partial) correlation coefficient ``\\hat{\\rho}_{XY|\\bf{Z}}``:
 
 ```math
@@ -48,16 +50,6 @@ For the pairwise case, the procedure is identical, but set ``\\bf{Z} = \\emptyse
 ## Examples
 
 - [`CorrTest`for independence between normally distributed data](@ref examples_corrtest).
-
-[^Levy1978]:
-    Levy, K. J., & Narula, S. C. (1978). Testing hypotheses concerning partial
-    correlations: Some methods and discussion. International Statistical Review/Revue Internationale de Statistique, 215-218.
-
-[^Schmidt2018]:
-    Schmidt, C., Huegle, J., & Uflacker, M. (2018, July). Order-independent
-    constraint-based causal structure learning for gaussian distribution models using
-    gpus. In Proceedings of the 30th International Conference on Scientific and
-    Statistical Database Management (pp. 1-10).
 """
 Base.@kwdef struct CorrTest{M} <: IndependenceTest{M}
     measure::M = nothing

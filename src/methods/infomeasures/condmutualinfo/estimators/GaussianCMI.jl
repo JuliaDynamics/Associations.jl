@@ -6,7 +6,7 @@ using StateSpaceSets: StateSpaceSet
     GaussianCMI(; normalize::Bool = false)
 
 `GaussianCMI` is a parametric estimator for Shannon conditional mutual information (CMI)
-(Vejmelka & Paluš)[^Vejmelka2008].
+[Vejmelka2008](@cite).
 
 ## Description
 
@@ -17,10 +17,6 @@ for [`GaussianMI`](@ref)):
 ```math
 \\hat{I}_{Gaussian}(X; Y | Z) = \\hat{I}_{Gaussian}(X; Y, Z) - \\hat{I}_{Gaussian}(X; Z)
 ```
-
-[^Vejmelka2008]:
-    Vejmelka, M., & Paluš, M. (2008). Inferring the directionality of coupling with
-    conditional mutual information. Physical Review E, 77(2), 026214.
 """
 Base.@kwdef struct GaussianCMI <: MutualInformationEstimator
     normalize::Bool = false

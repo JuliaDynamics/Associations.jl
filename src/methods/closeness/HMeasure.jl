@@ -11,7 +11,7 @@ export HMeasure
     HMeasure <: AssociationMeasure
     HMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
-The `HMeasure` (Grassberger et al., 1999)[^Grassberger1999] is a pairwise association
+The `HMeasure` [Arnhold1999](@cite) is a pairwise association
 measure. It quantifies the probability with which close state of a target
 timeseries/embedding are mapped to close states of a source timeseries/embedding.
 
@@ -25,7 +25,7 @@ for an explanation.
 
 ## Description
 
-The `HMeasure` (Grassberger et al., 1999)[^Grassberger1999] is similar to the
+The `HMeasure` [Arnhold1999](@cite) is similar to the
 [`SMeasure`](@ref), but the numerator of the formula is replaced by ``R_i(x)``, the mean
 squared Euclidean distance to *all other points*, and there is a ``\\log``-term inside
 the sum:
@@ -36,11 +36,6 @@ H^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N}
 ```
 
 Parameters are the same and ``R_i^{(k)}(x|y)`` is computed as for [`SMeasure`](@ref).
-
-[^Grassberger1999]:
-    Arnhold, J., Grassberger, P., Lehnertz, K., & Elger, C. E. (1999). A robust method for detecting
-    interdependences: application to intracranially recorded EEG. Physica D:
-    Nonlinear Phenomena, 134(4), 419-430.
 """
 Base.@kwdef struct HMeasure{M, TM} <: AssociationMeasure
     K::Int = 2

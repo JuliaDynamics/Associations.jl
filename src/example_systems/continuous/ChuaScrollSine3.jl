@@ -12,7 +12,7 @@ export ChuaScrollSine3
         ny = Normal(0.0, 0.01)
         nz = Normal(0.0, 0.01))
 
-An adjusted Chua system giving rise to n-scroll attractors (Tang et al., 2001)[^Tang2001].
+An adjusted Chua system giving rise to n-scroll attractors [Tang2001](@cite).
 
 ## Description
 
@@ -43,11 +43,6 @@ elseif x <= -2*a*c
     fx = (b*pi/2*a)*(x + 2*a*c)
 end
 ```
-
-[^Tang2001]:
-    Tang, Wallace KS, et al. "Generation of n-scroll attractors via
-    sine function." IEEE Transactions on Circuits and Systems I:
-    Fundamental Theory and Applications 48.11 (2001): 1369-1372.
 """
 Base.@kwdef struct ChuaScrollSine3{V,A,B,Y,Q,R,C,NX,NY,NZ,RNG} <: ContinuousDefinition
     xi::V = [0.1, 0.2, 0.3]

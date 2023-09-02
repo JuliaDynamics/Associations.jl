@@ -8,8 +8,7 @@ export ConvergentCrossMapping, CCM
     ConvergentCrossMapping(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The convergent [cross mapping](@ref cross_mapping_api) (CCM) measure
-(Sugihara et al., 2012)[^Sugihara2012]).
+The convergent [cross mapping](@ref cross_mapping_api) (CCM) measure [Sugihara2012](@cite)).
 
 Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
 with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
@@ -36,10 +35,6 @@ With this convention, `τ < 0` implies "past/present values of source used to pr
 target", and `τ > 0` implies "future/present values of source used to predict target".
 The latter case may not be meaningful for many applications, so by default, a warning
 will be given if `τ > 0` (`embed_warn = false` turns off warnings).
-
-[^Sugihara2012]:
-    Sugihara, G., May, R., Ye, H., Hsieh, C. H., Deyle, E., Fogarty, M., & Munch, S.
-    (2012). Detecting causality in complex ecosystems. science, 338(6106), 496-500.
 """
 Base.@kwdef struct ConvergentCrossMapping <: CrossmapMeasure
     d::Int = 2

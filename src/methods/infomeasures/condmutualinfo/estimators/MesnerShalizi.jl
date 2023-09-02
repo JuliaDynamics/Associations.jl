@@ -5,13 +5,8 @@ export MesnerShalisi
     MesnerShalizi(k = 1, w = 0)
 
 The `MesnerShalizi` estimator is an estimator for conditional mutual information for data
-that can be mixtures of discrete and continuous data (Mesner & Shalisi et al.,
-2020)[^MesnerShalizi2020].
+that can be mixtures of discrete and continuous data [MesnerShalizi2020](@cite).
 
-[^MesnerShalizi2020]:
-    Mesner, O. C., & Shalizi, C. R. (2020). Conditional mutual information estimation for
-    mixed, discrete and continuous data. IEEE Transactions on Information Theory, 67(1),
-    464-484.
 """
 Base.@kwdef struct MesnerShalizi{M} <: ConditionalMutualInformationEstimator
     k::Int = 1

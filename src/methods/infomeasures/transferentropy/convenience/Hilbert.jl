@@ -26,7 +26,7 @@ struct Phase <: InstantaneousSignalProperty end
 
 Compute transfer entropy on instantaneous phases/amplitudes of relevant signals, which are
 obtained by first applying the Hilbert transform to each signal, then extracting the
-phases/amplitudes of the resulting complex numbers[^Palus2014]. Original time series are
+phases/amplitudes of the resulting complex numbers [Palus2014](@cite). Original time series are
 thus transformed to instantaneous phase/amplitude time series. Transfer
 entropy is then estimated using the provided `est` on those phases/amplitudes (use e.g.
 [`VisitationFrequency`](@ref), or [`SymbolicPermutation`](@ref)).
@@ -38,8 +38,6 @@ entropy is then estimated using the provided `est` on those phases/amplitudes (u
     time series, from which transfer entropy is then computed as usual.
 
 See also: [`Phase`](@ref), [`Amplitude`](@ref).
-
-[^Palus2014]: Paluš, M. (2014). Cross-scale interactions and information transfer. Entropy, 16(10), 5263-5289.
 """
 struct Hilbert{E} <: TransferEntropyEstimator
     source::InstantaneousSignalProperty

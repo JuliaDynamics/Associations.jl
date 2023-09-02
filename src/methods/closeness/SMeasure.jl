@@ -11,8 +11,8 @@ export s_measure
     SMeasure < AssociationMeasure
     SMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
-`SMeasure` is a bivariate association measure from Grassberger et al. (1999)[^Grassberger1999]
-and Quiroga et al. (2000) [^Quiroga2000] that measure directional dependence
+`SMeasure` is a bivariate association measure from [Arnhold1999](@citet)
+and [Quiroga2000](@citet) that measure directional dependence
 between two input (potentially multivariate) time series.
 
 Note that `τx` and `τy` are negative; see explanation below.
@@ -65,7 +65,7 @@ S^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N} \\dfrac{R_i^{(k)}(x)}{R_i^{(k)}(x|y
 
 ## Input data
 
-The algorithm is slightly modified from [^Grassberger1999] to allow univariate timeseries as input.
+The algorithm is slightly modified from [Grassberger1999](@cite) to allow univariate timeseries as input.
 
 - If `x` and `y` are [`StateSpaceSet`](@ref)s then use `x` and `y` as is and ignore the parameters
     `dx`/`τx` and `dy`/`τy`.
@@ -78,14 +78,6 @@ The algorithm is slightly modified from [^Grassberger1999] to allow univariate t
 
 In all three cases, input StateSpaceSets are length-matched by eliminating points at the end of
 the longest StateSpaceSet (after the embedding step, if relevant) before analysis.
-
-[^Quiroga2000]:
-    Quian Quiroga, R., Arnhold, J. & Grassberger, P. [2000] “Learning driver-response relationships
-    from synchronization patterns,” Phys. Rev. E61(5), 5142–5148.
-[^Grassberger1999]:
-    Arnhold, J., Grassberger, P., Lehnertz, K., & Elger, C. E. (1999). A robust method for detecting
-    interdependences: application to intracranially recorded EEG. Physica D:
-    Nonlinear Phenomena, 134(4), 419-430.
 """
 Base.@kwdef struct SMeasure{M, TM} <: AssociationMeasure
     K::Int = 2

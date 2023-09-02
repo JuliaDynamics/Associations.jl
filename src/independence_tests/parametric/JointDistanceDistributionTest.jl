@@ -10,7 +10,7 @@ using Distributions: cdf
     JointDistanceDistributionTest(measure::JointDistanceDistribution; rng = Random.default_rng())
 
 An independence test for two variables based on the [`JointDistanceDistribution`](@ref)
-(Amigó & Hirata, 2018)[^Amigo2018].
+[Amigo2018](@cite).
 
 When used with [`independence`](@ref), a [`JDDTestResult`](@ref) is returned.
 
@@ -34,11 +34,6 @@ the joint distance distribution and a p-value. If you only need `Δ`, use [`jdd`
 
 [This example](@ref quickstart_jddtest) shows how the `JointDistanceDistributionTest`
 can be used in practice.
-
-[^Amigo2018]:
-    Amigó, José M., and Yoshito Hirata. "Detecting directional couplings from multivariate
-    flows by the joint distance distribution." Chaos: An Interdisciplinary Journal of
-    Nonlinear Science 28.7 (2018): 075302.
 """
 struct JointDistanceDistributionTest{M <: JointDistanceDistribution, R} <: IndependenceTest{M}
     measure::M

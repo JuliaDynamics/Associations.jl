@@ -8,7 +8,7 @@ export Verdes3
     Verdes3(; ui = [0.1, 0.15, 0.2], ωy = 315, ωz = 80, σx = 0.0, σy = 0.0, σz = 0.0)
 
 A 3D system where the response X is a highly nonlinear combination
-of Y and Z (Verdes, 2005)[^Verdes2005]. The forcings Y and Z involve sines and cosines, and
+of Y and Z [Verdes2005](@cite). The forcings Y and Z involve sines and cosines, and
 have different periods, which controlled by `ωy` and `ωz`.
 
 ```math
@@ -20,10 +20,6 @@ z(t+1) &= \\dfrac{(1 - \\dfrac{\\sin(2\\pi)}{\\omega z}t)}{2} + ηz
 ```
 where ηx, ηy, ηz is gaussian noise with mean 0 and standard deviation `σx`, `σy`
 and `σz`.
-
-[^Verdes2005]:
-    Verdes, P. F. "Assessing causality from multivariate time series." Physical
-    Review E 72.2 (2005): 026222.
 """
 Base.@kwdef struct Verdes3{V, Ωy, Ωz, N1, N2, N3, R} <: DiscreteDefinition
     xi::V = [0.1, 0.15, 0.2]
