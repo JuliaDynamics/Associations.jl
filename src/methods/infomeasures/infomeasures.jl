@@ -3,7 +3,8 @@ export InformationMeasure
 export InformationMeasureEstimator
 export InformationMeasureDefinition # Actually, InformationMeasure and InformationMeasureDefinition could be identical
 
-const ProbOrDiffEst = Union{ProbabilitiesEstimator, DifferentialEntropyEstimator}
+const ProbOrDiffEst = Union{ProbabilitiesEstimator, DifferentialInfoEstimator}
+
 """
 The supertype for all estimators of information-based measures.
 """
