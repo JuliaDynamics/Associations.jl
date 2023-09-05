@@ -1,3 +1,4 @@
+using StatsBase: levelsmap
 using ComplexityMeasures
 using ComplexityMeasures: Counts
 using DimensionalData: DimArray
@@ -10,12 +11,6 @@ export counts
 # The following code extends the functionality of ComplexityMeasures.jl for multiple
 # input data (ComplexityMeasures.jl only deals with single-variable estimation)
 # ##########################################################################################
-using StatsBase: levelsmap
-# So that we can mix discrete-valued state space sets with discrete-valued regular
-# vectors.
-unique_elements(x) = unique(x)
-unique_elements(x::AbstractStateSpaceSet) = unique(x.data)
-
 """
     counts(x₁, x₂, ..., xₙ) → Counts{N}
 
@@ -27,7 +22,7 @@ These discrete iterables are typically `Vector{Int}` constructed from input data
 [`encode`](@ref) in combination with some [`Discretization`](@ref).
 """
 function counts(x::Vararg{<:Any, N}) where N # this extends ComplexityMeasures.jl definition
-    #@show N
+    @show N
     # Get marginal probabilities and outcomes
     L = length(x)
     cts, lmaps, encoded_outcomes = counts_table(x...)
@@ -120,3 +115,8 @@ end
 # Ugly hack, because levelsmap doesn't work out-of-the-box for statespacesets.
 _levelsmap(x) = levelsmap(x)
 _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
+
+# So that we can mix discrete-valued state space sets with discrete-valued regular
+# vectors.
+unique_elements(x) = unique(x)
+unique_elements(x::AbstractStateSpaceSet) = unique(x.data)

@@ -6,6 +6,8 @@ const ArrayOrStateSpaceSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSp
 export AssociationMeasure
 export DirectedAssociationMeasure
 
+""" A discretization of `N` input datasets. """
+abstract type Discretization{N} end
 
 # Any non-bivariate association measures must implement:
 # - [`min_inputs_vars`](@ref).
@@ -69,5 +71,9 @@ function verify_number_of_inputs_vars(measure::AssociationMeasure, n::Int)
     end
 end
 
-include("counts.jl")
-include("probabilities.jl")
+# Counts related
+include("counts/counts.jl")
+#include("counts/estimation.jl")
+
+# Probabilities estimation related
+#include("probabilities.jl")
