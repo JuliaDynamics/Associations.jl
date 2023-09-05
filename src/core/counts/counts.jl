@@ -1,3 +1,9 @@
+using ComplexityMeasures
+using ComplexityMeasures: Counts
+using DimensionalData: DimArray
+
+import ComplexityMeasures: counts
+export counts
 
 # ##########################################################################################
 # Counts API.
@@ -5,37 +11,10 @@
 # input data (ComplexityMeasures.jl only deals with single-variable estimation)
 # ##########################################################################################
 using StatsBase: levelsmap
-
 # So that we can mix discrete-valued state space sets with discrete-valued regular
 # vectors.
 unique_elements(x) = unique(x)
 unique_elements(x::AbstractStateSpaceSet) = unique(x.data)
-
-
-# Base.show(io::IO, c::Counts) = show(io, summary_string(c))
-# function Base.show(io::IO, m::MIME"text/plain", c::Counts)
-#     arr = repr("text/plain", c.cts)
-#     # remove first two lines (these just show `NamedArray` info)
-#     arr_final = join(split(arr, '\n')[3:end], "\n  ")
-#     total_str = join([summary_string(c), arr_final], '\n')
-#     print(io,  total_str)
-# end
-
-# function summary_string(c::Counts)
-#     ds = size(c.cts)
-#     n = sum(c.cts)
-#     summary_string = join(["$d" for d in ds], 'x') * " Counts with n=$(n) counts"
-#     return summary_string
-# end
-
-# Base.getindex(c::Counts, i...) = getindex(c.cts, i...)
-# Base.setindex(c::Counts, i...) = setindex(c.cts, i...)
-# Base.iterate(c::Counts, state=1) = iterate(c.cts, state)
-# Base.eltype(c::Counts) = eltype(c.cts)
-# Base.length(c::Counts) = length(c.cts)
-# Base.size(c::Counts) = size(c.cts)
-# Base.firstindex(c::Counts) = firstindex(c.cts)
-# Base.lastindex(c::Counts) = lastindex(c.cts)
 
 """
     counts(x₁, x₂, ..., xₙ) → Counts{N}
@@ -47,7 +26,8 @@ discrete values.
 These discrete iterables are typically `Vector{Int}` constructed from input data using
 [`encode`](@ref) in combination with some [`Discretization`](@ref).
 """
-function counts(x...)
+function counts(x::Vararg{<:Any, N}) where N # this extends ComplexityMeasures.jl definition
+    #@show N
     # Get marginal probabilities and outcomes
     L = length(x)
     cts, lmaps, encoded_outcomes = counts_table(x...)
@@ -55,8 +35,7 @@ function counts(x...)
     #   internally encoded outcomes for the `i`-th input, and the actual outcomes
     #   for the `i`-th input.
     actual_outcomes = map(i -> to_outcomes(lmaps[i], encoded_outcomes[i]), tuple(1:L...))
-    cts_named = DimArray(cts, actual_outcomes)
-    return Counts(cts_named)
+    return Counts(cts, actual_outcomes)
 end
 
 function to_outcomes(lmap::Dict, encoded_outcomes::Vector{<:Integer})

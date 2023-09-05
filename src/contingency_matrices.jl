@@ -141,10 +141,6 @@ function contingency_matrix(x...)
     )
 end
 
-unique_elements(x) = unique(x)
-unique_elements(x::AbstractStateSpaceSet) = unique(x.data)
-
-
 function freqtable_equallength(matrix_dims, x...)
     # Map the input data to integers. This ensures compatibility with *any* input type.
     # Then, we can simply create a joint `StateSpaceSet{length(x), Int}` and use its elements
@@ -155,58 +151,15 @@ function freqtable_equallength(matrix_dims, x...)
     X = StateSpaceSet(levels...)
 
     freqs = zeros(Int, matrix_dims)
-    for ix in to_cartesian(sort(X.data)) # sorted matrix access should be faster.
+    for ix in _to_cartesian(sort(X.data)) # sorted matrix access should be faster.
         freqs[ix] += 1
     end
     return freqs, lmaps
 end
 
-function to_cartesian(x)
-    (CartesianIndex.(xᵢ...) for xᵢ in x)
-end
-
-"""
-    tolevels!(levels, x) → levels, dict
-    tolevels(x) → levels, dict
-
-Apply the bijective map ``f : \\mathcal{Q} \\to \\mathbb{N}^+`` to each `x[i]` and store
-the result in `levels[i]`, where `levels` is a pre-allocated integer vector such that
-`length(x) == length(levels)`.
-
-``\\mathcal{Q}`` can be any space, and each ``q \\in \\mathcal{Q}`` is mapped to a unique
-integer  in the range `1, 2, …, length(unique(x))`. This is useful for integer-encoding
-categorical data such as strings, or other complex data structures.
-
-The single-argument method allocated a `levels` vector internally.
-
-`dict` gives the inverse mapping.
-"""
-function tolevels!(levels, x)
-    @assert length(levels) == length(x)
-    lmap = _levelsmap(x)
-    for i in eachindex(x)
-        levels[i] = lmap[x[i]]
-    end
-    return levels, lmap
-end
-
-function tolevels(x)
-    lmap = _levelsmap(x)
-    levels = zeros(Int, length(x))
-    for i in eachindex(x)
-        levels[i] = lmap[x[i]]
-    end
-    return levels, lmap
-end
-
-# Ugly hack, because levelsmap doesn't work out-of-the-box for statespacesets.
-_levelsmap(x) = levelsmap(x)
-_levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
-
 # The following commented-out code below is equivalent to theabove, but muuuch faster.
 # I keep the comments here for, so when I revisit this, I understand *why* it works.
 # This will be moved into some sort of tutorial or doc example at some point.
-
 
 # TODO: actually dispatch on joint frequency method for all methods below.
 # function ContingencyMatrix(X, Y)

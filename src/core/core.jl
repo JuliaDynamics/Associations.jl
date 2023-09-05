@@ -24,9 +24,6 @@ function estimate(measure::M, est::Nothing, args...; kwargs...) where M
     estimate(measure, args...; kwargs...)
 end
 
-include("contingency_matrices.jl")
-
-
 # Just use ComplexityMeasures.convert_logunit when it is released.
 """
     _convert_logunit(h_a::Real, , to) → h_b
@@ -71,3 +68,6 @@ function verify_number_of_inputs_vars(measure::AssociationMeasure, n::Int)
         throw(ArgumentError("$T accepts a maximum of $nmax inputs. Got $n inputs."))
     end
 end
+
+include("counts.jl")
+include("probabilities.jl")

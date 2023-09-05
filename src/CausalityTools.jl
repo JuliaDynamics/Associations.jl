@@ -22,24 +22,26 @@ module CausalityTools
     @reexport using ComplexityMeasures
     @reexport using TimeseriesSurrogates
 
-    include("core.jl")
-    include("methods/infomeasures/infomeasures.jl")
-    include("methods/crossmappings/crossmappings.jl")
-    include("methods/closeness/closeness.jl")
-    include("methods/correlation/correlation.jl")
-    include("methods/recurrence/methods.jl")
+    include("core/core.jl")
+    # include("contingency_matrices.jl")
+    # include("infomeasures/infomeasures.jl")
 
-    include("utils/utils.jl")
+    # include("methods/crossmappings/crossmappings.jl")
+    # include("methods/closeness/closeness.jl")
+    # include("methods/correlation/correlation.jl")
+    # include("methods/recurrence/methods.jl")
 
-    # Independence tests must be loaded after everything else has been defined.
-    include("independence_tests/independence.jl")
+    # include("utils/utils.jl")
 
-    # Causal graph API must be loaded after independence tests.
-    include("causal_graphs/causal_graphs.jl")
+    # # Independence tests must be loaded after everything else has been defined.
+    # include("independence_tests/independence.jl")
 
-    include("example_systems/example_systems.jl")
+    # # Causal graph API must be loaded after independence tests.
+    # include("causal_graphs/causal_graphs.jl")
 
-    include("deprecations/deprecations.jl")
+    # include("example_systems/example_systems.jl")
+
+    # include("deprecations/deprecations.jl")
 
     #using Requires
     #function __init__()
