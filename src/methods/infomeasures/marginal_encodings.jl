@@ -19,7 +19,7 @@ used internally by [`contingency_matrix`](@ref).
     [`RectangularBinning`](@ref) (which adapts the grid to the data).
     When using [`FixedRectangularBinning`](@ref), the range along the first dimension
     is used as a template for all other dimensions.
-- [`SymbolicPermutation`](@ref). Each timeseries is separately [`encode`](@ref)d according
+- [`OrdinalPatterns`](@ref). Each timeseries is separately [`encode`](@ref)d according
     to its ordinal pattern.
 - [`Dispersion`](@ref). Each timeseries is separately [`encode`](@ref)d according to its
     dispersion pattern.
@@ -41,7 +41,7 @@ function marginally_encode_variable(est::CountOccurrences, x::AbstractVector)
     return x
 end
 
-function marginally_encode_variable(est::SymbolicPermutation{m}, x::AbstractVector) where {m}
+function marginally_encode_variable(est::OrdinalPatterns{m}, x::AbstractVector) where {m}
     emb = embed(x, m, est.τ).data
     return encode.(Ref(est.encoding), emb)
 end

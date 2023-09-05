@@ -34,7 +34,7 @@ mutualinfo(s::UT, t::UT, method; kwargs...) =
 
 info_methods = [
     :VisitationFrequency, :TransferOperator,
-    :SymbolicPermutation, :SymbolicAmplitudeAwarePermutation, :SymbolicWeightedPermutation,
+    :OrdinalPatterns, :AmplitudeAwareOrdinalPatterns, :WeightedOrdinalPatterns,
     :NaiveKernel,
     :Kraskov,
     :Kraskov1,

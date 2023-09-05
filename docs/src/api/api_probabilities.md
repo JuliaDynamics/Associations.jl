@@ -39,7 +39,7 @@ which discretizes each dimension of the multivariate input data separately.
 | [`ValueHistogram`](@ref)      | Binning (histogram)                            |
 | [`TransferOperator`](@ref)    | Binning (transfer operator)                    |
 | [`NaiveKernel`](@ref)         | Kernel density estimation                      |
-| [`SymbolicPermutation`](@ref) | Ordinal patterns                               |
+| [`OrdinalPatterns`](@ref) | Ordinal patterns                               |
 | [`Dispersion`](@ref)          | Dispersion patterns                            |
 
 ### Contingency
@@ -82,7 +82,7 @@ transfermatrix
 ### Symbolic permutations
 
 ```@docs
-SymbolicPermutation
+OrdinalPatterns
 ```
 
 ### Dispersion patterns

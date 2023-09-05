@@ -11,7 +11,7 @@ A convenience estimator for symbolic transfer entropy [Staniek2008](@cite).
 [Symbolic transfer entropy](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.100.158101)
 consists of two simple steps. First, the input time series are embedded with embedding
 lag `m` and delay `τ`. The ordinal patterns of the embedding vectors are then encoded
-using [`SymbolicPermutation`](@ref) with [`marginal_encodings`](@ref). This transforms the
+using [`OrdinalPatterns`](@ref) with [`marginal_encodings`](@ref). This transforms the
 input time series into integer time series using [`OrdinalPatternEncoding`](@ref).
 
 Transfer entropy is then estimated as usual on the encoded timeseries with
@@ -27,7 +27,7 @@ end
 function estimate(measure::TransferEntropy, est::SymbolicTransferEntropy,
     x::AbstractVector...)
     (; m, τ, lt) = est
-    est = SymbolicPermutation(; m, τ, lt)
+    est = OrdinalPatterns(; m, τ, lt)
     s = marginal_encodings(est, x...)
     transferentropy(measure, CountOccurrences(), s...)
 end

@@ -59,7 +59,7 @@ non-negative.
 | ----------------------------- | ------------------- | :-----------: |
 | [`CountOccurrences`](@ref)    | Frequencies         |          ✓    |
 | [`ValueHistogram`](@ref)      | Binning (histogram) |          ✓    |
-| [`SymbolicPermutation`](@ref) | Ordinal patterns    |          ✓    |
+| [`OrdinalPatterns`](@ref) | Ordinal patterns    |          ✓    |
 | [`Dispersion`](@ref)          | Dispersion patterns |          ✓    |
 """
 function pmi(measure::PMI, args...)

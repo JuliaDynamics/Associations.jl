@@ -66,7 +66,7 @@ distribution.
 | ---------------------------- | ------------------- | :-----------------: | :--------------------: | :-------------------------: |
 | [`CountOccurrences`](@ref)   | Frequencies         |         ✓          |           ✓           |              x              |
 | [`ValueHistogram`](@ref)     | Binning (histogram) |         ✓          |           ✓           |              x              |
-| [`SymbolicPermutation`](@ref) | Ordinal patterns    |         ✓          |           ✓           |              x              |
+| [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |           ✓           |              x              |
 | [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |           ✓           |              x              |
 """
 function entropy_conditional(measure::ConditionalEntropy, est::ProbabilitiesEstimator, x, y)
@@ -113,7 +113,7 @@ end
 # Override some definitions, because the estimator behaviour need to be adjusted
 # for multiple input variables.
 const WellDefinedCEProbEsts{m, D} = Union{
-    SymbolicPermutation{m},
+    OrdinalPatterns{m},
     ValueHistogram{<:FixedRectangularBinning{D}},
     ValueHistogram{<:RectangularBinning{T}},
     Dispersion

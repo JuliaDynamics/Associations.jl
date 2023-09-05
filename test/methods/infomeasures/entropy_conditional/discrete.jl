@@ -1,7 +1,7 @@
 ests = [
     ValueHistogram(RectangularBinning(3)),
     ValueHistogram(FixedRectangularBinning(0:0.25:1.0)),
-    SymbolicPermutation(m = 3),
+    OrdinalPatterns(m = 3),
     Dispersion(m = 2, c = 3)
 ]
 

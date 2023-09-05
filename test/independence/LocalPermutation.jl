@@ -28,7 +28,7 @@ Y = StateSpaceSet(y)
 Z = StateSpaceSet(z)
 
 nshuffles = 5
-lptest_sp = LocalPermutationTest(CMIShannon(), SymbolicPermutation(); nshuffles, rng)
+lptest_sp = LocalPermutationTest(CMIShannon(), OrdinalPatterns(); nshuffles, rng)
 lptest_vh = LocalPermutationTest(CMIShannon(), ValueHistogram(4); nshuffles, rng)
 lptest_dp = LocalPermutationTest(CMIShannon(), Dispersion(); nshuffles, rng)
 @test independence(lptest_sp, x, y, z) isa LocalPermutationTestResult
@@ -49,7 +49,7 @@ Y = StateSpaceSet(y)
 Z = StateSpaceSet(z)
 
 nshuffles = 5
-lptest_sp = LocalPermutationTest(PMI(), SymbolicPermutation(); nshuffles, rng)
+lptest_sp = LocalPermutationTest(PMI(), OrdinalPatterns(); nshuffles, rng)
 lptest_vh = LocalPermutationTest(PMI(), ValueHistogram(4); nshuffles, rng)
 lptest_dp = LocalPermutationTest(PMI(), Dispersion(); nshuffles, rng)
 @test independence(lptest_sp, x, y, z) isa LocalPermutationTestResult
@@ -89,7 +89,7 @@ z = z + rand(rng, n) * 1e-3
 # We should not be able to reject the null hypothesis `x ⫫ z | y`, because
 # x → y → z, so when conditioning on the intermediate variable,
 # the first and last variable in the chain should be independent.
-test_sp = LocalPermutationTest(PMI(), SymbolicPermutation(); nshuffles = 200, rng)
+test_sp = LocalPermutationTest(PMI(), OrdinalPatterns(); nshuffles = 200, rng)
 test_dp = LocalPermutationTest(PMI(), Dispersion(); nshuffles = 200, rng)
 test_vh = LocalPermutationTest(PMI(), ValueHistogram(2); nshuffles = 200, rng)
 @test pvalue(independence(test_sp, x, y, z)) > α

@@ -102,7 +102,7 @@ non-negative.
 | ---------------------------- | ------------------- | :------------------: | :---------------------: |
 | [`CountOccurrences`](@ref)   | Frequencies         |          ✓          |           ✓            |
 | [`ValueHistogram`](@ref)     | Binning (histogram) |          ✓          |           ✓            |
-| [`SymbolicPermutation`](@ref) | Ordinal patterns    |          ✓          |           ✓            |
+| [`OrdinalPatterns`](@ref) | Ordinal patterns    |          ✓          |           ✓            |
 | [`Dispersion`](@ref)         | Dispersion patterns |          ✓          |           ✓            |
 """
 function condmutualinfo(measure::CMI, est::ProbabilitiesEstimator, x, y, z)
@@ -212,7 +212,7 @@ end
 # Override some definitions, because the estimator behaviour need to be adjusted
 # for multiple input variables.
 const WellDefinedCMIShannonProbEsts{m, D} = Union{
-    SymbolicPermutation{m},
+    OrdinalPatterns{m},
     ValueHistogram{<:FixedRectangularBinning{D}},
     ValueHistogram{<:RectangularBinning{T}},
     Dispersion
