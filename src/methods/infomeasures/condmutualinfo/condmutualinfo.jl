@@ -98,12 +98,12 @@ non-negative.
 
 ## Estimators
 
-| Estimator                    | Principle           | [`CMIShannon`](@ref) | [`CMIRenyiSarbu`](@ref) |
-| ---------------------------- | ------------------- | :------------------: | :---------------------: |
-| [`CountOccurrences`](@ref)   | Frequencies         |          ✓          |           ✓            |
-| [`ValueHistogram`](@ref)     | Binning (histogram) |          ✓          |           ✓            |
+| Estimator                 | Principle           | [`CMIShannon`](@ref) | [`CMIRenyiSarbu`](@ref) |
+| ------------------------- | ------------------- | :------------------: | :---------------------: |
+| [`UniqueElements`](@ref)  | Frequencies         |          ✓          |           ✓            |
+| [`ValueHistogram`](@ref)  | Binning (histogram) |          ✓          |           ✓            |
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |          ✓          |           ✓            |
-| [`Dispersion`](@ref)         | Dispersion patterns |          ✓          |           ✓            |
+| [`Dispersion`](@ref)      | Dispersion patterns |          ✓          |           ✓            |
 """
 function condmutualinfo(measure::CMI, est::ProbabilitiesEstimator, x, y, z)
     return estimate(measure, est, x, y, z)
@@ -227,9 +227,9 @@ function marginal_entropies_cmi4h(measure::Union{CMIShannon, CMIRenyiSarbu},
     eYZ = StateSpaceSet(eY, eZ)
     eXYZ = StateSpaceSet(eX, eY, eZ)
 
-    HXZ = entropy(e, CountOccurrences(), eXZ)
-    HYZ = entropy(e, CountOccurrences(), eYZ)
-    HXYZ = entropy(e, CountOccurrences(), eXYZ)
-    HZ = entropy(e, CountOccurrences(), eZ)
+    HXZ = entropy(e, UniqueElements(), eXZ)
+    HYZ = entropy(e, UniqueElements(), eYZ)
+    HXYZ = entropy(e, UniqueElements(), eXYZ)
+    HZ = entropy(e, UniqueElements(), eZ)
     return HXZ, HYZ, HXYZ, HZ
 end

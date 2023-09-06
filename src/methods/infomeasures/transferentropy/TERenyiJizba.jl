@@ -36,7 +36,7 @@ mutual information.
 
 | Estimator                        | Type                                   | Principle           | [`TERenyiJizba`](@ref) |
 | -------------------------------- | -------------------------------------- | ------------------- | :--------------------: |
-| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)       | Frequencies         |           ✓           |
+| [`UniqueElements`](@ref)       | [`ProbabilitiesEstimator`](@ref)       | Frequencies         |           ✓           |
 | [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)       | Binning (histogram) |           ✓           |
 | [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref) | Nearest neighbors   |           ✓           |
 """

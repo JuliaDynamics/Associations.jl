@@ -55,12 +55,12 @@ non-negative.
 
 ## Estimators
 
-| Estimator                     | Principle           | [`PMI`](@ref) |
-| ----------------------------- | ------------------- | :-----------: |
-| [`CountOccurrences`](@ref)    | Frequencies         |          ✓    |
-| [`ValueHistogram`](@ref)      | Binning (histogram) |          ✓    |
-| [`OrdinalPatterns`](@ref) | Ordinal patterns    |          ✓    |
-| [`Dispersion`](@ref)          | Dispersion patterns |          ✓    |
+| Estimator                 | Principle           | [`PMI`](@ref) |
+| ------------------------- | ------------------- | :-----------: |
+| [`UniqueElements`](@ref)  | Frequencies         |      ✓       |
+| [`ValueHistogram`](@ref)  | Binning (histogram) |      ✓       |
+| [`OrdinalPatterns`](@ref) | Ordinal patterns    |      ✓       |
+| [`Dispersion`](@ref)      | Dispersion patterns |      ✓       |
 """
 function pmi(measure::PMI, args...)
     return estimate(measure, args...)
@@ -75,7 +75,7 @@ function estimate(measure::PMI, est::Contingency{<:ProbabilitiesEstimator}, x, y
 end
 
 function estimate(measure::PMI, est::Contingency{<:Nothing}, x, y, z)
-    return estimate(measure, contingency_matrix(CountOccurrences(), x, y, z))
+    return estimate(measure, contingency_matrix(UniqueElements(), x, y, z))
 end
 
 # We explicitly need to construct a contingency matrix, because unlike for e.g. CMI,

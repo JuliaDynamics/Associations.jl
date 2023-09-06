@@ -94,13 +94,13 @@ Joint and marginal probabilities are computed by jointly discretizing `x` and `y
 the approach given by `est` (using [`marginal_encodings`](@ref)), and obtaining marginal
 distributions from the joint distribution.
 
-| Estimator                    | Principle           | [`MIShannon`](@ref) | [`MITsallisFuruichi`](@ref) | [`MITsallisMartin`](@ref) | [`MIRenyiJizba`](@ref) | [`MIRenyiSarbu`](@ref) |
-| ---------------------------- | ------------------- | :-----------------: | :-------------------------: | :-----------------------: | :--------------------: | :--------------------: |
-| [`Contingency`](@ref)        | Contingency table   |         ✓          |             ✓              |            ✓             |           ✓           |           ✓            |
-| [`CountOccurrences`](@ref)   | Frequencies         |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
-| [`ValueHistogram`](@ref)     | Binning (histogram) |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
-| [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
-| [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |             ✓              |            ✓             |           ✓           |           ✖            |
+| Estimator                 | Principle           | [`MIShannon`](@ref) | [`MITsallisFuruichi`](@ref) | [`MITsallisMartin`](@ref) | [`MIRenyiJizba`](@ref) | [`MIRenyiSarbu`](@ref) |
+| ------------------------- | ------------------- | :-----------------: | :-------------------------: | :-----------------------: | :--------------------: | :--------------------: |
+| [`Contingency`](@ref)     | Contingency table   |         ✓          |             ✓              |            ✓             |           ✓           |           ✓           |
+| [`UniqueElements`](@ref)  | Frequencies         |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
+| [`ValueHistogram`](@ref)  | Binning (histogram) |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
+| [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
+| [`Dispersion`](@ref)      | Dispersion patterns |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
 """
 function mutualinfo(measure::MutualInformation, est::ProbabilitiesEstimator, x, y)
     return estimate(measure, est, x, y)
@@ -202,8 +202,8 @@ function marginal_entropies_mi3h(measure::MutualInformation,
     eX, eY = marginal_encodings(est, x, y)
     eXY = StateSpaceSet(eX, eY)
     e = measure.e
-    HX = entropy(e, CountOccurrences(), eX)
-    HY = entropy(e, CountOccurrences(), eY)
-    HXY = entropy(e, CountOccurrences(), eXY)
+    HX = entropy(e, UniqueElements(), eX)
+    HY = entropy(e, UniqueElements(), eY)
+    HXY = entropy(e, UniqueElements(), eXY)
     return HX, HY, HXY
 end

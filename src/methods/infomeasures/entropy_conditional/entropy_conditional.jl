@@ -62,12 +62,12 @@ Joint and marginal probabilities are computed by jointly discretizing `x` and `y
 the approach given by `est`, and obtaining the marginal distribution for `y` from the joint
 distribution.
 
-| Estimator                    | Principle           | [`CEShannon`](@ref) | [`CETsallisAbe`](@ref) | [`CETsallisFuruichi`](@ref) |
-| ---------------------------- | ------------------- | :-----------------: | :--------------------: | :-------------------------: |
-| [`CountOccurrences`](@ref)   | Frequencies         |         ✓          |           ✓           |              x              |
-| [`ValueHistogram`](@ref)     | Binning (histogram) |         ✓          |           ✓           |              x              |
+| Estimator                 | Principle           | [`CEShannon`](@ref) | [`CETsallisAbe`](@ref) | [`CETsallisFuruichi`](@ref) |
+| ------------------------- | ------------------- | :-----------------: | :--------------------: | :-------------------------: |
+| [`UniqueElements`](@ref)  | Frequencies         |         ✓          |           ✓           |              x              |
+| [`ValueHistogram`](@ref)  | Binning (histogram) |         ✓          |           ✓           |              x              |
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |           ✓           |              x              |
-| [`Dispersion`](@ref)         | Dispersion patterns |         ✓          |           ✓           |              x              |
+| [`Dispersion`](@ref)      | Dispersion patterns |         ✓          |           ✓           |              x              |
 """
 function entropy_conditional(measure::ConditionalEntropy, est::ProbabilitiesEstimator, x, y)
     return estimate(measure, est, x, y)
@@ -87,13 +87,13 @@ If `measure` is not given, then the default is `CEShannon()`.
 
 | Estimator                        | Principle         | [`CEShannon`](@ref) | [`CETsallisAbe`](@ref) | [`CETsallisFuruichi`](@ref) |
 | -------------------------------- | ----------------- | :-----------------: | :--------------------: | :-------------------------: |
-| [`Kraskov`](@ref)                | Nearest neighbors |         ✓          |           x           |              x              |
-| [`Zhu`](@ref)                    | Nearest neighbors |         ✓          |           x           |              x              |
-| [`ZhuSingh`](@ref)               | Nearest neighbors |         ✓          |           x           |              x              |
-| [`Gao`](@ref)                    | Nearest neighbors |         ✓          |           x           |              x              |
-| [`Goria`](@ref)                  | Nearest neighbors |         ✓          |           x           |              x              |
-| [`Lord`](@ref)                   | Nearest neighbors |         ✓          |           x           |              x              |
-| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |           x           |              x              |
+| [`Kraskov`](@ref)                | Nearest neighbors |         ✓          |           x            |              x              |
+| [`Zhu`](@ref)                    | Nearest neighbors |         ✓          |           x            |              x              |
+| [`ZhuSingh`](@ref)               | Nearest neighbors |         ✓          |           x            |              x              |
+| [`Gao`](@ref)                    | Nearest neighbors |         ✓          |           x            |              x              |
+| [`Goria`](@ref)                  | Nearest neighbors |         ✓          |           x            |              x              |
+| [`Lord`](@ref)                   | Nearest neighbors |         ✓          |           x            |              x              |
+| [`LeonenkoProzantoSavani`](@ref) | Nearest neighbors |         ✓          |           x            |              x              |
 """
 function entropy_conditional(measure::ConditionalEntropy, est::DifferentialEntropyEstimator, x, y)
     return estimate(measure, est, x, y)
@@ -124,8 +124,8 @@ function marginal_entropies_ce2h(measure::ConditionalEntropy,
     eX, eY = marginal_encodings(est, x, y)
     eXY = StateSpaceSet(eX, eY)
     e = measure.e
-    HY = entropy(e, CountOccurrences(), eY)
-    HXY = entropy(e, CountOccurrences(), eXY)
+    HY = entropy(e, UniqueElements(), eY)
+    HXY = entropy(e, UniqueElements(), eXY)
     return HY, HXY
 end
 

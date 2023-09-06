@@ -39,7 +39,7 @@ x, y, z, w = columns(first(trajectory(sys, 1000, Ttr = 10000)))
 x = rand(rng, 1:3, 20000)
 y = rand(rng, 1:3, 20000)
 z = rand(rng, 1:3, 20000)
-@test round(pmi(CountOccurrences(), x, y, z), digits = 3) == 0
+@test round(pmi(UniqueElements(), x, y, z), digits = 3) == 0
 
 # Independence tests
 x = rand(rng, 50)

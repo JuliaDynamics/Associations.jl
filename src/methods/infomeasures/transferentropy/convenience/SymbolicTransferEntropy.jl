@@ -15,7 +15,7 @@ using [`OrdinalPatterns`](@ref) with [`marginal_encodings`](@ref). This transfor
 input time series into integer time series using [`OrdinalPatternEncoding`](@ref).
 
 Transfer entropy is then estimated as usual on the encoded timeseries with
-[`transferentropy`](@ref) and the [`CountOccurrences`](@ref) naive frequency estimator.
+[`transferentropy`](@ref) and the [`UniqueElements`](@ref) naive frequency estimator.
 """
 Base.@kwdef struct SymbolicTransferEntropy <: TransferEntropyEstimator
     m::Int = 3
@@ -29,5 +29,5 @@ function estimate(measure::TransferEntropy, est::SymbolicTransferEntropy,
     (; m, τ, lt) = est
     est = OrdinalPatterns(; m, τ, lt)
     s = marginal_encodings(est, x...)
-    transferentropy(measure, CountOccurrences(), s...)
+    transferentropy(measure, UniqueElements(), s...)
 end

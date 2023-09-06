@@ -37,7 +37,7 @@ of the other dedicated conditional mutual information estimators.
 
 | Estimator                        | Type                                            | Principle           | Pairwise | Conditional |
 | -------------------------------- | ----------------------------------------------- | ------------------- | :------: | :---------: |
-| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |    ✓    |     ✓      |
+| [`UniqueElements`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |    ✓    |     ✓      |
 | [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |    ✓    |     ✓      |
 | [`Dispersion`](@ref)             | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |    ✓    |     ✓      |
 | [`Kraskov`](@ref)                | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |    ✓    |     ✓      |

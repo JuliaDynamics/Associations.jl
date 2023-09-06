@@ -129,7 +129,7 @@ function contingency_matrix(x...)
     matrix_dims = length.(Ωs);
 
     # Get marginal probabilities and outcomes
-    #pΩs = [probabilities_and_outcomes(CountOccurrences(), xᵢ) for xᵢ in x]
+    #pΩs = [probabilities_and_outcomes(UniqueElements(), xᵢ) for xᵢ in x]
     freqs, lmaps = freqtable_equallength(matrix_dims, x...)
 
     # TODO: Inverse map from integer-encoded outcomes to the original outcomes.
@@ -163,8 +163,8 @@ end
 
 # TODO: actually dispatch on joint frequency method for all methods below.
 # function ContingencyMatrix(X, Y)
-#     pX, ΩX = probabilities_and_outcomes(CountOccurrences(), X); lX = length(pX)
-#     pY, ΩY = probabilities_and_outcomes(CountOccurrences(), Y); lY = length(pY)
+#     pX, ΩX = probabilities_and_outcomes(UniqueElements(), X); lX = length(pX)
+#     pY, ΩY = probabilities_and_outcomes(UniqueElements(), Y); lY = length(pY)
 #     p̂X = reshape(pX, lX, 1)
 #     p̂Y = reshape(pY, 1, lY)
 #     pXY = p̂X .* p̂Y
@@ -172,9 +172,9 @@ end
 # end
 
 # function ContingencyMatrix(X, Y, Z)
-#     pX, ΩX = probabilities_and_outcomes(CountOccurrences(), X); lX = length(pX)
-#     pY, ΩY = probabilities_and_outcomes(CountOccurrences(), Y); lY = length(pY)
-#     pZ, ΩZ = probabilities_and_outcomes(CountOccurrences(), Z); lZ = length(pZ)
+#     pX, ΩX = probabilities_and_outcomes(UniqueElements(), X); lX = length(pX)
+#     pY, ΩY = probabilities_and_outcomes(UniqueElements(), Y); lY = length(pY)
+#     pZ, ΩZ = probabilities_and_outcomes(UniqueElements(), Z); lZ = length(pZ)
 #     p̂X = reshape(pX, lX, 1, 1)
 #     p̂Y = reshape(pY, 1, lY, 1)
 #     p̂Z = reshape(pZ, 1, 1, lZ)
@@ -204,9 +204,9 @@ end
 
     # The following is equivalent to the commented-out code above, but muuuch faster.
      # I keep the above code, so when I revisit this, I understand *why* it works.
-#     pX = probabilities(CountOccurrences(), X); lX = length(pX)
-#     pY = probabilities(CountOccurrences(), Y); lY = length(pY)
-#     pZ = probabilities(CountOccurrences(), Z); lZ = length(pZ)
+#     pX = probabilities(UniqueElements(), X); lX = length(pX)
+#     pY = probabilities(UniqueElements(), Y); lY = length(pY)
+#     pZ = probabilities(UniqueElements(), Z); lZ = length(pZ)
 
 #     # # Reshape explicitly for 3D case to work.
 #     p̂X = reshape(pX, lX, 1, 1)

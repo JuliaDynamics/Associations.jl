@@ -37,7 +37,7 @@ which all boil down to computing conditional mutual information, except for
 
 | Estimator                        | Type                                            | Principle           | [`TEShannon`](@ref) |
 | -------------------------------- | ----------------------------------------------- | ------------------- | :-----------------: |
-| [`CountOccurrences`](@ref)       | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |         ✓          |
+| [`UniqueElements`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |         ✓          |
 | [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |         ✓          |
 | [`SymbolicPermuation`](@ref)     | [`ProbabilitiesEstimator`](@ref)                | Ordinal patterns    |         ✓          |
 | [`Dispersion`](@ref)             | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |         ✓          |

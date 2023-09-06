@@ -35,7 +35,7 @@ which discretizes each dimension of the multivariate input data separately.
 | Estimator                     | Principle                                      |
 | :---------------------------- | :--------------------------------------------- |
 | [`Contingency`](@ref)         | Count co-occurrences, optionally discretize first |
-| [`CountOccurrences`](@ref)    | Count of unique elements                       |
+| [`UniqueElements`](@ref)    | Count of unique elements                       |
 | [`ValueHistogram`](@ref)      | Binning (histogram)                            |
 | [`TransferOperator`](@ref)    | Binning (transfer operator)                    |
 | [`NaiveKernel`](@ref)         | Kernel density estimation                      |
@@ -51,7 +51,7 @@ Contingency
 ### Count occurrences
 
 ```@docs
-CountOccurrences
+UniqueElements
 ```
 
 ### Histograms (binning)

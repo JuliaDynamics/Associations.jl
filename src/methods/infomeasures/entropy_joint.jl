@@ -95,7 +95,7 @@ function entropy_joint(measure::JointEntropyShannon, x...)
     # We circumvent this definition by directly counting *occurring pairs*.
     # Any non-occurring pair then gets probability zero automatically.
     X = StateSpaceSet(x...)
-    return entropy(measure.e, CountOccurrences(), X)
+    return entropy(measure.e, UniqueElements(), X)
 end
 
 function entropy_joint(measure::JointEntropyShannon, est::DifferentialEntropyEstimator, x...)
@@ -107,12 +107,12 @@ function entropy_joint(measure::JointEntropyRenyi, x...)
     # Direct analogue of Shannon version,
     #Golshani, L., Pasha, E., & Yari, G. (2009). Some properties of Rényi entropy and Rényi entropy rate. Information Sciences, 179(14), 2426-2433.
     X = StateSpaceSet(x...)
-    return entropy(measure.e, CountOccurrences(), X)
+    return entropy(measure.e, UniqueElements(), X)
 end
 
 function entropy_joint(measure::JointEntropyTsallis, x...)
     X = StateSpaceSet(x...)
-    return entropy(measure.e, CountOccurrences(), X)
+    return entropy(measure.e, UniqueElements(), X)
 end
 
 function entropy_joint(measure::JointEntropyShannon, c::ContingencyMatrix{T, 2}) where {T}
