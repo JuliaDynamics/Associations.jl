@@ -47,10 +47,10 @@ w = rand(1000)
 probests = [
     OrdinalPatterns(m = 3),
     Dispersion(),
-    ValueHistogram(3),
+    ValueBinning(3),
     Contingency(OrdinalPatterns(m = 3)),
     Contingency(Dispersion()),
-    Contingency(ValueHistogram(3)),
+    Contingency(ValueBinning(3)),
 ]
 
 @testset "Contingency table: with $(probests[i]) discretization" for i in eachindex(probests)

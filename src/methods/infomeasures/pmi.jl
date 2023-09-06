@@ -58,7 +58,7 @@ non-negative.
 | Estimator                 | Principle           | [`PMI`](@ref) |
 | ------------------------- | ------------------- | :-----------: |
 | [`UniqueElements`](@ref)  | Frequencies         |      ✓       |
-| [`ValueHistogram`](@ref)  | Binning (histogram) |      ✓       |
+| [`ValueBinning`](@ref)    | Binning (histogram) |      ✓       |
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |      ✓       |
 | [`Dispersion`](@ref)      | Dispersion patterns |      ✓       |
 """

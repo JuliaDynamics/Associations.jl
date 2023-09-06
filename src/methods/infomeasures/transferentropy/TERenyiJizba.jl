@@ -36,8 +36,8 @@ mutual information.
 
 | Estimator                        | Type                                   | Principle           | [`TERenyiJizba`](@ref) |
 | -------------------------------- | -------------------------------------- | ------------------- | :--------------------: |
-| [`UniqueElements`](@ref)       | [`ProbabilitiesEstimator`](@ref)       | Frequencies         |           ✓           |
-| [`ValueHistogram`](@ref)         | [`ProbabilitiesEstimator`](@ref)       | Binning (histogram) |           ✓           |
+| [`UniqueElements`](@ref)         | [`ProbabilitiesEstimator`](@ref)       | Frequencies         |           ✓           |
+| [`ValueBinning`](@ref)           | [`ProbabilitiesEstimator`](@ref)       | Binning (histogram) |           ✓           |
 | [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref) | Nearest neighbors   |           ✓           |
 """
 struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy{E, EMB}

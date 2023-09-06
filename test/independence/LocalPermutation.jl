@@ -29,7 +29,7 @@ Z = StateSpaceSet(z)
 
 nshuffles = 5
 lptest_sp = LocalPermutationTest(CMIShannon(), OrdinalPatterns(); nshuffles, rng)
-lptest_vh = LocalPermutationTest(CMIShannon(), ValueHistogram(4); nshuffles, rng)
+lptest_vh = LocalPermutationTest(CMIShannon(), ValueBinning(4); nshuffles, rng)
 lptest_dp = LocalPermutationTest(CMIShannon(), Dispersion(); nshuffles, rng)
 @test independence(lptest_sp, x, y, z) isa LocalPermutationTestResult
 @test independence(lptest_vh, x, y, z) isa LocalPermutationTestResult
@@ -50,7 +50,7 @@ Z = StateSpaceSet(z)
 
 nshuffles = 5
 lptest_sp = LocalPermutationTest(PMI(), OrdinalPatterns(); nshuffles, rng)
-lptest_vh = LocalPermutationTest(PMI(), ValueHistogram(4); nshuffles, rng)
+lptest_vh = LocalPermutationTest(PMI(), ValueBinning(4); nshuffles, rng)
 lptest_dp = LocalPermutationTest(PMI(), Dispersion(); nshuffles, rng)
 @test independence(lptest_sp, x, y, z) isa LocalPermutationTestResult
 @test independence(lptest_vh, x, y, z) isa LocalPermutationTestResult
@@ -91,7 +91,7 @@ z = z + rand(rng, n) * 1e-3
 # the first and last variable in the chain should be independent.
 test_sp = LocalPermutationTest(PMI(), OrdinalPatterns(); nshuffles = 200, rng)
 test_dp = LocalPermutationTest(PMI(), Dispersion(); nshuffles = 200, rng)
-test_vh = LocalPermutationTest(PMI(), ValueHistogram(2); nshuffles = 200, rng)
+test_vh = LocalPermutationTest(PMI(), ValueBinning(2); nshuffles = 200, rng)
 @test pvalue(independence(test_sp, x, y, z)) > α
 @test pvalue(independence(test_dp, x, y, z)) > α
 @test pvalue(independence(test_vh, x, y, z)) > α

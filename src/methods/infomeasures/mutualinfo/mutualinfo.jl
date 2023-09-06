@@ -98,7 +98,7 @@ distributions from the joint distribution.
 | ------------------------- | ------------------- | :-----------------: | :-------------------------: | :-----------------------: | :--------------------: | :--------------------: |
 | [`Contingency`](@ref)     | Contingency table   |         ✓          |             ✓              |            ✓             |           ✓           |           ✓           |
 | [`UniqueElements`](@ref)  | Frequencies         |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
-| [`ValueHistogram`](@ref)  | Binning (histogram) |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
+| [`ValueBinning`](@ref)    | Binning (histogram) |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
 | [`Dispersion`](@ref)      | Dispersion patterns |         ✓          |             ✓              |            ✓             |           ✓           |           ✖           |
 """
@@ -192,8 +192,8 @@ end
 # for multiple input variables.
 const WellDefinedMIShannonProbEsts{m, D} = Union{
     OrdinalPatterns{m},
-    ValueHistogram{<:FixedRectangularBinning{D}},
-    ValueHistogram{<:RectangularBinning{T}},
+    ValueBinning{<:FixedRectangularBinning{D}},
+    ValueBinning{<:RectangularBinning{T}},
     Dispersion
 } where {m, D, T}
 

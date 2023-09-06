@@ -2,7 +2,7 @@ using StableRNGs
 rng = StableRNG(123)
 
 ed = Dispersion(m = 2, c = 2)
-vh = ValueHistogram(2)
+vh = ValueBinning(2)
 sp = OrdinalPatterns(m=2)
 estd = Contingency(ed)
 esth = Contingency(vh)

@@ -106,7 +106,7 @@ z, w = randn(n), rand(n) # some completely unrelated timeseries to condition on.
 # to keep computation costs low and to ensure the probability distributions
 # over the bins don't approach the uniform distribution (need enough points
 # to fill bins).
-est = ValueHistogram(4)
+est = ValueBinning(4)
 
 te_xy = bbnue(est, x, y, surr = RandomShuffle(), nsurr = 50)
 te_yx = bbnue(est, y, x, surr = RandomShuffle(), nsurr = 50)

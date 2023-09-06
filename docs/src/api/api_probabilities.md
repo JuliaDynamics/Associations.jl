@@ -32,15 +32,15 @@ the information-based association measures here, the probabilities estimator mus
 compatible with multivariate data, or have an implementation for [`marginal_encodings`](@ref),
 which discretizes each dimension of the multivariate input data separately.
 
-| Estimator                     | Principle                                      |
-| :---------------------------- | :--------------------------------------------- |
-| [`Contingency`](@ref)         | Count co-occurrences, optionally discretize first |
-| [`UniqueElements`](@ref)    | Count of unique elements                       |
-| [`ValueHistogram`](@ref)      | Binning (histogram)                            |
-| [`TransferOperator`](@ref)    | Binning (transfer operator)                    |
-| [`NaiveKernel`](@ref)         | Kernel density estimation                      |
-| [`OrdinalPatterns`](@ref) | Ordinal patterns                               |
-| [`Dispersion`](@ref)          | Dispersion patterns                            |
+| Estimator                  | Principle                                         |
+| :------------------------- | :------------------------------------------------ |
+| [`Contingency`](@ref)      | Count co-occurrences, optionally discretize first |
+| [`UniqueElements`](@ref)   | Count of unique elements                          |
+| [`ValueBinning`](@ref)     | Binning (histogram)                               |
+| [`TransferOperator`](@ref) | Binning (transfer operator)                       |
+| [`NaiveKernel`](@ref)      | Kernel density estimation                         |
+| [`OrdinalPatterns`](@ref)  | Ordinal patterns                                  |
+| [`Dispersion`](@ref)       | Dispersion patterns                               |
 
 ### Contingency
 
@@ -57,7 +57,7 @@ UniqueElements
 ### Histograms (binning)
 
 ```@docs
-ValueHistogram
+ValueBinning
 RectangularBinning
 FixedRectangularBinning
 ```
@@ -104,10 +104,10 @@ WaveletOverlap
 PowerSpectrum
 ```
 
-### Diversity
+### CosineSimilarityBinning
 
 ```@docs
-Diversity
+CosineSimilarityBinning
 ```
 
 ## Utilities

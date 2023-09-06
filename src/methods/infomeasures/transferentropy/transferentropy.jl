@@ -79,7 +79,7 @@ exception - they compute transfer entropy directly.
 | Estimator                         | Type                                            | Principle           | [`TEShannon`](@ref) | [`TERenyiJizba`](@ref) |
 | --------------------------------- | ----------------------------------------------- | ------------------- | :-----------------: | :--------------------: |
 | [`UniqueElements`](@ref)          | [`ProbabilitiesEstimator`](@ref)                | Frequencies         |         ✓          |           ✓           |
-| [`ValueHistogram`](@ref)          | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |         ✓          |           ✓           |
+| [`ValueBinning`](@ref)            | [`ProbabilitiesEstimator`](@ref)                | Binning (histogram) |         ✓          |           ✓           |
 | [`Dispersion`](@ref)              | [`ProbabilitiesEstimator`](@ref)                | Dispersion patterns |         ✓          |           ✖           |
 | [`Kraskov`](@ref)                 | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖           |
 | [`Zhu`](@ref)                     | [`DifferentialEntropyEstimator`](@ref)          | Nearest neighbors   |         ✓          |           ✖           |

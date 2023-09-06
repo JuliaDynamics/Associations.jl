@@ -67,7 +67,7 @@ test_cmi = independence(test, places, experience, preferred_equipment)
 
 nshuffles = 5
 surrtest_sp = SurrogateTest(PMI(), OrdinalPatterns(); nshuffles, rng)
-surrtest_vh = SurrogateTest(PMI(), ValueHistogram(4); nshuffles, rng)
+surrtest_vh = SurrogateTest(PMI(), ValueBinning(4); nshuffles, rng)
 surrtest_dp = SurrogateTest(PMI(), Dispersion(); nshuffles, rng)
 
 @test independence(surrtest_sp, x, y, z) isa SurrogateTestResult

@@ -13,7 +13,7 @@ used internally by [`contingency_matrix`](@ref).
 
 ## Supported estimators
 
-- [`ValueHistogram`](@ref). Bin visitation frequencies are counted in the joint space `XY`,
+- [`ValueBinning`](@ref). Bin visitation frequencies are counted in the joint space `XY`,
     then marginal visitations are obtained from the joint bin visits.
     This behaviour is the same for both [`FixedRectangularBinning`](@ref) and
     [`RectangularBinning`](@ref) (which adapts the grid to the data).
@@ -51,7 +51,7 @@ function marginally_encode_variable(o::Dispersion, x::AbstractVector)
 end
 
 function marginally_encode_variable(
-        o::ValueHistogram{<:FixedRectangularBinning{D}},
+        o::ValueBinning{<:FixedRectangularBinning{D}},
         x::AbstractVector) where D
     range = first(est.binning.ranges)
     ϵmin = minimum(range)
@@ -67,7 +67,7 @@ end
 # that are not derived from the same joint distribution, which would hugely increase
 # bias, because we're not guaranteed cancellation between entropy terms
 # in higher-level methods.
-function marginal_encodings(o::ValueHistogram{<:RectangularBinning}, x::VectorOrStateSpaceSet...)
+function marginal_encodings(o::ValueBinning{<:RectangularBinning}, x::VectorOrStateSpaceSet...)
     X = StateSpaceSet(StateSpaceSet.(x)...)
     encoder = RectangularBinEncoding(est.binning, X)
 

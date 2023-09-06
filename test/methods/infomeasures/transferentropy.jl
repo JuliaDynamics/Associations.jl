@@ -15,6 +15,6 @@ est = ZhuSingh(k = 5)
     @test transferentropy(est, x, y, z) >= 0.0
     @test transferentropy(TERenyiJizba(), est, x, y, z) isa Real
 
-    est = Hilbert(ValueHistogram(4), target = Amplitude(), source = Phase())
+    est = Hilbert(ValueBinning(4), target = Amplitude(), source = Phase())
     @test transferentropy(est, x, y, z) >= 0.0
 end

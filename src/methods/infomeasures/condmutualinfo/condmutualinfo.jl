@@ -101,7 +101,7 @@ non-negative.
 | Estimator                 | Principle           | [`CMIShannon`](@ref) | [`CMIRenyiSarbu`](@ref) |
 | ------------------------- | ------------------- | :------------------: | :---------------------: |
 | [`UniqueElements`](@ref)  | Frequencies         |          ✓          |           ✓            |
-| [`ValueHistogram`](@ref)  | Binning (histogram) |          ✓          |           ✓            |
+| [`ValueBinning`](@ref)    | Binning (histogram) |          ✓          |           ✓            |
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |          ✓          |           ✓            |
 | [`Dispersion`](@ref)      | Dispersion patterns |          ✓          |           ✓            |
 """
@@ -213,8 +213,8 @@ end
 # for multiple input variables.
 const WellDefinedCMIShannonProbEsts{m, D} = Union{
     OrdinalPatterns{m},
-    ValueHistogram{<:FixedRectangularBinning{D}},
-    ValueHistogram{<:RectangularBinning{T}},
+    ValueBinning{<:FixedRectangularBinning{D}},
+    ValueBinning{<:RectangularBinning{T}},
     Dispersion
 } where {m, D, T}
 

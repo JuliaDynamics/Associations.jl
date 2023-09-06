@@ -421,9 +421,9 @@ We see that the [`Lord`](@ref) estimator, which estimates local volume elements 
 We can also use [`ProbabilitiesEstimator`](@ref) to estimate Shannon mutual information.
 This does not apply any bias correction.
 
-#### Discrete [`MIShannon`](@ref) with [`ValueHistogram`](@ref)
+#### Discrete [`MIShannon`](@ref) with [`ValueBinning`](@ref)
 
-A [`ValueHistogram`](@ref) estimator can be used to bin the data and compute
+A [`ValueBinning`](@ref) estimator can be used to bin the data and compute
 discrete Shannon mutual information.
 
 ```@example mi_demonstration
@@ -435,7 +435,7 @@ y = rand(rng, 1000)
 # Use the H3-estimation method with a discrete visitation frequency based 
 # probabilities estimator over a fixed grid covering the range of the data,
 # which is on [0, 1].
-est = ValueHistogram(FixedRectangularBinning(0, 1, 5))
+est = ValueBinning(FixedRectangularBinning(0, 1, 5))
 mutualinfo(est, x, y)
 ```
 
@@ -450,7 +450,7 @@ using CausalityTools
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 1000)
 y = rand(rng, 1000)
-est = ValueHistogram(FixedRectangularBinning(0, 1, 5))
+est = ValueBinning(FixedRectangularBinning(0, 1, 5))
 mutualinfo(Contingency(est), x, y)
 ```
 
@@ -465,7 +465,7 @@ using Random; rng = MersenneTwister(1234)
 x = rand(rng, 1000)
 y = rand(rng, 1000)
 c = contingency_matrix(est, x, y)
-est = ValueHistogram(FixedRectangularBinning(0, 1, 5))
+est = ValueBinning(FixedRectangularBinning(0, 1, 5))
 mutualinfo(c)
 ```
 
@@ -504,7 +504,7 @@ In this example we generate realizations of two different systems where we know 
 
 We use the default input parameter values (see [`AR1Unidir`](@ref) and [`Logistic2Unidir`](@ref) for details) and below we toggle only the random initial conditions and the coupling strength parameter `c_xy`. For each value of `c_xy` we generate 1,000 unique realizations of the system and obtain 500-point time series of the coupled variables.
 
-To estimate the mutual information, we use the binning-based [`ValueHistogram`](@ref) estimator. We summarize the distribution of $I(X; Y)$ values across all realizations using the median and quantiles encompassing 95 % of the values.
+To estimate the mutual information, we use the binning-based [`ValueBinning`](@ref) estimator. We summarize the distribution of $I(X; Y)$ values across all realizations using the median and quantiles encompassing 95 % of the values.
 
 ```@example
 using CausalityTools
@@ -526,7 +526,7 @@ mi = zeros(length(c), 3, 2)
 
 # Define an estimator for MI
 b = RectangularBinning(4)
-estimator = ValueHistogram(b)
+estimator = ValueBinning(b)
 
 for i in 1 : length(c)
     

@@ -35,13 +35,13 @@ ow = UniqueElementsEncoding(w)
 
 # Single variables
 x = rand(rng, 100)
-o = ValueHistogram(3)
+o = ValueBinning(3)
 @test encode(PerVariableEncoding(o), x) isa Vector{<:Integer}
 @test encode(PerVariableEncoding(o), (x, )) isa NTuple{1, Vector{<:Integer}}
 
 # Multiple variables
 y = StateSpaceSet(randn(rng, 100, 2))
-o = ValueHistogram(3)
+o = ValueBinning(3)
 @test encode(PerVariableEncoding(o), y) isa NTuple{2, Vector{<:Integer}}
 @test encode(PerVariableEncoding(o), (y[:, 1], y[:, 2])) isa NTuple{2, Vector{<:Integer}}
 @test encode(PerVariableEncoding(o), (y[:, 1], y[:, 2])) ==

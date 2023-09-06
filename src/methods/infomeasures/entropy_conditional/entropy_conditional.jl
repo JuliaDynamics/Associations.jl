@@ -65,7 +65,7 @@ distribution.
 | Estimator                 | Principle           | [`CEShannon`](@ref) | [`CETsallisAbe`](@ref) | [`CETsallisFuruichi`](@ref) |
 | ------------------------- | ------------------- | :-----------------: | :--------------------: | :-------------------------: |
 | [`UniqueElements`](@ref)  | Frequencies         |         ✓          |           ✓           |              x              |
-| [`ValueHistogram`](@ref)  | Binning (histogram) |         ✓          |           ✓           |              x              |
+| [`ValueBinning`](@ref)    | Binning (histogram) |         ✓          |           ✓           |              x              |
 | [`OrdinalPatterns`](@ref) | Ordinal patterns    |         ✓          |           ✓           |              x              |
 | [`Dispersion`](@ref)      | Dispersion patterns |         ✓          |           ✓           |              x              |
 """
@@ -114,8 +114,8 @@ end
 # for multiple input variables.
 const WellDefinedCEProbEsts{m, D} = Union{
     OrdinalPatterns{m},
-    ValueHistogram{<:FixedRectangularBinning{D}},
-    ValueHistogram{<:RectangularBinning{T}},
+    ValueBinning{<:FixedRectangularBinning{D}},
+    ValueBinning{<:RectangularBinning{T}},
     Dispersion
 } where {m, D, T}
 

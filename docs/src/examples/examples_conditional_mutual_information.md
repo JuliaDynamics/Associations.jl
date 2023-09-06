@@ -156,7 +156,7 @@ mutual information using a sum of entropies. However, the naive
 application of these estimators don't perform any bias application when
 taking the sum of entropy terms.
 
-#### [`CMIShannon`](@ref) with [`ValueHistogram`](@ref)
+#### [`CMIShannon`](@ref) with [`ValueBinning`](@ref)
 
 ```@example
 using CausalityTools
@@ -166,6 +166,6 @@ n = 1000
 x = rand(Epanechnikov(0.5, 1.0), n)
 y = rand(Erlang(1), n) .+ x
 z = rand(FDist(5, 2), n)
-est = ValueHistogram(RectangularBinning(5))
+est = ValueBinning(RectangularBinning(5))
 condmutualinfo(CMIShannon(), est, x, z, y), condmutualinfo(CMIShannon(), est, x, y, z)
 ```

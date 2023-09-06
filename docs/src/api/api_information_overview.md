@@ -15,7 +15,7 @@ f([measure], estimator, input_data...)
 # Some examples
 mutualinfo(MIShannon(base = ℯ), Kraskov(k = 1), x, y)
 mutualinfo(MITsallisFuruichi(base = ℯ), KozachenkoLeonenko(k = 3), x, y)
-condmutualinfo(CMIShannon(base = 2), ValueHistogram(3), x, y, z)
+condmutualinfo(CMIShannon(base = 2), ValueBinning(3), x, y, z)
 condmutualinfo(CMIRenyiJizba(base = 2), KSG2(k = 5), x, y, z)
 condmutualinfo(CMIRenyiPoczos(base = 2), PoczosSchneiderCMI(k = 10), x, y, z)
 ```

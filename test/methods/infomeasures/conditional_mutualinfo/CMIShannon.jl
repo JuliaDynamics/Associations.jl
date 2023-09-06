@@ -2,8 +2,8 @@ using CausalityTools
 using StateSpaceSets: StateSpaceSet
 
 probests = [
-    ValueHistogram(RectangularBinning(3))
-    #ValueHistogram(FixedRectangularBinning(0, 1, 3))
+    ValueBinning(RectangularBinning(3))
+    #ValueBinning(FixedRectangularBinning(0, 1, 3))
     NaiveKernel(0.2) # probably shouldn't be used.
 ]
 
@@ -60,7 +60,7 @@ z = StateSpaceSet(rand(1000, 1))
 
     @testset "Defaults" begin
         s, t, c = rand(100), rand(100), rand(100)
-        est_bin = ValueHistogram(RectangularBinning(3))
+        est_bin = ValueBinning(RectangularBinning(3))
         est_ksg = KSG1()
 
         # binning estimator yields non-negative values

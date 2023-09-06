@@ -86,7 +86,7 @@ fig
 ### Reproducing Schreiber (2000)
 
 Let's try to reproduce the results from Schreiber's original paper[^Schreiber2000] where
-he introduced the transfer entropy. We'll use the [`ValueHistogram`](@ref) estimator,
+he introduced the transfer entropy. We'll use the [`ValueBinning`](@ref) estimator,
 which is visitation frequency based and computes entropies by counting visits of the
 system's orbit to discrete portions of its reconstructed state space.
 
@@ -113,7 +113,7 @@ first(trajectory(ds, 1000; Ttr = 1000));
 base = 2
 te_x1x2 = zeros(length(εs)); te_x2x1 = zeros(length(εs))
 # Guess an appropriate bin width of 0.2 for the histogram
-est = ValueHistogram(0.2)
+est = ValueBinning(0.2)
 
 for (i, ε) in enumerate(εs)
     set_parameter!(ds, 1, ε)
@@ -150,7 +150,7 @@ nsurr = 25 # in real applications, you should use more surrogates
 base = 2
 te_x1x2 = zeros(length(εs)); te_x2x1 = zeros(length(εs))
 te_x1x2_surr = zeros(length(εs), nsurr); te_x2x1_surr = zeros(length(εs), nsurr)
-est = ValueHistogram(0.2) # use same bin-width as before
+est = ValueBinning(0.2) # use same bin-width as before
 
 for (i, ε) in enumerate(εs)
     set_parameter!(ds, 1, ε)
