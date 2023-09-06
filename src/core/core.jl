@@ -71,7 +71,6 @@ function verify_number_of_inputs_vars(measure::AssociationMeasure, n::Int)
     end
 end
 
-include("encoding/categorical_encoding.jl")
 include("encoding/per_point_encoding.jl")
 include("encoding/per_variable_encoding.jl")
 
