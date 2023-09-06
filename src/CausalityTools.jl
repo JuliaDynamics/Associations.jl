@@ -23,6 +23,7 @@ module CausalityTools
     @reexport using TimeseriesSurrogates
 
     include("core/core.jl")
+    include("information/information.jl")
     # include("contingency_matrices.jl")
     # include("infomeasures/infomeasures.jl")
 

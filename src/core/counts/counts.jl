@@ -21,7 +21,7 @@ discrete values.
 These discrete iterables are typically `Vector{Int}` constructed from input data using
 [`encode`](@ref) in combination with some [`Discretization`](@ref).
 """
-function counts(x::Vararg{<:Any, N}) where N # this extends ComplexityMeasures.jl definition
+function counts(x::Vararg{VectorOrStateSpaceSet, N}) where N # this extends ComplexityMeasures.jl definition
     # Get marginal probabilities and outcomes
     L = length(x)
     cts, lmaps, encoded_outcomes = counts_table(x...)

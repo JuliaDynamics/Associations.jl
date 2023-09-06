@@ -37,7 +37,7 @@ function PerVariableEncoding(o::OutcomeSpace)
     return PerVariableEncoding((o,))
 end
 
-function encode(encoding::PerVariableEncoding{1}, x::Vararg{<:Any, 1})
+function encode(encoding::PerVariableEncoding{1}, x::Vararg{Any, 1})
     e = first(encoding.outcome_spaces)
     x̂ = symbolize(e, first(x))
     return x̂::Vector{<:Integer}

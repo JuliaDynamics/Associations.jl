@@ -53,14 +53,14 @@ encode(PerPointEncoding(ex, ey), x, y)
 # Encoding three input datasets gives a 3-tuple of Vector{Int}
 encode(PerPointEncoding(ex, ey, ez), x, y, z)
 """
-function encode(encoding::PerPointEncoding{1}, x::Vararg{<:Any, 1})
+function encode(encoding::PerPointEncoding{1}, x::Vararg{Any, 1})
     e = first(encoding.encodings)
     x̂ = encode_individual_dataset(e, first(x))
     return x̂::Vector{<:Integer}
 end
 
 # Apply the same encoding to all input datasets.
-function encode(encoding::PerPointEncoding{1}, x::Vararg{<:Any, M}) where {M}
+function encode(encoding::PerPointEncoding{1}, x::Vararg{Any, M}) where {M}
     verify_input(encoding, x...)
     e = first(encoding.encodings)
     x̂ = map(k -> encode_individual_dataset(e, x[k]), tuple(1:M...))
@@ -69,7 +69,7 @@ function encode(encoding::PerPointEncoding{1}, x::Vararg{<:Any, M}) where {M}
 end
 
 
-function encode(encoding::PerPointEncoding{N}, x::Vararg{<:Any, M}) where {N, M}
+function encode(encoding::PerPointEncoding{N}, x::Vararg{Any, M}) where {N, M}
     verify_input(encoding, x...)
     x̂ = map(k -> encode_individual_dataset(encoding[k], x[k]), tuple(1:M...))
 

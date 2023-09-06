@@ -71,12 +71,13 @@ function verify_number_of_inputs_vars(measure::AssociationMeasure, n::Int)
     end
 end
 
+# Concrete ways of encoding multivariate data.
 include("encoding/per_point_encoding.jl")
 include("encoding/per_variable_encoding.jl")
 
-# Counts related
+# Counting (contingency tables for multivariate data)
 include("counts/counts.jl")
 include("counts/estimation_per_point.jl")
 
 # Probabilities estimation related
-#include("probabilities.jl")
+include("probabilities/probabilities.jl")
