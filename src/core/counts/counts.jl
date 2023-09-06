@@ -22,7 +22,6 @@ These discrete iterables are typically `Vector{Int}` constructed from input data
 [`encode`](@ref) in combination with some [`Discretization`](@ref).
 """
 function counts(x::Vararg{<:Any, N}) where N # this extends ComplexityMeasures.jl definition
-    @show N
     # Get marginal probabilities and outcomes
     L = length(x)
     cts, lmaps, encoded_outcomes = counts_table(x...)
@@ -50,7 +49,7 @@ function counts_table(x...)
     # Then, we can simply create a joint `StateSpaceSet{length(x), Int}` and use its elements
     # as `CartesianIndex`es to update counts.
     lvl = tolevels.(x)
-    levels = (first(l) for l in lvl)
+    levels = (first(l) for l in lvl) # TODO: construct SVector directly.
     lmaps = [last(l) for l in lvl]
 
     # Create the table with correct dimensions, assumming the outcome space is

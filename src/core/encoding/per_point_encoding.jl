@@ -53,10 +53,32 @@ encode(PerPointEncoding(ex, ey), x, y)
 # Encoding three input datasets gives a 3-tuple of Vector{Int}
 encode(PerPointEncoding(ex, ey, ez), x, y, z)
 """
-function encode(encoding::PerPointEncoding{N}, x...) where {N}
-    M = length(x)
+function encode(encoding::PerPointEncoding{1}, x::Vararg{<:Any, 1})
+    e = first(encoding.encodings)
+    x̂ = encode_individual_dataset(e, first(x))
+    return x̂::Vector{<:Integer}
+end
 
-    if N != M
+# Apply the same encoding to all input datasets.
+function encode(encoding::PerPointEncoding{1}, x::Vararg{<:Any, M}) where {M}
+    verify_input(encoding, x...)
+    e = first(encoding.encodings)
+    x̂ = map(k -> encode_individual_dataset(e, x[k]), tuple(1:M...))
+
+    return x̂::NTuple{M, Vector{<:Integer}}
+end
+
+
+function encode(encoding::PerPointEncoding{N}, x::Vararg{<:Any, M}) where {N, M}
+    verify_input(encoding, x...)
+    x̂ = map(k -> encode_individual_dataset(encoding[k], x[k]), tuple(1:M...))
+
+    return x̂::NTuple{M, Vector{<:Integer}}
+end
+
+function verify_input(encoding::PerPointEncoding{N}, x...) where N
+    M = length(x)
+    if N != M && N != 1
         s = "The given `encoding` is for $N input datasets. $M input datasets were given."
         throw(ArgumentError(s))
     end
@@ -64,16 +86,13 @@ function encode(encoding::PerPointEncoding{N}, x...) where {N}
     if !allequal(Ls)
         throw(ArgumentError("All input datasets must have the same length."))
     end
-    L = maximum(Ls)
-
-    # x̂ := Encoded `x`s, where `x̂[k]` is the encoded version of `x[k]`
-    x̂ = [encode_individual_dataset(encoding[k], x[k]) for k = 1:M]
-    return x̂
 end
+
+
 
 function encode_individual_dataset(encoding::Encoding, x)
     if !(typeof(x) <: AbstractStateSpaceSet)
-        encoding = CategoricalEncoding(x)
+        encoding = UniqueElementsEncoding(x)
         x̂ = encode.(Ref(encoding), x)
         return x̂
     end
@@ -105,7 +124,7 @@ function counts(encoding::PerPointEncoding, x...)
 
     # Marginal labels are the decoded outcomes.
     decoded_outcomes = map(i -> decode_outcomes(encoding[i], outcomes[i]), tuple(1:L...))
-    return Counts(cts_named, decoded_outcomes)
+    return Counts(cts, decoded_outcomes)
 end
 
 function decode_outcomes(encoding::Encoding, outcomes::Vector{<:Integer})
