@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.9
+
+### Bug fixes
+
+- Fixed bug in `transferentropy` function which yielded identical results in both directions for the bivariate case.
+
 ## 2.8.0
 
 Moved to DynamicalSystemsBase v3.0 (`trajectory` now returns both the data and the time
