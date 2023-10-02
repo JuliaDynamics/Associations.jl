@@ -1,5 +1,9 @@
 x, y, z = rand(1000), rand(1000), rand(1000)
 
+# Transfer entropy is asymmetric.
+pest = SymbolicPermutation(m = 2)
+@test transferentropy(TEShannon(), pest, x, y) != transferentropy(TEShannon(), pest, y, x)
+
 est = Lindner( k = 5)
 @test transferentropy(est, x, y) isa Real
 
