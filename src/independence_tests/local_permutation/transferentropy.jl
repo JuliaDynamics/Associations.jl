@@ -21,7 +21,6 @@ function independence(test::LocalPermutationTest{<:TransferEntropy{<:E}}, x::Abs
     @assert length(T⁺) == length(S) == length(TC)
     N = length(x)
 
-
     if measure isa TransferEntropy
         Î = estimate(measure, est, S, T, T⁺, C)
         Îs = permuted_Îs_te(S, T, T⁺, C, measure, est, test)
@@ -32,7 +31,7 @@ function independence(test::LocalPermutationTest{<:TransferEntropy{<:E}}, x::Abs
         Î = estimate(cmi, est, X, Y, Z)
         Îs = permuted_Îs(X, Y, Z, cmi, est, test)
     end
-    @show Î, Îs
+    
     p = count(Î .<= Îs) / nshuffles
     return LocalPermutationTestResult(length(x), Î, Îs, p, nshuffles)
 end
