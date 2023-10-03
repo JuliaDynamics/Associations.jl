@@ -25,12 +25,12 @@ rng = MersenneTwister(1234)
 ηTf = 1
 embedding = EmbeddingTE(; dS = 2, dT = 2, dC = 2, ηTf)
 measure = TEShannon(; embedding)
-estimators = [Lindner(k=5), Zhu1(k=5)]
+estimators = [Lindner(k=10), Zhu1(k=10)]
 
 @testset "LocalPermutationTest with TEShannon and $estimator" for estimator in estimators
-    x, y, z = ar3(300, rng)
+    x, y, z = ar3(500, rng)
 
-    independence_test = LocalPermutationTest(measure, estimator; nshuffles = 50)
+    independence_test = LocalPermutationTest(measure, estimator; nshuffles = 100, rng = rng)
     # x and z should be independent given y 
     # (so we shouldn't be able to reject the null, i.e. pvalue >= α)
     @test independence(independence_test, x, z, y).pvalue >= α
@@ -41,7 +41,7 @@ estimators = [Lindner(k=5), Zhu1(k=5)]
 
     # A test with noise (all variables should be conditionally independent)
     # (so we shouldn't be able to reject the null, i.e. pvalue >= α)
-    x, y, z = randn(rng, 100), randn(rng, 100), randn(rng, 100)
+    x, y, z = randn(rng, 500), randn(rng, 500), randn(rng, 500)
     @test independence(independence_test, x, z, y).pvalue >= α
     @test independence(independence_test, x, y, z).pvalue >= α
 
