@@ -102,14 +102,17 @@ end
 
 function mean_volumes(vols_joint, vols_ST, vols_TT⁺, vols_T, N::Int)
     vol = 0.0
+    n_ignore = 0
     for i = 1:N
         num = vols_TT⁺[i] * vols_ST[i]
         den = vols_joint[i] * vols_T[i]
         if den != 0
             vol += log(num / den)
+        else
+            n_ignore += 1
         end
     end
-    return vol / N
+    return vol / (N - n_ignore)
 end
 
 function mean_digamma(ks_ST, ks_TT⁺, ks_T, k::Int, N::Int,
