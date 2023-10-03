@@ -35,7 +35,8 @@ struct NeighborCloseness <: LocalPermutationClosenessSearch end
         nshuffles::Int = 100,
         rng = Random.default_rng(),
         replace = true,
-        w::Int = 0)
+        w::Int = 0,
+        show_progress = false)
 
 `LocalPermutationTest` is a generic conditional independence test
 [Runge2018LocalPerm](@cite) for assessing whether two variables `X` and `Y` are
@@ -111,7 +112,7 @@ function LocalPermutationTest(measure::M, est::EST = nothing;
         replace::Bool = true,
         nshuffles::Int = 100,
         closeness_search::C = NeighborCloseness(),
-        w::Int = 0, show_progress = true) where {M, EST, C, R}
+        w::Int = 0, show_progress = false) where {M, EST, C, R}
     return LocalPermutationTest{M, EST, C, R}(measure, est, rng, kperm, nshuffles, replace, closeness_search, w, show_progress)
 end
 

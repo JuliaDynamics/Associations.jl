@@ -10,7 +10,7 @@ export SurrogateTestResult
         nshuffles::Int = 100,
         surrogate = RandomShuffle(),
         rng = Random.default_rng(),
-        show_progress = true,
+        show_progress = false,
     )
 
 A generic (conditional) independence test for assessing whether two variables `X` and `Y`
@@ -79,7 +79,7 @@ end
 function SurrogateTest(measure::M, est::E = nothing;
     rng::R = Random.default_rng(),
     surrogate::S = RandomShuffle(),
-    nshuffles::Int = 100, show_progress = true
+    nshuffles::Int = 100, show_progress = false
     ) where {M, E, R, S}
     SurrogateTest{M, E, R, S}(measure, est, rng, surrogate, nshuffles, show_progress)
 end
