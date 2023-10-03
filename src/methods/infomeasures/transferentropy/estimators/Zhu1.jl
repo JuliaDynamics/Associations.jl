@@ -103,7 +103,11 @@ end
 function mean_volumes(vols_joint, vols_ST, vols_TT⁺, vols_T, N::Int)
     vol = 0.0
     for i = 1:N
-        vol += log((vols_TT⁺[i] * vols_ST[i]) / (vols_joint[i] * vols_T[i]))
+        num = vols_TT⁺[i] * vols_ST[i]
+        den = vols_joint[i] * vols_T[i]
+        if den != 0
+            vol += log(num / den)
+        end
     end
     return vol / N
 end

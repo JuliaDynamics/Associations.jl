@@ -5,6 +5,8 @@
 ### Bug fixes
 
 - Fixed bug in `transferentropy` function which yielded identical results in both directions for the bivariate case.
+- Fixed bug that occurred when using `LocalPermutationTest` with `TEShannon` as the measure and a dedicated `TransferEntropyEstimator` (e.g. `Zhu1` or `Lindner`). This occurred because the `LocalPermutationTest` is, strictly speaking, a test using conditional mutual information as the measure. Therefore, naively applying a `TransferEntropy` measure such as `TEShannon` would error. This is fixed by performing a similar procedure where the source marginal is shuffled according to local neighborhoods in the conditional marginal. This is similar, but not identical to the CMI-based `LocalPermutationTest`, and adapts to the specific case of transfer entropy estimation using dedicated transfer entropy estimators instead of some lower-level estimator.
+- Fixed bug in `Zhu1` transfer entropy estimator where when box volumes were extremely small, taking the logarithm of volume ratios resulted in `Inf` values. This was solved by simply ignoring these volumes.
 
 ## 2.8.0
 
