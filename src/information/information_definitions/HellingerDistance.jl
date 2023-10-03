@@ -20,16 +20,8 @@ D_{H}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 ## Implements
 
-- [`information`](@ref). If used with [`RelativeAmount`](@ref), the KL divergence may
-    be undefined to due some outcomes having zero counts. Use some other
-    [`ProbabilitiesEstimator`](@ref) like [`BayesianRegularization`](@ref) to ensure
-    all estimated probabilities are nonzero.
-## Implements
-
-- [`information`](@ref). If used with [`RelativeAmount`](@ref), the KL divergence may
-    be undefined to due some outcomes having zero counts. Use some other
-    [`ProbabilitiesEstimator`](@ref) like [`BayesianRegularization`](@ref) to ensure
-    all estimated probabilities are nonzero.
+- [`information`](@ref). Used to compute the distance between two pre-computed
+    probability distributions.
 """
 struct HellingerDistance <: BivariateInformationMeasure end
 

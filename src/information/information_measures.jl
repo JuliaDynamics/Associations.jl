@@ -16,10 +16,10 @@ of probability mass functions or probability densities).
 
 ## Implements
 
-- [`information`](@ref). Used to compute the measure given some estimation scheme
-    (which varies between measures).
+- [`information`](@ref). Used to compute the measure given given relevant input
+    probabilities.
 
-## Concrete measure implementations
+## Concrete implementations
 
 ### Discrepancy/divergence/closeness measures
 
@@ -30,6 +30,7 @@ probabilities distributions are.
 
 - [`KLDivergence`](@ref)
 - [`RenyiDivergence`](@ref)
+- [`HellingerDistance`](@ref)
 
 The supertype for all bivariate information-based measure definitions.
 """
