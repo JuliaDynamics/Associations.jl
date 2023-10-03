@@ -1,4 +1,3 @@
-
 using StableRNGs
 rng = StableRNG(123)
 x, y, z = rand(rng, 100), rand(rng, 100), rand(rng, 100)
@@ -95,3 +94,6 @@ test_vh = LocalPermutationTest(PMI(), ValueHistogram(2); nshuffles = 200, rng)
 @test pvalue(independence(test_sp, x, y, z)) > α
 @test pvalue(independence(test_dp, x, y, z)) > α
 @test pvalue(independence(test_vh, x, y, z)) > α
+
+# tests for specific measures
+include("LocalPermutationTest/transferentropy.jl")
