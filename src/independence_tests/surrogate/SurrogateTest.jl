@@ -1,5 +1,6 @@
 using Random
 using TimeseriesSurrogates
+import ProgressMeter
 export SurrogateTest
 export SurrogateTestResult
 
@@ -9,6 +10,7 @@ export SurrogateTestResult
         nshuffles::Int = 100,
         surrogate = RandomShuffle(),
         rng = Random.default_rng(),
+        show_progress = true,
     )
 
 A generic (conditional) independence test for assessing whether two variables `X` and `Y`
@@ -72,14 +74,14 @@ struct SurrogateTest{M, E, R, S} <: IndependenceTest{M}
     rng::R
     surrogate::S
     nshuffles::Int
-
-    function SurrogateTest(measure::M, est::E = nothing;
-        rng::R = Random.default_rng(),
-        surrogate::S = RandomShuffle(),
-        nshuffles::Int = 100,
-        ) where {M, E, R, S}
-        new{M, E, R, S}(measure, est, rng, surrogate, nshuffles)
-    end
+    show_progress::Bool
+end
+function SurrogateTest(measure::M, est::E = nothing;
+    rng::R = Random.default_rng(),
+    surrogate::S = RandomShuffle(),
+    nshuffles::Int = 100, show_progress = true
+    ) where {M, E, R, S}
+    SurrogateTest{M, E, R, S}(measure, est, rng, surrogate, nshuffles, show_progress)
 end
 
 
@@ -128,19 +130,24 @@ end
 # third argument is to be conditioned on. This works naturally with e.g.
 # conditional mutual information.
 function independence(test::SurrogateTest, x, y, z)
-    (; measure, est, rng, surrogate, nshuffles) = test
+    (; measure, est, rng, surrogate, nshuffles, show_progress) = test
 
     # Make sure that the measure is compatible with the input data.
     verify_number_of_inputs_vars(measure, 3)
 
+    progress = ProgressMeter.Progress(nshuffles;
+        desc="SurrogateTest:", enabled=show_progress
+    )
+
     X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
     N = length(x)
-    Î = estimate(measure,est, X, Y, Z)
+    Î = estimate(measure, est, X, Y, Z)
     s = surrogenerator(x, surrogate, rng)
     Îs = zeros(nshuffles)
     for b in 1:nshuffles
         Îs[b] = estimate(measure, est, s(), Y, Z)
+        ProgressMeter.next!(progress)
     end
     p = count(Î .<= Îs) / nshuffles
 
