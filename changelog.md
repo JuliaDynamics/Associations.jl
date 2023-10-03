@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.10
+
+- Progress bars in some independence tests (surrogate, local permutation) can be
+  enabled by passing keyword `show_progress = true` in the test constructors.
+
 ## 2.9
 
 ### Bug fixes
@@ -63,7 +68,7 @@ indices).
 
 ## 2.2
 
-- Added `MCR` and `RMCD` recurrence based association measures, along with 
+- Added `MCR` and `RMCD` recurrence based association measures, along with
     the corresponding `mcr` and `rmcd` methods.
 
 ## 2.1
