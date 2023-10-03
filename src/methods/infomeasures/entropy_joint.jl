@@ -45,19 +45,6 @@ end
 """ The supertype of all joint entropy measures. """
 abstract type JointEntropy end
 
-"""
-    JointEntropyShannon <: JointEntropy
-    JointEntropyShannon(; base = 2)
-
-The Shannon joint entropy measure. See docstring of [`entropy_joint`](@ref) for definition.
-"""
-struct JointEntropyShannon{E<:Shannon} <: JointEntropy
-    e::E
-    function JointEntropyShannon(; base = 2)
-        e = Shannon(; base)
-        new{typeof(e)}(e)
-    end
-end
 
 """
     JointEntropyTsallis <: JointEntropy

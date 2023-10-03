@@ -36,4 +36,7 @@ The supertype for all bivariate information-based measure definitions.
 """
 abstract type BivariateInformationMeasure <: MultivariateInformationMeasure end
 
+min_inputs_vars(::BivariateInformationMeasure) = 3
+max_inputs_vars(::BivariateInformationMeasure) = 3
+
 abstract type MultivariateInformationMeasureEstimator end
