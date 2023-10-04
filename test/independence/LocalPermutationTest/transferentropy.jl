@@ -25,6 +25,10 @@ end
 ηTf = 1
 embedding = EmbeddingTE(; dS = 2, dT = 2, dC = 2, ηTf)
 measure = TEShannon(; embedding)
+
+# For the dedicated estimators, we actually test the outcome on longer timeseries.
+# This is because the transfer entropy based local permutation test implemented 
+# here doesn't appear in the literature. It is new, so we need to verify that it works.
 dedicated_estimators = [Lindner(k=10), Zhu1(k=10)]
 @testset "LocalPermutationTest with TEShannon + dedicated TE estimator $estimator" for estimator in dedicated_estimators
     x, y, z = ar3(500, rng)
@@ -44,8 +48,8 @@ dedicated_estimators = [Lindner(k=10), Zhu1(k=10)]
     @test independence(independence_test, x, z, y).pvalue >= α
     @test independence(independence_test, x, y, z).pvalue >= α
 
-    # Only conditional analyses are possible, meaning that we need three inputs.
-    # Pairwise analyses won't work, because only two inputs are given.
+    # Only conditional analyses are possible with dedicated `TransferEntropyEstimator`s,
+    # meaning that we need three inputs. Pairwise analyses don't work.
     @test_throws ArgumentError independence(independence_test, x, y)
 end
 
