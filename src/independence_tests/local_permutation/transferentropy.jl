@@ -9,12 +9,14 @@ function LocalPermutationTest(measure::TransferEntropy, est::Nothing, args...; k
 end
 
 function independence(test::LocalPermutationTest{<:TransferEntropy{<:E}}, x::AbstractVector...) where E
-    if !(length(x) == 3)
-        msg = "`LocalPermutationTest` is not defined for pairwise transfer entropy. " * 
-            "Two input timeseries were provided. Please provide a third timeseries to condition on."
+    measure, est, nshuffles = test.measure, test.est, test.nshuffles
+
+    if !(length(x) == 3) && est isa TransferEntropyEstimator
+        msg = "`LocalPermutationTest` is not defined for pairwise transfer entropy with " *
+        " `TransferEntropyEstimators`. " * 
+            "Either provide a third timeseries to condition on, or use some other estimator."
         throw(ArgumentError(msg))
     end
-    measure, est, nshuffles = test.measure, test.est, test.nshuffles
     # Below, the T variable also includes any conditional variables.
     S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
     TC = StateSpaceSet(T, C)
