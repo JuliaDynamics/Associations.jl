@@ -15,6 +15,8 @@ also used in the Trentool MATLAB toolbox, and is based on nearest neighbor searc
 during neighbor searches (defaults to `0`, meaning that only the point itself is excluded
 when searching for neighbours).
 
+The estimator can be used both for pairwise and conditional transfer entropy estimation.
+
 ## Description
 
 For a given points in the joint embedding space `jᵢ`, this estimator first computes the
@@ -32,7 +34,8 @@ TE(X \\to Y) =
 ```
 
 where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
-neighbor searches are performed.
+neighbor searches are performed. Here this estimator has been modified to allow for 
+conditioning too (a simple modification to [Lindner2011](@citet)'s equation 5 and 6). 
 """
 Base.@kwdef struct Lindner{B} <: TransferEntropyEstimator
     k::Int = 2 # number of neighbors in joint space.

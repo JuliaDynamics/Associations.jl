@@ -13,7 +13,10 @@ export Zhu1
 
 The `Zhu1` transfer entropy estimator [Zhu2015](@cite).
 
-Assumes that the input data have been normalized as described in (Zhu et al., 2015).
+Assumes that the input data have been normalized as described in [Zhu2015](@citet).
+The estimator can be used both for pairwise and conditional transfer entropy.
+
+## Description
 
 This estimator approximates probabilities within hyperrectangles
 surrounding each point `xᵢ ∈ x` using using `k` nearest neighbor searches. However,
