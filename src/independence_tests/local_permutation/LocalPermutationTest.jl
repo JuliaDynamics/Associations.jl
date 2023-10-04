@@ -168,7 +168,6 @@ function independence(test::LocalPermutationTest, x, y, z)
 
     X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
-    N = length(X)
     Î = estimate(measure, est, X, Y, Z)
     Îs = permuted_Îs(X, Y, Z, measure, est, test)
     p = count(Î .<= Îs) / nshuffles
@@ -181,7 +180,8 @@ end
 function permuted_Îs(X, Y, Z, measure, est, test)
     rng, kperm, nshuffles, replace, w = test.rng, test.kperm, test.nshuffles, test.replace, test.w
     progress = ProgressMeter.Progress(nshuffles;
-        desc="LocalPermutationTest:", enabled=test.show_progress
+        desc = "LocalPermutationTest:",
+        enabled = test.show_progress
     )
     N = length(X)
     test.kperm < N || throw(ArgumentError("kperm must be smaller than input data length"))

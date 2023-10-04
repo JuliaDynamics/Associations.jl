@@ -45,7 +45,10 @@ end
 # about the target variable is left untouched.
 function permuted_Îs_te(S, T, T⁺, C, measure::TransferEntropy, est, test)
     rng, kperm, nshuffles, replace, w = test.rng, test.kperm, test.nshuffles, test.replace, test.w
-
+    progress = ProgressMeter.Progress(nshuffles;
+        desc = "LocalPermutationTest:",
+        enabled = test.show_progress
+    )
     N = length(S)
     test.kperm < N || throw(ArgumentError("kperm must be smaller than input data length"))
 
@@ -65,6 +68,7 @@ function permuted_Îs_te(S, T, T⁺, C, measure::TransferEntropy, est, test)
             shuffle_without_replacement!(Ŝ, S, idxs_C, kperm, rng, Nᵢ, πs)
         end
         Îs[n] = estimate(measure, est, Ŝ, T, T⁺, C)
+        ProgressMeter.next!(progress)
     end
     return Îs
 end
