@@ -15,6 +15,8 @@ also used in the Trentool MATLAB toolbox, and is based on nearest neighbor searc
 during neighbor searches (defaults to `0`, meaning that only the point itself is excluded
 when searching for neighbours).
 
+The estimator can be used both for pairwise and conditional transfer entropy estimation.
+
 ## Description
 
 For a given points in the joint embedding space `jᵢ`, this estimator first computes the
@@ -32,7 +34,8 @@ TE(X \\to Y) =
 ```
 
 where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
-neighbor searches are performed.
+neighbor searches are performed. Here this estimator has been modified to allow for 
+conditioning too (a simple modification to [Lindner2011](@citet)'s equation 5 and 6). 
 """
 Base.@kwdef struct Lindner{B} <: TransferEntropyEstimator
     k::Int = 2 # number of neighbors in joint space.
@@ -61,11 +64,22 @@ function estimate(measure::TEShannon, est::Lindner,
         C::AbstractStateSpaceSet)
     (; k, w, base) = est
 
-    joint = StateSpaceSet(S, T, T⁺, C)
-    ST = StateSpaceSet(S, T, C)
-    TT⁺ = StateSpaceSet(T, T⁺, C)
-    T = StateSpaceSet(T, C)
+    # This layer ensures that the number of `StateSpaceSet`s that must be 
+    # constructed is minimal when doing e.g. surrogate testing (then,
+    # `S` is the only marginal changing).
+    TT⁺C = StateSpaceSet(T, T⁺, C)
+    TC = StateSpaceSet(T, C)
+    return estimate_with_premade_embeddings(measure, est, S, TT⁺C, TC)
+end
 
+function estimate_with_premade_embeddings(measure::TEShannon, est::Lindner,
+        S::AbstractStateSpaceSet,
+        TT⁺C::AbstractStateSpaceSet,
+        TC::AbstractStateSpaceSet)
+    (; k, w, base) = est
+
+    joint = StateSpaceSet(S, TT⁺C)
+    STC = StateSpaceSet(S, TC)
     N = length(joint)
     W = Theiler(w)
     metric =  Chebyshev()
@@ -75,19 +89,19 @@ function estimate(measure::TEShannon, est::Lindner,
     # points within distance `ds[i]` from the point. Then count, for each point in each
     # of the marginals, how many neighbors each `xᵢ` has given `ds[i]`.
     ds = last.(ds_joint) # only care about distance to the k-th neighbor
-    tree_ST = KDTree(ST, metric)
-    tree_TT⁺ = KDTree(TT⁺, metric)
-    tree_T = KDTree(T, metric)
-    nns_ST  = [isearch(tree_ST, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(ST)]
-    nns_TT⁺ = [isearch(tree_TT⁺, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(TT⁺)]
-    nns_T   = [isearch(tree_T, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(T)]
+    tree_STC = KDTree(STC, metric)
+    tree_TT⁺C = KDTree(TT⁺C, metric)
+    tree_TC = KDTree(TC, metric)
+    nns_STC  = [isearch(tree_STC, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(STC)]
+    nns_TT⁺C = [isearch(tree_TT⁺C, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(TT⁺C)]
+    nns_TC   = [isearch(tree_TC, pᵢ, WithinRange(ds[i])) for (i, pᵢ) in enumerate(TC)]
 
-    n_ST = length.(nns_ST)
-    n_TT⁺ = length.(nns_TT⁺)
-    n_T = length.(nns_T)
+    n_STC = length.(nns_STC)
+    n_TT⁺C = length.(nns_TT⁺C)
+    n_TC = length.(nns_TC)
     te = 0.0
     for i = 1:N
-        te += digamma(n_T[i] + 1) - digamma(n_TT⁺[i] + 1) - digamma(n_ST[i])
+        te += digamma(n_TC[i] + 1) - digamma(n_TT⁺C[i] + 1) - digamma(n_STC[i])
     end
     te /= N
     # The "unit" is nats
