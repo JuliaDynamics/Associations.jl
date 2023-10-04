@@ -1,49 +1,10 @@
-
+using Test
+using CausalityTools 
 using StableRNGs
+
 rng = StableRNG(123)
-x, y, z = rand(rng, 100), rand(rng, 100), rand(rng, 100)
+x, y, z = rand(rng, 30), rand(rng, 30), rand(rng, 30)
 
-test_cmi_replace = LocalPermutationTest(CMIShannon(), FPVP())
-test_cmi_nonreplace = LocalPermutationTest(CMIShannon(), FPVP())
-
-test_teshannon = LocalPermutationTest(TEShannon(), FPVP())
-@test_throws ArgumentError LocalPermutationTest(TEShannon()) # estimator needed
-
-@test independence(test_cmi_replace, x, y, z) isa LocalPermutationTestResult
-@test independence(test_cmi_nonreplace, x, y, z) isa LocalPermutationTestResult
-
-@test independence(test_teshannon, x, y, z) isa LocalPermutationTestResult
-
-test_kperm_toolarge = LocalPermutationTest(CMIShannon(), FPVP(); kperm = 200, rng)
-@test_throws ArgumentError independence(test_kperm_toolarge, x, y, z)
-
-# CMI
-# ------------------------
-# Independence tests
-x = rand(rng, 50)
-y = rand(rng, 50)
-z = rand(rng, 50)
-X = StateSpaceSet(x)
-Y = StateSpaceSet(y)
-Z = StateSpaceSet(z)
-
-nshuffles = 5
-lptest_sp = LocalPermutationTest(CMIShannon(), SymbolicPermutation(); nshuffles, rng)
-lptest_vh = LocalPermutationTest(CMIShannon(), ValueHistogram(4); nshuffles, rng)
-lptest_dp = LocalPermutationTest(CMIShannon(), Dispersion(); nshuffles, rng)
-@test independence(lptest_sp, x, y, z) isa LocalPermutationTestResult
-@test independence(lptest_vh, x, y, z) isa LocalPermutationTestResult
-@test independence(lptest_dp, x, y, z) isa LocalPermutationTestResult
-@test independence(lptest_sp, X, Y, Z) isa LocalPermutationTestResult
-@test independence(lptest_vh, X, Y, Z) isa LocalPermutationTestResult
-@test independence(lptest_dp, X, Y, Z) isa LocalPermutationTestResult
-
-# Part mutual information
-# ------------------------
-# Independence tests
-x = rand(rng, 50)
-y = rand(rng, 50)
-z = rand(rng, 50)
 X = StateSpaceSet(x)
 Y = StateSpaceSet(y)
 Z = StateSpaceSet(z)

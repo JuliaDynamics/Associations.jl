@@ -13,7 +13,10 @@ export Zhu1
 
 The `Zhu1` transfer entropy estimator [Zhu2015](@cite).
 
-Assumes that the input data have been normalized as described in (Zhu et al., 2015).
+Assumes that the input data have been normalized as described in [Zhu2015](@citet).
+The estimator can be used both for pairwise and conditional transfer entropy.
+
+## Description
 
 This estimator approximates probabilities within hyperrectangles
 surrounding each point `xᵢ ∈ x` using using `k` nearest neighbor searches. However,
@@ -102,10 +105,17 @@ end
 
 function mean_volumes(vols_joint, vols_ST, vols_TT⁺, vols_T, N::Int)
     vol = 0.0
+    n_ignore = 0
     for i = 1:N
-        vol += log((vols_TT⁺[i] * vols_ST[i]) / (vols_joint[i] * vols_T[i]))
+        num = vols_TT⁺[i] * vols_ST[i]
+        den = vols_joint[i] * vols_T[i]
+        if den != 0
+            vol += log(num / den)
+        else
+            n_ignore += 1
+        end
     end
-    return vol / N
+    return vol / (N - n_ignore)
 end
 
 function mean_digamma(ks_ST, ks_TT⁺, ks_T, k::Int, N::Int,

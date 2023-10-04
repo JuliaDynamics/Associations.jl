@@ -72,13 +72,13 @@ instead of `Z` and we `I(X; Y)` and `Iₖ(X̂; Y)` instead of `I(X; Y | Z)` and
 
 ## Compatible measures
 
-| Measure                       | Pairwise | Conditional | Requires `est` |
-| ----------------------------- | :------: | :---------: | :------------: |
-| [`PartialCorrelation`](@ref)  |    ✖    |     ✓      |       No       |
-| [`DistanceCorrelation`](@ref) |    ✖    |     ✓      |       No       |
-| [`CMIShannon`](@ref)          |    ✖    |     ✓      |      Yes       |
-| [`TEShannon`](@ref)           |    ✓    |     ✓      |      Yes       |
-| [`PMI`](@ref)                 |    ✖    |     ✓      |      Yes       |
+| Measure                       | Pairwise | Conditional | Requires `est` |                                                               Note                                                                |
+| ----------------------------- | :------: | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------: |
+| [`PartialCorrelation`](@ref)  |    ✖    |     ✓      |       No       |                                                                                                                                   |
+| [`DistanceCorrelation`](@ref) |    ✖    |     ✓      |       No       |                                                                                                                                   |
+| [`CMIShannon`](@ref)          |    ✖    |     ✓      |      Yes       |                                                                                                                                   |
+| [`TEShannon`](@ref)           |    ✓    |     ✓      |      Yes       | Pairwise tests not possible with `TransferEntropyEstimator`s, only lower-level estimators, e.g. `FPVP`, `GaussianMI` or `Kraskov` |
+| [`PMI`](@ref)                 |    ✖    |     ✓      |      Yes       |                                                                                                                                   |
 
 The `LocalPermutationTest` is only defined for conditional independence testing.
 Exceptions are for measures like [`TEShannon`](@ref), which use conditional
