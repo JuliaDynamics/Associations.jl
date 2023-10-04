@@ -1,9 +1,10 @@
 using Test
-using CausalityTools
-using Random
+using CausalityTools 
+using StableRNGs
 
+rng = StableRNG(123)
 
-function ar3(n::Int, rng = MersenneTwister(1234))
+function ar3(n::Int, rng = StableRNG(123))
     x = zeros(n)
     y = zeros(n)
     z = zeros(n)
@@ -20,14 +21,12 @@ function ar3(n::Int, rng = MersenneTwister(1234))
 end
 
 α = 0.05
-rng = MersenneTwister(1234)
 
 ηTf = 1
 embedding = EmbeddingTE(; dS = 2, dT = 2, dC = 2, ηTf)
 measure = TEShannon(; embedding)
-estimators = [Lindner(k=10), Zhu1(k=10)]
-
-@testset "LocalPermutationTest with TEShannon and $estimator" for estimator in estimators
+dedicated_estimators = [Lindner(k=10), Zhu1(k=10)]
+@testset "LocalPermutationTest with TEShannon + dedicated TE estimator $estimator" for estimator in dedicated_estimators
     x, y, z = ar3(500, rng)
 
     independence_test = LocalPermutationTest(measure, estimator; nshuffles = 100, rng = rng)
@@ -49,3 +48,12 @@ estimators = [Lindner(k=10), Zhu1(k=10)]
     # Pairwise analyses won't work, because only two inputs are given.
     @test_throws ArgumentError independence(independence_test, x, y)
 end
+
+nondedicated_estimators = [FPVP(), GaussianMI(), Kraskov(), ValueHistogram(2)]
+@testset "LocalPermutationTest with TEShannon + non-dedicated estimator $estimator" for estimator in nondedicated_estimators
+    x, y, z = ar3(50, rng)
+
+    independence_test = LocalPermutationTest(measure, estimator; nshuffles = 100, rng = rng)
+    @test independence(independence_test, x, z, y) isa LocalPermutationTestResult
+end
+
