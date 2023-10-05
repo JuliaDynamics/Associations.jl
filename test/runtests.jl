@@ -12,4 +12,8 @@ testfile(file, testname=defaultname(file)) = @testset "$testname" begin; include
     testfile("systems/systems.jl")
 end
 
+include("complexity_measures/test_effort_to_compress.jl")
+include("complexity_measures/test_dynamical_complexity.jl")
+include("complexity_measures/test_icc.jl")
+
 #include("integrations/test_uncertaindata_integration.jl")
