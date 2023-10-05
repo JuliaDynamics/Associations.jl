@@ -27,7 +27,7 @@ D_{q}(P_Y(\\Omega) || P_Y(\\Omega)) =
     [`ProbabilitiesEstimator`](@ref) like [`BayesianRegularization`](@ref) to ensure
     all estimated probabilities are nonzero.
 """
-struct RenyiDivergence{Q, B} <: BivariateInformationMeasure
+struct RenyiDivergence{Q, B} <: DivergenceOrDistance
     q::Q
     base::B
     function RenyiDivergence(q::Q, base::B) where {Q, B}

@@ -23,7 +23,7 @@ D_{H}(P_Y(\\Omega) || P_Y(\\Omega)) =
 - [`information`](@ref). Used to compute the distance between two pre-computed
     probability distributions.
 """
-struct HellingerDistance <: BivariateInformationMeasure end
+struct HellingerDistance <: DivergenceOrDistance end
 
 function information(measure::HellingerDistance, px::Probabilities, py::Probabilities)
     return 1/sqrt(2) * sum((sqrt(pxᵢ) - sqrt(pyᵢ))^2 for (pxᵢ, pyᵢ) in zip(px, py))

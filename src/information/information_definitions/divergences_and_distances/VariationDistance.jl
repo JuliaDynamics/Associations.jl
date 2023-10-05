@@ -23,7 +23,7 @@ D_{V}(P_Y(\\Omega) || P_Y(\\Omega)) =
 - [`information`](@ref). Used to compute the variation distance between two pre-computed
     probability distributions.
 """
-struct VariationDistance <: BivariateInformationMeasure end
+struct VariationDistance <: DivergenceOrDistance end
 
 function information(measure::VariationDistance, px::Probabilities, py::Probabilities)
     return 1/2 * sum(abs(pxᵢ - pyᵢ) for (pxᵢ, pyᵢ) in zip(px, py))

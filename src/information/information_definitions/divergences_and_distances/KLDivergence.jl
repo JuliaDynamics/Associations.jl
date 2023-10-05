@@ -25,7 +25,7 @@ D_{KL}(P_Y(\\Omega) || P_Y(\\Omega)) =
     [`ProbabilitiesEstimator`](@ref) like [`BayesianRegularization`](@ref) to ensure
     all estimated probabilities are nonzero.
 """
-struct KLDivergence{B} <: BivariateInformationMeasure
+struct KLDivergence{B} <: DivergenceOrDistance
     base::B
 end
 KLDivergence(; base = 2) = KLDivergence(base)
