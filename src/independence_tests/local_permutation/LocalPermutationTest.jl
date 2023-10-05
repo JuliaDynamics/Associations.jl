@@ -1,6 +1,7 @@
 using Random: shuffle!
 using Random
 import Statistics: quantile
+import ProgressMeter
 
 export LocalPermutationTest
 export LocalPermutationTestResult
@@ -34,7 +35,8 @@ struct NeighborCloseness <: LocalPermutationClosenessSearch end
         nshuffles::Int = 100,
         rng = Random.default_rng(),
         replace = true,
-        w::Int = 0)
+        w::Int = 0,
+        show_progress = false)
 
 `LocalPermutationTest` is a generic conditional independence test
 [Runge2018LocalPerm](@cite) for assessing whether two variables `X` and `Y` are
@@ -72,13 +74,13 @@ instead of `Z` and we `I(X; Y)` and `Iₖ(X̂; Y)` instead of `I(X; Y | Z)` and
 
 ## Compatible measures
 
-| Measure                       | Pairwise | Conditional | Requires `est` |
-| ----------------------------- | :------: | :---------: | :------------: |
-| [`PartialCorrelation`](@ref)  |    ✖    |     ✓      |       No       |
-| [`DistanceCorrelation`](@ref) |    ✖    |     ✓      |       No       |
-| [`CMIShannon`](@ref)          |    ✖    |     ✓      |      Yes       |
-| [`TEShannon`](@ref)           |    ✓    |     ✓      |      Yes       |
-| [`PMI`](@ref)                 |    ✖    |     ✓      |      Yes       |
+| Measure                       | Pairwise | Conditional | Requires `est` |                                                               Note                                                                |
+| ----------------------------- | :------: | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------: |
+| [`PartialCorrelation`](@ref)  |    ✖    |     ✓      |       No       |                                                                                                                                   |
+| [`DistanceCorrelation`](@ref) |    ✖    |     ✓      |       No       |                                                                                                                                   |
+| [`CMIShannon`](@ref)          |    ✖    |     ✓      |      Yes       |                                                                                                                                   |
+| [`TEShannon`](@ref)           |    ✓    |     ✓      |      Yes       | Pairwise tests not possible with `TransferEntropyEstimator`s, only lower-level estimators, e.g. `FPVP`, `GaussianMI` or `Kraskov` |
+| [`PMI`](@ref)                 |    ✖    |     ✓      |      Yes       |                                                                                                                                   |
 
 The `LocalPermutationTest` is only defined for conditional independence testing.
 Exceptions are for measures like [`TEShannon`](@ref), which use conditional
@@ -102,15 +104,16 @@ struct LocalPermutationTest{M, EST, C, R} <: IndependenceTest{M}
     replace::Bool
     closeness_search::C
     w::Int # Theiler window
-    function LocalPermutationTest(measure::M, est::EST = nothing;
-            rng::R = Random.default_rng(),
-            kperm::Int = 10,
-            replace::Bool = true,
-            nshuffles::Int = 100,
-            closeness_search::C = NeighborCloseness(),
-            w::Int = 0) where {M, EST, C, R}
-        new{M, EST, C, R}(measure, est, rng, kperm, nshuffles, replace, closeness_search, w)
-    end
+    show_progress::Bool
+end
+function LocalPermutationTest(measure::M, est::EST = nothing;
+        rng::R = Random.default_rng(),
+        kperm::Int = 10,
+        replace::Bool = true,
+        nshuffles::Int = 100,
+        closeness_search::C = NeighborCloseness(),
+        w::Int = 0, show_progress = false) where {M, EST, C, R}
+    return LocalPermutationTest{M, EST, C, R}(measure, est, rng, kperm, nshuffles, replace, closeness_search, w, show_progress)
 end
 
 Base.show(io::IO, test::LocalPermutationTest) = print(io,
@@ -165,7 +168,6 @@ function independence(test::LocalPermutationTest, x, y, z)
 
     X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
-    N = length(X)
     Î = estimate(measure, est, X, Y, Z)
     Îs = permuted_Îs(X, Y, Z, measure, est, test)
     p = count(Î .<= Îs) / nshuffles
@@ -177,7 +179,10 @@ end
 # computing the test statistic.
 function permuted_Îs(X, Y, Z, measure, est, test)
     rng, kperm, nshuffles, replace, w = test.rng, test.kperm, test.nshuffles, test.replace, test.w
-
+    progress = ProgressMeter.Progress(nshuffles;
+        desc = "LocalPermutationTest:",
+        enabled = test.show_progress
+    )
     N = length(X)
     test.kperm < N || throw(ArgumentError("kperm must be smaller than input data length"))
 
@@ -194,6 +199,7 @@ function permuted_Îs(X, Y, Z, measure, est, test)
             shuffle_without_replacement!(X̂, X, idxs_z, kperm, rng, Nᵢ, πs)
         end
         Îs[n] = estimate(measure, est, X̂, Y, Z)
+        ProgressMeter.next!(progress)
     end
 
     return Îs

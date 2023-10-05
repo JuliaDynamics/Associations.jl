@@ -1,5 +1,6 @@
 using Random
 using TimeseriesSurrogates
+import ProgressMeter
 export SurrogateTest
 export SurrogateTestResult
 
@@ -9,6 +10,7 @@ export SurrogateTestResult
         nshuffles::Int = 100,
         surrogate = RandomShuffle(),
         rng = Random.default_rng(),
+        show_progress = false,
     )
 
 A generic (conditional) independence test for assessing whether two variables `X` and `Y`
@@ -72,14 +74,14 @@ struct SurrogateTest{M, E, R, S} <: IndependenceTest{M}
     rng::R
     surrogate::S
     nshuffles::Int
-
-    function SurrogateTest(measure::M, est::E = nothing;
-        rng::R = Random.default_rng(),
-        surrogate::S = RandomShuffle(),
-        nshuffles::Int = 100,
-        ) where {M, E, R, S}
-        new{M, E, R, S}(measure, est, rng, surrogate, nshuffles)
-    end
+    show_progress::Bool
+end
+function SurrogateTest(measure::M, est::E = nothing;
+    rng::R = Random.default_rng(),
+    surrogate::S = RandomShuffle(),
+    nshuffles::Int = 100, show_progress = false
+    ) where {M, E, R, S}
+    SurrogateTest{M, E, R, S}(measure, est, rng, surrogate, nshuffles, show_progress)
 end
 
 
@@ -127,44 +129,26 @@ end
 # Generic dispatch for any three-argument conditional independence measure where the
 # third argument is to be conditioned on. This works naturally with e.g.
 # conditional mutual information.
-function independence(test::SurrogateTest, x, y, z)
-    (; measure, est, rng, surrogate, nshuffles) = test
+function independence(test::SurrogateTest, x, args...)
+    # Setup (`args...` is either `y` or `y, z`)
+    (; measure, est, rng, surrogate, nshuffles, show_progress) = test
+    verify_number_of_inputs_vars(measure, 1+length(args))
+    SSSets = map(w -> StateSpaceSet(w), args)
+    estimation = x -> estimate(measure, est, x, SSSets...)
+    progress = ProgressMeter.Progress(nshuffles;
+        desc="SurrogateTest:", enabled=show_progress
+    )
 
-    # Make sure that the measure is compatible with the input data.
-    verify_number_of_inputs_vars(measure, 3)
-
-    X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
-    @assert length(X) == length(Y) == length(Z)
-    N = length(x)
-    Î = estimate(measure,est, X, Y, Z)
+    # Estimate
+    Î = estimation(StateSpaceSet(x))
     s = surrogenerator(x, surrogate, rng)
     Îs = zeros(nshuffles)
     for b in 1:nshuffles
-        Îs[b] = estimate(measure, est, s(), Y, Z)
+        Îs[b] = estimation(s())
+        ProgressMeter.next!(progress)
     end
     p = count(Î .<= Îs) / nshuffles
-
     return SurrogateTestResult(3, Î, Îs, p, nshuffles)
-end
-
-function independence(test::SurrogateTest, x, y)
-    (; measure, est, rng, surrogate, nshuffles) = test
-
-    # Make sure that the measure is compatible with the input data.
-    verify_number_of_inputs_vars(measure, 2)
-
-    X, Y = StateSpaceSet(x), StateSpaceSet(y)
-    @assert length(X) == length(Y)
-    N = length(x)
-    Î = estimate(measure,est, X, Y)
-    sx = surrogenerator(x, surrogate, rng)
-    Îs = zeros(nshuffles)
-    for b in 1:nshuffles
-        Îs[b] = estimate(measure, est, sx(), y)
-    end
-    p = count(Î .<= Îs) / nshuffles
-
-    return SurrogateTestResult(2, Î, Îs, p, nshuffles)
 end
 
 # Concrete implementations

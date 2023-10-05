@@ -119,12 +119,15 @@ include("optimization/optimization.jl")
 include("TEShannon.jl")
 include("TERenyiJizba.jl")
 
-function transferentropy(args...; kwargs...)
-    return estimate(args...; kwargs...)
+function transferentropy(measure::TransferEntropy, est::TE_ESTIMATORS, args...; kwargs...)
+    return estimate(measure, est, args...; kwargs...)
+end
+function transferentropy(est::TE_ESTIMATORS, args...; kwargs...)
+    return estimate(TEShannon(), est, args...; kwargs...)
 end
 
 function estimate(est::TE_ESTIMATORS, args...; kwargs...)
-    estimate(TEShannon(), est, args...; kwargs...)
+    return estimate(TEShannon(), est, args...; kwargs...)
 end
 
 function estimate(measure::TransferEntropy, est::TE_ESTIMATORS, x...)

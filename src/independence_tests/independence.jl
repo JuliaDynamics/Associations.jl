@@ -28,7 +28,8 @@ Returns a test `summary`, whose type depends on `test`.
 - [`JointDistanceDistributionTest`](@ref).
 """
 function independence(test::IndependenceTest, x...)
-    throw(ArgumentError("No concrete implementation for $(typeof(test)) test yet"))
+    L = length(x)
+    throw(ArgumentError("No concrete implementation for $(typeof(test)) test with $(L) input variables."))
 end
 
 function pvalue_text_summary(test::IndependenceTestResult)
