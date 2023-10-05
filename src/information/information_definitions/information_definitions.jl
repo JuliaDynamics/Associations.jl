@@ -1,5 +1,5 @@
 include("KLDivergence.jl")
-include("RenyiDivergence.jl")
+include("joint_entropies/joint_entropies.jl")
 include("HellingerDistance.jl")
 include("conditional_mutual_informations/conditional_mutual_informations.jl")
 
@@ -9,11 +9,3 @@ include("MITsallisMartin.jl")
 include("MITsallisFuruichi.jl")
 include("MIRenyiSarbu.jl")
 include("MIRenyiJizba.jl")
-
-abstract type JointEntropy <: BivariateInformationMeasure end
- # q-logarithm for Tsallis and Renyi joint entropies
-logq(x, q) = (x^(1-q) - 1) / (1 - q)
-
-include("JointEntropyShannon.jl")
-include("JointEntropyRenyi.jl")
-include("JointEntropyTsallis.jl")

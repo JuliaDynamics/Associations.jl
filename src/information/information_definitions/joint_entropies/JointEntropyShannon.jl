@@ -28,8 +28,8 @@ end
 function information(definition::JointEntropyShannon, pxy::Probabilities{T, 2}) where T
     base = definition.e.base
     h = 0.0
-    for pij in pxy
-        h += pij * log(pij)
+    for p in pxy
+        h += p * log(p)
     end
     h = -h
     return _convert_logunit(h, ℯ, base)

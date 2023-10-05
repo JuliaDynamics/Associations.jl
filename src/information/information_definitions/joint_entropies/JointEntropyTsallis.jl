@@ -31,8 +31,8 @@ function information(definition::JointEntropyTsallis, pxy::Probabilities{T, 2}) 
     base = definition.e.base
     q = definition.e.q
     h = 0.0
-    for pij in c
-        h += pij^q * logq(pij, q)
+    for p in pxy
+        h += p^q * logq(p, q)
     end
     h = -h
     return _convert_logunit(h, ℯ, base)
