@@ -1,7 +1,7 @@
 include("KLDivergence.jl")
 include("RenyiDivergence.jl")
 include("HellingerDistance.jl")
-include("VariationDistance.jl")
+include("conditional_mutual_informations/conditional_mutual_informations.jl")
 
 abstract type MutualInformation <: BivariateInformationMeasure end
 include("MIShannon.jl")
