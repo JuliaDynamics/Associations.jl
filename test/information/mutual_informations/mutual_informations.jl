@@ -1,0 +1,5 @@
+include("mi_renyi_jizba.jl")
+include("mi_renyi_sarbu.jl")
+include("mi_shannon.jl")
+include("mi_tsallis_furuichi.jl")
+include("mi_tsallis_martin.jl")
