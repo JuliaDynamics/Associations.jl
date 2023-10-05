@@ -1,8 +1,8 @@
 export PartialMutualInformation
 
 """
-    PMI <: MultivariateInformationMeasure
-    PMI(; base = 2)
+    PartialMutualInformation <: MultivariateInformationMeasure
+    PartialMutualInformation(; base = 2)
 
 The partial mutual information (PMI) measure of conditional association [Zhao2016](@cite).
 
@@ -11,7 +11,7 @@ The partial mutual information (PMI) measure of conditional association [Zhao201
 PMI is defined as for variables ``X``, ``Y`` and ``Z`` as
 
 ```math
-PMI(X; Y | Z) = D(p(x, y, z) || p^{*}(x|z) p^{*}(y|z) p(z)),
+PartialMutualInformation(X; Y | Z) = D(p(x, y, z) || p^{*}(x|z) p^{*}(y|z) p(z)),
 ```
 
 where ``p(x, y, z)`` is the joint distribution for ``X``, ``Y`` and ``Z``, and
@@ -21,28 +21,27 @@ where ``p(x, y, z)`` is the joint distribution for ``X``, ``Y`` and ``Z``, and
 ## Estimation
 
 The PMI is estimated by first estimating a 3D probability mass function using 
-[`probabilities`](@ref), then computing ``PMI(X; Y | Z)`` from those probaiblities.
+[`probabilities`](@ref), then computing ``PartialMutualInformation(X; Y | Z)`` from those probaiblities.
 
 ## Properties
 
 For the discrete case, the following identities hold in theory (when estimating PMI, they
 may not).
 
-- `PMI(X, Y, Z) >= CMI(X, Y, Z)` (where CMI is the Shannon CMI). Holds in theory, but
-    when estimating PMI, the identity may not hold.
-- `PMI(X, Y, Z) >= 0`. Holds both in theory and for estimation using
-    [`ProbabilitiesEstimator`](@ref)s.
-- `X ⫫ Y | Z => PMI(X, Y, Z) = CMI(X, Y, Z) = 0` (in theory, but not necessarily for
+- `PartialMutualInformation(X, Y, Z) >= CMI(X, Y, Z)` (where CMI is the Shannon CMI). Holds in theory, but
+    when estimating PartialMutualInformation, the identity may not hold.
+- `PartialMutualInformation(X, Y, Z) >= 0`. Holds both in theory and when estimating using discrete estimators.
+- `X ⫫ Y | Z => PartialMutualInformation(X, Y, Z) = CMI(X, Y, Z) = 0` (in theory, but not necessarily for
     estimation).
 """
-Base.@kwdef struct PMI <: MultivariateInformationMeasure
+Base.@kwdef struct PartialMutualInformation <: MultivariateInformationMeasure
     base::Real = 2
 end
 
-min_inputs_vars(::PMI) = 3
-max_inputs_vars(::PMI) = 3
+min_inputs_vars(::PartialMutualInformation) = 3
+max_inputs_vars(::PartialMutualInformation) = 3
 
-function information(definition::PartialMutualInformation, pxyz::Probabilites{T, N}) where N
+function information(definition::PartialMutualInformation, pxyz::Probabilities{T, 3}) where T
     dx, dy, dz = size(pxyz)
     px = marginal(pxyz, dims = [1])
     py = marginal(pxyz, dims = [2])
