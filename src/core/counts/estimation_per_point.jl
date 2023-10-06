@@ -3,7 +3,7 @@
 # input variables.
 function counts(encoding::CodifyPoints{N}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
     x̂ = encode(encoding, x...)
-    return counts(x̂...)
+    return counts(UniqueElements(), x̂...)
 end
 
 
@@ -11,5 +11,5 @@ end
 function counts(encoding::CodifyPoints{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
     e = first(encoding.encodings)
     x̂ = ([encode(e, pt) for pt in xₖ] for xₖ in x)
-    return counts(x̂...)
+    return counts(UniqueElements(), x̂...)
 end
