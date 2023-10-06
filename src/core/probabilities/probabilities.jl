@@ -17,7 +17,7 @@ end
 
 # Not providing any discretization defaults to `RelativeAmount` estimation.
 function probabilities(x::Vararg{VectorOrStateSpaceSet, N}) where N
-    cts = counts(x...)
+    cts = counts(UniqueElements(), x...)
     return probabilities(RelativeAmount(), cts)
 end
 

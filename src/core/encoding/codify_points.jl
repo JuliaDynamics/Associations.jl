@@ -47,31 +47,31 @@ ey = CombinationEncoding(RelativeMeanEncoding(0.0, 1.0, n = 3), OrdinalPatternEn
 # For `z`, we use ordinal patterns to encode.
 ez = OrdinalPatternEncoding(4)
 
-# Encoding two input datasets gives a 2-tuple of Vector{Int}
-encode(CodifyPoints(ex, ey), x, y)
+# Codify two input datasets gives a 2-tuple of Vector{Int}
+codify(CodifyPoints(ex, ey), x, y)
 
-# Encoding three input datasets gives a 3-tuple of Vector{Int}
-encode(CodifyPoints(ex, ey, ez), x, y, z)
+# Codify three input datasets gives a 3-tuple of Vector{Int}
+codify(CodifyPoints(ex, ey, ez), x, y, z)
 """
-function encode(encoding::CodifyPoints{1}, x::Vararg{Any, 1})
+function codify(encoding::CodifyPoints{1}, x::Vararg{Any, 1})
     e = first(encoding.encodings)
-    x̂ = encode_individual_dataset(e, first(x))
+    x̂ = codify_individual_dataset(e, first(x))
     return x̂::Vector{<:Integer}
 end
 
 # Apply the same encoding to all input datasets.
-function encode(encoding::CodifyPoints{1}, x::Vararg{Any, M}) where {M}
+function codify(encoding::CodifyPoints{1}, x::Vararg{Any, M}) where {M}
     verify_input(encoding, x...)
     e = first(encoding.encodings)
-    x̂ = map(k -> encode_individual_dataset(e, x[k]), tuple(1:M...))
+    x̂ = map(k -> codify_individual_dataset(e, x[k]), tuple(1:M...))
 
     return x̂::NTuple{M, Vector{<:Integer}}
 end
 
 
-function encode(encoding::CodifyPoints{N}, x::Vararg{Any, M}) where {N, M}
+function codify(encoding::CodifyPoints{N}, x::Vararg{Any, M}) where {N, M}
     verify_input(encoding, x...)
-    x̂ = map(k -> encode_individual_dataset(encoding[k], x[k]), tuple(1:M...))
+    x̂ = map(k -> codify_individual_dataset(encoding[k], x[k]), tuple(1:M...))
 
     return x̂::NTuple{M, Vector{<:Integer}}
 end
@@ -88,7 +88,7 @@ function verify_input(encoding::CodifyPoints{N}, x...) where N
     end
 end
 
-function encode_individual_dataset(encoding::Encoding, x)
+function codify_individual_dataset(encoding::Encoding, x)
     if !(typeof(x) <: AbstractStateSpaceSet)
         encoding = UniqueElementsEncoding(x)
         x̂ = encode.(Ref(encoding), x)
@@ -109,7 +109,7 @@ end
 function counts(encoding::CodifyPoints, x...)
     # This converts each dataset `x[i]::StateSpaceSet` into `x̂[i]::Vector{Int}`,
     # where `length(x[i]) == length(x̂[i])`.
-    x̂ = encode(encoding, x...)
+    x̂ = codify(encoding, x...)
     # lmaps[i]: a `Dict{outcome_type, Int}` containing the conversion between the
     #   internally encoded outcomes for the `i`-th input, and the actual outcomes
     #   for the `i`-th input.
