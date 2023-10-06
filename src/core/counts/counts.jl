@@ -12,16 +12,30 @@ export counts
 # input data (ComplexityMeasures.jl only deals with single-variable estimation)
 # ##########################################################################################
 """
-    counts(x₁, x₂, ..., xₙ) → Counts{N}
+    counts([o::OutcomeSpace], x₁, x₂, ..., xₙ) → Counts{N}
 
-Construct an `N`-dimensional contingency table of counts from the input vectors
-``x_1, x_2, \\ldots, x_N``, where each ``xₖ` must be an iterable containing
-discrete values.
+Construct an `N`-dimensional contingency table from the input iterables
+`x₁, x₂, ..., xₙ` which are such that 
+`length(x₁) == length(x₂) == ⋯ == length(xₙ)`.
 
-These discrete iterables are typically `Vector{Int}` constructed from input data using
-[`encode`](@ref) in combination with some [`Discretization`](@ref).
+## Discretization
+
+If `x₁, x₂, ..., xₙ` are not already discretized, then the data must first
+be discretized by providing either a [`CodifyPoints`](@ref), or a 
+[`CodifyVariables`](@ref) as the first argument.
+
+If `x₁, x₂, ..., xₙ` are already discretized, then [`UniqueElements`](@ref)
+should be used as the first argument.
+
+# Concrete implementations
+
+- `counts(o::UniqueElements, x₁, x₂, ..., xₙ)`.
+- `counts(encoding::CodifyPoints, x₁, x₂, ..., xₙ)`.
+- `counts(encoding::CodifyVariables, x₁, x₂, ..., xₙ)`.
+
+See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@ref).
 """
-function counts(x::Vararg{VectorOrStateSpaceSet, N}) where N # this extends ComplexityMeasures.jl definition
+function counts(o::UniqueElements, x::Vararg{VectorOrStateSpaceSet, N}) where N # this extends ComplexityMeasures.jl definition
     # Get marginal probabilities and outcomes
     L = length(x)
     cts, lmaps, encoded_outcomes = counts_table(x...)
@@ -30,6 +44,14 @@ function counts(x::Vararg{VectorOrStateSpaceSet, N}) where N # this extends Comp
     #   for the `i`-th input.
     actual_outcomes = map(i -> to_outcomes(lmaps[i], encoded_outcomes[i]), tuple(1:L...))
     return Counts(cts, actual_outcomes)
+end
+
+function counts(x::Vararg{VectorOrStateSpaceSet, N}) where N
+    if N == 1
+        return ComplexityMeasures.counts(UniqueElements(), x)
+    else
+        return counts(UniqueElements(), x...)
+    end
 end
 
 function to_outcomes(lmap::Dict, encoded_outcomes::Vector{<:Integer})
@@ -119,7 +141,6 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 # vectors.
 unique_elements(x) = unique(x)
 unique_elements(x::AbstractStateSpaceSet) = unique(x.data)
-
 
 # TODO: preserve axis labels
 function marginal(p::Counts; dims = 1:ndims(p))
