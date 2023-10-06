@@ -1,7 +1,7 @@
 export Contingency
 
 """
-    Contingency <: DiscreteInfoEstimator
+    Contingency <: InformationMeasureEstimator
     Contingency(definition::MultivariateInformationMeasure,
         pest::ProbabilitiesEstimator, o::OutcomeSpace)
 
@@ -16,7 +16,7 @@ Works for any outcome space that implements [`symbolize`](@ref).
 See also: [`Counts`](@ref), [`Probabilities]](@ref), [`ProbabilitiesEstimator`](@ref),
 [`OutcomeSpace`](@ref), [`DiscreteInfoEstimator`](@ref).
 """
-Base.@kwdef struct Contingency{M <: MultivariateInformationMeasure, O, P} <: DiscreteInfoEstimator
+Base.@kwdef struct Contingency{M <: MultivariateInformationMeasure, O, P} <: InformationMeasureEstimator{M}
     definition::M # API from complexity measures: definition must be first field.
     o::O
     pest::P
