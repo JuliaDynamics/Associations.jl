@@ -3,6 +3,16 @@ using CausalityTools
 using Random
 rng = Xoshiro(1234)
 
+
+# Analytic test
+x = [1, 2, 3, 1, 2, 3, 1, 2, 3]
+y = [1, 2, 1, 2, 1, 2, 1, 2, 1]
+
+@test counts(x, y) == counts(UniqueElements(), x, y)
+
+# With `OutcomeSpaces` directly
+# ----------------------------
+
 x = StateSpaceSet(rand(rng, 50, 3))
 y = StateSpaceSet(rand(rng, 50, 3))
 z = StateSpaceSet(rand(rng, 50, 2))
