@@ -1,4 +1,3 @@
-import ComplexityMeasures: symbolize_for_dispersion
 export marginal_encodings
 
 """
@@ -47,7 +46,7 @@ function marginally_encode_variable(o::OrdinalPatterns{m}, x::AbstractVector) wh
 end
 
 function marginally_encode_variable(o::Dispersion, x::AbstractVector)
-    return symbolize_for_dispersion(est, x)
+    return codify(est, x)
 end
 
 function marginally_encode_variable(
