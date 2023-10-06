@@ -13,11 +13,8 @@ module CausalityTools
     using DelayEmbeddings: embed, genembed
     export embed, genembed
 
-    import DynamicalSystemsBase: trajectory
-    import DynamicalSystemsBase: DiscreteDynamicalSystem, ContinuousDynamicalSystem
     import HypothesisTests: pvalue
     export trajectory
-    export DiscreteDynamicalSystem, ContinuousDynamicalSystem
     @reexport using StateSpaceSets
     @reexport using ComplexityMeasures
     @reexport using TimeseriesSurrogates
