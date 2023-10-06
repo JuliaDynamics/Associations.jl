@@ -7,8 +7,8 @@ function counts(encoding::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}
     return counts(x̂...)
 end
 
-function counts(encoding::OutcomeSpace, x::Vararg{ArrayOrStateSpaceSet, N}) where N
-    e = first(encoding.encodings)
-    x̂ = ([encode(e, pt) for pt in xₖ] for xₖ in x)
+# If a single outcome space is given, then codify each variable according to the same outcome space.
+function counts(o::OutcomeSpace, x::Vararg{ArrayOrStateSpaceSet, N}) where N
+    x̂ = (codify(o, xₖ) for xₖ in x)
     return counts(x̂...)
 end
