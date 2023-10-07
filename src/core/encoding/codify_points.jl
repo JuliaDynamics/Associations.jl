@@ -1,17 +1,16 @@
-import ComplexityMeasures: encode
-import ComplexityMeasures: decode
+import ComplexityMeasures: codify
 import ComplexityMeasures: counts
 using ComplexityMeasures: Encoding
 
 export CodifyPoints
+export codify
 
 """
     CodifyPoints{N}
     CodifyPoints(encodings::NTuple{N, Encoding})
 
 Given multiple dataset `xs::StateSpaceSet`, [`encode`](@ref) every `mₖ`-dimensional point
-`x[k][i]` as an integer using the given
-[`Encoding`](@ref)s `encodings[k]`.
+`x[k][i]` as an integer using the given [`Encoding`](@ref)s `encodings[k]`.
 """
 struct CodifyPoints{N} <: Discretization{N}
     encodings::NTuple{N, Encoding}
@@ -29,9 +28,9 @@ function CodifyPoints(encodings::Vararg{Encoding, N}) where N
 end
 
 """
-    encode(encoding::CodifyPoints{N}, x::Vararg{<:AbstractStateSpaceSet, N})
+    codify(encoding::CodifyPoints{N}, x::Vararg{<:AbstractStateSpaceSet, N})
 
-Encode
+Codify each timeseries `xᵢ ∈ x` according to the given `encoding`.
 
 ## Examples
 
@@ -126,5 +125,5 @@ function counts(encoding::CodifyPoints, x...)
 end
 
 function decode_outcomes(encoding::Encoding, outcomes::Vector{<:Integer})
-    return decode.(Ref(encoding), outcomes)
+    return ComplexityMeasures.decode.(Ref(encoding), outcomes)
 end

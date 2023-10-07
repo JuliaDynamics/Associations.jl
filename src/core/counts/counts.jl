@@ -4,6 +4,7 @@ using ComplexityMeasures: Counts
 using DimensionalData: DimArray
 
 import ComplexityMeasures: counts
+import ComplexityMeasures: codify
 export counts
 
 # ##########################################################################################

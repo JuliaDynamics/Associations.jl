@@ -10,11 +10,6 @@ function probabilities(est::RelativeAmount, c::Counts{<:Integer, N}) where N
     return Probabilities(c)
 end
 
-function probabilities(d::Discretization, x::Vararg{Any, N}) where N
-    cts = counts(d, x...)
-    return probabilities(RelativeAmount(), cts)
-end
-
 # Not providing any discretization defaults to `RelativeAmount` estimation.
 function probabilities(x::Vararg{VectorOrStateSpaceSet, N}) where N
     cts = counts(UniqueElements(), x...)

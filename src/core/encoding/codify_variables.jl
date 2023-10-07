@@ -1,5 +1,6 @@
 using ComplexityMeasures
 import ComplexityMeasures: codify
+import ComplexityMeasures: OutcomeSpace
 
 using DelayEmbeddings: embed
 export CodifyVariables
@@ -10,7 +11,7 @@ export codify
 
 """
     CodifyVariables <: Discretization
-    CodifyVariables(encoding::Encoding)
+    CodifyVariables(outcome_spaces::OutcomeSpace)
 
 Given multiple dataset `xs::StateSpaceSet`, [`encode`](@ref) the `i`-th variable/column
 using `encoding` (the same encoding is applied to each column to ensure consistency).
