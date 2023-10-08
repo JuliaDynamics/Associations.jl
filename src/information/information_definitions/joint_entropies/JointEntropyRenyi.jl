@@ -14,8 +14,10 @@ Given two two discrete random variables ``X`` and ``Y`` with ranges ``\\mathcal{
 ``\\mathcal{X}``, [Golshani2009](@citet) defines the Rényi joint entropy as
 
 ```math
-H_q^R(X, Y) = -\\dfrac{1}{1-\\alpha} \\log \\sum_{i = 1}^N p_i^q.
+H_q^R(X, Y) = \\dfrac{1}{1-\\alpha} \\log \\sum_{i = 1}^N p_i^q,
 ```
+
+where ``q > 0`` and ``q != 1``.
 """
 struct JointEntropyRenyi{E<:Renyi} <: JointEntropy
     e::E
@@ -30,8 +32,10 @@ function information(definition::JointEntropyRenyi, pxy::Probabilities{T, 2}) wh
     q = definition.e.q
     h = 0.0
     for p in pxy
-        h += p^q * logq(p, q)
+        if p != 0
+            h += p^q
+        end
     end
-    h = -h
+    h = 1 / (1 - q) * log(h) 
     return _convert_logunit(h, ℯ, base)
 end
