@@ -31,3 +31,33 @@ struct CMIRenyiJizba{E <: Renyi} <: ConditionalMutualInformation
         new{E}(e)
     end
 end
+
+function information(est::JointProbabilities{<:CMIRenyiJizba}, x, y, z)
+    throw(ArgumentError("CMIRenyiJizba not implemented for $(typeof(est).name.name)"))
+end
+
+# --------------------------------------------------------------
+# Conditional mutual information through entropy decomposition
+# --------------------------------------------------------------
+function information(est::DifferentialDecomposition{<:CMIRenyiJizba, <:DifferentialInfoEstimator{<:Renyi}}, x, y, z)
+    HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_differential(est, x, y, z)
+    cmi = HXZ + HYZ - HXYZ - HZ
+    return cmi
+end
+
+function information(est::DiscreteDecomposition{<:CMIRenyiJizba, <:DiscreteInfoEstimator{<:Renyi}}, x, y, z)
+    HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_discrete(est, x, y, z)
+    cmi = HXZ + HYZ - HXYZ - HZ
+    return cmi
+end
+
+# ------------------------------------------------
+# Pretty printing for decomposition estimators.
+# ------------------------------------------------
+function decomposition_string(definition::CMIRenyiJizba, est::DiscreteInfoEstimator)
+    return "CMI_RJ(X, Y) = H_R(X,Z) + H_R(Y,Z) - H_R(X,Y,Z) - H_R(Z)";
+end
+
+function decomposition_string(definition::CMIRenyiJizba, est::DifferentialInfoEstimator)
+    return "CMI_RJ(X, Y) = h_R(X,Z) + h_R(Y,Z) - h_R(X,Y,Z) - h_R(Z)";
+end

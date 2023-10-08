@@ -73,3 +73,29 @@ function information(definition::CMIShannon, pxyz::Probabilities{T, 3}) where T
     end
     return cmi
 end
+
+# ------------------------------------------------
+# Conditional mutual information through entropy decomposition
+# ------------------------------------------------
+function information(est::DifferentialDecomposition{<:CMIShannon, <:DifferentialInfoEstimator{<:Shannon}}, x, y, z)
+    HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_differential(est, x, y, z)
+    cmi = HXZ + HYZ - HXYZ - HZ
+    return cmi
+end
+
+function information(est::DiscreteDecomposition{<:CMIShannon, <:DiscreteInfoEstimator{<:Shannon}}, x, y, z)
+    HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_discrete(est, x, y, z)
+    cmi = HXZ + HYZ - HXYZ - HZ
+    return cmi
+end
+
+# ------------------------------------------------
+# Pretty printing for decomposition estimators.
+# ------------------------------------------------
+function decomposition_string(definition::CMIShannon, est::DiscreteInfoEstimator)
+    return "CMI_S(X, Y) = H_S(X,Z) + H_S(Y,Z) - H_S(X,Y,Z) - H_S(Z)";
+end
+
+function decomposition_string(definition::CMIShannon, est::DifferentialInfoEstimator)
+    return "CMI_S(X, Y) = h_S(X,Z) + h_S(Y,Z) - h_S(X,Y,Z) - h_S(Z)";
+end
