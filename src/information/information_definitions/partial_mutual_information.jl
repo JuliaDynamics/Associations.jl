@@ -50,7 +50,7 @@ function information(definition::PartialMutualInformation, pxyz::Probabilities{T
     pxz = marginal(pxyz, dims = [1, 3])
 
     pmi = 0.0
-    logb = log_with_base(measure.base)
+    logb = log_with_base(definition.base)
     for i in 1:dx
         for j in 1:dy
             for k in 1:dz
