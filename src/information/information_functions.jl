@@ -29,7 +29,8 @@ function information(measure::MultivariateInformationMeasure, est::Probabilities
     return information(measure, pmfs...)
 end
 
-# I don't think we need an implementation specifically for the bivariate measures?
+# For the divergences/distances, is it faster to compute the joint and derive the marginal from the joint, 
+# or use allcounts to compute the marginals directly? We stick with the joint for now...
 # function information(measure::BivariateInformationMeasure, est::ProbabilitiesEstimator, o::OutcomeSpace, x, y)
 #     cts_x = allcounts(o, x)
 #     cts_y = allcounts(o, y)
