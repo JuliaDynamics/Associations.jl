@@ -9,5 +9,3 @@ y = rand(["hello", "yoyo", "heyhey"], 200)
 # We could in principle use any probabilities estimator here, but we default to `RelativeAmount`.
 p = probabilities(x, y) 
 @test information(MIRenyiJizba(), p) isa Real # we don't have any better analytical numbers here.
-
-# TODO: three-entropies sum
