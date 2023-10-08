@@ -56,3 +56,11 @@ function information(definition::MIRenyiSarbu, pxy::Probabilities{T, 2}) where T
         return _convert_logunit(1 / (q - 1) * log(mi), ℯ, e.base)
     end
 end
+
+function information(est::DifferentialDecomposition{<:MIRenyiSarbu}, x, y)
+    throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est).name.name)"))
+end
+
+function information(est::DiscreteDecomposition{<:MIRenyiSarbu}, x, y)
+    throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est).name.name)"))
+end

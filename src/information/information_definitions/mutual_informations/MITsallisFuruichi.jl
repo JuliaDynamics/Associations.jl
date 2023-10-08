@@ -53,3 +53,29 @@ function information(definition::MITsallisFuruichi, pxy::Probabilities{T, 2}) wh
     mi = (1 / (q - 1) * (1 - mi) / (1-q))
     return _convert_logunit(mi, ℯ, e.base)
 end
+
+
+
+function information(est::DifferentialDecomposition{<:MITsallisFuruichi, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
+    HX, HY, HXY = marginal_entropies_mi3h(est, x, y)
+    mi = HX + HY - HXY
+    return mi
+end
+
+function information(est::DiscreteDecomposition{<:MITsallisFuruichi, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
+    HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
+    mi = HX + HY - HXY
+    return mi
+end
+
+
+# ------------------------------------------------
+# Pretty printing for decomposition estimators.
+# ------------------------------------------------
+function decomposition_string(definition::MIShannon, est::DiscreteInfoEstimator{<:Tsallis})
+    return "MI_S(X, Y) = H_T(X) + H_T(Y) - H_T(X, Y)";
+end
+
+function decomposition_string(definition::MIShannon, est::DifferentialInfoEstimator{<:Tsallis})
+    return "MI_T(X, Y) = h_T(X) + h_T(Y) - h_T(X, Y)";
+end

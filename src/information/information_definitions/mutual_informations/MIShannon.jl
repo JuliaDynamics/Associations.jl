@@ -97,38 +97,28 @@ function information(definition::MIShannon, pxy::Probabilities{T, 2}) where T
     return mi
 end
 
+# ------------------------------------------------
+# Mutual information through entropy decomposition
+# ------------------------------------------------
+function information(est::DifferentialDecomposition{<:MIShannon, <:DifferentialInfoEstimator{<:Shannon}}, x, y)
+    HX, HY, HXY = marginal_entropies_mi3h_differential(est, x, y)
+    mi =  HX + HY - HXY
+    return mi
+end
 
-# function information(measure::MIShannon, est::ProbOrDiffEst, x, y)
-#     # Due to inconsistent API in ComplexityMeasures.jl, we have to treat
-#     # DifferentialEntropyEstimator here. Because all measures in this package
-#     # have their own `base` field, it will conflict with `est.base` for
-#     # `DifferentialEntropyEstimator`s. In these cases, we use `measure.base`,
-#     # and override the estimator base, by simply creating a copy of the
-#     # estimator with one field modified.
-#     if est isa DifferentialEntropyEstimator && :base in fieldnames(typeof(est))
-#         if est.base != measure.e.base
-#             mb = measure.e.base
-#             eb = est.base
-#             modified_est = Accessors.@set est.base = measure.e.base
-#             HX, HY, HXY = marginal_entropies_mi3h(measure, modified_est, x, y)
-#         else
-#             HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
-#         end
-#     else
-#         HX, HY, HXY = marginal_entropies_mi3h(measure, est, x, y)
-#     end
-#     mi = HX + HY - HXY
-#     return mi
-# end
+function information(est::DiscreteDecomposition{<:MIShannon, <:DiscreteInfoEstimator{<:Shannon}}, x, y)
+    HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
+    mi = HX + HY - HXY
+    return mi
+end
 
-# # Generic 3H-formulation of mutual information.
-# function marginal_entropies_mi3h(definition, est, x, y)
-#     e = definition.e
-#     X = StateSpaceSet(x)
-#     Y = StateSpaceSet(y)
-#     XY = StateSpaceSet(X, Y)
-#     HX = information(e, est, X)
-#     HY = information(e, est, Y)
-#     HXY = information(e, est, XY)
-#     return HX, HY, HXY
-# end
+# ------------------------------------------------
+# Pretty printing for decomposition estimators.
+# ------------------------------------------------
+function decomposition_string(definition::MIShannon, est::DiscreteInfoEstimator)
+    return "MI_S(X, Y) = H_S(X) + H_S(Y) - H_S(X, Y)";
+end
+
+function decomposition_string(definition::MIShannon, est::DifferentialInfoEstimator)
+    return "MI_S(X, Y) = h_S(X) + h_S(Y) - h_S(X, Y)";
+end
