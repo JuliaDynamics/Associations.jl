@@ -67,6 +67,8 @@ end
 # bias, because we're not guaranteed cancellation between entropy terms
 # in higher-level methods.
 function marginal_encodings(o::ValueBinning{<:RectangularBinning}, x::VectorOrStateSpaceSet...)
+    # TODO: The following line can be faster by explicitly writing out loops that create the 
+    # joint embedding vectors.
     X = StateSpaceSet(StateSpaceSet.(x)...)
     encoder = RectangularBinEncoding(est.binning, X)
 
