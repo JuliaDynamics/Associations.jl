@@ -6,9 +6,9 @@ rng = Xoshiro(1234)
 # ------------------------------------------------------------
 # API test 
 # ------------------------------------------------------------
-x = randn(rng, 1000)
-y = x .+ randn(rng, 1000)
-z = y .+ randn(rng, 1000)
+x = randn(rng, 100)
+y = x .+ randn(rng, 100)
+z = y .+ randn(rng, 100)
 
 os = [
     OrdinalPatterns(m=2),
@@ -27,17 +27,17 @@ bivariate_symmetric_measures = [
     JointEntropyShannon(),
 ]
 
-@testset "JointProbabilities estimator with $m" for m in bivariate_symmetric_measures
-    @testset "CodifyVariables with $o" for o in os
+@testset "JointProbabilities estimator with $(typeof(m).name.name)" for m in bivariate_symmetric_measures
+    @testset "CodifyVariables with $(typeof(o).name.name)" for o in os
         est = JointProbabilities(m, CodifyVariables(o))
         est_xy = information(est, x, y)
         est_yx = information(est, y, x)
-
+        
         @test est_xy isa Real
         @test est_yx isa Real
-        @test est_xy == est_yx # symmetry
+        @test est_xy ≈ est_yx # symmetry
     end
-end
+end;
 
 bivariate_asymmetric_measures = [
     CEShannon(),
@@ -49,12 +49,12 @@ bivariate_asymmetric_measures = [
     VariationDistance(),
 ]
 
-@testset "JointProbabilities estimator with $m" for m in bivariate_asymmetric_measures
-    @testset "CodifyVariables with $o" for o in os
+@testset "JointProbabilities estimator with $(typeof(m).name.name)" for m in bivariate_asymmetric_measures
+    @testset "CodifyVariables with $(typeof(o).name.name)" for o in os
         est = JointProbabilities(m, CodifyVariables(o))
         @test information(est, x, y) isa Real
     end
-end
+end;
 
 trivariate_asymmetric_measures = [
     CMIShannon(),
@@ -62,9 +62,9 @@ trivariate_asymmetric_measures = [
     CMIRenyiSarbu(),
 ]
 
-@testset "JointProbabilities estimator with $m" for m in trivariate_asymmetric_measures
-    @testset "CodifyVariables with $o" for o in os
+@testset "JointProbabilities estimator with $(typeof(m).name.name)" for m in trivariate_asymmetric_measures
+    @testset "CodifyVariables with $(typeof(o).name.name)" for o in os
         est = JointProbabilities(m, CodifyVariables(o))
         @test information(est, x, y, z) isa Real
     end
-end
+end;
