@@ -69,3 +69,11 @@ function information(definition::CMIRenyiSarbu, pxyz::Probabilities{T, 3}) where
     end
     return 1 / (q - 1) * cmi
 end
+
+function information(est::DifferentialDecomposition{<:CMIRenyiSarbu}, x, y)
+    throw(ArgumentError("CMIRenyiSarbu not implemented for $(typeof(est).name.name)"))
+end
+
+function information(est::DiscreteDecomposition{<:CMIRenyiSarbu}, x, y)
+    throw(ArgumentError("CMIRenyiSarbu not implemented for $(typeof(est).name.name)"))
+end
