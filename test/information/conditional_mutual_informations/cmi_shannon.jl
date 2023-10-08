@@ -10,5 +10,3 @@ z = rand([1, 2, 5], 50)
 # We could in principle use any probabilities estimator here, but we default to `RelativeAmount`.
 p = probabilities(x, y, z) 
 @test information(CMIShannon(), p) >= 0.0
-
-# TODO: three-entropies sum
