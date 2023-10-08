@@ -103,7 +103,7 @@ function codify_individual_dataset(encoding::Encoding, x)
 end
 
  # The decoding step on the second-to-last line is not possible without actually providing
- # the encodings. Therefore, we need to override the generic implementation of
+ # the encodings. Therefore, we need to override the Generic implementation of
  # `counts`.
 function counts(encoding::CodifyPoints, x...)
     # This converts each dataset `x[i]::StateSpaceSet` into `x̂[i]::Vector{Int}`,

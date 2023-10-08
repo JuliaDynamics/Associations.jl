@@ -6,7 +6,7 @@ using DelayEmbeddings: embed
 export CodifyVariables
 export codify
 
-# TODO: implement this generically for `Encodings` too (will require type-parameterized
+# TODO: implement this Generically for `Encodings` too (will require type-parameterized
 # number of elements for the Encodings).
 
 """
