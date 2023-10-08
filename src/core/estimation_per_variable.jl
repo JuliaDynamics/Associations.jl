@@ -9,23 +9,11 @@ function counts(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceS
     return counts(x̂...)
 end
 
-# # If a single outcome space is given, then codify each variable according to the same outcome space.
-# function counts(discretization::OutcomeSpace, x::Vararg{ArrayOrStateSpaceSet, 1}) where N
-#     return ComplexityMeasures.counts(discretization, x)
-# end
-
-
-# # If a single outcome space is given, then codify each variable according to the same outcome space.
-# function counts(discretization::OutcomeSpace, x::Vararg{ArrayOrStateSpaceSet, N}) where N
-#     return counts(CodifyVariables(discretization), x)
-# end
-
-# function probabilities(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
-#     cts = counts(discretization, x...)
-#     return probabilities(RelativeAmount(), cts)
-# end
-# # Equivalent to the above.
-# function probabilities(o::OutcomeSpace, x::Vararg{Any, N}) where N
-#     cts = counts(o, x...)
-#     return probabilities(RelativeAmount(), cts)
-# end
+# `CodifyVariables{1}` is equivalent to `OutcomeSpace`
+function probabilities(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
+    cts = counts(discretization, x...)
+    return probabilities(RelativeAmount(), cts)
+end
+function probabilities(discretization::OutcomeSpace, x::Vararg{ArrayOrStateSpaceSet, N}) where N
+    return probabilities(CodifyVariables(discretization), x...)
+end
