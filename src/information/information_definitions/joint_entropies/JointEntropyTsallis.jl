@@ -29,7 +29,9 @@ function information(definition::JointEntropyTsallis, pxy::Probabilities{T, 2}) 
     
     h = 0.0
     for p in pxy
-        h += p^q * logq(p, q)
+        if p != 0.0 # logq will error if probability is zero.
+            h += p^q * logq(p, q)
+        end
     end
     h = -h
     return _convert_logunit(h, ℯ, base)
