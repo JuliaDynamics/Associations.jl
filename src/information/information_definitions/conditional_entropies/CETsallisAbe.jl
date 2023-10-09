@@ -20,17 +20,13 @@ H_q^{T_A}(X | Y) = \\dfrac{H_q^T(X, Y) - H_q^T(Y)}{1 + (1-q)H_q^T(Y)},
 where ``H_q^T(\\cdot)`` and ``H_q^T(\\cdot, \\cdot)`` is the [`Tsallis`](@ref)
 entropy and the joint Tsallis entropy.
 """
-struct CETsallisAbe{E} <: ConditionalEntropy
-    e::E
-    function CETsallisAbe(; q = 1.5, base = 2)
-        e = Tsallis(; q, base)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct CETsallisAbe{B, Q} <: ConditionalEntropy
+    base::B = 2
+    q::Q = 1.5
 end
 
 function information(definition::CETsallisAbe, pxy::Probabilities{T, 2}) where {T}
-    e = definition.e
-    base, q = e.base, e.q
+    (; base, q) = definition
 
     py = marginal(pxy, dims = 2)
     # Definition 7 in Abe & Rajagopal (2001)

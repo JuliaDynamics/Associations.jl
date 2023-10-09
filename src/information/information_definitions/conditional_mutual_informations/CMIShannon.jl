@@ -36,25 +36,17 @@ differential entropies.
 
 See also: [`condmutualinfo`](@ref).
 """
-struct CMIShannon{E <: Shannon} <: ConditionalMutualInformation
-    e::E
-    function CMIShannon(; base::T = 2) where {T <: Real}
-        e = Shannon(; base)
-        new{typeof(e)}(e)
-    end
-    function CMIShannon(e::E) where E <: Shannon
-        new{E}(e)
-    end
+Base.@kwdef struct CMIShannon{B} <: ConditionalMutualInformation
+    base::B = 2
 end
 
 function information(definition::CMIShannon, pxyz::Probabilities{T, 3}) where T
-    e = definition.e
     dx, dy, dz = size(pxyz)
     pxz = marginal(pxyz, dims = [1, 3])
     pyz = marginal(pxyz, dims = [2, 3])
     pz = marginal(pxyz, dims = 3)
     cmi = 0.0
-    log0 = log_with_base(e.base)
+    log0 = log_with_base(definition.base)
     for k in 1:dz
         pzₖ = pz[k]
         for j in 1:dy

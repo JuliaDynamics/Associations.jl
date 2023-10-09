@@ -4,6 +4,7 @@ export CMIRenyiJizba
 
 """
     CMIRenyiJizba <: ConditionalMutualInformation
+    CMIRenyiJizba(; base = 2, q = 1.5)
 
 The Rényi conditional mutual information ``I_q^{R_{J}}(X; Y | Z`` defined in
 [Jizba2012](@citet).
@@ -21,15 +22,9 @@ I_q^{R_{J}}(X; Y | Z) = I_q^{R_{J}}(X; Y, Z) - I_q^{R_{J}}(X; Z),
 
 where ``I_q^{R_{J}}(X; Z)`` is the [`MIRenyiJizba`](@ref) mutual information.
 """
-struct CMIRenyiJizba{E <: Renyi} <: ConditionalMutualInformation
-    e::E
-    function CMIRenyiJizba(; base = 2, q = 1.5)
-        e = Renyi(; base, q)
-        new{typeof(e)}(e)
-    end
-    function CMIRenyiJizba(e::E) where E <: Renyi
-        new{E}(e)
-    end
+Base.@kwdef struct CMIRenyiJizba{B, Q} <: ConditionalMutualInformation
+    base::B = 2
+    q::Q = 1.5
 end
 
 function information(est::JointProbabilities{<:CMIRenyiJizba}, x, y, z)

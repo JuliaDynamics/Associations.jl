@@ -5,7 +5,7 @@ export CEShannon
 
 """
     CEShannon <: ConditionalEntropy
-    CEShannon(; base = 2,)
+    CEShannon(; base = 2)
 
 The [`Shannon`](@ref) conditional entropy measure.
 
@@ -48,21 +48,17 @@ differential entropy and Shannon joint differential entropy, respectively. This 
 definition used when calling [`entropy_conditional`](@ref) with a
 [`DifferentialEntropyEstimator`](@ref).
 """
-struct CEShannon{E} <: ConditionalEntropy
-    e::E
-    function CEShannon(; base = 2)
-        e = Shannon(; base)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct CEShannon{B} <: ConditionalEntropy
+    base::B = 2
 end
 
 function information(definition::CEShannon, pxy::Probabilities{T, 2}) where {T}
-    e = definition.e
+    base = definition.base
     Nx, Ny = size(pxy)
     py = marginal(pxy, dims = 2)
 
     ce = 0.0
-    log0 = log_with_base(e.base)
+    log0 = log_with_base(base)
     for j in 1:Ny
         pyⱼ = py[j]
         for i in 1:Nx

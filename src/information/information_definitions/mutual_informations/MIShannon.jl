@@ -65,24 +65,18 @@ called with a [`DifferentialEntropyEstimator`](@ref).
 
 See also: [`mutualinfo`](@ref).
 """
-struct MIShannon{E <: Shannon} <: MutualInformation
-    e::E
-    function MIShannon(; base::Real = 2)
-        e = Shannon(; base)
-        new{typeof(e)}(e)
-    end
-    function MIShannon(e::Shannon)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct MIShannon{B} <: MutualInformation
+    base::B = 2
 end
 
 # Double-sum estimation.
 function information(definition::MIShannon, pxy::Probabilities{T, 2}) where T
-    e = definition.e
+    (; base) = definition
+    
     px = marginal(pxy, dims = 1)
     py = marginal(pxy, dims = 2)
     mi = 0.0
-    logb = log_with_base(e.base)
+    logb = log_with_base(base)
     for i in eachindex(px.p)
         pxᵢ = px[i]
         for j in eachindex(py.p)

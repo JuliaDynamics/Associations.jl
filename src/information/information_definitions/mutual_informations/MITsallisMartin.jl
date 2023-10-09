@@ -28,19 +28,16 @@ entropies, and `q` is the [`Tsallis`](@ref)-parameter.
 
 See also: [`mutualinfo`](@ref).
 """
-struct MITsallisMartin{E <: Tsallis} <: MutualInformation
-    e::E
-    function MITsallisMartin(; q = 1.5, base = 2)
-        e = Tsallis(; q, base)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct MITsallisMartin{B, Q} <: MutualInformation
+    base::B = 2
+    q::Q = 1.5
 end
 
 # This is definition 3 in Martin et al. (2004), but with pᵢ replaced by the joint
 # distribution and qᵢ replaced by the product of the marginal distributions.
 function information(definition::MITsallisMartin, pxy::Probabilities{T, 2}) where T
-    e = definition.e
-    q = definition.e.q
+    (; base, q) = definition
+    # TODO: return MIShannon if q = 1? otherwise, we don't need `base`.
     q != 1 || throw(ArgumentError("`MITsallisMartin` for q=$(q) not defined."))
     px = marginal(pxy, dims = 1)
     py = marginal(pxy, dims = 2)

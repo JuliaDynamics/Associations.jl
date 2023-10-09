@@ -17,16 +17,13 @@ Given two two discrete random variables ``X`` and ``Y`` with ranges ``\\mathcal{
 H^S(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y) \\log p(x, y)
 ```
 """
-struct JointEntropyShannon{E<:Shannon} <: JointEntropy
-    e::E
-    function JointEntropyShannon(; base = 2)
-        e = Shannon(; base)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct JointEntropyShannon{B} <: JointEntropy
+    base::B = 2
 end
 
 function information(definition::JointEntropyShannon, pxy::Probabilities{T, 2}) where T
-    base = definition.e.base
+    (; base) = definition
+    
     h = 0.0
     for p in pxy
         h += p * log(p)

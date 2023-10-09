@@ -29,19 +29,16 @@ I(X, Y)^R_q =
 ```
 See also: [`mutualinfo`](@ref).
 """
-struct MIRenyiSarbu{E <: Renyi} <: MutualInformation
-    e::E
-    function MIRenyiSarbu(; q = 1.5, base = 2)
-        e = Renyi(; q, base)
-        new{typeof(e)}(e)
-    end
+struct MIRenyiSarbu{B, Q} <: MutualInformation
+    base::B = 2
+    q::Q = 1.5
 end
 
 function information(definition::MIRenyiSarbu, pxy::Probabilities{T, 2}) where T
+    (; base, q) = definition
+
     px = marginal(pxy, dims = 1)
     py = marginal(pxy, dims = 2)
-    e = definition.e
-    q = e.q
 
     mi = 0.0
     for i in eachindex(px.p)
@@ -53,7 +50,7 @@ function information(definition::MIRenyiSarbu, pxy::Probabilities{T, 2}) where T
     if mi == 0
         return 0.0
     else
-        return _convert_logunit(1 / (q - 1) * log(mi), ℯ, e.base)
+        return _convert_logunit(1 / (q - 1) * log(mi), ℯ, base)
     end
 end
 
