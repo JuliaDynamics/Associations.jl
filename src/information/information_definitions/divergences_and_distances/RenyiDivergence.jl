@@ -38,7 +38,7 @@ end
 RenyiDivergence(; q = 0.5, base = 2) = RenyiDivergence(q, base)
 
 function information(definition::RenyiDivergence, px::Probabilities, py::Probabilities)
-    (; base, q)
+    (; base, q) = definition
 
     if q == Inf
         return maximum(pxᵢ / pyᵢ for (pxᵢ, pyᵢ) in zip(px, py))

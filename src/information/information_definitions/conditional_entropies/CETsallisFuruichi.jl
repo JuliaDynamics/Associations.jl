@@ -35,10 +35,10 @@ end
 function information(definition::CETsallisFuruichi, pxy::Probabilities{T, 2}) where {T}
     (; base, q) = definition
     Nx, Ny = size(pxy)
-    q = e.q
     if q == 1
         return information(CEShannon(; base), pxy)
     end
+    
     py = marginal(pxy, dims = 2)
     ce = 0.0
     qlog = logq0(q)
