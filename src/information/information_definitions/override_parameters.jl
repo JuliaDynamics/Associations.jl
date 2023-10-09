@@ -22,10 +22,54 @@ const TSALLIS_MULTIVARIATE_MEASURES = Union{
     JointEntropyTsallis,
 }
 
-function estimator_with_overridden_parameters(defintion::CMITsallis, 
-        est::InformationMeasureEstimator{<:Tsallis})
-    modified_est = @set est.base = definition.base
-    modified_est = @set est.q = definition.q
+const RENYI_MULTIVARIATE_MEASURES = Union{
+    CMIRenyiPoczos, CMIRenyiSarbu, CMIRenyiJizba,
+    MIRenyiJizba, MIRenyiSarbu,
+    JointEntropyRenyi,
+}
 
+const SHANNON_MULTIVARIATE_MEASURES = Union{
+    CMIShannon,
+    MIShannon,
+    CEShannon,
+    JointEntropyShannon,
+}
+
+
+function estimator_with_overridden_parameters(
+        definition::TSALLIS_MULTIVARIATE_MEASURES, 
+        est::InformationMeasureEstimator{<:Tsallis}
+    )
+    # The low-level definition
+    lowdef = est.definition
+   
+    # Update the low-level definition. Have to do this step-wise. Ugly, but works.
+    modified_lowdef = @set lowdef.base = definition.base # update `base` field
+    modified_lowdef = @set modified_lowdef.q = definition.q # update `q` field
+
+    # Set the definition for the low-level estimator to the updated definition.
+    modified_est = @set est.definition = modified_lowdef
+    
+    return modified_est
+end
+
+function estimator_with_overridden_parameters(
+        definition::RENYI_MULTIVARIATE_MEASURES, 
+        est::InformationMeasureEstimator{<:Renyi}
+    )
+    lowdef = est.definition
+    modified_lowdef = @set lowdef.base = definition.base # update `base` field
+    modified_lowdef = @set modified_lowdef.q = definition.q # update `q` field
+    modified_est = @set est.definition = modified_lowdef
+    return modified_est
+end
+
+function estimator_with_overridden_parameters(
+        definition::SHANNON_MULTIVARIATE_MEASURES, 
+        est::InformationMeasureEstimator{<:Shannon}
+    )
+    lowdef = est.definition
+    modified_lowdef = @set lowdef.base = definition.base # update `base` field
+    modified_est = @set est.definition = modified_lowdef
     return modified_est
 end
