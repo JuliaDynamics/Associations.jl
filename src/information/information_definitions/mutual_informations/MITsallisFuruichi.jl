@@ -29,7 +29,7 @@ entropies, and `q` is the [`Tsallis`](@ref)-parameter.
 
 See also: [`mutualinfo`](@ref).
 """
-struct MITsallisFuruichi{B, Q} <: MutualInformation
+Base.@kwdef struct MITsallisFuruichi{B, Q} <: MutualInformation
     base::B = 2
     q::Q = 1.5
 end

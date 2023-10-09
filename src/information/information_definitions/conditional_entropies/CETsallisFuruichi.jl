@@ -27,7 +27,7 @@ p(x, y) \\log(p(x | y))
 If any of the entries of the marginal distribution for `Y` are zero, then the 
 measure is undefined and `NaN` is returned.
 """
-struct CETsallisFuruichi{B, Q} <: ConditionalEntropy
+Base.@kwdef struct CETsallisFuruichi{B, Q} <: ConditionalEntropy
     base::B = 2
     q::Q = 1.5
 end

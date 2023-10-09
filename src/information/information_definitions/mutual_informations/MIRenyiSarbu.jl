@@ -29,7 +29,7 @@ I(X, Y)^R_q =
 ```
 See also: [`mutualinfo`](@ref).
 """
-struct MIRenyiSarbu{B, Q} <: MutualInformation
+Base.@kwdef struct MIRenyiSarbu{B, Q} <: MutualInformation
     base::B = 2
     q::Q = 1.5
 end
