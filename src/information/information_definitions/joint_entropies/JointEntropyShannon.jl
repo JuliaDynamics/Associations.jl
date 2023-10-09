@@ -14,8 +14,10 @@ Given two two discrete random variables ``X`` and ``Y`` with ranges ``\\mathcal{
 ``\\mathcal{X}``, [CoverThomas2006](@citet) defines the Shannon joint entropy as
 
 ```math
-H^S(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y) \\log p(x, y)
+H^S(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y) \\log p(x, y),
 ```
+
+where we define ``log(p(x, y)) := 0`` if ``p(x, y) = 0``.
 """
 Base.@kwdef struct JointEntropyShannon{B} <: JointEntropy
     base::B = 2
@@ -26,7 +28,9 @@ function information(definition::JointEntropyShannon, pxy::Probabilities{T, 2}) 
     
     h = 0.0
     for p in pxy
-        h += p * log(p)
+        if p != 0 # Define log(0) = 0
+            h += p * log(p)
+        end
     end
     h = -h
     return _convert_logunit(h, ℯ, base)

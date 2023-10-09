@@ -14,10 +14,11 @@ Given two two discrete random variables ``X`` and ``Y`` with ranges ``\\mathcal{
 ``\\mathcal{X}``, [Furuichi2006](@citet) defines the Tsallis joint entropy as
 
 ```math
-H_q^T(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y)^q \\log_q p(x, y)
+H_q^T(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y)^q \\log_q p(x, y),
 ```
 
-where ``log_q(x, q) = \\dfrac{x^{1-q} - 1}{1-q}`` is the q-logarithm.
+where ``log_q(x, q) = \\dfrac{x^{1-q} - 1}{1-q}`` is the q-logarithm, and 
+we define ``log_q(x, q) := 0`` if ``q = 0``.
 """
 Base.@kwdef struct JointEntropyTsallis{B, Q} <: JointEntropy
     base::B = 2
@@ -29,7 +30,7 @@ function information(definition::JointEntropyTsallis, pxy::Probabilities{T, 2}) 
     
     h = 0.0
     for p in pxy
-        if p != 0.0 # logq will error if probability is zero.
+        if p != 0.0 # Define logq(0) = 0
             h += p^q * logq(p, q)
         end
     end
