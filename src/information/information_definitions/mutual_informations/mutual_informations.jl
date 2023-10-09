@@ -6,9 +6,10 @@ function marginal_entropies_mi3h_differential(est::DifferentialDecomposition{<:M
     X = StateSpaceSet(x)
     Y = StateSpaceSet(y)
     XY = StateSpaceSet(X, Y)
-    HX = information(est.est, X) # estimates entropy in the X marginal
-    HY = information(est.est, Y) # estimates entropy in the Y marginal
-    HXY = information(est.est, XY) # estimates entropy in the joint XY space
+    modified_est = estimator_with_overridden_parameters(est.definition, est.est)
+    HX = information(modified_est, X) # estimates entropy in the X marginal
+    HY = information(modified_est, Y) # estimates entropy in the Y marginal
+    HXY = information(modified_est, XY) # estimates entropy in the joint XY space
     return HX, HY, HXY
 end
 
@@ -18,11 +19,13 @@ function marginal_entropies_mi3h_discrete(est::DiscreteDecomposition{<:MutualInf
     eXY = StateSpaceSet(eX, eY)
 
     # The outcome space is no longer relevant from this point on. We're done discretizing, 
-    # so now we can just count (i.e. use `UniqueElements`).
+    # so now we can just count (i.e. use `UniqueElements` as the outcome space).
     o = UniqueElements()
-    HX = information(est.mest, est.pest, o, eX) # estimates entropy in the X marginal
-    HY = information(est.mest, est.pest, o, eY) # estimates entropy in the Y marginal
-    HXY = information(est.mest, est.pest, o, eXY) # estimates entropy in the joint XY space
+
+    modified_est = estimator_with_overridden_parameters(est.definition, est.mest)
+    HX = information(modified_est, est.pest, o, eX) # estimates entropy in the X marginal
+    HY = information(modified_est, est.pest, o, eY) # estimates entropy in the Y marginal
+    HXY = information(modified_est, est.pest, o, eXY) # estimates entropy in the joint XY space
     
     return HX, HY, HXY
 end
