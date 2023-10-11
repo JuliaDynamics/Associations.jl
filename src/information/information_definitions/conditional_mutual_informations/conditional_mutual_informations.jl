@@ -5,7 +5,7 @@ max_inputs_vars(::ConditionalMutualInformation) = 3
 
 
 # Generic H4-formulation of CMI
-function marginal_entropies_cmi4h_differential(est::DifferentialDecomposition{<:ConditionalMutualInformation, <:DifferentialInfoEstimator}, x, y, z)
+function marginal_entropies_cmi4h_differential(est::EntropyDecomposition{<:ConditionalMutualInformation, <:DifferentialInfoEstimator}, x, y, z)
     Z = StateSpaceSet(z)
     Y = StateSpaceSet(y)
     X = StateSpaceSet(x)
@@ -22,7 +22,7 @@ function marginal_entropies_cmi4h_differential(est::DifferentialDecomposition{<:
     return HXZ, HYZ, HXYZ, HZ
 end
 
-function marginal_entropies_cmi4h_discrete(est::DiscreteDecomposition{<:ConditionalMutualInformation, <:DiscreteInfoEstimator}, x, y, z)
+function marginal_entropies_cmi4h_discrete(est::EntropyDecomposition{<:ConditionalMutualInformation, <:DiscreteInfoEstimator}, x, y, z)
     # Encode marginals to integers based on the outcome space.
     eX, eY, eZ = codified_marginals(est.discretization, x, y, z)
     eXZ = StateSpaceSet(eX, eZ)

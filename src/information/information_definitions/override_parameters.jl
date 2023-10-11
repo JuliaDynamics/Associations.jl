@@ -73,3 +73,14 @@ function estimator_with_overridden_parameters(
     modified_est = @set est.definition = modified_lowdef
     return modified_est
 end
+
+
+function estimator_with_overridden_parameters(
+        definition::CMIShannon, 
+        est::MutualInformationEstimator{<:MIShannon}
+    )
+    lowdef = est.definition
+    modified_lowdef = @set lowdef.base = definition.base # update `base` field
+    modified_est = @set est.definition = modified_lowdef
+    return modified_est
+end

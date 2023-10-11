@@ -67,27 +67,52 @@ function information(definition::CMIShannon, pxyz::Probabilities{T, 3}) where T
 end
 
 # ------------------------------------------------
-# Conditional mutual information through entropy decomposition
+# Four-entropies decompostion of CMIShannon
 # ------------------------------------------------
-function information(est::DifferentialDecomposition{<:CMIShannon, <:DifferentialInfoEstimator{<:Shannon}}, x, y, z)
+function information(est::EntropyDecomposition{<:CMIShannon, <:DifferentialInfoEstimator{<:Shannon}}, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_differential(est, x, y, z)
     cmi = HXZ + HYZ - HXYZ - HZ
     return cmi
 end
 
-function information(est::DiscreteDecomposition{<:CMIShannon, <:DiscreteInfoEstimator{<:Shannon}}, x, y, z)
+function information(est::EntropyDecomposition{<:CMIShannon, <:DiscreteInfoEstimator{<:Shannon}}, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_discrete(est, x, y, z)
     cmi = HXZ + HYZ - HXYZ - HZ
     return cmi
 end
 
+# ---------------------------------------------------
+# Two-mutual-information decomposition of CMIShannon 
+# ---------------------------------------------------
+function information(est::MIDecomposition{<:ConditionalMutualInformation, <:MutualInformationEstimator{<:MIShannon}}, x, y, z)
+    MI_X_YZ, MI_X_Z = marginal_mutual_informations(est, x, y, z)
+    cmi = MI_X_YZ - MI_X_Z
+    return cmi
+end
+
+# We don't care if the estimated is mixed, discrete or handles both. The MI estimator 
+# handles that internally.
+function marginal_mutual_informations(est::MIDecomposition{<:ConditionalMutualInformation, <:MutualInformationEstimator{<:MIShannon}}, x, y, z)
+    X = StateSpaceSet(x)
+    Y = StateSpaceSet(y)
+    Z = StateSpaceSet(z)
+    YZ = StateSpaceSet(Y, Z)
+
+    modified_est = estimator_with_overridden_parameters(est.definition, est.est)
+    MI_X_YZ = information(modified_est, X, YZ)
+    MI_X_Z = information(modified_est, X, Z)
+
+    return MI_X_YZ, MI_X_Z
+end
+
 # ------------------------------------------------
 # Pretty printing for decomposition estimators.
 # ------------------------------------------------
-function decomposition_string(definition::CMIShannon, est::DiscreteInfoEstimator)
+function decomposition_string(definition::CMIShannon, est::EntropyDecomposition{M, E}) where {M, E <: DiscreteInfoEstimator}
     return "CMI_S(X, Y) = H_S(X,Z) + H_S(Y,Z) - H_S(X,Y,Z) - H_S(Z)";
 end
 
-function decomposition_string(definition::CMIShannon, est::DifferentialInfoEstimator)
+function decomposition_string(definition::CMIShannon, est::EntropyDecomposition{M, E}) where {M, E <: DifferentialInfoEstimator}
     return "CMI_S(X, Y) = h_S(X,Z) + h_S(Y,Z) - h_S(X,Y,Z) - h_S(Z)";
 end
+
