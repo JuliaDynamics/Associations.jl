@@ -1,5 +1,5 @@
 import Statistics.cov
-using Statistics: mean
+using Statistics: mean, std
 using StateSpaceSets: AbstractStateSpaceSet
 using StaticArrays: @MMatrix, @MVector, SMatrix, SVector
 

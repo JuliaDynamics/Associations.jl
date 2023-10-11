@@ -1,3 +1,5 @@
 include("utils.jl")
 include("KSG1.jl")
 include("KSG2.jl")
+include("GaussianMI.jl")
+include("GaoOhViswanath.jl")

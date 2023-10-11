@@ -29,7 +29,7 @@ module CausalityTools
     # include("methods/correlation/correlation.jl")
     # include("methods/recurrence/methods.jl")
 
-    # include("utils/utils.jl")
+    include("utils/cov.jl")
 
     # # Independence tests must be loaded after everything else has been defined.
     # include("independence_tests/independence.jl")
