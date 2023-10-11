@@ -25,7 +25,7 @@ estimator, or BI-KSG, by [Gao2018](@cite), is given by
 where ``c_{d, 2} = \\dfrac{\\pi^{\\frac{d}{2}}}{\\Gamma{(\\dfrac{d}{2} + 1)}}`` is the
 volume of a ``d``-dimensional unit ``\\mathcal{l}_2``-ball.
 """
-struct GaoOhViswanath{M, MJ, MM} <: MutualInformationEstimator{M}
+struct GaoOhViswanath{M <: MutualInformation, MJ, MM} <: MutualInformationEstimator{M}
     definition::M
     k::Int
     w::Int

@@ -54,7 +54,7 @@ then estimated as
     \\dfrac{1}{N} \\sum_{i = 1}^N \\sum_{j = 1}^m \\psi{(\\theta_i^j + 1)}
 ```
 """
-struct KraskovStögbauerGrassberger2{M, MJ, MM} <: MutualInformationEstimator{M}
+struct KraskovStögbauerGrassberger2{M <: MutualInformation, MJ, MM} <: MutualInformationEstimator{M}
     definition::M # the definition of the measure
     k::Int
     w::Int

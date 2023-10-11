@@ -50,7 +50,7 @@ If `normalize == true`, then the mutual information is estimated as
 
 where ``\\sigma_i`` are the eigenvalues for ``\\Sigma``.
 """
-struct GaussianMI{M} <: MutualInformationEstimator{M}
+struct GaussianMI{M <: MutualInformation} <: MutualInformationEstimator{M}
     definition::M
     normalize::Bool
 end

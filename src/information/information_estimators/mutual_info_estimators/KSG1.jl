@@ -32,7 +32,7 @@ concatenation of the marginal StateSpaceSets ``\\{ \\bf{X}_k \\}_{k=1}^m``, wher
 is potentially multivariate. Let ``\\bf{x}_1, \\bf{x}_2, \\ldots, \\bf{x}_N`` be the points
 in the joint space ``X``.
 """
-struct KraskovStögbauerGrassberger1{M, MJ, MM} <: MutualInformationEstimator{M}
+struct KraskovStögbauerGrassberger1{M <: MutualInformation, MJ, MM} <: MutualInformationEstimator{M}
     definition::M # the definition of the measure
     k::Int
     w::Int
