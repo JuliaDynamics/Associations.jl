@@ -39,8 +39,7 @@ struct KraskovStögbauerGrassberger1{M, MJ, MM} <: MutualInformationEstimator{M}
     metric_joint::MJ # always Chebyshev, otherwise estimator is not valid!
     metric_marginals::MM
 
-    function KraskovStögbauerGrassberger1(;
-            definition = MIShannon(),
+    function KraskovStögbauerGrassberger1(definition = MIShannon();
             k::Int = 1,
             w::Int = 0,
             metric_marginals::MM = Chebyshev()) where MM
