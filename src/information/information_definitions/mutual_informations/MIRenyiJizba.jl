@@ -55,7 +55,3 @@ end
 function information(est::EntropyDecomposition{<:MIRenyiJizba}, x, y)
     throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est).name.name)"))
 end
-
-function information(est::EntropyDecomposition{<:MIRenyiJizba}, x, y)
-    throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est).name.name)"))
-end
