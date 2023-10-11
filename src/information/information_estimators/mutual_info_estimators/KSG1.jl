@@ -38,22 +38,18 @@ struct KraskovStögbauerGrassberger1{M, MJ, MM} <: MutualInformationEstimator{M}
     w::Int
     metric_joint::MJ # always Chebyshev, otherwise estimator is not valid!
     metric_marginals::MM
-
-    function KraskovStögbauerGrassberger1(definition = MIShannon();
-            k::Int = 1,
-            w::Int = 0,
-            metric_marginals::MM = Chebyshev()) where MM
-        metric_joint = Chebyshev()
-        M = typeof(definition)
-        TJ = typeof(metric_joint)
-        new{M, TJ, MM}(definition, k, w, metric_joint, metric_marginals)
-    end
+end
+function KraskovStögbauerGrassberger1(definition = MIShannon();
+        k::Int = 1,
+        w::Int = 0,
+        metric_marginals = Chebyshev())
+    metric_joint = Chebyshev()
+    KraskovStögbauerGrassberger1(definition, k, w, metric_joint, metric_marginals)
 end
 const KSG1 = KraskovStögbauerGrassberger1
 
 function information(est::KSG1{<:MIShannon}, x::VectorOrStateSpaceSet...)
     verify_number_of_inputs_vars(est.definition, length(x))
-
 
     (; definition, k, w, metric_joint, metric_marginals) = est
     joint = StateSpaceSet(x...)

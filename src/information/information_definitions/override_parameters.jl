@@ -74,7 +74,6 @@ function estimator_with_overridden_parameters(
     return modified_est
 end
 
-
 function estimator_with_overridden_parameters(
         definition::CMIShannon, 
         est::MutualInformationEstimator{<:MIShannon}
