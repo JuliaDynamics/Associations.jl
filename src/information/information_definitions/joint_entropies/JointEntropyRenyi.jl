@@ -19,17 +19,14 @@ H_q^R(X, Y) = \\dfrac{1}{1-\\alpha} \\log \\sum_{i = 1}^N p_i^q,
 
 where ``q > 0`` and ``q != 1``.
 """
-struct JointEntropyRenyi{E<:Renyi} <: JointEntropy
-    e::E
-    function JointEntropyRenyi(; base = 2, q = 1.5)
-        e = Renyi(; base, q)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct JointEntropyRenyi{B, Q} <: JointEntropy
+    base::B = 2
+    q::Q = 1.5
 end
 
 function information(definition::JointEntropyRenyi, pxy::Probabilities{T, 2}) where T
-    base = definition.e.base
-    q = definition.e.q
+    (; base, q) = definition
+    
     h = 0.0
     for p in pxy
         if p != 0

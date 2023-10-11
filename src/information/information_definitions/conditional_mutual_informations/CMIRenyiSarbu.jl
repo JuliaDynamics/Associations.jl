@@ -5,7 +5,7 @@ export CMIRenyiSarbu
 
 """
     CMIRenyiSarbu <: ConditionalMutualInformation
-    CMIRenyiSarbu(; base = 2, definition = CMIRenyiSarbuSarbu())
+    CMIRenyiSarbu(; base = 2, q = 1.5)
 
 The Rényi conditional mutual information from [Sarbu2014](@citet).
 
@@ -32,24 +32,21 @@ I(X, Y; Z)^R_q =
 
 See also: [`condmutualinfo`](@ref).
 """
-struct CMIRenyiSarbu{E <: Renyi} <: ConditionalMutualInformation
-    e::E
-    function CMIRenyiSarbu(; base = 2, q = 1.5)
-        e = Renyi(; base, q)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct CMIRenyiSarbu{B, Q} <: ConditionalMutualInformation
+    base::B = 2
+    q::Q = 1.5
 end
 
 function information(definition::CMIRenyiSarbu, pxyz::Probabilities{T, 3}) where T
-    e = definition.e
-    q = e.q
+    (; base, q) = definition
+
     dx, dy, dz = size(pxyz)
     pxz = marginal(pxyz, dims = [1, 3])
     pyz = marginal(pxyz, dims = [2, 3])
     pz = marginal(pxyz, dims = 3)
 
     cmi = 0.0
-    logb = log_with_base(e.base)
+    logb = log_with_base(base)
     for k in 1:dz
         pzₖ = pz[k]
         inner = 0.0
@@ -70,10 +67,10 @@ function information(definition::CMIRenyiSarbu, pxyz::Probabilities{T, 3}) where
     return 1 / (q - 1) * cmi
 end
 
-function information(est::DifferentialDecomposition{<:CMIRenyiSarbu}, x, y)
+function information(est::DifferentialDecomposition{<:CMIRenyiSarbu}, args...)
     throw(ArgumentError("CMIRenyiSarbu not implemented for $(typeof(est).name.name)"))
 end
 
-function information(est::DiscreteDecomposition{<:CMIRenyiSarbu}, x, y)
+function information(est::DiscreteDecomposition{<:CMIRenyiSarbu}, args...)
     throw(ArgumentError("CMIRenyiSarbu not implemented for $(typeof(est).name.name)"))
 end

@@ -28,19 +28,16 @@ entropies, and `q` is the [`Tsallis`](@ref)-parameter.
 
 See also: [`mutualinfo`](@ref).
 """
-struct MITsallisMartin{E <: Tsallis} <: MutualInformation
-    e::E
-    function MITsallisMartin(; q = 1.5, base = 2)
-        e = Tsallis(; q, base)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct MITsallisMartin{B, Q} <: MutualInformation
+    base::B = 2
+    q::Q = 1.5
 end
 
 # This is definition 3 in Martin et al. (2004), but with pᵢ replaced by the joint
 # distribution and qᵢ replaced by the product of the marginal distributions.
 function information(definition::MITsallisMartin, pxy::Probabilities{T, 2}) where T
-    e = definition.e
-    q = definition.e.q
+    (; base, q) = definition
+    # TODO: return MIShannon if q = 1? otherwise, we don't need `base`.
     q != 1 || throw(ArgumentError("`MITsallisMartin` for q=$(q) not defined."))
     px = marginal(pxy, dims = 1)
     py = marginal(pxy, dims = 2)
@@ -56,16 +53,16 @@ function information(definition::MITsallisMartin, pxy::Probabilities{T, 2}) wher
     return f * (1 - mi)
 end
 
-function information(est::DifferentialDecomposition{<:MITsallisMartin, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
+function information(est::EntropyDecomposition{<:MITsallisMartin, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(est, x, y)
-    q = est.definition.e.q
+    q = est.definition.q
     mi = HX + HY - (1 - q) * HX * HY - HXY
     return mi
 end
 
-function information(est::DiscreteDecomposition{<:MITsallisMartin, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
+function information(est::EntropyDecomposition{<:MITsallisMartin, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
-    q = est.definition.e.q
+    q = est.definition.q
     mi = HX + HY - (1 - q) * HX * HY - HXY
     return mi
 end

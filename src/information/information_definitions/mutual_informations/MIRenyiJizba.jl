@@ -22,23 +22,18 @@ I_q^{R_{J}}(X; Y) = S_q^{R}(X) + S_q^{R}(Y) - S_q^{R}(X, Y),
 where ``S_q^{R}(\\cdot)`` and ``S_q^{R}(\\cdot, \\cdot)`` the [`Rényi`](@ref) entropy and
 the joint Rényi entropy.
 """
-struct MIRenyiJizba{E <: Renyi} <: MutualInformation
-    e::E
-    function MIRenyiJizba(; q = 1.5, base = 2)
-        e = Renyi(; q, base)
-        new{typeof(e)}(e)
-    end
-    function MIRenyiJizba(e::E) where E <: Renyi
-        new{E}(e)
-    end
+Base.@kwdef struct MIRenyiJizba{B, Q} <: MutualInformation
+    base::B = 2
+    q::Q = 1.5
 end
 
 function information(definition::MIRenyiJizba, pxy::Probabilities{T, 2}) where T
-    e = definition.e
-    q = e.q
+    (; base, q) = definition
+
     px = marginal(pxy, dims = 1)
     py = marginal(pxy, dims = 2)
-    logb = log_with_base(e.base)
+    
+    logb = log_with_base(base)
     num = 0.0
     den = 0.0
     for i in eachindex(px.p)
@@ -54,4 +49,13 @@ function information(definition::MIRenyiJizba, pxy::Probabilities{T, 2}) where T
     end
 
     return (1 / (1 / q)) * mi
+end
+
+
+function information(est::EntropyDecomposition{<:MIRenyiJizba}, x, y)
+    throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est).name.name)"))
+end
+
+function information(est::EntropyDecomposition{<:MIRenyiJizba}, x, y)
+    throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est).name.name)"))
 end

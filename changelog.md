@@ -1,5 +1,28 @@
 # Changelog
 
+## 3.0 (new major release)
+
+This release contains a series of breaking changes.
+
+### New information measure API
+
+- Multivariate information measures now store their parameters explicitly, instead 
+    of using `ComplexityMeasures.EntropyDefinition` to do so. For example, to 
+    define Shannon-type conditional mutual information, one should do 
+    `CMIShannon(base = 2)` instead of `CMIShannon(Shannon(base = 2))`.
+- New generic discrete estimator `JointDistribution` for estimating multivariate
+    information measures. This estimators explicitly computes the joint distribution
+    based on the given discretization, and can be applied to any measure which is 
+    defined as a function of a joint distribution.
+- New generic decomposition-based estimator `DifferentialDecomposition`. This estimator
+    computes some multivariate information measure by rewriting the measure definition
+    as a combination of some lower-level measure. For example, `CMIShannon` can be 
+    rewritten as a sum of `Shannon` entropies. Each of these terms can then 
+    be estimated using some differential entropy estimator, e.g. `ZhuSingh` or `Kraskov`.
+- New generic decomposition-based estimator `DiscreteDecomposition`. Works exactly like,
+    `DifferentialDecomposition`, but takes some *discrete* estimator, and some additional
+    parameters that control discretization and probability estimation.
+
 ## 2.10
 
 - Progress bars in some independence tests (surrogate, local permutation) can be

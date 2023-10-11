@@ -29,17 +29,14 @@ entropies, and `q` is the [`Tsallis`](@ref)-parameter.
 
 See also: [`mutualinfo`](@ref).
 """
-struct MITsallisFuruichi{E <: Tsallis} <: MutualInformation
-    e::E
-    function MITsallisFuruichi(; q = 1.5, base = 2)
-        e = Tsallis(; q, base)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct MITsallisFuruichi{B, Q} <: MutualInformation
+    base::B = 2
+    q::Q = 1.5
 end
 
 function information(definition::MITsallisFuruichi, pxy::Probabilities{T, 2}) where T
-    e = definition.e
-    q = definition.e.q
+    (; base, q) = definition
+
     px = marginal(pxy, dims = 1)
     py = marginal(pxy, dims = 2)
 
@@ -51,18 +48,18 @@ function information(definition::MITsallisFuruichi, pxy::Probabilities{T, 2}) wh
         end
     end
     mi = (1 / (q - 1) * (1 - mi) / (1-q))
-    return _convert_logunit(mi, ℯ, e.base)
+    return _convert_logunit(mi, ℯ, base)
 end
 
 
 
-function information(est::DifferentialDecomposition{<:MITsallisFuruichi, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
+function information(est::EntropyDecomposition{<:MITsallisFuruichi, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(est, x, y)
     mi = HX + HY - HXY
     return mi
 end
 
-function information(est::DiscreteDecomposition{<:MITsallisFuruichi, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
+function information(est::EntropyDecomposition{<:MITsallisFuruichi, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
     mi = HX + HY - HXY
     return mi

@@ -24,11 +24,13 @@ means that we can not only  use lower-level entropy estimators
     An estimate obtained through a decomposition into more fundamental information 
     theoretic measures will in general be more biased than when using a dedicated 
     estimator. One reason is that this decomposition may miss out on crucial information
-    in the joint space. To remedy this, dedicated estimators typically derives the 
-    marginal estimates by first considering the joint space, and then does some clever
-    trick to eliminate the bias that is introduced through a naive decomposition.
-    For example, [`MutualInformationEstimator`](@ref) are typically more reliable 
-    for computing [`MIShannon`](@ref) than using e.g. [`Kraskov`](@ref) as the estimator.
+    in the joint space. To remedy this, dedicated information measure 
+    estimators typically derive the marginal estimates by first considering the joint
+    space, and then does some clever trick to eliminate the bias that is introduced
+    through a naive decomposition.
+    For example, [`MutualInformationEstimator`](@ref)s are typically more reliable 
+    for computing [`MIShannon`](@ref) than using a entropy decomposition with e.g.
+    the [`Kraskov`](@ref) estimator.
 
 ## Controlling the decomposition and estimator
 
@@ -39,11 +41,35 @@ The given estimator `est` controls which decomposition is applied. For example:
 - If `est isa MutualInformationEstimator`, then the measure is decomposed into its
     mutual information components.
 
+## Handling of overlapping parameters
+
+If there are overlapping parameters between the measure to be estimated, and the
+lower-level decomposed measures, then the top-level measure parameter takes precedence.
+For example, if we want to estimate `CMIShannon(base = 2)` through a decomposition 
+of entropies using the `Kraskov(Shannon(base = ℯ))` estimator, then `base = 2` 
+is used.
+
 !!! info 
     Not all measures have the property that they can be decomposed into more fundamental
     information theoretic quantities. For example, [`MITsallisMartin`](@ref) *can* be 
     decomposed into a combination of marginal entropies, while [`MIRenyiSarbu`](@ref)
     cannot. An error will be thrown if decomposition is not possible.
+
+## Example
+
+Here, we estimate Shannon-type conditional mutual information using the `ZhuSingh`
+entropy estimator.
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000) .+ 0.5x
+z = rand(rng, 10000) .+ 0.7y
+
+est = DifferentialDecomposition(CMIShannon(), ZhuSingh(k = 10))
+information(est, x, z, y)
+```
 """
 struct DifferentialDecomposition{M <: MultivariateInformationMeasure, E <: DifferentialInfoEstimator} <: InformationMeasureEstimator{M}
     definition::M # API from complexity measures: definition must be the first field of the info estimator.

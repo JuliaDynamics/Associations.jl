@@ -4,6 +4,7 @@ export CMIRenyiPoczos
 
 """
     CMIRenyiPoczos <: ConditionalMutualInformation
+    CMIRenyiPoczos(; base = 2, q = 1.5)
 
 The differential Rényi conditional mutual information ``I_q^{R_{P}}(X; Y | Z)``
 defined in (Póczos & Schneider, 2012)[^Póczos2012].
@@ -29,13 +30,7 @@ I_q^{R_{P}}(X; Y | Z) = \\dfrac{1}{q-1}
     information and divergences. In Artificial Intelligence and Statistics (pp. 914-923).
     PMLR.
 """
-struct CMIRenyiPoczos{E <: Renyi} <: ConditionalMutualInformation
-    e::E
-    function CMIRenyiPoczos(; base = 2, q = 1.5)
-        e = Renyi(; base, q)
-        new{typeof(e)}(e)
-    end
-    function CMIRenyiPoczos(e::E) where E <: Renyi
-        new{E}(e)
-    end
+Base.@kwdef struct CMIRenyiPoczos{B, Q} <: ConditionalMutualInformation
+    base::B = 2
+    q::Q = 1.5
 end

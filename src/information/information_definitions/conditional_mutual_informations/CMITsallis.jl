@@ -5,25 +5,25 @@ export CMITsallis
 
 """
     CMITsallis <: ConditionalMutualInformation
-    CMITsallis(; q = 1.5, base = 2)
+    CMITsallis(; base = 2, q = 1.5)
 """
-struct CMITsallis{E <: Tsallis} <: ConditionalMutualInformation
-    e::E
-    function CMITsallis(; base::T = 2, q = 1.5) where {T <: Real}
-        e = Tsallis(; base, q)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct CMITsallis{B, Q} <: ConditionalMutualInformation
+    base::B = 2
+    q::Q = 1.5 # Todo: check formula. Where does `q` appear?
 end
 
-function information(measure::CMITsallis, pxyz::Probabilities{T, 3}) where T
-    e = measure.e
+# TODO: this has to be wrong. See the following paper for a definition:
+# https://www.sciencedirect.com/science/article/pii/S0378437119317030?casa_token=OjBFqwe6_1UAAAAA:s32zgg706dkO5P8Wuy2x2fWX0WjR09IguDvA8xGt6OTthjGkTAAutiZSiqI49ScyA6nTwomXEw
+function information(definition::CMITsallis, pxyz::Probabilities{T, 3}) where T
+    (; base, q) = definition
+
     dx, dy, dz = size(pxyz)
     pxz = marginal(pxyz, dims = [1, 3])
     pyz = marginal(pxyz, dims = [2, 3])
     pz = marginal(pxyz, dims = 3)
 
     cmi = 0.0
-    log0 = log_with_base(e.base)
+    log0 = log_with_base(base)
     for k in 1:dz
         pzₖ = pz[k]
         for j in 1:dy

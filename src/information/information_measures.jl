@@ -1,6 +1,8 @@
 export MultivariateInformationMeasure
 export MultivariateInformationMeasureEstimator
 export BivariateInformationMeasure
+export BivariateInformationMeasureEstimator
+
 """
     MultivariateInformationMeasure <: AssociationMeasure
 
@@ -36,7 +38,8 @@ The supertype for all bivariate information-based measure definitions.
 """
 abstract type BivariateInformationMeasure <: MultivariateInformationMeasure end
 
-min_inputs_vars(::BivariateInformationMeasure) = 3
-max_inputs_vars(::BivariateInformationMeasure) = 3
+min_inputs_vars(::BivariateInformationMeasure) = 2
+max_inputs_vars(::BivariateInformationMeasure) = 2
 
 abstract type MultivariateInformationMeasureEstimator end
+abstract type BivariateInformationMeasureEstimator end

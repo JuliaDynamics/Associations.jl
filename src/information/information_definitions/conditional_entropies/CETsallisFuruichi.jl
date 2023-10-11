@@ -27,21 +27,18 @@ p(x, y) \\log(p(x | y))
 If any of the entries of the marginal distribution for `Y` are zero, then the 
 measure is undefined and `NaN` is returned.
 """
-struct CETsallisFuruichi{E} <: ConditionalEntropy
-    e::E
-    function CETsallisFuruichi(; q = 1.5, base = 2)
-        e = Tsallis(; q, base)
-        new{typeof(e)}(e)
-    end
+Base.@kwdef struct CETsallisFuruichi{B, Q} <: ConditionalEntropy
+    base::B = 2
+    q::Q = 1.5
 end
 
 function information(definition::CETsallisFuruichi, pxy::Probabilities{T, 2}) where {T}
-    e = definition.e
+    (; base, q) = definition
     Nx, Ny = size(pxy)
-    q = e.q
     if q == 1
-        return information(CEShannon(; base = definition.e.base), pxy)
+        return information(CEShannon(; base), pxy)
     end
+    
     py = marginal(pxy, dims = 2)
     ce = 0.0
     qlog = logq0(q)
