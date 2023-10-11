@@ -94,15 +94,15 @@ end
 # ------------------------------------------------
 # Mutual information through entropy decomposition
 # ------------------------------------------------
-function information(est::DifferentialDecomposition{<:MIShannon, <:DifferentialInfoEstimator{<:Shannon}}, x, y)
+function information(est::EntropyDecomposition{<:MIShannon, <:DifferentialInfoEstimator{<:Shannon}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_differential(est, x, y)
     mi =  HX + HY - HXY
     return mi
 end
 
-function information(est::DiscreteDecomposition{<:MIShannon, <:DiscreteInfoEstimator{<:Shannon}}, x, y)
+function information(est::EntropyDecomposition{<:MIShannon, <:DiscreteInfoEstimator{<:Shannon}, D, P}, x, y) where {D, P}
     HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
-    mi = HX + HY - HXY
+    mi =  HX + HY - HXY
     return mi
 end
 

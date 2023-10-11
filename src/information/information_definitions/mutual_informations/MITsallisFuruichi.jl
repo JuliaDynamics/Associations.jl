@@ -53,13 +53,13 @@ end
 
 
 
-function information(est::DifferentialDecomposition{<:MITsallisFuruichi, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
+function information(est::EntropyDecomposition{<:MITsallisFuruichi, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(est, x, y)
     mi = HX + HY - HXY
     return mi
 end
 
-function information(est::DiscreteDecomposition{<:MITsallisFuruichi, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
+function information(est::EntropyDecomposition{<:MITsallisFuruichi, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
     mi = HX + HY - HXY
     return mi

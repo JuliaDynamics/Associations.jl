@@ -54,10 +54,10 @@ function information(definition::MIRenyiSarbu, pxy::Probabilities{T, 2}) where T
     end
 end
 
-function information(est::DifferentialDecomposition{<:MIRenyiSarbu}, x, y)
+function information(est::EntropyDecomposition{<:MIRenyiSarbu}, x, y)
     throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est).name.name)"))
 end
 
-function information(est::DiscreteDecomposition{<:MIRenyiSarbu}, x, y)
+function information(est::EntropyDecomposition{<:MIRenyiSarbu}, x, y)
     throw(ArgumentError("MIRenyiSarbu not implemented for $(typeof(est).name.name)"))
 end

@@ -53,14 +53,14 @@ function information(definition::MITsallisMartin, pxy::Probabilities{T, 2}) wher
     return f * (1 - mi)
 end
 
-function information(est::DifferentialDecomposition{<:MITsallisMartin, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
+function information(est::EntropyDecomposition{<:MITsallisMartin, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h(est, x, y)
     q = est.definition.q
     mi = HX + HY - (1 - q) * HX * HY - HXY
     return mi
 end
 
-function information(est::DiscreteDecomposition{<:MITsallisMartin, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
+function information(est::EntropyDecomposition{<:MITsallisMartin, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
     q = est.definition.q
     mi = HX + HY - (1 - q) * HX * HY - HXY
