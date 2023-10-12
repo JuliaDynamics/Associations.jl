@@ -1,7 +1,18 @@
+
 export MultivariateInformationMeasure
 export MultivariateInformationMeasureEstimator
 export BivariateInformationMeasure
 export BivariateInformationMeasureEstimator
+export MutualInformationEstimator
+export ConditionalMutualInformationEstimator
+
+# The estimator *always* has the measure definition as the first field with type 
+# parameter `M`.
+abstract type MultivariateInformationMeasureEstimator{M} <: InformationMeasureEstimator{M} end
+abstract type BivariateInformationMeasureEstimator{M} <: MultivariateInformationMeasureEstimator{M} end
+
+abstract type MutualInformationEstimator{M} <: BivariateInformationMeasureEstimator{M} end
+abstract type ConditionalMutualInformationEstimator{M} <: MultivariateInformationMeasureEstimator{M} end
 
 """
     MultivariateInformationMeasure <: AssociationMeasure
@@ -40,6 +51,3 @@ abstract type BivariateInformationMeasure <: MultivariateInformationMeasure end
 
 min_inputs_vars(::BivariateInformationMeasure) = 2
 max_inputs_vars(::BivariateInformationMeasure) = 2
-
-abstract type MultivariateInformationMeasureEstimator end
-abstract type BivariateInformationMeasureEstimator end
