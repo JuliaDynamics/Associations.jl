@@ -27,3 +27,4 @@ TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
 [compat]
 DynamicalSystemsBase = "3"
 julia = "^1.6"
+Documenter = "0.27"
