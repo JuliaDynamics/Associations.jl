@@ -11,7 +11,7 @@ The partial mutual information (PMI) measure of conditional association [Zhao201
 PMI is defined as for variables ``X``, ``Y`` and ``Z`` as
 
 ```math
-PartialMutualInformation(X; Y | Z) = D(p(x, y, z) || p^{*}(x|z) p^{*}(y|z) p(z)),
+PMI(X; Y | Z) = D(p(x, y, z) || p^{*}(x|z) p^{*}(y|z) p(z)),
 ```
 
 where ``p(x, y, z)`` is the joint distribution for ``X``, ``Y`` and ``Z``, and
@@ -21,17 +21,17 @@ where ``p(x, y, z)`` is the joint distribution for ``X``, ``Y`` and ``Z``, and
 ## Estimation
 
 The PMI is estimated by first estimating a 3D probability mass function using 
-[`probabilities`](@ref), then computing ``PartialMutualInformation(X; Y | Z)`` from those probaiblities.
+[`probabilities`](@ref), then computing ``PMI(X; Y | Z)`` from those probaiblities.
 
 ## Properties
 
 For the discrete case, the following identities hold in theory (when estimating PMI, they
 may not).
 
-- `PartialMutualInformation(X, Y, Z) >= CMI(X, Y, Z)` (where CMI is the Shannon CMI). Holds in theory, but
+- `PMI(X, Y, Z) >= CMI(X, Y, Z)` (where CMI is the Shannon CMI). Holds in theory, but
     when estimating PartialMutualInformation, the identity may not hold.
-- `PartialMutualInformation(X, Y, Z) >= 0`. Holds both in theory and when estimating using discrete estimators.
-- `X ⫫ Y | Z => PartialMutualInformation(X, Y, Z) = CMI(X, Y, Z) = 0` (in theory, but not necessarily for
+- `PMI(X, Y, Z) >= 0`. Holds both in theory and when estimating using discrete estimators.
+- `X ⫫ Y | Z => PMI(X, Y, Z) = CMI(X, Y, Z) = 0` (in theory, but not necessarily for
     estimation).
 """
 Base.@kwdef struct PartialMutualInformation <: MultivariateInformationMeasure
