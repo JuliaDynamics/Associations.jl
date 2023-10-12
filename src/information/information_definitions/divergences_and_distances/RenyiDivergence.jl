@@ -12,7 +12,7 @@ The Rényi divergence between two probability distributions
 ``P_X = (p_x(\\omega_1), \\ldots, p_x(\\omega_n))`` and
 ``P_Y = (p_y(\\omega_1), \\ldots, p_y(\\omega_m))``, both defined over the same
 [`OutcomeSpace`](@ref) ``\\Omega = \\{\\omega_1, \\ldots, \\omega_n \\}``, is defined as
-[vanErven2014](@cited)
+[vanErven2014](@citet).
 
 ```math
 D_{q}(P_Y(\\Omega) || P_Y(\\Omega)) =
