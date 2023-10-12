@@ -109,10 +109,16 @@ end
 # ------------------------------------------------
 # Pretty printing for decomposition estimators.
 # ------------------------------------------------
-function decomposition_string(definition::MIShannon, est::DiscreteInfoEstimator)
+function decomposition_string(
+        definition::MIShannon, 
+        est::EntropyDecomposition{M, <:DifferentialInfoEstimator}
+    ) where M
     return "MI_S(X, Y) = H_S(X) + H_S(Y) - H_S(X, Y)";
 end
 
-function decomposition_string(definition::MIShannon, est::DifferentialInfoEstimator)
+function decomposition_string(
+        definition::MIShannon, 
+        est::EntropyDecomposition{M, <:DiscreteInfoEstimator}
+    ) where M
     return "MI_S(X, Y) = h_S(X) + h_S(Y) - h_S(X, Y)";
 end

@@ -1,3 +1,18 @@
+export MutualInformation
+
+"""
+    MutualInformation
+
+Abstract type for all mutual information measures.
+
+## Concrete implementations
+
+- [`MIShannon`](@ref)
+- [`MITsallisMartin`](@ref)
+- [`MITsallisFuruichi`](@ref)
+- [`MIRenyiJizba`](@ref)
+- [`MIRenyiSarbu`](@ref)
+"""
 abstract type MutualInformation <: BivariateInformationMeasure end
 
 # Generic 3H-formulation of Shannon mutual information (a scaled sum of these entropies are also used by 

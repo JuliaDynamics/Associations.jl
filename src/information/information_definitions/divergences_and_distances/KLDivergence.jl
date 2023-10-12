@@ -1,7 +1,7 @@
 export KLDivergence
 
 """
-    KLDivergence <: BivariateInformationMeasure
+    KLDivergence <: DivergenceOrDistance
 
 The Kullback-Leibler (KL) divergence.
 

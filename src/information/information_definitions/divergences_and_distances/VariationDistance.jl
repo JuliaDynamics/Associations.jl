@@ -1,7 +1,7 @@
 export VariationDistance
 
 """
-    VariationDistance <: BivariateInformationMeasure
+    VariationDistance <: DivergenceOrDistance
 
 The variation distance.
 

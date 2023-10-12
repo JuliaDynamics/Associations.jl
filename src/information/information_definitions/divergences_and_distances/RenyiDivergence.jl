@@ -1,7 +1,7 @@
 export RenyiDivergence
 
 """
-    RenyiDivergence <: BivariateInformationMeasure
+    RenyiDivergence <: DivergenceOrDistance
     RenyiDivergence(q; base = 2)
 
 The Rényi divergence of positive order `q`

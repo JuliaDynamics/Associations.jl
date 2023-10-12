@@ -1,3 +1,18 @@
+export ConditionalMutualInformation
+
+"""
+    CondiitionalMutualInformation
+
+Abstract type for all mutual information measures.
+
+## Concrete implementations
+
+- [`CMIShannon`](@ref)
+- [`CMITsallis`](@ref)
+- [`CMIRenyiJizba`](@ref)
+- [`CMIRenyiSarbu`](@ref)
+- [`CMIRenyiPoczos`](@ref)
+"""
 abstract type ConditionalMutualInformation <: MultivariateInformationMeasure end
 
 min_inputs_vars(::ConditionalMutualInformation) = 3

@@ -1,7 +1,7 @@
 export HellingerDistance
 
 """
-    HellingerDistance <: BivariateInformationMeasure
+    HellingerDistance <: DivergenceOrDistance
 
 The Hellinger distance.
 
