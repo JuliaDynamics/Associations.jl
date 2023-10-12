@@ -31,15 +31,15 @@ The following estimators are dedicated [`MutualInformationEstimator`](@ref).
 | [`KSG1`](@ref)                 | Nearest neighbors |         ✓          |
 | [`KSG2`](@ref)                 | Nearest neighbors |         ✓          |
 | [`GaoOhViswanath`](@ref)       | Nearest neighbors |         ✓          |
-| [`GaoKannanOhViswanath`](@ref) | Nearest neighbors |          x          |
+| [`GaoKannanOhViswanath`](@ref) | Nearest neighbors |         ✓          |
 | [`GaussianMI`](@ref)           | Parametric        |         ✓          |
 
 MI may also be estimated using any of the following generic estimators:
 
 | Estimator                      | Principle                    | [`MIShannon`](@ref) | [`MITsallisFuruichi`](@ref) | [`MITsallisMartin`](@ref) | [`MIRenyiJizba`](@ref) | [`MIRenyiSarbu`](@ref) |
-| ------------------------------ | ---------------------------- | :------------------: | :----------------------: | :---------------------: | :---------------------: | :------------------: |
-| [`JointProbabilities`](@ref)   | Discrete joint pmf           |          ✓          |            ✓             |           ✓            |           ✓            |          ✓          |
-| [`EntropyDecomposition`](@ref) | Four-entropies decomposition |          ✓          |            ✓             |           ✓            |            x            |          x           |
+| ------------------------------ | ---------------------------- | :-----------------: | :-------------------------: | :-----------------------: | :--------------------: | :--------------------: |
+| [`JointProbabilities`](@ref)   | Discrete joint pmf           |         ✓          |             ✓              |            ✓             |           ✓           |           ✓           |
+| [`EntropyDecomposition`](@ref) | Four-entropies decomposition |         ✓          |             ✓              |            ✓             |           x            |           x            |
 """
 function mutualinfo(est::MultivariateInformationMeasureEstimator{<:MutualInformation}, x, y)
     return information(est, x, y)
