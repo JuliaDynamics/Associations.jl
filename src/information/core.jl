@@ -1,3 +1,5 @@
+import ComplexityMeasures: information 
+export information
 
 export MultivariateInformationMeasure
 export MultivariateInformationMeasureEstimator

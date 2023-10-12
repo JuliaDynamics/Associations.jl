@@ -1,4 +1,3 @@
-import ComplexityMeasures: information 
 
 include("core.jl")
 
