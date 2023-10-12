@@ -12,6 +12,9 @@ using StateSpaceSets
 pages = [
     "Overview" => "index.md",
     "Information" => "information.md",
+    "Tutorials" => [
+        "Tutorial: information measures" => "info_tutorial.md",
+    ],
     # "Association measures" => "measures.md",
     # "Independence testing" => "independence.md",
     # "Causal graphs" => "causal_graphs.md",

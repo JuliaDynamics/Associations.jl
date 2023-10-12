@@ -1,7 +1,7 @@
 # Information API
 
 ```@docs
-information
+CausalityTools.information
 ```
 
 ## Definitions
@@ -11,7 +11,7 @@ that are functionals of probability mass functions or probability densities). Th
 listed below. For estimating a measure, use [`information`](@ref) with a compatible
 estimator among the estimators listed below.
 
-### Conditional entropies
+### [Conditional entropies](@id conditional_entropies)
 
 ```@docs
 CEShannon
@@ -19,13 +19,21 @@ CETsallisAbe
 CETsallisFuruchi
 ```
 
-### Divergences and distances
+### [Divergences and distances](@id divergences_and_distances)
 
 ```@docs
 HellingerDistance
 KLDivergence
 RenyiDivergence
 VariationDistance
+```
+
+### [Joint entropies](@id joint_entropies)
+
+```@docs
+JointEntropyShannon
+JointEntropyTsallis
+JointEntropyRenyi
 ```
 
 ### Mutual informations
@@ -48,6 +56,12 @@ CMIRenyiPoczos
 CMITsallis
 ```
 
+### Other measures
+
+```@docs
+PartialMutualInformation
+```
+
 ## Estimators
 
 ### Generic estimators
@@ -67,3 +81,8 @@ GaoOhViswanath
 GaussianMI
 ```
 
+## Single-variable information API
+
+```@docs
+Goria
+```

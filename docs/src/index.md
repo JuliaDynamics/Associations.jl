@@ -20,6 +20,9 @@ association measures, a as-complete-as-possible set of their estimators.
 We also want to lower the entry-point to the field of association
 quantification, independence testing and causal inference, by providing well-documented
 implementations of literature methods with runnable code examples.
+We also provide an extendible API for bi- or multivariate information measures 
+(which we here pragmatically define as measures that are functionals of probability 
+mass functions or probability densitites).
 
 The core function for quantifying associations is [`independence`](@ref),
 which performs either a parametric or nonparametric (conditional)
