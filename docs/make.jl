@@ -11,13 +11,14 @@ using StateSpaceSets
 
 pages = [
     "Overview" => "index.md",
-    "Association measures" => "measures.md",
-    "Independence testing" => "independence.md",
-    "Causal graphs" => "causal_graphs.md",
-    "APIs and estimators" => "api.md",
-    "Predefined systems" => "coupled_systems.md",
-    "Experimental" => "experimental.md",
-    "References" => "references.md",
+    "Information" => "information.md",
+    # "Association measures" => "measures.md",
+    # "Independence testing" => "independence.md",
+    # "Causal graphs" => "causal_graphs.md",
+    # "APIs and estimators" => "api.md",
+    # "Predefined systems" => "coupled_systems.md",
+    # "Experimental" => "experimental.md",
+    # "References" => "references.md",
 ]
 
 Downloads.download(
