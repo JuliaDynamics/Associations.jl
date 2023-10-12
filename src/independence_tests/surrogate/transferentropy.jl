@@ -20,7 +20,7 @@ function marginals_and_surrogenerator(opt::OptimiseTraditional, surrogate::Surro
     return Ŝ, T⁺, S, T, C
 end
 
-function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where {E}
+function independence(test::SurrogateAssociationTest{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where {E}
     (; measure, est, rng, surrogate, nshuffles) = test
 
     cmi = te_to_cmi(measure)
@@ -35,10 +35,10 @@ function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingType
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(length(x), Î, Îs, p, nshuffles)
+    return SurrogateAssociationTestResult(length(x), Î, Îs, p, nshuffles)
 end
 
-function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingTypes}, <:TransferEntropyEstimator}, x::AbstractVector...) where {E}
+function independence(test::SurrogateAssociationTest{<:TransferEntropy{<:E, <:EmbeddingTypes}, <:TransferEntropyEstimator}, x::AbstractVector...) where {E}
     (; measure, est, rng, surrogate, nshuffles) = test
 
     Ŝ, T⁺, S, T, C = marginals_and_surrogenerator(measure.embedding, surrogate, x...; rng)
@@ -51,12 +51,12 @@ function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingType
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(length(x), Î, Îs, p, nshuffles)
+    return SurrogateAssociationTestResult(length(x), Î, Îs, p, nshuffles)
 end
 
-function SurrogateTest(measure::TEShannon, est::Nothing, args...; kwargs...)
-    txt = "A valid estimator must be provided as second argument to `SurrogateTest` " *
+function SurrogateAssociationTest(measure::TEShannon, est::Nothing, args...; kwargs...)
+    txt = "A valid estimator must be provided as second argument to `SurrogateAssociationTest` " *
         "when using the `TEShannon` measure.\n" *
-        "Do e.g. SurrogateTest(TEShannon(), FPVP())"
+        "Do e.g. SurrogateAssociationTest(TEShannon(), FPVP())"
     throw(ArgumentError(txt))
 end

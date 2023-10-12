@@ -23,7 +23,7 @@ Returns a test `summary`, whose type depends on `test`.
 
 ## Compatible independence tests
 
-- [`SurrogateTest`](@ref).
+- [`SurrogateAssociationTest`](@ref).
 - [`LocalPermutationTest`](@ref).
 - [`JointDistanceDistributionTest`](@ref).
 """
@@ -82,6 +82,6 @@ function null_hypothesis_text(test::IndependenceTestResult)
 end
 include("parametric/parametric.jl")
 include("local_permutation/LocalPermutationTest.jl")
-include("surrogate/SurrogateTest.jl")
+include("surrogate/SurrogateAssociationTest.jl")
 # TODO: rename/find suitable generic name before including
 # include("correlation/correlation.jl). Perhaps `ParametricTest`?

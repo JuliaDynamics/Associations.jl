@@ -2,7 +2,7 @@
 # so we need to dispatch explicitly and call `s_measure` manually
 # to avoid automatic conversion to `StateSpaceSet`s (which would ignore
 # embedding parameters if input data are `Vector`s).
-function independence(test::SurrogateTest{<:HLMS}, x, y)
+function independence(test::SurrogateAssociationTest{<:HLMS}, x, y)
     (; measure, est, rng, surrogate, nshuffles) = test
     Î = estimate(measure, x, y)
     sx = surrogenerator(x, surrogate, rng)
@@ -13,5 +13,5 @@ function independence(test::SurrogateTest{<:HLMS}, x, y)
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(2, Î, Îs, p, nshuffles)
+    return SurrogateAssociationTestResult(2, Î, Îs, p, nshuffles)
 end

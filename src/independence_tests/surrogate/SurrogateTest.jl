@@ -1,12 +1,12 @@
 using Random
 using TimeseriesSurrogates
 import ProgressMeter
-export SurrogateTest
-export SurrogateTestResult
+export SurrogateAssociationTest
+export SurrogateAssociationTestResult
 
 """
-    SurrogateTest <: IndependenceTest
-    SurrogateTest(measure, [est];
+    SurrogateAssociationTest <: IndependenceTest
+    SurrogateAssociationTest(est_or_measure;
         nshuffles::Int = 100,
         surrogate = RandomShuffle(),
         rng = Random.default_rng(),
@@ -17,7 +17,7 @@ A generic (conditional) independence test for assessing whether two variables `X
 are independendent, potentially conditioned on a third variable `Z`, based on
 surrogate data.
 
-When used with [`independence`](@ref), a [`SurrogateTestResult`](@ref) is returned.
+When used with [`independence`](@ref), a [`SurrogateAssociationTestResult`](@ref) is returned.
 
 ## Description
 
@@ -36,89 +36,96 @@ The shuffled variable is always the first variable (`X`). Exceptions are:
     then the source variable is always shuffled, and the target and conditional
     variable are left unshuffled.
 
-## Compatible measures
+## Compatible estimators/measures
 
-| Measure                               | Pairwise | Conditional | Requires `est` |
-| ------------------------------------- | :------: | :---------: | :------------: |
-| [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      |       No       |
-| [`DistanceCorrelation`](@ref)         |    ✓    |     ✓      |       No       |
-| [`SMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
-| [`HMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
-| [`MMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
-| [`LMeasure`](@ref)                    |    ✓    |     ✖      |       No       |
-| [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |      Yes       |
-| [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |      Yes       |
-| [`MIShannon`](@ref)                   |    ✓    |     ✖      |      Yes       |
-| [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      |      Yes       |
-| [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      |      Yes       |
-| [`MITsallisMartin`](@ref)             |    ✓    |     ✖      |      Yes       |
-| [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      |      Yes       |
-| [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |      Yes       |
-| [`CMIShannon`](@ref)                  |    ✖    |     ✓      |      Yes       |
-| [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |      Yes       |
-| [`TEShannon`](@ref)                   |    ✓    |     ✓      |      Yes       |
-| [`TERenyiJizba`](@ref)                |    ✓    |     ✓      |      Yes       |
-| [`PMI`](@ref)                         |    ✖    |     ✓      |      Yes       |
+Some measures can be used directly as the first input, since they don't require any 
+estimator, e.g. one can construct `SurrogateAssociationTest(PearsonCorrelation())`.
+
+| Measure                               | Pairwise | Conditional |
+| ------------------------------------- | :------: | :---------: | 
+| [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      | 
+| [`DistanceCorrelation`](@ref)         |    ✓    |     ✓      | 
+| [`SMeasure`](@ref)                    |    ✓    |     ✖      |
+| [`HMeasure`](@ref)                    |    ✓    |     ✖      | 
+| [`MMeasure`](@ref)                    |    ✓    |     ✖      | 
+| [`LMeasure`](@ref)                    |    ✓    |     ✖      | 
+
+
+The following *estimators*
+
+| [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      | 
+| [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      | 
+| [`MIShannon`](@ref)                   |    ✓    |     ✖      | 
+| [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      | 
+| [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      | 
+| [`MITsallisMartin`](@ref)             |    ✓    |     ✖      | 
+| [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      | 
+| [`PartialCorrelation`](@ref)          |    ✖    |     ✓      | 
+| [`CMIShannon`](@ref)                  |    ✖    |     ✓      | 
+| [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      | 
+| [`TEShannon`](@ref)                   |    ✓    |     ✓      | 
+| [`TERenyiJizba`](@ref)                |    ✓    |     ✓      | 
+| [`PMI`](@ref)                         |    ✖    |     ✓      | 
 
 ## Examples
 
-- [Pairwise test, `DistanceCorrelation`](@ref examples_surrogatetest_distancecorrelation).
-- [Pairwise test, `TEShannon`](@ref examples_surrogatetest_teshannon).
-- [Conditional test, `PartialCorrelation`](@ref examples_surrogatetest_partialcorrelation).
-- [Pairwise test, `MIShannon`, categorical](@ref examples_surrogatetest_mishannon_categorical).
-- [Conditional test, `CMIShannon`, categorical](@ref examples_surrogatetest_cmishannon_categorical).
+- [Pairwise test, `DistanceCorrelation`](@ref examples_SurrogateAssociationTest_distancecorrelation).
+- [Pairwise test, `TEShannon`](@ref examples_SurrogateAssociationTest_teshannon).
+- [Conditional test, `PartialCorrelation`](@ref examples_SurrogateAssociationTest_partialcorrelation).
+- [Pairwise test, `MIShannon`, categorical](@ref examples_SurrogateAssociationTest_mishannon_categorical).
+- [Conditional test, `CMIShannon`, categorical](@ref examples_SurrogateAssociationTest_cmishannon_categorical).
 """
-struct SurrogateTest{M, E, R, S} <: IndependenceTest{M}
-    measure::M
+struct SurrogateAssociationTest{M, E, R, S} <: IndependenceTest{M}
+    est_or_measure::M
     est::E
     rng::R
     surrogate::S
     nshuffles::Int
     show_progress::Bool
 end
-function SurrogateTest(measure::M, est::E = nothing;
+function SurrogateAssociationTest(est_or_measure::M, est::E = nothing;
     rng::R = Random.default_rng(),
     surrogate::S = RandomShuffle(),
     nshuffles::Int = 100, show_progress = false
     ) where {M, E, R, S}
-    SurrogateTest{M, E, R, S}(measure, est, rng, surrogate, nshuffles, show_progress)
+    SurrogateAssociationTest{M, E, R, S}(est_or_measure, est, rng, surrogate, nshuffles, show_progress)
 end
 
 
-Base.show(io::IO, test::SurrogateTest) = print(io,
+Base.show(io::IO, test::SurrogateAssociationTest) = print(io,
     """
-    `SurrogateTest` independence test.
+    `SurrogateAssociationTest` independence test.
     -------------------------------------
-    measure:    $(test.measure)
-    estimator:  $(test.est)
-    rng:        $(test.rng)
-    # shuffles: $(test.nshuffles)
-    surrogate:  $(test.surrogate)
+    estimator/measure: $(test.est_or_measure)
+    estimator:         $(test.est)
+    rng:               $(test.rng)
+    # shuffles:        $(test.nshuffles)
+    surrogate:         $(test.surrogate)
     """
 )
 
 """
-    SurrogateTestResult(m, m_surr, pvalue)
+    SurrogateAssociationTestResult(m, m_surr, pvalue)
 
-Holds the result of a [`SurrogateTest`](@ref). `m` is the measure computed on
+Holds the result of a [`SurrogateAssociationTest`](@ref). `m` is the measure computed on
 the original data. `m_surr` is a vector of the measure computed on permuted data, where
 `m_surr[i]` is the measure compute on the `i`-th permutation. `pvalue` is the one-sided
 `p`-value for the test.
 """
-struct SurrogateTestResult{M, MS, P} <: IndependenceTestResult
+struct SurrogateAssociationTestResult{M, MS, P} <: IndependenceTestResult
     n_vars::Int # 2 vars = pairwise, 3 vars = conditional
     m::M
     m_surr::MS
     pvalue::P
     nshuffles::Int
 end
-pvalue(r::SurrogateTestResult) = r.pvalue
-quantile(r::SurrogateTestResult, q) = quantile(r.m_surr, q)
+pvalue(r::SurrogateAssociationTestResult) = r.pvalue
+quantile(r::SurrogateAssociationTestResult, q) = quantile(r.m_surr, q)
 
-function Base.show(io::IO, test::SurrogateTestResult)
+function Base.show(io::IO, test::SurrogateAssociationTestResult)
     print(io,
         """\
-        `SurrogateTest` independence test
+        `SurrogateAssociationTest` independence test
         $(null_hypothesis_text(test))
         $(quantiles_text(test))
         $(pvalue_text_summary(test))
@@ -129,14 +136,14 @@ end
 # Generic dispatch for any three-argument conditional independence measure where the
 # third argument is to be conditioned on. This works naturally with e.g.
 # conditional mutual information.
-function independence(test::SurrogateTest, x, args...)
+function independence(test::SurrogateAssociationTest, x, args...)
     # Setup (`args...` is either `y` or `y, z`)
-    (; measure, est, rng, surrogate, nshuffles, show_progress) = test
-    verify_number_of_inputs_vars(measure, 1+length(args))
+    (; est_or_measure, est, rng, surrogate, nshuffles, show_progress) = test
+    verify_number_of_inputs_vars(est_or_measure, 1+length(args))
     SSSets = map(w -> StateSpaceSet(w), args)
-    estimation = x -> estimate(measure, est, x, SSSets...)
+    estimation = x -> estimate(est_or_measure, est, x, SSSets...)
     progress = ProgressMeter.Progress(nshuffles;
-        desc="SurrogateTest:", enabled=show_progress
+        desc="SurrogateAssociationTest:", enabled=show_progress
     )
 
     # Estimate
@@ -148,7 +155,7 @@ function independence(test::SurrogateTest, x, args...)
         ProgressMeter.next!(progress)
     end
     p = count(Î .<= Îs) / nshuffles
-    return SurrogateTestResult(3, Î, Îs, p, nshuffles)
+    return SurrogateAssociationTestResult(3, Î, Îs, p, nshuffles)
 end
 
 # Concrete implementations

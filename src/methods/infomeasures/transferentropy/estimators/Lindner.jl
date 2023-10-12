@@ -54,7 +54,7 @@ function estimate(measure::TEShannon, est::Lindner, x::AbstractVector...)
     return estimate(measure, est, S, T, T⁺, C)
 end
 
-# This method is separate from the one above because when using `SurrogateTest`,
+# This method is separate from the one above because when using `SurrogateAssociationTest`,
 # `S` is repeatedly shuffled, while the other marginals are not, so we avoid
 # allocating a bunch of new StateSpaceSets for every shuffle.
 function estimate(measure::TEShannon, est::Lindner,

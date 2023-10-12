@@ -23,7 +23,7 @@ end
 """
     PATestResult(n_vars, ΔA, ttest, pvalue)
 
-Holds the result of a [`SurrogateTest`](@ref). `n_vars` is the number of variables
+Holds the result of a [`SurrogateAssociationTest`](@ref). `n_vars` is the number of variables
 used for the test (2 for pairwise, 3 for conditional). `ΔA` is the distribution of
 asymmetries, one for each `η`. `ttest` is a one-sample t-test, and `pvalue` is the
 right-tailed p-value for the test.

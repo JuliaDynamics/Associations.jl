@@ -15,10 +15,10 @@ which is implemented as described in [Kalisch2008](@citet).
 
 - **`pairwise_test`**: An [`IndependenceTest`](@ref) that uses a pairwise,
     nondirectional [`AssociationMeasure`](@ref) measure (e.g. a parametric
-    [`CorrTest`](@ref), or [`SurrogateTest`](@ref) with the [`MIShannon`](@ref) measure).
+    [`CorrTest`](@ref), or [`SurrogateAssociationTest`](@ref) with the [`MIShannon`](@ref) measure).
 - **`conditional_test`**: An [`IndependenceTest`](@ref) that uses a conditional,
     nondirectional [`AssociationMeasure`](@ref) (e.g. [`CorrTest`](@ref),
-    or [`SurrogateTest`](@ref) with the [`CMIShannon`](@ref) measure).
+    or [`SurrogateAssociationTest`](@ref) with the [`CMIShannon`](@ref) measure).
 
 ## Keyword arguments
 

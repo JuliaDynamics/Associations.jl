@@ -6,7 +6,7 @@ export OCESelectedParents
 
 """
     OCE <: GraphAlgorithm
-    OCE(; utest::IndependenceTest = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3)),
+    OCE(; utest::IndependenceTest = SurrogateAssociationTest(MIShannon(), KSG2(k = 3, w = 3)),
           ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3)),
           τmax::T = 1, α = 0.05)
 
@@ -44,7 +44,7 @@ Input data must either be a `Vector{Vector{<:Real}}`, or a `StateSpaceSet`.
 - [Inferring time series graph from a chain of logistic maps](@ref oce_example)
 """
 Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
-    utest::U = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3), nshuffles = 100)
+    utest::U = SurrogateAssociationTest(MIShannon(), KSG2(k = 3, w = 3), nshuffles = 100)
     ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3), nshuffles = 100)
     τmax::T = 1
     α = 0.05

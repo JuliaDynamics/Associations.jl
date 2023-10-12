@@ -37,7 +37,7 @@ Optimise the marginals for a transfer entropy analysis from source time series `
 target time series `t`, potentially given a conditional time series `c`.
 
 If `exclude_source == true`, then no optimisation is done for the source. This is
-useful for [`SurrogateTest`](@ref), because most surrogate methods accept
+useful for [`SurrogateAssociationTest`](@ref), because most surrogate methods accept
 univariate time series, and if we embed the source and it becomes multidimensional,
 then we can't create surrogates. A future optimization is to do column-wise surrogate
 generation.

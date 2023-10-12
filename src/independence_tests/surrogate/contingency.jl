@@ -1,7 +1,7 @@
 
 # Explicit dispatch for independence for `Contingency` estimator, because we don't
 # want to convert categorical input data to `StateSpaceSets`.
-function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y) where MEASURE
+function independence(test::SurrogateAssociationTest{MEASURE, <:Contingency}, x, y) where MEASURE
     (; measure, est, rng, surrogate, nshuffles) = test
     @assert length(x) == length(y)
     N = length(x)
@@ -14,10 +14,10 @@ function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y) where M
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(2, Î, Îs, p, nshuffles)
+    return SurrogateAssociationTestResult(2, Î, Îs, p, nshuffles)
 end
 
-function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y, z) where MEASURE
+function independence(test::SurrogateAssociationTest{MEASURE, <:Contingency}, x, y, z) where MEASURE
     (; measure, est, rng, surrogate, nshuffles) = test
     @assert length(x) == length(y) == length(z)
     N = length(x)
@@ -29,5 +29,5 @@ function independence(test::SurrogateTest{MEASURE, <:Contingency}, x, y, z) wher
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(3, Î, Îs, p, nshuffles)
+    return SurrogateAssociationTestResult(3, Î, Îs, p, nshuffles)
 end
