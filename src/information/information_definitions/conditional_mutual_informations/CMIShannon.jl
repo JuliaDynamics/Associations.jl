@@ -110,21 +110,21 @@ end
 # ------------------------------------------------
 function decomposition_string(
         definition::CMIShannon, 
-        est::EntropyDecomposition{M, <:DiscreteInfoEstimator}
-    ) where {M}
+        est::EntropyDecomposition{<:Shannon, <:DiscreteInfoEstimator}
+    )
     return "CMI_S(X, Y | Z) = H_S(X,Z) + H_S(Y,Z) - H_S(X,Y,Z) - H_S(Z)";
 end
 
 function decomposition_string(
         definition::CMIShannon, 
-        est::EntropyDecomposition{M, <:DifferentialInfoEstimator}
-    ) where {M}
+        est::EntropyDecomposition{<:Shannon, <:DifferentialInfoEstimator}
+    )
     return "CMI_S(X, Y | Z) = h_S(X,Z) + h_S(Y,Z) - h_S(X,Y,Z) - h_S(Z)";
 end
 
 function decomposition_string(
         definition::CMIShannon, 
         est::MIDecomposition{<:MIShannon, <:MutualInformationEstimator}
-    ) where {M}
-    return "CMI_S(X, Y | Z) = I_S(X; Y, Z) + I_S(X; Z)"
+    )
+    return "CMI_S(X, Y | Z) = MI_S(X; Y, Z) + MI_S(X; Z)"
 end
