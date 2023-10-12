@@ -12,6 +12,8 @@ Abstract type for all mutual information measures.
 - [`CMIRenyiJizba`](@ref)
 - [`CMIRenyiSarbu`](@ref)
 - [`CMIRenyiPoczos`](@ref)
+
+See also: [`ConditionalMutualInformationEstimator`](@ref)
 """
 abstract type ConditionalMutualInformation <: MultivariateInformationMeasure end
 

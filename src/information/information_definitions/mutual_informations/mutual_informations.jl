@@ -12,6 +12,8 @@ Abstract type for all mutual information measures.
 - [`MITsallisFuruichi`](@ref)
 - [`MIRenyiJizba`](@ref)
 - [`MIRenyiSarbu`](@ref)
+
+See also: [`MutualInformationEstimator`](@ref)
 """
 abstract type MutualInformation <: BivariateInformationMeasure end
 

@@ -49,9 +49,14 @@ z = rand(rng, 1000) .+ y
 condmutualinfo(FPVP(CMIShannon(base = 2), k = 20), x, z, y)
 condmutualinfo(PoczosSchneiderCMI(CMIRenyiPoczos(), k = 20), x, z, y)
 
-# Generic estimators
+# Discrete estimation from joint probabilities
 information(JointProbabilities(CMIShannon(), ValueBinning(3)), x, z, y)
 
+# Four-entropies decomposition with `Kraskov` differential entropy estimator for all terms.
+information(EntropyDecomposition(CMIShannon(), Kraskov(k = 20)), x, z, y)
+
+# Two-mutual-informations decomposition with `MesnerShalizi` MI estimator for both terms.
+information(MIDecomposition(CMIShannon(), MesnerShalizi(k = 20)), x, z, y)
 ```
 """
 function condmutualinfo(est::MultivariateInformationMeasureEstimator{<:ConditionalMutualInformation}, x, y, z)

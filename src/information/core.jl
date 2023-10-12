@@ -5,6 +5,7 @@ export MultivariateInformationMeasure
 export MultivariateInformationMeasureEstimator
 export BivariateInformationMeasure
 export BivariateInformationMeasureEstimator
+
 export MutualInformationEstimator
 export ConditionalMutualInformationEstimator
 
@@ -13,7 +14,34 @@ export ConditionalMutualInformationEstimator
 abstract type MultivariateInformationMeasureEstimator{M} <: InformationMeasureEstimator{M} end
 abstract type BivariateInformationMeasureEstimator{M} <: MultivariateInformationMeasureEstimator{M} end
 
+"""
+    MutualInformationEstimator
+
+The supertype for dedicated [`MutualInformation`](@ref) estimators.
+
+## Concrete implementations
+
+- [`KSG1`](@ref)
+- [`KSG2`](@ref)
+- [`GaoOhViswanath`](@ref)
+- [`GaoKannanOhViswanath`](@ref)
+- [`GaussianMI`](@ref)
+"""
 abstract type MutualInformationEstimator{M} <: BivariateInformationMeasureEstimator{M} end
+
+"""
+    ConditionalMutualInformationEstimator
+
+The supertype for dedicated [`ConditionalMutualInformation`](@ref) estimators.
+
+## Concrete implementations
+
+- [`FPVP`](@ref)
+- [`GaussianCMI`](@ref)
+- [`MesnerShalizi`](@ref)
+- [`Rahimzamani`](@ref)
+- [`PoczosSchneiderCMI`](@ref)
+"""
 abstract type ConditionalMutualInformationEstimator{M} <: MultivariateInformationMeasureEstimator{M} end
 
 """
