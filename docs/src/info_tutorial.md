@@ -49,7 +49,7 @@ with 3 bins along each dimension to discretize the data.
 
 ```@example INFO_TUTORIAL
 x, y = randn(rng, 1000), randn(rng, 1000)
-est = JointProbabilities(CEShannon(base = 2), ValueBinning(3))
+est = JointProbabilities(ConditionalEntropyShannon(base = 2), ValueBinning(3))
 information(est, x, y)
 ```
 
