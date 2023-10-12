@@ -1,15 +1,39 @@
+export joint_entropy
 export conditional_entropy
 export mutualinfo
 export condmutualinfo
 
 """
-    conditional_entropy(est, x, y) → mi::Real
+    joint_entropy(est::JointProbabilities, x, y) → mi::Real
 
-Estimate the conditional entropy `CE_*(X | Y)` of type ``*`` using 
+Estimate the joint entropy ``H_*(X, Y)`` of type ``*`` using 
+the estimator `est`, where type of the joint entropy is controlled by
+`est.definition`.
+
+## Estimation
+
+| Estimator                    | Principle          | [`JointEntropyShannon`](@ref) | [`JointEntropyRenyi`](@ref) | [`JointEntropyTsallis`](@ref) |
+| ---------------------------- | ------------------ | :---------------------------: | :-------------------------: | :---------------------------: |
+| [`JointProbabilities`](@ref) | Discrete joint pmf |              ✓               |             ✓              |              ✓               |
+"""
+function joint_entropy(est::MultivariateInformationMeasureEstimator{<:JointEntropy}, x, y)
+    return information(est, x, y)
+end
+
+"""
+    conditional_entropy(est::JointProbabilities, x, y) → mi::Real
+
+Estimate the conditional entropy ``CE_*(X | Y)`` of type ``*`` using 
 the estimator `est`, where type of the conditional entropy is controlled by
 `est.definition`.
-"""
 
+
+## Estimation
+
+| Estimator                    | Principle          | [`ConditionalEntropyShannon`](@ref) | [`ConditionalEntropyTsallisAbe`](@ref) | [`ConditionalEntropyTsallisFuruichi`](@ref) |
+| ---------------------------- | ------------------ | :---------------------------------: | :------------------------------------: | :-----------------------------------------: |
+| [`JointProbabilities`](@ref) | Discrete joint pmf |                 ✓                  |                   ✓                   |                     ✓                      |
+"""
 function conditional_entropy(est::MultivariateInformationMeasureEstimator{<:ConditionalEntropy}, x, y)
     return information(est, x, y)
 end
@@ -19,7 +43,7 @@ end
     mutualinfo(est::JointProbabilities, x, y, z) → mi::Real
     mutualinfo(est::EntropyDecomposition, x, y, z) → mi::Real
 
-Estimate some mutual information `MI_*(X, Y)` of type ``*`` using 
+Estimate some mutual information ``MI_*(X, Y)`` of type ``*`` using 
 the estimator `est`, where type of the MI is controlled by `est.definition`.
 
 ## Estimation
@@ -51,7 +75,7 @@ end
     condmutualinfo(est::EntropyDecomposition, x, y, z) → cmi::Real
     condmutualinfo(est::MIDecomposition, x, y, z) → cmi::Real
 
-Estimate some conditional mutual information `CMI_*(X, Y | Z)` of type ``*`` using 
+Estimate some conditional mutual information ``CMI_*(X, Y | Z)`` of type ``*`` using 
 the estimator `est`, where type of the CMI is controlled by `est.definition`.
 
 ## Estimation

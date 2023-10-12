@@ -105,6 +105,7 @@ For commonly used names, we provide convenience functions. These are just simple
 wrappers around [`information`](@ref).
 
 ```@docs
+joint_entropy
 conditional_entropy
 mutualinfo
 condmutualinfo
