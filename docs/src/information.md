@@ -1,7 +1,8 @@
 # Information API
 
 ```@docs
-CausalityTools.information
+CausalityTools.information(::MultivariateInformationMeasure)
+CausalityTools.information(::MultivariateInformationMeasureEstimator)
 ```
 
 ## Definitions
@@ -14,9 +15,10 @@ estimator among the estimators listed below.
 ### [Conditional entropies](@id conditional_entropies)
 
 ```@docs
+ConditionalEntropy
 CEShannon
+CETsallisFuruichi
 CETsallisAbe
-CETsallisFuruchi
 ```
 
 ### [Divergences and distances](@id divergences_and_distances)
@@ -39,6 +41,7 @@ JointEntropyRenyi
 ### Mutual informations
 
 ```@docs
+MutualInformation
 MIShannon
 MITsallisFuruichi
 MITsallisMartin
@@ -49,6 +52,7 @@ MIRenyiSarbu
 ### Conditional mutual informations
 
 ```@docs
+ConditionalMutualInformation
 CMIShannon
 CMIRenyiSarbu
 CMIRenyiJizba
@@ -65,6 +69,7 @@ PartialMutualInformation
 ## Estimators
 
 ### Generic estimators
+
 ```@docs
 JointProbabilities
 EntropyDecomposition
@@ -74,6 +79,7 @@ MIDecomposition
 ### Mutual information estimators
 
 ```@docs
+MutualInformationEstimator
 KSG1
 KSG2
 GaoKannanOhViswanath
@@ -81,8 +87,33 @@ GaoOhViswanath
 GaussianMI
 ```
 
+
+### Conditional mutual information estimators
+
+```@docs
+ConditionalMutualInformationEstimator
+GaussianCMI
+FPVP
+MesnerShalizi
+Rahimzamani
+PoczosSchneiderCMI
+```
+
+
+## Convenience functions
+
+For commonly used names, we provide convenience functions. These are just simple 
+wrappers around [`information`](@ref).
+
+```@docs
+entropy_conditional
+mutualinfo
+condmutualinfo
+```
+
 ## Single-variable information API
 
 ```@docs
-Goria
+
 ```
+

@@ -1,3 +1,44 @@
+"""
+    information(definition::MultivariateInformationMeasure, p::Probabilities{T, N})
+
+Estimate an `N`-variate multivariate information measure given by `definition` 
+directly from a  pre-computed joint probability mass function `p`.
+"""
+function information(::MultivariateInformationMeasure, p::Probabilities) end
+
+"""
+    information(est::MultivariateInformationMeasureEstimator, x...)
+
+Estimate the information measure given by `est.definition` from the input data `x`,
+where `length(x) ≥ 2`.
+
+## Estimators
+
+- [`JointProbabilities`](@ref). 
+- [`EntropyDecomposition`](@ref). 
+- [`MIDecomposition`](@ref).
+
+When `length(x) == 2`, any of the following estimators can be used:
+
+- Any [`MutualInformationEstimator`](@ref)
+
+When `length(x) == 3`, any of the following estimators can be used:
+
+- Any [`ConditionalMutualInformationEstimator`](@ref)
+
+
+## Examples
+
+Here's three different ways 
+```julia
+using CausalityTools
+est = JointProbabilities(CMIShannon(), ValueBinning(3))
+x, y, z = rand(100), rand(100), rand(100)
+information(est, x, y, z)
+```
+"""
+function information(::MultivariateInformationMeasureEstimator, x...) end
+
 
 """
     information(definition::BivariateInformationMeasure, d::Discretization, x, y)
