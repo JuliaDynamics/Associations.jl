@@ -1,10 +1,10 @@
 using ComplexityMeasures: Tsallis
 
-export CETsallisAbe
+export ConditionalEntropyTsallisAbe
 
 """
-    CETsallisAbe <: ConditionalEntropy
-    CETsallisAbe(; base = 2, q = 1.5)
+    ConditionalEntropyTsallisAbe <: ConditionalEntropy
+    ConditionalEntropyTsallisAbe(; base = 2, q = 1.5)
 
 [Abe2001](@citet)'s discrete Tsallis conditional entropy measure.
 
@@ -20,12 +20,12 @@ H_q^{T_A}(X | Y) = \\dfrac{H_q^T(X, Y) - H_q^T(Y)}{1 + (1-q)H_q^T(Y)},
 where ``H_q^T(\\cdot)`` and ``H_q^T(\\cdot, \\cdot)`` is the [`Tsallis`](@ref)
 entropy and the joint Tsallis entropy.
 """
-Base.@kwdef struct CETsallisAbe{B, Q} <: ConditionalEntropy
+Base.@kwdef struct ConditionalEntropyTsallisAbe{B, Q} <: ConditionalEntropy
     base::B = 2
     q::Q = 1.5
 end
 
-function information(definition::CETsallisAbe, pxy::Probabilities{T, 2}) where {T}
+function information(definition::ConditionalEntropyTsallisAbe, pxy::Probabilities{T, 2}) where {T}
     (; base, q) = definition
 
     py = marginal(pxy, dims = 2)

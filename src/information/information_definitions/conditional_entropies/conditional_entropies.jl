@@ -7,15 +7,15 @@ The supertype for all conditional entropy measures.
 
 ## Concrete subtypes
 
-- [`CEShannon`](@ref)
-- [`CETsallisAbe`](@ref)
-- [`CETsallisFuruichi`](@ref)
+- [`ConditionalEntropyShannon`](@ref)
+- [`ConditionalEntropyTsallisAbe`](@ref)
+- [`ConditionalEntropyTsallisFuruichi`](@ref)
 """
 abstract type ConditionalEntropy <: MultivariateInformationMeasure end
 
 min_inputs_vars(::ConditionalEntropy) = 2
 max_inputs_vars(::ConditionalEntropy) = 2
 
-include("CEShannon.jl")
-include("CETsallisAbe.jl")
-include("CETsallisFuruichi.jl")
+include("ConditionalEntropyShannon.jl")
+include("ConditionalEntropyTsallisAbe.jl")
+include("ConditionalEntropyTsallisFuruichi.jl")

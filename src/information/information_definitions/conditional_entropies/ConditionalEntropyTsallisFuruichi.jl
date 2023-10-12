@@ -1,8 +1,8 @@
-export CETsallisFuruichi
+export ConditionalEntropyTsallisFuruichi
 
 """
-    CETsallisFuruichi <: ConditionalEntropy
-    CETsallisFuruichi(; base = 2, q = 1.5)
+    ConditionalEntropyTsallisFuruichi <: ConditionalEntropy
+    ConditionalEntropyTsallisFuruichi(; base = 2, q = 1.5)
 
 Furuichi (2006)'s discrete Tsallis conditional entropy definition.
 
@@ -27,16 +27,16 @@ p(x, y) \\log(p(x | y))
 If any of the entries of the marginal distribution for `Y` are zero, then the 
 measure is undefined and `NaN` is returned.
 """
-Base.@kwdef struct CETsallisFuruichi{B, Q} <: ConditionalEntropy
+Base.@kwdef struct ConditionalEntropyTsallisFuruichi{B, Q} <: ConditionalEntropy
     base::B = 2
     q::Q = 1.5
 end
 
-function information(definition::CETsallisFuruichi, pxy::Probabilities{T, 2}) where {T}
+function information(definition::ConditionalEntropyTsallisFuruichi, pxy::Probabilities{T, 2}) where {T}
     (; base, q) = definition
     Nx, Ny = size(pxy)
     if q == 1
-        return information(CEShannon(; base), pxy)
+        return information(ConditionalEntropyShannon(; base), pxy)
     end
     
     py = marginal(pxy, dims = 2)

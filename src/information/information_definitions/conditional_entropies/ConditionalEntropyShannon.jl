@@ -1,11 +1,11 @@
 using ComplexityMeasures: Shannon
 import ComplexityMeasures: log_with_base
 
-export CEShannon
+export ConditionalEntropyShannon
 
 """
-    CEShannon <: ConditionalEntropy
-    CEShannon(; base = 2)
+    ConditionalEntropyShannon <: ConditionalEntropy
+    ConditionalEntropyShannon(; base = 2)
 
 The [`Shannon`](@ref) conditional entropy measure.
 
@@ -25,7 +25,7 @@ This is the definition used when calling [`entropy_conditional`](@ref) with a
 
 ### Two-entropies formulation
 
-Equivalently, the following difference of entropies hold
+Equivalently, the following differenConditionalEntropy of entropies hold
 
 ```math
 H^S(X | Y) = H^S(X, Y) - H^S(Y),
@@ -48,25 +48,25 @@ differential entropy and Shannon joint differential entropy, respectively. This 
 definition used when calling [`entropy_conditional`](@ref) with a
 [`DifferentialEntropyEstimator`](@ref).
 """
-Base.@kwdef struct CEShannon{B} <: ConditionalEntropy
+Base.@kwdef struct ConditionalEntropyShannon{B} <: ConditionalEntropy
     base::B = 2
 end
 
-function information(definition::CEShannon, pxy::Probabilities{T, 2}) where {T}
+function information(definition::ConditionalEntropyShannon, pxy::Probabilities{T, 2}) where {T}
     base = definition.base
     Nx, Ny = size(pxy)
     py = marginal(pxy, dims = 2)
 
-    ce = 0.0
+    ConditionalEntropy = 0.0
     log0 = log_with_base(base)
     for j in 1:Ny
         pyⱼ = py[j]
         for i in 1:Nx
             pxyᵢⱼ = pxy[i, j]
             if pxyᵢⱼ != 0.0
-                ce += pxyᵢⱼ * log0(pxyᵢⱼ / pyⱼ)
+                ConditionalEntropy += pxyᵢⱼ * log0(pxyᵢⱼ / pyⱼ)
             end
         end
     end
-    return -ce
+    return -ConditionalEntropy
 end
