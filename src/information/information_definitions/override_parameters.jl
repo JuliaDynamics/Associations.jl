@@ -18,7 +18,7 @@ function estimator_with_overridden_parameters(definition, lower_level_estimator)
 const TSALLIS_MULTIVARIATE_MEASURES = Union{
     CMITsallis, 
     MITsallisFuruichi, MITsallisMartin,
-    CETsallisAbe, CETsallisFuruichi,
+    ConditionalEntropyTsallisAbe, ConditionalEntropyTsallisFuruichi,
     JointEntropyTsallis,
 }
 
@@ -31,7 +31,7 @@ const RENYI_MULTIVARIATE_MEASURES = Union{
 const SHANNON_MULTIVARIATE_MEASURES = Union{
     CMIShannon,
     MIShannon,
-    CEShannon,
+    ConditionalEntropyShannon,
     JointEntropyShannon,
 }
 
