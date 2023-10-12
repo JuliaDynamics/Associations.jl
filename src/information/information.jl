@@ -9,3 +9,4 @@ include("information_definitions/information_definitions.jl")
 # Specific estimators must be included after definitions.
 
 include("information_estimators/mutual_info_estimators/mutual_info_estimators.jl")
+include("information_estimators/conditional_mutual_info_estimators/conditional_mutual_info_estimators.jl")

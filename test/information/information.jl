@@ -5,6 +5,5 @@ include("mutual_informations/mutual_informations.jl")
 include("conditional_mutual_informations/conditional_mutual_informations.jl")
 
 # Estimators of the information measures.
-include("estimators/discrete/joint.jl")
-
+include("estimators/estimators.jl")
 include("internal_api.jl")
