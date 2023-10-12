@@ -1,5 +1,6 @@
 include("Contingency.jl")
 
+include("JointProbabilities.jl")
 include("EntropyDecomposition.jl")
 include("MIDecomposition.jl")
 
