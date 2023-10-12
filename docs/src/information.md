@@ -1,7 +1,6 @@
 # Information API
 
 ```@docs
-CausalityTools.information(::MultivariateInformationMeasure)
 CausalityTools.information(::MultivariateInformationMeasureEstimator)
 ```
 
@@ -16,9 +15,9 @@ estimator among the estimators listed below.
 
 ```@docs
 ConditionalEntropy
-CEShannon
-CETsallisFuruichi
-CETsallisAbe
+ConditionalEntropyShannon
+ConditionalEntropyTsallisFuruichi
+ConditionalEntropyTsallisAbe
 ```
 
 ### [Divergences and distances](@id divergences_and_distances)
@@ -80,8 +79,8 @@ MIDecomposition
 
 ```@docs
 MutualInformationEstimator
-KSG1
-KSG2
+KraskovStögbauerGrassberger1
+KraskovStögbauerGrassberger2
 GaoKannanOhViswanath
 GaoOhViswanath
 GaussianMI

@@ -2,19 +2,57 @@ export conditional_entropy
 export mutualinfo
 export condmutualinfo
 
+"""
+    conditional_entropy(est, x, y) → mi::Real
+
+Estimate the conditional entropy `CE_*(X | Y)` of type ``*`` using 
+the estimator `est`, where type of the conditional entropy is controlled by
+`est.definition`.
+"""
+
 function conditional_entropy(est::MultivariateInformationMeasureEstimator{<:ConditionalEntropy}, x, y)
     return information(est, x, y)
 end
 
+"""
+    mutualinfo(est::MutualInformationEstimator, x, y, z) → mi::Real
+    mutualinfo(est::JointProbabilities, x, y, z) → mi::Real
+    mutualinfo(est::EntropyDecomposition, x, y, z) → mi::Real
+
+Estimate some mutual information `MI_*(X, Y)` of type ``*`` using 
+the estimator `est`, where type of the MI is controlled by `est.definition`.
+
+## Estimation
+
+The following estimators are dedicated [`MutualInformationEstimator`](@ref).
+
+| Estimator                      | Principle         | [`MIShannon`](@ref) |
+| ------------------------------ | ----------------- | :-----------------: |
+| [`KSG1`](@ref)                 | Nearest neighbors |         ✓          |
+| [`KSG2`](@ref)                 | Nearest neighbors |         ✓          |
+| [`GaoOhViswanath`](@ref)       | Nearest neighbors |         ✓          |
+| [`GaoKannanOhViswanath`](@ref) | Nearest neighbors |          x          |
+| [`GaussianMI`](@ref)           | Parametric        |         ✓          |
+
+MI may also be estimated using any of the following generic estimators:
+
+| Estimator                      | Principle                    | [`MIShannon`](@ref) | [`MITsallisFuruichi`](@ref) | [`MITsallisMartin`](@ref) | [`MIRenyiJizba`](@ref) | [`MIRenyiSarbu`](@ref) |
+| ------------------------------ | ---------------------------- | :------------------: | :----------------------: | :---------------------: | :---------------------: | :------------------: |
+| [`JointProbabilities`](@ref)   | Discrete joint pmf           |          ✓          |            ✓             |           ✓            |           ✓            |          ✓          |
+| [`EntropyDecomposition`](@ref) | Four-entropies decomposition |          ✓          |            ✓             |           ✓            |            x            |          x           |
+"""
 function mutualinfo(est::MultivariateInformationMeasureEstimator{<:MutualInformation}, x, y)
     return information(est, x, y)
 end
 
 """
-    condmutualinfo(est::ConditionalMutualInformationEstimator, x, y, z) → cmi::Real
+    condmutualinfo(est::CondiitionalMutualInformationEstimator, x, y, z) → cmi::Real
+    condmutualinfo(est::JointProbabilities, x, y, z) → cmi::Real
+    condmutualinfo(est::EntropyDecomposition, x, y, z) → cmi::Real
+    condmutualinfo(est::MIDecomposition, x, y, z) → cmi::Real
 
-Estimate the conditional mutual information (CMI) measure specified by `est.definition`
-between `x` and `y`, given `z`.
+Estimate some conditional mutual information `CMI_*(X, Y | Z)` of type ``*`` using 
+the estimator `est`, where type of the CMI is controlled by `est.definition`.
 
 ## Estimation
 
@@ -55,8 +93,8 @@ information(JointProbabilities(CMIShannon(), ValueBinning(3)), x, z, y)
 # Four-entropies decomposition with `Kraskov` differential entropy estimator for all terms.
 information(EntropyDecomposition(CMIShannon(), Kraskov(k = 20)), x, z, y)
 
-# Two-mutual-informations decomposition with `MesnerShalizi` MI estimator for both terms.
-information(MIDecomposition(CMIShannon(), MesnerShalizi(k = 20)), x, z, y)
+# Two-mutual-informations decomposition with `GaoKannanOhViswanath` MI estimator for both terms.
+information(MIDecomposition(CMIShannon(), GaoKannanOhViswanath(k = 20)), x, z, y)
 ```
 """
 function condmutualinfo(est::MultivariateInformationMeasureEstimator{<:ConditionalMutualInformation}, x, y, z)
