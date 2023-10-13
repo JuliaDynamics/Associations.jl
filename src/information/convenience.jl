@@ -4,7 +4,7 @@ export mutualinfo
 export condmutualinfo
 
 """
-    joint_entropy(est::JointProbabilities, x, y) → mi::Real
+    joint_entropy(est::JointProbabilities, x, y) → h::Real
 
 Estimate the joint entropy ``H_*(X, Y)`` of type ``*`` using 
 the estimator `est`, where type of the joint entropy is controlled by
@@ -21,7 +21,7 @@ function joint_entropy(est::MultivariateInformationMeasureEstimator{<:JointEntro
 end
 
 """
-    conditional_entropy(est::JointProbabilities, x, y) → mi::Real
+    conditional_entropy(est::JointProbabilities, x, y) → h::Real
 
 Estimate the conditional entropy ``CE_*(X | Y)`` of type ``*`` using 
 the estimator `est`, where type of the conditional entropy is controlled by
