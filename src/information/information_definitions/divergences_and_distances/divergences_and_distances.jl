@@ -1,7 +1,12 @@
 """
     DivergenceOrDistance <: BivariateInformationMeasure
 
-An abstract type for divergence or distance measures.
+The supertype for bivariate information measures aiming to quantify some sort of
+divergence, distance or closeness between two probability distributions.
+
+Some of these measures are proper metrics, while others are not, but they have in
+common that they aim to quantify how "far from each other" two probabilities distributions
+are.
 
 ## Concrete implementations
 

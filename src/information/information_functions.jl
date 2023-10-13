@@ -7,24 +7,15 @@ directly from a  pre-computed joint probability mass function `p`.
 function information(::MultivariateInformationMeasure, p::Probabilities) end
 
 """
-    information(est::MultivariateInformationMeasureEstimator, x...)
+    information(est::MultivariateInformationMeasureEstimator, x, y, [z, w, ...])
 
-Estimate the information measure given by `est.definition` from the input data `x`,
-where `length(x) ≥ 2`.
+Using the provided estimator `est`, estimate the information measure given by
+`est.definition` from input data `x, y, ...`, where the number of inputs depend on `est`.
 
-## Estimators
-
-- [`JointProbabilities`](@ref). 
-- [`EntropyDecomposition`](@ref). 
-- [`MIDecomposition`](@ref).
-
-When `length(x) == 2`, any of the following estimators can be used:
-
-- Any [`MutualInformationEstimator`](@ref)
-
-When `length(x) == 3`, any of the following estimators can be used:
-
-- Any [`ConditionalMutualInformationEstimator`](@ref)
+The docstring for [`MultivariateInformationMeasure`](@ref) lists all possible measures,
+and the docstring for [`MultivariateInformationMeasureEstimator`](@ref) lists possible
+estimators. You may also want to check out the
+[convenience wrappers](@ref convenience_info) in the online documentation.
 
 
 ## Examples

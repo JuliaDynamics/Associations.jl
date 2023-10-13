@@ -11,6 +11,22 @@ export ConditionalMutualInformationEstimator
 
 # The estimator *always* has the measure definition as the first field with type 
 # parameter `M`.
+"""
+    MultivariateInformationMeasureEstimator
+
+The supertype for all multivariate information measures.
+
+## Concrete subtypes
+
+- [`JointProbababilities`](@ref)
+- [`EntropyDecomposition`](@ref)
+- [`MIDecomposition`](@ref)
+
+## Abstract subtypes
+
+- [`MutualInformationEstimator`](@ref)
+- [`ConditionalMutualInformationEstimator`](@ref)
+"""
 abstract type MultivariateInformationMeasureEstimator{M} <: InformationMeasureEstimator{M} end
 abstract type BivariateInformationMeasureEstimator{M} <: MultivariateInformationMeasureEstimator{M} end
 
@@ -48,34 +64,21 @@ abstract type ConditionalMutualInformationEstimator{M} <: MultivariateInformatio
     MultivariateInformationMeasure <: AssociationMeasure
 
 The supertype for all multivariate information-based measure definitions.
+
+## Implementations
+
+- [`JointEntropy`](@ref) (its concrete subtypes)
+- [`ConditionalEntropy`](@ref) (its concrete subtypes)
+- [`MutualInformation`](@ref) (its concrete subtypes)
+- [`ConditionalMutualInformation`](@ref) (its concrete subtypes)
+- [`PartialMutualInformation`](@ref)
 """
 abstract type MultivariateInformationMeasure <: AssociationMeasure end
 
 """
-    BivariateInformationMeasure <: AssociationMeasure
+    BivariateInformationMeasure <: MultivariateInformationMeasure
 
-The supertype of all bivariate information measures (defined here as functionals
-of probability mass functions or probability densities).
-
-## Implements
-
-- [`information`](@ref). Used to compute the measure given given relevant input
-    probabilities.
-
-## Concrete implementations
-
-### Discrepancy/divergence/closeness measures
-
-A multitude of measures exist to quantify the discrepancy/divergence/closeness between two
-probability distributions. Some of these are proper metrics, others are not.
-They have in common that they aim to quantify how far from each other two
-probabilities distributions are.
-
-- [`KLDivergence`](@ref)
-- [`RenyiDivergence`](@ref)
-- [`HellingerDistance`](@ref)
-
-The supertype for all bivariate information-based measure definitions.
+The supertype of all bivariate information measure definitions.
 """
 abstract type BivariateInformationMeasure <: MultivariateInformationMeasure end
 

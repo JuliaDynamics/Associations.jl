@@ -1,4 +1,16 @@
+export JointEntropy
 
+"""
+    JointEntropy <: BivariateInformationMeasure
+
+The supertype for all joint entropy measures.
+
+## Concrete implementations
+
+- [`JointEntropyShannon`](@ref)
+- [`JointEntropyRenyi`](@ref)
+- [`JointEntropyTsallis`](@ref)
+"""
 abstract type JointEntropy <: BivariateInformationMeasure end
 
 # q-logarithm for Tsallis and Renyi joint entropies
