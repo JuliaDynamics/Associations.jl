@@ -10,5 +10,6 @@ include("information_definitions/information_definitions.jl")
 
 include("information_estimators/mutual_info_estimators/mutual_info_estimators.jl")
 include("information_estimators/conditional_mutual_info_estimators/conditional_mutual_info_estimators.jl")
+include("information_estimators/transfer_entropy_estimators/transfer_entropy_estimators.jl")
 
 include("convenience.jl")
