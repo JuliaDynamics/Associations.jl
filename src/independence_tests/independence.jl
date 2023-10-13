@@ -1,6 +1,7 @@
 export independence, cit
 export IndependenceTest
 
+using Statistics: quantile
 
 """
     IndependenceTest <: IndependenceTest
