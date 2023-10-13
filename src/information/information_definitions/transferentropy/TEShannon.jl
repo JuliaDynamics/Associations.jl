@@ -28,7 +28,7 @@ where ``I(T^+; S^- | T^-)`` is the Shannon conditional mutual information
 ([`CMIShannon`](@ref)). The variables ``T^+``, ``T^-``,
 ``S^-`` and ``C^-`` are described in the docstring for [`transferentropy`](@ref).
 """
-struct TEShannon{B, EMB} <: TransferEntropy{B, EMB}
+struct TEShannon{B, EMB} <: TransferEntropy
     base::B
     embedding::EMB
     function TEShannon(; base::B = 2, embedding::EMB = EmbeddingTE()) where {B, EMB}
@@ -37,14 +37,21 @@ struct TEShannon{B, EMB} <: TransferEntropy{B, EMB}
     # TODO: add constructor that automatically determines the embedding.
 end
 
+
+
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TEShannon, <:DiscreteInfoEstimator})
+    (; definition, est, discretization, pest) = est
+    base = definition.base
+    return EntropyDecomposition(CMIShannon(; base), est, discretization, pest)
+end
+
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TEShannon, <:DifferentialInfoEstimator})
+    return EntropyDecomposition(CMIShannon(; est.definition.base), est.est)
+end
+
 function convert_to_cmi_estimator(est::MIDecomposition{<:TEShannon})
     base = est.definition.base
     return MIDecomposition(CMIShannon(; base), est.est)
-end
-
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TEShannon})
-    base = est.definition.base
-    return EntropyDecomposition(CMIShannon(; base), est.est)
 end
 
 function convert_to_cmi_estimator(est::CMIDecomposition{<:TEShannon})

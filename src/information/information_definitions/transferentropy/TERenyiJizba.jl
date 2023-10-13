@@ -40,16 +40,21 @@ mutual information.
 | [`ValueBinning`](@ref)           | [`ProbabilitiesEstimator`](@ref)       | Binning (histogram) |           ✓           |
 | [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref) | Nearest neighbors   |           ✓           |
 """
-struct TERenyiJizba{E <: Renyi, EMB} <: TransferEntropy{E, EMB}
-    e::E
+struct TERenyiJizba{B, Q, EMB} <: TransferEntropy
+    base::B
+    q::Q
     embedding::EMB
-    function TERenyiJizba(; base = 2, q = 1.5, embedding::EMB = EmbeddingTE()) where EMB
-        e = Renyi(; base = base, q = q)
-        return new{typeof(e), EMB}(e, embedding)
-    end
-    function TERenyiJizba(e::E; embedding::EMB = EmbeddingTE()) where {E <: Renyi, EMB}
-        return new{E, EMB}(e, embedding)
+    function TERenyiJizba(; base::B = 2, q::Q = 1.5, embedding::EMB = EmbeddingTE()) where {B, Q, EMB}
+        return new{B, Q, EMB}(base, q, embedding)
     end
 end
 
-max_inputs_vars(::TERenyiJizba) = 3
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DiscreteInfoEstimator})
+    (; definition, est, discretization, pest) = est
+    base = definition.base
+    return EntropyDecomposition(CMIRenyiJizba(; base), est, discretization, pest)
+end
+
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DifferentialInfoEstimator})
+    return EntropyDecomposition(CMIRenyiJizba(; est.definition.base), est.est)
+end

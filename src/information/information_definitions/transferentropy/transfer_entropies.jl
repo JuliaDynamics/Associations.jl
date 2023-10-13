@@ -5,7 +5,7 @@ The supertype of all transfer entropy measures. Concrete subtypes are
 - [`TEShannon`](@ref)
 - [`TERenyiJizba`](@ref)
 """
-abstract type TransferEntropy{E, EMB} <: MultivariateInformationMeasure end
+abstract type TransferEntropy <: MultivariateInformationMeasure end
 
 max_inputs_vars(::TransferEntropy) = 3
 is_directed(m::TransferEntropy) = true
@@ -48,5 +48,6 @@ end
 
 # Concrete implementations
 include("TEShannon.jl")
+include("TERenyiJizba.jl")
 
 #teest_to_cmiest(definition::TERenyiJizba) = CMIRenyiJizba(definition.e)
