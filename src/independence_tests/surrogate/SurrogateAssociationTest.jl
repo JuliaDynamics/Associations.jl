@@ -159,7 +159,7 @@ function independence(test::SurrogateAssociationTest, x, args...)
         ProgressMeter.next!(progress)
     end
     p = count(Î .<= Îs) / nshuffles
-    return SurrogateAssociationTestResult(3, Î, Îs, p, nshuffles)
+    return SurrogateAssociationTestResult(1+length(args), Î, Îs, p, nshuffles)
 end
 
 # Concrete implementations
