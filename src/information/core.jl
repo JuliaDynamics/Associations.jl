@@ -71,6 +71,7 @@ The supertype for all multivariate information-based measure definitions.
 - [`ConditionalEntropy`](@ref) (its concrete subtypes)
 - [`MutualInformation`](@ref) (its concrete subtypes)
 - [`ConditionalMutualInformation`](@ref) (its concrete subtypes)
+- [`TransferEntropy`](@ref) (its concrete subtypes)
 - [`PartialMutualInformation`](@ref)
 """
 abstract type MultivariateInformationMeasure <: AssociationMeasure end
