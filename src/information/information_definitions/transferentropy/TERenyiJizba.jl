@@ -27,18 +27,40 @@ conditional mutual information ([`CMIRenyiJizba`](@ref)).
 The variables ``T^+``, ``T^-``,
 ``S^-`` and ``C^-`` are described in the docstring for [`transferentropy`](@ref).
 
-## Compatible estimators (TODO: update)
+## Estimation
 
-Jizba's formulation of Renyi-type transfer entropy can currently be estimated using
-selected probabilities estimators and differential entropy estimators, which
-under the hood compute the transfer entropy as Jizba's formulation of Rényi conditional
-mutual information.
+Estimating Jizba's Rényi transfer entropy is a bit complicated, since it doesn't have 
+a dedicated estimator. Instead, we re-write the Rényi transfer entropy as a 
+Rényi conditional mutual information, and estimate it using an 
+[`EntropyDecomposition`](@ref) with a suitable discrete/differential Rényi entropy
+estimator from the list below as its input.
 
-| Estimator                        | Type                                   | Principle           | [`TERenyiJizba`](@ref) |
-| -------------------------------- | -------------------------------------- | ------------------- | :--------------------: |
-| [`UniqueElements`](@ref)         | [`ProbabilitiesEstimator`](@ref)       | Frequencies         |           ✓           |
-| [`ValueBinning`](@ref)           | [`ProbabilitiesEstimator`](@ref)       | Binning (histogram) |           ✓           |
-| [`LeonenkoProzantoSavani`](@ref) | [`DifferentialEntropyEstimator`](@ref) | Nearest neighbors   |           ✓           |
+| Estimator                      | Sub-estimator                    | Principle                    |
+| :----------------------------- | :------------------------------- | :--------------------------- |
+| [`EntropyDecomposition`](@ref) | [`LeonenkoProzantoSavani`](@ref) | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`ValueBinning`](@ref)           | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`Dispersion`](@ref)             | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`OrdinalPatterns`](@ref)        | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`UniqueElements`](@ref)         | Four-entropies decomposition |
+
+Any of these estimators must be given as input to a [`CMIDecomposition](@ref) estimator.
+
+## Example
+
+```julia
+using CausalityTools, Random
+rng = MersenneTwister(1234)
+x, y, z = rand(rng, 1000), rand(rng, 1000), rand(rng, 1000)
+def = CMIRenyiJizba(q = 1.5)
+
+# Using a differential Rényi entropy estimator
+est = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k = 10))
+information(est, x, y, z)
+
+# Using a plug-in Rényi entropy estimator, discretizing using ordinal patterns.
+est = EntropyDecomposition(def, PlugIn(Renyi()), OrdinalPatterns(m=2), RelativeAmount())
+information(est, x, y, z)
+```
 """
 struct TERenyiJizba{B, Q, EMB} <: TransferEntropy
     base::B
@@ -49,12 +71,13 @@ struct TERenyiJizba{B, Q, EMB} <: TransferEntropy
     end
 end
 
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DiscreteInfoEstimator})
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DiscreteInfoEstimator{Renyi}})
     (; definition, est, discretization, pest) = est
     base = definition.base
     return EntropyDecomposition(CMIRenyiJizba(; base), est, discretization, pest)
 end
 
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DifferentialInfoEstimator})
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DifferentialInfoEstimator{Renyi}})
     return EntropyDecomposition(CMIRenyiJizba(; est.definition.base), est.est)
 end
+
