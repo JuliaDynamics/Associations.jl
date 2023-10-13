@@ -21,11 +21,6 @@ abstract type AssociationMeasure end
 
 abstract type DirectedAssociationMeasure <: AssociationMeasure end
 
-# For measures without dedicated estimators, skip the estimator.
-function estimate(measure::M, est::Nothing, args...; kwargs...) where M
-    estimate(measure, args...; kwargs...)
-end
-
 # Just use ComplexityMeasures.convert_logunit when it is released.
 """
     _convert_logunit(h_a::Real, , to) → h_b
