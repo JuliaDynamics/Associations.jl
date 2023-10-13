@@ -3,6 +3,7 @@ using TimeseriesSurrogates
 import ProgressMeter
 export SurrogateAssociationTest
 export SurrogateAssociationTestResult
+import Statistics: quantile
 
 """
     SurrogateAssociationTest <: IndependenceTest
@@ -41,31 +42,34 @@ The shuffled variable is always the first variable (`X`). Exceptions are:
 Some measures can be used directly as the first input, since they don't require any 
 estimator, e.g. one can construct `SurrogateAssociationTest(PearsonCorrelation())`.
 
+| Measure                       | Pairwise | Conditional |
+| ----------------------------- | :------: | :---------: |
+| [`PearsonCorrelation`](@ref)  |    ✓    |     ✖      |
+| [`DistanceCorrelation`](@ref) |    ✓    |     ✓      |
+| [`SMeasure`](@ref)            |    ✓    |     ✖      |
+| [`HMeasure`](@ref)            |    ✓    |     ✖      |
+| [`MMeasure`](@ref)            |    ✓    |     ✖      |
+| [`LMeasure`](@ref)            |    ✓    |     ✖      |
+
+Moreover, any valid estimator of the following measures may be used:
+
 | Measure                               | Pairwise | Conditional |
-| ------------------------------------- | :------: | :---------: | 
-| [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      | 
-| [`DistanceCorrelation`](@ref)         |    ✓    |     ✓      | 
-| [`SMeasure`](@ref)                    |    ✓    |     ✖      |
-| [`HMeasure`](@ref)                    |    ✓    |     ✖      | 
-| [`MMeasure`](@ref)                    |    ✓    |     ✖      | 
-| [`LMeasure`](@ref)                    |    ✓    |     ✖      | 
+| ------------------------------------- | :------: | :---------: |
+| [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |
+| [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |
+| [`MIShannon`](@ref)                   |    ✓    |     ✖      |
+| [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      |
+| [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      |
+| [`MITsallisMartin`](@ref)             |    ✓    |     ✖      |
+| [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      |
+| [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |
+| [`CMIShannon`](@ref)                  |    ✖    |     ✓      |
+| [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |
+| [`TEShannon`](@ref)                   |    ✓    |     ✓      |
+| [`TERenyiJizba`](@ref)                |    ✓    |     ✓      |
+| [`PMI`](@ref)                         |    ✖    |     ✓      |
 
 
-The following *estimators*
-
-| [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      | 
-| [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      | 
-| [`MIShannon`](@ref)                   |    ✓    |     ✖      | 
-| [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      | 
-| [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      | 
-| [`MITsallisMartin`](@ref)             |    ✓    |     ✖      | 
-| [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      | 
-| [`PartialCorrelation`](@ref)          |    ✖    |     ✓      | 
-| [`CMIShannon`](@ref)                  |    ✖    |     ✓      | 
-| [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      | 
-| [`TEShannon`](@ref)                   |    ✓    |     ✓      | 
-| [`TERenyiJizba`](@ref)                |    ✓    |     ✓      | 
-| [`PMI`](@ref)                         |    ✖    |     ✓      | 
 
 ## Examples
 
@@ -141,7 +145,7 @@ function independence(test::SurrogateAssociationTest, x, args...)
     (; est_or_measure, est, rng, surrogate, nshuffles, show_progress) = test
     verify_number_of_inputs_vars(est_or_measure, 1+length(args))
     SSSets = map(w -> StateSpaceSet(w), args)
-    estimation = x -> estimate(est_or_measure, est, x, SSSets...)
+    estimation = x -> estimate(est_or_measure, x, SSSets...)
     progress = ProgressMeter.Progress(nshuffles;
         desc="SurrogateAssociationTest:", enabled=show_progress
     )
@@ -159,10 +163,8 @@ function independence(test::SurrogateAssociationTest, x, args...)
 end
 
 # Concrete implementations
-include("contingency.jl")
-include("transferentropy.jl")
-include("hlms_measure.jl")
-include("crossmapping.jl")
-include("mutualinfo.jl")
-include("condmutualinfo.jl")
-include("pmi.jl")
+# include("contingency.jl")
+# include("transferentropy.jl")
+# include("hlms_measure.jl")
+# include("crossmapping.jl")
+# include("pmi.jl")
