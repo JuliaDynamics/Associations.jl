@@ -66,8 +66,8 @@ function null_hypothesis_text(test::IndependenceTestResult)
     if test.n_vars == 2
         return """\
         ---------------------------------------------------------------------
-        H₀: "The first two variables are independent"
-        Hₐ: "The first two variables are dependent"
+        H₀: "The variables are independent"
+        Hₐ: "The variables are dependent"
         ---------------------------------------------------------------------\
         """
     elseif test.n_vars == 3
@@ -81,8 +81,8 @@ function null_hypothesis_text(test::IndependenceTestResult)
         return ""
     end
 end
-include("parametric/parametric.jl")
-include("local_permutation/LocalPermutationTest.jl")
+#include("parametric/parametric.jl")
+#include("local_permutation/LocalPermutationTest.jl")
 include("surrogate/SurrogateAssociationTest.jl")
 # TODO: rename/find suitable generic name before including
 # include("correlation/correlation.jl). Perhaps `ParametricTest`?
