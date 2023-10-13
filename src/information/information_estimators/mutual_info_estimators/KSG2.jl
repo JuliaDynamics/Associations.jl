@@ -121,7 +121,6 @@ function marginal_inrangecount!(est::KraskovStögbauerGrassberger2, ns::Vector{I
         xᵢᵐ = xₘ[i]
         # Add small noise to facilitate ≤ while still using inrangecount
         ϵᵢᵐ = evaluate(est.metric_marginals, xᵢᵐ, xₘ[knn_idxs[i]]) + 1e1*eps()
-        #@show m, i, ϵᵢᵐ, ds[i]
         # Subtract 1 because `inrangecount` includes the point itself.
         ns[i] = inrangecount(tree, xᵢᵐ, ϵᵢᵐ) - 1
     end

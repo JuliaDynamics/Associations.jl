@@ -145,7 +145,6 @@ target = 2, cond = 3), and a tuple `τs`, which stores the lags for each variabl
 """
 function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVector{T}) where T
 
-    #@show p.τS
     #if (p.τS isa Int && p.τS > 0) || (length(p.τS) > 1 && any(p.τS[p.τS .> 0]))
     #    @warn("Backwards lag τS should be negative. You might be getting nonsensical results!")
     #end
@@ -183,7 +182,6 @@ end
 
 function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}) where T
 
-    #@show p.τS
     #if (p.τS isa Int && p.τS > 0) || (length(p.τS) > 1 && any(p.τS[p.τS .> 0]))
     #    @warn("Backwards lag τS should be negative. You might be getting nonsensical results!")
     #end
