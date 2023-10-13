@@ -50,7 +50,7 @@ function marginal_entropies_cmi4h_discrete(est::EntropyDecomposition{<:Condition
     # so now we can just count (i.e. use `UniqueElements` as the outcome space).
     o = UniqueElements()
 
-    modified_est = estimator_with_overridden_parameters(est.definition, est.mest)
+    modified_est = estimator_with_overridden_parameters(est.definition, est.est)
     HXZ = information(modified_est, est.pest, o, eXZ)
     HYZ = information(modified_est, est.pest, o, eYZ)
     HXYZ = information(modified_est, est.pest, o, eXYZ)
