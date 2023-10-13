@@ -6,7 +6,7 @@ export CMIRenyiJizba
     CMIRenyiJizba <: ConditionalMutualInformation
     CMIRenyiJizba(; base = 2, q = 1.5)
 
-The Rényi conditional mutual information ``I_q^{R_{J}}(X; Y | Z`` defined in
+The Rényi conditional mutual information ``I_q^{R_{J}}(X; Y | Z)`` defined in
 [Jizba2012](@citet).
 
 ## Usage
