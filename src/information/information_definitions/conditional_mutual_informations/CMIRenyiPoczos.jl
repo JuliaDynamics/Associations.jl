@@ -18,9 +18,9 @@ defined in (Póczos & Schneider, 2012)[^Póczos2012].
 
 ```math
 \\begin{align*}
-I_q^{R_{P}}(X; Y | Z) = \\dfrac{1}{q-1}
+I_q^{R_{P}}(X; Y | Z) &= \\dfrac{1}{q-1}
 \\int \\int \\int \\dfrac{p_Z(z) p_{X, Y | Z}^q}{( p_{X|Z}(x|z) p_{Y|Z}(y|z) )^{q-1}} \\\\
-\\mathbb{E}_{X, Y, Z} \\sim p_{X, Y, Z}
+&= \\mathbb{E}_{X, Y, Z} \\sim p_{X, Y, Z}
 \\left[ \\dfrac{p_{X, Z}^{1-q}(X, Z) p_{Y, Z}^{1-q}(Y, Z) }{p_{X, Y, Z}^{1-q}(X, Y, Z) p_Z^{1-q}(Z)} \\right]
 \\end{align*}
 ```

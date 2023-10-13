@@ -25,7 +25,7 @@ Rényi ``\\alpha``-divergence between the conditional joint probability mass fun
 I(X, Y; Z)^R_q =
 \\dfrac{1}{q-1} \\sum_{z \\in Z} p(Z = z)
 \\log \\left(
-    \\sum{x \\in X}\\sum{y \\in Y}
+    \\sum_{x \\in X}\\sum_{y \\in Y}
     \\dfrac{p(x, y|z)^q}{\\left( p(x|z)\\cdot p(y|z) \\right)^{q-1}}
 \\right)
 ```
