@@ -1,3 +1,4 @@
+include("codify_marginals.jl")
 
 include("JointProbabilities.jl")
 include("EntropyDecomposition.jl")
