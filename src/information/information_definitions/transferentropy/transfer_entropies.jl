@@ -1,3 +1,5 @@
+export TransferEntropy
+
 """
     TransferEntropy <: AssociationMeasure
 
