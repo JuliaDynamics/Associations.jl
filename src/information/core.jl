@@ -81,3 +81,12 @@ abstract type BivariateInformationMeasure <: MultivariateInformationMeasure end
 
 min_inputs_vars(::BivariateInformationMeasure) = 2
 max_inputs_vars(::BivariateInformationMeasure) = 2
+
+function verify_number_of_inputs_vars(est::MultivariateInformationMeasureEstimator, n)
+    return verify_number_of_inputs_vars(est.definition, n)
+end
+
+# For internal use only
+function estimate(est::MultivariateInformationMeasureEstimator, x...)
+    return information(est, x...)
+end
