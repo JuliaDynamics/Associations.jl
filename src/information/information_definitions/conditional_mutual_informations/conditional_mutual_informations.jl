@@ -59,6 +59,9 @@ function marginal_entropies_cmi4h_discrete(est::EntropyDecomposition{<:Condition
     return HXZ, HYZ, HXYZ, HZ
 end
 
+function information(est::CMIDecomposition{<:ConditionalMutualInformation}, x, y, z)
+    return information(est.est, x, y, z)
+end
 
 include("CMIShannon.jl")
 include("CMITsallis.jl")

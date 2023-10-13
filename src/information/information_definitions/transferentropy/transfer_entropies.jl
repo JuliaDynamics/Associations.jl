@@ -25,6 +25,7 @@ function information(est::MultivariateInformationMeasureEstimator{<:TransferEntr
     cmi_est = convert_to_cmi_estimator(est)
 
     # Estimate by letting TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻). 
+    @show typeof(T⁺), typeof(S)
     return information(cmi_est, T⁺, S, StateSpaceSet(T, C))
 end
 

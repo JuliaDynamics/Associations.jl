@@ -34,6 +34,7 @@ end
 
 function information(est::FPVP{<:CMIShannon}, x, y, z)
     (; definition, k, w, metric_joint, metric_marginals) = est
+    @show "here"
 
     # Ensures that vector-valued inputs are converted to StateSpaceSets, so that
     # building the marginal/joint spaces and neighbor searches are fast.
