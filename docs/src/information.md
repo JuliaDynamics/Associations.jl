@@ -1,15 +1,25 @@
 # Information API
 
+## Overview
+
+CausalityTools.jl implements a range of bivariate and multivariate information measures,
+which are listed under [definition](@ref definitions) below. Each of these measures
+can be estimated using one or several [estimators](@ref) with [`information`](@ref).
+Please see the [tutorial](@ref info_tutorial) for examples.
+
+The API consists of the following types and methods:
+- [`MultivariateInformationMeasure`](@ref)
+- [`MultivariateInformationMeasureEstimator`](@ref)
+- [`information`](@ref)
+
 ```@docs
+MultivariateInformationMeasure
+MultivariateInformationMeasureEstimator
 CausalityTools.information(::MultivariateInformationMeasureEstimator)
 ```
 
-## Definitions
+## [Definitions](@id definitions)
 
-We implement a range of bivariate and multivariate information measures (i.e. measures
-that are functionals of probability mass functions or probability densities). They are 
-listed below. For estimating a measure, use [`information`](@ref) with a compatible
-estimator among the estimators listed below.
 
 ### [Conditional entropies](@id conditional_entropies)
 
@@ -32,6 +42,7 @@ VariationDistance
 ### [Joint entropies](@id joint_entropies)
 
 ```@docs
+JointEntropy
 JointEntropyShannon
 JointEntropyTsallis
 JointEntropyRenyi
@@ -99,7 +110,7 @@ PoczosSchneiderCMI
 ```
 
 
-## Convenience functions
+## [Convenience functions](@ref convenience_info)
 
 For commonly used names, we provide convenience functions. These are just simple 
 wrappers around [`information`](@ref).

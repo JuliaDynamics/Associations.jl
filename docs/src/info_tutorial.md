@@ -1,4 +1,4 @@
-# Information measure tutorial
+# [Information measure tutorial](@id info_tutorial)
 
 CausalityTools.jl extends the single-variate information API in
 [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl)
@@ -11,6 +11,13 @@ mass functions or probability densities. This definition may or may not agree wi
 literature usage, depending on the context. We made this choice pragmatically based on
 user-friendlyness and coding-friendlyness, but still trying to maintain some
 level of meaningful terminology.
+
+## Basic strategy
+
+To *estimate* a multivariate information measure in practice, you must first specify
+the [definition](@ref) of the measure, which is then used as input to an 
+[estimator](@ref). This estimator is then given to [`information`](@ref), or one 
+of the [convenience methods](@ref convenience_info).
 
 ## Distances/divergences
 
