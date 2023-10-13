@@ -21,7 +21,7 @@ Works for any outcome space that implements [`codify`](@ref).
 See also: [`Counts`](@ref), [`Probabilities`](@ref), [`ProbabilitiesEstimator`](@ref),
 [`OutcomeSpace`](@ref), [`DiscreteInfoEstimator`](@ref).
 """
-struct JointProbabilities{M <: MultivariateInformationMeasure, O, P} <: InformationMeasureEstimator{M}
+struct JointProbabilities{M <: MultivariateInformationMeasure, O, P} <: MultivariateInformationMeasureEstimator{M}
     definition::M # API from complexity measures: definition must be the first field of the infoestimator.
     discretization::O
     pest::P # Not exposed for user for now.

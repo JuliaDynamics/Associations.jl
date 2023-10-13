@@ -107,7 +107,7 @@ est = EntropyDecomposition(CMIShannon(), ZhuSingh(k = 3))
 information(est, x, z, y) # should be near 0 (and can be negative)
 ```
 """
-struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: InformationMeasureEstimator, D, P} <: InformationMeasureEstimator{M}
+struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: InformationMeasureEstimator, D, P} <: MultivariateInformationMeasureEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.
     est::E # The estimator + measure which `definition` is decomposed into.
     discretization::D # `Nothing` if `est` is a `DifferentialInfoEstimator`.
