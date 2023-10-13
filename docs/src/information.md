@@ -70,10 +70,18 @@ CMIRenyiPoczos
 CMITsallis
 ```
 
-### Other measures
+### Partial mutual information
 
 ```@docs
 PartialMutualInformation
+```
+
+### Transfer entropy
+
+```@docs
+TransferEntropy
+TEShannon
+TERenyiJizba
 ```
 
 ## Estimators
