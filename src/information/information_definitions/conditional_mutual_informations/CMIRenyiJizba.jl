@@ -26,10 +26,13 @@ where ``I_q^{R_{J}}(X; Z)`` is the [`MIRenyiJizba`](@ref) mutual information.
 
 The following estimators can be used to compute `CMIRenyiJizba`.
 
-| Estimator                      |          Sub-estimator           | Principle                    |
-| ------------------------------ | :------------------------------: | :--------------------------- |
-| [`JointProbabilities`](@ref)   |                -                 | Discrete joint pmf           |
+| Estimator                      | Sub-estimator                    | Principle                    |
+| :----------------------------- | :------------------------------- | :--------------------------- |
 | [`EntropyDecomposition`](@ref) | [`LeonenkoProzantoSavani`](@ref) | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`ValueBinning`](@ref)           | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`Dispersion`](@ref)             | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`OrdinalPatterns`](@ref)        | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`UniqueElements`](@ref)         | Four-entropies decomposition |
 
 ## Examples
 
@@ -38,10 +41,13 @@ using CausalityTools, Random
 rng = MersenneTwister(1234)
 x, y, z = rand(rng, 1000), rand(rng, 1000), rand(rng, 1000)
 def = CMIRenyiJizba(q = 1.5)
+
+# Using a differential Rényi entropy estimator
 est = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k = 10))
 information(est, x, y, z)
 
-est = EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(3), RelativeAmount())
+# Using a plug-in Rényi entropy estimator, discretizing using ordinal patterns.
+est = EntropyDecomposition(def, PlugIn(Renyi()), OrdinalPatterns(m=2), RelativeAmount())
 information(est, x, y, z)
 ```
 """
@@ -85,3 +91,28 @@ function decomposition_string(
 ) 
     return "CMI_RJ(X, Y | Z) = h_R(X,Z) + h_R(Y,Z) - h_R(X,Y,Z) - h_R(Z)";
 end
+
+
+
+# ---------------------------------
+# Avoid some common errors
+# ---------------------------------
+function EntropyDecomposition(
+        definition::CMIRenyiJizba, 
+        est::DifferentialInfoEstimator{<:Shannon}
+    )
+    msg = "Can't decompose CMIRenyiJizba into a combination of Shannon entropies. " * 
+        "Please make sure that the definition of the estimator is an instance of `Renyi`."
+    throw(ArgumentError(msg))
+end
+
+# function EntropyDecomposition(
+#         definition::CMIRenyiJizba, 
+#         est::DiscreteInfoEstimator{<:Shannon}, 
+#         d::Discretization,
+#         pest::ProbabilitiesEstimator
+#     )
+#     msg = "Can't decompose CMIRenyiJizba into a combination of Shannon entropies."
+#     throw(ArgumentError(msg))
+# end
+
