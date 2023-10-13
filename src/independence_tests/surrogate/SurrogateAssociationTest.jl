@@ -79,20 +79,19 @@ Moreover, any valid estimator of the following measures may be used:
 - [Pairwise test, `MIShannon`, categorical](@ref examples_SurrogateAssociationTest_mishannon_categorical).
 - [Conditional test, `CMIShannon`, categorical](@ref examples_SurrogateAssociationTest_cmishannon_categorical).
 """
-struct SurrogateAssociationTest{M, E, R, S} <: IndependenceTest{M}
-    est_or_measure::M
-    est::E
+struct SurrogateAssociationTest{E, R, S} <: IndependenceTest{E}
+    est_or_measure::E
     rng::R
     surrogate::S
     nshuffles::Int
     show_progress::Bool
 end
-function SurrogateAssociationTest(est_or_measure::M, est::E = nothing;
+function SurrogateAssociationTest(est_or_measure::E;
     rng::R = Random.default_rng(),
     surrogate::S = RandomShuffle(),
     nshuffles::Int = 100, show_progress = false
-    ) where {M, E, R, S}
-    SurrogateAssociationTest{M, E, R, S}(est_or_measure, est, rng, surrogate, nshuffles, show_progress)
+    ) where {E, R, S}
+    SurrogateAssociationTest{E, R, S}(est_or_measure, rng, surrogate, nshuffles, show_progress)
 end
 
 
@@ -101,7 +100,6 @@ Base.show(io::IO, test::SurrogateAssociationTest) = print(io,
     `SurrogateAssociationTest` independence test.
     -------------------------------------
     estimator/measure: $(test.est_or_measure)
-    estimator:         $(test.est)
     rng:               $(test.rng)
     # shuffles:        $(test.nshuffles)
     surrogate:         $(test.surrogate)
@@ -142,7 +140,7 @@ end
 # conditional mutual information.
 function independence(test::SurrogateAssociationTest, x, args...)
     # Setup (`args...` is either `y` or `y, z`)
-    (; est_or_measure, est, rng, surrogate, nshuffles, show_progress) = test
+    (; est_or_measure, rng, surrogate, nshuffles, show_progress) = test
     verify_number_of_inputs_vars(est_or_measure, 1+length(args))
     SSSets = map(w -> StateSpaceSet(w), args)
     estimation = x -> estimate(est_or_measure, x, SSSets...)
