@@ -1,4 +1,5 @@
 include("discrete/joint.jl")
+include("entropy_decomposition.jl")
 
 # Generically test the estimators. Any future analytical tests should go in their own 
 # estimator-specific files.
