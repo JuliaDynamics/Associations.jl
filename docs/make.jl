@@ -21,7 +21,7 @@ pages = [
     # "APIs and estimators" => "api.md",
     # "Predefined systems" => "coupled_systems.md",
     # "Experimental" => "experimental.md",
-    # "References" => "references.md",
+    "References" => "references.md",
 ]
 
 Downloads.download(
