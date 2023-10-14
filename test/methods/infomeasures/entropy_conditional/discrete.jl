@@ -11,7 +11,7 @@ x = rand(100)
 y = rand(100)
 @testset "$(typeof(ests[i]).name)" for i in eachindex(ests)
     est = ests[i]
-    @test entropy_conditional(CEShannon(), est, x, y) >= 0
-    @test entropy_conditional(CETsallisAbe(), est, x, y) isa Real
-    @test_throws ArgumentError entropy_conditional(CETsallisFuruichi(), est, x, y)
+    @test entropy_conditional(ConditionalEntropyShannon(), est, x, y) >= 0
+    @test entropy_conditional(ConditionalEntropyTsallisAbe(), est, x, y) isa Real
+    @test_throws ArgumentError entropy_conditional(ConditionalEntropyTsallisFuruichi(), est, x, y)
 end

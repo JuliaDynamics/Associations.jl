@@ -1,6 +1,6 @@
-@test CEShannon() isa CEShannon
-@test CETsallisAbe() isa CETsallisAbe
-@test CETsallisFuruichi() isa CETsallisFuruichi
+@test ConditionalEntropyShannon() isa ConditionalEntropyShannon
+@test ConditionalEntropyTsallisAbe() isa ConditionalEntropyTsallisAbe
+@test ConditionalEntropyTsallisFuruichi() isa ConditionalEntropyTsallisFuruichi
 
 include("contingency_matrix.jl")
 include("discrete.jl")
