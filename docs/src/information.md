@@ -117,6 +117,14 @@ Rahimzamani
 PoczosSchneiderCMI
 ```
 
+### Transfer entropy estimators
+
+```@docs
+TransferEntropyEstimator
+Zhu1
+```
+
+
 
 ## [Convenience functions](@ref convenience_info)
 

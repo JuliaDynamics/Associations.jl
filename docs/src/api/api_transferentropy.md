@@ -7,27 +7,6 @@ The transfer entropy API is made up of the following functions and types.
 - [`transferentropy`](@ref).
 - [`TransferEntropyEstimator`](@ref), and its subtypes.
 
-```@docs
-transferentropy
-```
-
-## Definitions
-
-```@docs
-TransferEntropy
-```
-
-## [`TransferEntropyEstimator`](@ref)s
-
-```@docs
-TransferEntropyEstimator
-```
-
-### [`Zhu1`](@ref)
-
-```@docs
-Zhu1
-```
 
 ### [`Lindner`](@ref)
 
