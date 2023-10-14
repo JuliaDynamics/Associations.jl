@@ -1,13 +1,20 @@
 using ComplexityMeasures
+export codified_marginals 
 
 """
     codified_marginals(o::OutcomeSpace, x::VectorOrStateSpaceSet...)
 
-Encode/discretize each input vector `xᵢ ∈ x` according to a procedure determined by `o`.
-Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@ref)s) will be encoded column-wise,
-i.e. each column of `xᵢ` is treated as a timeseries and is encoded separately.
+Encode/discretize each input vector (e.g. timeseries) `xᵢ ∈ x` according to a procedure
+determined by `o`. 
 
-This is useful for computing any discrete information theoretic quantity.
+For some outcome spaces, the encoding is sequential (i.e. time ordering matters). 
+Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@ref)s) will be encoded
+column-wise, i.e. each column of `xᵢ` is treated as a timeseries and is encoded separately.
+
+This is useful for discretizing input data when computing some 
+[`MultivariateInformationMeasure`](@ref). This method is used internally by
+both the [`JointProbabilities`](@ref) and [`EntropyDecomposition`](@ref) estimators
+to handle discretization.
 
 ## Supported estimators
 
@@ -17,10 +24,18 @@ This is useful for computing any discrete information theoretic quantity.
     [`RectangularBinning`](@ref) (which adapts the grid to the data).
     When using [`FixedRectangularBinning`](@ref), the range along the first dimension
     is used as a template for all other dimensions.
-- [`OrdinalPatterns`](@ref). Each timeseries is separately [`encode`](@ref)d according
-    to its ordinal pattern.
-- [`Dispersion`](@ref). Each timeseries is separately [`encode`](@ref)d according to its
-    dispersion pattern.
+- [`OrdinalPatterns`](@ref). Each timeseries is separately [`codify`](@ref)-ed by 
+    embedding the timeseries, then sequentially encoding the ordinal patterns of 
+    the embedding vectors.
+- [`Dispersion`](@ref). Each timeseries is separately [`codify`](@ref)-ed by 
+    embedding the timeseries, then sequentially encoding the embedding vectors
+    according to their dispersion pattern (which for each embedding vector is computed
+    relative to all other embedding vectors).
+- [`CosineSimilarityBinning`](@ref). Each timeseries is separately [`codify`](@ref)-ed
+    by embedding the timeseries, the encoding the embedding points in a 
+    in a sequential manner according to the cosine similarity of the embedding vectors.
+- [`UniqueElements`](@ref). Each timeseries is [`codify`](@ref)-ed according to 
+    its unique values (i.e. each unique element gets assigned a specific integer).
 
 Many more implementations are possible. Each new implementation gives one new
 way of estimating the [`ContingencyMatrix`](@ref)
@@ -47,6 +62,11 @@ function codify_marginal(o::Dispersion, x::AbstractVector)
     return codify(o, x)
 end
 
+function codify_marginal(o::CosineSimilarityBinning, x::AbstractVector)
+    return codify(o, x)
+end
+# TODO: maybe construct a convenience wrapper where the user can avoid constructing the
+# joint space, for performance benefits (but increased bias).
 function codify_marginal(
         o::ValueBinning{<:FixedRectangularBinning{D}},
         x::AbstractVector) where D
