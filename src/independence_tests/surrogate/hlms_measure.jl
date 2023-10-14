@@ -3,7 +3,7 @@
 # to avoid automatic conversion to `StateSpaceSet`s (which would ignore
 # embedding parameters if input data are `Vector`s).
 function independence(test::SurrogateAssociationTest{<:HLMS}, x, y)
-    (; measure, est, rng, surrogate, nshuffles) = test
+    (; measure, rng, surrogate, nshuffles) = test
     Î = estimate(measure, x, y)
     sx = surrogenerator(x, surrogate, rng)
     sy = surrogenerator(y, surrogate, rng)
