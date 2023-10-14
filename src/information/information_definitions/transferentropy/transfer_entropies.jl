@@ -26,7 +26,7 @@ function information(est::MultivariateInformationMeasureEstimator{<:TransferEntr
     S, T, T⁺, C = individual_marginals_te(definition.embedding, x...)
     cmi_est = convert_to_cmi_estimator(est)
 
-    # Estimate by letting TE(s -> t) := I(t⁺; s⁻ | t⁻, c⁻). 
+    # Estimate by letting TE(s -> t | c) := I(t⁺; s⁻ | t⁻, c⁻). 
     return information(cmi_est, T⁺, S, StateSpaceSet(T, C))
 end
 

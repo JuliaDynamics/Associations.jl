@@ -58,3 +58,43 @@ function convert_to_cmi_estimator(est::CMIDecomposition{<:TEShannon})
     base = est.definition.base
     return CMIDecomposition(CMIShannon(; base), est.est)
 end
+
+
+# ------------------------------------------------
+# Pretty printing for decomposition estimators.
+# ------------------------------------------------
+# These are some possible decompositions
+# TE(s -> t | c) =
+# = I(t⁺; s⁻ | t⁻, c⁻)
+# = I(t⁺; s⁻, t⁻, c⁻) - I(t⁺; t⁻, c⁻)
+# = h(t⁺ | t⁻,c⁻) - h(t⁺ | s⁻,t⁻,c⁻)
+# = h(t⁺, t⁻,c⁻) - h(t⁻,c⁻) - h(t⁺,s⁻,t⁻,c⁻) + h(s⁻,t⁻,c⁻)"
+
+function decomposition_string(
+        definition::TEShannon, 
+        est::EntropyDecomposition{M, <:DiscreteInfoEstimator}
+    ) where M
+    return "TEₛ(s → t | c) = Hₛ(t⁺, t⁻,c⁻) - Hₛ(t⁻,c⁻) - Hₛ(t⁺,s⁻,t⁻,c⁻) + Hₛ(s⁻,t⁻,c⁻)"
+end
+
+function decomposition_string(
+    definition::TEShannon, 
+    est::EntropyDecomposition{M, <:DifferentialInfoEstimator}
+    ) where M
+    return "TEₛ(s → t | c) = hₛ(t⁺, t⁻,c⁻) - hₛ(t⁻,c⁻) - hₛ(t⁺,s⁻,t⁻,c⁻) + hₛ(s⁻,t⁻,c⁻)"
+end
+
+function decomposition_string(
+        definition::TEShannon, 
+        est::MIDecomposition{M, <:MutualInformationEstimator{<:MIShannon}}
+    ) where M
+    return "TEₛ(s → t | c) = Iₛ(t⁺; s⁻, t⁻, c⁻) - Iₛ(t⁺; t⁻, c⁻)"
+end
+
+
+function decomposition_string(
+        definition::TEShannon, 
+        est::CMIDecomposition{M, <:ConditionalMutualInformationEstimator{<:CMIShannon}}
+    ) where M
+    return "TEₛ(s → t | c) = Iₛ(t⁺; s⁻ | t⁻, c⁻)"
+end

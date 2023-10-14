@@ -31,7 +31,7 @@ information(est, x, z, y) # should be near 0 (and can be negative)
 
 See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).
 """
-struct MIDecomposition{M <: MultivariateInformationMeasure, E} <: MultivariateInformationMeasureEstimator{M}
+struct MIDecomposition{M <: MultivariateInformationMeasure, E} <: DecompositionEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.
     est::E # The MI estimator + measure which `definition` is decomposed into.
 end

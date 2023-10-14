@@ -107,7 +107,7 @@ est = EntropyDecomposition(CMIShannon(), ZhuSingh(k = 3))
 information(est, x, z, y) # should be near 0 (and can be negative)
 ```
 """
-struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: InformationMeasureEstimator, D, P} <: MultivariateInformationMeasureEstimator{M}
+struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: InformationMeasureEstimator, D, P} <: DecompositionEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.
     est::E # The estimator + measure which `definition` is decomposed into.
     discretization::D # `Nothing` if `est` is a `DifferentialInfoEstimator`.
@@ -138,28 +138,14 @@ struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: Informatio
 end
 
 # ----------------------------------------------------------------------------------------
-# Pretty printing
+# Custom pretty printing for discrete entropy estimators, since it has more field.
 # ----------------------------------------------------------------------------------------
-function summary_strings(est::EntropyDecomposition{<:M, <:DifferentialInfoEstimator}) where M
-    return [
-        "Measure to be decomposed",
-        "Estimator for decomposed components",
-    ]
-end
-
 function summary_strings(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) where M
     return [
         "Measure to be decomposed",
         "Estimator for decomposed components",
         "Discretization",
         "Probabilities estimator"
-    ]
-end
-
-function summary_types(est::EntropyDecomposition{<:M, <:DifferentialInfoEstimator}) where M
-    return [
-        typeof(est.definition),
-        typeof(est.est),
     ]
 end
 
@@ -172,26 +158,12 @@ function summary_types(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) 
     ]
 end
 
-function measure_colors(est::EntropyDecomposition{<:M, <:DifferentialInfoEstimator}) where M
-    return [
-        :light_red,
-        :light_green,
-    ]
-end
-
 function measure_colors(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) where M
     return [
         :light_red,
         :light_green,
         :light_blue,
         :light_yellow,
-    ]
-end
-
-function info_colors(est::EntropyDecomposition{<:M, <:DifferentialInfoEstimator}) where M
-    return [
-        :red,
-        :green,
     ]
 end
 
@@ -202,27 +174,4 @@ function info_colors(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) wh
         :blue,
         :yellow,
     ]
-end
-
-function Base.show(io::IO, est::EntropyDecomposition)
-    types = summary_types(est)
-    strs = summary_strings(est)
-    measurecolors = measure_colors(est)
-    infocolors = info_colors(est)
-    n = maximum(length.(strs))
-
-    spaces_needed = [n - length(s) for s in strs] 
-    spaced_strs = [strs[i] * repeat(" ", spaces_needed[i]) for i in eachindex(strs)]
-    ctx = IOContext(io, :color => true)
-    printstyled(ctx,  "EntropyDecomposition estimator\n\n", color=:bold)
-    d = decomposition_string(est.definition, est)
-        printstyled(ctx,  "  Formula: $(d)\n\n", color=:light_grey)
-    indent = " "
-    for i in eachindex(strs)
-        printstyled(ctx, "$(indent)$(spaced_strs[i]): ", color=infocolors[i])
-        printstyled(ctx, string(types[i]), color=measurecolors[i])
-        if i < length(strs)
-            print(io, "\n")
-        end
-    end
 end
