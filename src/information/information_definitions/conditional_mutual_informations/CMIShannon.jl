@@ -105,6 +105,18 @@ function marginal_mutual_informations(est::MIDecomposition{<:ConditionalMutualIn
     return MI_X_YZ, MI_X_Z
 end
 
+# ---------------------------------
+# Avoid some common errors
+# ---------------------------------
+function verify_decomposition_entropy_type(definition::CMIShannon, est::ENTROPY_ESTS)
+    if !(est.definition isa Shannon)
+        T = typeof(est.definition).name.name
+        msg = "Can't decompose CMIShannon into a combination of $T entropies. Please provide a `Shannon` entropy estimator instead."
+        throw(ArgumentError(msg))
+    end
+end
+
+
 # ------------------------------------------------
 # Pretty printing for decomposition estimators.
 # ------------------------------------------------
@@ -112,19 +124,19 @@ function decomposition_string(
         definition::CMIShannon, 
         est::EntropyDecomposition{<:CMIShannon, <:DiscreteInfoEstimator{<:Shannon}}
     )
-    return "CMI_S(X, Y | Z) = H_S(X,Z) + H_S(Y,Z) - H_S(X,Y,Z) - H_S(Z)";
+    return "Iₛ(X, Y | Z) = Hₛ(X,Z) + Hₛ(Y,Z) - Hₛ(X,Y,Z) - Hₛ(Z)";
 end
 
 function decomposition_string(
         definition::CMIShannon, 
         est::EntropyDecomposition{<:CMIShannon, <:DifferentialInfoEstimator{<:Shannon}}
     )
-    return "CMI_S(X, Y | Z) = h_S(X,Z) + h_S(Y,Z) - h_S(X,Y,Z) - h_S(Z)";
+    return "Iₛ(X, Y | Z) = hₛ(X,Z) + hₛ(Y,Z) - hₛ(X,Y,Z) - hₛ(Z)";
 end
 
 function decomposition_string(
         definition::CMIShannon, 
-        est::MIDecomposition{<:MIShannon, <:MutualInformationEstimator}
+        est::MIDecomposition{<:CMIShannon, <:MutualInformationEstimator}
     )
-    return "CMI_S(X, Y | Z) = MI_S(X; Y, Z) + MI_S(X; Z)"
+    return "Iₛ(X, Y | Z) = Iₛ(X; Y, Z) + Iₛ(X; Z)"
 end

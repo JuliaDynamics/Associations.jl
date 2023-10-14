@@ -82,14 +82,14 @@ function decomposition_string(
         definition::CMIRenyiJizba, 
         est::EntropyDecomposition{<:CMIRenyiJizba, <:DiscreteInfoEstimator{<:Renyi}}
     ) 
-    return "CMI_RJ(X, Y | Z) = H_R(X,Z) + H_R(Y,Z) - H_R(X,Y,Z) - H_R(Z)";
+    return "Iᵣⱼ(X, Y | Z) = Hᵣ(X,Z) + Hᵣ(Y,Z) - Hᵣ(X,Y,Z) - Hᵣ(Z)";
 end
 
 function decomposition_string(
     definition::CMIRenyiJizba, 
     est::EntropyDecomposition{<:CMIRenyiJizba, <:DifferentialInfoEstimator{<:Renyi}}
 ) 
-    return "CMI_RJ(X, Y | Z) = h_R(X,Z) + h_R(Y,Z) - h_R(X,Y,Z) - h_R(Z)";
+    return "Iᵣⱼ(X, Y | Z) = hᵣ(X,Z) + hᵣ(Y,Z) - hᵣ(X,Y,Z) - hᵣ(Z)";
 end
 
 # ---------------------------------
