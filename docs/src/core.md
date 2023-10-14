@@ -41,7 +41,7 @@ CodifyVariables
 The [`CodifyVariables`](@ref) discretization scheme encodes input data points directly 
 to integers, *without* applying any transformation to the data before encoding.
 
-```
+```@docs
 CodifyPoints
 ComplexityMeasures.Encoding
 ComplexityMeasures.encoding
