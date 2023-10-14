@@ -92,27 +92,14 @@ function decomposition_string(
     return "CMI_RJ(X, Y | Z) = h_R(X,Z) + h_R(Y,Z) - h_R(X,Y,Z) - h_R(Z)";
 end
 
-
-
 # ---------------------------------
 # Avoid some common errors
 # ---------------------------------
-function EntropyDecomposition(
-        definition::CMIRenyiJizba, 
-        est::DifferentialInfoEstimator{<:Shannon}
-    )
-    msg = "Can't decompose CMIRenyiJizba into a combination of Shannon entropies. " * 
-        "Please make sure that the definition of the estimator is an instance of `Renyi`."
-    throw(ArgumentError(msg))
+const ENTROPY_ESTS = Union{DifferentialInfoEstimator, DiscreteInfoEstimator}
+function verify_decomposition_entropy_type(definition::CMIRenyiJizba, est::ENTROPY_ESTS)
+    if !(est.definition isa Renyi)
+        T = typeof(est.definition).name.name
+        msg = "Can't decompose CMIRenyiJizba into a combination of $T entropies. Please provide a `Renyi` entropy estimator instead."
+        throw(ArgumentError(msg))
+    end
 end
-
-# function EntropyDecomposition(
-#         definition::CMIRenyiJizba, 
-#         est::DiscreteInfoEstimator{<:Shannon}, 
-#         d::Discretization,
-#         pest::ProbabilitiesEstimator
-#     )
-#     msg = "Can't decompose CMIRenyiJizba into a combination of Shannon entropies."
-#     throw(ArgumentError(msg))
-# end
-

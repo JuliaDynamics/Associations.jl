@@ -119,6 +119,7 @@ struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: Informatio
         est::DifferentialInfoEstimator)
         M = typeof(definition)
         E = typeof(est)
+        verify_decomposition_entropy_type(definition, est)
         return new{M, E, Nothing, Nothing}(definition, est, nothing, nothing)
     end
 
@@ -131,11 +132,27 @@ struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: Informatio
         M = typeof(definition)
         E = typeof(est)
         P = typeof(pest)
-    
+        verify_decomposition_entropy_type(definition, est)
+
         return new{M, E, D, P}(definition, est, discretization, pest)
     end
-
 end
+
+# For internal use.
+"""
+    verify_decomposition_entropy_type(
+        definition::MultivariateInformationMeasure, 
+        est::Union{DiscreteInfoEstimator, DifferentialInfoEstimator}
+    )
+
+Check that we can actually decompose the `definition` into `est.definition`. The 
+default is to do nothing. Certain definitions  may override (e.g. `CMIRenyiJizba` does so).
+"""
+function verify_decomposition_entropy_type(
+        definition::MultivariateInformationMeasure, 
+        est::Union{DiscreteInfoEstimator, DifferentialInfoEstimator})
+end
+
 
 # ----------------------------------------------------------------------------------------
 # Custom pretty printing for discrete entropy estimators, since it has more field.
