@@ -20,7 +20,18 @@ est_disc = EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2));
 @test information(est_disc, x, z, y) isa Real
 
 # Test `TransferOperator` explicitly
-discretization = TransferOperator(RectangularBinning(2))
+discretization = TransferOperator(RectangularBinning(2, true))
 est_disc = EntropyDecomposition(def, PlugIn(Renyi()), discretization)
 @test information(est_disc, x, z) isa Real
 @test information(est_disc, x, z, y) isa Real
+
+
+
+# ---------------
+# Pretty printing
+# ---------------
+out_hdiff = repr(EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi())))
+out_hdisc = repr(EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2)))
+
+@test occursin("TEᵣⱼ(s → t | c) = hᵣ(t⁺, t⁻,c⁻) - hᵣ(t⁻,c⁻) - hᵣ(t⁺,s⁻,t⁻,c⁻) + hᵣ(s⁻,t⁻,c⁻)", out_hdiff)
+@test occursin("TEᵣⱼ(s → t | c) = Hᵣ(t⁺, t⁻,c⁻) - Hᵣ(t⁻,c⁻) - Hᵣ(t⁺,s⁻,t⁻,c⁻) + Hᵣ(s⁻,t⁻,c⁻)", out_hdisc)
