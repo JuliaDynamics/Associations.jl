@@ -19,6 +19,20 @@ are ignored. If `est` is a [`DiscreteInfoEstimator`](@ref), then `discretization
 probabilities estimator `pest` must also be provided (default to `RelativeAmount`, 
 which uses naive plug-in probabilities).
 
+## Discrete estimation and outcome spaces
+
+The following outcome spaces can be used for discretisation. Note that not all 
+outcome spaces will work with all measures.
+
+| Estimator                         | Principle                             | Note                             |
+| :-------------------------------- | :------------------------------------ | :------------------------------- |
+| [`UniqueElements`](@ref)          | Count of unique elements              |                                  |
+| [`ValueBinning`](@ref)            | Binning (histogram)                   |                                  |
+| [`OrdinalPatterns`](@ref)         | Ordinal patterns                      |                                  |
+| [`Dispersion`](@ref)              | Dispersion patterns                   |                                  |
+| [`CosineSimilarityBinning`](@ref) | Cosine similarities histogram         |                                  |
+| [`TransferOperator`](@ref)        | Transfer operator on rectangular bins | `binning.precise` must be `true` |
+
 ## Bias 
 
 Estimating the `definition` by decomposition into a combination of entropy terms,
