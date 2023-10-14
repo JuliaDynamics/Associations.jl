@@ -15,17 +15,6 @@ thus be estimated using [`DifferentialEntropyEstimator`](@ref)s.
 ComplexityMeasures.entropy
 ```
 
-## Definitions
-
-```@docs
-EntropyDefinition
-Shannon
-Renyi
-Tsallis
-Kaniadakis
-Curado
-StretchedExponential
-```
 
 ## [`DifferentialEntropyEstimator`](@ref)s
 
@@ -34,9 +23,6 @@ CausalityTools.jl reexports [`DifferentialEntropyEstimator`](@ref)s from
 Why? Any information-based measure that can be written as a function of differential entropies
 can be estimated using a [`DifferentialEntropyEstimator`](@ref)s. 
 
-```@docs
-DifferentialEntropyEstimator
-```
 
 ### Overview
 
@@ -58,48 +44,6 @@ For example, [`Kraskov`](@ref) estimates the [`Shannon`](@ref) entropy.
 | [`Gao`](@ref)                | Nearest neighbors |        ✓         |
 | [`Goria`](@ref)              | Nearest neighbors |        ✓         |
 | [`Lord`](@ref)               | Nearest neighbors |        ✓         |
-
-### [`Kraskov`](@ref)
-
-```@docs
-Kraskov
-```
-
-### [`KozachenkoLeonenko`](@ref)
-
-```@docs
-KozachenkoLeonenko
-```
-
-### [`Zhu`](@ref)
-
-```@docs
-Zhu
-```
-
-### [`ZhuSingh`](@ref)
-
-```@docs
-ZhuSingh
-```
-
-### [`Gao`](@ref)
-
-```@docs
-Gao
-```
-
-### [`Goria`](@ref)
-
-```@docs
-Goria
-```
-
-### [`Lord`](@ref)
-
-```@docs
-Lord
-```
 
 ## Utilities
 

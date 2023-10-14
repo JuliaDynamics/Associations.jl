@@ -13,55 +13,6 @@ The probabilities API is re-exported from [ComplexityMeasures.jl](https://github
 using some sort of [`ProbabilitiesEstimator`](@ref)s, because their formulas are simply functions
 of probability mass functions.
 
-## Probabilities
-
-```@docs
-ProbabilitiesEstimator
-probabilities
-probabilities!
-Probabilities
-```
-
-## Estimators
-
-### Overview
-
-Here, we list probabilities estimators that are compatible with CausalityTools.jl. Note that not
-all probabilities estimators from ComplexityMeasures.jl are included. This is because for
-the information-based association measures here, the probabilities estimator must be
-compatible with multivariate data, or have an implementation for [`marginal_encodings`](@ref),
-which discretizes each dimension of the multivariate input data separately.
-
-| Estimator                  | Principle                                         |
-| :------------------------- | :------------------------------------------------ |
-| [`Contingency`](@ref)      | Count co-occurrences, optionally discretize first |
-| [`UniqueElements`](@ref)   | Count of unique elements                          |
-| [`ValueBinning`](@ref)     | Binning (histogram)                               |
-| [`TransferOperator`](@ref) | Binning (transfer operator)                       |
-| [`NaiveKernel`](@ref)      | Kernel density estimation                         |
-| [`OrdinalPatterns`](@ref)  | Ordinal patterns                                  |
-| [`Dispersion`](@ref)       | Dispersion patterns                               |
-
-### Contingency
-
-```@docs
-Contingency
-```
-
-### Count occurrences
-
-```@docs
-UniqueElements
-```
-
-### Histograms (binning)
-
-```@docs
-ValueBinning
-RectangularBinning
-FixedRectangularBinning
-```
-
 ### Transfer operator (binning)
 
 ```@docs
@@ -77,18 +28,6 @@ For explicit estimation of the transfer operator, see
 InvariantMeasure
 invariantmeasure
 transfermatrix
-```
-
-### Symbolic permutations
-
-```@docs
-OrdinalPatterns
-```
-
-### Dispersion patterns
-
-```@docs
-Dispersion
 ```
 
 ### Kernel density

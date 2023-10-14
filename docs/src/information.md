@@ -125,8 +125,6 @@ TransferEntropyEstimator
 Zhu1
 ```
 
-
-
 ## [Convenience functions](@ref convenience_info)
 
 For commonly used names, we provide convenience functions. These are just simple 
@@ -139,9 +137,93 @@ mutualinfo
 condmutualinfo
 ```
 
-## Single-variable information API
+## Single-variable information API (from ComplexityMeasures.jl)
+
+Below we list some relevant types from
+[ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl) that 
+are used for the [`EntropyDecomposition`](@ref) estimator.
+
+### Entropies
 
 ```@docs
-
+Shannon
+Renyi
+Tsallis
 ```
 
+### Discrete information estimators
+
+```@docs
+DiscreteInfoEstimator
+PlugIn
+MillerMadow
+Schürmann
+GeneralizedSchürmann
+Jackknife
+HorvitzThompson
+ChaoShen
+```
+
+The discrete estimators take some form of discretization as input, commonly an
+[`OutcomeSpace`](@ref). There are many, many outcome spaces designed for single-variable
+information measures. Only a handful of them can be used for multi-variable information
+measures, and they are as follows:
+
+| Estimator                  | Principle                 |
+| :------------------------- | :------------------------ |
+| [`UniqueElements`](@ref)   | Count of unique elements  |
+| [`ValueBinning`](@ref)     | Binning (histogram)       |
+| [`TransferOperator`](@ref) | TODO                      |
+| [`OrdinalPatterns`](@ref)  | Ordinal patterns          |
+| [`Dispersion`](@ref)       | Dispersion patterns       |
+
+
+```@docs
+OutcomeSpace
+```
+
+#### Binning
+
+```@docs
+ValueBinning
+RectangularBinning
+FixedRectangularBinning
+```
+
+#### Ordinal patterns
+
+```@docs
+OrdinalPatterns
+```
+
+#### Dispersion
+
+```@docs
+Dispersion
+```
+
+#### Unique elements
+
+The [`UniqueElements`](@ref) outcome space is useful for categorical data.
+
+```@docs
+UniqueElements
+```
+
+### Differential information estimators
+
+```@docs
+DifferentialInfoEstimator
+Kraskov
+KozachenkoLeonenko
+Zhu
+ZhuSingh
+Gao
+Goria
+Lord
+LeonenkoProzantoSavani
+Vasicek
+AlizadehArghami
+Ebrahimi
+Correa
+```
