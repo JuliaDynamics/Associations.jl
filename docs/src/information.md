@@ -164,20 +164,6 @@ HorvitzThompson
 ChaoShen
 ```
 
-The discrete estimators take some form of discretization as input, commonly an
-[`OutcomeSpace`](@ref). There are many, many outcome spaces designed for single-variable
-information measures. Only a handful of them can be used for multi-variable information
-measures, and they are as follows:
-
-| Estimator                  | Principle                 |
-| :------------------------- | :------------------------ |
-| [`UniqueElements`](@ref)   | Count of unique elements  |
-| [`ValueBinning`](@ref)     | Binning (histogram)       |
-| [`TransferOperator`](@ref) | TODO                      |
-| [`OrdinalPatterns`](@ref)  | Ordinal patterns          |
-| [`Dispersion`](@ref)       | Dispersion patterns       |
-
-
 ```@docs
 OutcomeSpace
 ```
