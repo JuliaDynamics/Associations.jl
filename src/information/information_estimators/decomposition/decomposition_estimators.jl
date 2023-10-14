@@ -5,6 +5,11 @@ include("EntropyDecomposition.jl")
 include("MIDecomposition.jl")
 include("CMIDecomposition.jl")
 
+function decomposition_string(::SOURCE_DEF, ::DecompositionEstimator{<:TARGET_DEF}) where {SOURCE_DEF, TARGET_DEF}
+    #"Decomposition formula for $M not defined for $E"
+    "Not specified. Are you sure $SOURCE_DEF is the measure you want to decompose " * 
+    "into $TARGET_DEF?"
+end
 # ----------------------------------------------------------------------------------------
 # Pretty printing
 # ----------------------------------------------------------------------------------------
