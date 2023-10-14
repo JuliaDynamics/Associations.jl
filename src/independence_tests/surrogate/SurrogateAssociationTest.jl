@@ -65,11 +65,9 @@ Moreover, any valid estimator of the following measures may be used:
 | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |
 | [`CMIShannon`](@ref)                  |    ✖    |     ✓      |
 | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |
+| [`PMI`](@ref)                         |    ✖    |     ✓      |
 | [`TEShannon`](@ref)                   |    ✓    |     ✓      |
 | [`TERenyiJizba`](@ref)                |    ✓    |     ✓      |
-| [`PMI`](@ref)                         |    ✖    |     ✓      |
-
-
 
 ## Examples
 
@@ -143,7 +141,7 @@ function independence(test::SurrogateAssociationTest, x, args...)
     (; est_or_measure, rng, surrogate, nshuffles, show_progress) = test
     verify_number_of_inputs_vars(est_or_measure, 1+length(args))
     SSSets = map(w -> StateSpaceSet(w), args)
-    estimation = x -> estimate(est_or_measure, x, SSSets...)
+    estimation = x -> information(est_or_measure, x, SSSets...)
     progress = ProgressMeter.Progress(nshuffles;
         desc="SurrogateAssociationTest:", enabled=show_progress
     )
@@ -161,8 +159,9 @@ function independence(test::SurrogateAssociationTest, x, args...)
 end
 
 # Concrete implementations
+include("transferentropy.jl")
+
 # include("contingency.jl")
-# include("transferentropy.jl")
 # include("hlms_measure.jl")
 # include("crossmapping.jl")
 # include("pmi.jl")

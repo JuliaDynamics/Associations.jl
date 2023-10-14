@@ -23,6 +23,7 @@ const TSALLIS_MULTIVARIATE_MEASURES = Union{
 }
 
 const RENYI_MULTIVARIATE_MEASURES = Union{
+    TERenyiJizba,
     CMIRenyiPoczos, CMIRenyiSarbu, CMIRenyiJizba,
     MIRenyiJizba, MIRenyiSarbu,
     JointEntropyRenyi,
@@ -33,6 +34,7 @@ const SHANNON_MULTIVARIATE_MEASURES = Union{
     MIShannon,
     ConditionalEntropyShannon,
     JointEntropyShannon,
+    TEShannon,
 }
 
 

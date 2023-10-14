@@ -3,6 +3,8 @@ import ComplexityMeasures: TransferOperator, invariantmeasure, InvariantMeasure,
 using ComplexityMeasures.GroupSlices
 export TransferOperator
 
+using ComplexityMeasures: Probabilities
+
 """
 	marginal_indices(x)
 
@@ -60,8 +62,16 @@ function _marginal_encodings(encoder::RectangularBinEncoding, x::VectorOrStateSp
     return encodings
 end
 
-function transferentropy(est::EntropyDecomposition{<:TEShannon, <:DiscreteInfoEstimator{<:Shannon}, <:TransferOperator{<:RectangularBinning}}
-    x...)
+# Only works for `RelativeAmount`, because probabilities are obtained from the 
+# transfer operator.
+function h4_marginal_probs(
+        est::EntropyDecomposition{
+            <:TEShannon, 
+            <:DiscreteInfoEstimator{<:Shannon}, 
+            <:TransferOperator{<:RectangularBinning}, 
+            <:RelativeAmount},
+        x...
+    )
     joint_pts, vars, τs, js = te_embed(est.definition.embedding, x...)
     iv = invariantmeasure(joint_pts, est.discretization.binning)
 
@@ -69,26 +79,49 @@ function transferentropy(est::EntropyDecomposition{<:TEShannon, <:DiscreteInfoEs
     # need to do the conversion twice. We should explicitly store the bin indices for all
     # marginals, not a single encoding integer for each bin. Otherwise, we can't
     # properly subset marginals here and relate them to the approximated invariant measure.
-    # The bins visited by the orbit are
-    visited_bins_coordinates = StateSpaceSet(decode.(Ref(iv.to.encoder), iv.to.bins))
-    unique_visited_bins = _marginal_encodings(iv.to.encoder, visited_bins_coordinates)[1]
+    visited_bins_coordinates = StateSpaceSet(decode.(Ref(iv.to.encoding), iv.to.bins))
+    unique_visited_bins = _marginal_encodings(iv.to.encoding, visited_bins_coordinates)[1]
 
     # # The subset of visited bins with nonzero measure
     inds_non0measure = findall(iv.ρ .> 0)
     positive_measure_bins = unique_visited_bins[inds_non0measure]
 
     # Estimate marginal probability distributions from joint measure
-    cols_ST = [vars.S; vars.T; vars.C]
-    cols_TTf = [vars.Tf; vars.T; vars.C]
-    cols_T = [vars.T; vars.C]
-    p_T  = marginal_probs_from_μ(cols_T, positive_measure_bins, iv, inds_non0measure)
-    p_ST = marginal_probs_from_μ(cols_ST, positive_measure_bins, iv, inds_non0measure)
-    p_TTf = marginal_probs_from_μ(cols_TTf, positive_measure_bins, iv, inds_non0measure)
-    p_joint = iv.ρ[inds_non0measure]
+    cols_STC = [vars.S; vars.T; vars.C]
+    cols_T⁺TC = [vars.Tf; vars.T; vars.C]
+    cols_TC = [vars.T; vars.C]
+    pTC  = marginal_probs_from_μ(cols_TC, positive_measure_bins, iv, inds_non0measure)
+    pSTC = marginal_probs_from_μ(cols_STC, positive_measure_bins, iv, inds_non0measure)
+    pT⁺TC = marginal_probs_from_μ(cols_T⁺TC, positive_measure_bins, iv, inds_non0measure)
+    pST⁺TC = iv.ρ[inds_non0measure]
 
-    # TODO: use new syntax.
-    te = entropy(e, Probabilities(p_ST)) +
-        entropy(e, Probabilities(p_TTf)) -
-        entropy(e, Probabilities(p_T)) -
-        entropy(e, Probabilities(p_joint))
+    return Probabilities(pTC), 
+        Probabilities(pSTC), 
+        Probabilities(pT⁺TC), 
+        Probabilities(pST⁺TC)
+end
+
+function information(
+        est::EntropyDecomposition{
+            <:TEShannon, 
+            <:DiscreteInfoEstimator{<:Shannon}, 
+            <:TransferOperator{<:RectangularBinning}, 
+            <:RelativeAmount,
+        },
+        x...)
+    # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
+    # StateSpaceSet. The horizontal concatenation of C with T then just returns T.
+    # We therefore don't need separate methods for the conditional and non-conditional
+    # cases.
+    pTC, pSTC, pT⁺TC, pST⁺TC = h4_marginal_probs(est, x...)
+    cmi_est = convert_to_cmi_estimator(est)
+    h_est = estimator_with_overridden_parameters(cmi_est.definition, cmi_est.est)
+
+    # Estimate by letting TE(s -> t | c) := I(t⁺; s⁻ | t⁻, c⁻).
+    hSTC =  information(h_est, pSTC)
+    hT⁺TC = information(h_est, pT⁺TC)
+    hTC = information(h_est, pTC)
+    hST⁺TC = information(h_est, pST⁺TC)
+    te = hT⁺TC - hTC - hST⁺TC + hSTC
+    return te 
 end

@@ -13,7 +13,8 @@ max_inputs_vars(::TransferEntropy) = 3
 is_directed(m::TransferEntropy) = true
 
 include("embedding.jl")
-include("utils.jl")
+include("utils/utils.jl")
+include("utils/OptimiseTraditional.jl")
 
 # If the estimator is not a dedicated `TransferEntropyEstimator`, then we need to 
 # convert the estimator to a conditional mutual information estimator.
@@ -29,6 +30,7 @@ function information(est::MultivariateInformationMeasureEstimator{<:TransferEntr
     # Estimate by letting TE(s -> t | c) := I(t⁺; s⁻ | t⁻, c⁻). 
     return information(cmi_est, T⁺, S, StateSpaceSet(T, C))
 end
+
 
 function individual_marginals_te(emb::EmbeddingTE, x::AbstractVector...)
     joint, vars, τs, js = te_embed(emb, x...)
@@ -52,4 +54,6 @@ end
 include("TEShannon.jl")
 include("TERenyiJizba.jl")
 
-#teest_to_cmiest(definition::TERenyiJizba) = CMIRenyiJizba(definition.e)
+
+# Special estimation
+include("transferoperator.jl")
