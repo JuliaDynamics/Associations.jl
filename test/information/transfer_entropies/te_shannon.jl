@@ -31,6 +31,10 @@ est_zhu = Zhu1(def, k = 3)
 @test information(est_zhu, x, z) isa Real
 @test information(est_zhu, x, z, y) isa Real
 
+est_lindner = Lindner(def, k = 3)
+@test information(est_lindner, x, z) isa Real
+@test information(est_lindner, x, z, y) isa Real
+
 
 # Test `TransferOperator` explicitly
 discretization = TransferOperator(RectangularBinning(2, true))
@@ -50,5 +54,5 @@ out_hdisc = repr(EntropyDecomposition(def, PlugIn(Shannon()), ValueBinning(2)))
 
 @test occursin("TEₛ(s → t | c) = Iₛ(t⁺; s⁻ | t⁻, c⁻)", out_cmi)
 @test occursin("TEₛ(s → t | c) = Iₛ(t⁺; s⁻, t⁻, c⁻) - Iₛ(t⁺; t⁻, c⁻)", out_mi)
-@test occursin("TEₛ(s → t | c) = hₛ(t⁺, t⁻,c⁻) - hₛ(t⁻,c⁻) - hₛ(t⁺,s⁻,t⁻,c⁻) + hₛ(s⁻,t⁻,c⁻)", out_hdisc)
-@test occursin("TEₛ(s → t | c) = Hₛ(t⁺, t⁻,c⁻) - Hₛ(t⁻,c⁻) - Hₛ(t⁺,s⁻,t⁻,c⁻) + Hₛ(s⁻,t⁻,c⁻)", out_hdiff)
+@test occursin("TEₛ(s → t | c) = hₛ(t⁺, t⁻,c⁻) - hₛ(t⁻,c⁻) - hₛ(t⁺,s⁻,t⁻,c⁻) + hₛ(s⁻,t⁻,c⁻)", out_hdiff)
+@test occursin("TEₛ(s → t | c) = Hₛ(t⁺, t⁻,c⁻) - Hₛ(t⁻,c⁻) - Hₛ(t⁺,s⁻,t⁻,c⁻) + Hₛ(s⁻,t⁻,c⁻)", out_hdisc)
