@@ -25,3 +25,7 @@ est_mi = MIDecomposition(TEShannon(), KSG1())
 est_cmi = CMIDecomposition(TEShannon(), FPVP())
 @test information(est_cmi, x, z) isa Real
 @test information(est_cmi, x, z, y) isa Real
+
+est_zhu = Zhu1(TEShannon(), k = 3)
+@test information(est_zhu, x, z) isa Real
+@test information(est_zhu, x, z, y) isa Real
