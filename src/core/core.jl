@@ -6,8 +6,18 @@ const ENTROPY_ESTS = Union{DifferentialInfoEstimator, DiscreteInfoEstimator}
 
 export AssociationMeasure
 export DirectedAssociationMeasure
+export Discretization
+# The type parameter `N` indicates the number of input datasets to be discretized.
+"""
+    Discretization
 
-""" A discretization of `N` input datasets. """
+The supertype of all discretization schemes.
+
+## Concrete implementations
+
+- [`CodifyVariables`](@ref)
+- [`CodifyPoints`](@ref)
+"""
 abstract type Discretization{N} end
 
 # Any non-bivariate association measures must implement:
