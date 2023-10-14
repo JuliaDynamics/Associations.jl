@@ -95,7 +95,6 @@ end
 # ---------------------------------
 # Avoid some common errors
 # ---------------------------------
-const ENTROPY_ESTS = Union{DifferentialInfoEstimator, DiscreteInfoEstimator}
 function verify_decomposition_entropy_type(definition::CMIRenyiJizba, est::ENTROPY_ESTS)
     if !(est.definition isa Renyi)
         T = typeof(est.definition).name.name
