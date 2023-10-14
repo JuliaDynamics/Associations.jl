@@ -1,0 +1,71 @@
+# This example no longer works because we moved the example systems out.
+
+#### Longer example: AR1-system and unidirectionally coupled logistic maps
+
+In this example we generate realizations of two different systems where we know the strength of coupling between the variables. Our aim is to compute Shannon mutual information $I^S(X; Y)$ ([`MIShannon`](@ref)) between time series of each variable and assess how the magnitude of $I^S(X; Y)$ changes as we change the strength of coupling between $X$ and $Y$. We'll use two systems that ship with CausalityTools.jl:
+
+* A stochastic system consisting of two unidirectionally coupled first-order autoregressive processes ([`ar1_unidir`](@ref))
+* A deterministic, chaotic system consisting of two unidirectionally coupled logistic maps ([`logistic2_unidir`](@ref))
+
+We use the default input parameter values (see [`AR1Unidir`](@ref) and [`Logistic2Unidir`](@ref) for details) and below we toggle only the random initial conditions and the coupling strength parameter `c_xy`. For each value of `c_xy` we generate 1,000 unique realizations of the system and obtain 500-point time series of the coupled variables.
+
+To estimate the mutual information, we use the binning-based [`ValueBinning`](@ref) estimator. We summarize the distribution of $I(X; Y)$ values across all realizations using the median and quantiles encompassing 95 % of the values.
+
+```@example
+using CausalityTools
+using Statistics
+using CairoMakie
+
+# Span a range of x-y coupling strengths
+c = 0.0:0.1:1.0
+
+# Number of observations in each time series
+npts = 500
+
+# Number of unique realizations of each system
+n_realizations = 1000
+
+# Get MI for multiple realizations of two systems, 
+# saving three quantiles for each c value
+mi = zeros(length(c), 3, 2)
+
+# Define an estimator for MI
+discretization = ValueBinning(RectangularBinning(4))
+est = EntropyDecomposition(MIShannon(), discretization)
+
+for i in 1 : length(c)
+    tmp = zeros(n_realizations, 2)
+    
+    for k in 1 : n_realizations
+        
+        # Obtain time series realizations of the two 2D systems 
+        # for a given coupling strength and random initial conditions
+        s_logistic = system(Logistic2Unidir(; xi = rand(2), c_xy = c[i]))
+        s_ar = system(AR1Unidir(xi = rand(2), c_xy = c[i]))
+        lmap = first(trajectory(s_logistic, npts - 1, Ttr = 500))
+        ar1 = first(trajectory(s_ar, npts - 1))
+        
+        # Compute the MI between the two coupled components of each system
+        tmp[k, 1] = mutualinfo(est, lmap[:, 1], lmap[:, 2])
+        tmp[k, 2] = mutualinfo(est, ar1[:, 1], ar1[:, 2])
+    end
+    
+    # Compute lower, middle, and upper quantiles of MI for each coupling strength
+    mi[i, :, 1] = quantile(tmp[:, 1], [0.025, 0.5, 0.975])
+    mi[i, :, 2] = quantile(tmp[:, 2], [0.025, 0.5, 0.975])
+end
+
+# Plot distribution of MI values as a function of coupling strength for both systems
+fig = with_theme(theme_minimal()) do
+    fig = Figure()
+    ax = Axis(fig[1, 1], xlabel = "Coupling strength", ylabel = "Mutual information")
+    band!(ax, c, mi[:, 1, 1], mi[:, 3, 1], color = (:black, 0.3))
+    lines!(ax, c, mi[:, 2, 1], label = "2D chaotic logistic maps", color = :black)
+    band!(ax, c, mi[:, 1, 2], mi[:, 3, 2], color = (:red, 0.3))
+    lines!(ax, c, mi[:, 2, 2],  label = "2D order-1 autoregressive", color = :red)
+    return fig
+end
+fig
+```
+
+As expected, $I(X; Y)$ increases with coupling strength in a system-specific manner.

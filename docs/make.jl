@@ -12,6 +12,9 @@ using StateSpaceSets
 pages = [
     "Overview" => "index.md",
     "Information API" => "information.md",
+    "Examples" => [
+        "Estimating multivariate information measures" => "examples/estimating_infomeasures.md",
+    ],
     "Tutorials" => [
         "Intro to information measures" => "info_tutorial.md",
     ],
