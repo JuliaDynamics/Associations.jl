@@ -39,7 +39,7 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-condmutualinfo(FPVP(k = 5), x, z, y) # defaults to `CMIShannon()`
+information(FPVP(k = 5), x, z, y) # defaults to `CMIShannon()`
 ```
 
 #### [`CMIShannon`](@ref) with [`MesnerShalizi`](@ref)
@@ -59,7 +59,7 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-condmutualinfo(MesnerShalizi(k = 10), x, z, y) # defaults to `CMIShannon()`
+information(MesnerShalizi(; k = 10), x, z, y) # defaults to `CMIShannon()`
 ```
 
 #### [`CMIShannon`](@ref) with [`Rahimzamani`](@ref)
@@ -79,7 +79,7 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-condmutualinfo(CMIShannon(base = 10), Rahimzamani(k = 10), x, z, y)
+condmutualinfo(Rahimzamani(CMIShannon(base = 10); k = 10), x, z, y)
 ```
 
 #### [`CMIRenyiPoczos`](@ref) with [`PoczosSchneiderCMI`](@ref)
@@ -99,7 +99,8 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-condmutualinfo(CMIRenyiPoczos(base = 2, q = 1.2), PoczosSchneiderCMI(k = 5), x, z, y)
+est = PoczosSchneiderCMI(CMIRenyiPoczos(base = 2, q = 1.2); k = 5)
+condmutualinfo(est, x, z, y)
 ```
 
 ### Estimation using [`MutualInformationEstimator`](@ref)s
@@ -126,7 +127,8 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-condmutualinfo(CMIShannon(base = 2), KSG1(k = 5), x, z, y)
+est = MIDecomposition(CMIShannon(base = 2), KSG1(k = 10))
+condmutualinfo(est, x, z, y)
 ```
 
 ### Estimation using [`DifferentialEntropyEstimator`](@ref)s
@@ -146,7 +148,8 @@ n = 1000
 x = rand(Epanechnikov(0.5, 1.0), n)
 y = rand(Erlang(1), n) .+ x
 z = rand(FDist(5, 2), n)
-condmutualinfo(CMIShannon(), Kraskov(k = 5), x, z, y)
+est = EntropyDecomposition(CMIShannon(), Kraskov(k = 5))
+condmutualinfo(est, x, z, y)
 ```
 
 ### Estimation using [`ProbabilitiesEstimator`](@ref)s
@@ -166,6 +169,8 @@ n = 1000
 x = rand(Epanechnikov(0.5, 1.0), n)
 y = rand(Erlang(1), n) .+ x
 z = rand(FDist(5, 2), n)
-est = ValueBinning(RectangularBinning(5))
-condmutualinfo(CMIShannon(), est, x, z, y), condmutualinfo(CMIShannon(), est, x, y, z)
+discretization = ValueBinning(RectangularBinning(5))
+hest = PlugIn(Shannon())
+est = EntropyDecomposition(CMIShannon(), hest, discretization)
+condmutualinfo(est, x, y, z)
 ```
