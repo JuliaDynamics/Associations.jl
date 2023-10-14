@@ -13,16 +13,21 @@ def = CMIShannon()
 @test_throws ArgumentError EntropyDecomposition(def, PlugIn(Renyi()), OrdinalPatterns(m=2), RelativeAmount())
 
 # ---------------------------------------------------------------------------------------
-# Here we test all the possible "generic" ways of estimating `CMIShannon`.
-# Measure-specific tests are in the dedicated estimator test files, e.g. `FPVP.jl`.
+# Test all possible ways of estimating `CMIShannon`.
 # ---------------------------------------------------------------------------------------
-# Categorical variables work for `JointProbabilities`
+
+# ::::::::::::::::::::::::
+# PMF
+# ::::::::::::::::::::::::
 x = rand(["a", "b", "c"], 50)
 y = rand(["hello", "yoyo", "heyhey"], 50)
 z = rand([1, 2, 5], 50)
 est = JointProbabilities(def, UniqueElements())
 @test information(est, x, y, z) ≥ 0
 
+# ::::::::::::::::::::::::
+# Decomposition estimators
+# ::::::::::::::::::::::::
 x = randn(rng, 50)
 y = randn(rng, 50)
 z = randn(rng, 50)
@@ -34,6 +39,28 @@ est_disc = EntropyDecomposition(def, PlugIn(Shannon()), ValueBinning(2));
 
 est_mi = MIDecomposition(def, KSG1())
 @test information(est_mi, x, z, y) isa Real
+
+
+# ::::::::::::::::::::::::
+# Dedicated estimators
+# ::::::::::::::::::::::::
+# On vector-valued inputs
+def = CMIShannon()
+x, y, z = rand(rng, 100), rand(rng, 100), rand(rng, 100);
+@test information(MesnerShalizi(def, k = 2), x, y, z) isa Real
+@test information(FPVP(def, k = 2), x, y, z) isa Real
+@test information(Rahimzamani(def, k = 2), x, y, z) isa Real
+@test information(GaussianCMI(def), x, y, z) isa Real
+
+# On `StateSpaceSet`s
+data = [rand(rng, 50, 2) for i = 1:3]
+x, y, z = StateSpaceSet.(data)
+def = CMIShannon()
+@test information(MesnerShalizi(def, k = 2), x, y, z) isa Real
+@test information(FPVP(def, k = 2), x, y, z) isa Real
+@test information(Rahimzamani(def, k = 2), x, y, z) isa Real
+@test information(GaussianCMI(def), x, y, z) isa Real
+
 
 # ---------------
 # Pretty printing

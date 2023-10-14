@@ -1,11 +1,37 @@
 using Test
 using CausalityTools
+using Random
+rng = MersenneTwister(1234)
 
-# Double-sum estimation.
-x = rand(["a", "b", "c"], 200)
-y = rand(["hello", "yoyo", "heyhey"], 200)
+def = MIRenyiJizba(q = 0.5)
 
-# The estimation of probabilities is decoupled from the estimation of the mutual info.
-# We could in principle use any probabilities estimator here, but we default to `RelativeAmount`.
-p = probabilities(x, y) 
-@test information(MIRenyiJizba(), p) isa Real # we don't have any better analytical numbers here.
+# ---------------------------------------------------------------------------------------
+# Test all possible ways of estimating `MIRenyiJizba`.
+# ---------------------------------------------------------------------------------------
+# ::::::::::::::::::::::::
+# PMF
+# ::::::::::::::::::::::::
+x = rand(rng, ["a", "b", "c"], 200);
+y = rand(rng, ["hello", "yoyo", "heyhey"], 200);
+est = JointProbabilities(def, UniqueElements())
+@test information(est, x, y) ≥ 0
+
+# ::::::::::::::::::::::::
+# Decomposition estimators
+# ::::::::::::::::::::::::
+x = randn(rng, 50);
+y = randn(rng, 50);
+est_diff = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k=3))
+@test information(est_diff, x, y) isa Real
+
+est_disc = EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2));
+@test information(est_disc, x, y) isa Real
+
+# ---------------
+# Pretty printing
+# ---------------
+def = MIRenyiJizba()
+out_hdiff = repr(EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi())))
+out_hdisc = repr(EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2)))
+@test occursin("Iᵣⱼ(X, Y) = Hᵣ(X) + Hᵣ(Y) - Hᵣ(X, Y)", out_hdisc)
+@test occursin("Iᵣⱼ(X, Y) = hᵣ(X) + hᵣ(Y) - hᵣ(X, Y)", out_hdiff)

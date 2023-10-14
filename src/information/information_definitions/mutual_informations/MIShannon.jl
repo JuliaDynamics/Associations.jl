@@ -111,14 +111,14 @@ end
 # ------------------------------------------------
 function decomposition_string(
         definition::MIShannon, 
-        est::EntropyDecomposition{M, <:DifferentialInfoEstimator}
-    ) where M
-    return "MI_S(X, Y) = H_S(X) + H_S(Y) - H_S(X, Y)";
+        est::EntropyDecomposition{<:MIShannon, <:DifferentialInfoEstimator{<:Shannon}}
+    )
+    return "Iₛ(X, Y) = hₛ(X) + hₛ(Y) - hₛ(X, Y)";
 end
 
 function decomposition_string(
         definition::MIShannon, 
-        est::EntropyDecomposition{M, <:DiscreteInfoEstimator}
-    ) where M
-    return "MI_S(X, Y) = h_S(X) + h_S(Y) - h_S(X, Y)";
+        est::EntropyDecomposition{<:MIShannon, <:DiscreteInfoEstimator{<:Shannon}}
+    )
+    return "Iₛ(X, Y) = Hₛ(X) + Hₛ(Y) - Hₛ(X, Y)";
 end
