@@ -11,6 +11,7 @@ using StateSpaceSets
 
 pages = [
     "Overview" => "index.md",
+    "Core" => "core.md",
     "Information API" => "information.md",
     "Examples" => [
         "Estimating multivariate information measures" => "examples/estimating_infomeasures.md",
