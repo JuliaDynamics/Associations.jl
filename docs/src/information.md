@@ -92,6 +92,7 @@ TERenyiJizba
 JointProbabilities
 EntropyDecomposition
 MIDecomposition
+CMIDecomposition
 ```
 
 ### Mutual information estimators
