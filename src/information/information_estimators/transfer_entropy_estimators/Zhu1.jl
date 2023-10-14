@@ -26,6 +26,48 @@ This estimator is an extension to the entropy estimator in [Singh2003](@citet).
 `w` is the Theiler window, which determines if temporal neighbors are excluded
 during neighbor searches (defaults to `0`, meaning that only the point itself is excluded
 when searching for neighbours).
+
+
+## Description
+
+For a given points in the joint embedding space `jᵢ`, this estimator first computes the
+distance `dᵢ` from `jᵢ` to its `k`-th nearest neighbor. Then, for each point `mₖ[i]` in
+the `k`-th marginal space, it counts the number of points within radius `dᵢ`.
+
+The Shannon transfer entropy is then computed as
+
+```math
+TE_S(X \\to Y) =
+\\psi(k) + \\dfrac{1}{N} \\sum_{i}^n
+\\left[
+    \\sum_{k=1}^3 \\left( \\psi(m_k[i] + 1) \\right)
+\\right],
+```
+
+where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
+neighbor searches are performed. Here this estimator has been modified to allow for 
+conditioning too (a simple modification to [Lindner2011](@citet)'s equation 5 and 6). 
+
+
+## Usage
+
+- [`information`](@ref)`(est::Zhu1, x, y, z)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000) .+ x
+z = rand(rng, 10000) .+ y
+est = Zhu1(TEShannon(), k = 10)
+information(est, x, z, y) # should be near 0 (and can be negative)
+```
+
+## Compatible definitions
+
+- [`TEShannon`](@ref)
 """
 struct Zhu1{M} <: TransferEntropyEstimator{M}
     definition::M

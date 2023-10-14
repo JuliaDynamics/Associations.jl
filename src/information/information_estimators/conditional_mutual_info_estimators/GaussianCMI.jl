@@ -3,9 +3,9 @@ using StateSpaceSets: StateSpaceSet
 
 """
     GaussianCMI <: MutualInformationEstimator
-    GaussianCMI(; normalize::Bool = false)
+    GaussianCMI(definition = CMIShannon(); normalize::Bool = false)
 
-`GaussianCMI` is a parametric estimator for Shannon conditional mutual information (CMI)
+`GaussianCMI` is a parametric [`ConditionalMutualInformationEstimator`](@ref) 
 [Vejmelka2008](@cite).
 
 ## Description
@@ -30,8 +30,12 @@ using Random; rng = MersenneTwister(1234)
 x = rand(rng, 10000)
 y = rand(rng, 10000) .+ x
 z = rand(rng, 10000) .+ y
-information(GaussianCMI(), x, z, y) # should be near 0 (and can be negative)
+information(GaussianCMI(CMIShannon(base = 2)), x, z, y)
 ```
+
+## Compatible definitions
+
+- [`CMIShannon`](@ref)
 """
 struct GaussianCMI{M <: ConditionalMutualInformation} <: ConditionalMutualInformationEstimator{M}
     definition::M

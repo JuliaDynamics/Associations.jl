@@ -47,8 +47,23 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
     there will be slight differences between the methods. See the source code for more
     details.
 
+## Usage
 
-See also: [`mutualinfo`](@ref).
+- [`information`](@ref)`(est::GaoKannanOhViswanath, x, y)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000)
+information(GaoKannanOhViswanath(; k = 10), x, y) # should be near 0 (and can be negative)
+```
+
+## Compatible definitions
+
+- [`MIShannon`](@ref)
 """
 struct GaoKannanOhViswanath{M <: MutualInformation} <: MutualInformationEstimator{M}
     definition::M

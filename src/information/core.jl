@@ -27,8 +27,8 @@ The supertype for all multivariate information measures.
 
 [`MutualInformationEstimator`](@ref)s:
 
-- [`KSG1`](@ref)
-- [`KSG2`](@ref)
+- [`KraskovStögbauerGrassberger1`](@ref)
+- [`KraskovStögbauerGrassberger2`](@ref)
 - [`GaoOhViswanath`](@ref)
 - [`GaoKannanOhViswanath`](@ref)
 - [`GaussianMI`](@ref)

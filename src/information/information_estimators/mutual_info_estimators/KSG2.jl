@@ -43,7 +43,7 @@ are a distance less than ``\\epsilon_i`` away from ``\\bf{x}_i^m``. That is, we 
 distance from a query point ``\\bf{x}_i \\in X`` (in the *joint* space) to count neighbors of
 ``x_i^m \\in \\bf{X}_m`` (in the marginal space).
 
-Mutual information between the variables ``\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m`` is
+Shannon mutual information between the variables ``\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m`` is
 then estimated as
 
 ```math
@@ -53,6 +53,24 @@ then estimated as
     (m - 1)\\psi{(N)} -
     \\dfrac{1}{N} \\sum_{i = 1}^N \\sum_{j = 1}^m \\psi{(\\theta_i^j + 1)}
 ```
+
+## Usage
+
+- [`information`](@ref)`(est::KSG2, x, y)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000)
+information(KSG2(; k = 10), x, y) # should be near 0 (and can be negative)
+```
+
+## Compatible definitions
+
+- [`MIShannon`](@ref)
 """
 struct KraskovStögbauerGrassberger2{M <: MutualInformation, MJ, MM} <: MutualInformationEstimator{M}
     definition::M # the definition of the measure

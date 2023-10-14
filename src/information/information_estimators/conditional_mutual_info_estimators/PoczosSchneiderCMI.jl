@@ -6,8 +6,9 @@ export PoczosSchneiderCMI
     PoczosSchneiderCMI <: ConditionalMutualInformationEstimator
     PoczosSchneiderCMI(definition = CMIRenyiPoczos(); k = 1, w = 0)
 
-The `PoczosSchneiderCMI` estimator computes various (differential) conditional
-mutual informations, using a `k`-th nearest neighbor approach [Poczos2012](@cite).
+The `PoczosSchneiderCMI` [`ConditionalMutualInformationEstimator`](@ref) 
+computes conditional mutual informations using a `k`-th nearest neighbor approach
+[Poczos2012](@cite).
 
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
 number of temporal neighbors that are excluded during neighbor searches.
@@ -27,6 +28,10 @@ z = rand(rng, 10000) .+ y
 est = PoczosSchneiderCMI(CMIRenyiPoczos(), k = 10)
 information(est, x, z, y) # should be near 0 (and can be negative)
 ```
+
+## Compatible definitions
+
+- [`CMIRenyiPoczos`](@ref)
 """
 struct PoczosSchneiderCMI{M <: ConditionalMutualInformation, ME} <: ConditionalMutualInformationEstimator{M}
     definition::M

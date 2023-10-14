@@ -23,10 +23,10 @@ For a given points in the joint embedding space `jᵢ`, this estimator first com
 distance `dᵢ` from `jᵢ` to its `k`-th nearest neighbor. Then, for each point `mₖ[i]` in
 the `k`-th marginal space, it counts the number of points within radius `dᵢ`.
 
-The transfer entropy is then computed as
+The Shannon transfer entropy is then computed as
 
 ```math
-TE(X \\to Y) =
+TE_S(X \\to Y) =
 \\psi(k) + \\dfrac{1}{N} \\sum_{i}^n
 \\left[
     \\sum_{k=1}^3 \\left( \\psi(m_k[i] + 1) \\right)
@@ -36,6 +36,27 @@ TE(X \\to Y) =
 where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
 neighbor searches are performed. Here this estimator has been modified to allow for 
 conditioning too (a simple modification to [Lindner2011](@citet)'s equation 5 and 6). 
+
+
+## Usage
+
+- [`information`](@ref)`(est::Lindner, x, y, z)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000) .+ x
+z = rand(rng, 10000) .+ y
+est = Lindner(TEShannon(), k = 10)
+information(est, x, z, y) # should be near 0 (and can be negative)
+```
+
+## Compatible definitions
+
+- [`TEShannon`](@ref)
 """
 struct Lindner{E} <: TransferEntropyEstimator{E}
     definition::E

@@ -49,6 +49,25 @@ If `normalize == true`, then the mutual information is estimated as
 ```
 
 where ``\\sigma_i`` are the eigenvalues for ``\\Sigma``.
+
+
+## Usage
+
+- [`information`](@ref)`(est::GaussianMI, x, y)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000)
+information(GaussianMI(), x, y) # should be near 0 (and can be negative)
+```
+
+## Compatible definitions
+
+- [`MIShannon`](@ref)
 """
 struct GaussianMI{M <: MutualInformation} <: MutualInformationEstimator{M}
     definition::M

@@ -6,6 +6,13 @@ using DelayEmbeddings: dimension
 using Statistics: mean
 export KraskovStögbauerGrassberger1, KSG1
 
+# TODO: finish description
+# ## Description
+
+# Let the joint StateSpaceSet ``X := \\{\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m \\}`` be defined by the
+# concatenation of the marginal StateSpaceSets ``\\{ \\bf{X}_k \\}_{k=1}^m``, where each ``\\bf{X}_k``
+# is potentially multivariate. Let ``\\bf{x}_1, \\bf{x}_2, \\ldots, \\bf{x}_N`` be the points
+# in the joint space ``X``.
 """
     KSG1 <: MutualInformationEstimator
     KraskovStögbauerGrassberger1 <: MutualInformationEstimator
@@ -25,12 +32,23 @@ short) is the ``I^{(1)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@
     during neighbor searches in the joint space. Defaults to `0`, meaning that only the
     point itself is excluded.
 
-## Description
+## Usage
 
-Let the joint StateSpaceSet ``X := \\{\\bf{X}_1, \\bf{X_2}, \\ldots, \\bf{X}_m \\}`` be defined by the
-concatenation of the marginal StateSpaceSets ``\\{ \\bf{X}_k \\}_{k=1}^m``, where each ``\\bf{X}_k``
-is potentially multivariate. Let ``\\bf{x}_1, \\bf{x}_2, \\ldots, \\bf{x}_N`` be the points
-in the joint space ``X``.
+- [`information`](@ref)`(est::KSG1, x, y)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000)
+information(KSG1(; k = 10), x, y) # should be near 0 (and can be negative)
+```
+
+## Compatible definitions
+
+- [`MIShannon`](@ref)
 """
 struct KraskovStögbauerGrassberger1{M <: MutualInformation, MJ, MM} <: MutualInformationEstimator{M}
     definition::M # the definition of the measure
