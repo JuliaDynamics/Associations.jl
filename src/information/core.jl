@@ -16,16 +16,35 @@ export ConditionalMutualInformationEstimator
 
 The supertype for all multivariate information measures.
 
-## Concrete subtypes
+## Generic implementations
 
 - [`JointProbababilities`](@ref)
 - [`EntropyDecomposition`](@ref)
 - [`MIDecomposition`](@ref)
+- [`CMIDecomposition`](@ref)
 
-## Abstract subtypes
+## Dedicated implementations
 
-- [`MutualInformationEstimator`](@ref)
-- [`ConditionalMutualInformationEstimator`](@ref)
+[`MutualInformationEstimator`](@ref)s:
+
+- [`KSG1`](@ref)
+- [`KSG2`](@ref)
+- [`GaoOhViswanath`](@ref)
+- [`GaoKannanOhViswanath`](@ref)
+- [`GaussianMI`](@ref)
+
+[`ConditionalMutualInformationEstimator`](@ref)s:
+
+- [`FPVP`](@ref)
+- [`MesnerShalizi`](@ref)
+- [`Rahimzamani`](@ref)
+- [`PoczosSchneiderCMI`](@ref)
+- [`GaussianCMI`](@ref)
+
+[`TransferEntropyEstimator`](@ref)s:
+
+- [`Zhu1`](@ref)
+- [`Lindner`](@ref)
 """
 abstract type MultivariateInformationMeasureEstimator{M} <: InformationMeasureEstimator{M} end
 abstract type BivariateInformationMeasureEstimator{M} <: MultivariateInformationMeasureEstimator{M} end
@@ -67,11 +86,47 @@ The supertype for all multivariate information-based measure definitions.
 
 ## Implementations
 
-- [`JointEntropy`](@ref) (its concrete subtypes)
-- [`ConditionalEntropy`](@ref) (its concrete subtypes)
-- [`MutualInformation`](@ref) (its concrete subtypes)
-- [`ConditionalMutualInformation`](@ref) (its concrete subtypes)
-- [`TransferEntropy`](@ref) (its concrete subtypes)
+[`JointEntropy`](@ref) definitions:
+
+- [`JointEntropyShannon`](@ref)
+- [`JointEntropyRenyi`](@ref)
+- [`JointEntropyTsallis`](@ref)
+
+[`ConditionalEntropy`](@ref) definitions:
+
+- [`ConditionalEntropyShannon`](@ref)
+- [`ConditionalEntropyShannon`](@ref)
+
+[`DivergenceOrDistance`](@ref) definitions:
+
+- [`HellingerDistance`](@ref)
+- [`KLDivergence`](@ref)
+- [`RenyiDivergence`](@ref)
+- [`VariationDistance`](@ref)
+
+[`MutualInformation`](@ref) definitions:
+
+- [`MIShannon`](@ref)
+- [`MIRenyiJizba`](@ref)
+- [`MIRenyiMartin`](@ref)
+- [`MITsallisAbe`](@ref)
+- [`MITsallisFuruchi`](@ref)
+
+[`ConditionalMutualInformation`](@ref) definitions:
+
+- [`CMIShannon`](@ref)
+- [`CMITsallis`](@ref)
+- [`CMIRenyiJizba`](@ref)
+- [`CMIRenyiPoczos`](@ref)
+- [`CMIRenyiSarbu`](@ref)
+
+[`TransferEntropy`](@ref) definitions:
+
+- [`TEShannon`](@ref)
+- [`TERenyiJizba`](@ref)
+
+Other definitions:
+
 - [`PartialMutualInformation`](@ref)
 """
 abstract type MultivariateInformationMeasure <: AssociationMeasure end

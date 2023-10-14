@@ -4,16 +4,29 @@ using SpecialFunctions: gamma
 export PoczosSchneiderCMI
 """
     PoczosSchneiderCMI <: ConditionalMutualInformationEstimator
-    PoczosSchneiderCMI(definition = CMIRenyiPoczos(), k = 1, w = 0)
+    PoczosSchneiderCMI(definition = CMIRenyiPoczos(); k = 1, w = 0)
 
 The `PoczosSchneiderCMI` estimator computes various (differential) conditional
-mutual informations, using a `k`-th nearest neighbor approach (Póczos & Schneider,
-2012)[^Póczos2012].
+mutual informations, using a `k`-th nearest neighbor approach [Poczos2012](@cite).
 
-[^Póczos2012]:
-    Póczos, B., & Schneider, J. (2012, March). Nonparametric estimation of conditional
-    information and divergences. In Artificial Intelligence and Statistics (pp. 914-923).
-    PMLR.
+`k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
+number of temporal neighbors that are excluded during neighbor searches.
+
+## Usage
+
+- [`information`](@ref)`(est::PoczosSchneiderCMI, x, y, z)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000) .+ x
+z = rand(rng, 10000) .+ y
+est = PoczosSchneiderCMI(CMIRenyiPoczos(), k = 10)
+information(est, x, z, y) # should be near 0 (and can be negative)
+```
 """
 struct PoczosSchneiderCMI{M <: ConditionalMutualInformation, ME} <: ConditionalMutualInformationEstimator{M}
     definition::M

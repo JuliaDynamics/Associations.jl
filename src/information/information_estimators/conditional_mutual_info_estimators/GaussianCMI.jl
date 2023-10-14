@@ -17,6 +17,21 @@ for [`GaussianMI`](@ref)):
 ```math
 \\hat{I}_{Gaussian}(X; Y | Z) = \\hat{I}_{Gaussian}(X; Y, Z) - \\hat{I}_{Gaussian}(X; Z)
 ```
+
+## Usage
+
+- [`information`](@ref)`(est::GaussianCMI, x, y, z)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000) .+ x
+z = rand(rng, 10000) .+ y
+information(GaussianCMI(), x, z, y) # should be near 0 (and can be negative)
+```
 """
 struct GaussianCMI{M <: ConditionalMutualInformation} <: ConditionalMutualInformationEstimator{M}
     definition::M

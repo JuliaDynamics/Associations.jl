@@ -6,7 +6,7 @@ export MIShannon
     MIShannon <: BivariateInformationMeasure
     MIShannon(; base = 2)
 
-The Shannon mutual information ``I^S(X; Y)``.
+The Shannon mutual information ``I_S(X; Y)``.
 
 ## Usage
 

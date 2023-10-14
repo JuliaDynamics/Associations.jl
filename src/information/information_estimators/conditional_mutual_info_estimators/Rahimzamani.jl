@@ -8,8 +8,26 @@ The `Rahimzamani` estimator, short for Rahimzamani-Asnani-Viswanath-Kannan,
 is an estimator for Shannon conditional mutual information for data that can be mixtures of
 discrete and continuous data [Rahimzamani2018](@cite).
 
-This is very similar to the [`GaoKannanOhViswanath`](@ref) mutual information estimator,
-but has been expanded to the conditional case.
+This estimator is very similar to the [`GaoKannanOhViswanath`](@ref) mutual information
+estimator, but has been expanded to the conditional mutual information case.
+
+`k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
+number of temporal neighbors that are excluded during neighbor searches.
+
+## Usage
+
+- [`information`](@ref)`(est::Rahimzamani, x, y, z)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000) .+ x
+z = rand(rng, 10000) .+ y
+information(Rahimzamani(; k = 10), x, z, y) # should be near 0 (and can be negative)
+```
 """
 struct Rahimzamani{M <: ConditionalMutualInformation, ME} <: ConditionalMutualInformationEstimator{M}
     definition::M

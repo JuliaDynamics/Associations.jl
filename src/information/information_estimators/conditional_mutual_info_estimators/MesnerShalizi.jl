@@ -5,7 +5,26 @@ export MesnerShalisi
     MesnerShalizi(definition = CMIShannon(); k = 1, w = 0)
 
 The `MesnerShalizi` estimator is an estimator for conditional mutual information for data
-that can be mixtures of discrete and continuous data [MesnerShalizi2020](@cite).
+that can be mixtures of discrete and continuous data [Mesner2020](@cite).
+
+
+`k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
+number of temporal neighbors that are excluded during neighbor searches.
+
+## Usage
+
+- [`information`](@ref)`(est::MesnerShalizi, x, y, z)`.
+
+## Example 
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 10000)
+y = rand(rng, 10000) .+ x
+z = rand(rng, 10000) .+ y
+information(MesnerShalizi(; k = 10), x, z, y) # should be near 0 (and can be negative)
+```
 """
 struct MesnerShalizi{M <: ConditionalMutualInformation, ME} <: ConditionalMutualInformationEstimator{M}
     definition::M
