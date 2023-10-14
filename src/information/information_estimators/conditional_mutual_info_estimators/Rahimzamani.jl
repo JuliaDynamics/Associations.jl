@@ -13,10 +13,6 @@ estimator, but has been expanded to the conditional mutual information case.
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
 number of temporal neighbors that are excluded during neighbor searches.
 
-## Compatible definitions
-
-- [`CMIShannon`](@ref)
-
 ## Usage
 
 - [`information`](@ref)`(est::Rahimzamani, x, y, z)`.
