@@ -5,3 +5,4 @@ include("entropy_decomposition.jl")
 # estimator-specific files.
 include("cond_mutual_information_estimators/cond_mutual_information_estimators.jl")
 include("mutual_information_estimators/mutual_information_estimators.jl")
+include("transfer_entropy_estimators/transfer_entropy_estimators.jl")
