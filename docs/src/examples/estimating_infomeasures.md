@@ -1,7 +1,7 @@
 # Estimating multivariate information measures
 
 
-## [`MIShannon`](@ref)
+## Mutual information
 
 ### [Estimation with [`MutualInformationEstimator`](@ref)s](@id example_mi_MutualInformationEstimator)
 
@@ -357,7 +357,7 @@ function ifamily1(α; base = ℯ)
 end
 
 fig = plot_results(family1, ifamily1; 
-    k_lord = k_lord, k = k, nreps = 10,
+    k_lord = k_lord, k = k, nreps = 10, n = 800,
     estimators = estimators,
     base = base)
 ```
@@ -424,8 +424,7 @@ function family3(α, n::Int)
 end
 
 fig = plot_results(family3, ifamily3; 
-    k_lord = k_lord, k = k, nreps = 10,
-    n = 2000,
+    k_lord = k_lord, k = k, nreps = 5, n = 800,
     estimators = estimators, base = base)
 ```
 
