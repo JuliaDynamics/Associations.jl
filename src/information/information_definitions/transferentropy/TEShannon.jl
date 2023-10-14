@@ -37,8 +37,6 @@ struct TEShannon{B, EMB} <: TransferEntropy
     # TODO: add constructor that automatically determines the embedding.
 end
 
-
-
 function convert_to_cmi_estimator(est::EntropyDecomposition{<:TEShannon, <:DiscreteInfoEstimator})
     (; definition, est, discretization, pest) = est
     base = definition.base
@@ -72,14 +70,14 @@ end
 
 function decomposition_string(
         definition::TEShannon, 
-        est::EntropyDecomposition{M, <:DiscreteInfoEstimator}
+        est::EntropyDecomposition{M, <:DiscreteInfoEstimator{<:Shannon}}
     ) where M
     return "TEₛ(s → t | c) = Hₛ(t⁺, t⁻,c⁻) - Hₛ(t⁻,c⁻) - Hₛ(t⁺,s⁻,t⁻,c⁻) + Hₛ(s⁻,t⁻,c⁻)"
 end
 
 function decomposition_string(
     definition::TEShannon, 
-    est::EntropyDecomposition{M, <:DifferentialInfoEstimator}
+    est::EntropyDecomposition{M, <:DifferentialInfoEstimator{<:Shannon}}
     ) where M
     return "TEₛ(s → t | c) = hₛ(t⁺, t⁻,c⁻) - hₛ(t⁻,c⁻) - hₛ(t⁺,s⁻,t⁻,c⁻) + hₛ(s⁻,t⁻,c⁻)"
 end

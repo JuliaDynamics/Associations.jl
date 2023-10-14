@@ -71,13 +71,36 @@ struct TERenyiJizba{B, Q, EMB} <: TransferEntropy
     end
 end
 
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DiscreteInfoEstimator{Renyi}})
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DiscreteInfoEstimator{<:Renyi}})
     (; definition, est, discretization, pest) = est
     base = definition.base
     return EntropyDecomposition(CMIRenyiJizba(; base), est, discretization, pest)
 end
 
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DifferentialInfoEstimator{Renyi}})
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DifferentialInfoEstimator{<:Renyi}})
     return EntropyDecomposition(CMIRenyiJizba(; est.definition.base), est.est)
 end
 
+# ------------------------------------------------
+# Pretty printing for decomposition estimators.
+# ------------------------------------------------
+# These are some possible decompositions
+# TE(s -> t | c) =
+# = I(t⁺; s⁻ | t⁻, c⁻)
+# = I(t⁺; s⁻, t⁻, c⁻) - I(t⁺; t⁻, c⁻)
+# = h(t⁺ | t⁻,c⁻) - h(t⁺ | s⁻,t⁻,c⁻)
+# = h(t⁺, t⁻,c⁻) - h(t⁻,c⁻) - h(t⁺,s⁻,t⁻,c⁻) + h(s⁻,t⁻,c⁻)"
+
+function decomposition_string(
+        definition::TERenyiJizba, 
+        est::EntropyDecomposition{M, <:DiscreteInfoEstimator}
+    ) where M
+    return "TEᵣⱼ(s → t | c) = Hᵣ(t⁺, t⁻,c⁻) - Hᵣ(t⁻,c⁻) - Hᵣ(t⁺,s⁻,t⁻,c⁻) + Hᵣ(s⁻,t⁻,c⁻)"
+end
+
+function decomposition_string(
+    definition::TERenyiJizba, 
+    est::EntropyDecomposition{M, <:DifferentialInfoEstimator}
+    ) where M
+    return "TEᵣⱼ(s → t | c) = hᵣ(t⁺, t⁻,c⁻) - hᵣ(t⁻,c⁻) - hᵣ(t⁺,s⁻,t⁻,c⁻) + hᵣ(s⁻,t⁻,c⁻)"
+end

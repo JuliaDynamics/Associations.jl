@@ -66,12 +66,16 @@ end
 # transfer operator.
 function h4_marginal_probs(
         est::EntropyDecomposition{
-            <:TEShannon, 
-            <:DiscreteInfoEstimator{<:Shannon}, 
-            <:TransferOperator{<:RectangularBinning}, 
-            <:RelativeAmount},
+            <:TransferEntropy, 
+            <:DiscreteInfoEstimator, 
+            <:TransferOperator, 
+            <:RelativeAmount
+        },
         x...
     )
+    if !est.discretization.binning.precise
+        throw(ArgumentError("Please supply a binning with `precise == true`, otherwise points may end up outside the binning."))
+    end
     joint_pts, vars, τs, js = te_embed(est.definition.embedding, x...)
     iv = invariantmeasure(joint_pts, est.discretization.binning)
 
@@ -79,7 +83,8 @@ function h4_marginal_probs(
     # need to do the conversion twice. We should explicitly store the bin indices for all
     # marginals, not a single encoding integer for each bin. Otherwise, we can't
     # properly subset marginals here and relate them to the approximated invariant measure.
-    visited_bins_coordinates = StateSpaceSet(decode.(Ref(iv.to.encoding), iv.to.bins))
+    encoding = iv.to.encoding
+    visited_bins_coordinates = StateSpaceSet(decode.(Ref(encoding), iv.to.bins))
     unique_visited_bins = _marginal_encodings(iv.to.encoding, visited_bins_coordinates)[1]
 
     # # The subset of visited bins with nonzero measure
@@ -103,10 +108,10 @@ end
 
 function information(
         est::EntropyDecomposition{
-            <:TEShannon, 
-            <:DiscreteInfoEstimator{<:Shannon}, 
-            <:TransferOperator{<:RectangularBinning}, 
-            <:RelativeAmount,
+            <:TransferEntropy, 
+            <:DiscreteInfoEstimator, 
+            <:TransferOperator, 
+            <:RelativeAmount
         },
         x...)
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional

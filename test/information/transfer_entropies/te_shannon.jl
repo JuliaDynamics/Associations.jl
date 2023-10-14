@@ -1,7 +1,7 @@
 using Test
 using CausalityTools
 using Random
-rng = MersenneTwister(1234)
+rng = Xoshiro(1234)
 
 # Double-sum estimation.
 x = randn(rng, 50)
@@ -29,3 +29,10 @@ est_cmi = CMIDecomposition(TEShannon(), FPVP())
 est_zhu = Zhu1(TEShannon(), k = 3)
 @test information(est_zhu, x, z) isa Real
 @test information(est_zhu, x, z, y) isa Real
+
+
+# Test `TransferOperator` explicitly
+discretization = TransferOperator(RectangularBinning(2, true))
+est_disc = EntropyDecomposition(TEShannon(), PlugIn(Shannon()), discretization);
+@test information(est_disc, x, z) isa Real
+@test information(est_disc, x, z, y) isa Real

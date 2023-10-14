@@ -25,6 +25,7 @@ function information(est::MultivariateInformationMeasureEstimator{<:TransferEntr
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
     S, T, T⁺, C = individual_marginals_te(definition.embedding, x...)
+
     cmi_est = convert_to_cmi_estimator(est)
 
     # Estimate by letting TE(s -> t | c) := I(t⁺; s⁻ | t⁻, c⁻). 
