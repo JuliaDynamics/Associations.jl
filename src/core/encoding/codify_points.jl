@@ -52,23 +52,29 @@ Codify each timeseries `xᵢ ∈ x` according to the given `encoding`.
 ## Examples
 
 ```julia
-x = StateSpaceSet(rand(100, 2))
-y = StateSpaceSet(rand(100, 3))
-z = StateSpaceSet(rand(100, 4))
+x = StateSpaceSet(rand(10000, 2))
+y = StateSpaceSet(rand(10000, 3))
+z = StateSpaceSet(rand(10000, 2))
 
 # For `x`, we use a relative mean encoding.
 ex = RelativeMeanEncoding(0.0, 1.0, n = 3)
 # For `y`, we use a combination encoding.
-ey = CombinationEncoding(RelativeMeanEncoding(0.0, 1.0, n = 3), OrdinalPatternEncoding(3))
+ey = CombinationEncoding(
+    RelativeMeanEncoding(0.0, 1.0, n = 2), 
+    OrdinalPatternEncoding(3)
+)
 # For `z`, we use ordinal patterns to encode.
-ez = OrdinalPatternEncoding(4)
+ez = OrdinalPatternEncoding(2)
 
 # Codify two input datasets gives a 2-tuple of Vector{Int}
 codify(CodifyPoints(ex, ey), x, y)
 
 # Codify three input datasets gives a 3-tuple of Vector{Int}
 codify(CodifyPoints(ex, ey, ez), x, y, z)
+```
 """
+function codify(encoding::CodifyPoints, x) end
+
 function codify(encoding::CodifyPoints{1}, x::Vararg{Any, 1})
     e = first(encoding.encodings)
     x̂ = codify_individual_dataset(e, first(x))

@@ -56,18 +56,21 @@ end
 
 Codify each timeseries `xᵢ ∈ x` according to the given `encoding`.
 
+Since most use cases involve applying the same [`OutcomeSpace`](@ref) to each marginal
+dimension, we allow using [`OutcomeSpace`](@ref) interchangeably with
+[`CodifyVariables`](@ref) when only one outcome space is used.
+
 ## Examples
 
 ```julia
 using CausalityTools
 x = [0.1, 0.2, 0.3, 0.2, 0.1, 0.0, 0.5, 0.3, 0.5]
-xc = codify(OrdinalPatterns(m=2), x) # should give [1, 1, 2, 2, 2, 1, 2, 1]
+xc1 = codify(CodifyVariables(OrdinalPatterns(m=2)), x) # should give [1, 1, 2, 2, 2, 1, 2, 1]
+xc2 = codify(OrdinalPatterns(m=2), x) # equivalent
 length(xc) < length(x) # should be true, because `OrdinalPatterns` delay embeds.    
 ```
 """
-function codify(encoding::CodifyVariables, x)
-
-end
+function codify(encoding::CodifyVariables, x) end
 
 function codify(encoding::CodifyVariables{1}, x::Vararg{Any, 1})
     e = first(encoding.outcome_spaces)

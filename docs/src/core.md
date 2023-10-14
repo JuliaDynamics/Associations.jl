@@ -16,9 +16,6 @@ CodifyVariables
 
 ### Point-wise discretization
 
-The [`CodifyVariables`](@ref) discretization scheme encodes input data points directly 
-to integers, *without* applying any transformation to the data before encoding.
-
 ```@docs
 CodifyPoints
 Encoding
@@ -30,6 +27,8 @@ RelativeFirstDifferenceEncoding
 UniqueElementsEncoding
 CombinationEncoding
 RectangularBinEncoding
+encode
+decode
 ```
 
 ## Counting and probabilities
