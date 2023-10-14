@@ -1,5 +1,70 @@
 # Estimating multivariate information measures
 
+## Conditional entropy 
+
+## [Conditional entropy](@id examples_condentropy)
+
+### Pre-computed pseudo-counts (example from Cover & Thomas)
+
+This is essentially example 2.2.1 in Cover & Thomas (2006), where they use the following
+relative frequency table as an example. Notethat Julia is column-major, so we need to
+transpose their example. Then their `X` is in the first dimension of our table (along
+columns) and their `Y` is our second dimension (rows).
+
+```@example ce_contingency_table
+using CausalityTools
+freqs_yx = [1//8 1//16 1//32 1//32; 
+    1//16 1//8  1//32 1//32;
+    1//16 1//16 1//16 1//16; 
+    1//4  0//1  0//1  0//1];
+# `freqs_yx` is already normalized, se we can feed it directly to `Probabilities`
+pxy = Probabilities(freqs_yx)
+```
+
+The marginal distribution for `x` (first dimension) is
+
+```@example ce_contingency_table
+marginal(pxy, dims = 2)
+```
+
+The marginal distribution for `y` (second dimension) is
+
+```@example ce_contingency_table
+marginal(pxy, dims = 1)
+```
+
+And the Shannon conditional entropy ``H^S(X | Y)``
+
+```@example ce_contingency_table
+ce_x_given_y = information(ConditionalEntropyShannon(), pxy) |> Rational
+```
+
+This is the same as in their example. Hooray! To compute ``H^S(Y | X)``, we just need to
+flip the contingency matrix.
+
+```@example ce_contingency_table
+pyx = Probabilities(transpose(freqs_yx))
+ce_y_given_x = information(ConditionalEntropyShannon(), pyx) |> Rational
+```
+
+### Estimation from data
+
+We can of course also estimate conditional entropy from data. To do so, we'll use the 
+[`JointProbabilities`](@ref) estimator, which constructs a multivariate pmf for us.
+Thus, we don't explicitly need a set of counts, like in the example above, because they
+are estimated under the hood for us. 
+
+Let's first demonstrate on some categorical data. For that, we must use
+[`UniqueElements`](@ref) as the discretization (i.e. just count unique elements).
+
+```@example
+using CausalityTools, Random
+rng = MersenneTwister(1234)
+x = rand(rng, 1:3, 1000)
+y = rand(rng, ["The Witcher", "Lord of the Rings"], 1000)
+est = JointProbabilities(ConditionalEntropyShannon(), UniqueElements())
+information(est, x, y)
+```
 
 ## Mutual information
 
