@@ -11,14 +11,28 @@ export codify
 
 """
     CodifyVariables <: Discretization
-    CodifyVariables(outcome_spaces::OutcomeSpace)
+    CodifyVariables(outcome_space::OutcomeSpace)
 
-Given multiple dataset `xs::StateSpaceSet`, [`encode`](@ref) the `i`-th variable/column
-using `encoding` (the same encoding is applied to each column to ensure consistency).
+The `CodifyVariables` discretization scheme quantises input data in a column-wise manner
+using the given `outcome_space`.
 
-Encoding is done internally using [`codify`](@ref), which typically runs a sliding
-window (of width dictated by the given `encoding`) across each variable, encoding
-each window to a unique integer.
+# Description
+
+The main difference between `CodifyVariables` and [`CodifyPoints`] is that the former
+uses [`OutcomeSpace`](@ref)s for discretization. This usually means that some
+transformation is applied to the data before discretizing. For example, some outcome
+constructs a delay embedding from the input (and thus encodes sequential information)
+before encoding the data.
+
+Specifically, given `x::AbstractStateSpaceSet...`, where the `i`-th dataset `x[i]` 
+is assumed to represent a single series of measurements, `CodifyVariables` encodes
+ `x[i]` by [`codify`](@ref)-ing into a series of integers 
+using an appropriate  [`OutcomeSpace`](@ref). This is typically done by first 
+sequentially transforming the data and then running sliding window (the width of 
+the window is controlled by `outcome_space`) across the data, and then encoding each
+window to a unique integer.
+
+`CodifyVariables` can be used interchangeably with [`OutcomeSpace`](@ref)s.
 """
 struct CodifyVariables{N} <: Discretization{N}
     outcome_spaces::NTuple{N, OutcomeSpace}
@@ -34,6 +48,25 @@ end
 
 function CodifyVariables(o::OutcomeSpace)
     return CodifyVariables((o,))
+end
+
+"""
+    codify(encoding::CodifyVariables, x::Vararg{<:AbstractStateSpaceSet, N})
+    codify(encoding::OutcomeSpace, x::Vararg{<:AbstractStateSpaceSet, N})
+
+Codify each timeseries `xᵢ ∈ x` according to the given `encoding`.
+
+## Examples
+
+```julia
+using CausalityTools
+x = [0.1, 0.2, 0.3, 0.2, 0.1, 0.0, 0.5, 0.3, 0.5]
+xc = codify(OrdinalPatterns(m=2), x) # should give [1, 1, 2, 2, 2, 1, 2, 1]
+length(xc) < length(x) # should be true, because `OrdinalPatterns` delay embeds.    
+```
+"""
+function codify(encoding::CodifyVariables, x)
+
 end
 
 function codify(encoding::CodifyVariables{1}, x::Vararg{Any, 1})

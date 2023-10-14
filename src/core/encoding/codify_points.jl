@@ -9,8 +9,25 @@ export codify
     CodifyPoints{N}
     CodifyPoints(encodings::NTuple{N, Encoding})
 
-Given multiple dataset `xs::StateSpaceSet`, [`encode`](@ref) every `mₖ`-dimensional point
-`x[k][i]` as an integer using the given [`Encoding`](@ref)s `encodings[k]`.
+`CodifyPoints` points is a [`Discretization`](@ref) scheme that encodes input data points
+*without* applying any sequential transformation to the input (as opposed to 
+[`CodifyVariables`](@ref), which may apply some transformation before encoding).
+
+## Description
+
+Given `x::AbstractStateSpaceSet...`, where the `i`-th dataset is assumed to represent
+a single series of measurements, `CodifyPoints` encodes each point `pₖ ∈ x[i]` 
+using some [`Encoding`](@ref)(s), *without* applying any (sequential) transformation to
+the `x[i]` first. This behaviour is different to [`CodifyVariables`](@ref), which
+*does* apply a transformation to `x[i]` before encoding.
+
+If `length(x) == N` (i.e. there are `N` input dataset), then `encodings` must be a tuple
+of `N` [`Encoding`](@ref). Alternatively, if `encodings` is a single [`Encoding`](@ref),
+then that same encoding is applied to every `x[i]`.
+
+## Usage
+
+- [`codify`](@ref)`(encodings::CodifyPoints, x...)`
 """
 struct CodifyPoints{N} <: Discretization{N}
     encodings::NTuple{N, Encoding}

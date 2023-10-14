@@ -43,12 +43,6 @@ WaveletOverlap
 PowerSpectrum
 ```
 
-### CosineSimilarityBinning
-
-```@docs
-CosineSimilarityBinning
-```
-
 ## Utilities
 
 ### Outcomes
@@ -70,17 +64,3 @@ The encodings API is defined by:
 - [`Encoding`](@ref)
 - [`encode`](@ref)
 - [`decode`](@ref)
-
-```@docs
-Encoding
-encode
-decode
-```
-
-#### Available encodings
-
-```@docs
-OrdinalPatternEncoding
-GaussianCDFEncoding
-RectangularBinEncoding
-```
