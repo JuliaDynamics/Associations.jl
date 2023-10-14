@@ -40,9 +40,9 @@ bivariate_symmetric_measures = [
 end;
 
 bivariate_asymmetric_measures = [
-    CEShannon(),
-    CETsallisAbe(),
-    CETsallisFuruichi(),
+    ConditionalEntropyShannon(),
+    ConditionalEntropyTsallisAbe(),
+    ConditionalEntropyTsallisFuruichi(),
     HellingerDistance(),
     KLDivergence(),
     RenyiDivergence(),
