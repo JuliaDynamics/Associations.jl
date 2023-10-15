@@ -4,6 +4,17 @@
 
 This release contains a series of breaking changes.
 
+### New crossmap API
+
+- `CrossmapEstimator`s now take the `CrossmapMeasure` definition as their first argument.
+    For example, you'll have to do `ExpandingSegment(CCM(); libsizes = 10:10:50)` instead
+    of `ExpandingSegment(; libsizes = 10:10:50)`.
+- `crossmap(definition::CCMLike, est::CrossmapEstimator, args...)` will now error, since 
+    the estimator contains the crossmap measure definition. The new signature is
+    `crossmap(est::CrossmapEstimator, args...)`. For example, you must do 
+    `crossmap(RandomSegment(CCM(); libsizes = 10:10:50), x, y)` instead of 
+    `crossmap(CCM(), RandomSegment(; libsizes = 10:10:50), x, y)`.
+
 ### New information measure API
 
 - Multivariate information measures now store their parameters explicitly, instead 
