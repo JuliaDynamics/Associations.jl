@@ -39,7 +39,7 @@ module CausalityTools
 
     # include("example_systems/example_systems.jl")
 
-    # include("deprecations/deprecations.jl")
+    include("deprecations/deprecations.jl")
 
     #using Requires
     #function __init__()
