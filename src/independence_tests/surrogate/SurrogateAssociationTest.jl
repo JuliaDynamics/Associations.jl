@@ -71,6 +71,26 @@ Moreover, any valid estimator of the following measures may be used:
 
 ## Examples
 
+```julia
+using CausalityTools
+using Random
+rng = Xoshiro(1234)
+x = rand(rng, 3000);
+y = rand(rng, 3000) .+ circshift(x, 1);
+z = rand(rng, 3000) .+ circshift(y, 1)
+
+est = EntropyDecomposition(TEShannon(base = 2), Kraskov(k = 20))
+test = SurrogateAssociationTest(est)
+independence(test, x, z) # Should indicate dependence
+independence(test, x, z, y) # Should indicate independence
+
+est = JointProbabilities(PartialMutualInformation(), ValueBinning(3))
+test = SurrogateAssociationTest(est)
+independence(test, x, z, y)
+```
+
+## Extended examples
+
 - [Pairwise test, `DistanceCorrelation`](@ref examples_SurrogateAssociationTest_distancecorrelation).
 - [Pairwise test, `TEShannon`](@ref examples_SurrogateAssociationTest_teshannon).
 - [Conditional test, `PartialCorrelation`](@ref examples_SurrogateAssociationTest_partialcorrelation).
@@ -141,6 +161,7 @@ function independence(test::SurrogateAssociationTest, x, args...)
     (; est_or_measure, rng, surrogate, nshuffles, show_progress) = test
     verify_number_of_inputs_vars(est_or_measure, 1+length(args))
     SSSets = map(w -> StateSpaceSet(w), args)
+    
     estimation = x -> information(est_or_measure, x, SSSets...)
     progress = ProgressMeter.Progress(nshuffles;
         desc="SurrogateAssociationTest:", enabled=show_progress
@@ -162,6 +183,5 @@ end
 include("transferentropy.jl")
 
 # include("contingency.jl")
-# include("hlms_measure.jl")
+include("hlms_measure.jl")
 # include("crossmapping.jl")
-# include("pmi.jl")
