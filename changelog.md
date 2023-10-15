@@ -2,9 +2,17 @@
 
 ## 3.0 (new major release)
 
-This release contains a series of breaking changes.
+This release contains several breaking changes. Any code from before v3.0 will need 
+updating to continue working with v3.0.
 
-### New crossmap API
+The main reason for these breaking changes is that estimators now store the 
+definitions they estimate. This way, we reduce the amount of code we have to write 
+maintain, document and test. At the same time, we hope it is a bit more user-friendly 
+to only relate to "one way of thinking" about estimating association measures.
+
+### Breaking changes 
+
+The crossmap API has been overhauled. 
 
 - `CrossmapEstimator`s now take the `CrossmapMeasure` definition as their first argument.
     For example, you'll have to do `ExpandingSegment(CCM(); libsizes = 10:10:50)` instead
@@ -15,7 +23,7 @@ This release contains a series of breaking changes.
     `crossmap(RandomSegment(CCM(); libsizes = 10:10:50), x, y)` instead of 
     `crossmap(CCM(), RandomSegment(; libsizes = 10:10:50), x, y)`.
 
-### New information measure API
+The information API has been overhauled.
 
 - Multivariate information measures now store their parameters explicitly, instead 
     of using `ComplexityMeasures.EntropyDefinition` to do so. For example, to 
