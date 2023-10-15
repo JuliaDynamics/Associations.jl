@@ -3,13 +3,7 @@ using CausalityTools
 using StateSpaceSets: StateSpaceSet
 n = 1000
 x, y, z, w = rand(n), rand(n), StateSpaceSet(rand(n, 3)), StateSpaceSet(rand(n + 1, 3))
-
 τ = -1
-
-# Deprecated
-@test crossmap(x, y, 3, τ) isa Float64
-@test crossmap(x, y, 3, τ , :random) isa Vector{Float64}
-@test crossmap(x, y, 3, τ, :segment) isa Vector{Float64}
 
 # V2.x
 @testset "ConvergentCrossMapping" begin
