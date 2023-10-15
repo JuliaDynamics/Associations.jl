@@ -1,7 +1,5 @@
 # Estimating multivariate information measures
 
-## Conditional entropy 
-
 ## [Conditional entropy](@id examples_condentropy)
 
 ### Pre-computed pseudo-counts (example from Cover & Thomas)
