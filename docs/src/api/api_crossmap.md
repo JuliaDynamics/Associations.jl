@@ -2,7 +2,7 @@
 # [Cross mapping API](@id cross_mapping_api)
 
 Several cross mapping methods have emerged in the literature
-Following Sugihara et al. (2012)'s paper on the convergent cross mapping.
+Following [Sugihara2012](@citet)'s paper on the convergent cross mapping.
 In CausalityTools.jl, we provide a unified interface for using these cross mapping methods.
 We indicate the different types of cross mappings by
 passing an [`CrossmapMeasure`](@ref) instance as the first argument to [`crossmap`](@ref)

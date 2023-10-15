@@ -11,13 +11,17 @@ using StateSpaceSets
 
 pages = [
     "Overview" => "index.md",
-    "Core" => "core.md",
-    "Information API" => "information.md",
+    "Core API" => [
+        "Core" => "core.md",
+        "Information API" => "api/api_information.md",
+        "Crossmap API" => "api/api_crossmap.md",
+    ],
     "Examples" => [
-        "Estimating multivariate information measures" => "examples/estimating_infomeasures.md",
+        "Information examples" => "examples/estimating_infomeasures.md",
+        "Crossmap examples" => "examples/examples_cross_mappings.md"
     ],
     "Tutorials" => [
-        "Intro to information measures" => "info_tutorial.md",
+        "Information tutorial" => "info_tutorial.md",
     ],
     # "Association measures" => "measures.md",
     # "Independence testing" => "independence.md",

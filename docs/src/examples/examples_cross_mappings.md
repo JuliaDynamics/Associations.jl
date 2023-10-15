@@ -25,8 +25,8 @@ x, y = randn(rng, 200), randn(rng, 200)
 # We'll draw a single sample at each `l ∈ libsizes`. Sampling with replacement is then
 # necessary, because our 200-pt timeseries will result in embeddings with
 # less than 200 points.
-est = RandomVectors(; libsizes = 50:10:200, replace = true, rng)
-crossmap(CCM(), est, x, y)
+est = RandomVectors(CCM(); libsizes = 50:10:200, replace = true, rng)
+crossmap(est, x, y)
 ```
 
 To generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
@@ -36,8 +36,8 @@ crossmap repeatedly, e.g.
 using CausalityTools
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 200), randn(rng, 200)
-est = RandomVectors(; libsizes = 50:10:200, replace = true, rng)
-ρs = [crossmap(CCM(), est, x, y) for i = 1:80]
+est = RandomVectors(CCM(); libsizes = 50:10:200, replace = true, rng)
+ρs = [crossmap(est, x, y) for i = 1:80]
 M = hcat(ρs...)
 ```
 
@@ -59,8 +59,8 @@ x, y = randn(rng, 200), randn(rng, 200)
 # We'll draw a single sample at each `l ∈ libsizes`. We limit the library size to 100, 
 # because drawing segments of the data longer than half the available data doesn't make
 # much sense.
-est = RandomSegment(; libsizes = 50:10:100, rng)
-crossmap(CCM(), est, x, y)
+est = RandomSegment(CCM(); libsizes = 50:10:100, rng)
+crossmap(est, x, y)
 ```
 
 As above, to generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
@@ -70,8 +70,8 @@ crossmap repeatedly, e.g.
 using CausalityTools
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 200), randn(rng, 200)
-est = RandomSegment(; libsizes = 50:10:100, rng)
-ρs = [crossmap(CCM(), est, x, y) for i = 1:80]
+est = RandomSegment(CCM(); libsizes = 50:10:100, rng)
+ρs = [crossmap(est, x, y) for i = 1:80]
 M = hcat(ρs...)
 ```
 
@@ -129,13 +129,13 @@ function add_to_fig!(fig_pos, libsizes, ρs_x̂y, ρs_ŷx; title = "", quantile
     axislegend(ax, position = :rb)
 end
 
-function reproduce_figure_3A_naive(measure::CrossmapMeasure)
+function reproduce_figure_3A_naive(definition::CrossmapMeasure)
     sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.02, βyx = 0.32);
     x, y = columns(first(trajectory(sys_bidir, 3100, Ttr = 10000)));
     libsizes = [20:2:50; 55:5:200; 300:50:500; 600:100:900; 1000:500:3000]
-    est = ExpandingSegment(; libsizes);
-    ρs_x̂y = crossmap(measure, est, x, y)
-    ρs_ŷx = crossmap(measure, est, y, x)
+    est = ExpandingSegment(definition; libsizes);
+    ρs_x̂y = crossmap(est, x, y)
+    ρs_ŷx = crossmap(est, y, x)
 
     with_theme(theme_minimal(),
         markersize = 5) do
