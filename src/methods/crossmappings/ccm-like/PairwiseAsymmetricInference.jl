@@ -58,7 +58,7 @@ max_segmentlength(definition::PairwiseAsymmetricInference, x::AbstractVector) =
 # TODO: version that takes into consideration prediction lag
 
 function embed(definition::PairwiseAsymmetricInference, t::AbstractVector, s::AbstractVector)
-    (; d, τ, w) = measure
+    (; d, τ, w) = definition
     @assert τ != 0
     if τ > 0 && definition.embed_warn
         @warn """τ > 0. You're using future values of source to predict the target. Turn \
