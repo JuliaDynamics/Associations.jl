@@ -77,14 +77,3 @@ end
     @test crossmap(ExpandingSegment(def; libsizes = 10:10:20), x, y) |> length == 2
     @test crossmap(ExpandingSegment(def; libsizes = [10, 20, 30]), x, y) |> length == 3
 end
-
-# TODO: remove for v2.0
-@testset "Compat" begin
-    x, y = rand(100), rand(100)
-    @test crossmap(x, y, 2, τ) isa Real
-    @test pai(x, y, 2, τ) isa Real
-    @test length(crossmap(x, y, 2, τ, :segment, nreps = 100)) == 100
-    @test length(pai(x, y, 2, τ, :segment, nreps = 100)) == 100
-    @test length(crossmap(x, y, 2, τ, :random, nreps = 100)) == 100
-    @test length(pai(x, y, 2, τ, :random, nreps = 100)) == 100
-end

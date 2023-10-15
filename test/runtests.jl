@@ -4,6 +4,7 @@ defaultname(file) = uppercasefirst(replace(splitext(basename(file))[1], '_' => '
 testfile(file, testname=defaultname(file)) = @testset "$testname" begin; include(file); end
 
 @testset "CausalityTools.jl" begin
+    testfile("deprecations.jl")
     testfile("core/core.jl")
     testfile("information/information.jl")
     #testfile("estimation/estimation.jl")

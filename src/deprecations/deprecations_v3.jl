@@ -26,7 +26,23 @@ function crossmap(measure::CCMLike, est::CrossmapEstimator, args...)
         " is no longer possible. The signature is now " * 
         "crossmap(est::CrossmapEstimator{<:CrossmapMeasure}, args...), so you must give the " * 
         "measure definition as the first argument to the estimator." 
-    throw(error(msg))
+    throw(ArgumentError(msg))
+end
+
+function crossmap(x::AbstractVector, y::AbstractVector, args...)
+    msg = "crossmap(x::AbstractVector, y::AbstractVector, args...)" * 
+    " is no longer possible. The signature is now " * 
+    "crossmap(est::CrossmapEstimator{<:CrossmapMeasure}, args...). " *
+    "For example, you can do `crossmap(RandomSegment(CCM(); libsizes = 10:10:50), x, y)`" 
+    throw(ArgumentError(msg))
+end
+
+function pai(x::AbstractVector, y::AbstractVector, args...)
+    msg = "pai(x::AbstractVector, y::AbstractVector, args...)" * 
+    " is no longer possible. The signature is now " * 
+    "pai(est::CrossmapEstimator{<:CrossmapMeasure}, args...). " *
+    "For example, you can do `pai(RandomSegment(CCM(); libsizes = 10:10:50), x, y)`" 
+    throw(ArgumentError(msg))
 end
 
 
