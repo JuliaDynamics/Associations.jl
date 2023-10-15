@@ -153,7 +153,7 @@ Hm. This looks a bit like the paper, but the curve is not smooth. We can do bett
 It is not clear from the paper exactly *what* they plot in their Figure 3A, if they plot an average of some kind, or precisely what parameters and initial conditions they use. However, we can get a smoother plot by using a [`Ensemble`](@ref). Combined with a [`CrossmapEstimator`](@ref), it uses Monte Carlo resampling on subsets of the input data to compute an ensemble of `ρ`s that we here use to compute the median and 90-th percentile range for each library size.
 
 ```@example MAIN_CCM
-function reproduce_figure_3A_ensemble(measure::CrossmapMeasure)
+function reproduce_figure_3A_ensemble(definition::CrossmapMeasure)
     sys_bidir = logistic_sugi(; u0 = [0.4, 0.2], rx = 3.8, ry = 3.5, βxy = 0.02, βyx = 0.1);
     x, y = columns(first(trajectory(sys_bidir, 10000, Ttr = 10000)));
     # Note: our time series are 1000 points long. When embedding, some points are
@@ -162,9 +162,9 @@ function reproduce_figure_3A_ensemble(measure::CrossmapMeasure)
     libsizes = [20:5:50; 55:5:200; 300:50:500; 600:100:900; 1000:500:3000]
     # No point in doing more than one rep, because there data are always the same
     # for `ExpandingSegment.`
-    ensemble_ev = Ensemble(measure, ExpandingSegment(; libsizes); nreps = 1)
-    ensemble_rs = Ensemble(measure, RandomSegment(; libsizes); nreps = 30)
-    ensemble_rv = Ensemble(measure, RandomVectors(; libsizes); nreps = 30)
+    ensemble_ev = Ensemble(ExpandingSegment(definition; libsizes); nreps = 1)
+    ensemble_rs = Ensemble(RandomSegment(definition; libsizes); nreps = 30)
+    ensemble_rv = Ensemble(RandomVectors(definition; libsizes); nreps = 30)
     ρs_x̂y_es = crossmap(ensemble_ev, x, y)
     ρs_ŷx_es = crossmap(ensemble_ev, y, x)
     ρs_x̂y_rs = crossmap(ensemble_rs, x, y)
@@ -215,7 +215,8 @@ function reproduce_figure_3B()
             sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.7, βxy, βyx);
             # Generate 1000 points. Randomly select a 400-pt long segment.
             x, y = columns(first(trajectory(sys_bidir, 400, Ttr = 10000)));
-            ensemble = Ensemble(CCM(d = 3, w = 5, τ = -1), RandomVectors(libsizes = 100), nreps = 50)
+            definition = CCM(d = 3, w = 5, τ = -1)
+            ensemble = Ensemble(RandomVectors(definition; libsizes = 100), nreps = 50)
             ρx̂ys[i, j] = mean(crossmap(ensemble, x, y))
             ρŷxs[i, j] = mean(crossmap(ensemble, y, x))
         end
@@ -317,7 +318,7 @@ end
 
 ### Reproducing McCracken & Weigel (2014)
 
-Let's try to reproduce figure 8 from McCracken & Weigel (2014)'s[^McCracken2014]
+Let's try to reproduce figure 8 from [McCracken2014](@citet)'s
 paper on [`PairwiseAsymmetricInference`](@ref) (PAI). We'll start by defining the their example B (equations 6-7). This system consists of two
 variables ``X`` and ``Y``, where ``X`` drives ``Y``.
 
@@ -351,8 +352,8 @@ end
 
 function reproduce_figure_8_mccraken(; 
         c = 2.0, Δt = 0.2,
-        as = 0.25:0.25:5.0,
-        bs = 0.25:0.25:5.0)
+        as = 0.5:0.5:5.0,
+        bs = 0.5:0.5:5.0)
     # -----------------------------------------------------------------------------------------
     # Generate many time series for many different values of the parameters `a` and `b`,
     # and compute PAI. This will replicate the upper right panel of 
@@ -364,7 +365,7 @@ function reproduce_figure_8_mccraken(;
     # Manually resample `nreps` length-`L` time series and use mean ρ(x̂|X̄y) - ρ(ŷ|Ȳx)
     # for each parameter combination.
     nreps = 50
-    L = 300 # length of timeseries
+    L = 200 # length of timeseries
     Δ = zeros(length(as), length(bs))
     for (i, a) in enumerate(as)
         for (j, b) in enumerate(bs)
@@ -411,5 +412,8 @@ end
 
 reproduce_figure_8_mccraken()
 ```
+
+We haven't used as many parameter combinations as [McCracken2014](@citet) did, 
+but we get a figure that looks roughly similar to theirs.
 
 As expected, ``\Delta < 0`` for all parameter combinations, implying that ``X`` "PAI drives" ``Y``.
