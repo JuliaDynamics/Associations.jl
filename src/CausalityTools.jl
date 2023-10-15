@@ -24,8 +24,8 @@ module CausalityTools
     # include("contingency_matrices.jl")
     # include("infomeasures/infomeasures.jl")
 
-    # include("methods/crossmappings/crossmappings.jl")
-    # include("methods/closeness/closeness.jl")
+    include("methods/crossmappings/crossmappings.jl")
+    include("methods/closeness/closeness.jl")
     # include("methods/correlation/correlation.jl")
     # include("methods/recurrence/methods.jl")
 
