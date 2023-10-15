@@ -45,14 +45,14 @@ Base.@kwdef struct ConvergentCrossMapping <: CrossmapMeasure
 end
 const CCM = ConvergentCrossMapping
 
-n_neighbors_simplex(measure::ConvergentCrossMapping) = measure.d + 1
-max_segmentlength(measure::ConvergentCrossMapping, x::AbstractVector) =
-    length(x) - measure.d + 1
+n_neighbors_simplex(definition::ConvergentCrossMapping) = definition.d + 1
+max_segmentlength(definition::ConvergentCrossMapping, x::AbstractVector) =
+    length(x) - definition.d + 1
 # TODO: version that takes into consideration prediction lag
 
-function embed(measure::ConvergentCrossMapping, t::AbstractVector, s::AbstractVector)
+function embed(definition::ConvergentCrossMapping, t::AbstractVector, s::AbstractVector)
     (; d, τ, w, f) = measure
-    if τ > 0 && measure.embed_warn
+    if τ > 0 && definition.embed_warn
         @warn """τ > 0. You're using future values of source to predict the target. Turn \
         off this warning by setting `embed_warn = false` in the \
         `PairwiseAsymmetricInference` constructor."""

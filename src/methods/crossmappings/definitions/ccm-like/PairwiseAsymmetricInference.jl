@@ -50,16 +50,16 @@ Base.@kwdef struct PairwiseAsymmetricInference <: CrossmapMeasure
 end
 const PAI = PairwiseAsymmetricInference
 
-n_neighbors_simplex(measure::PairwiseAsymmetricInference) =
-    (measure.d + 1) + 1 # one extra coordinate included, due to the inclusion of the target.
-max_segmentlength(measure::PairwiseAsymmetricInference, x::AbstractVector) =
-    length(x) - measure.d + 1
+n_neighbors_simplex(definition::PairwiseAsymmetricInference) =
+    (definition.d + 1) + 1 # one extra coordinate included, due to the inclusion of the target.
+max_segmentlength(definition::PairwiseAsymmetricInference, x::AbstractVector) =
+    length(x) - definition.d + 1
 # TODO: version that takes into consideration prediction lag
 
-function embed(measure::PairwiseAsymmetricInference, t::AbstractVector, s::AbstractVector)
+function embed(definition::PairwiseAsymmetricInference, t::AbstractVector, s::AbstractVector)
     (; d, τ, w) = measure
     @assert τ != 0
-    if τ > 0 && measure.embed_warn
+    if τ > 0 && definition.embed_warn
         @warn """τ > 0. You're using future values of source to predict the target. Turn \
         off this warning by setting `embed_warn = false` in the \
         `PairwiseAsymmetricInference` constructor."""
@@ -69,7 +69,7 @@ function embed(measure::PairwiseAsymmetricInference, t::AbstractVector, s::Abstr
     # - Positive τ := embedding vectors (s(i), t(i), t(i+1), ...), "future predicts present"
     τs = [0; reverse(range(start=0, step=τ, stop=(d-1)*τ))]
     js = [2; repeat([1], d)]
-    idxs_S̄ = 1:measure.d
-    idx_t̄ = measure.d + 1 # column index of time series to be predict
+    idxs_S̄ = 1:definition.d
+    idx_t̄ = definition.d + 1 # column index of time series to be predict
     return genembed(StateSpaceSet(t, s), τs, js), idx_t̄, idxs_S̄
 end

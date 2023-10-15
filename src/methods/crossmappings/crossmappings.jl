@@ -23,7 +23,7 @@ The supertype for all cross-map measures. Concrete subtypes are
 abstract type CrossmapMeasure <: AssociationMeasure end
 
 """
-    CrossmapEstimator{LIBSIZES, RNG}
+    CrossmapEstimator{M<:CrossmapMeasure, LIBSIZES, RNG}
 
 A parametric supertype for all cross-map estimators, which are used with [`predict`](@ref) and
 [`crossmap`](@ref).
@@ -53,7 +53,7 @@ size shrinks with the magnitude of the index/time-offset for the prediction.
 For spatial analyses (not yet implemented), indices could be more complex and involve
 multi-indices.
 """
-abstract type CrossmapEstimator{LIBSIZES, RNG} end
+abstract type CrossmapEstimator{M, LIBSIZES, RNG} end
 
 segment_length_error() = "Segment lengths can be inferred only if both a cross-map " *
     "measure and an input time series is provided. " *
@@ -183,12 +183,11 @@ A directive to compute an ensemble analysis, where `measure` (e.g.
 [`ConvergentCrossMapping`](@ref)) is computed
 using the given estimator `est` (e.g. [`RandomVectors`](@ref))
 """
-Base.@kwdef struct Ensemble{M, E} # todo: perhaps just use a more general Ensemble?
-    measure::M
-    est::E
+Base.@kwdef struct Ensemble{M <: CrossmapEstimator{<:CrossmapMeasure}} # todo: perhaps just use a more general Ensemble?
+    est::M
     nreps::Int = 100
-    function Ensemble(measure::M, est::E; nreps = 100) where {M, E}
-        new{M, E}(measure, est, nreps)
+    function Ensemble(est::M; nreps = 100) where {M}
+        new{M}(est, nreps)
     end
 end
 
@@ -197,8 +196,8 @@ include("ccm-like/ccm-like.jl")
 
 
 # Internal methods for compatibility with `independence`
-function estimate(measure::CrossmapMeasure, args...)
-    return crossmap(measure, args...)
+function estimate(est::CrossmapEstimator{<:CrossmapMeasure}, args...)
+    return crossmap(est, args...)
 end
 
 # Experimental
