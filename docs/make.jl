@@ -12,7 +12,7 @@ using StateSpaceSets
 pages = [
     "Overview" => "index.md",
     "Associations API" => [
-        "Core" => "core.md",
+        "Core" => "api/associations_core.md",
         "Information API" => "api/api_information.md",
         "Crossmap API" => "api/api_crossmap.md",
         "Correlation API" => "api/api_correlation.md",

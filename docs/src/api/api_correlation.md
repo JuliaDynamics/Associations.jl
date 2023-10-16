@@ -1,4 +1,4 @@
-# Correlation API
+# [Correlation API](@id correlation_api)
 
 ## Pearson correlation
 
