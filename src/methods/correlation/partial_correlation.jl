@@ -38,7 +38,7 @@ In practice, we compute the estimate
 
 where ``\\hat{P} = \\hat{\\Sigma}^{-1}`` is the sample precision matrix.
 """
-struct PartialCorrelation <: AssociationMeasure end
+struct PartialCorrelation <: CorrelationMeasure end
 
 min_inputs_vars(::PartialCorrelation) = 3
 max_inputs_vars(::PartialCorrelation) = Inf

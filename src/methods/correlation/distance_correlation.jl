@@ -33,7 +33,7 @@ is computed.
     Székely, G. J., & Rizzo, M. L. (2014). Partial distance correlation with methods for
     dissimilarities.
 """
-struct DistanceCorrelation <: AssociationMeasure end
+struct DistanceCorrelation <: CorrelationMeasure end
 
 max_inputs_vars(::DistanceCorrelation) = 3
 
