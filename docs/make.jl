@@ -20,7 +20,8 @@ pages = [
     
     "Examples" => [
         "Information examples" => "examples/estimating_infomeasures.md",
-        "Crossmap examples" => "examples/examples_cross_mappings.md"
+        "Crossmap examples" => "examples/examples_cross_mappings.md",
+        "Correlation examples" => "examples/examples_correlation.md",
     ],
     "Tutorials" => [
         "Information tutorial" => "info_tutorial.md",
