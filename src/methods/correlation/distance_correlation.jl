@@ -1,5 +1,6 @@
 using StateSpaceSets: AbstractStateSpaceSet
-using Distances
+using Distances: Euclidean
+using Distances: pairwise
 using LinearAlgebra
 
 export DistanceCorrelation
