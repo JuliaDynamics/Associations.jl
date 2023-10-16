@@ -32,45 +32,6 @@ AssociationMeasure
 | Part mutual information | [`PMI`](@ref)                         |    ✖    |     ✓      | [`pmi`](@ref)                  |
 | Information asymmetry   | [`PA`](@ref)                          |    ✓    |     ✓      | [`asymmetry`](@ref)            |
 
-## Correlation measures
-
-
-## Closeness measures
-
-### Joint distance distribution
-
-```@docs
-JointDistanceDistribution
-jdd
-```
-
-### S-measure
-
-```@docs
-SMeasure
-s_measure
-```
-
-### H-measure
-
-```@docs
-HMeasure
-h_measure
-```
-
-### M-measure
-
-```@docs
-MMeasure
-m_measure
-```
-
-### L-measure
-
-```@docs
-LMeasure
-l_measure
-```
 
 ## Recurrence-based
 

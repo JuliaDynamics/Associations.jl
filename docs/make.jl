@@ -13,15 +13,17 @@ pages = [
     "Overview" => "index.md",
     "Associations API" => [
         "Core" => "api/associations_core.md",
-        "Information API" => "api/api_information.md",
-        "Crossmap API" => "api/api_crossmap.md",
         "Correlation API" => "api/api_correlation.md",
+        "Information API" => "api/api_information.md",
+        "Closeness API" => "api/api_closeness.md",
+        "Crossmap API" => "api/api_crossmap.md",
     ],
     
     "Examples" => [
-        "Information examples" => "examples/estimating_infomeasures.md",
-        "Crossmap examples" => "examples/examples_cross_mappings.md",
         "Correlation examples" => "examples/examples_correlation.md",
+        "Information examples" => "examples/estimating_infomeasures.md",
+        "Closeness examples" => "examples/examples_closeness.md",
+        "Crossmap examples" => "examples/examples_cross_mappings.md",
     ],
     "Tutorials" => [
         "Information tutorial" => "info_tutorial.md",

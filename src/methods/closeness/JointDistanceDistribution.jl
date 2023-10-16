@@ -20,14 +20,14 @@ end
     JointDistanceDistribution <: AssociationMeasure end
     JointDistanceDistribution(; metric = Euclidean(), B = 10, D = 2, τ = -1, μ = 0.0)
 
-The joint distance distribution (JDD) measure [Amigo2018](@citet).
+The joint distance distribution (JDD) measure [Amigo2018](@cite).
 
 ## Usage
 
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional
     dependence.
 - Use with [`jdd`](@ref) to compute the joint distance distribution `Δ` from
-    [Amigo2018](@citet)
+    [Amigo2018](@citet).
 
 ## Keyword arguments
 
