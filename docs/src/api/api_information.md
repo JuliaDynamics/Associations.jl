@@ -1,4 +1,8 @@
-# Information API
+# [Information API](@ref information_api)
+
+The information API define multivariate information measures, which we define as 
+any functional of probability mass functions (pmf) or probability densities that operate
+on two or more input datasets.
 
 ## Overview
 
@@ -17,6 +21,52 @@ MultivariateInformationMeasure
 MultivariateInformationMeasureEstimator
 CausalityTools.information(::MultivariateInformationMeasureEstimator)
 ```
+
+## Core
+
+### Discretization
+
+```@docs
+Discretization
+codify
+```
+
+#### Column-wise discretization
+
+```@docs
+CodifyVariables
+```
+
+#### Point-wise discretization
+
+```@docs
+CodifyPoints
+Encoding
+encoding
+GaussianCDFEncoding
+OrdinalPatternEncoding
+RelativeMeanEncoding
+RelativeFirstDifferenceEncoding
+UniqueElementsEncoding
+CombinationEncoding
+RectangularBinEncoding
+encode
+decode
+```
+
+## Counting and probabilities
+
+For counting and probabilities, CausalityTools.jl extends the single-variable machinery
+in ComplexityMeasures.jl to multiple variables.
+
+```@docs
+CausalityTools.Counts
+CausalityTools.counts
+CausalityTools.Probabilities
+CausalityTools.probabilities
+marginal
+```
+
 
 ## [Definitions](@id definitions)
 
