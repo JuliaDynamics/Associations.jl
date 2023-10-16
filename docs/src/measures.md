@@ -34,26 +34,6 @@ AssociationMeasure
 
 ## Correlation measures
 
-### Pearson correlation
-
-```@docs
-PearsonCorrelation
-pearson_correlation
-```
-
-### Partial correlation
-
-```@docs
-PartialCorrelation
-partial_correlation
-```
-
-### Distance correlation
-
-```@docs
-DistanceCorrelation
-distance_correlation
-```
 
 ## Closeness measures
 
@@ -90,22 +70,6 @@ m_measure
 ```@docs
 LMeasure
 l_measure
-```
-
-## Cross-map measures
-
-See also the [cross mapping API](@ref crossmap_api) for estimators.
-
-### Convergent cross mapping
-
-```@docs
-ConvergentCrossMapping
-```
-
-### Pairwise asymmetric inference
-
-```@docs
-PairwiseAsymmetricInference
 ```
 
 ## Recurrence-based

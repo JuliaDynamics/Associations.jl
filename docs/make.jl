@@ -11,11 +11,13 @@ using StateSpaceSets
 
 pages = [
     "Overview" => "index.md",
-    "Core API" => [
+    "Associations API" => [
         "Core" => "core.md",
         "Information API" => "api/api_information.md",
         "Crossmap API" => "api/api_crossmap.md",
+        "Correlation API" => "api/api_correlation.md",
     ],
+    
     "Examples" => [
         "Information examples" => "examples/estimating_infomeasures.md",
         "Crossmap examples" => "examples/examples_cross_mappings.md"
