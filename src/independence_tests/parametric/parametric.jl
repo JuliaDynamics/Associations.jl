@@ -26,7 +26,7 @@ function fishers_z(p̂)
     return 0.5 * log((1 + p̂) / (1 - p̂))
 end
 
-#include("JointDistanceDistributionTest.jl")
+include("JointDistanceDistributionTest.jl")
 #include("PredictiveAsymmetryTest.jl")
 #include("PATest.jl")
 #include("CorrTest.jl")

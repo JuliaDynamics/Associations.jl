@@ -81,7 +81,7 @@ function null_hypothesis_text(test::IndependenceTestResult)
         return ""
     end
 end
-#include("parametric/parametric.jl")
+include("parametric/parametric.jl")
 #include("local_permutation/LocalPermutationTest.jl")
 include("surrogate/SurrogateAssociationTest.jl")
 # TODO: rename/find suitable generic name before including
