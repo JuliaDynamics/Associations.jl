@@ -24,6 +24,10 @@ D_{KL}(P_Y(\\Omega) || P_Y(\\Omega)) =
     be undefined to due some outcomes having zero counts. Use some other
     [`ProbabilitiesEstimator`](@ref) like [`BayesianRegularization`](@ref) to ensure
     all estimated probabilities are nonzero.
+
+!!! note 
+    Distances.jl also defines `KLDivergence`. Quality it if you're loading both 
+    packages, i.e. do `information(CausalityTools.KLDivergence(), x, y)`.
 """
 struct KLDivergence{B} <: DivergenceOrDistance
     base::B

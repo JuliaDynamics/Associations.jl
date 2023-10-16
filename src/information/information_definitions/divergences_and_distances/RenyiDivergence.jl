@@ -4,7 +4,7 @@ export RenyiDivergence
     RenyiDivergence <: DivergenceOrDistance
     RenyiDivergence(q; base = 2)
 
-The Rényi divergence of positive order `q`
+The Rényi divergence of positive order `q`.
 
 ## Description
 
@@ -26,6 +26,10 @@ D_{q}(P_Y(\\Omega) || P_Y(\\Omega)) =
     be undefined to due some outcomes having zero counts. Use some other
     [`ProbabilitiesEstimator`](@ref) like [`BayesianRegularization`](@ref) to ensure
     all estimated probabilities are nonzero.
+
+!!! note 
+    Distances.jl also defines `RenyiDivergence`. Quality it if you're loading both 
+    packages, i.e. do `information(CausalityTools.RenyiDivergence(), x, y)`.
 """
 struct RenyiDivergence{Q, B} <: DivergenceOrDistance
     q::Q
