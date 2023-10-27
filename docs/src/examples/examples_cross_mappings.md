@@ -244,7 +244,7 @@ reproduce_figure_3B()
 Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
 introduced the [`ConvergentCrossMapping`](@ref) measure.
 Equations and parameters can be found in their supplementary material.
-Simulatenously, we also compute the [`PairwiseAsymmetricInference`](@ref) measure
+Simultaneously, we also compute the [`PairwiseAsymmetricInference`](@ref) measure
 from McCracken & Weigel (2014)[^McCracken2014], which is a related method, but uses a
 slightly different embedding.
 

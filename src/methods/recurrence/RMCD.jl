@@ -46,7 +46,7 @@ where  `base` controls the base of the logarithm.
 when ``X``, ``Y`` and ``Z`` are mutually independent.
 
 Our implementation allows dropping the third/last argument, in which
-case the following mutual information-like quantitity is computed (not
+case the following mutual information-like quantity is computed (not
 discussed in [Ramos2017](@citet).
 
 ```math

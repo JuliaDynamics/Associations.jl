@@ -23,7 +23,7 @@ which is implemented as described in [Kalisch2008](@citet).
 ## Keyword arguments
 
 - **`α::Real`**. The significance level of the test.
-- **`max_depth`**. The maximum level of conditional indendence tests to be
+- **`max_depth`**. The maximum level of conditional independence tests to be
     performed. By default, there is no limit (i.e. `max_depth = Inf`), meaning that
     maximum depth is `N - 2`, where `N` is the number of input variables.
 - **`maxiters_orient::Real`**. The maximum number of times to apply the orientation

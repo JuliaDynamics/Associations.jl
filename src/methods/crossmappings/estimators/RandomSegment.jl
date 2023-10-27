@@ -6,7 +6,7 @@ export RandomSegment
     RandomSegment <: CrossmapEstimator
     RandomSegment(; libsizes::Int, rng = Random.default_rng())
 
-Indicatates that cross mapping is performed on contiguous time series
+Indicates that cross mapping is performed on contiguous time series
 segments/windows of length `L` with a randomly selected starting point.
 
 This is method 2 from [Luo2015](@cite).

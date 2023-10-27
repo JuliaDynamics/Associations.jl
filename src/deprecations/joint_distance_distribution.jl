@@ -6,7 +6,7 @@ Compute the joint distance distribution [Amigo2018](@cite) from
 `source` to `target` using the given [`JointDistanceDistribution`](@ref) measure.
 
 Returns the distribution `Δ` from the paper directly ([example](@ref quickstart_jdd)).
-Use [`JointDistanceDistributionTest`](@ref) to perform a formal indepencence test.
+Use [`JointDistanceDistributionTest`](@ref) to perform a formal independence test.
 """
 function jdd(source, target; kw...)
     if !isempty(kw)

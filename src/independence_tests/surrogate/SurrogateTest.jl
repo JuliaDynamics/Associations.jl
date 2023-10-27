@@ -14,7 +14,7 @@ export SurrogateTestResult
     )
 
 A generic (conditional) independence test for assessing whether two variables `X` and `Y`
-are independendent, potentially conditioned on a third variable `Z`, based on
+are independent, potentially conditioned on a third variable `Z`, based on
 surrogate data.
 
 When used with [`independence`](@ref), a [`SurrogateTestResult`](@ref) is returned.

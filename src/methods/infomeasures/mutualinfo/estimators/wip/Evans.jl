@@ -21,7 +21,7 @@ end
 function estimate(def::MIShannonDifferential, est::Evans, x::VectorOrStateSpaceSet...)
     e = def.e
     @assert length(x) >= 2 ||
-        error("Need at leats two input StateSpaceSets to compute mutual information between them.")
+        error("Need at least two input StateSpaceSets to compute mutual information between them.")
 
     (; k, w, metric) = est
 

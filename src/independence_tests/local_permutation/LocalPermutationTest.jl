@@ -40,7 +40,7 @@ struct NeighborCloseness <: LocalPermutationClosenessSearch end
 
 `LocalPermutationTest` is a generic conditional independence test
 [Runge2018LocalPerm](@cite) for assessing whether two variables `X` and `Y` are
-conditionally independendent given a third variable `Z` (all of which may be multivariate).
+conditionally independent given a third variable `Z` (all of which may be multivariate).
 
 When used with [`independence`](@ref), a [`LocalPermutationTestResult`](@ref) is returned.
 

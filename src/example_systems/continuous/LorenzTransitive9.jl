@@ -12,7 +12,7 @@ export LorenzTransitive9
         β₁ = 8/3,  β₂ = 8/3,  β₃ = 8.3,
         c₁₂ = 1.0, c₂₃ = 1.0)
 
-Initalise a dynamical system consisting of three coupled Lorenz attractors with
+Initialise a dynamical system consisting of three coupled Lorenz attractors with
 a transitive causality chain where X₁ → X₂ and X₂ → X₃. In total, the three
 3D-subsystems create a 9-dimensional dynamical system.
 

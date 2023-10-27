@@ -21,7 +21,7 @@ export contingency_matrix
 A contingency matrix is essentially a multivariate analogue of [`Probabilities`](@ref)
 that also keep track of raw frequencies.
 
-The contingency matrix can be constructed directyly from an `N`-dimensional `frequencies`
+The contingency matrix can be constructed directly from an `N`-dimensional `frequencies`
 array. Alternatively, the [`contingency_matrix`](@ref) function performs counting for
 you; this works on both raw categorical data, or by first discretizing data using a
 a [`ProbabilitiesEstimator`](@ref).
@@ -203,7 +203,7 @@ end
 _levelsmap(x) = levelsmap(x)
 _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 
-# The following commented-out code below is equivalent to theabove, but muuuch faster.
+# The following commented-out code below is equivalent to the above, but much faster.
 # I keep the comments here for, so when I revisit this, I understand *why* it works.
 # This will be moved into some sort of tutorial or doc example at some point.
 
@@ -249,7 +249,7 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
     # end
     #return ContingencyMatrix(pXYZ / N)
 
-    # The following is equivalent to the commented-out code above, but muuuch faster.
+    # The following is equivalent to the commented-out code above, but much faster.
      # I keep the above code, so when I revisit this, I understand *why* it works.
 #     pX = probabilities(CountOccurrences(), X); lX = length(pX)
 #     pY = probabilities(CountOccurrences(), Y); lY = length(pY)
@@ -299,7 +299,7 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 # like for mutual information (Fernandes et al., 2010)
 ###########################################################################################
 
-# Exaplanation of the algorithm
+# Explanation of the algorithm
 # First, we compute the counts of `fᵢⱼ` for each outcome `(Ωxᵢ, Ωyᵢ)`
 # by counting how many times `X == Ωxᵢ` and `y == Ωyᵢ` occur simultaneously.
 
@@ -322,7 +322,7 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 # As discussed in Fernandes et al. (2010), the mutual information estimated based on
 # contingency matrices *strongly* depends on how joint probabilities are estimated
 # for the contingency matrices.
-# They present multiple alternatives, based of different prior assuptions of the data,
+# They present multiple alternatives, based of different prior assumptions of the data,
 # which we here implement as subtypes:
 
 # - [`NaiveJointFrequency`](@ref).

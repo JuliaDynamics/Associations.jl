@@ -45,7 +45,7 @@ because there is no coupling $Y \to X$.
 ### Conditional analysis
 
 What happens if we compute$\Delta A_{X \to Z}$? We'd maybe expect there to be 
-some information transfer $X \to Z$, even though ther are not directly linked, because
+some information transfer $X \to Z$, even though they are not directly linked, because
 information is transferred through $Y$.
 
 ```@example example_pa1

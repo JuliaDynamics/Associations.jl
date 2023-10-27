@@ -46,7 +46,7 @@ Base.@kwdef struct LorenzForced9{V,CXY,CYX,CZX,CZY,A1,A2,A3,B1,B2,B3,C1,C2,C3} <
     c_xy::CXY = 1.0
     c_yx::CYX = 1.0
     c_zx::CZX = 1.0
-    c_zy::CZY = 1.0 # beyond c = 2, systems syncronize
+    c_zy::CZY = 1.0 # beyond c = 2, systems synchronize
     a₁::A1 = 10
     a₂::A2 = 28
     a₃::A3 = 8/3

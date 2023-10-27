@@ -30,7 +30,7 @@ If `bootstrap_method` is specified, then `nreps` different bootstrapped estimate
     points from the embedding ``M_x``  (time ordering does not matter). This is method 3 from
     [Luo2015](@citet), which critiqued the original [Sugihara2012](@cite)'s methodology.
 - `bootstrap_method = :segment` selects training sets consisting of time-contiguous segments
-    (each of lenght `L`) of embedding vectors in ``M_x`` (time ordering matters). This is
+    (each of length `L`) of embedding vectors in ``M_x`` (time ordering matters). This is
     method 2 from [Luo2015](@citet).
 """
 function crossmap(x, y, d, τ; correspondence_measure = Statistics.cor, r = 0)
@@ -90,7 +90,7 @@ If `bootstrap_method` is specified, then `nreps` different bootstrapped estimate
     points from the embedding ``M_x``  (time ordering does not matter). This is method 3 from
     [Luo2015](@cite), which critiqued the original [Sugihara2012](@citet) methodology.
 - `bootstrap_method = :segment` selects training sets consisting of time-contiguous segments
-    (each of lenght `L`) of embedding vectors in ``M_x`` (time ordering matters). This is
+    (each of length `L`) of embedding vectors in ``M_x`` (time ordering matters). This is
     method 2 from Luo et al. (2015)[Luo2015](@cite).
 """
 function pai(x, y, d, τ; correspondence_measure = Statistics.cor, r = 0)

@@ -93,7 +93,7 @@ end
 function encode_as_tuple(e::RectangularBinEncoding, point::SVector{D, T}) where {D, T}
     ranges = e.ranges
     if e.precise
-        # Don't know how to make this faster unfurtunately...
+        # Don't know how to make this faster unfortunately...
         bin = map(searchsortedlast, ranges, point)
     else
         bin = floor.(Int, (point .- e.mini) ./ e.widths) .+ 1

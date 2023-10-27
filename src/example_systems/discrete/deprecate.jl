@@ -958,7 +958,7 @@ end
     verdes(;u₀ = rand(3), ωy = 315, ωz = 80,
         σx = 0.0, σy = 0.0, σz = 0.0) → DiscreteDynamicalSystem
 
-Intitialise a 3D system where the response X is a highly nonlinear combination
+Initialise a 3D system where the response X is a highly nonlinear combination
 of Y and Z [Verdes2005](@cite). The forcings Y and Z involve sines and cosines, and
 have different periods, which controlled by `ωy` and `ωz`.
 

@@ -52,7 +52,7 @@ Given some `input` data, estimate some information measure using the given
 """
 function estimate(measure::InformationMeasure, args...; kwargs...) end
 
-# Contingency matrices and its computation based on various probabilites
+# Contingency matrices and its computation based on various probabilities
 # estimators
 include("marginal_encodings.jl")
 

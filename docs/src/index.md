@@ -81,5 +81,5 @@ we use here. Contributors are listed in the respective GitHub repos and webpages
 ## Related packages
 
 - [TransferEntropy.jl](https://github.com/JuliaDynamics/TransferEntropy.jl) previously
-    provided mutual infromation and transfer entropy estimators. These have been
+    provided mutual information and transfer entropy estimators. These have been
     re-implemented from scratch and moved here.

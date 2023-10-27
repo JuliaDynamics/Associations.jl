@@ -55,14 +55,14 @@ Returns a vector containing the predictive asymmetry for each value of `ηs`.
 
 If `normalize == true` (the default), then compute the normalized predictive asymmetry 𝒜.
 In this case, for each ``\\eta`` in `ηs`, compute 𝒜(η) by normalizing 𝔸(η) to some fraction `f` of the
-mean transfer entropy over prediction lags ``-\\eta, ..., \\eta`` (exluding lag 0).
+mean transfer entropy over prediction lags ``-\\eta, ..., \\eta`` (excluding lag 0).
 [Haaga2020](@citet) uses a normalization with `f=1.0` as a built-in hypothesis test,
 avoiding more computationally costly surrogate testing.
 
 ## Estimators
 
 Any [estimator](@ref) that works for [`transferentropy`](@ref) will also work with
-`predictive_asymmetry`. Check the online documentation for compatiable estimators.
+`predictive_asymmetry`. Check the online documentation for compatible estimators.
 
 ## Examples
 

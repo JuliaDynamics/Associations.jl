@@ -4,7 +4,7 @@ export ExpandingSegment
     ExpandingSegment <: CrossmapEstimator
     ExpandingSegment(; libsizes::Int, rng = Random.default_rng())
 
-Indicatates that cross mapping is performed on a contiguous time series segment/window,
+Indicates that cross mapping is performed on a contiguous time series segment/window,
 starting from the first available data point up to the `L`th data point.
 
 If used in an ensemble setting, the estimator is applied to time indices `Lmin:step:Lmax`

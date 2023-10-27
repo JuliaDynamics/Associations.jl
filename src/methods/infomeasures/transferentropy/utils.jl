@@ -150,7 +150,7 @@ function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVec
     #    @warn("Backwards lag τS should be negative. You might be getting nonsensical results!")
     #end
 
-    # Get lags and posisions separately for each marginal
+    # Get lags and positions separately for each marginal
     pos_Tf, lags_Tf = rc(target, p.dTf, p.ηTf, true)
     pos_T, lags_T = rc(target, p.dT, p.τT, false)
     pos_S, lags_S = rc(source, p.dS, p.τS, false)
@@ -187,7 +187,7 @@ function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVec
     #if (p.τS isa Int && p.τS > 0) || (length(p.τS) > 1 && any(p.τS[p.τS .> 0]))
     #    @warn("Backwards lag τS should be negative. You might be getting nonsensical results!")
     #end
-    # Get lags and posisions separately for each marginal
+    # Get lags and positions separately for each marginal
     pos_Tf, lags_Tf = rc(target, p.dTf, p.ηTf,  true)
     pos_T, lags_T = rc(target, p.dT, p.τT, false)
     pos_S, lags_S = rc(source, p.dS, p.τS, false)

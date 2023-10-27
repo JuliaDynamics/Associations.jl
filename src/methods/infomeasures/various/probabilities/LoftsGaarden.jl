@@ -5,7 +5,7 @@ import ComplexityMeasures: outcome_space
     Loftsgaarden <: ProbabilitiesEstimator
 
 The `Loftsgaarden` probabilities estimator is based on the `k`-th nearest neighbor
-density estimatio from Loftsgaarden & Quesenberry (1965).
+density estimation from Loftsgaarden & Quesenberry (1965).
 
 It estimates probabilities by first estimating the density locally at each sample
 point `xᵢ` using the distance from `xᵢ` to its `k`-th nearest neighbor. The density

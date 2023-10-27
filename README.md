@@ -22,7 +22,7 @@ find online or build locally by running the `docs/make.jl` file.
     every measure-estimator combination you can think of. For example, we offer the generic
     `SurrogateTest`, which is fully compatible with
     [TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl),
-    and the `LocalPermutationTest` for conditional indepencence testing.
+    and the `LocalPermutationTest` for conditional independence testing.
 - A dedicated API for causal network inference based on these measures and independence
     tests.
 

@@ -525,7 +525,7 @@ end
 function lorenz_lorenz_lorenz_bidir_forced_trajectory(npts;
         n_transient = 2000, dt = 0.1, sample_dt = 1,
         u0 = rand(9),
-        c_xy = 1.0, c_yx = 1.0, c_zx = 1.0, c_zy = 1.0, # beyond c = 2, systems syncronize
+        c_xy = 1.0, c_yx = 1.0, c_zx = 1.0, c_zy = 1.0, # beyond c = 2, systems synchronize
         a₁ = 10, a₂ = 28, a₃ = 8/3,
         b₁ = 10, b₂ = 28, b₃ = 8/3,
         c₁ = 10, c₂ = 28, c₃ = 8/3)
@@ -632,7 +632,7 @@ end
                 β₁ = 8/3,  β₂ = 8/3,  β₃ = 8.3,
                 c₁₂ = 1.0, c₂₃ = 1.0) → ContinuousDynamicalSystem
 
-Initalise a dynamical system consisting of three coupled Lorenz attractors with
+Initialise a dynamical system consisting of three coupled Lorenz attractors with
 a transitive causality chain where X₁ → X₂ and X₂ → X₃. In total, the three
 3D-subsystems create a 9-dimensional dynamical system.
 

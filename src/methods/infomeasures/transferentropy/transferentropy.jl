@@ -141,7 +141,7 @@ function estimate(measure::TransferEntropy, est::TE_ESTIMATORS, x...)
     return condmutualinfo(cmi, est, T⁺, S, StateSpaceSet(T, C))
 end
 
-# When using any estimator except dedicatd `TransferEntropyEstimator`s,
+# When using any estimator except dedicated `TransferEntropyEstimator`s,
 # we use the conditional mutual information decomposition, so we need
 # to change the measure for dispatch to work.
 te_to_cmi(measure::TEShannon) = CMIShannon(measure.e)

@@ -160,7 +160,7 @@ function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractState
         #   1) when sampling with replacement, or
         #   2) when input data points are very similar.
         # When either is the case, we encounter division by zero when computing weights.
-        # To circumvent zero-division, we simply add some artifical small distance
+        # To circumvent zero-division, we simply add some artificial small distance
         # to all distances, so that there are no zero-distance neighbors.
         if !(first(dᵢ) > 0.0)
             for i = 1:nnd

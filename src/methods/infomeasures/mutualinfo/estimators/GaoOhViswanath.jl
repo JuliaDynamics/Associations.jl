@@ -37,7 +37,7 @@ function estimate(measure::MIShannon, est::GaoOhViswanath, x::VectorOrStateSpace
     e = measure.e
 
     @assert length(x) >= 2 ||
-        error("Need at leats two input StateSpaceSets to compute mutual information between them.")
+        error("Need at least two input StateSpaceSets to compute mutual information between them.")
     (; k, w, metric_joint, metric_marginals) = est
     joint = StateSpaceSet(x...)
     marginals = map(xᵢ -> StateSpaceSet(xᵢ), x)

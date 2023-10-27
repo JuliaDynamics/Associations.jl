@@ -61,7 +61,7 @@ end
     point_density!(S₁, S₂, est::LocalLikelihood, xᵢ, bwᵢ,
         neighborsᵢ::AbstractStateSpaceSet{D}) where D
 
-Estimate the density around point `xᵢ` using a local likehood estimator, which is
+Estimate the density around point `xᵢ` using a local likelihood estimator, which is
 a generalization of kernel density estimation. This is done by fitting a local gaussian
 distribution around `xᵢ` from its local neighborhood (represented the points `neighborsᵢ`).
 The bandwidth  `bwᵢ` is given by the distance from `xᵢ` to its `k`-th nearest neighbor.

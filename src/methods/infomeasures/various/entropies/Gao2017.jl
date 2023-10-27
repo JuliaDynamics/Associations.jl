@@ -20,7 +20,7 @@ function Î(q, est::Gao2017, x::AbstractStateSpaceSet{D}) where D
     Bk,d,α,K = bias(est)
     idxs, ds = bulksearch(tree, x, NeighborNumber(k), Theiler(w))
 
-    # In the case of a multivariate Gaussian, maximum likehood estimation simply
+    # In the case of a multivariate Gaussian, maximum likelihood estimation simply
     # amounts to finding the sample means and sample covariance matrices.
     for xᵢ in x
         μ, Σ = mean_and_cov(x)

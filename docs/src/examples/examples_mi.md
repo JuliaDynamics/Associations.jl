@@ -91,7 +91,7 @@ for i = 1:nreps
     mis_ksg2[i, :] = map(k -> mutualinfo(measure, KSG2(; k), X, Y), ks)
 end
 fig = Figure()
-ax = Axis(fig[1, 1], xlabel = "k / N", ylabel = "Mutual infomation (nats)")
+ax = Axis(fig[1, 1], xlabel = "k / N", ylabel = "Mutual information (nats)")
 scatterlines!(ax, ks ./ N, mean(mis_ksg1, dims = 1) |> vec, label = "KSG1")
 scatterlines!(ax, ks ./ N, mean(mis_ksg2, dims = 1) |> vec, label = "KSG2")
 hlines!(ax, [mitrue], color = :black, linewidth = 3, label = "I (true)")
@@ -214,7 +214,7 @@ function new_cycle_theme()
     # https://nanx.me/ggsci/reference/pal_locuszoom.html
     my_colors = ["#D43F3AFF", "#EEA236FF", "#5CB85CFF", "#46B8DAFF",
         "#357EBDFF", "#9632B8FF", "#B8B8B8FF"]
-    cycle = Cycle([:color, :linestyle, :marker], covary=true) # alltogether
+    cycle = Cycle([:color, :linestyle, :marker], covary=true) # all together
     my_markers = [:circle, :rect, :utriangle, :dtriangle, :diamond,
         :pentagon, :cross, :xcross]
     my_linestyle = [nothing, :dash, :dot, :dashdot, :dashdotdot]

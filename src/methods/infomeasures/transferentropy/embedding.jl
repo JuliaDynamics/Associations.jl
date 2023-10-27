@@ -39,7 +39,7 @@ one ``\\tau^k_{C}`` equals zero. This way, the ``T^{-}``, ``S^{-}`` and ``C^{-}`
 always contains present/past states, while the ``\\mathcal T`` marginal contain future
 states relative to the other marginals. However, this is not a strict requirement,
 and modern approaches that searches for optimal embeddings can return embeddings without
-the intantaneous lag.
+the instantaneous lag.
 
 Combined, we get the generalized delay reconstruction
 ``\\mathbb{E} = (T^{+}_{(d_{T^{+}})}, T^{-}_{(d_{T})}, S^{-}_{(d_{S})}, C^{-}_{(d_{C})})``.
