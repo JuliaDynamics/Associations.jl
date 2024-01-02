@@ -8,7 +8,7 @@ probests = [
 ]
 
 probests_for_timeseries = [
-    OrdinalPatterns(m = 3),
+    OrdinalPatterns{3}(),
     Dispersion(c = 3, m = 2)
 ]
 

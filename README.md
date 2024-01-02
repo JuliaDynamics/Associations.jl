@@ -19,10 +19,9 @@ find online or build locally by running the `docs/make.jl` file.
     systems theory, for example distance correlation, mutual information, transfer entropy,
     convergent cross mapping and a lot more!
 - A dedicated API for independence testing, which comes with automatic compatibility with
-    every measure-estimator combination you can think of. For example, we offer the generic
-    `SurrogateTest`, which is fully compatible with
-    [TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl),
-    and the `LocalPermutationTest` for conditional indepencence testing.
+    every measure-estimator combination you can think of. For example, for conditional
+    indepencence testing, we offer the generic [`SurrogateAssociationTest`](@ref)
+    (which is fully compatible with [TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl)), and the [`LocalPermutationTest`](@ref).
 - A dedicated API for causal network inference based on these measures and independence
     tests.
 

@@ -6,6 +6,6 @@ using Random
 rng = Xoshiro(1234)
 n = 100000
 x, y = rand(rng, n), rand(rng, n)
-o = OrdinalPatterns(m=3)
+o = OrdinalPatterns{3}()
 div_kl = information(HellingerDistance(), o, x, y)
 @test abs(div_kl) ≤ 0.001

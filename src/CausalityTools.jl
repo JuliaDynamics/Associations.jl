@@ -19,10 +19,9 @@ module CausalityTools
     @reexport using ComplexityMeasures
     @reexport using TimeseriesSurrogates
 
-    include("core/core.jl")
+    include("core.jl")
+
     include("information/information.jl")
-    # include("contingency_matrices.jl")
-    # include("infomeasures/infomeasures.jl")
 
     include("methods/crossmappings/crossmappings.jl")
     include("methods/closeness/closeness.jl")

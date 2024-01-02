@@ -1,7 +1,7 @@
 ests = [
     ValueBinning(RectangularBinning(3)),
     ValueBinning(FixedRectangularBinning(0:0.25:1.0)),
-    OrdinalPatterns(m = 3),
+    OrdinalPatterns{3}(),
     Dispersion(m = 2, c = 3)
 ]
 

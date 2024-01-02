@@ -45,10 +45,10 @@ w = rand(1000)
 
 # These are the estimators that have implementations of `marginal_encodings`
 probests = [
-    OrdinalPatterns(m = 3),
+    OrdinalPatterns{3}(),
     Dispersion(),
     ValueBinning(3),
-    Contingency(OrdinalPatterns(m = 3)),
+    Contingency(OrdinalPatterns{3}()),
     Contingency(Dispersion()),
     Contingency(ValueBinning(3)),
 ]

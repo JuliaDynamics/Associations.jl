@@ -56,7 +56,7 @@ end
 # A generic implementation suffices. It dispatches to measure-specific functions
 # that only depend on two or more sets of `Probabilities`.
 function information(measure::MultivariateInformationMeasure, est::ProbabilitiesEstimator, o::OutcomeSpace, x...)
-    cts_xs = map(xᵢ -> allcounts(o, xᵢ), x)
+    cts_xs = map(xᵢ -> first(allcounts_and_outcomes(o, xᵢ)), x)
     pmfs = map(cts -> probabilities(est, cts), cts_xs)
     return information(measure, pmfs...)
 end
@@ -64,8 +64,8 @@ end
 # For the divergences/distances, is it faster to compute the joint and derive the marginal from the joint, 
 # or use allcounts to compute the marginals directly? We stick with the joint for now...
 # function information(measure::BivariateInformationMeasure, est::ProbabilitiesEstimator, o::OutcomeSpace, x, y)
-#     cts_x = allcounts(o, x)
-#     cts_y = allcounts(o, y)
+#     cts_x, outs_x = allcounts_and_outcomes(o, x)
+#     cts_y, outs_y = allcounts_and_outcomes(o, y)
 #     px = probabilities(est, cts_x)
 #     py = probabilities(est, cts_y)
 #     return information(measure, px, py)

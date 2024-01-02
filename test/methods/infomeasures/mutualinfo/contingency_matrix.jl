@@ -10,7 +10,7 @@ y = rand(["hello", "yoyo", "heyhey"], 200)
 
 # With discretization using a probabilities estimator
 z, w = rand(100), rand(100)
-est = OrdinalPatterns(m = 3)
+est = OrdinalPatterns{3}()
 @test mutualinfo(MIShannon(), Contingency(est), z, w) >= 0.0
 @test mutualinfo(MITsallisFuruichi(), Contingency(est), z, w) isa Real
 @test mutualinfo(MITsallisMartin(), Contingency(est), z, w) isa Real

@@ -1,15 +1,19 @@
+using Test
+using Random
+rng = Xoshiro(1234)
+
 # Pre-discretized
-x = rand(["a", "b", "c"], 200)
-y = rand(["hello", "yoyo", "heyhey"], 200)
-z = rand(["a", "b"], 200)
+x = rand(rng, ["a", "b", "c"], 200)
+y = rand(rng, ["hello", "yoyo", "heyhey"], 200)
+z = rand(rng, ["a", "b"], 200)
 @test condmutualinfo(CMIShannon(), Contingency(), x, y, z) >= 0.0
 @test condmutualinfo(CMIShannon(), Contingency(), x, y, z) isa Real
 @test condmutualinfo(CMIRenyiJizba(), Contingency(), x, y, z) isa Real
 @test condmutualinfo(CMIRenyiSarbu(), Contingency(), x, y, z) isa Real
 
 # With discretization using a probabilities estimator
-a, b, c = rand(100), rand(100), rand(100)
-est = OrdinalPatterns(m = 2)
+a, b, c = rand(rng, 100), rand(rng, 100), rand(rng, 100)
+est = OrdinalPatterns{2}()
 s1 = condmutualinfo(CMIShannon(), Contingency(est), a, b, c)
 s2 = condmutualinfo(CMIShannon(), est, a, b, c)
 @test s1 >= 0.0
