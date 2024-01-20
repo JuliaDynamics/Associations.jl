@@ -26,7 +26,7 @@ module CausalityTools
     include("methods/crossmappings/crossmappings.jl")
     include("methods/closeness/closeness.jl")
     include("methods/correlation/correlation.jl")
-    # include("methods/recurrence/methods.jl")
+    include("methods/recurrence/methods.jl")
 
     include("utils/cov.jl")
 

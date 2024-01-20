@@ -12,3 +12,9 @@ info under the following subheadings.
 
 Association measures are useful in their own right, but their utility come into 
 play when using them in the context of [independence testing](@ref independence_testing).
+
+```@docs
+AssociationMeasure
+AssociationMeasureEstimator
+association
+```

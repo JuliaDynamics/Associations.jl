@@ -1,8 +1,8 @@
 # [Cross mappings](@id examples_crossmappings)
 
-## [`ConvergentCrossMapping`](@ref)
+### [`ConvergentCrossMapping`](@ref)
 
-### [`ConvergentCrossMapping`](@ref) directly
+#### [`ConvergentCrossMapping`](@ref) directly
 
 ```@example
 using CausalityTools
@@ -10,7 +10,7 @@ x, y = rand(200), rand(100)
 crossmap(CCM(), x, y)
 ```
 
-### [`ConvergentCrossMapping`](@ref) with [`RandomVectors`](@ref)
+#### [`ConvergentCrossMapping`](@ref) with [`RandomVectors`](@ref)
 
 When cross-mapping with the [`RandomVectors`](@ref) estimator, a single random subsample
 of time indices (i.e. not in any particular order) of length `l` is drawn for each library
@@ -44,7 +44,7 @@ M = hcat(ρs...)
 Now, the `k`-th row of `M` contains `80` estimates of the correspondence measure `ρ`
 at library size `libsizes[k]`.
 
-### [`ConvergentCrossMapping`](@ref) with [`RandomSegments`](@ref)
+#### [`ConvergentCrossMapping`](@ref) with [`RandomSegments`](@ref)
 
 When cross-mapping with the [`RandomSegments`](@ref) estimator, a single random subsample
 of continguous, ordered time indices of length `l` is drawn for each library
@@ -78,12 +78,12 @@ M = hcat(ρs...)
 Now, the `k`-th row of `M` contains `80` estimates of the correspondence measure `ρ`
 at library size `libsizes[k]`.
 
-### Reproducing Sugihara et al. (2012)
+#### Reproducing Sugihara et al. (2012)
 
 !!! note "Run blocks consecutively"
     If copying these examples and running them locally, make sure the relevant packages (given in the first block) are loaded first.
 
-#### Figure 3A
+##### Figure 3A
 
 Let's reproduce figure 3A too, focusing only on [`ConvergentCrossMapping`](@ref) this time. In this figure, they compute the cross mapping for libraries of increasing size, always starting at time index 1. This approach - which we here call the [`ExpandingSegment`](@ref) estimator - is one of many ways of estimating the correspondence between observed and predicted value.
 
@@ -197,7 +197,7 @@ reproduce_figure_3A_ensemble(ConvergentCrossMapping(d = 3, τ = -1, w = 5))
 There wasn't really that much of a difference, since for the logistic map, the autocorrelation function flips sign for every lag increase. However, for examples from other systems, tuning `w` may be important.
 
 
-#### Figure 3B
+##### Figure 3B
 
 What about figure 3B? Here they generate time series of length 400 for a range of values for both coupling parameters, and plot the dominant direction $\Delta = \rho(\hat{x} | y) - \rho(\hat{y} | x)$.
 
@@ -240,7 +240,7 @@ end
 reproduce_figure_3B()
 ```
 
-#### Figures 3C and 3D
+##### Figures 3C and 3D
 
 Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
 introduced the [`ConvergentCrossMapping`](@ref) measure.
@@ -314,9 +314,9 @@ with_theme(theme_minimal(),
 end
 ```
 
-## [`PairwiseAsymmetricInference`](@ref)
+### [`PairwiseAsymmetricInference`](@ref)
 
-### Reproducing McCracken & Weigel (2014)
+#### Reproducing McCracken & Weigel (2014)
 
 Let's try to reproduce figure 8 from [McCracken2014](@citet)'s
 paper on [`PairwiseAsymmetricInference`](@ref) (PAI). We'll start by defining the their example B (equations 6-7). This system consists of two

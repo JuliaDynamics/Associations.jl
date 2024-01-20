@@ -1,7 +1,5 @@
 
-# [Independence testing](@id independence_testing)
-
-## Independence testing API
+# [Independence testing API](@id independence_testing)
 
 The independence test API is defined by
 

@@ -28,7 +28,6 @@ pages = [
     "Tutorials" => [
         "Information tutorial" => "info_tutorial.md",
     ],
-    # "Association measures" => "measures.md",
     # "Independence testing" => "independence.md",
     # "Causal graphs" => "causal_graphs.md",
     # "APIs and estimators" => "api.md",
@@ -36,6 +35,7 @@ pages = [
     # "Experimental" => "experimental.md",
     "References" => "references.md",
 ]
+
 
 Downloads.download(
     "https://raw.githubusercontent.com/JuliaDynamics/doctheme/master/build_docs_with_style.jl",
