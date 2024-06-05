@@ -12,3 +12,5 @@ Manifest.toml
 *.scss
 *.css
 vscode/*
+
+*.code-workspace
