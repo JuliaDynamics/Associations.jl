@@ -3,33 +3,32 @@ import ComplexityMeasures: decode
 import ComplexityMeasures: counts
 using ComplexityMeasures: Encoding
 
-export PerPointEncoding
+export PointEncoding
 
 """
-    PerPointEncoding{N}
-    PerPointEncoding(encodings::NTuple{N, Encoding})
+    PointEncoding{N}
+    PointEncoding(encodings::NTuple{N, Encoding})
 
 Given multiple dataset `xs::StateSpaceSet`, [`encode`](@ref) every `mₖ`-dimensional point
-`x[k][i]` as an integer using the given
-[`Encoding`](@ref)s `encodings[k]`.
+`x[k][i]` as an integer using the given [`Encoding`](@ref)s `encodings[k]`.
 """
-struct PerPointEncoding{N} <: Discretization{N}
+struct PointEncoding{N} <: Discretization{N}
     encodings::NTuple{N, Encoding}
-    function PerPointEncoding(encodings::NTuple{N, Encoding}) where N
+    function PointEncoding(encodings::NTuple{N, Encoding}) where N
         if !(N ≥ 1)
-            throw(ArgumentError("PerPointEncoding requires at least 1 dimensions"))
+            throw(ArgumentError("PointEncoding requires at least 1 dimensions"))
         end
         new{N}(encodings)
     end
 end
-Base.getindex(e::PerPointEncoding, i) = getindex(e.encodings, i)
+Base.getindex(e::PointEncoding, i) = getindex(e.encodings, i)
 
-function PerPointEncoding(encodings::Vararg{Encoding, N}) where N
-    return PerPointEncoding(tuple(encodings...))
+function PointEncoding(encodings::Vararg{Encoding, N}) where N
+    return PointEncoding(tuple(encodings...))
 end
 
 """
-    encode(encoding::PerPointEncoding{N}, x::Vararg{<:AbstractStateSpaceSet, N})
+    encode(encoding::PointEncoding{N}, x::Vararg{<:AbstractStateSpaceSet, N})
 
 Encode
 
@@ -48,19 +47,20 @@ ey = CombinationEncoding(RelativeMeanEncoding(0.0, 1.0, n = 3), OrdinalPatternEn
 ez = OrdinalPatternEncoding(4)
 
 # Encoding two input datasets gives a 2-tuple of Vector{Int}
-encode(PerPointEncoding(ex, ey), x, y)
+encode(PointEncoding(ex, ey), x, y)
 
 # Encoding three input datasets gives a 3-tuple of Vector{Int}
-encode(PerPointEncoding(ex, ey, ez), x, y, z)
+encode(PointEncoding(ex, ey, ez), x, y, z)
+```
 """
-function encode(encoding::PerPointEncoding{1}, x::Vararg{Any, 1})
+function encode(encoding::PointEncoding{1}, x::Vararg{Any, 1})
     e = first(encoding.encodings)
     x̂ = encode_individual_dataset(e, first(x))
     return x̂::Vector{<:Integer}
 end
 
 # Apply the same encoding to all input datasets.
-function encode(encoding::PerPointEncoding{1}, x::Vararg{Any, M}) where {M}
+function encode(encoding::PointEncoding{1}, x::Vararg{Any, M}) where {M}
     verify_input(encoding, x...)
     e = first(encoding.encodings)
     x̂ = map(k -> encode_individual_dataset(e, x[k]), tuple(1:M...))
@@ -69,14 +69,14 @@ function encode(encoding::PerPointEncoding{1}, x::Vararg{Any, M}) where {M}
 end
 
 
-function encode(encoding::PerPointEncoding{N}, x::Vararg{Any, M}) where {N, M}
+function encode(encoding::PointEncoding{N}, x::Vararg{Any, M}) where {N, M}
     verify_input(encoding, x...)
     x̂ = map(k -> encode_individual_dataset(encoding[k], x[k]), tuple(1:M...))
 
     return x̂::NTuple{M, Vector{<:Integer}}
 end
 
-function verify_input(encoding::PerPointEncoding{N}, x...) where N
+function verify_input(encoding::PointEncoding{N}, x...) where N
     M = length(x)
     if N != M && N != 1
         s = "The given `encoding` is for $N input datasets. $M input datasets were given."
@@ -108,7 +108,7 @@ end
  # The decoding step on the second-to-last line is not possible without actually providing
  # the encodings. Therefore, we need to override the generic implementation of
  # `counts`.
-function counts(encoding::PerPointEncoding, x...)
+function counts(encoding::PointEncoding, x...)
     # This converts each dataset `x[i]::StateSpaceSet` into `x̂[i]::Vector{Int}`,
     # where `length(x[i]) == length(x̂[i])`.
     x̂ = encode(encoding, x...)

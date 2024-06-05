@@ -1,27 +1,28 @@
-using ComplexityMeasures
-import ComplexityMeasures: symbolize
+import ComplexityMeasures: codify, encode
+import ComplexityMeasures: OutcomeSpace
 
 using DelayEmbeddings: embed
-export PerVariableEncoding
-export symbolize
+export VariableEncoding
+export codify
 
 # TODO: implement this generically for `Encodings` too (will require type-parameterized
 # number of elements for the Encodings).
 
 """
-    PerVariableEncoding <: Discretization
-    PerVariableEncoding(encoding::Encoding)
+    VariableEncoding <: Discretization
+    VariableEncoding(encoding::Encoding)
 
-Given multiple dataset `xs::StateSpaceSet`, [`encode`](@ref) the `i`-th variable/column
-using `encoding` (the same encoding is applied to each column to ensure consistency).
+Given multiple dataset `xs::AbstractStateSpaceSet`, [`encode`](@ref) the `i`-th
+variable/column using the given `encoding`. The same encoding is applied to each column to
+ensure that each column has the same length after encoding.
 
-Encoding is done internally using [`symbolize`](@ref), which typically runs a sliding
+Encoding is done internally using [`codify`](@ref), which typically runs a sliding
 window (of width dictated by the given `encoding`) across each variable, encoding
 each window to a unique integer.
 """
-struct PerVariableEncoding{N} <: Discretization{N}
+struct VariableEncoding{N} <: Discretization{N}
     outcome_spaces::NTuple{N, OutcomeSpace}
-    function PerVariableEncoding(outcome_spaces::NTuple{N, OutcomeSpace}) where N
+    function VariableEncoding(outcome_spaces::NTuple{N, OutcomeSpace}) where N
         if N > 1
             s = "It is currently only possible to use the same `OutcomeSpace` for all " *
                 "variables. Got $N different encodings"
@@ -33,23 +34,23 @@ end
 # TODO: we can use encoded_space_cardinality if multiple outcome spaces are used
 # to test if the outcome spaces can be matched.
 
-function PerVariableEncoding(o::OutcomeSpace)
-    return PerVariableEncoding((o,))
+function VariableEncoding(o::OutcomeSpace)
+    return VariableEncoding((o,))
 end
 
-function encode(encoding::PerVariableEncoding{1}, x::Vararg{Any, 1})
+function encode(encoding::VariableEncoding{1}, x::Vararg{Any, 1})
     e = first(encoding.outcome_spaces)
-    x̂ = symbolize(e, first(x))
+    x̂ = codify(e, first(x))
     return x̂::Vector{<:Integer}
 end
 
-function encode(encoding::PerVariableEncoding{1}, x::Tuple)
+function encode(encoding::VariableEncoding{1}, x::Tuple)
     e = first(encoding.outcome_spaces)
-    x̂ = map(xᵢ -> symbolize(e, xᵢ), x)
+    x̂ = map(xᵢ -> codify(e, xᵢ), x)
     N = length(x)
     return x̂::NTuple{N, Vector{<:Integer}}
 end
 
-function encode(encoding::PerVariableEncoding{1}, x::AbstractStateSpaceSet)
+function encode(encoding::VariableEncoding{1}, x::AbstractStateSpaceSet)
     return encode(encoding, columns(x))
 end

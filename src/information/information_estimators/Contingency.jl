@@ -11,7 +11,7 @@ constructs a contingency table of the required dimensionality (a [`Counts`](@ref
 then constructs a multidimensional probability mass function (a [`Probabilities`](@ref)
 instance) from those counts using the provided probabilities estimator `pest`.
 
-Works for any outcome space that implements [`symbolize`](@ref).
+Works for any outcome space that implements [`codify`](@ref).
 
 See also: [`Counts`](@ref), [`Probabilities]](@ref), [`ProbabilitiesEstimator`](@ref),
 [`OutcomeSpace`](@ref), [`DiscreteInfoEstimator`](@ref).

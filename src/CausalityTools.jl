@@ -59,12 +59,13 @@ module CausalityTools
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "2.7.1"
+    version_number = "3.0.0"
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - New association measure: `PMI` (part mutual information).
-    - Fixed an import warning.
+    - The information measure API has been completely overhauled. See the online docs
+        for more information.
+    - The documentation has been completely restructured.
     """
 
     if display_update
