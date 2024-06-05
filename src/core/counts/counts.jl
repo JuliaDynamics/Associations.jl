@@ -1,7 +1,6 @@
 using StatsBase: levelsmap
 using ComplexityMeasures
 using ComplexityMeasures: Counts
-using DimensionalData: DimArray
 
 import ComplexityMeasures: counts
 export counts
