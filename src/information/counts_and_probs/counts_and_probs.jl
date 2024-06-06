@@ -6,12 +6,6 @@ export Discretization
 
 The supertype of all discretization schemes.
 
-## Description 
-
-A fundamental operation when computing multivariate information measures from data 
-is *discretization*. There are many ways of discretizing multiple input datasets. We 
-offer two main ways of doing so.
-
 ## Concrete implementations
 
 - [`CodifyVariables`](@ref)

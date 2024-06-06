@@ -1,9 +1,24 @@
+# CausalityTools.jl
+
 ![CausalityTools.jl static logo](assets/logo-large.png)
 
 ```@docs
 CausalityTools
 ```
+## Documentation content 
 
+- [Association measures](@ref).
+
+### Independence testing
+
+For practical applications, it is often useful to determine whether variables are independent, possible conditioned upon 
+another set of variables. One way of doing so is to utilize an 
+association measure, and perform some sort of randomization-based
+[independence testing](@ref independence_testing).
+
+For example, to test the dependence between time series, [time series surrogates testing](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl) is used. Many other frameworks for independence exist too. Here, we've collected some independence testing frameworks, and made sure that they are compatible with as many of the implemented association measures as possible.
+
+<!--
 ## Goals
 
 Causal inference, and quantification of association in general, is fundamental to
@@ -29,7 +44,7 @@ which performs either a parametric or nonparametric (conditional)
 [`IndependenceTest`](@ref) using some form of
 [association measure](@ref association_measure). These tests, in turn, can be
 used with some [`GraphAlgorithm`](@ref) and [`infer_graph`](@ref) to infer causal graphs.
-
+-->
 ## Input data
 
 Input data for CausalityTools are given as:

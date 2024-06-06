@@ -71,12 +71,13 @@ end
 
 """
     condmutualinfo(est::CondiitionalMutualInformationEstimator, x, y, z) → cmi::Real
+    condmutualinfo(est::MIDecomposition, x, y, z) → cmi::Real
     condmutualinfo(est::JointProbabilities, x, y, z) → cmi::Real
     condmutualinfo(est::EntropyDecomposition, x, y, z) → cmi::Real
-    condmutualinfo(est::MIDecomposition, x, y, z) → cmi::Real
 
-Estimate some conditional mutual information ``CMI_*(X, Y | Z)`` of type ``*`` using 
-the estimator `est`, where type of the CMI is controlled by `est.definition`.
+Estimate some [`ConditionalMutualInformation`](@ref) `*`, ``CMI_*(X, Y | Z)``, using the 
+given `estimator`
+type ``*`` using  the estimator `est`, where type of the CMI is controlled by `est.definition`.
 
 ## Estimation
 

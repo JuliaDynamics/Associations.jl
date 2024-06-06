@@ -14,7 +14,7 @@ export ConditionalMutualInformationEstimator
 """
     MultivariateInformationMeasureEstimator
 
-The supertype for all multivariate information measures.
+The supertype for all estimators of multivariate information measures.
 
 ## Generic implementations
 

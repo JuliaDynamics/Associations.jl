@@ -33,6 +33,6 @@ set_theme!(;
     palette = (color = COLORSCHEME,),
     fontsize = 22,
     figure_padding = 8,
-    resolution = (800, 400),
+    size = (800, 400),
     linewidth = 3.0,
 )
