@@ -4,9 +4,8 @@
 
 There are two ways of encoding multivariate time series. 
 
-Multivariate time series can be encoded on a point-by-basis basis (i.e. not taking into consideration time information) by using [`CodifyPoints`](@ref),
-which takes as an input argument [`Encoding`](@ref) that is compatible 
-with the dimension of the input data.
+Multivariate time series can be encoded on a point-by-basis basis (i.e. not taking into consideration time information) by using the [`CodifyPoints`](@ref) discretization scheme. [`CodifyPoints`](@ref)  takes as an input argument [`Encoding`](@ref) that is compatible with the dimension of the input data, and converts the multivariate timeseries into a univariate time 
+series (because each multidimensional point is encoded as a single integer).
 
 ```@example
 using Random; rng = Xoshiro(1234)

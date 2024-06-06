@@ -42,8 +42,8 @@ function build_docs_with_style(pages, modules...; bib = nothing, authors = "Geor
             assets = [
                 asset("https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap", class=:css),
             ],
-            collapselevel = 2,
-            size_threshold = 1000 * 2^10, # 200 KiB
+            collapselevel = 3,
+            size_threshold = 1000 * 5^10, # 200 KiB
             size_threshold_warn = true,
         ),
         sitename = "$(modules[1]).jl",

@@ -10,7 +10,7 @@ Many association statistics exists. We have divided these statistics into (curre
 
 ## [Information API](@ref information_api)
 
-The information API defines bivariate and multivariate information measures, which we here define as any functional of a bidimensional or a multidimensional probability mass functions (PMFs) or probability density.
+The information API defines bivariate and multivariate information measures, which we here define as any functional of a multidimensional probability mass functions (PMFs) or multidimensional probability density.
 
 ### Overview
 
@@ -32,7 +32,8 @@ CausalityTools.information(::MultivariateInformationMeasureEstimator)
 ```
 
 ### Discretization
-A fundamental operation when computing multivariate information measures from data  is *discretization*. There are many ways of discretizing multiple input datasets. We offer two main ways of doing so.
+
+A fundamental operation when computing multivariate information measures from data is *discretization*. There are many ways of discretizing multiple input datasets. We offer two main ways of doing so.
 
 ```@docs
 Discretization
