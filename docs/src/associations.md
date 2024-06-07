@@ -300,7 +300,6 @@ DistanceCorrelation
 distance_correlation
 ```
 
-
 ## [Cross mapping API](@id cross_mapping_api)
 
 The cross mapping API define different ways of quantifying association based on the 
