@@ -8,6 +8,15 @@ export ConditionalEntropyTsallisAbe
 
 [Abe2001](@citet)'s discrete Tsallis conditional entropy measure.
 
+## Usage 
+
+- Use with [`information`](@ref) to compute the Tsallis-Abe conditional entropy between 
+    two variables.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
+
 ## Definition
 
 Abe & Rajagopal's Tsallis conditional entropy between discrete random variables

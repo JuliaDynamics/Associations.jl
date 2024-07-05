@@ -2,33 +2,162 @@
 
 The most basic components of CausalityTools.jl are a collection of statistics that in some manner quantify the "association" between input datasets. Precisely what is meant by "association" depends on the measure, and precisely what is meant  by "quantify" depends on the *estimator* of that measure. 
 
-Many association statistics exists. We have divided these statistics into (currently) three separate APIs:
+Many association statistics exists. We have divided these statistics into (currently) three separate APIs, which are described below (use the left-hand menu to navigate the page).
 
-- The [information API](@ref information_api).
-- The [cross mapping API](@ref cross_mapping_api).
-- The [correlation API](@ref correlation_api).
+- [Information measures](@ref)
+- [Cross-map measures](@ref)
+- [Correlation measures](@ref)
 
-## [Information API](@ref information_api)
+## [Overview](@id overview_association_measures)
 
-The information API defines bivariate and multivariate information measures, which we here define as any functional of a multidimensional probability mass functions (PMFs) or multidimensional probability density.
+| Type                    | Measure                               | Pairwise | Conditional | Function version               |
+| ----------------------- | ------------------------------------- | :------: | :---------: | ------------------------------ |
+| Correlation             | [`PearsonCorrelation`](@ref)          |    ✓    |     ✖      | [`pearson_correlation`](@ref)  |
+| Correlation             | [`DistanceCorrelation`](@ref)         |    ✓    |     ✓      | [`distance_correlation`](@ref) |
+| Closeness               | [`SMeasure`](@ref)                    |    ✓    |     ✖      | [`s_measure`](@ref)            |
+| Closeness               | [`HMeasure`](@ref)                    |    ✓    |     ✖      | [`h_measure`](@ref)            |
+| Closeness               | [`MMeasure`](@ref)                    |    ✓    |     ✖      | [`m_measure`](@ref)            |
+| Closeness (ranks)       | [`LMeasure`](@ref)                    |    ✓    |     ✖      | [`l_measure`](@ref)            |
+| Closeness               | [`JointDistanceDistribution`](@ref)   |    ✓    |     ✖      | [`jdd`](@ref)                  |
+| Cross-mapping           | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      | [`crossmap`](@ref)             |
+| Cross-mapping           | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      | [`crossmap`](@ref)             |
+| Conditional recurrence  | [`MCR`](@ref)                         |    ✓    |     ✖      | [`mcr`](@ref)                  |
+| Conditional recurrence  | [`RMCD`](@ref)                        |    ✓    |     ✓      | [`rmcd`](@ref)                 |
+| Shared information      | [`MIShannon`](@ref)                   |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information      | [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information      | [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information      | [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      | [`mutualinfo`](@ref)           |
+| Shared information      | [`PartialCorrelation`](@ref)          |    ✖    |     ✓      | [`partial_correlation`](@ref)  |
+| Shared information      | [`CMIShannon`](@ref)                  |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Shared information      | [`CMIRenyiSarbu`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Shared information      | [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      | [`condmutualinfo`](@ref)       |
+| Information transfer    | [`TEShannon`](@ref)                   |    ✓    |     ✓      | [`transferentropy`](@ref)      |
+| Information transfer    | [`TERenyiJizba`](@ref)                |    ✓    |     ✓      | [`transferentropy`](@ref)      |
+| Part mutual information | [`PMI`](@ref)                         |    ✖    |     ✓      | [`pmi`](@ref)                  |
+| Information asymmetry   | [`PA`](@ref)                          |    ✓    |     ✓      | [`asymmetry`](@ref)            |
 
-### Overview
 
-CausalityTools.jl implements a range of bivariate and multivariate information measures,
-which are listed under [definition](@ref definitions) below. Each of these measures
-can be estimated using one or several [estimators](@ref) with [`information`](@ref).
-Please see the [tutorial](@ref info_tutorial) for examples.
+## [Information measures](@id information_measures)
 
-The API consists of the following types and methods:
-
-- [`MultivariateInformationMeasure`](@ref)
-- [`MultivariateInformationMeasureEstimator`](@ref)
-- [`information`](@ref)
+The information API defines bivariate and multivariate information measures, which we here define as *any functional of a multidimensional probability mass functions (PMFs) or multidimensional probability density*. Estimating an information measure from 
+data is done by calling the [`information`](@ref) function with a relevant 
+[`MultivariateInformationMeasure`](@ref) and a [`MultivariateInformationMeasureEstimator`](@ref). 
+We have taken great care to make [`information`](@ref) modular. For one given measure, there may be multiple ways of estimating it. Individual docstrings detail estimation
+possibilities.
 
 ```@docs
+CausalityTools.information(::MultivariateInformationMeasureEstimator)
 MultivariateInformationMeasure
 MultivariateInformationMeasureEstimator
-CausalityTools.information(::MultivariateInformationMeasureEstimator)
+```
+
+### Generic estimators
+
+We provide a set of generic estimators that can be used to calculate 
+potentially several types of information measures.
+
+```@docs
+JointProbabilities
+EntropyDecomposition
+MIDecomposition
+CMIDecomposition
+```
+
+
+### [Conditional entropies](@id conditional_entropies)
+
+```@docs
+ConditionalEntropy
+ConditionalEntropyShannon
+ConditionalEntropyTsallisFuruichi
+ConditionalEntropyTsallisAbe
+```
+
+### [Divergences and distances](@id divergences_and_distances)
+
+```@docs
+HellingerDistance
+KLDivergence
+RenyiDivergence
+VariationDistance
+```
+
+### [Joint entropies](@id joint_entropies)
+
+```@docs
+JointEntropy
+JointEntropyShannon
+JointEntropyTsallis
+JointEntropyRenyi
+```
+
+### Mutual informations
+
+```@docs
+MutualInformation
+mutualinfo
+MIShannon
+MITsallisFuruichi
+MITsallisMartin
+MIRenyiJizba
+MIRenyiSarbu
+```
+
+### Mutual information estimators
+
+```@docs
+MutualInformationEstimator
+KraskovStögbauerGrassberger1
+KraskovStögbauerGrassberger2
+GaoKannanOhViswanath
+GaoOhViswanath
+GaussianMI
+```
+
+### Conditional mutual informations
+
+```@docs
+ConditionalMutualInformation
+condmutualinfo
+CMIShannon
+CMIRenyiSarbu
+CMIRenyiJizba
+CMIRenyiPoczos
+CMITsallis
+```
+
+#### Conditional mutual information estimators
+
+```@docs
+ConditionalMutualInformationEstimator
+GaussianCMI
+FPVP
+MesnerShalizi
+Rahimzamani
+PoczosSchneiderCMI
+```
+
+### Partial mutual information
+
+```@docs
+PartialMutualInformation
+```
+
+### Transfer entropy
+
+```@docs
+TransferEntropy
+transferentropy
+TEShannon
+TERenyiJizba
+```
+
+
+#### Transfer entropy estimators
+
+```@docs
+TransferEntropyEstimator
+Zhu1
 ```
 
 ### Discretization
@@ -62,7 +191,7 @@ encode
 decode
 ```
 
-### Counting and probabilities
+#### Counting and probabilities
 
 For counting and probabilities, CausalityTools.jl extends the single-variable machinery
 in ComplexityMeasures.jl to multiple variables.
@@ -73,114 +202,6 @@ CausalityTools.counts
 CausalityTools.Probabilities
 CausalityTools.probabilities
 marginal
-```
-
-
-### [Definitions](@id definitions)
-
-
-#### [Conditional entropies](@id conditional_entropies)
-
-```@docs
-ConditionalEntropy
-ConditionalEntropyShannon
-ConditionalEntropyTsallisFuruichi
-ConditionalEntropyTsallisAbe
-```
-
-#### [Divergences and distances](@id divergences_and_distances)
-
-```@docs
-HellingerDistance
-KLDivergence
-RenyiDivergence
-VariationDistance
-```
-
-#### [Joint entropies](@id joint_entropies)
-
-```@docs
-JointEntropy
-JointEntropyShannon
-JointEntropyTsallis
-JointEntropyRenyi
-```
-
-#### Mutual informations
-
-```@docs
-MutualInformation
-MIShannon
-MITsallisFuruichi
-MITsallisMartin
-MIRenyiJizba
-MIRenyiSarbu
-```
-
-#### Conditional mutual informations
-
-```@docs
-ConditionalMutualInformation
-CMIShannon
-CMIRenyiSarbu
-CMIRenyiJizba
-CMIRenyiPoczos
-CMITsallis
-```
-
-#### Partial mutual information
-
-```@docs
-PartialMutualInformation
-```
-
-#### Transfer entropy
-
-```@docs
-TransferEntropy
-TEShannon
-TERenyiJizba
-```
-
-### Estimators
-
-#### Generic estimators
-
-```@docs
-JointProbabilities
-EntropyDecomposition
-MIDecomposition
-CMIDecomposition
-```
-
-#### Mutual information estimators
-
-```@docs
-MutualInformationEstimator
-KraskovStögbauerGrassberger1
-KraskovStögbauerGrassberger2
-GaoKannanOhViswanath
-GaoOhViswanath
-GaussianMI
-```
-
-
-#### Conditional mutual information estimators
-
-```@docs
-ConditionalMutualInformationEstimator
-GaussianCMI
-FPVP
-MesnerShalizi
-Rahimzamani
-PoczosSchneiderCMI
-```
-
-#### Transfer entropy estimators
-
-```@docs
-TransferEntropyEstimator
-Zhu1
 ```
 
 ### [Convenience functions](@ref convenience_info)
@@ -194,6 +215,7 @@ conditional_entropy
 mutualinfo
 condmutualinfo
 ```
+
 
 ### Single-variable information API (from ComplexityMeasures.jl)
 
@@ -273,7 +295,7 @@ Ebrahimi
 Correa
 ```
 
-## [Correlation API](@id correlation_api)
+## [Correlation measures](@id correlation_measures)
 
 This page lists all available [`CorrelationMeasure`](@ref)s, as 
 well as their convenience functions. The [examples](@ref correlation_examples)
@@ -300,9 +322,9 @@ DistanceCorrelation
 distance_correlation
 ```
 
-## [Cross mapping API](@id cross_mapping_api)
+## [Cross-map measures](@id cross_map_measures)
 
-The cross mapping API define different ways of quantifying association based on the 
+The cross-map measures define different ways of quantifying association based on the 
 concept of "cross mapping", which has appeared in many contexts in the literature,
 and gained huge popularity with  [Sugihara2012](@citet)'s on *convergent cross mapping*.
 
@@ -314,7 +336,7 @@ To estimate a cross map measure, you simply input a [`CrossmapMeasure`](@ref) in
 as the first argument to a [`CrossmapEstimator`](@ref), which is then fed to 
 the [`crossmap`](@ref) or [`predict`](@ref) functions. 
 
-The cross mapping API consists of the following functions.
+The Cross-map measures consists of the following functions.
 
 - [`predict`](@ref)
 - [`crossmap`](@ref)

@@ -5,6 +5,11 @@ export KLDivergence
 
 The Kullback-Leibler (KL) divergence.
 
+## Usage 
+
+- [`information`](@ref). Used to compute the Hellinger distance between two pre-computed
+    probability distributions.
+
 ## Description
 
 The KL-divergence between two probability distributions
@@ -28,6 +33,22 @@ D_{KL}(P_Y(\\Omega) || P_Y(\\Omega)) =
 !!! note 
     Distances.jl also defines `KLDivergence`. Quality it if you're loading both 
     packages, i.e. do `information(CausalityTools.KLDivergence(), x, y)`.
+
+
+## Examples
+
+```julia
+using CausalityTools
+
+# There should be zero information gain from `x` over `y` for independent random variables.
+using Random
+rng = Xoshiro(1234)
+n = 100000
+x, y = rand(rng, n), rand(rng, n)
+div_kl = information(KLDivergence(), OrdinalPatterns(m=3), x, y)
+@test abs(div_kl) ≤ 0.001
+
+```
 """
 struct KLDivergence{B} <: DivergenceOrDistance
     base::B

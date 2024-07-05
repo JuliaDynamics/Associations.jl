@@ -11,7 +11,9 @@ using StateSpaceSets
 
 pages = [
     "Overview" => "index.md",
-    "Associations" => "associations.md",
+    "Association measures" => "associations.md",
+    "APIs and estimators" => "api.md",
+
     #[
         # "Core" => "api/associations_core.md",
         # "Correlation API" => "api/api_correlation.md",
@@ -26,11 +28,12 @@ pages = [
         # ],
     #],
     "Tutorials" => [
-        "Information tutorial" => "info_tutorial.md",
+        "Discretization" => "discretization_tutorial.md",
+        "Information measures" => "info_tutorial.md",
+
     ],
     # "Independence testing" => "independence.md",
     # "Causal graphs" => "causal_graphs.md",
-    # "APIs and estimators" => "api.md",
     # "Predefined systems" => "coupled_systems.md",
     # "Experimental" => "experimental.md",
     "References" => "references.md",

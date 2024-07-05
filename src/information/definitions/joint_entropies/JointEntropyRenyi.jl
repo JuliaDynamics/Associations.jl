@@ -8,6 +8,15 @@ export JointEntropyRenyi
 
 The Rényi joint entropy measure [Golshani2009](@cite).
 
+## Usage 
+
+- Use with [`information`](@ref) to compute the Golshani-Rényi joint entropy between 
+    two variables.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
+
 ## Definition
 
 Given two two discrete random variables ``X`` and ``Y`` with ranges ``\\mathcal{X}`` and
@@ -18,6 +27,16 @@ H_q^R(X, Y) = \\dfrac{1}{1-\\alpha} \\log \\sum_{i = 1}^N p_i^q,
 ```
 
 where ``q > 0`` and ``q != 1``.
+
+## Examples
+
+```julia
+using CausalityTools
+x, y = rand(100), rand(100)
+measure = JointEntropyRenyi()
+discretization = CodifyVariables(OrdinalPatterns(m=3))
+information(JointProbabilities(measure, discretization), x, y)
+```
 """
 Base.@kwdef struct JointEntropyRenyi{B, Q} <: JointEntropy
     base::B = 2

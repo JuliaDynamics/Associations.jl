@@ -12,6 +12,12 @@ export EntropyDecomposition
 Estimate the multivariate information measure specified by `definition` by rewriting
 its formula into some combination of entropy terms. 
 
+## Usage
+
+- [`information`](@ref)`(est::EntropyDecomposition, x...)`.
+
+## Description
+
 The entropy terms are estimated using `est`, and then combined to form the final 
 estimate of `definition`. No bias correction is applied.
 If `est` is a [`DifferentialInfoEstimator`](@ref), then `discretization` and `pest` 
@@ -83,12 +89,6 @@ probabilities estimator `pest` controls how probabilities are estimated from cou
     - [`Dispersion`](@ref). Each timeseries is separately [`codify`](@ref)-ed according
         to its dispersion pattern  (no bias correction).
 
-## Usage
-
-- [`information`](@ref)`(est::EntropyDecomposition, x...)`.
-
-See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).
-
 ## Examples
 
 Both Shannon-type mutual information and conditional mutual information can be 
@@ -120,6 +120,8 @@ z = rand(rng, 100000) .+ y
 est = EntropyDecomposition(CMIShannon(), ZhuSingh(k = 3))
 information(est, x, z, y) # should be near 0 (and can be negative)
 ```
+
+See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).
 """
 struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: InformationMeasureEstimator, D, P} <: DecompositionEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.

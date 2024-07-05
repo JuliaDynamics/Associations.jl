@@ -8,6 +8,7 @@ CausalityTools
 ## Documentation content 
 
 - [Association measures](@ref).
+- [Tutorials](@ref).
 
 ### Independence testing
 

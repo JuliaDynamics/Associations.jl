@@ -20,12 +20,22 @@ estimators. You may also want to check out the
 
 ## Examples
 
-Here's three different ways 
 ```julia
 using CausalityTools
-est = JointProbabilities(CMIShannon(), ValueBinning(3))
-x, y, z = rand(100), rand(100), rand(100)
-information(est, x, y, z)
+using Random; rng = MersenneTwister(12345)
+x, y, z = rand(rng, 100), rand(rng, 100), rand(rng, 100)
+
+
+# Mutual information
+# ------------------
+est = EntropyDecomposition(MIShannon(), PlugIn(Shannon()), OrdinalPatterns(m=3))
+information(est, x, y)
+
+est = JointProbabilities(MIShannon(), CodifyVariables(OrdinalPatterns(m=3)))
+information(est, x, y)
+
+# Conditional mutual information
+information(JointProbabilities(CMIShannon(), ValueBinning(3)), x, y, z)
 ```
 """
 function information(::MultivariateInformationMeasureEstimator, x...) end

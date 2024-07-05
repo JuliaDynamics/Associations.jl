@@ -6,6 +6,15 @@ export ConditionalEntropyTsallisFuruichi
 
 Furuichi (2006)'s discrete Tsallis conditional entropy definition.
 
+## Usage 
+
+- Use with [`information`](@ref) to compute the Tsallis-Furuichi conditional entropy between 
+    two variables.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
+
 ## Definition
 
 Furuichi's Tsallis conditional entropy between discrete random variables

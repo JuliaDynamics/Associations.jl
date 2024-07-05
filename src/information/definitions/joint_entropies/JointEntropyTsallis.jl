@@ -8,6 +8,15 @@ export JointEntropyTsallis
 
 The Tsallis joint entropy definition from [Furuichi2006](@citet). 
 
+## Usage 
+
+- Use with [`information`](@ref) to compute the Furuichi-Tsallis joint entropy between 
+    two variables.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
+
 ## Definition
 
 Given two two discrete random variables ``X`` and ``Y`` with ranges ``\\mathcal{X}`` and
@@ -19,6 +28,16 @@ H_q^T(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y)^q \\log_q
 
 where ``log_q(x, q) = \\dfrac{x^{1-q} - 1}{1-q}`` is the q-logarithm, and 
 we define ``log_q(x, q) := 0`` if ``q = 0``.
+
+## Examples
+
+```julia
+using CausalityTools
+x, y = rand(100), rand(100)
+measure = JointEntropyTsallis()
+discretization = CodifyVariables(OrdinalPatterns(m=3))
+information(JointProbabilities(measure, discretization), x, y)
+```
 """
 Base.@kwdef struct JointEntropyTsallis{B, Q} <: JointEntropy
     base::B = 2

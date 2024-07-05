@@ -9,6 +9,15 @@ export ConditionalEntropyShannon
 
 The [`Shannon`](@ref) conditional entropy measure.
 
+## Usage 
+
+- Use with [`information`](@ref) to compute the Shannon conditional entropy between 
+    two variables.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
+
 ## Discrete definition
 
 ### Sum formulation
