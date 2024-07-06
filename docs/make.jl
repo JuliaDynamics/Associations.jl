@@ -12,8 +12,6 @@ using StateSpaceSets
 pages = [
     "Overview" => "index.md",
     "Association measures" => "associations.md",
-    "APIs and estimators" => "api.md",
-
     #[
         # "Core" => "api/associations_core.md",
         # "Correlation API" => "api/api_correlation.md",
@@ -27,8 +25,10 @@ pages = [
         #     "Crossmap examples" => "examples/examples_cross_mappings.md",
         # ],
     #],
-    "Tutorials" => [
-        "Discretization" => "discretization_tutorial.md",
+    "Basics and tutorials" => [
+        "Encoding elements" => "encoding_tutorial.md",
+        "Encoding input datasets" => "discretization_tutorial.md",
+        "Counts and probabilities" => "probabilities_tutorial.md",
         "Information measures" => "info_tutorial.md",
 
     ],

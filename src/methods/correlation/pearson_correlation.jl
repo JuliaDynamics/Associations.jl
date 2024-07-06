@@ -33,11 +33,11 @@ Compute the [`PearsonCorrelation`](@ref) between `x` and `y`, which must each be
 1-dimensional.
 """
 function pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(PearsonCorrelation(), x, y)
+    return association(PearsonCorrelation(), x, y)
 end
 
 # Common interface for higher-level methods.
-function estimate(measure::PearsonCorrelation,
+function association(measure::PearsonCorrelation,
         x::VectorOrStateSpaceSet{1, T},
         y::VectorOrStateSpaceSet{1, T}) where T
     Lx, Ly = length(x), length(y)
@@ -56,8 +56,8 @@ function estimate(measure::PearsonCorrelation,
     return ρ
 end
 
-function estimate(measure::PearsonCorrelation, est::Nothing, x, y)
-    return estimate(measure, x, y)
+function association(measure::PearsonCorrelation, est::Nothing, x, y)
+    return association(measure, x, y)
 end
 
 # Silly, but 1-dimensional StateSpaceSets needs special indexing (because each point is a vector,

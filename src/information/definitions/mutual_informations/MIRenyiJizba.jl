@@ -46,7 +46,7 @@ information(est_diff, x, y)
 
 est_disc = EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2));
 information(est_disc, x, y)
-````
+```
 """
 Base.@kwdef struct MIRenyiJizba{B, Q} <: MutualInformation
     base::B = 2

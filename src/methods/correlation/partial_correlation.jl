@@ -50,11 +50,11 @@ max_inputs_vars(::PartialCorrelation) = Inf
 Compute the [`PartialCorrelation`](@ref) between `x` and `y`, given `z`.
 """
 function partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::ArrayOrStateSpaceSet...)
-    return estimate(PartialCorrelation(), x, y, z...)
+    return association(PartialCorrelation(), x, y, z...)
 end
 
 # Compatibility with `independence`
-function estimate(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
+function association(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
         conds::ArrayOrStateSpaceSet...)
     X, Y, Z = construct_partialcor_datasets(x, y, conds...)
     D = StateSpaceSet(X, Y, Z)
@@ -72,8 +72,8 @@ function construct_partialcor_datasets(x::VectorOrStateSpaceSet, y::VectorOrStat
     return X, Y, Z
 end
 
-function estimate(measure::PartialCorrelation, est::Nothing, x, y, z)
-    return estimate(measure, x, y, z)
+function association(measure::PartialCorrelation, est::Nothing, x, y, z)
+    return association(measure, x, y, z)
 end
 
 

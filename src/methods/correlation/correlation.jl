@@ -20,9 +20,9 @@ include("partial_correlation.jl")
 include("distance_correlation.jl")
 
 function correlation(est::CorrelationMeasure, x...)
-    return estimate(est, x...)
+    return association(est, x...)
 end
 
 function correlation(est::CorrelationMeasureEstimator, x...)
-    return estimate(est, x...)
+    return association(est, x...)
 end

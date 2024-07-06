@@ -96,11 +96,11 @@ end
 Compute the [`SMeasure`](@ref) from source `x` to target `y`.
 """
 function s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
+    return association(measure, x, y)
 end
 
 # Internal method for use with `independence`
-function estimate(measure::SMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
+function association(measure::SMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     # Match length of StateSpaceSets by excluding end points.

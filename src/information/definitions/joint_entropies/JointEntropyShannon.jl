@@ -10,7 +10,7 @@ The Shannon joint entropy measure [CoverThomas1999](@cite).
 
 ## Usage 
 
-- Use with [`information`](@ref) to compute the Shannon joint entropy between 
+- Use with [`association`](@ref) to compute the Shannon joint entropy between 
     two variables.
 
 ## Compatible estimators

@@ -55,20 +55,20 @@ See also: [`DistanceCorrelation`](@ref).
     dissimilarities.
 """
 function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet)
-    return estimate(DistanceCorrelation(), x, y)
+    return association(DistanceCorrelation(), x, y)
 end
 
 function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet,
         z::ArrayOrStateSpaceSet)
-    return estimate(DistanceCorrelation(), x, y, z)
+    return association(DistanceCorrelation(), x, y, z)
 end
 
-function estimate(m::DistanceCorrelation, est::Nothing, args...)
-    return estimate(m, args...)
+function association(m::DistanceCorrelation, est::Nothing, args...)
+    return association(m, args...)
 end
 
 # Common interface for higher-level methods.
-function estimate(measure::DistanceCorrelation, X, Y)
+function association(measure::DistanceCorrelation, X, Y)
     # TODO: Future optimization: this could be quicker if we only compute distances once
     # for X and once for Y. Currently, they are computed twice each.
     𝒱ₙ²xy = distance_covariance(X, Y)
@@ -217,7 +217,7 @@ end
 
 
 # Common interface for higher-level methods.
-function estimate(measure::DistanceCorrelation, X, Y, Z)
+function association(measure::DistanceCorrelation, X, Y, Z)
     Lx, Ly, Lz = length(X), length(Y), length(Z)
     Lx == Ly == Lz || throw(ArgumentError("Input X, Y and Z must have same lengths."))
     N = Lx

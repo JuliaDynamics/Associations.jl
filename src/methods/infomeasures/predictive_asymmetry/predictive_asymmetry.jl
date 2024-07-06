@@ -36,7 +36,7 @@ const PA_ESTIMATORS = Union{
     TransferEntropyEstimator
     }
 
-function estimate(measure::PredictiveAsymmetry, est::PA_ESTIMATORS, source, target)
+function association(measure::PredictiveAsymmetry, est::PA_ESTIMATORS, source, target)
     (; ηs, normalize, f, base, dTf, dT, dS, dC, τT, τS, τC) = measure
 
     check_ηs(ηs)
@@ -66,7 +66,7 @@ function estimate(measure::PredictiveAsymmetry, est::PA_ESTIMATORS, source, targ
     return 𝔸s
 end
 
-function estimate(measure::PredictiveAsymmetry, est::PA_ESTIMATORS, source, target, cond)
+function association(measure::PredictiveAsymmetry, est::PA_ESTIMATORS, source, target, cond)
     (; ηs, normalize, f, base, dTf, dT, dS, dC, τT, τS, τC) = measure
 
     check_ηs(ηs)

@@ -54,11 +54,11 @@ end
 Compute the [`HMeasure`](@ref) from source `x` to target `y`.
 """
 function h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
+    return association(measure, x, y)
 end
 
 # Internal method for use with `independence`
-function estimate(measure::HMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
+function association(measure::HMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     # Match length of StateSpaceSets by excluding end points.

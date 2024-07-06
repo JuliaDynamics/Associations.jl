@@ -196,7 +196,7 @@ include("ccm-like/ccm-like.jl")
 
 
 # Internal methods for compatibility with `independence`
-function estimate(est::CrossmapEstimator{<:CrossmapMeasure}, args...)
+function association(est::CrossmapEstimator{<:CrossmapMeasure}, args...)
     return crossmap(est, args...)
 end
 

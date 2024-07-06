@@ -88,7 +88,7 @@ given. Returns the distribution of asymmetry values.
 The docstring for [`PA`](@ref) lists compatible estimators.
 """
 function asymmetry(args...; kwargs...)
-    return estimate(args...; kwargs...)
+    return association(args...; kwargs...)
 end
 
 const PA_ESTS = Union{
@@ -102,7 +102,7 @@ function asymmetry(est::PA_ESTS, args...)
     throw(ArgumentError("A valid measure must be provided as the second argument; do `PA()`."))
 end
 
-function estimate(measure::PA, x::AbstractVector...)
+function association(measure::PA, x::AbstractVector...)
     throw(ArgumentError("A valid estimator must be provided as the second argument, try for example `FPVP()`."))
 end
 
@@ -194,7 +194,7 @@ end
 as_vector(x::Union{AbstractVector{T}}) where T = vec(x)
 as_vector(x::AbstractStateSpaceSet{1, T}) where T = x[:, 1]
 
-function estimate(measure::PA, est::PA_ESTS, x, y)
+function association(measure::PA, est::PA_ESTS, x, y)
     X = as_vector(x)
     Y = as_vector(y)
     measure = redefine_lags(measure, x)
@@ -225,7 +225,7 @@ function estimate(measure::PA, est::PA_ESTS, x, y)
     return ΔA
 end
 
-function estimate(measure::PA, est::PA_ESTIMATORS, x, y, z)
+function association(measure::PA, est::PA_ESTIMATORS, x, y, z)
     measure = redefine_lags(measure, x, z)
     (; ηT, τS, τC) = measure
     X = as_vector(x)

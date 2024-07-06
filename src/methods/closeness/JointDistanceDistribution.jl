@@ -71,12 +71,12 @@ end
 
 # The convenience wrapper `jdd`` is in deprecations folder for now.
 
-function estimate(measure::JointDistanceDistribution, est::Nothing, source, target)
-    return estimate(measure, source, target)
+function association(measure::JointDistanceDistribution, est::Nothing, source, target)
+    return association(measure, source, target)
 end
 
 # Internal method for compatibility with independence tests.
-function estimate(measure::JointDistanceDistribution, source, target)
+function association(measure::JointDistanceDistribution, source, target)
     (; metric, B, D, τ) = measure
     length(source) == length(target) || error("lengths of inputs must match")
     js = ([1 for i = 1:D]...,)

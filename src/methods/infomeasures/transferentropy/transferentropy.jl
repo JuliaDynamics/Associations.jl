@@ -120,17 +120,17 @@ include("TEShannon.jl")
 include("TERenyiJizba.jl")
 
 function transferentropy(measure::TransferEntropy, est::TE_ESTIMATORS, args...; kwargs...)
-    return estimate(measure, est, args...; kwargs...)
+    return association(measure, est, args...; kwargs...)
 end
 function transferentropy(est::TE_ESTIMATORS, args...; kwargs...)
-    return estimate(TEShannon(), est, args...; kwargs...)
+    return association(TEShannon(), est, args...; kwargs...)
 end
 
-function estimate(est::TE_ESTIMATORS, args...; kwargs...)
-    return estimate(TEShannon(), est, args...; kwargs...)
+function association(est::TE_ESTIMATORS, args...; kwargs...)
+    return association(TEShannon(), est, args...; kwargs...)
 end
 
-function estimate(measure::TransferEntropy, est::TE_ESTIMATORS, x...)
+function association(measure::TransferEntropy, est::TE_ESTIMATORS, x...)
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
     # StateSpaceSet. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
@@ -169,8 +169,8 @@ include("estimators/estimators.jl")
 include("convenience/convenience.jl")
 
 # Default to Shannon-type base 2 transfer entropy
-function estimate(est::TransferEntropyEstimator, x...)
-    estimate(TEShannon(base = 2), est, x...)
+function association(est::TransferEntropyEstimator, x...)
+    association(TEShannon(base = 2), est, x...)
 end
 
 transferentropy(emb::EmbeddingTE, args...; kwargs...) =

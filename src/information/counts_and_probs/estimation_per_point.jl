@@ -2,6 +2,7 @@ import ComplexityMeasures: codify
 import ComplexityMeasures: counts
 import ComplexityMeasures: probabilities
 
+
 # If multiple encodings are given, the number of encodings must match the number of
 # input variables.
 function counts(encoding::CodifyPoints{N}, x::Vararg{Any, N}) where {N}

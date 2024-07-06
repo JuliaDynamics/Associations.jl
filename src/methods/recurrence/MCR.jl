@@ -55,7 +55,7 @@ end
 
 max_inputs_vars(::MCR) = 3
 
-function estimate(measure::MCR, x, y)
+function association(measure::MCR, x, y)
     (; r, metric) = measure
     N = length(x)
     @assert length(x) == length(y)
@@ -70,7 +70,7 @@ function estimate(measure::MCR, x, y)
 end
 
 # The
-function estimate(measure::MCR, x, y, z)
+function association(measure::MCR, x, y, z)
     (; r, metric) = measure
     N = length(x)
     @assert length(x) == length(y)
@@ -94,7 +94,7 @@ function estimate(measure::MCR, x, y, z)
 end
 
 # For compatibility with causal graph and independence testing API
-estimate(r::MCR, est::Nothing, x, y) = estimate(r, x, y)
+association(r::MCR, est::Nothing, x, y) = association(r, x, y)
 
 """
     mcr(m::MCR, x, y)
@@ -103,4 +103,4 @@ Compute the association between `x` and `y` based on conditional probabilities o
 recurrence using the given [`MCR`](@ref) `measure`, where `x` and `y` can be either
 univariate timeseries or multivariate [`StateSpaceSet`](@ref)s.
 """
-mcr(args...) = estimate(args...)
+mcr(args...) = association(args...)

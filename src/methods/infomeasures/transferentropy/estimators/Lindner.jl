@@ -48,16 +48,16 @@ Base.@kwdef struct Lindner{B} <: TransferEntropyEstimator
     end
 end
 
-function estimate(measure::TEShannon, est::Lindner, x::AbstractVector...)
+function association(measure::TEShannon, est::Lindner, x::AbstractVector...)
     verify_number_of_inputs_vars(measure, length(x))
     S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
-    return estimate(measure, est, S, T, T⁺, C)
+    return association(measure, est, S, T, T⁺, C)
 end
 
 # This method is separate from the one above because when using `SurrogateAssociationTest`,
 # `S` is repeatedly shuffled, while the other marginals are not, so we avoid
 # allocating a bunch of new StateSpaceSets for every shuffle.
-function estimate(measure::TEShannon, est::Lindner,
+function association(measure::TEShannon, est::Lindner,
         S::AbstractStateSpaceSet,
         T::AbstractStateSpaceSet,
         T⁺::AbstractStateSpaceSet,

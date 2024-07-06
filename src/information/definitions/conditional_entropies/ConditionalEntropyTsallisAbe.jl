@@ -10,7 +10,7 @@ export ConditionalEntropyTsallisAbe
 
 ## Usage 
 
-- Use with [`information`](@ref) to compute the Tsallis-Abe conditional entropy between 
+- Use with [`association`](@ref) to compute the Tsallis-Abe conditional entropy between 
     two variables.
 
 ## Compatible estimators

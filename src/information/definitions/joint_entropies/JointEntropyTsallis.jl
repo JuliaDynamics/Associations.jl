@@ -10,7 +10,7 @@ The Tsallis joint entropy definition from [Furuichi2006](@citet).
 
 ## Usage 
 
-- Use with [`information`](@ref) to compute the Furuichi-Tsallis joint entropy between 
+- Use with [`association`](@ref) to compute the Furuichi-Tsallis joint entropy between 
     two variables.
 
 ## Compatible estimators

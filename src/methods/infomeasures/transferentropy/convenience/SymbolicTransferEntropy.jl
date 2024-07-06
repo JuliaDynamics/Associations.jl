@@ -24,7 +24,7 @@ Base.@kwdef struct SymbolicTransferEntropy <: TransferEntropyEstimator
 end
 
 
-function estimate(measure::TransferEntropy, est::SymbolicTransferEntropy,
+function association(measure::TransferEntropy, est::SymbolicTransferEntropy,
     x::AbstractVector...)
     (; m, τ, lt) = est
     est = OrdinalPatterns(; m, τ, lt)

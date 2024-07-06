@@ -79,17 +79,17 @@ Parameters for recurrence matrix estimation are given as a [`RMCD`](@ref) instan
 Inputs `x`, `y`, `z` can be either univariate timeseries or multivariate
 [`StateSpaceSet`](@ref)s.
 """
-rmcd(measure::RMCD, args...) = estimate(measure, args...)
+rmcd(measure::RMCD, args...) = association(measure, args...)
 
 # For compatibility with independence testing framework.
-function estimate(measure::RMCD, est::Nothing, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
-    return estimate(measure, x, y, z)
+function association(measure::RMCD, est::Nothing, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
+    return association(measure, x, y, z)
 end
-function estimate(measure::RMCD, est::Nothing, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
+function association(measure::RMCD, est::Nothing, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
+    return association(measure, x, y)
 end
 
-function estimate(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
+function association(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
     (; r, metric, base) = measure
     @assert length(x) == length(y) == length(z)
     N = length(x)
@@ -125,7 +125,7 @@ function estimate(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpace
 end
 
 # Similar, but analogous to mutual information
-function estimate(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
+function association(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     (; r, metric, base) = measure
     @assert length(x) == length(y)
     N = length(x)

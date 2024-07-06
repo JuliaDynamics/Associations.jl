@@ -18,11 +18,14 @@ find online or build locally by running the `docs/make.jl` file.
 - Association measures from conventional statistics, information theory and dynamical
     systems theory, for example distance correlation, mutual information, transfer entropy,
     convergent cross mapping and a lot more!
+- Generalization of the 1D discretization and probabilities estimation API from 
+    [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl) to 
+    multiple variables.
 - A dedicated API for independence testing, which comes with automatic compatibility with
     every measure-estimator combination you can think of. For example, for conditional
     indepencence testing, we offer the generic [`SurrogateAssociationTest`](@ref)
     (which is fully compatible with [TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl)), and the [`LocalPermutationTest`](@ref).
-- A dedicated API for causal network inference based on these measures and independence
+- A dedicated API for (causal) network inference based on these measures and independence
     tests.
 
 ## Installation

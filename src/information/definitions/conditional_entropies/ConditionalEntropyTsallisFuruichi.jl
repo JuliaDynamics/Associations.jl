@@ -8,7 +8,7 @@ Furuichi (2006)'s discrete Tsallis conditional entropy definition.
 
 ## Usage 
 
-- Use with [`information`](@ref) to compute the Tsallis-Furuichi conditional entropy between 
+- Use with [`association`](@ref) to compute the Tsallis-Furuichi conditional entropy between 
     two variables.
 
 ## Compatible estimators

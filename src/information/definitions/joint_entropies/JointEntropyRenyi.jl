@@ -10,7 +10,7 @@ The Rényi joint entropy measure [Golshani2009](@cite).
 
 ## Usage 
 
-- Use with [`information`](@ref) to compute the Golshani-Rényi joint entropy between 
+- Use with [`association`](@ref) to compute the Golshani-Rényi joint entropy between 
     two variables.
 
 ## Compatible estimators

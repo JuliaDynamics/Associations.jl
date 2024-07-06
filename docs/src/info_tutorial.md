@@ -19,6 +19,27 @@ the [definition](@ref) of the measure, which is then used as input to an
 [estimator](@ref). This estimator is then given to [`information`](@ref), or one 
 of the [convenience methods](@ref convenience_info).
 
+!!! note "Naming convention: The same name for different things"
+    Upon doing a literature review on the possible variants of information theoretic measures,
+    it become painstakingly obvious that authors use *the same name for different concepts*.
+    For novices, and experienced practitioners too, this can be confusing.
+    Our API clearly distinguishes between methods that are conceptually the same but named
+    differently in the literature due to differing *estimation* strategies, from methods
+    that actually have different definitions.
+
+    - Multiple, equivalent definitions occur for example for the Shannon mutual
+        information (MI; [`MIShannon`](@ref)), which has both a discrete and continuous version, and there there are multiple equivalent mathematical formulas for them: a direct sum/integral
+        over a joint probability mass function (pmf), as a sum of three entropy terms, and as
+        a Kullback-Leibler divergence between the joint pmf and the product of the marginal
+        distributions. Since these definitions are all equivalent, we only need once type
+        ([`MIShannon`](@ref)) to represent them.
+    - But Shannon MI is not the  only type of mutual information! For example, "Tsallis mutual information"
+        has been proposed in different variants by various authors. Despite sharing the
+        same name, these are actually *nonequivalent definitions*. We've thus assigned
+        them entirely different measure names (e.g. [`MITsallisFuruichi`](@ref) and
+        [`MITsallisMartin`](@ref)), with the author name at the end.
+
+
 ## Distances/divergences
 
 There are many information measures in the literature that aim to quantify the 

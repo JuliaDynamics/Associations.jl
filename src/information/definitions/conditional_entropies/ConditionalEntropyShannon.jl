@@ -11,7 +11,7 @@ The [`Shannon`](@ref) conditional entropy measure.
 
 ## Usage 
 
-- Use with [`information`](@ref) to compute the Shannon conditional entropy between 
+- Use with [`association`](@ref) to compute the Shannon conditional entropy between 
     two variables.
 
 ## Compatible estimators

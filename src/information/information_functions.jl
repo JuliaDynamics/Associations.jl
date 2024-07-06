@@ -1,3 +1,8 @@
+const INFO_TYPES = Union{MultivariateInformationMeasureEstimator, MultivariateInformationMeasure}
+function association(e::INFO_TYPES, args...)
+    return information(e, args...)
+end
+
 """
     information(definition::MultivariateInformationMeasure, p::Probabilities{T, N})
 

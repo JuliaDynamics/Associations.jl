@@ -12,28 +12,46 @@ export counts
 # input data (ComplexityMeasures.jl only deals with single-variable estimation)
 # ##########################################################################################
 """
-    counts([o::OutcomeSpace], x₁, x₂, ..., xₙ) → Counts{N}
+    counts(o::UniqueElements, x₁, x₂, ..., xₙ) → Counts{N}
+    counts(encoding::CodifyPoints, x₁, x₂, ..., xₙ) → Counts{N}
+    counts(encoding::CodifyVariables, x₁, x₂, ..., xₙ) → Counts{N}
 
 Construct an `N`-dimensional contingency table from the input iterables
 `x₁, x₂, ..., xₙ` which are such that 
 `length(x₁) == length(x₂) == ⋯ == length(xₙ)`.
 
-## Discretization
+If `x₁, x₂, ..., xₙ` are already discrete, then use [`UniqueElements`](@ref) as 
+the first argument to directly construct the joint contingency table.
 
-If `x₁, x₂, ..., xₙ` are not already discretized, then the data must first
-be discretized by providing either a [`CodifyPoints`](@ref), or a 
-[`CodifyVariables`](@ref) as the first argument.
+If `x₁, x₂, ..., xₙ` need to be discretized, provide as the first argument
+- [`CodifyPoints`](@ref) (encodes every *point* in each of the input variables `xᵢ`s individually)
+- [`CodifyVariables`](@ref) (encodes every `xᵢ` individually using a sliding window encoding).
 
-If `x₁, x₂, ..., xₙ` are already discretized, then [`UniqueElements`](@ref)
-should be used as the first argument.
+## Examples
 
-# Concrete implementations
+```julia
+# Discretizing some non-discrete data using a sliding-window encoding for each variable
+x, y = rand(100), rand(100)
+c = CodifyVariables(OrdinalPatterns(m = 4))
+counts(c, x, y)
 
-- `counts(o::UniqueElements, x₁, x₂, ..., xₙ)`.
-- `counts(encoding::CodifyPoints, x₁, x₂, ..., xₙ)`.
-- `counts(encoding::CodifyVariables, x₁, x₂, ..., xₙ)`.
+# Discretizing the data by binning each individual data point
+binning = RectangularBinning(3)
+encoding = RectangularBinEncoding(binning, [x; y]) # give input values to ensure binning covers all data
+c = CodifyPoints(encoding)
+counts(c, x, y)
 
-See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@ref).
+# Counts table for already discrete data
+n = 50 # all variables must have the same number of elements
+x = rand(["dog", "cat", "mouse"], n)
+y = rand(1:3, n)
+z = rand([(1, 2), (2, 1)], n)
+
+counts(UniqueElements(), x, y, z)
+```
+
+See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@ref), [`OutcomeSpace`](@ref),
+[`probabilities`](@ref).
 """
 function counts(o::UniqueElements, x::Vararg{VectorOrStateSpaceSet, N}) where N # this extends ComplexityMeasures.jl definition
     # Get marginal probabilities and outcomes

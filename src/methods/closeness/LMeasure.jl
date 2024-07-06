@@ -68,7 +68,7 @@ end
 Compute the [`LMeasure`](@ref) from source `x` to target `y`.
 """
 function l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
+    return association(measure, x, y)
 end
 
 function getrank(x, p)
@@ -76,7 +76,7 @@ function getrank(x, p)
 end
 
 # Internal method for use with `independence`
-function estimate(measure::LMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
+function association(measure::LMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     # Match length of StateSpaceSets by excluding end points.

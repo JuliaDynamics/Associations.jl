@@ -37,15 +37,15 @@ Base.@kwdef struct Zhu1 <: TransferEntropyEstimator
     end
 end
 
-function estimate(measure::TEShannon, est::Zhu1, x::AbstractVector...)
+function association(measure::TEShannon, est::Zhu1, x::AbstractVector...)
     # The Zhu1 estimator needs to keep track of the dimension of the individual
     # terms that goes into the implicit CMI computation. We could have just used
     # `h4_marginals` here, but then we wouldn't get the dimensions out of the box.
     S, T, T⁺, C = individual_marginals_te(measure.embedding, x...)
-    return estimate(measure, est, S, T, T⁺, C)
+    return association(measure, est, S, T, T⁺, C)
 end
 
-function estimate(measure::TEShannon, est::Zhu1, S::AbstractStateSpaceSet, T::AbstractStateSpaceSet, T⁺::AbstractStateSpaceSet, C::AbstractStateSpaceSet)
+function association(measure::TEShannon, est::Zhu1, S::AbstractStateSpaceSet, T::AbstractStateSpaceSet, T⁺::AbstractStateSpaceSet, C::AbstractStateSpaceSet)
     (; k, w) = est
 
     joint = StateSpaceSet(S, T, T⁺, C)

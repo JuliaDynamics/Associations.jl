@@ -12,30 +12,11 @@ const ENTROPY_ESTS = Union{DifferentialInfoEstimator, DiscreteInfoEstimator}
 """
     AssociationMeasure
 
-The supertype of all association measures.
-"""
-abstract type AssociationMeasure end
+The supertype of all association measures. 
 
-"""
-    AssociationMeasureEstimator
+Concrete subtypes are given as input to [`association`](@ref).
 
-The supertype of all association measures.
-"""
-abstract type AssociationMeasureEstimator end
-
-"""
-    association(definition::AssociationMeasure, x, y, [z, ...])
-    association(est::AssociationMeasureEstimator, x, y, [z, ...])
-
-Compute the association between input variables `x, y, z, …` according to the 
-estimator `est` (or directly from the `definition` if possible).
-
-The return type depends on the definition/estimator.
-
-## Compatible definitions
-
-Some measures are estimated directly (they have no estimator types). These can be 
-given to `association` directly. They are:
+## Concrete implementations 
 
 - [`PearsonCorrelation`](@ref)
 - [`PartialCorrelation`](@ref)
@@ -46,19 +27,64 @@ given to `association` directly. They are:
 - [`MMeasure`](@ref)
 - [`JointDistanceDistribution`](@ref).
 
-## Compatible estimators
+## Abstract implementations
 
-For all other association measures, you need to provide an
-[`AssociationMeasureEstimator`](@ref) of some kind. It takes the definition as its 
-first argument.
+The docstrings for the abstract types below list concrete implementations.
 
-### Cross mappings
+- [`MultivariateInformationMeasure`](@ref)
+- [`CrossmapMeasure`](@ref)
+"""
+abstract type AssociationMeasure end
 
-- [`RandomVectors`](@ref), [`RandomSegments`](@ref), [`ExpandingSegments`](@ref), which 
-    all take either a [`ConvergentCrossMapping`](@ref) or
-    [`PairwiseAsymmetricEmbedding`](@ref) definition as their first arg
+"""
+    AssociationMeasureEstimator
 
+The supertype of all association measure estimators.
 
+Concrete subtypes are given as input to [`association`](@ref).
+
+## Abstract subtypes
+
+See the documentation of the abstract types below for concrete implementations.
+
+- [`MultivariateInformationMeasureEstimator`](@ref)
+- [`CrossmapEstimator`](@ref)
+"""
+abstract type AssociationMeasureEstimator end
+
+"""
+    association(estimator::AssociationMeasureEstimator, x, y, [z, ...]) → r
+    association(definition::AssociationMeasure, x, y, [z, ...]) → r
+
+Estimate the (conditional) association between input variables `x, y, z, …` using 
+the given `estimator` or `definition`.  
+
+The type of the return value `r` depends on the `measure`/`estimator`.
+
+## Compatible definitions and estimators
+
+Some [`AssociationMeasure`](@ref)s have no estimators and are given directly.
+For other association measures, you need to provide an [`AssociationMeasureEstimator`](@ref)
+ of some kind, which takes the definition as its first argument.
+
+## Examples
+
+```julia
+using CausalityTools
+x, y, z = rand(1000), rand(1000), rand(1000)
+
+# Pairwise association using different measures
+association(DistanceCorrelation(), x, y)
+association(PartialCorrelation(), x, y)
+association(JointProbabilities(ConditionalEntropyTsallisAbe(), ValueBinning(3)), x, y)
+association(JointProbabilities(JointEntropyShannon(), Dispersion(c = 3, m = 2)), x, y)
+association(EntropyDecomposition(MIShannon(), PlugIn(Shannon()), OrdinalPatterns(m=3)), x, y)
+association(KSG2(MIShannon(base = 2)), x, y)
+
+# Conditional association using different measures
+association(JointProbabilities(PartialMutualInformation(), OrdinalPatterns(m=3)), x, y, z)
+association(FPVP(CMIShannon(base = 2)), x, y, z)
+```
 """
 function association(est, x...) end
 

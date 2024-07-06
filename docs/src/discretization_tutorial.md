@@ -12,7 +12,8 @@ typically happens when working with pre-embedded time series. If we want to
 apply something like [`OrdinalPatternEncoding`](@ref) to a pre-embedded 
 [`StateSpaceSet`](@ref), then we must encode each *point* individually,
 respecting the fact that time ordering is already taken care of by the 
-embedding procedure.
+embedding procedure. [`CodifyPoints`](@ref) ensures input data are encoded 
+on a point-by-point basis.
 
 ```@example
 using CausalityTools
@@ -25,14 +26,15 @@ y = StateSpaceSet(rand(rng, 50, 3))
 # The third variable is 4-dimensional and has 50 points
 z = StateSpaceSet(rand(rng, 50, 4))
 
+# One encoding scheme per input variable
+# encode `x` using `ox` on a point-by-point basis (Vector{SVector{4}} → Vector{Int})
+# encode `y` using `oy` on a point-by-point basis (Vector{SVector{3}} → Vector{Int})
+# encode `z` using `oz` on a point-by-point basis (Vector{SVector{2}} → Vector{Int})
 ox = OrdinalPatternEncoding(2)
 oy = OrdinalPatternEncoding(3)
 oz = OrdinalPatternEncoding(4)
 
 # This given three column vectors of integers.
-# `x` has been encoded usign `ox` on a point-by-point basis
-# `y` has been encoded using `oy` on a point-by-point basis
-# `z` has been encoded using `oz` on a point-by-point basis
 cx, cy, cz = codify(CodifyPoints(ox, oy, oz), x, y, z)
 
 [cx cy cz]
@@ -49,9 +51,11 @@ is `4! = 24` for 4-dimensional embedding vectors.
 Sometimes, it may be desireable to encode input data one variable/column at a time.
 This typically happens when the input are either a single or multiple timeseries.
 
-To encode columns, we apply an [`Encoding`](@ref) using a sliding window across each input variable. The width of the window is determined by the chosen encoding.
+To encode columns, we apply an [`Encoding`](@ref) using a sliding window across each input variable. 
+The width of the window is determined by the chosen encoding.
 For example, using [`ValueBinning`](@ref) will encode `N` value into `N` discretized
-values.
+values. [`CodifyVariables`](@ref) is used to enforce a sliding window encoding on a 
+per-variable basis.
 
 ```@example
 using CausalityTools
@@ -97,3 +101,35 @@ cx, cy = codify(CodifyVariables(o), StateSpaceSet(x, y))
 
 [cx cy]
 ```
+
+## Codify API
+
+
+A fundamental operation when computing multivariate information measures from data is *discretization*.  The following
+functions and types are used by CausalityTools.jl to perform discretization of input data.
+
+```@docs
+codify
+Discretization
+```
+
+### Encoding per variable/column
+
+```@docs
+CodifyVariables
+```
+
+The sliding-window discretization is formally done by applying some [`OutcomeSpace`](@ref) to each
+variable/column. 
+
+```@docs
+OutcomeSpace
+
+```
+
+### Encoding per sample/row
+
+```@docs
+CodifyPoints
+```
+

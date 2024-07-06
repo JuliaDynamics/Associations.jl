@@ -84,6 +84,11 @@ abstract type ConditionalMutualInformationEstimator{M} <: MultivariateInformatio
 
 The supertype for all multivariate information-based measure definitions.
 
+## Definition
+
+Following [Datseris2024](@citet), we define a multivariate information measure as *any functional 
+of a multidimensional probability mass functions (PMFs) or multidimensional probability density*.
+
 ## Implementations
 
 [`JointEntropy`](@ref) definitions:
@@ -95,7 +100,8 @@ The supertype for all multivariate information-based measure definitions.
 [`ConditionalEntropy`](@ref) definitions:
 
 - [`ConditionalEntropyShannon`](@ref)
-- [`ConditionalEntropyShannon`](@ref)
+- [`ConditionalEntropyTsallisAbe`](@ref)
+- [`ConditionalEntropyTsallisFuruichi`](@ref)
 
 [`DivergenceOrDistance`](@ref) definitions:
 
