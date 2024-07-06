@@ -4,8 +4,16 @@ export GaoOhViswanath
 """
     GaoOhViswanath <: MutualInformationEstimator
 
-The `GaoOhViswanath` mutual information estimator, also called the bias-improved-KSG
-estimator, or BI-KSG, by [Gao2018](@cite), is given by
+The `GaoOhViswanath` is a mutual information estimator based on nearest neighbors,
+and is also called the bias-improved-KSG estimator, or BI-KSG, by [Gao2018](@cite).
+
+## Usage
+
+- Use with [`association`](@ref) to compute [`MIShannon`](@ref) from input data.
+
+## Description
+
+The estimator is given by
 
 ```math
 \\begin{align*}
@@ -24,11 +32,6 @@ estimator, or BI-KSG, by [Gao2018](@cite), is given by
 
 where ``c_{d, 2} = \\dfrac{\\pi^{\\frac{d}{2}}}{\\Gamma{(\\dfrac{d}{2} + 1)}}`` is the
 volume of a ``d``-dimensional unit ``\\mathcal{l}_2``-ball.
-
-
-## Usage
-
-- [`information`](@ref)`(est::GaoOhViswanath, x, y)`.
 
 ## Example 
 

@@ -7,15 +7,17 @@ export Rahimzamani
 The `Rahimzamani` [`ConditionalMutualInformationEstimator`](@ref) is designed
 for data that can be mixtures of discrete and continuous data [Rahimzamani2018](@cite).
 
+## Usage
+
+- Use with [`association`](@ref) to compute a [`CMIShannon`](@ref) from input data.
+
+## Description
+
 This estimator is very similar to the [`GaoKannanOhViswanath`](@ref) mutual information
 estimator, but has been expanded to the conditional mutual information case.
 
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
 number of temporal neighbors that are excluded during neighbor searches.
-
-## Usage
-
-- [`information`](@ref)`(est::Rahimzamani, x, y, z)`.
 
 ## Example 
 

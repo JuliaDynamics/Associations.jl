@@ -14,6 +14,10 @@ export KraskovStögbauerGrassberger2, KSG2
 The `KraskovStögbauerGrassberger2` mutual information estimator (you can use `KSG2` for
 short) is the ``I^{(2)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@cite).
 
+## Usage
+
+- Use with [`association`](@ref) to compute [`MIShannon`](@ref) from input data.
+
 ## Keyword arguments
 
 - **`k::Int`**: The number of nearest neighbors to consider. Only information about the
@@ -53,10 +57,6 @@ then estimated as
     (m - 1)\\psi{(N)} -
     \\dfrac{1}{N} \\sum_{i = 1}^N \\sum_{j = 1}^m \\psi{(\\theta_i^j + 1)}
 ```
-
-## Usage
-
-- [`information`](@ref)`(est::KSG2, x, y)`.
 
 ## Example 
 

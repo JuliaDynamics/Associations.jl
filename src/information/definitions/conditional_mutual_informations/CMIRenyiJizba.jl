@@ -11,8 +11,9 @@ The Rényi conditional mutual information ``I_q^{R_{J}}(X; Y | Z)`` defined in
 
 ## Usage
 
+- Use with [`association`](@ref)/[`condmutualinfo`](@ref) to compute the raw 
+    Rényi-Jizba conditional mutual information.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information.
 
 ## Definition
 

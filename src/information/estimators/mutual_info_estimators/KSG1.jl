@@ -21,6 +21,10 @@ export KraskovStögbauerGrassberger1, KSG1
 The `KraskovStögbauerGrassberger1` mutual information estimator (you can use `KSG1` for
 short) is the ``I^{(1)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@citet).
 
+## Usage
+
+- Use with [`association`](@ref) to compute [`MIShannon`](@ref) from input data.
+
 ## Keyword arguments
 
 - **`k::Int`**: The number of nearest neighbors to consider. Only information about the
@@ -31,10 +35,6 @@ short) is the ``I^{(1)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@
 - **`w::Int`**: The Theiler window, which determines if temporal neighbors are excluded
     during neighbor searches in the joint space. Defaults to `0`, meaning that only the
     point itself is excluded.
-
-## Usage
-
-- [`information`](@ref)`(est::KSG1, x, y)`.
 
 ## Example 
 

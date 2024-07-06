@@ -10,6 +10,12 @@ export ConvergentCrossMapping, CCM
 
 The convergent cross mapping measure [Sugihara2012](@cite).
 
+## Usage
+
+- Use with [`association`](@ref) to compute the cross-map correlation between input variables.
+
+## Description
+
 Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
 with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
 temporal neighbors are excluded during neighbor searches (`w = 0` means that only the

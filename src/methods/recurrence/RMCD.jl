@@ -10,6 +10,15 @@ The recurrence measure of conditional dependence, or RMCD [Ramos2017](@cite),
 is a recurrence-based measure that mimics the conditional mutual
 information, but uses recurrence probabilities.
 
+## Usage
+
+- Use with [`association`](@ref)/[`rmcd`](@ref) to compute the raw RMCD for pairwise 
+    or conditional association.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+    or conditional association.
+
+## Description
+
 `r` is a mandatory keyword which specifies the recurrence threshold when constructing
 recurrence matrices. It can be instance of
 any subtype of `AbstractRecurrenceType` from
@@ -20,12 +29,6 @@ from [Distances.jl](https://github.com/JuliaStats/Distances.jl).
 
 Both the pairwise and conditional RMCD is non-negative, but due to round-off error,
 negative values may occur. If that happens, an RMCD value of `0.0` is returned.
-
-## Usage
-
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
-    or conditional association.
-- Use with [`rmcd`](@ref) to compute the raw RMCD for pairwise or conditional association.
 
 ## Description
 

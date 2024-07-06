@@ -24,10 +24,10 @@ The joint distance distribution (JDD) measure [Amigo2018](@cite).
 
 ## Usage
 
+- Use with [`association`](@ref)/[`jdd`](@ref) to compute the joint distance distribution measure `Δ` from
+    [Amigo2018](@citet).
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional
     dependence.
-- Use with [`jdd`](@ref) to compute the joint distance distribution `Δ` from
-    [Amigo2018](@citet).
 
 ## Keyword arguments
 

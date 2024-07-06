@@ -11,8 +11,8 @@ The Shannon conditional mutual information (CMI) ``I^S(X; Y | Z)``.
 
 ## Usage
 
+- Use with [`association`](@ref)/[`condmutualinfo`](@ref) to compute the raw Shannon conditional mutual information.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information.
 
 ## Supported definitions
 

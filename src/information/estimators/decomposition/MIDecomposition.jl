@@ -13,9 +13,10 @@ value of the measure.
 
 ## Usage
 
-- [`information`](@ref)`(est::MIDecomposition, x...)`.
+- Use with [`association`](@ref) to compute a [`MultivariateInformationMeasure`](@ref)
+    from input data.
 
-## Example 
+## Examples
 
 One common application is computing Shannon-type conditional mutual information.
 It can be decomposed as a sum of mutual information terms, which we can each 

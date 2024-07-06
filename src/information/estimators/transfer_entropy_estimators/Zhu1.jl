@@ -11,10 +11,12 @@ export Zhu1
     Zhu1 <: TransferEntropyEstimator
     Zhu1(k = 1, w = 0, base = MathConstants.e)
 
-The `Zhu1` transfer entropy estimator [Zhu2015](@cite).
+The `Zhu1` transfer entropy estimator [Zhu2015](@cite) for normalized input data 
+(as described in [Zhu2015](@citet)) for both for pairwise and conditional transfer entropy.
 
-Assumes that the input data have been normalized as described in [Zhu2015](@citet).
-The estimator can be used both for pairwise and conditional transfer entropy.
+## Usage
+
+- Use with [`association`](@ref) to compute [`TEShannon`](@ref) from input data.
 
 ## Description
 
@@ -26,7 +28,6 @@ This estimator is an extension to the entropy estimator in [Singh2003](@citet).
 `w` is the Theiler window, which determines if temporal neighbors are excluded
 during neighbor searches (defaults to `0`, meaning that only the point itself is excluded
 when searching for neighbours).
-
 
 ## Description
 

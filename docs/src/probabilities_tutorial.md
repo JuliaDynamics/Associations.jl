@@ -30,6 +30,7 @@ Estimating multivariate counts (contingency matrices) and PMFs is simple. If the
 we can use [`UniqueElements`](@ref) to 
 
 ```@example counts_probs_tutorial
+using CausalityTools
 n = 50 # the number of samples must be the same for each input variable
 x = rand(["dog", "cat", "snake"], n)
 y = rand(1:4, n)

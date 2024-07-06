@@ -7,8 +7,8 @@ The Hellinger distance.
 
 ## Usage 
 
-- [`information`](@ref). Used to compute the Hellinger distance between two pre-computed
-    probability distributions.
+- Use with [`association`](@ref) to compute the compute the Hellinger distance between two pre-computed
+    probability distributions, or from raw data using one of the estimators listed below.
 
 ## Compatible estimators
 
@@ -30,12 +30,18 @@ D_{H}(P_Y(\\Omega) || P_Y(\\Omega)) =
 ## Examples
 
 ```julia
-# There should be zero information gain from `x` over `y` for independent random variables.
+using CausalityTools
+# From raw data
 using Random; rng = Xoshiro(1234)
 n = 100000
 x, y = rand(rng, n), rand(rng, n)
-o = OrdinalPatterns(m = 3)
-div_hd = information(HellingerDistance(), o, x, y) # pretty close to zero
+est = JointProbabilities(HellingerDistance(), CodifyVariables(OrdinalPatterns(m=3)))
+div_hd = association(est, x, y) # pretty close to zero
+
+# From pre-computed PMFs
+p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
+p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
+association(HellingerDistance(), p1, p2)
 ```
 
 """

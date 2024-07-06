@@ -19,8 +19,8 @@ Note that `τx` and `τy` are negative; see explanation below.
 
 ## Usage
 
+- Use with [`association`](@ref)/[`s_measure`](@ref) to compute the raw s-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
-- Use with [`s_measure`](@ref) to compute the raw s-measure statistic.
 
 ## Description
 

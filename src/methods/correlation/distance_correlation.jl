@@ -16,10 +16,10 @@ is computed.
 
 ## Usage
 
+- Use with [`association`](@ref)/[`distance_correlation`](@ref) to compute the raw distance correlation
+    coefficient.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for
     pairwise dependence.
-- Use with [`distance_correlation`](@ref) to compute the raw distance correlation
-    coefficient.
 
 !!! warn
     A partial distance correlation `distance_correlation(X, Y, Z) = 0` doesn't

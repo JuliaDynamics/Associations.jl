@@ -15,7 +15,7 @@ number of temporal neighbors that are excluded during neighbor searches.
 
 ## Usage
 
-- [`information`](@ref)`(est::PoczosSchneiderCMI, x, y, z)`.
+- Use with [`association`](@ref) to compute [`CMIRenyiPoczos`](@ref) from input data.
 
 ## Example 
 
@@ -25,8 +25,7 @@ using Random; rng = MersenneTwister(1234)
 x = rand(rng, 10000)
 y = rand(rng, 10000) .+ x
 z = rand(rng, 10000) .+ y
-est = PoczosSchneiderCMI(CMIRenyiPoczos(), k = 10)
-information(est, x, z, y) # should be near 0 (and can be negative)
+association(PoczosSchneiderCMI(CMIRenyiPoczos(), k = 10), x, z, y) # should be near 0 (and can be negative)
 ```
 
 ## Compatible definitions

@@ -17,6 +17,7 @@ struct Amplitude <: InstantaneousSignalProperty end
 Indicates that the instantaneous phases of a signal should be used. """
 struct Phase <: InstantaneousSignalProperty end
 
+# TODO: update to new syntax
 """
     Hilbert(est;
         source::InstantaneousSignalProperty = Phase(),

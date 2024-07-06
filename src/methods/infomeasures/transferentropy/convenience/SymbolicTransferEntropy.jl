@@ -1,5 +1,6 @@
 export SymbolicTransferEntropy
 
+# TODO: update to new syntax
 """
     SymbolicTransferEntropy <: TransferEntropyEstimator
     SymbolicTransferEntropy(; m = 3, τ = 1, lt = ComplexityMeasures.isless_rand

@@ -9,6 +9,10 @@ using LinearAlgebra: eigvals, det
 
 `GaussianMI` is a parametric estimator for Shannon mutual information.
 
+## Usage
+
+- Use with [`association`](@ref) to compute [`MIShannon`](@ref) from input data.
+
 ## Description
 
 Given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
@@ -49,11 +53,6 @@ If `normalize == true`, then the mutual information is estimated as
 ```
 
 where ``\\sigma_i`` are the eigenvalues for ``\\Sigma``.
-
-
-## Usage
-
-- [`information`](@ref)`(est::GaussianMI, x, y)`.
 
 ## Example 
 

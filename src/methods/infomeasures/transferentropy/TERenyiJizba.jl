@@ -7,9 +7,9 @@ The Rényi transfer entropy from [Jizba2012](@citet).
 
 ## Usage
 
+- Use with [`association`](@ref)/[`transferentropy`](@ref) to compute the raw transfer entropy.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
     and conditional dependence.
-- Use with [`transferentropy`](@ref) to compute the raw transfer entropy.
 
 ## Description
 

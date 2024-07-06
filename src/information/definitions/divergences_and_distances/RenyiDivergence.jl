@@ -6,6 +6,16 @@ export RenyiDivergence
 
 The Rényi divergence of positive order `q`.
 
+## Usage 
+
+- Use with [`association`](@ref) to compute the compute the Rényi divergence between two 
+    pre-computed probability distributions, or from raw data using one of the estimators
+    listed below.
+
+## Compatible estimators
+
+- [`JointDistanceDistribution`](@ref)
+
 ## Description
 
 The Rényi divergence between two probability distributions
@@ -30,6 +40,23 @@ D_{q}(P_Y(\\Omega) || P_Y(\\Omega)) =
 !!! note 
     Distances.jl also defines `RenyiDivergence`. Quality it if you're loading both 
     packages, i.e. do `information(CausalityTools.RenyiDivergence(), x, y)`.
+
+## Examples
+
+```julia
+using CausalityTools
+# From raw data
+using Random; rng = Xoshiro(1234)
+n = 100000
+x, y = rand(rng, n), rand(rng, n)
+est = JointProbabilities(RenyiDivergence(), CodifyVariables(OrdinalPatterns(m=3)))
+div_hd = association(est, x, y) # pretty close to zero
+
+# From pre-computed PMFs
+p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
+p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
+association(RenyiDivergence(), p1, p2)
+```
 """
 struct RenyiDivergence{Q, B} <: DivergenceOrDistance
     q::Q

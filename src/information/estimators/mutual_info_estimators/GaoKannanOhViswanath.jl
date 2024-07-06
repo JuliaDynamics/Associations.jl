@@ -10,12 +10,9 @@ The `GaoKannanOhViswanath` (Shannon) estimator is designed for estimating
 mutual information between variables that may be either discrete, continuous or
 a mixture of both [GaoKannanOhViswanath2017](@cite).
 
-!!! note "Explicitly convert your discrete data to floats"
-    Even though the `GaoKannanOhViswanath` estimator is designed to handle discrete data,
-    our implementation demands that all input data are `StateSpaceSet`s whose data points
-    are floats. If you have discrete data, such as strings or symbols, encode them using
-    integers and convert those integers to floats before passing them to
-    [`mutualinfo`](@ref).
+## Usage
+
+- Use with [`association`](@ref) to compute [`MIShannon`](@ref) from input data.
 
 ## Description
 
@@ -27,7 +24,6 @@ The estimator avoids the common issue of having to add noise to data before anal
 due to tied points, which may bias other estimators. Citing their paper, the
 estimator *"strongly outperforms natural baselines of discretizing the mixed random
 variables (by quantization) or making it continuous by adding a small Gaussian noise."*
-
 
 !!! warn "Implementation note"
     In [GaoKannanOhViswanath2017](@citet), they claim (roughly speaking) that the estimator
@@ -47,11 +43,14 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
     there will be slight differences between the methods. See the source code for more
     details.
 
-## Usage
+!!! note "Explicitly convert your discrete data to floats"
+    Even though the `GaoKannanOhViswanath` estimator is designed to handle discrete data,
+    our implementation demands that all input data are `StateSpaceSet`s whose data points
+    are floats. If you have discrete data, such as strings or symbols, encode them using
+    integers and convert those integers to floats before passing them to
+    [`mutualinfo`](@ref).
 
-- [`information`](@ref)`(est::GaoKannanOhViswanath, x, y)`.
-
-## Example 
+## Examples
 
 ```julia
 using CausalityTools

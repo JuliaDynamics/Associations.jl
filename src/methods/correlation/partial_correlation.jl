@@ -9,9 +9,9 @@ variables removed.
 
 ## Usage
 
+- Use with [`association`](@ref)/[`partial_correlation`](@ref) to compute the raw correlation coefficient.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for
     conditional dependence.
-- Use with [`partial_correlation`](@ref) to compute the raw correlation coefficient.
 
 ## Description
 

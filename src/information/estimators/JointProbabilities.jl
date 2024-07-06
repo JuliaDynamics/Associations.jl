@@ -10,6 +10,12 @@ export JointProbabilities
 
 `JointProbabilities` is a generic estimator for multivariate discrete information measures.
     
+## Usage
+
+- Use with [`association`](@ref) to compute an information measure from input data.
+
+## Description
+
 It first encodes the input data according to the given `discretization`, then constructs 
 `probs`, a multidimensional [`Probabilities`](@ref) instance. Finally, `probs` are 
 forwarded to a [`PlugIn`](@ref) estimator, which computes the measure according to 

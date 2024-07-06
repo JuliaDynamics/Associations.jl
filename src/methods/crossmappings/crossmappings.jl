@@ -28,6 +28,13 @@ abstract type CrossmapMeasure <: AssociationMeasure end
 A parametric supertype for all cross-map estimators, which are used with [`predict`](@ref) and
 [`crossmap`](@ref).
 
+## Concrete subtypes
+
+- [`ConvergentCrossMapping`](@ref)
+- [`PairwiseAsymmetricInference`](@ref)
+
+## Description
+
 Because the type of the library may differ between estimators, and because RNGs from
 different packages may be used, subtypes must implement the `LIBSIZES` and `RNG`
 type parameters.

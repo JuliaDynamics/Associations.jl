@@ -53,6 +53,7 @@ probabilities(UniqueElements(), x, y, z)
 
 See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@ref), [`OutcomeSpace`](@ref).
 """
+function probabilities(o::OutcomeSpace) end
 
 function probabilities(est::RelativeAmount, c::Counts{<:Integer, N}) where N
     probs = Probabilities(c)

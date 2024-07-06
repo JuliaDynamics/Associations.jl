@@ -12,6 +12,13 @@ is a version of [`ConvergentCrossMapping`](@ref) that searches for neighbors in
 *mixed* embeddings (i.e. both source and target variables included); otherwise, the
 algorithms are identical.
 
+## Usage
+
+- Use with [`association`](@ref) to compute the pairwise asymmetric inference measure 
+    between variables.
+
+## Description
+
 Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
 with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
 temporal neighbors are excluded during neighbor searches (`w = 0` means that only the

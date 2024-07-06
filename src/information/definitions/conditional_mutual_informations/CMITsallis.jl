@@ -1,7 +1,8 @@
 using ComplexityMeasures: Tsallis
 import ComplexityMeasures: log_with_base
 
-export CMITsallis
+# Dont export for now. I think this definitin is wrong. See below.
+#export CMITsallis
 
 """
     CMITsallis <: ConditionalMutualInformation
@@ -12,7 +13,7 @@ Base.@kwdef struct CMITsallis{B, Q} <: ConditionalMutualInformation
     q::Q = 1.5 # Todo: check formula. Where does `q` appear?
 end
 
-# TODO: this has to be wrong. See the following paper for a definition:
+# TODO: This has to be wrong. See the following paper for a definition:
 # https://www.sciencedirect.com/science/article/pii/S0378437119317030?casa_token=OjBFqwe6_1UAAAAA:s32zgg706dkO5P8Wuy2x2fWX0WjR09IguDvA8xGt6OTthjGkTAAutiZSiqI49ScyA6nTwomXEw
 function information(definition::CMITsallis, pxyz::Probabilities{T, 3}) where T
     (; base, q) = definition

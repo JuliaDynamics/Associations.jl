@@ -8,8 +8,8 @@ The Pearson correlation of two variables.
 
 ## Usage
 
+- Use with [`association`](@ref)/[`pearson_correlation`](@ref) to compute the raw correlation coefficient.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`pearson_correlation`](@ref) to compute the raw correlation coefficient.
 
 ## Description
 

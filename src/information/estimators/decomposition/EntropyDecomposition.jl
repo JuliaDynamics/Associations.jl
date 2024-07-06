@@ -14,7 +14,8 @@ its formula into some combination of entropy terms.
 
 ## Usage
 
-- [`information`](@ref)`(est::EntropyDecomposition, x...)`.
+- Use with [`association`](@ref) to compute a [`MultivariateInformationMeasure`](@ref)
+    from input data.
 
 ## Description
 

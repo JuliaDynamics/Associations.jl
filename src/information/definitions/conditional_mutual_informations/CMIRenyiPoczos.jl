@@ -11,8 +11,9 @@ defined in (Póczos & Schneider, 2012)[^Póczos2012].
 
 ## Usage
 
+- Use with [`association`](@ref)/[`condmutualinfo`](@ref) to compute the raw 
+    Rényi-Poczos conditional mutual information.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information.
 
 ## Definition
 

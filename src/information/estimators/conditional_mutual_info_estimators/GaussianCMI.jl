@@ -8,6 +8,10 @@ using StateSpaceSets: StateSpaceSet
 `GaussianCMI` is a parametric [`ConditionalMutualInformationEstimator`](@ref) 
 [Vejmelka2008](@cite).
 
+## Usage
+
+- Use with [`association`](@ref) to compute [`CMIShannon`](@ref) from input data.
+
 ## Description
 
 `GaussianCMI` estimates Shannon CMI through a sum of two mutual information terms that
@@ -18,10 +22,6 @@ for [`GaussianMI`](@ref)):
 \\hat{I}_{Gaussian}(X; Y | Z) = \\hat{I}_{Gaussian}(X; Y, Z) - \\hat{I}_{Gaussian}(X; Z)
 ```
 
-## Usage
-
-- [`information`](@ref)`(est::GaussianCMI, x, y, z)`.
-
 ## Example 
 
 ```julia
@@ -30,7 +30,7 @@ using Random; rng = MersenneTwister(1234)
 x = rand(rng, 10000)
 y = rand(rng, 10000) .+ x
 z = rand(rng, 10000) .+ y
-information(GaussianCMI(CMIShannon(base = 2)), x, z, y)
+association(GaussianCMI(CMIShannon(base = 2)), x, z, y)
 ```
 
 ## Compatible definitions

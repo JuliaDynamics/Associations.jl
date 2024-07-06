@@ -11,6 +11,14 @@ export mcr
 An association measure based on mean conditional probabilities of recurrence
 (MCR) introduced by [Romano2007](@citet).
 
+## Usage
+
+- Use with [`association`](@ref)/[`mcr`](@ref) to compute the raw MCR for pairwise association.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+    association.
+
+## Description
+
 `r` is  mandatory keyword which specifies the recurrence threshold when constructing
 recurrence matrices. It can be instance of
 any subtype of `AbstractRecurrenceType` from
@@ -18,14 +26,6 @@ any subtype of `AbstractRecurrenceType` from
 To use any `r` that is not a real number, you have to do `using RecurrenceAnalysis` first.
 The `metric` is any valid metric
 from [Distances.jl](https://github.com/JuliaStats/Distances.jl).
-
-## Usage
-
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
-    association.
-- Use with [`mcr`](@ref) to compute the raw MCR for pairwise association.
-
-## Description
 
 For input variables `X` and `Y`, the conditional probability of recurrence
 is defined as

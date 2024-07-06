@@ -10,6 +10,13 @@ terms are then estimated using `est`, which can be any
 [`ConditionalMutualInformationEstimator`](@ref). Finally, these estimates are combined
 according to the relevant decomposition formula.
 
+## Usage
+
+- Use with [`association`](@ref) to compute a [`MultivariateInformationMeasure`](@ref)
+    from input data.
+
+## Description
+
 Similar to [`EntropyDecomposition`](@ref), but `definition` is expressed as 
 conditional mutual information terms instead of entropy terms.
 

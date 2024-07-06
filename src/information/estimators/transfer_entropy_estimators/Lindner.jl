@@ -11,6 +11,12 @@ export Lindner
 The `Lindner` transfer entropy estimator [Lindner2011](@cite), which is
 also used in the Trentool MATLAB toolbox, and is based on nearest neighbor searches.
 
+## Usage
+
+- Use with [`association`](@ref) to compute [`TEShannon`](@ref) from input data.
+
+## Keyword parameters
+
 `w` is the Theiler window, which determines if temporal neighbors are excluded
 during neighbor searches (defaults to `0`, meaning that only the point itself is excluded
 when searching for neighbours).
@@ -36,11 +42,6 @@ TE_S(X \\to Y) =
 where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` for which
 neighbor searches are performed. Here this estimator has been modified to allow for 
 conditioning too (a simple modification to [Lindner2011](@citet)'s equation 5 and 6). 
-
-
-## Usage
-
-- [`information`](@ref)`(est::Lindner, x, y, z)`.
 
 ## Example 
 

@@ -20,8 +20,8 @@ for an explanation.
 
 ## Usage
 
+- Use with [`association`](@ref)/[`m_measure`](@ref) to compute the raw m-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
-- Use with [`m_measure`](@ref) to compute the raw m-measure statistic.
 
 ## Description
 

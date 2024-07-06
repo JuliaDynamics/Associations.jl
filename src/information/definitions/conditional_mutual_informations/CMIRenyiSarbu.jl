@@ -11,8 +11,9 @@ The Rényi conditional mutual information from [Sarbu2014](@citet).
 
 ## Usage
 
+- Use with [`association`](@ref)/[`condmutualinfo`](@ref) to compute the raw Rényi-Sarbu 
+    conditional mutual information.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`condmutualinfo`](@ref) to compute the raw conditional mutual information.
 
 ## Discrete description
 
