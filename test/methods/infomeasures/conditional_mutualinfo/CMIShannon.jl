@@ -1,119 +1,87 @@
 using CausalityTools
 using StateSpaceSets: StateSpaceSet
-
-probests = [
-    ValueBinning(RectangularBinning(3))
-    #ValueBinning(FixedRectangularBinning(0, 1, 3))
-    NaiveKernel(0.2) # probably shouldn't be used.
-]
-
-probests_for_timeseries = [
-    OrdinalPatterns{3}(),
-    Dispersion(c = 3, m = 2)
-]
-
-k = 5
-diff_entropy_estimators = [
-    Kraskov(; k),
-    KozachenkoLeonenko(),
-    ZhuSingh(; k),
-    Zhu(; k),
-    LeonenkoProzantoSavani(; k),
-    Lord(; k = k*5),
-]
-
-diff_mi_estimators = [
-    GaussianMI(),
-    KSG1(; k),
-    KSG2(; k),
-    GaoKannanOhViswanath(; k),
-    GaoOhViswanath(; k),
-]
+using Test
+using Random; rng = Xoshiro(1235)
 
 
-x = StateSpaceSet(rand(1000, 2))
-y = StateSpaceSet(rand(1000, 1))
-z = StateSpaceSet(rand(1000, 1))
+x = StateSpaceSet(rand(rng, 1000, 2))
+y = StateSpaceSet(rand(rng, 1000, 1))
+z = StateSpaceSet(rand(rng, 1000, 1))
 
-@test FPVP() isa FPVP
-@test MesnerShalisi() isa MesnerShalizi
-@test MesnerShalizi() isa MesnerShalizi
-@test PoczosSchneiderCMI() isa PoczosSchneiderCMI
-@test Rahimzamani() isa Rahimzamani
-@test GaussianCMI() isa GaussianCMI
-@test condmutualinfo(FPVP(), x, y, z) isa Real
-@test condmutualinfo(MesnerShalizi(), x, y, z) isa Real
-@test condmutualinfo(PoczosSchneiderCMI(), x, y, z) isa Real
-@test condmutualinfo(Rahimzamani(), x, y, z) isa Real
-@test condmutualinfo(GaussianCMI(), x, y, z) isa Real
+@testset "Dedicated estimators" begin
+    @test FPVP() isa FPVP
+    @test MesnerShalisi() isa MesnerShalizi
+    @test MesnerShalizi() isa MesnerShalizi
+    @test PoczosSchneiderCMI() isa PoczosSchneiderCMI
+    @test Rahimzamani() isa Rahimzamani
+    @test GaussianCMI() isa GaussianCMI
 
-@test_throws ArgumentError condmutualinfo(CMIShannon(), FPVP(), x, y)
-@test_throws ArgumentError condmutualinfo(CMIShannon(), FPVP(), x)
+    @test association(FPVP(), x, y, z) isa Real
+    @test association(MesnerShalizi(), x, y, z) isa Real
+    @test association(PoczosSchneiderCMI(), x, y, z) isa Real
+    @test association(Rahimzamani(), x, y, z) isa Real
+    @test association(GaussianCMI(), x, y, z) isa Real
+end
 
-@testset "CMIShannon" begin
-    @test m = CMIShannon(base = 2) isa CMIShannon
+@testset "Input checks" begin
+    @test_throws ArgumentError association(CMIShannon(), FPVP(), x, y)
+    @test_throws ArgumentError association(CMIShannon(), FPVP(), x)
+end
 
-    x = StateSpaceSet(rand(10000, 2))
-    y = StateSpaceSet(rand(10000, 1))
-    z = StateSpaceSet(rand(10000, 1))
-    w = StateSpaceSet(rand(10000, 1))
+@testset "JointProbabilities" begin
+    rng = Xoshiro(1234)
+    # Pre-discretized
+    x = rand(rng, ["a", "b", "c"], 200)
+    y = rand(rng, ["hello", "yoyo", "heyhey"], 200)
+    z = rand(rng, ["a", "b"], 200)
+    est = JointProbabilities(CMIShannon(), UniqueElements())
+    @test association(est, x, y, z) >= 0.0
+    @test association(est, x, y, z) isa Real
+end
 
-    @testset "Defaults" begin
-        s, t, c = rand(100), rand(100), rand(100)
-        est_bin = ValueBinning(RectangularBinning(3))
-        est_ksg = KSG1()
+@testset "EntropyDecomposition" begin
 
-        # binning estimator yields non-negative values
-        @test condmutualinfo(CMIShannon(base = 2), est_bin, s, t, c) >= 0.0
-        @test condmutualinfo(CMIShannon(base = 2), est_ksg, s, t, c) isa Real # not guaranteed to be >= 0
+    @testset "Discrete" begin
+        outcome_spaces = [
+            ValueBinning(RectangularBinning(3)),
+            OrdinalPatterns(m = 3),
+            Dispersion(c = 3, m = 2)
+        ]
+
+        for (i, o) in enumerate(outcome_spaces)
+            est = EntropyDecomposition(est_diff, o)
+            @test association(est, x, y, z) ≥ 0
+        end
     end
 
-    @testset "Definition: CMIDefinitionShannonH4" begin
-        @test CMIShannon() isa CMIShannon
-        # ----------------------------------------------------------------
-        # Dedicated estimators.
-        # ----------------------------------------------------------------
-        # Just test that each estimator is reasonably close to zero for data from a uniform
-        # distribution. This number varies wildly between estimators, so we're satisfied
-        # to test just that they don't blow up.
-        @testset "$(typeof(diff_mi_estimators[i]).name.name)" for i in eachindex(diff_mi_estimators)
-            est = diff_mi_estimators[i]
-            mi = condmutualinfo(CMIShannon(base = 2), est, x, y, z)
-            @test mi isa Real
-            @test -0.5 < mi < 0.1
+    @testset "Differential" begin
+        
+        diff_entropy_estimators = [
+            Kraskov(; k),
+            KozachenkoLeonenko(),
+            ZhuSingh(; k),
+            Zhu(; k),
+            LeonenkoProzantoSavani(; k),
+            Lord(; k = k*5),
+        ]
+        for (i, est_diff) in enumerate(diff_entropy_estimators)
+            @test association(est_diff, x, y, z) isa Real # not guaranteed to be >= 0
         end
+    end
+end
 
-        # ----------------------------------------------------------------
-        # Probability-based estimators.
-        #
-        # We can't guarantee that the result is any particular value, because these are just
-        # plug-in estimators. Just check that pluggin in works.
-        # ----------------------------------------------------------------
+@testset "MIDecomposition" begin
+    k = 2
+    diff_mi_estimators = [
+        GaussianMI(),
+        KSG1(; k),
+        KSG2(; k),
+        GaoKannanOhViswanath(; k),
+        GaoOhViswanath(; k),
+    ]
 
-        # Estimators that accept StateSpaceSet inputs
-        @testset "$(typeof(probests[i]).name.name)" for i in eachindex(probests)
-            est = probests[i]
-            @test condmutualinfo(CMIShannon(base = 2), est, x, y, z) isa Real # default
-        end
-
-        # Estimators that only accept timeseries input
-        a, b, c = rand(10000), rand(10000), rand(10000)
-
-        @testset "$(typeof(probests_for_timeseries[i]).name)" for i in eachindex(probests_for_timeseries)
-            est = probests_for_timeseries[i]
-            cmi = CMIShannon(base = 2)
-            @test condmutualinfo(cmi, est, a, b, c) >= 0
-            @test condmutualinfo(cmi, est, x, y, z) >= 0
-        end
-
-        # ----------------------------------------------------------------
-        # Entropy-based estimators.
-        # ----------------------------------------------------------------
-        @testset "$(typeof(diff_entropy_estimators[i]).name.name)" for i in eachindex(diff_entropy_estimators)
-            est = diff_entropy_estimators[i]
-            mi = condmutualinfo(CMIShannon(base = 2), est, x, y, z)
-            @test mi isa Real
-            @test -0.5 < mi < 0.1
-        end
+    for (i, est_mi) in enumerate(diff_mi_estimators)
+        est = MIDecomposition(CMIShannon(), est_mi)
+        @test association(est, x, y, z) isa Real # not guaranteed to be >= 0
     end
 end

@@ -2,7 +2,7 @@
 # API
 # ------------------------------------------------------------------------
 # Error for wrong number of input datasets.
-test = SurrogateTest(MIShannon(), KSG1())
+test = SurrogateAssociationTest(MIShannon(), KSG1())
 x, y, z = rand(30), rand(30), rand(30)
 @test_throws ArgumentError independence(test, x)
 @test_throws ArgumentError independence(test, x, y, z)

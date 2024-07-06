@@ -4,7 +4,7 @@ export GaoOhViswanath
 """
     GaoOhViswanath <: MutualInformationEstimator
 
-The `GaoOhViswanath` is a mutual information estimator based on nearest neighbors,
+The `GaoOhViswanath` is a Shannon mutual information estimator based on nearest neighbors,
 and is also called the bias-improved-KSG estimator, or BI-KSG, by [Gao2018](@cite).
 
 ## Usage

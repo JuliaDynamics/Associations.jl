@@ -9,4 +9,4 @@ z = rand([1, 2, 5], 50)
 # The estimation of probabilities is decoupled from the estimation of the mutual info.
 # We could in principle use any probabilities estimator here, but we default to `RelativeAmount`.
 p = probabilities(x, y, z) 
-@test information(CMITsallis(), p) >= 0.0
+@test information(CMITsallisPapapetrou(), p) >= 0.0

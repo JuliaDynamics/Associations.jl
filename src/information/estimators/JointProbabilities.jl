@@ -31,13 +31,14 @@ Works for any [`OutcomeSpace`](@ref) that implements [`codify`](@ref).
 
 !!! note "Joint probabilities vs decomposition methods"
 
-    Using [`JointProbabilities`](@ref) to compute e.g. conditional mutual estimation 
+    Using [`JointProbabilities`](@ref) to compute an information measure, 
+    e.g. conditional mutual estimation,
     is typically slower than other dedicated estimation procedures like [`EntropyDecomposition`](@ref).
-    The reasomn is that measures such as [`CMIShannon`](@ref) can be formulated as a
+    The reason is that measures such as [`CMIShannon`](@ref) can be formulated as a
     sum of four entropies, which can be estimated individually and summed afterwards. 
     This decomposition is fast because because we avoid *explicitly* estimating the entire joint pmf, 
-    which demands many extra calculation steps, but it is biased, because it fails
-    to fully take into consideration the joint relationships between the variables.
+    which demands many extra calculation steps, However, the decomposition is biased, 
+    because it fails to fully take into consideration the joint relationships between the variables.
     Pick your estimator according to your needs.
 
 See also: [`Counts`](@ref), [`Probabilities`](@ref), [`ProbabilitiesEstimator`](@ref),

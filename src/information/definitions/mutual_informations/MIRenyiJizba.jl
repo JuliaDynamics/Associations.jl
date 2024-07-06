@@ -10,8 +10,14 @@ The Rényi mutual information ``I_q^{R_{J}}(X; Y)`` defined in [Jizba2012](@cite
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
+- Use with [`association`](@ref) to compute the raw Rényi-Jizba mutual information from input data
+    using of of the estimators listed below.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence using
+    the Rényi-Jizba mutual information.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref).
 
 ## Definition
 

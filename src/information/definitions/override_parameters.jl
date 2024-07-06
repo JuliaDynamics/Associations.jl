@@ -16,7 +16,7 @@ This method is explicitly extended for each possible decomposition.
 function estimator_with_overridden_parameters(definition, lower_level_estimator) end
 
 const TSALLIS_MULTIVARIATE_MEASURES = Union{
-    CMITsallis, 
+    CMITsallisPapapetrou, 
     MITsallisFuruichi, MITsallisMartin,
     ConditionalEntropyTsallisAbe, ConditionalEntropyTsallisFuruichi,
     JointEntropyTsallis,

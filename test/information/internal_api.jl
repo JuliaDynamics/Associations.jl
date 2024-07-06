@@ -5,7 +5,7 @@ using CausalityTools
 # This file tests internal functions.
 # ----------------------------------------------------------------
 def_renyi = CMIRenyiSarbu(; q = 5, base = 5)
-def_tsallis = CMITsallis(; q = 5, base = 5)
+def_tsallis = CMITsallisPapapetrou(; q = 5, base = 5)
 def_shannon = CMIShannon(; base = 5)
 est_renyi = PlugIn(Renyi(; q = 0.5, base = 2))
 est_tsallis = PlugIn(Tsallis(; q = 0.5, base = 2))

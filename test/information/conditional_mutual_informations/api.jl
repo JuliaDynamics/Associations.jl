@@ -2,7 +2,7 @@
 # ----------------------------------------------------------------
 # Joint probabilities estimation
 # ----------------------------------------------------------------
-definitions = [CMIShannon(), CMIRenyiSarbu(), CMITsallis()]
+definitions = [CMIShannon(), CMIRenyiSarbu(), CMITsallisPapapetrou()]
 
 @testset "JointProbabilities with $(typeof(def).name.name)" for def in definitions
     x, y, z = rand(rng, 100), rand(rng, 100), rand(rng, 100)

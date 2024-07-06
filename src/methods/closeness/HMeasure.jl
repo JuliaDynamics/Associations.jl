@@ -4,7 +4,6 @@ using StateSpaceSets: AbstractStateSpaceSet
 using Distances: SqEuclidean, Euclidean
 using Distances: pairwise, evaluate
 
-export h_measure
 export HMeasure
 
 """
@@ -20,7 +19,7 @@ for an explanation.
 
 ## Usage
 
-- Use with [`association`](@ref)/[`h_measure`](@ref) to compute the raw h-measure statistic.
+- Use with [`association`](@ref) to compute the raw h-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
 
 ## Description
@@ -46,15 +45,6 @@ Base.@kwdef struct HMeasure{M, TM} <: AssociationMeasure
     dx::Int = 2
     dy::Int = 2
     w::Int = 0
-end
-
-"""
-    h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`HMeasure`](@ref) from source `x` to target `y`.
-"""
-function h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return association(measure, x, y)
 end
 
 # Internal method for use with `independence`

@@ -12,19 +12,13 @@ using StateSpaceSets
 pages = [
     "Overview" => "index.md",
     "Association measures" => "associations.md",
-    #[
-        # "Core" => "api/associations_core.md",
-        # "Correlation API" => "api/api_correlation.md",
-        # "Information API" => "api/api_information.md",
-        # "Closeness API" => "api/api_closeness.md",
-        # "Crossmap API" => "api/api_crossmap.md",
-        # "Examples" => [
-        #     "Correlation examples" => "examples/examples_correlation.md",
-        #     "Information examples" => "examples/estimating_infomeasures.md",
-        #     "Closeness examples" => "examples/examples_closeness.md",
-        #     "Crossmap examples" => "examples/examples_cross_mappings.md",
-        # ],
-    #],
+    "Independence" => "independence.md",
+    "Examples" => [
+        "Information examples" => "examples/estimating_infomeasures.md",
+        #"Correlation examples" => "examples/examples_correlation.md",
+        #"Closeness examples" => "examples/examples_closeness.md",
+        #"Crossmap examples" => "examples/examples_cross_mappings.md",
+    ],
     "Basics and tutorials" => [
         "Encoding elements" => "encoding_tutorial.md",
         "Encoding input datasets" => "discretization_tutorial.md",

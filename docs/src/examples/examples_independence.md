@@ -117,7 +117,7 @@ The same goes for variables one step up the chain
 test_result = independence(test, y, w, z)
 ```
 
-## [[`SurrogateTest`](@ref)](@id examples_surrogatetest)
+## [[`SurrogateAssociationTest`](@ref)](@id examples_surrogatetest)
 
 ### [Distance correlation](@id examples_surrogatetest_distancecorrelation)
 
@@ -125,17 +125,17 @@ test_result = independence(test, y, w, z)
 using CausalityTools
 x = randn(1000)
 y = randn(1000) .+ 0.5x
-independence(SurrogateTest(DistanceCorrelation()), x, y)
+independence(SurrogateAssociationTest(DistanceCorrelation()), x, y)
 ```
 
-### [Partial correlation](@id examples_surrogatetest_partialcorrelation)
+### [Partial correlation](@id examples_surrogate_test_partialcorrelation)
 
 ```@example
 using CausalityTools
 x = randn(1000)
 y = randn(1000) .+ 0.5x
 z = randn(1000) .+ 0.8y
-independence(SurrogateTest(PartialCorrelation()), x, z, y)
+independence(SurrogateAssociationTest(PartialCorrelation()), x, z, y)
 ```
 
 ### [Mutual information ([`MIShannon`](@ref), categorical)](@id examples_surrogatetest_mishannon_categorical)
@@ -148,7 +148,7 @@ using CausalityTools
 n = 1000
 preference = rand(["yes", "no"], n)
 food = rand(["veggies", "meat", "fish"], n)
-test = SurrogateTest(MIShannon(), Contingency())
+test = SurrogateAssociationTest(MIShannon(), Contingency())
 independence(test, preference, food)
 ```
 
@@ -193,14 +193,14 @@ experience = map(preferred_equipment) do equipment
     end
 end;
 
-test_mi = independence(SurrogateTest(MIShannon(), Contingency()), places, experience)
+test_mi = independence(SurrogateAssociationTest(MIShannon(), Contingency()), places, experience)
 ```
 
 As expected, the evidence favors the alternative hypothesis that `places` and 
 `experience` are dependent.
 
 ```@example  indep_cmi
-test_cmi = independence(SurrogateTest(CMIShannon(), Contingency()), places, experience, preferred_equipment)
+test_cmi = independence(SurrogateAssociationTest(CMIShannon(), Contingency()), places, experience, preferred_equipment)
 ```
 
 Again, as expected, when conditioning on the mediating variable, the dependence disappears,
@@ -218,7 +218,7 @@ using CausalityTools
 sys = system(Logistic2Unidir(c_xy = 0.5)) # x affects y, but not the other way around.
 x, y = columns(first(trajectory(sys, 1000, Ttr = 10000)))
 
-test = SurrogateTest(TEShannon(), KSG1(k = 4))
+test = SurrogateAssociationTest(TEShannon(), KSG1(k = 4))
 independence(test, x, y)
 ```
 
@@ -242,11 +242,11 @@ s = s_measure(measure, x, y)
 
 The `s` statistic is larger when there is stronger coupling and smaller
 when there is weaker coupling. To check whether `s` is significant (i.e. large
-enough to claim directional dependence), we can use a [`SurrogateTest`](@ref),
+enough to claim directional dependence), we can use a [`SurrogateAssociationTest`](@ref),
 like [here](@ref examples_surrogatetest_smeasure).
 
 ```@example quickstart_smeasure
-test = SurrogateTest(measure)
+test = SurrogateAssociationTest(measure)
 independence(test, x, y)
 ```
 

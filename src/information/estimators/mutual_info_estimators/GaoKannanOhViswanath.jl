@@ -7,7 +7,7 @@ export GaoKannanOhViswanath
     GaoKannanOhViswanath(; k = 1, w = 0)
 
 The `GaoKannanOhViswanath` (Shannon) estimator is designed for estimating
-mutual information between variables that may be either discrete, continuous or
+Shannon mutual information between variables that may be either discrete, continuous or
 a mixture of both [GaoKannanOhViswanath2017](@cite).
 
 ## Usage

@@ -51,8 +51,8 @@ Z = StateSpaceSet(z)
 
 nshuffles = 5
 lptest = LocalPermutationTest(PMI(), OrdinalPatterns(); nshuffles, rng)
-sutest = SurrogateTest(PMI(), OrdinalPatterns(); nshuffles, rng)
+sutest = SurrogateAssociationTest(PMI(), OrdinalPatterns(); nshuffles, rng)
 @test independence(lptest, x, y, z) isa LocalPermutationTestResult
 @test independence(lptest, X, Y, Z) isa LocalPermutationTestResult
-@test independence(sutest, x, y, z) isa SurrogateTestResult
-@test independence(sutest, X, Y, Z) isa SurrogateTestResult
+@test independence(sutest, x, y, z) isa SurrogateAssociationTestResult
+@test independence(sutest, X, Y, Z) isa SurrogateAssociationTestResult

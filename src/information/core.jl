@@ -121,7 +121,7 @@ of a multidimensional probability mass functions (PMFs) or multidimensional prob
 [`ConditionalMutualInformation`](@ref) definitions:
 
 - [`CMIShannon`](@ref)
-- [`CMITsallis`](@ref)
+- [`CMITsallisPapapetrou`](@ref)
 - [`CMIRenyiJizba`](@ref)
 - [`CMIRenyiPoczos`](@ref)
 - [`CMIRenyiSarbu`](@ref)

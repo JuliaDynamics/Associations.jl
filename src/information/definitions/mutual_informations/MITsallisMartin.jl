@@ -10,9 +10,15 @@ The discrete Tsallis mutual information from [Martin2004](@citet).
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
-    dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
+- Use with [`association`](@ref) to compute the raw Tsallis-Martin mutual information from input data
+    using of of the estimators listed below.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence using
+    the Tsallis-Martin mutual information.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
+- [`EntropyDecomposition`](@ref)
 
 ## Description
 
@@ -25,8 +31,6 @@ I_{\\text{Martin}}^T(X, Y, q) := H_q^T(X) + H_q^T(Y) - (1 - q) H_q^T(X) H_q^T(Y)
 
 where ``H^S(\\cdot)`` and ``H^S(\\cdot, \\cdot)`` are the marginal and joint Shannon
 entropies, and `q` is the [`Tsallis`](@ref)-parameter.
-
-See also: [`mutualinfo`](@ref).
 """
 Base.@kwdef struct MITsallisMartin{B, Q} <: MutualInformation
     base::B = 2

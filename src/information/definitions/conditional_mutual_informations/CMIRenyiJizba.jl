@@ -11,9 +11,15 @@ The Rényi conditional mutual information ``I_q^{R_{J}}(X; Y | Z)`` defined in
 
 ## Usage
 
-- Use with [`association`](@ref)/[`condmutualinfo`](@ref) to compute the raw 
-    Rényi-Jizba conditional mutual information.
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`association`](@ref) to compute the raw  Rényi-Jizba conditional mutual information
+    using of of the estimators listed below.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise conditional 
+    independence using the Rényi-Jizba conditional mutual information.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
+- [`EntropyDecomposition`](@ref)
 
 ## Definition
 
@@ -22,18 +28,6 @@ I_q^{R_{J}}(X; Y | Z) = I_q^{R_{J}}(X; Y, Z) - I_q^{R_{J}}(X; Z),
 ```
 
 where ``I_q^{R_{J}}(X; Z)`` is the [`MIRenyiJizba`](@ref) mutual information.
-
-## Estimation
-
-The following estimators can be used to compute `CMIRenyiJizba`.
-
-| Estimator                      | Sub-estimator                    | Principle                    |
-| :----------------------------- | :------------------------------- | :--------------------------- |
-| [`EntropyDecomposition`](@ref) | [`LeonenkoProzantoSavani`](@ref) | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`ValueBinning`](@ref)           | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`Dispersion`](@ref)             | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`OrdinalPatterns`](@ref)        | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`UniqueElements`](@ref)         | Four-entropies decomposition |
 
 ## Examples
 
@@ -45,11 +39,11 @@ def = CMIRenyiJizba(q = 1.5)
 
 # Using a differential Rényi entropy estimator
 est = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k = 10))
-information(est, x, y, z)
+association(est, x, y, z)
 
 # Using a plug-in Rényi entropy estimator, discretizing using ordinal patterns.
 est = EntropyDecomposition(def, PlugIn(Renyi()), OrdinalPatterns(m=2), RelativeAmount())
-information(est, x, y, z)
+association(est, x, y, z)
 ```
 """
 Base.@kwdef struct CMIRenyiJizba{B, Q} <: ConditionalMutualInformation
@@ -57,20 +51,20 @@ Base.@kwdef struct CMIRenyiJizba{B, Q} <: ConditionalMutualInformation
     q::Q = 1.5
 end
 
-function information(est::JointProbabilities{<:CMIRenyiJizba}, x, y, z)
+function association(est::JointProbabilities{<:CMIRenyiJizba}, x, y, z)
     throw(ArgumentError("CMIRenyiJizba not implemented for $(typeof(est).name.name)"))
 end
 
 # --------------------------------------------------------------
 # Conditional mutual information through entropy decomposition
 # --------------------------------------------------------------
-function information(est::EntropyDecomposition{<:CMIRenyiJizba, <:DifferentialInfoEstimator{<:Renyi}}, x, y, z)
+function association(est::EntropyDecomposition{<:CMIRenyiJizba, <:DifferentialInfoEstimator{<:Renyi}}, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_differential(est, x, y, z)
     cmi = HXZ + HYZ - HXYZ - HZ
     return cmi
 end
 
-function information(est::EntropyDecomposition{<:CMIRenyiJizba, <:DiscreteInfoEstimator{<:Renyi}}, x, y, z)
+function association(est::EntropyDecomposition{<:CMIRenyiJizba, <:DiscreteInfoEstimator{<:Renyi}}, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_discrete(est, x, y, z)
     cmi = HXZ + HYZ - HXYZ - HZ
     return cmi

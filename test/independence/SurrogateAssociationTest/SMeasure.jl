@@ -2,9 +2,9 @@
 # ------------------------------------------------------------
 using Random
 rng = MersenneTwister(1234)
-x, y = rand(rng, 500), rand(rng, 500)
+x, y = rand(rng, 300), rand(rng, 300)
 z = x .+ y
-test = SurrogateTest(HMeasure(); rng)
+test = SurrogateAssociationTest(SMeasure(); rng)
 α = 0.04 # Some arbitrary significance level.
 
 # We shouldn't be able to reject the null when the variables are independent

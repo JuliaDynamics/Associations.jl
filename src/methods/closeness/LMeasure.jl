@@ -5,7 +5,6 @@ using Distances: SqEuclidean, Euclidean
 using Distances: pairwise, evaluate
 
 export LMeasure
-export l_measure
 
 """
     LMeasure <: AssociationMeasure
@@ -20,7 +19,7 @@ for an explanation.
 
 ## Usage
 
-- Use with [`association`](@ref)/[`l_measure`](@ref) to compute the raw L-measure statistic.
+- Use with [`association`](@ref) to compute the raw L-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
 
 ## Description
@@ -60,15 +59,6 @@ Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
     dx::Int = 2
     dy::Int = 2
     w::Int = 0
-end
-
-"""
-    l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`LMeasure`](@ref) from source `x` to target `y`.
-"""
-function l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return association(measure, x, y)
 end
 
 function getrank(x, p)

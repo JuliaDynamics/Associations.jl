@@ -10,9 +10,15 @@ in that paper is called the *mutual entropy*.
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
+- Use with [`association`](@ref) to compute the raw Tsallis-Furuichi mutual information from input data
+    using of of the estimators listed below.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence using
+    the Tsallis-Furuichi mutual information.
 
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
+- [`EntropyDecomposition`](@ref)
 
 ## Description
 
@@ -26,8 +32,6 @@ I_q^T(X; Y) = H_q^T(X) - H_q^T(X | Y) = H_q^T(X) + H_q^T(Y) - H_q^T(X, Y),
 where ``H^T(\\cdot)`` and ``H^T(\\cdot, \\cdot)`` are the marginal and joint Tsallis
 entropies, and `q` is the [`Tsallis`](@ref)-parameter.
 ```
-
-See also: [`mutualinfo`](@ref).
 """
 Base.@kwdef struct MITsallisFuruichi{B, Q} <: MutualInformation
     base::B = 2

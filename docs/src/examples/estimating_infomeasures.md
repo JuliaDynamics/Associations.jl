@@ -34,7 +34,7 @@ marginal(pxy, dims = 1)
 And the Shannon conditional entropy ``H^S(X | Y)``
 
 ```@example ce_contingency_table
-ce_x_given_y = information(ConditionalEntropyShannon(), pxy) |> Rational
+ce_x_given_y = association(ConditionalEntropyShannon(), pxy) |> Rational
 ```
 
 This is the same as in their example. Hooray! To compute ``H^S(Y | X)``, we just need to
@@ -42,7 +42,7 @@ flip the contingency matrix.
 
 ```@example ce_contingency_table
 pyx = Probabilities(transpose(freqs_yx))
-ce_y_given_x = information(ConditionalEntropyShannon(), pyx) |> Rational
+ce_y_given_x = association(ConditionalEntropyShannon(), pyx) |> Rational
 ```
 
 ### Estimation from data
@@ -61,7 +61,7 @@ rng = MersenneTwister(1234)
 x = rand(rng, 1:3, 1000)
 y = rand(rng, ["The Witcher", "Lord of the Rings"], 1000)
 est = JointProbabilities(ConditionalEntropyShannon(), UniqueElements())
-information(est, x, y)
+association(est, x, y)
 ```
 
 ## Mutual information
@@ -84,7 +84,7 @@ n = 1000
 using CausalityTools
 x = randn(1000)
 y = rand(1000) .+ x
-information(GaussianMI(MIShannon()), x, y) # defaults to `MIShannon()`
+association(GaussianMI(MIShannon()), x, y) # defaults to `MIShannon()`
 ```
 
 #### [`MIShannon`](@ref) with [`KraskovStögbauerGrassberger1`](@ref)
@@ -92,7 +92,7 @@ information(GaussianMI(MIShannon()), x, y) # defaults to `MIShannon()`
 ```@example mi_demonstration
 using CausalityTools
 x, y = rand(1000), rand(1000)
-information(KSG1(MIShannon(); k = 5), x, y)
+association(KSG1(MIShannon(); k = 5), x, y)
 ```
 
 #### [`MIShannon`](@ref) with [`KraskovStögbauerGrassberger2`](@ref)
@@ -100,7 +100,7 @@ information(KSG1(MIShannon(); k = 5), x, y)
 ```@example mi_demonstration
 using CausalityTools
 x, y = rand(1000), rand(1000)
-information(KSG2(MIShannon(); k = 5), x, y)
+association(KSG2(MIShannon(); k = 5), x, y)
 ```
 
 #### [`MIShannon`](@ref) with [`GaoKannanOhViswanath`](@ref)
@@ -108,7 +108,7 @@ information(KSG2(MIShannon(); k = 5), x, y)
 ```@example mi_demonstration
 using CausalityTools
 x, y = rand(1000), rand(1000)
-information(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
+association(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
 ```
 
 #### [`MIShannon`](@ref) with [`GaoOhViswanath`](@ref)
@@ -116,7 +116,7 @@ information(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
 ```@example mi_demonstration
 using CausalityTools
 x, y = rand(1000), rand(1000)
-information(GaoOhViswanath(MIShannon(); k = 10), x, y)
+association(GaoOhViswanath(MIShannon(); k = 10), x, y)
 ```
 
 #### Reproducing Kraskov et al. (2004)
@@ -152,8 +152,8 @@ for i = 1:nreps
     for (j, k) in enumerate(ks)
         est1 = KSG1(MIShannon(; base = ℯ); k)
         est2 = KSG2(MIShannon(; base = ℯ); k)
-        mis_ksg1[i, j] = information(est1, X, Y)
-        mis_ksg2[i, j] = information(est2, X, Y)
+        mis_ksg1[i, j] = association(est1, X, Y)
+        mis_ksg2[i, j] = association(est2, X, Y)
     end
 end
 fig = Figure()
@@ -206,12 +206,12 @@ function compare_ksg_gkov(;
             W = StateSpaceSet(rand(L, 2))
             est_gkov = GaoKannanOhViswanath(MIShannon(; base = ℯ); k)
             est_ksg1 = KSG1(MIShannon(; base = ℯ); k)
-            mis_ksg1_discrete[i, j] = mutualinfo(est_ksg1, X, Y)
-            mis_gkov_discrete[i, j] = mutualinfo(est_gkov, X, Y)
-            mis_ksg1_mix[i, j] = information(est_ksg1, X, Z)
-            mis_gkov_mix[i, j] = information(est_gkov, X, Z)
-            mis_ksg1_cont[i, j] = information(est_ksg1, Z, W)
-            mis_gkov_cont[i, j] = information(est_gkov, Z, W)
+            mis_ksg1_discrete[i, j] = association(est_ksg1, X, Y)
+            mis_gkov_discrete[i, j] = association(est_gkov, X, Y)
+            mis_ksg1_mix[i, j] = association(est_ksg1, X, Z)
+            mis_gkov_mix[i, j] = association(est_gkov, X, Z)
+            mis_ksg1_cont[i, j] = association(est_ksg1, Z, W)
+            mis_gkov_cont[i, j] = association(est_gkov, Z, W)
         end
     end
     return mis_ksg1_mix, mis_ksg1_discrete, mis_ksg1_cont,
@@ -261,7 +261,7 @@ Note that this doesn't apply any bias correction.
 ```@example mi_demonstration
 using CausalityTools
 x, y = rand(1000), rand(1000)
-information(EntropyDecomposition(MIShannon(), Kraskov(k = 3)), x, y)
+association(EntropyDecomposition(MIShannon(), Kraskov(k = 3)), x, y)
 ```
 
 #### [`DifferentialEntropyEstimator`](@ref) comparison
@@ -320,7 +320,7 @@ run(est; f::Function, # function that generates data
         nreps::Int = 10, 
         αs = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1], 
         n::Int = 1000) =
-    map(α -> information(est, f(α, n)...), αs)
+    map(α -> association(est, f(α, n)...), αs)
 
 function compute_results(f::Function; estimators, k = 5, k_lord = 20,
         n = 1000, base = ℯ, nreps = 10,
@@ -397,7 +397,7 @@ estimators = [
     GaoOhViswanath(def; k),
     GaoKannanOhViswanath(def; k),
     GaussianMI(def),
-]
+];
 ```
 
 #### Family 1
@@ -515,7 +515,7 @@ y = rand(rng, 1000)
 discretization = ValueBinning(FixedRectangularBinning(0, 1, 5))
 hest = PlugIn(Shannon())
 est = EntropyDecomposition(MIShannon(), hest, discretization)
-information(est, x, y)
+association(est, x, y)
 ```
 
 #### Discrete [`MIShannon`](@ref) with [`JointProbabilities`](@ref) (numerical)
@@ -530,7 +530,7 @@ using Random; rng = MersenneTwister(1234)
 x = rand(rng, 1000)
 y = rand(rng, 1000)
 discretization = ValueBinning(FixedRectangularBinning(0, 1, 5))
-information(JointProbabilities(MIShannon(), discretization), x, y)
+association(JointProbabilities(MIShannon(), discretization), x, y)
 ```
 
 The [`JointProbabilities`](@ref) estimator can also be used with categorical data.
@@ -554,7 +554,7 @@ end
 
 discretization = UniqueElements()
 est = JointProbabilities(MIShannon(), discretization)
-information(est, preferences, biased_foods), information(est, preferences, random_foods)
+association(est, preferences, biased_foods), association(est, preferences, random_foods)
 ```
 
 ## [Conditional mutual information](@id estimating_condmutualinfo)
@@ -576,7 +576,7 @@ n = 1000
 x = randn(1000)
 y = randn(1000) .+ x
 z = randn(1000) .+ y
-condmutualinfo(GaussianCMI(), x, z, y) # defaults to `CMIShannon()`
+association(GaussianCMI(), x, z, y) # defaults to `CMIShannon()`
 ```
 
 #### [`CMIShannon`](@ref) with [`FPVP`](@ref)
@@ -596,7 +596,7 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-information(FPVP(k = 5), x, z, y) # defaults to `CMIShannon()`
+association(FPVP(k = 5), x, z, y) # defaults to `CMIShannon()`
 ```
 
 #### [`CMIShannon`](@ref) with [`MesnerShalizi`](@ref)
@@ -616,7 +616,7 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-information(MesnerShalizi(; k = 10), x, z, y) # defaults to `CMIShannon()`
+association(MesnerShalizi(; k = 10), x, z, y) # defaults to `CMIShannon()`
 ```
 
 #### [`CMIShannon`](@ref) with [`Rahimzamani`](@ref)
@@ -636,7 +636,7 @@ z = (z ./ std(z)) .+ y
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
-condmutualinfo(Rahimzamani(CMIShannon(base = 10); k = 10), x, z, y)
+association(Rahimzamani(CMIShannon(base = 10); k = 10), x, z, y)
 ```
 
 #### [`CMIRenyiPoczos`](@ref) with [`PoczosSchneiderCMI`](@ref)
@@ -657,7 +657,7 @@ z = (z ./ std(z)) .+ y
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
 est = PoczosSchneiderCMI(CMIRenyiPoczos(base = 2, q = 1.2); k = 5)
-condmutualinfo(est, x, z, y)
+association(est, x, z, y)
 ```
 
 ### Estimation using [`MIDecomposition`](@ref)
@@ -685,7 +685,7 @@ z = (z ./ std(z)) .+ y
 # the link between X and Z is exclusively through Y, so when observing Y,
 # X and Z should appear independent.
 est = MIDecomposition(CMIShannon(base = 2), KSG1(k = 10))
-condmutualinfo(est, x, z, y)
+association(est, x, z, y)
 ```
 
 ### Estimation using [`EntropyDecomposition`](@ref)s
@@ -706,7 +706,7 @@ x = rand(Epanechnikov(0.5, 1.0), n)
 y = rand(Erlang(1), n) .+ x
 z = rand(FDist(5, 2), n)
 est = EntropyDecomposition(CMIShannon(), Kraskov(k = 5))
-condmutualinfo(est, x, z, y)
+association(est, x, z, y)
 ```
 
 Any [`DiscreteInfoEstimator`](@ref) that computes entropy can also be used to compute
@@ -727,5 +727,5 @@ z = rand(FDist(5, 2), n)
 discretization = ValueBinning(RectangularBinning(5))
 hest = PlugIn(Shannon())
 est = EntropyDecomposition(CMIShannon(), hest, discretization)
-condmutualinfo(est, x, y, z)
+association(est, x, y, z)
 ```

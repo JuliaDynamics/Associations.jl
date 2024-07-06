@@ -1,5 +1,4 @@
 export PearsonCorrelation
-export pearson_correlation
 
 """
     PearsonCorrelation
@@ -8,8 +7,9 @@ The Pearson correlation of two variables.
 
 ## Usage
 
-- Use with [`association`](@ref)/[`pearson_correlation`](@ref) to compute the raw correlation coefficient.
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`association`](@ref) to compute the raw Pearson correlation coefficient.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence
+    using the Pearson correlation coefficient.
 
 ## Description
 
@@ -25,16 +25,6 @@ where ``\\bar{x}`` and ``\\bar{y}`` are the means of the observations ``x_k`` an
 respectively.
 """
 struct PearsonCorrelation <: CorrelationMeasure end
-
-"""
-    pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`PearsonCorrelation`](@ref) between `x` and `y`, which must each be
-1-dimensional.
-"""
-function pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return association(PearsonCorrelation(), x, y)
-end
 
 # Common interface for higher-level methods.
 function association(measure::PearsonCorrelation,

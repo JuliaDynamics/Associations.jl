@@ -28,11 +28,11 @@ function independence(test::SurrogateAssociationTest{<:EntropyDecomposition{<:Tr
     Ŝ, T⁺, S, T, C = marginals_and_surrogenerator(embedding, surrogate, x, args...; rng)
     TC = StateSpaceSet(T, C)
     @assert length(T⁺) == length(S) == length(TC)
-    Î = information(cmi_est, T⁺, S, TC)
+    Î = association(cmi_est, T⁺, S, TC)
     Îs = zeros(nshuffles)
     for b in 1:nshuffles
         # TE(ŝ -> t) := I(t⁺; ŝ⁻ | t⁻, c⁻)
-        Îs[b] = information(cmi_est, T⁺, Ŝ(), TC)
+        Îs[b] = association(cmi_est, T⁺, Ŝ(), TC)
     end
     p = count(Î .<= Îs) / nshuffles
 

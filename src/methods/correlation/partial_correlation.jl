@@ -1,4 +1,3 @@
-export partial_correlation
 export PartialCorrelation
 
 """
@@ -9,9 +8,9 @@ variables removed.
 
 ## Usage
 
-- Use with [`association`](@ref)/[`partial_correlation`](@ref) to compute the raw correlation coefficient.
+- Use with [`association`](@ref) to compute the raw partial correlation coefficient.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for
-    conditional dependence.
+    correlated-based conditional independence.
 
 ## Description
 
@@ -42,16 +41,6 @@ struct PartialCorrelation <: CorrelationMeasure end
 
 min_inputs_vars(::PartialCorrelation) = 3
 max_inputs_vars(::PartialCorrelation) = Inf
-
-"""
-    partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
-        z::VectorOrStateSpaceSet...)
-
-Compute the [`PartialCorrelation`](@ref) between `x` and `y`, given `z`.
-"""
-function partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::ArrayOrStateSpaceSet...)
-    return association(PartialCorrelation(), x, y, z...)
-end
 
 # Compatibility with `independence`
 function association(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,

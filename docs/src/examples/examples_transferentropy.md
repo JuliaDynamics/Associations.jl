@@ -140,7 +140,7 @@ As expected, transfer entropy from `X1` to `X2` is higher than from `X2` to `X1`
 
 Computing transfer entropy from finite time series introduces bias, and so does any particular choice of entropy estimator used to calculate it. To determine whether a transfer entropy estimate should be trusted, we can employ surrogate testing. We'll generate surrogate using
 [TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl).
-One possible way to do so is to use a [`SurrogateTest`](@ref) with [`independence`](@ref), but
+One possible way to do so is to use a [`SurrogateAssociationTest`](@ref) with [`independence`](@ref), but
 here we'll do the surrogate resampling manually, so we can plot and inspect the results.
 
 In the example below, we continue with the same time series generated above. However, at each value of `ε`, we also compute transfer entropy for `nsurr = 50` different randomly shuffled (permuted) versions of the source process. If the original transfer entropy exceeds that of some percentile the transfer entropy estimates of the surrogate ensemble, we will take that as "significant" transfer entropy.

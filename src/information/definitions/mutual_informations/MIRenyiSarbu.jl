@@ -10,8 +10,14 @@ The discrete Rényi mutual information from [Sarbu2014](@citet).
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
+- Use with [`association`](@ref) to compute the raw Rényi-Sarbu mutual information from input data
+    using of of the estimators listed below.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence using
+    the Rényi-Sarbu mutual information.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref).
 
 ## Description
 
@@ -27,7 +33,6 @@ I(X, Y)^R_q =
     \\dfrac{p(x, y)^q}{\\left( p(x)\\cdot p(y) \\right)^{q-1}}
 \\right)
 ```
-See also: [`mutualinfo`](@ref).
 """
 Base.@kwdef struct MIRenyiSarbu{B, Q} <: MutualInformation
     base::B = 2

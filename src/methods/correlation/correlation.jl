@@ -18,11 +18,3 @@ abstract type CorrelationMeasureEstimator{M} <: AssociationMeasure end
 include("pearson_correlation.jl")
 include("partial_correlation.jl")
 include("distance_correlation.jl")
-
-function correlation(est::CorrelationMeasure, x...)
-    return association(est, x...)
-end
-
-function correlation(est::CorrelationMeasureEstimator, x...)
-    return association(est, x...)
-end

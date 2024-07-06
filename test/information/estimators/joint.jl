@@ -58,7 +58,7 @@ end;
 
 trivariate_asymmetric_measures = [
     CMIShannon(),
-    CMITsallis(),
+    CMITsallisPapapetrou(),
     CMIRenyiSarbu(),
 ]
 

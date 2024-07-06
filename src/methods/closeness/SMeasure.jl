@@ -5,7 +5,6 @@ using Distances: SqEuclidean, Euclidean
 using Distances: pairwise, evaluate
 
 export SMeasure
-export s_measure
 
 """
     SMeasure < AssociationMeasure
@@ -19,7 +18,7 @@ Note that `τx` and `τy` are negative; see explanation below.
 
 ## Usage
 
-- Use with [`association`](@ref)/[`s_measure`](@ref) to compute the raw s-measure statistic.
+- Use with [`association`](@ref) to compute the raw s-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
 
 ## Description
@@ -88,15 +87,6 @@ Base.@kwdef struct SMeasure{M, TM} <: AssociationMeasure
     dx::Int = 2
     dy::Int = 2
     w::Int = 0
-end
-
-"""
-    s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`SMeasure`](@ref) from source `x` to target `y`.
-"""
-function s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return association(measure, x, y)
 end
 
 # Internal method for use with `independence`

@@ -10,7 +10,7 @@ x, y, z, w = columns(first(trajectory(sys, n, Ttr = 10000)));
 α = 0.04 # Arbitrary significance level 1 - α = 0.96
 
 # The ground truth is X → Y → Z.
-test = SurrogateTest(TEShannon(), FPVP(); rng)
+test = SurrogateAssociationTest(TEShannon(), FPVP(); rng)
 
 
 @test pvalue(independence(test, x, z)) < α # This has been manually tested to occur with c₁₂ = 0.8
@@ -18,5 +18,5 @@ test = SurrogateTest(TEShannon(), FPVP(); rng)
 # We should be able to reject the null when testing transferentropy(x → y | z)
 @test pvalue(independence(test, x, z, y)) > α
 
-@test independence(SurrogateTest(TEShannon(), Zhu1()), x, y, z) isa SurrogateTestResult
-@test independence(SurrogateTest(TEShannon(), Lindner()), x, y, z) isa SurrogateTestResult
+@test independence(SurrogateAssociationTest(TEShannon(), Zhu1()), x, y, z) isa SurrogateAssociationTestResult
+@test independence(SurrogateAssociationTest(TEShannon(), Lindner()), x, y, z) isa SurrogateAssociationTestResult

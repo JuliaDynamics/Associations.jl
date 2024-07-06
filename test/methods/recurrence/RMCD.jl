@@ -13,22 +13,22 @@ Z = rand(rng, n, 2) |> StateSpaceSet
 
 @test_throws UndefKeywordError RMCD()
 
-@test rmcd(RMCD(; r = 0.5), x, y) >= 0
-@test rmcd(RMCD(; r = 0.5), x, Y) >= 0
-@test rmcd(RMCD(; r = 0.5), X, Y) >= 0
-@test rmcd(RMCD(; r = 0.5, metric = Chebyshev()), x, y) >= 0
-@test rmcd(RMCD(; r = 0.5, metric = Chebyshev()), X, Y) >= 0
+@test association(RMCD(; r = 0.5), x, y) >= 0
+@test association(RMCD(; r = 0.5), x, Y) >= 0
+@test association(RMCD(; r = 0.5), X, Y) >= 0
+@test association(RMCD(; r = 0.5, metric = Chebyshev()), x, y) >= 0
+@test association(RMCD(; r = 0.5, metric = Chebyshev()), X, Y) >= 0
 
-@test rmcd(RMCD(; r = 0.5), x, y, z) >= 0
-@test rmcd(RMCD(; r = 0.5), x, Y, z) >= 0
-@test rmcd(RMCD(; r = 0.5), X, Y, Z) >= 0
-@test rmcd(RMCD(; r = 0.5, metric = Chebyshev()), x, y, z) >= 0
-@test rmcd(RMCD(; r = 0.1, metric = Chebyshev()), X, Y, z) >= 0
-@test rmcd(RMCD(; r = 0.5), x, y, x) == 0
-@test rmcd(RMCD(; r = 0.5), x, y, y) == 0
+@test association(RMCD(; r = 0.5), x, y, z) >= 0
+@test association(RMCD(; r = 0.5), x, Y, z) >= 0
+@test association(RMCD(; r = 0.5), X, Y, Z) >= 0
+@test association(RMCD(; r = 0.5, metric = Chebyshev()), x, y, z) >= 0
+@test association(RMCD(; r = 0.1, metric = Chebyshev()), X, Y, z) >= 0
+@test association(RMCD(; r = 0.5), x, y, x) == 0
+@test association(RMCD(; r = 0.5), x, y, y) == 0
 
 # We should not be able to reject null for independent variables
-test = SurrogateTest(RMCD(r = 0.5); rng, nshuffles = 50)
+test = SurrogateAssociationTest(RMCD(r = 0.5); rng, nshuffles = 50)
 
 @test pvalue(independence(test, x, y)) >= α
 @test pvalue(independence(test, X, Y)) >= α

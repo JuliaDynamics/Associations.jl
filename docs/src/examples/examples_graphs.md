@@ -25,7 +25,7 @@ end
 ## [Optimal causation entropy](@id oce_example)
 
 Here, we use the [`OCE`](@ref) algorithm to infer a time series graph. We use a
-[`SurrogateTest`](@ref) for the initial step, and a [`LocalPermutationTest`](@ref)
+[`SurrogateAssociationTest`](@ref) for the initial step, and a [`LocalPermutationTest`](@ref)
 for the conditional steps.
 
 ```@example graph_examples
@@ -38,7 +38,7 @@ sys = system(Logistic4Chain(; rng))
 x, y, z, w = columns(first(trajectory(sys, 400, Ttr = 10000)))
 
 # Independence tests for unconditional and conditional stages.
-utest = SurrogateTest(MIShannon(), KSG2(k = 3, w = 1); rng, nshuffles = 150)
+utest = SurrogateAssociationTest(MIShannon(), KSG2(k = 3, w = 1); rng, nshuffles = 150)
 ctest = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 1); rng, nshuffles = 150)
 
 # Infer graph
@@ -97,7 +97,7 @@ CausalInference.jl is that our implementation automatically works with any compa
 and [`IndependenceTest`](@ref), and thus any combination of (nondirectional)
 [`AssociationMeasure`](@ref) and estimator.
 
-Here, we replicate the example above, but using a nonparametric [`SurrogateTest`](@ref)
+Here, we replicate the example above, but using a nonparametric [`SurrogateAssociationTest`](@ref)
 with the Shannon mutual information [`MIShannon`](@ref) measure and the
 [`GaoOhViswanath`](@ref) estimator for the pairwise independence tests, and a
 [`LocalPermutationTest`](@ref) with conditional mutual information [`CMIShannon`](@ref)
@@ -115,7 +115,7 @@ z = v + w + randn(rng, n)*0.25
 s = z + randn(rng, n)*0.25
 X = [x, v, w, z, s]
 
-pairwise_test = SurrogateTest(MIShannon(), GaoOhViswanath(k = 10))
+pairwise_test = SurrogateAssociationTest(MIShannon(), GaoOhViswanath(k = 10))
 cond_test = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 10))
 alg = PC(pairwise_test, cond_test; α = 0.05)
 est_cpdag_nonparametric = infer_graph(alg, X; verbose = false)

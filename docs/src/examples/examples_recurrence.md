@@ -18,7 +18,7 @@ m = Recurrence(r = 0.5)
 ```
 
 This value is close to zero. To test if it is significantly indistinguishable from
-zero, we can use a [`SurrogateTest`](@ref) (see example below).
+zero, we can use a [`SurrogateAssociationTest`](@ref) (see example below).
 
 ## Independence test
 
@@ -28,7 +28,7 @@ using StableRNGs
 rng = StableRNG(1234)
 x = rand(rng, 300)
 y = rand(rng, 300)
-test = SurrogateTest(Recurrence(r = 0.5); rng, nshuffles = 100, surrogate = RandomShuffle())
+test = SurrogateAssociationTest(Recurrence(r = 0.5); rng, nshuffles = 100, surrogate = RandomShuffle())
 independence(test, x, y)
 ```
 
@@ -40,7 +40,7 @@ using StableRNGs
 rng = StableRNG(1234)
 x = rand(rng, 300)
 z = x .+ rand(rng, 300)
-test = SurrogateTest(Recurrence(r = 0.5); rng, nshuffles = 100, surrogate = RandomShuffle())
+test = SurrogateAssociationTest(Recurrence(r = 0.5); rng, nshuffles = 100, surrogate = RandomShuffle())
 independence(test, x, z)
 ```
 

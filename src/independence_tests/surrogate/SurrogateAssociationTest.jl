@@ -76,15 +76,15 @@ using CausalityTools
 using Random
 rng = Xoshiro(1234)
 x = rand(rng, 3000);
-y = rand(rng, 3000) .+ circshift(x, 1);
-z = rand(rng, 3000) .+ circshift(y, 1)
+y = rand(rng, 3000) .* circshift(x, 1);
+z = rand(rng, 3000) .* circshift(y, 1);
 
-est = EntropyDecomposition(TEShannon(base = 2), Kraskov(k = 20))
+est = EntropyDecomposition(TEShannon(base = 2), Lord(k = 20))
 test = SurrogateAssociationTest(est)
 independence(test, x, z) # Should indicate dependence
 independence(test, x, z, y) # Should indicate independence
 
-est = JointProbabilities(PartialMutualInformation(), ValueBinning(3))
+est = JointProbabilities(PartialMutualInformation(), OrdinalPatterns(m=3))
 test = SurrogateAssociationTest(est)
 independence(test, x, z, y)
 ```

@@ -11,9 +11,14 @@ The Rényi conditional mutual information from [Sarbu2014](@citet).
 
 ## Usage
 
-- Use with [`association`](@ref)/[`condmutualinfo`](@ref) to compute the raw Rényi-Sarbu 
-    conditional mutual information.
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`association`](@ref) to compute the raw  Rényi-Sarbu conditional mutual information
+    using of of the estimators listed below.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise conditional 
+    independence using the Rényi-Sarbu conditional mutual information.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref)
 
 ## Discrete description
 
@@ -30,15 +35,13 @@ I(X, Y; Z)^R_q =
     \\dfrac{p(x, y|z)^q}{\\left( p(x|z)\\cdot p(y|z) \\right)^{q-1}}
 \\right)
 ```
-
-See also: [`condmutualinfo`](@ref).
 """
 Base.@kwdef struct CMIRenyiSarbu{B, Q} <: ConditionalMutualInformation
     base::B = 2
     q::Q = 1.5
 end
 
-function information(definition::CMIRenyiSarbu, pxyz::Probabilities{T, 3}) where T
+function association(definition::CMIRenyiSarbu, pxyz::Probabilities{T, 3}) where T
     (; base, q) = definition
 
     dx, dy, dz = size(pxyz)
@@ -68,6 +71,6 @@ function information(definition::CMIRenyiSarbu, pxyz::Probabilities{T, 3}) where
     return 1 / (q - 1) * cmi
 end
 
-function information(est::EntropyDecomposition{<:CMIRenyiSarbu}, args...)
+function association(est::EntropyDecomposition{<:CMIRenyiSarbu}, args...)
     throw(ArgumentError("CMIRenyiSarbu not implemented for $(typeof(est).name.name)"))
 end

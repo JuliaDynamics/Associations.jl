@@ -7,32 +7,43 @@ an [`AssociationMeasure`](@ref) (complete list in the table below) or an [`Assoc
 
 ## [Overview](@id overview_association_measures)
 
-| Type                    | [`AssociationMeasure`](@ref)          | Pairwise | Conditional | Convenience function           |
-|-------------------------|---------------------------------------|:--------:|:-----------:|--------------------------------|
-| Correlation             | [`PearsonCorrelation`](@ref)          |    ✓     |      ✖      | [`pearson_correlation`](@ref)  |
-| Correlation             | [`DistanceCorrelation`](@ref)         |    ✓     |      ✓      | [`distance_correlation`](@ref) |
-| Closeness               | [`SMeasure`](@ref)                    |    ✓     |      ✖      | [`s_measure`](@ref)            |
-| Closeness               | [`HMeasure`](@ref)                    |    ✓     |      ✖      | [`h_measure`](@ref)            |
-| Closeness               | [`MMeasure`](@ref)                    |    ✓     |      ✖      | [`m_measure`](@ref)            |
-| Closeness (ranks)       | [`LMeasure`](@ref)                    |    ✓     |      ✖      | [`l_measure`](@ref)            |
-| Closeness               | [`JointDistanceDistribution`](@ref)   |    ✓     |      ✖      | [`jdd`](@ref)                  |
-| Cross-mapping           | [`PairwiseAsymmetricInference`](@ref) |    ✓     |      ✖      | [`crossmap`](@ref)             |
-| Cross-mapping           | [`ConvergentCrossMapping`](@ref)      |    ✓     |      ✖      | [`crossmap`](@ref)             |
-| Conditional recurrence  | [`MCR`](@ref)                         |    ✓     |      ✖      | [`mcr`](@ref)                  |
-| Conditional recurrence  | [`RMCD`](@ref)                        |    ✓     |      ✓      | [`rmcd`](@ref)                 |
-| Shared information      | [`MIShannon`](@ref)                   |    ✓     |      ✖      | [`mutualinfo`](@ref)           |
-| Shared information      | [`MIRenyiJizba`](@ref)                |    ✓     |      ✖      | [`mutualinfo`](@ref)           |
-| Shared information      | [`MIRenyiSarbu`](@ref)                |    ✓     |      ✖      | [`mutualinfo`](@ref)           |
-| Shared information      | [`MITsallisFuruichi`](@ref)           |    ✓     |      ✖      | [`mutualinfo`](@ref)           |
-| Shared information      | [`PartialCorrelation`](@ref)          |    ✖     |      ✓      | [`partial_correlation`](@ref)  |
-| Shared information      | [`CMIShannon`](@ref)                  |    ✖     |      ✓      | [`condmutualinfo`](@ref)       |
-| Shared information      | [`CMIRenyiSarbu`](@ref)               |    ✖     |      ✓      | [`condmutualinfo`](@ref)       |
-| Shared information      | [`CMIRenyiJizba`](@ref)               |    ✖     |      ✓      | [`condmutualinfo`](@ref)       |
-| Information transfer    | [`TEShannon`](@ref)                   |    ✓     |      ✓      | [`transferentropy`](@ref)      |
-| Information transfer    | [`TERenyiJizba`](@ref)                |    ✓     |      ✓      | [`transferentropy`](@ref)      |
-| Part mutual information | [`PMI`](@ref)                         |    ✖     |      ✓      | [`pmi`](@ref)                  |
-| Information asymmetry   | [`PA`](@ref)                          |    ✓     |      ✓      | [`asymmetry`](@ref)            |
-
+| Type                    | [`AssociationMeasure`](@ref)                | Pairwise | Conditional |
+|-------------------------|---------------------------------------------|:--------:|:-----------:|
+| Correlation             | [`PearsonCorrelation`](@ref)                |    ✓     |      ✖      |
+| Correlation             | [`DistanceCorrelation`](@ref)               |    ✓     |      ✓      |
+| Closeness               | [`SMeasure`](@ref)                          |    ✓     |      ✖      |
+| Closeness               | [`HMeasure`](@ref)                          |    ✓     |      ✖      |
+| Closeness               | [`MMeasure`](@ref)                          |    ✓     |      ✖      |
+| Closeness (ranks)       | [`LMeasure`](@ref)                          |    ✓     |      ✖      |
+| Closeness               | [`JointDistanceDistribution`](@ref)         |    ✓     |      ✖      |
+| Cross-mapping           | [`PairwiseAsymmetricInference`](@ref)       |    ✓     |      ✖      |
+| Cross-mapping           | [`ConvergentCrossMapping`](@ref)            |    ✓     |      ✖      |
+| Conditional recurrence  | [`MCR`](@ref)                               |    ✓     |      ✖      |
+| Conditional recurrence  | [`RMCD`](@ref)                              |    ✓     |      ✓      |
+| Shared information      | [`MIShannon`](@ref)                         |    ✓     |      ✖      |
+| Shared information      | [`MIRenyiJizba`](@ref)                      |    ✓     |      ✖      |
+| Shared information      | [`MIRenyiSarbu`](@ref)                      |    ✓     |      ✖      |
+| Shared information      | [`MITsallisFuruichi`](@ref)                 |    ✓     |      ✖      |
+| Shared information      | [`PartialCorrelation`](@ref)                |    ✖     |      ✓      |
+| Shared information      | [`CMIShannon`](@ref)                        |    ✖     |      ✓      |
+| Shared information      | [`CMIRenyiSarbu`](@ref)                     |    ✖     |      ✓      |
+| Shared information      | [`CMIRenyiJizba`](@ref)                     |    ✖     |      ✓      |
+| Shared information      | [`CMIRenyiPoczos`](@ref)                    |    ✖     |      ✓      |
+| Shared information      | [`CMITsallisPapapetrou`](@ref)                        |    ✖     |      ✓      |
+| Information transfer    | [`TEShannon`](@ref)                         |    ✓     |      ✓      |
+| Information transfer    | [`TERenyiJizba`](@ref)                      |    ✓     |      ✓      |
+| Part mutual information | [`PMI`](@ref)                               |    ✖     |      ✓      |
+| Information asymmetry   | [`PA`](@ref)                                |    ✓     |      ✓      |
+| Information measure     | [`JointEntropyShannon`](@ref)               |    ✓     |      ✖      |
+| Information measure     | [`JointEntropyRenyi`](@ref)                 |    ✓     |      ✖      |
+| Information measure     | [`JointEntropyTsallis`](@ref)               |    ✓     |      ✖      |
+| Information measure     | [`ConditionalEntropyShannon`](@ref)         |    ✓     |      ✖      |
+| Information measure     | [`ConditionalEntropyTsallisAbe`](@ref)      |    ✓     |      ✖      |
+| Information measure     | [`ConditionalEntropyTsallisFuruichi`](@ref) |    ✓     |      ✖      |
+| Divergence              | [`HellingerDistance`](@ref)                 |    ✓     |      ✖      |
+| Divergence              | [`KLDivergence`](@ref)                      |    ✓     |      ✖      |
+| Divergence              | [`RenyiDivergence`](@ref)                   |    ✓     |      ✖      |
+| Divergence              | [`VariationDistance`](@ref)                 |    ✓     |      ✖      |
 
 ```@docs
 association
@@ -118,7 +129,7 @@ CMIShannon
 CMIRenyiSarbu
 CMIRenyiJizba
 CMIRenyiPoczos
-CMITsallis
+CMITsallisPapapetrou
 ```
 
 #### Conditional mutual information estimators
@@ -146,7 +157,6 @@ TEShannon
 TERenyiJizba
 ```
 
-
 #### Transfer entropy estimators
 
 ```@docs
@@ -154,7 +164,6 @@ TransferEntropyEstimator
 Zhu1
 Lindner
 ```
-
 
 ##### Convenience
 
@@ -171,8 +180,6 @@ Amplitude
 optimize_marginals_te
 EmbeddingTE
 ```
-
-
 
 ### Single-variable information API (from ComplexityMeasures.jl)
 
@@ -200,38 +207,6 @@ GeneralizedSchuermann
 Jackknife
 HorvitzThompson
 ChaoShen
-```
-
-```@docs
-OutcomeSpace
-```
-
-#### Binning
-
-```@docs
-ValueBinning
-RectangularBinning
-FixedRectangularBinning
-```
-
-#### Ordinal patterns
-
-```@docs
-OrdinalPatterns
-```
-
-#### Dispersion
-
-```@docs
-Dispersion
-```
-
-#### Unique elements
-
-The [`UniqueElements`](@ref) outcome space is useful for categorical data.
-
-```@docs
-UniqueElements
 ```
 
 #### Differential information estimators
@@ -352,29 +327,4 @@ MMeasure
 
 ```@docs
 LMeasure
-```
-
-## Convenience
-
-We encourage using [`association`](@ref) to compute associations between variables. However, since there 
-are many types of established *names* for different types of associations, we provide the following 
-convenience functions.
-
-```@docs
-joint_entropy
-conditional_entropy
-mutualinfo
-condmutualinfo
-transferentropy
-pmi
-pearson_correlation
-partial_correlation
-distance_correlation
-mcr
-rmcd
-jdd
-s_measure
-h_measure
-m_measure
-l_measure
 ```

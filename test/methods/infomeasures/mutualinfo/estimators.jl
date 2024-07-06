@@ -39,7 +39,7 @@ y = StateSpaceSet(rand(rng, 1000, 1))
     @testset "$(typeof(ests_mi[i]).name.name)" for i in eachindex(ests_mi)
         est = ests_mi[i]
         measure = MIShannon(base = 2)
-        mi = mutualinfo(measure, est, x, y)
+        mi = association(measure, est, x, y)
         @test mi isa Real
         @test -0.5 < mi < 0.1
 
@@ -56,9 +56,9 @@ y = StateSpaceSet(rand(rng, 1000, 1))
 
         mitrue_nats = -0.5*log(det(Σ))
         mitrue_bits = CausalityTools._convert_logunit(mitrue_nats, ℯ, 2)
-        estimated_nats = mutualinfo(MIShannon(; base = ℯ), est, X, Y)
-        estimated_bits = mutualinfo(MIShannon(; base = 2), est, X, Y)
-        estimated_bits_kr = mutualinfo(MIShannon(; base = 2), Kraskov(), X, Y)
+        estimated_nats = association(MIShannon(; base = ℯ), est, X, Y)
+        estimated_bits = association(MIShannon(; base = 2), est, X, Y)
+        estimated_bits_kr = association(MIShannon(; base = 2), Kraskov(), X, Y)
     end
 
     # ----------------------------------------------------------------
@@ -67,7 +67,7 @@ y = StateSpaceSet(rand(rng, 1000, 1))
     @testset "$(typeof(ests_diffent[i]).name.name)" for i in eachindex(ests_diffent)
         est = ests_diffent[i]
         measure = MIShannon(base = 2)
-        mi = mutualinfo(measure, est, x, y)
+        mi = association(measure, est, x, y)
         @test mi isa Real
         @test -0.5 < mi < 0.1
 
@@ -84,9 +84,9 @@ y = StateSpaceSet(rand(rng, 1000, 1))
 
         mitrue_nats = -0.5*log(det(Σ))
         mitrue_bits = CausalityTools._convert_logunit(mitrue_nats, ℯ, 2)
-        estimated_nats = mutualinfo(MIShannon(; base = ℯ), est, X, Y)
-        estimated_bits = mutualinfo(MIShannon(; base = 2), est, X, Y)
-        estimated_bits_kr = mutualinfo(MIShannon(; base = 2), Kraskov(), X, Y)
+        estimated_nats = association(MIShannon(; base = ℯ), est, X, Y)
+        estimated_bits = association(MIShannon(; base = 2), est, X, Y)
+        estimated_bits_kr = association(MIShannon(; base = 2), Kraskov(), X, Y)
     end
 
 end
@@ -98,8 +98,8 @@ end
     @testset "Normalized equals unnormalized" begin
         x′ = StateSpaceSet(2. .* x.data .+ [SVector(1.)])
         y′ = StateSpaceSet(3. .* y.data .- [SVector(1.)])
-        @test (  mutualinfo(GaussianMI(normalize=false), x , y)
-                 ≈ mutualinfo(GaussianMI(normalize=true) , x′, y′))
+        @test (  association(GaussianMI(normalize=false), x , y)
+                 ≈ association(GaussianMI(normalize=true) , x′, y′))
     end
 
     @testset "Compare with analytic eq" begin

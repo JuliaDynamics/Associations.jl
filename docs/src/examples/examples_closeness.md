@@ -13,7 +13,7 @@ s = s_measure(measure, x, y)
 
 The `s` statistic is larger when there is stronger coupling and smaller
 when there is weaker coupling. To check whether `s` is significant (i.e. large
-enough to claim directional dependence), we can use a [`SurrogateTest`](@ref),
+enough to claim directional dependence), we can use a [`SurrogateAssociationTest`](@ref),
 like [here](@ref examples_surrogatetest_smeasure).
 
 ## [H-measure](@id quickstart_hmeasure)

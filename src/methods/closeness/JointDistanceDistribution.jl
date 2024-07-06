@@ -6,7 +6,6 @@ using DelayEmbeddings: genembed
 import HypothesisTests: OneSampleTTest, pvalue
 export OneSampleTTest, pvalue
 export JointDistanceDistribution
-export jdd
 
 function normalise_minmax(x::T, vmin, vmax) where T
     if x == zero(T)
@@ -24,7 +23,7 @@ The joint distance distribution (JDD) measure [Amigo2018](@cite).
 
 ## Usage
 
-- Use with [`association`](@ref)/[`jdd`](@ref) to compute the joint distance distribution measure `Δ` from
+- Use with [`association`](@ref) to compute the joint distance distribution measure `Δ` from
     [Amigo2018](@citet).
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional
     dependence.

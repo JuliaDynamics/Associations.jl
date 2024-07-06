@@ -16,6 +16,14 @@ export codify
 The `CodifyVariables` discretization scheme quantises input data in a column-wise manner
 using the given `outcome_space`.
 
+## Compatible outcome spaces
+
+- [`UniqueElements`](@ref) (for when data are pre-discretized)
+- [`BubbleSortSwaps`](@ref)
+- [`CosineSimilarityBinning`](@ref)
+- [`OrdinalPatterns`](@ref)
+- [`Dispersion`](@ref)
+
 # Description
 
 The main difference between `CodifyVariables` and [`CodifyPoints`] is that the former
@@ -29,10 +37,17 @@ is assumed to represent a single series of measurements, `CodifyVariables` encod
  `x[i]` by [`codify`](@ref)-ing into a series of integers 
 using an appropriate  [`OutcomeSpace`](@ref). This is typically done by first 
 sequentially transforming the data and then running sliding window (the width of 
-the window is controlled by `outcome_space`) across the data, and then encoding each
-window to a unique integer.
+the window is controlled by `outcome_space`) across the data, and then encoding the 
+values within each window to an integer.
 
-`CodifyVariables` can be used interchangeably with [`OutcomeSpace`](@ref)s.
+## Examples
+
+```julia
+using CausalityTools
+x, y = rand(100), rand(100)
+d = CodifyVariables(OrdinalPatterns(m=2))
+cx, cy = codify(d, x, y)
+```
 """
 struct CodifyVariables{N} <: Discretization{N}
     outcome_spaces::NTuple{N, OutcomeSpace}
@@ -51,23 +66,30 @@ function CodifyVariables(o::OutcomeSpace)
 end
 
 """
-    codify(encoding::CodifyVariables, x::Vararg{<:AbstractStateSpaceSet, N})
-    codify(encoding::OutcomeSpace, x::Vararg{<:AbstractStateSpaceSet, N})
+    codify(d::CodifyVariables, x::Vararg{<:AbstractStateSpaceSet, N})
+    codify(d::CodifyPoints, x::Vararg{<:AbstractStateSpaceSet, N})
 
-Codify each timeseries `xᵢ ∈ x` according to the given `encoding`.
+Codify each timeseries `xᵢ ∈ x` according to the given encoding/discretization `d`.
 
-Since most use cases involve applying the same [`OutcomeSpace`](@ref) to each marginal
-dimension, we allow using [`OutcomeSpace`](@ref) interchangeably with
-[`CodifyVariables`](@ref) when only one outcome space is used.
+## Compatible discretizations
+
+- [`CodifyVariables`](@ref)
+- [`CodifyPoints`](@ref)
 
 ## Examples
 
 ```julia
 using CausalityTools
+
+# Sliding window encoding
 x = [0.1, 0.2, 0.3, 0.2, 0.1, 0.0, 0.5, 0.3, 0.5]
 xc1 = codify(CodifyVariables(OrdinalPatterns(m=2)), x) # should give [1, 1, 2, 2, 2, 1, 2, 1]
 xc2 = codify(OrdinalPatterns(m=2), x) # equivalent
-length(xc) < length(x) # should be true, because `OrdinalPatterns` delay embeds.    
+length(xc1) < length(x) # should be true, because `OrdinalPatterns` delay embeds.  
+
+# Point-by-point encoding
+x, y = StateSpaceSet(rand(100, 3)), StateSpaceSet(rand(100, 3))
+cx, cy = codify(CodifyPoints(OrdinalPatternEncoding(3)), x, y)
 ```
 """
 function codify(encoding::CodifyVariables, x) end
@@ -78,10 +100,9 @@ function codify(encoding::CodifyVariables{1}, x::Vararg{Any, 1})
     return x̂::Vector{<:Integer}
 end
 
-function codify(encoding::CodifyVariables{1}, x::Tuple)
+function codify(encoding::CodifyVariables{1}, x::Vararg{Any, N}) where N
     e = first(encoding.outcome_spaces)
     x̂ = map(xᵢ -> ComplexityMeasures.codify(e, xᵢ), x)
-    N = length(x)
     return x̂::NTuple{N, Vector{<:Integer}}
 end
 

@@ -9,11 +9,11 @@ service = rand(rng, ["netflix", "hbo"], n)
 est = Contingency()
 nshuffles = 3
 
-@test_throws ArgumentError SurrogateTest(PMI())
+@test_throws ArgumentError SurrogateAssociationTest(PMI())
 
-@test independence(SurrogateTest(PMI(), est; nshuffles, rng), food, likeit, service) isa SurrogateTestResult
-@test independence(SurrogateTest(CMIRenyiSarbu(), est; nshuffles, rng), food, likeit, service) isa SurrogateTestResult
-@test independence(SurrogateTest(CMIRenyiJizba(), est; nshuffles, rng), food, likeit, service) isa SurrogateTestResult
+@test independence(SurrogateAssociationTest(PMI(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
+@test independence(SurrogateAssociationTest(CMIRenyiSarbu(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
+@test independence(SurrogateAssociationTest(CMIRenyiJizba(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
 
 
 # Analytical tests, in the limit.
@@ -28,7 +28,7 @@ service = rand(rng, ["netflix", "hbo"], n);
 
 # We should not be able to reject the null hypothesis `food ⫫ likeit | service`, because
 # the variables are all independent.
-test_cmi = independence(SurrogateTest(PMI(), est; nshuffles = 200, rng), food, likeit, service)
+test_cmi = independence(SurrogateAssociationTest(PMI(), est; nshuffles = 200, rng), food, likeit, service)
 @test pvalue(test_cmi) > α
 
 # Simulate a survey where the place a person grew up controls how many times they
@@ -60,20 +60,20 @@ end;
 # We should not be able to reject the null hypothesis `places ⫫ experience | preferred_equipment`, because
 # places → preferred_equipment → experience, so when conditioning on the intermediate variable,
 # the first and last variable in the chain should be independent.
-test = SurrogateTest(PMI(), est; nshuffles = 200, rng)
+test = SurrogateAssociationTest(PMI(), est; nshuffles = 200, rng)
 test_cmi = independence(test, places, experience, preferred_equipment)
 @test pvalue(test_cmi) > α
 
 
 nshuffles = 5
-surrtest_sp = SurrogateTest(PMI(), OrdinalPatterns(); nshuffles, rng)
-surrtest_vh = SurrogateTest(PMI(), ValueBinning(4); nshuffles, rng)
-surrtest_dp = SurrogateTest(PMI(), Dispersion(); nshuffles, rng)
+surrtest_sp = SurrogateAssociationTest(PMI(), OrdinalPatterns(); nshuffles, rng)
+surrtest_vh = SurrogateAssociationTest(PMI(), ValueBinning(4); nshuffles, rng)
+surrtest_dp = SurrogateAssociationTest(PMI(), Dispersion(); nshuffles, rng)
 
-@test independence(surrtest_sp, x, y, z) isa SurrogateTestResult
-@test independence(surrtest_vh, x, y, z) isa SurrogateTestResult
-@test independence(surrtest_dp, x, y, z) isa SurrogateTestResult
+@test independence(surrtest_sp, x, y, z) isa SurrogateAssociationTestResult
+@test independence(surrtest_vh, x, y, z) isa SurrogateAssociationTestResult
+@test independence(surrtest_dp, x, y, z) isa SurrogateAssociationTestResult
 
-@test independence(surrtest_sp, X, Y, Z) isa SurrogateTestResult
-@test independence(surrtest_vh, X, Y, Z) isa SurrogateTestResult
-@test independence(surrtest_dp, X, Y, Z) isa SurrogateTestResult
+@test independence(surrtest_sp, X, Y, Z) isa SurrogateAssociationTestResult
+@test independence(surrtest_vh, X, Y, Z) isa SurrogateAssociationTestResult
+@test independence(surrtest_dp, X, Y, Z) isa SurrogateAssociationTestResult

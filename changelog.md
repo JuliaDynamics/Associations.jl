@@ -12,6 +12,11 @@ to only relate to "one way of thinking" about estimating association measures.
 
 ### Breaking changes 
 
+- `SurrogateTest` is now `SurrogateAssociationTest`
+- `SurrogateTestResult` is now `SurrogateAssociationTestResult`
+- All convenience functions are removed. Use `association(measure_or_est, input_data...)` instead.
+- All example systems are removed.
+
 The crossmap API has been overhauled. 
 
 - `CrossmapEstimator`s now take the `CrossmapMeasure` definition as their first argument.
@@ -33,14 +38,18 @@ The information API has been overhauled.
     information measures. This estimators explicitly computes the joint distribution
     based on the given discretization, and can be applied to any measure which is 
     defined as a function of a joint distribution.
-- New generic decomposition-based estimator `DifferentialDecomposition`. This estimator
+- New generic decomposition-based estimator `EntropyDecomposition`. This estimator
     computes some multivariate information measure by rewriting the measure definition
     as a combination of some lower-level measure. For example, `CMIShannon` can be 
     rewritten as a sum of `Shannon` entropies. Each of these terms can then 
     be estimated using some differential entropy estimator, e.g. `ZhuSingh` or `Kraskov`.
-- New generic decomposition-based estimator `DiscreteDecomposition`. Works exactly like,
-    `DifferentialDecomposition`, but takes some *discrete* estimator, and some additional
-    parameters that control discretization and probability estimation.
+- New generic decomposition-based estimator `MIDecomposition`. This estimator
+    computes some multivariate information measure by rewriting the measure definition
+    as a combination of some mutual information measure.
+- New generic decomposition-based estimator `CMIDecomposition`. This estimator
+    computes some multivariate information measure by rewriting the measure definition
+    as a combination of some conditional mutual information measure.
+
 
 ## 2.10
 

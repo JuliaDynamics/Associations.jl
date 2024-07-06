@@ -8,7 +8,7 @@ Abstract type for all mutual information measures.
 ## Concrete implementations
 
 - [`CMIShannon`](@ref)
-- [`CMITsallis`](@ref)
+- [`CMITsallisPapapetrou`](@ref)
 - [`CMIRenyiJizba`](@ref)
 - [`CMIRenyiSarbu`](@ref)
 - [`CMIRenyiPoczos`](@ref)
@@ -59,12 +59,12 @@ function marginal_entropies_cmi4h_discrete(est::EntropyDecomposition{<:Condition
     return HXZ, HYZ, HXYZ, HZ
 end
 
-function information(est::CMIDecomposition{<:ConditionalMutualInformation}, x, y, z)
-    return information(est.est, x, y, z)
+function association(est::CMIDecomposition{<:ConditionalMutualInformation}, x, y, z)
+    return association(est.est, x, y, z)
 end
 
 include("CMIShannon.jl")
-include("CMITsallis.jl")
+include("CMITsallisPapapetrou.jl")
 include("CMIRenyiJizba.jl")
 include("CMIRenyiPoczos.jl")
 include("CMIRenyiSarbu.jl")

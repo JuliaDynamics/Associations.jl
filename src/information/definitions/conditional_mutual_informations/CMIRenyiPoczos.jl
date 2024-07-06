@@ -7,13 +7,18 @@ export CMIRenyiPoczos
     CMIRenyiPoczos(; base = 2, q = 1.5)
 
 The differential Rényi conditional mutual information ``I_q^{R_{P}}(X; Y | Z)``
-defined in (Póczos & Schneider, 2012)[^Póczos2012].
+defined in [Poczos2012](@citet).
 
 ## Usage
 
-- Use with [`association`](@ref)/[`condmutualinfo`](@ref) to compute the raw 
-    Rényi-Poczos conditional mutual information.
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
+- Use with [`association`](@ref) to compute the raw Rényi-Poczos conditional mutual information
+    using of of the estimators listed below.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise conditional 
+    independence using the Rényi-Poczos conditional mutual information.
+
+## Compatible estimators
+
+- [`PoczosSchneiderCMI`](@ref)
 
 ## Definition
 
@@ -25,11 +30,6 @@ I_q^{R_{P}}(X; Y | Z) &= \\dfrac{1}{q-1}
 \\left[ \\dfrac{p_{X, Z}^{1-q}(X, Z) p_{Y, Z}^{1-q}(Y, Z) }{p_{X, Y, Z}^{1-q}(X, Y, Z) p_Z^{1-q}(Z)} \\right]
 \\end{align*}
 ```
-
-[^Póczos2012]:
-    Póczos, B., & Schneider, J. (2012, March). Nonparametric estimation of conditional
-    information and divergences. In Artificial Intelligence and Statistics (pp. 914-923).
-    PMLR.
 """
 Base.@kwdef struct CMIRenyiPoczos{B, Q} <: ConditionalMutualInformation
     base::B = 2

@@ -10,14 +10,26 @@ The Shannon mutual information ``I_S(X; Y)``.
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`mutualinfo`](@ref) to compute the raw mutual information.
+- Use with [`association`](@ref) to compute the raw Shannon mutual information from input data
+    using of of the estimators listed below.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence using
+    the Shannon mutual information.
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref) (generic)
+- [`EntropyDecomposition`](@ref) (generic)
+- [`KSG1`](@ref)
+- [`KSG2`](@ref)
+- [`GaoOhViswanath`](@ref)
+- [`GaoKannanOhViswanath`](@ref)
+- [`GaussianMI`](@ref)
 
 ## Discrete definition
 
 There are many equivalent formulations of discrete Shannon mutual information, meaning that 
-it can be estimated in several ways. We currently use the double-sum and the three-entropies
-formulations.
+it can be estimated in several ways, either using [`JointProbabilities`](@ref)  (double-sum formulation),
+[`EntropyDecomposition`](@ref) (three-entropies decomposition), or some dedicated estimator.
 
 ### Double sum formulation
 
@@ -62,8 +74,6 @@ I^S(X; Y) = h^S(X) + h_q^S(Y) - h^S(X, Y),
 where ``h^S(\\cdot)`` and ``h^S(\\cdot, \\cdot)`` are the marginal and joint
 differential Shannon entropies. This definition is used by [`mutualinfo`](@ref) when
 called with a [`DifferentialEntropyEstimator`](@ref).
-
-See also: [`mutualinfo`](@ref).
 """
 Base.@kwdef struct MIShannon{B} <: MutualInformation
     base::B = 2

@@ -70,13 +70,13 @@ nshuffles = 3
 
 utests = [
     CorrTest(),
-    SurrogateTest(PearsonCorrelation(); nshuffles, rng),# nonparametric version of CorrTest
-    SurrogateTest(MIShannon(), KSG2(); nshuffles, rng),
-    SurrogateTest(DistanceCorrelation(); nshuffles, rng),
+    SurrogateAssociationTest(PearsonCorrelation(); nshuffles, rng),# nonparametric version of CorrTest
+    SurrogateAssociationTest(MIShannon(), KSG2(); nshuffles, rng),
+    SurrogateAssociationTest(DistanceCorrelation(); nshuffles, rng),
     ];
 ctests = [
     CorrTest(),
-    SurrogateTest(PartialCorrelation(); nshuffles, rng), # nonparametric version of CorrTest
+    SurrogateAssociationTest(PartialCorrelation(); nshuffles, rng), # nonparametric version of CorrTest
     LocalPermutationTest(CMIShannon(), KSG2(); nshuffles, rng),
     LocalPermutationTest(DistanceCorrelation(); nshuffles, rng),
 ]
@@ -97,7 +97,7 @@ alg = PC(CorrTest(), CorrTest(), maxdepth = 1)
 
 x, y, z = rand(rng, 50), rand(rng, 50), rand(rng, 50)
 X = [x, y, z]
-tt = SurrogateTest(TEShannon(), KSG2())
+tt = SurrogateAssociationTest(TEShannon(), KSG2())
 ct = CorrTest()
 @test_throws ArgumentError infer_graph(PC(ct, tt), X)
 @test_throws ArgumentError infer_graph(PC(tt, ct), X)

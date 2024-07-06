@@ -18,7 +18,7 @@ export KraskovStögbauerGrassberger1, KSG1
     KraskovStögbauerGrassberger1 <: MutualInformationEstimator
     KraskovStögbauerGrassberger1(; k::Int = 1, w = 0, metric_marginals = Chebyshev())
 
-The `KraskovStögbauerGrassberger1` mutual information estimator (you can use `KSG1` for
+The `KraskovStögbauerGrassberger1` Shannon mutual information estimator (you can use `KSG1` for
 short) is the ``I^{(1)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@citet).
 
 ## Usage

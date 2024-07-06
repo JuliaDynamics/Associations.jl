@@ -119,12 +119,17 @@ Discretization
 CodifyVariables
 ```
 
-The sliding-window discretization is formally done by applying some [`OutcomeSpace`](@ref) to each
-variable/column. 
+The sliding-window discretization is formally done by applying some [`OutcomeSpace`](@ref) to each variable/column. Pick between the folloing outcome spaces
 
 ```@docs
-OutcomeSpace
-
+UniqueElements
+CosineSimilarityBinning
+Dispersion
+OrdinalPatterns
+BubbleSortSwaps
+ValueBinning
+RectangularBinning
+FixedRectangularBinning
 ```
 
 ### Encoding per sample/row

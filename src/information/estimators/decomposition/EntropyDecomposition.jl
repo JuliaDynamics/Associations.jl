@@ -26,10 +26,15 @@ are ignored. If `est` is a [`DiscreteInfoEstimator`](@ref), then `discretization
 probabilities estimator `pest` must also be provided (default to `RelativeAmount`, 
 which uses naive plug-in probabilities).
 
-## Discrete estimation and outcome spaces
+## Compatible differential information estimators
 
-The following outcome spaces can be used for discretisation. Note that not all 
-outcome spaces will work with all measures.
+If using the first signature, any compatible [`DifferentialInfoEstimator`](@ref) can be 
+used.
+
+## Compatible outcome spaces for discrete estimation
+
+If using the second signature, the outcome spaces can be used for discretisation. 
+Note that not all outcome spaces will work with all measures.
 
 | Estimator                         | Principle                             | Note                             |
 | :-------------------------------- | :------------------------------------ | :------------------------------- |
@@ -105,7 +110,7 @@ y = StateSpaceSet(rand(rng, 1000000, 2))
 # Compute Shannon mutual information by discretizing each marginal column-wise
 # (per variable) using length-`3` ordinal patterns.
 est = EntropyDecomposition(MIShannon(), PlugIn(Shannon()), OrdinalPatterns(m=3))
-information(est, x, y) # should be close to 0
+association(est, x, y) # should be close to 0
 ```
 
 Here, we estimate Shannon-type conditional mutual information using the `ZhuSingh`
@@ -119,7 +124,7 @@ y = rand(rng, 100000) .+ x
 z = rand(rng, 100000) .+ y
 
 est = EntropyDecomposition(CMIShannon(), ZhuSingh(k = 3))
-information(est, x, z, y) # should be near 0 (and can be negative)
+association(est, x, z, y) # should be near 0 (and can be negative)
 ```
 
 See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).

@@ -13,6 +13,20 @@ export codify
 *without* applying any sequential transformation to the input (as opposed to 
 [`CodifyVariables`](@ref), which may apply some transformation before encoding).
 
+## Usage
+
+- Use with [`codify`](@ref)` to encode/discretize input variable on a point-by-point basis.
+
+## Compatible encodings
+
+- [`GaussianCDFEncoding`](@ref)
+- [`OrdinalPatternEncoding`](@ref)
+- [`RelativeMeanEncoding`](@ref)
+- [`RelativeFirstDifferenceEncoding`](@ref)
+- [`UniqueElementsEncoding`](@ref)
+- [`RectangularBinEncoding`](@ref)
+- [`CombinationEncoding`](@ref)
+
 ## Description
 
 Given `x::AbstractStateSpaceSet...`, where the `i`-th dataset is assumed to represent
@@ -25,9 +39,23 @@ If `length(x) == N` (i.e. there are `N` input dataset), then `encodings` must be
 of `N` [`Encoding`](@ref). Alternatively, if `encodings` is a single [`Encoding`](@ref),
 then that same encoding is applied to every `x[i]`.
 
-## Usage
+## Examples
 
-- [`codify`](@ref)`(encodings::CodifyPoints, x...)`
+```julia
+using CausalityTools
+
+# The same encoding on two input datasets
+x = StateSpaceSet(rand(100, 3))
+y = StateSpaceSet(rand(100, 3))
+encoding_ord = OrdinalPatternEncoding(3)
+cx, cy = codify(CodifyPoints(encoding_ord), x, y)
+
+# Different encodings on multiple datasets
+z = StateSpaceSet(rand(100, 2))
+encoding_bin = RectangularBinEncoding(RectangularBinning(3), z)
+d = CodifyPoints(encoding_ord, encoding_ord, encoding_bin)
+cx, cy, cz = codify(d, x, y, z)
+```
 """
 struct CodifyPoints{N} <: Discretization{N}
     encodings::NTuple{N, Encoding}

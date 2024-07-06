@@ -9,13 +9,13 @@ service = rand(rng, ["netflix", "hbo"], n)
 est = Contingency()
 nshuffles = 3
 
-@test_throws ArgumentError SurrogateTest(MIShannon())
+@test_throws ArgumentError SurrogateAssociationTest(MIShannon())
 
-@test independence(SurrogateTest(MIShannon(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MIRenyiJizba(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MIRenyiSarbu(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MITsallisFuruichi(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
-@test independence(SurrogateTest(MITsallisMartin(), est; nshuffles, rng), food, likeit) isa SurrogateTestResult
+@test independence(SurrogateAssociationTest(MIShannon(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
+@test independence(SurrogateAssociationTest(MIRenyiJizba(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
+@test independence(SurrogateAssociationTest(MIRenyiSarbu(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
+@test independence(SurrogateAssociationTest(MITsallisFuruichi(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
+@test independence(SurrogateAssociationTest(MITsallisMartin(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
 
 # Analytical tests, in the limit.
 # -------------------------------
@@ -48,5 +48,5 @@ experience = map(preferred_equipment) do equipment
 end;
 
 # We should be able to reject the null hypothesis of `places ⫫ experience`.
-test_mi = independence(SurrogateTest(MIShannon(), est; nshuffles, rng), places, experience)
+test_mi = independence(SurrogateAssociationTest(MIShannon(), est; nshuffles, rng), places, experience)
 @test pvalue(test_mi) < α

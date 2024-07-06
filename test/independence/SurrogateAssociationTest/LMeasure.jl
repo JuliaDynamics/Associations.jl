@@ -4,7 +4,7 @@ using Random
 rng = MersenneTwister(1234)
 x, y = rand(rng, 500), rand(rng, 500)
 z = x .+ y
-test = SurrogateTest(LMeasure(); rng)
+test = SurrogateAssociationTest(LMeasure(); rng)
 α = 0.05 # Some arbitrary significance level.
 
 # We shouldn't be able to reject the null when the variables are independent
