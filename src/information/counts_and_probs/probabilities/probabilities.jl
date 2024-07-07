@@ -71,7 +71,6 @@ function probabilities(x::Vararg{VectorOrStateSpaceSet, N}) where N
     return Probabilities(probs.p, cts.outcomes, cts.dimlabels)
 end
 
-# TODO: preserve axis labels
 """
     marginal(p::Probabilities; dims = 1:ndims(p))
     marginal(c::Counts; dims = 1:ndims(p))
@@ -83,5 +82,8 @@ function marginal(p::Probabilities; dims = 1:ndims(p))
     alldims = 1:ndims(p)
     reduce_dims = (setdiff(alldims, dims)...,)
     marginal = dropdims(sum(p.p, dims = reduce_dims), dims = reduce_dims)
-    return Probabilities(marginal)
+    include_idxs = setdiff(alldims, reduce_dims)
+    new_outcomes = p.outcomes[include_idxs]
+    new_dimlabels = p.dimlabels[include_idxs]
+    return Probabilities(marginal, new_outcomes, new_dimlabels)
 end

@@ -160,10 +160,12 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 unique_elements(x) = unique(x)
 unique_elements(x::AbstractStateSpaceSet) = unique(x.data)
 
-# TODO: preserve axis labels
-function marginal(p::Counts; dims = 1:ndims(p))
-    alldims = 1:ndims(p)
+function marginal(c::Counts; dims = 1:ndims(c))
+    alldims = 1:ndims(c)
     reduce_dims = (setdiff(alldims, dims)...,)
-    marginal = dropdims(sum(p.p, dims = reduce_dims), dims = reduce_dims)
-    return Counts(marginal)
+    marginal = dropdims(sum(c.cts, dims = reduce_dims), dims = reduce_dims)
+    include_idxs = setdiff(alldims, reduce_dims)
+    new_outcomes = c.outcomes[include_idxs]
+    new_dimlabels = c.dimlabels[include_idxs]
+    return Counts(marginal, new_outcomes, new_dimlabels)
 end
