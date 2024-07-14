@@ -1,3 +1,4 @@
+export jdd 
 
 """
     jdd(measure::JointDistanceDistribution, source, target) → Δ
@@ -9,18 +10,19 @@ Returns the distribution `Δ` from the paper directly ([example](@ref quickstart
 Use [`JointDistanceDistributionTest`](@ref) to perform a formal indepencence test.
 """
 function jdd(source, target; kw...)
-    if !isempty(kw)
-        @warn(
-            "Providing keywords to `jdd` is deprecated. " *
-            "Use `jdd(JointDistanceDistribution(; kwargs...), source, target) instead of " *
-            "`jdd(source, target; kwargs...)`"
-        )
-    end
-    estimate(JointDistanceDistribution(; kw...), source, target)
+    @warn(
+        "Convenience function `jdd` is deprecated. " *
+        "Use `association(JointDistanceDistribution(; kwargs...), source, target) instead."
+    )
+    association(JointDistanceDistribution(; kw...), source, target)
 end
 
 function jdd(measure::JointDistanceDistribution, source, target)
-    return estimate(measure, source, target)
+    @warn(
+        "Convenience function `jdd` is deprecated. " *
+        "Use `association(JointDistanceDistribution(; kwargs...), source, target) instead."
+    )
+    return association(measure, source, target)
 end
 
 function jdd(::Type{OneSampleTTest}, x, y; kwargs...)

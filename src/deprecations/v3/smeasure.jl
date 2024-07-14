@@ -16,26 +16,25 @@ synchronization for `s = 1.0`.
 ```julia
 using CausalityTools
 
-# A two-dimensional Ulam lattice map
-sys = ulam(2)
-
-# Sample 1000 points after discarding 5000 transients
-orbit = trajectory(sys, 1000, Ttr = 5000)
-x, y = orbit[:, 1], orbit[:, 2]
+x, y = rand(1000), rand(1000)
 
 # 4-dimensional embedding for `x`, 5-dimensional embedding for `y`
 m = SMeasure(dx = 4, τx = 3, dy = 5, τy = 1)
-s_measure(m, x, y)
+association(m, x, y)
 ```
-
 """
-function s_measure(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet; kwargs...)
-    if !isempty(kwargs)
-        @warn(
-            "Providing keywords to `s_measure` is deprecated. " *
-            "Use `s_measure(SMeasure(; kwargs...), source, target) instead of " *
-            "`s_measure(source, target; kwargs...)`"
-        )
-    end
-    return estimate(SMeasure(; kwargs...), x, y)
+function s_measure(x, y; kwargs...)
+    @warn(
+        "Convenience function `s_measure` is deprecated. " *
+        "Use `association(SMeasure(; kwargs...), x, y)` instead."
+    )
+    return association(SMeasure(; kwargs...), x, y)
+end
+
+function s_measure(measure::SMeasure, x, y; kwargs...)
+    @warn(
+        "Convenience function `s_measure` is deprecated. " *
+        "Use `association(SMeasure(; kwargs...), x, y)` instead."
+    )
+    return association(SMeasure(; kwargs...), x, y)
 end

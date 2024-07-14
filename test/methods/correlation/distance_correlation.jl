@@ -7,12 +7,12 @@ a = StateSpaceSet(repeat([1], 100))
 @test CausalityTools.distance_variance(a) == 0.0
 
 v = rand(1000, 3); w = 0.5 .* v .+ 1.2;
-@test distance_correlation(v, w) ≈ 1.0
+@test association(DistanceCorrelation(), v, w) ≈ 1.0
 # Comparison with `energy` R package, which is by the authors of the original paper
 x = -1.0:0.1:1.0 |> collect
 y = map(xᵢ -> xᵢ^3 - 2xᵢ^2 - 3, x)
 z = map(yᵢ -> yᵢ^2 - 2yᵢ, y)
-dcov = distance_correlation(x, y)
+dcov = association(DistanceCorrelation(), x, y)
 @test round(dcov, digits = 3) == 0.673
 
 # ----------------------------
@@ -25,5 +25,9 @@ M = reshape([0.0, 0.2, 0.3, 0.2, 0.0, 0.6, 0.3, 0.6, 0.3], 3, 3)
     0.15 0.0 -0.15;
     -0.15 -0.15 0.0]
 
-@test round(distance_correlation(x, z, y), digits = 5) ≈ round(0.1556139, digits = 5)
+@test round(association(DistanceCorrelation(), x, z, y), digits = 5) ≈ round(0.1556139, digits = 5)
 @test round(CausalityTools.distance_covariance(x, z, y), digits = 5) ≈ round(0.02379782, digits = 5)
+
+# Deprecations
+@test_logs (:warn, "Convenience function `distance_correlation` is deprecated. Use `association(DistanceCorrelation(), x, y)` instead.") distance_correlation(x, y)
+@test_logs (:warn, "Convenience function `distance_correlation` is deprecated. Use `association(DistanceCorrelation(), x, y, z)` instead.") distance_correlation(x, y, z)
