@@ -1,8 +1,7 @@
-using StableRNGs
 using StateSpaceSets
 using Distances: Chebyshev
 
-rng = StableRNG(1234)
+rng = Xoshiro(1234)
 x = rand(rng, 200)
 y = rand(rng, 200)
 X = rand(rng, 200, 2) |> StateSpaceSet

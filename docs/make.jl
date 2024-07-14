@@ -13,11 +13,17 @@ pages = [
     "Overview" => "index.md",
     "Association measures" => "associations.md",
     "Independence" => "independence.md",
+    "Network/graph inference" => "causal_graphs.md",
     "Examples" => [
-        "Information examples" => "examples/estimating_infomeasures.md",
+        "Association measures" => "examples/examples_associations.md",
         #"Correlation examples" => "examples/examples_correlation.md",
         #"Closeness examples" => "examples/examples_closeness.md",
         #"Crossmap examples" => "examples/examples_cross_mappings.md",
+    ],
+    "Extended examples" => [
+        "extended_examples/cross_mapping.md",
+        "extended_examples/pairwise_asymmetric_inference.md",
+        "extended_examples/mutual_information.md",
     ],
     "Basics and tutorials" => [
         "Encoding elements" => "encoding_tutorial.md",

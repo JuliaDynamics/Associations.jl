@@ -21,22 +21,20 @@ module CausalityTools
 
     include("core.jl")
 
-    include("information/information.jl")
-
+    include("methods/information/information.jl")
     include("methods/crossmappings/crossmappings.jl")
     include("methods/closeness/closeness.jl")
     include("methods/correlation/correlation.jl")
     include("methods/recurrence/methods.jl")
 
     include("utils/cov.jl")
+    include("utils/multidimensional_surrogates.jl")
 
     # # Independence tests must be loaded after everything else has been defined.
     include("independence_tests/independence.jl")
 
     # # Causal graph API must be loaded after independence tests.
-    # include("causal_graphs/causal_graphs.jl")
-
-    # include("example_systems/example_systems.jl")
+    include("causal_graphs/causal_graphs.jl")
 
     include("deprecations/deprecations.jl")
 

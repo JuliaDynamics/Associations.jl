@@ -99,7 +99,7 @@ end
 const VectorOr1D{D} = Union{AbstractVector, AbstractDataset{D}} where D
 function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrStateSpaceSet...)
     if isempty(z)
-        ρ = estimate(PearsonCorrelation(), x, y)
+        ρ = association(PearsonCorrelation(), x, y)
         z = fishers_z(ρ)
         pval = pvalue(test, z, 0, length(x))
         return CorrTestResult(ρ, z, pval)

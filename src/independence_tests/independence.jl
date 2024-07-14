@@ -24,9 +24,10 @@ Returns a test `summary`, whose type depends on `test`.
 
 ## Compatible independence tests
 
-- [`SurrogateAssociationTest`](@ref).
-- [`LocalPermutationTest`](@ref).
-- [`JointDistanceDistributionTest`](@ref).
+- [`SurrogateAssociationTest`](@ref)
+- [`LocalPermutationTest`](@ref)
+- [`JointDistanceDistributionTest`](@ref)
+- [`CorrTest`](@ref)
 """
 function independence(test::IndependenceTest, x...)
     L = length(x)

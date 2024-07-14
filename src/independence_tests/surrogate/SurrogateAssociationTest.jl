@@ -18,7 +18,10 @@ A generic (conditional) independence test for assessing whether two variables `X
 are independendent, potentially conditioned on a third variable `Z`, based on
 surrogate data.
 
-When used with [`independence`](@ref), a [`SurrogateAssociationTestResult`](@ref) is returned.
+## Usage 
+
+- Use with [`independence`](@ref) to perform a surrogate test with input data. This will
+    return a [`SurrogateAssociationTestResult`](@ref).
 
 ## Description
 
@@ -28,19 +31,16 @@ assumed to represent independence between the variables. The null distribution i
 by repeatedly shuffling the input data in some way that is intended
 to break any dependence between the input variables.
 
-There are different ways of shuffling, dictated by `surrogate`, each representing a
-distinct null hypothesis. For each shuffle, the provided `measure` is computed (using `est`,
-if relevant). This procedure is repeated `nshuffles` times, and a test summary is returned.
-The shuffled variable is always the first variable (`X`). Exceptions are:
+The test first estimates the desired statistic using `measure_or_est` on the input data. 
+Then, the first input variable is shuffled `nshuffled` times according to the given 
+`surrogate` method (each type of `surrogate` represents a distinct null hypothesis).
+For each shuffle, `measure_or_est` is recomputed and the results are stored. 
 
 - If [`TransferEntropy`](@ref) measure such as [`TEShannon`](@ref),
     then the source variable is always shuffled, and the target and conditional
     variable are left unshuffled.
 
 ## Compatible estimators/measures
-
-Some measures can be used directly as the first input, since they don't require any 
-estimator, e.g. one can construct `SurrogateAssociationTest(PearsonCorrelation())`.
 
 | Measure                       | Pairwise | Conditional |
 | ----------------------------- | :------: | :---------: |
@@ -50,11 +50,6 @@ estimator, e.g. one can construct `SurrogateAssociationTest(PearsonCorrelation()
 | [`HMeasure`](@ref)            |    ✓    |     ✖      |
 | [`MMeasure`](@ref)            |    ✓    |     ✖      |
 | [`LMeasure`](@ref)            |    ✓    |     ✖      |
-
-Moreover, any valid estimator of the following measures may be used:
-
-| Measure                               | Pairwise | Conditional |
-| ------------------------------------- | :------: | :---------: |
 | [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |
 | [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |
 | [`MIShannon`](@ref)                   |    ✓    |     ✖      |
@@ -162,7 +157,7 @@ function independence(test::SurrogateAssociationTest, x, args...)
     verify_number_of_inputs_vars(est_or_measure, 1+length(args))
     SSSets = map(w -> StateSpaceSet(w), args)
     
-    estimation = x -> information(est_or_measure, x, SSSets...)
+    estimation = x -> association(est_or_measure, x, SSSets...)
     progress = ProgressMeter.Progress(nshuffles;
         desc="SurrogateAssociationTest:", enabled=show_progress
     )

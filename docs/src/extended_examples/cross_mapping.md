@@ -1,88 +1,11 @@
+# [`ConvergentCrossMapping`](@ref)
 
-# [Cross mapping](@id examples_crossmappings)
-
-## [`ConvergentCrossMapping`](@ref) directly
-
-```@example
-using CausalityTools
-x, y = rand(200), rand(100)
-crossmap(CCM(), x, y)
-```
-
-## [`ConvergentCrossMapping`](@ref) with [`RandomVectors`](@ref)
-
-When cross-mapping with the [`RandomVectors`](@ref) estimator, a single random subsample
-of time indices (i.e. not in any particular order) of length `l` is drawn for each library
-size `l`, and cross mapping is performed using the embedding vectors corresponding
-to those time indices.
-
-```@example
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x, y = randn(rng, 200), randn(rng, 200)
-
-# We'll draw a single sample at each `l ∈ libsizes`. Sampling with replacement is then
-# necessary, because our 200-pt timeseries will result in embeddings with
-# less than 200 points.
-est = RandomVectors(CCM(); libsizes = 50:25:200, replace = true, rng)
-crossmap(est, x, y)
-```
-
-To generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
-crossmap repeatedly, e.g.
-
-```@example
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x, y = randn(rng, 200), randn(rng, 200)
-est = RandomVectors(CCM(); libsizes = 50:25:200, replace = true, rng)
-ρs = [crossmap(est, x, y) for i = 1:55]
-M = hcat(ρs...)
-```
-
-Now, the `k`-th row of `M` contains `55` estimates of the correspondence measure `ρ`
-at library size `libsizes[k]`.
-
-### [`ConvergentCrossMapping`](@ref) with [`RandomSegments`](@ref)
-
-When cross-mapping with the [`RandomSegments`](@ref) estimator, a single random subsample
-of continguous, ordered time indices of length `l` is drawn for each library
-size `l`, and cross mapping is performed using the embedding vectors corresponding
-to those time indices.
-
-```@example
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x, y = randn(rng, 200), randn(rng, 200)
-
-# We'll draw a single sample at each `l ∈ libsizes`. We limit the library size to 100, 
-# because drawing segments of the data longer than half the available data doesn't make
-# much sense.
-est = RandomSegment(CCM(); libsizes = 50:25:100, rng)
-crossmap(est, x, y)
-```
-
-As above, to generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
-crossmap repeatedly, e.g.
-
-```@example
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x, y = randn(rng, 200), randn(rng, 200)
-est = RandomSegment(CCM(); libsizes = 50:25:100, rng)
-ρs = [crossmap(est, x, y) for i = 1:80]
-M = hcat(ρs...)
-```
-
-Now, the `k`-th row of `M` contains `80` estimates of the correspondence measure `ρ`
-at library size `libsizes[k]`.
-
-### Reproducing Sugihara et al. (2012)
+## Reproducing Sugihara et al. (2012)
 
 !!! note "Run blocks consecutively"
     If copying these examples and running them locally, make sure the relevant packages (given in the first block) are loaded first.
 
-#### Figure 3A
+### Figure 3A
 
 Let's reproduce figure 3A too, focusing only on [`ConvergentCrossMapping`](@ref) this time. In this figure, they compute the cross mapping for libraries of increasing size, always starting at time index 1. This approach - which we here call the [`ExpandingSegment`](@ref) estimator - is one of many ways of estimating the correspondence between observed and predicted value.
 
@@ -131,7 +54,7 @@ end
 function reproduce_figure_3A_naive(definition::CrossmapMeasure)
     sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.700001, βxy = 0.02, βyx = 0.32);
     x, y = columns(first(trajectory(sys_bidir, 3100, Ttr = 10000)));
-    libsizes = [20:2:50; 60:10:200; 300:50:500; 600:150:900; 1000:500:2000]
+    libsizes = [20:2:50; 55:5:200; 300:50:500; 600:100:900; 1000:500:3000]
     est = ExpandingSegment(definition; libsizes);
     ρs_x̂y = crossmap(est, x, y)
     ρs_ŷx = crossmap(est, y, x)
@@ -158,7 +81,7 @@ function reproduce_figure_3A_ensemble(definition::CrossmapMeasure)
     # Note: our time series are 1000 points long. When embedding, some points are
     # lost, so we must use slightly less points for the segments than 
     # there are points in the original time series.
-    libsizes = [20:2:50; 60:10:200; 300:50:500; 600:150:900; 1000:500:2000]
+    libsizes = [20:5:50; 55:5:200; 300:50:500; 600:100:900; 1000:500:2000]
     # No point in doing more than one rep, because there data are always the same
     # for `ExpandingSegment.`
     ensemble_ev = Ensemble(ExpandingSegment(definition; libsizes); nreps = 1)
@@ -196,7 +119,7 @@ reproduce_figure_3A_ensemble(ConvergentCrossMapping(d = 3, τ = -1, w = 5))
 There wasn't really that much of a difference, since for the logistic map, the autocorrelation function flips sign for every lag increase. However, for examples from other systems, tuning `w` may be important.
 
 
-#### Figure 3B
+### Figure 3B
 
 What about figure 3B? Here they generate time series of length 400 for a range of values for both coupling parameters, and plot the dominant direction $\Delta = \rho(\hat{x} | y) - \rho(\hat{y} | x)$.
 
@@ -204,16 +127,16 @@ In the paper, they use a 1000 different parameterizations for the logistic map p
 
 ```@example MAIN_CCM
 function reproduce_figure_3B()
-    βxys = 0.0:0.025:0.4
-    βyxs = 0.0:0.025:0.4
+    βxys = 0.0:0.02:0.4
+    βyxs = 0.0:0.02:0.4
     ρx̂ys = zeros(length(βxys), length(βyxs))
     ρŷxs = zeros(length(βxys), length(βyxs))
 
     for (i, βxy) in enumerate(βxys)
         for (j, βyx) in enumerate(βyxs)
             sys_bidir = logistic_sugi(; u0 = [0.2, 0.4], rx = 3.7, ry = 3.7, βxy, βyx);
-            # Generate 300 points. Randomly select a 100-pt long segment.
-            x, y = columns(first(trajectory(sys_bidir, 1000, Ttr = 10000)));
+            # Generate 1000 points. Randomly select a 400-pt long segment.
+            x, y = columns(first(trajectory(sys_bidir, 400, Ttr = 10000)));
             definition = CCM(d = 3, w = 5, τ = -1)
             ensemble = Ensemble(RandomVectors(definition; libsizes = 100), nreps = 50)
             ρx̂ys[i, j] = mean(crossmap(ensemble, x, y))
@@ -239,7 +162,7 @@ end
 reproduce_figure_3B()
 ```
 
-#### Figures 3C and 3D
+### Figures 3C and 3D
 
 Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
 introduced the [`ConvergentCrossMapping`](@ref) measure.
@@ -313,106 +236,3 @@ with_theme(theme_minimal(),
 end
 ```
 
-## [`PairwiseAsymmetricInference`](@ref)
-
-### Reproducing McCracken & Weigel (2014)
-
-Let's try to reproduce figure 8 from [McCracken2014](@citet)'s
-paper on [`PairwiseAsymmetricInference`](@ref) (PAI). We'll start by defining the their example B (equations 6-7). This system consists of two
-variables ``X`` and ``Y``, where ``X`` drives ``Y``.
-
-After we have computed the PAI in both directions, we define a measure of directionality as the difference between PAI in the ``X \to Y`` direction and in the ``Y \to X`` direction, so that if ``X`` drives ``Y``, then ``\Delta < 0``.
-
-```@example MAIN_CCM
-using CausalityTools
-using LabelledArrays
-using StaticArrays
-using DynamicalSystemsBase
-using StateSpaceSets
-using CairoMakie, Printf
-using Distributions: Normal
-using Statistics: mean, std
-
-function eom_nonlinear_sindriver(dx, x, p, n)
-    a, b, c, t, Δt = (p...,)
-    x, y = x[1], x[2]
-    𝒩 = Normal(0, 1)
-    
-    dx[1] = sin(t)
-    dx[2] = a*x * (1 - b*x) + c* rand(𝒩)
-    p[end-1] += 1 # update t
-
-    return
-end
-
-function nonlinear_sindriver(;u₀ = rand(2), a = 1.0, b = 1.0, c = 2.0, Δt = 1)
-    DiscreteDynamicalSystem(eom_nonlinear_sindriver, u₀, [a, b, c, 0, Δt])
-end
-
-function reproduce_figure_8_mccraken(; 
-        c = 2.0, Δt = 0.2,
-        as = 0.5:0.5:5.0,
-        bs = 0.5:0.5:5.0)
-    # -----------------------------------------------------------------------------------------
-    # Generate many time series for many different values of the parameters `a` and `b`,
-    # and compute PAI. This will replicate the upper right panel of 
-    # figure 8 in McCracken & Weigel (2014).
-    # -----------------------------------------------------------------------------------------
-    
-    measure = PairwiseAsymmetricInference(d = 3)
-
-    # Manually resample `nreps` length-`L` time series and use mean ρ(x̂|X̄y) - ρ(ŷ|Ȳx)
-    # for each parameter combination.
-    nreps = 50
-    L = 200 # length of timeseries
-    Δ = zeros(length(as), length(bs))
-    for (i, a) in enumerate(as)
-        for (j, b) in enumerate(bs)
-            s = nonlinear_sindriver(; a, b, c,  Δt)
-            x, y = columns(first(trajectory(s, 1000, Ttr = 10000)))
-            Δreps = zeros(nreps)
-            for i = 1:nreps
-                # Ensure we're subsampling at the same time indices. 
-                ind_start = rand(1:(1000-L))
-                r = ind_start:(ind_start + L)
-                Δreps[i] = @views crossmap(measure, y[r], x[r]) - 
-                    crossmap(measure, x[r], y[r])
-            end
-            Δ[i, j] = mean(Δreps)
-        end
-    end
-
-    # -----------------------------------------------------------------------------------------
-    # An example time series for plotting.
-    # -----------------------------------------------------------------------------------------
-    sys = nonlinear_sindriver(; a = 1.0, b = 1.0, c, Δt)
-    npts = 500
-    orbit = first(trajectory(sys, npts, Ttr = 10000))
-    x, y = columns(orbit)
-    with_theme(theme_minimal(),
-        markersize = 5) do
-        
-        X = x[1:300]
-        Y = y[1:300]
-        fig = Figure();
-        ax_ts = Axis(fig[1, 1:2], xlabel = "Time (t)", ylabel = "Value")
-        scatterlines!(ax_ts, (X .- mean(X)) ./ std(X), label = "x")
-        scatterlines!(ax_ts, (Y .- mean(Y)) ./ std(Y), label = "y")
-        axislegend()
-
-        ax_hm = Axis(fig[2, 1:2], xlabel = "a", ylabel = "b")
-        ax_hm.yticks = (1:length(as), string.([i % 2 == 0 ? as[i] : "" for i = 1:length(as)]))
-        ax_hm.xticks = (1:length(bs), string.([i % 2 == 0 ? bs[i] : "" for i = 1:length(bs)]))
-        hm = heatmap!(ax_hm, Δ,  colormap = :viridis)
-        Colorbar(fig[2, 3], hm; label = "Δ' = ρ(ŷ | yx) - ρ(x̂ | xy)")
-        fig
-    end
-end
-
-reproduce_figure_8_mccraken()
-```
-
-We haven't used as many parameter combinations as [McCracken2014](@citet) did, 
-but we get a figure that looks roughly similar to theirs.
-
-As expected, ``\Delta < 0`` for all parameter combinations, implying that ``X`` "PAI drives" ``Y``.
