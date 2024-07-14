@@ -1,7 +1,7 @@
 
 # [Independence testing](@id independence_testing)
 
-## Overview 
+## Overview
 
 The independence test API is defined by
 
@@ -13,14 +13,14 @@ independence
 IndependenceTest
 ```
 
-## [`SurrogateAssociationTest`](@ref) for independence
+## [`SurrogateAssociationTest`](@ref)
 
 ```@docs
 SurrogateAssociationTest
 SurrogateAssociationTestResult
 ```
 
-## [`LocalPermutationTest`](@ref) for independence
+## [`LocalPermutationTest`](@ref)
 
 ```@docs
 LocalPermutationTest
