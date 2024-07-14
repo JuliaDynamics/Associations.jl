@@ -14,25 +14,15 @@ const ENTROPY_ESTS = Union{DifferentialInfoEstimator, DiscreteInfoEstimator}
 
 The supertype of all association measures. 
 
-Concrete subtypes are given as input to [`association`](@ref).
-
-## Concrete implementations 
-
-- [`PearsonCorrelation`](@ref)
-- [`PartialCorrelation`](@ref)
-- [`DistanceCorrelation`](@ref)
-- [`SMeasure`](@ref)
-- [`LMeasure`](@ref)
-- [`HMeasure`](@ref)
-- [`MMeasure`](@ref)
-- [`JointDistanceDistribution`](@ref).
-
 ## Abstract implementations
 
 The docstrings for the abstract types below list concrete implementations.
+Concrete subtypes are given as input to [`association`](@ref).
 
 - [`MultivariateInformationMeasure`](@ref)
 - [`CrossmapMeasure`](@ref)
+- [`ClosenessMeasure`](@ref)
+- [`CorrelationMeasure`](@ref)
 """
 abstract type AssociationMeasure end
 
