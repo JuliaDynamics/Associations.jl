@@ -7,7 +7,7 @@ using Distances: pairwise, evaluate
 export MMeasure
 
 """
-    MMeasure <: AssociationMeasure
+    MMeasure <: ClosenessMeasure
     MMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
 The `MMeasure` [Andrzejak2003](@cite) is a pairwise association
@@ -34,8 +34,10 @@ M^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N}
 where ``R_i(x)`` is computed as for [`HMeasure`](@ref), while ``R_i^k(x)`` and
 ``R_i^{(k)}(x|y)`` is computed as for [`SMeasure`](@ref).
 Parameters also have the same meaning as for [`SMeasure`](@ref)/[`HMeasure`](@ref).
+
+See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct MMeasure{M, TM} <: AssociationMeasure
+Base.@kwdef struct MMeasure{M, TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = SqEuclidean()
     tree_metric::TM = Euclidean()

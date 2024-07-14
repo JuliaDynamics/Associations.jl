@@ -7,7 +7,7 @@ using Distances: pairwise, evaluate
 export SMeasure
 
 """
-    SMeasure < AssociationMeasure
+    SMeasure < ClosenessMeasure
     SMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
 `SMeasure` is a bivariate association measure from [Arnhold1999](@citet)
@@ -77,8 +77,10 @@ The algorithm is slightly modified from [Grassberger1999](@cite) to allow univar
 
 In all three cases, input StateSpaceSets are length-matched by eliminating points at the end of
 the longest StateSpaceSet (after the embedding step, if relevant) before analysis.
+
+See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct SMeasure{M, TM} <: AssociationMeasure
+Base.@kwdef struct SMeasure{M, TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = SqEuclidean()
     tree_metric::TM = Euclidean()

@@ -35,8 +35,10 @@ H^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N}
 ```
 
 Parameters are the same and ``R_i^{(k)}(x|y)`` is computed as for [`SMeasure`](@ref).
+
+See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct HMeasure{M, TM} <: AssociationMeasure
+Base.@kwdef struct HMeasure{M, TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = SqEuclidean()
     tree_metric::TM = Euclidean()

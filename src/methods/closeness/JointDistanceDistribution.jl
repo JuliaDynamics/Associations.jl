@@ -60,7 +60,7 @@ of these embeddings, as described in [Amigo2018](@citet).
 * [Computing the JDD](@ref quickstart_jdd)
 * [Independence testing using JDD](@ref quickstart_jddtest)
 """
-Base.@kwdef struct JointDistanceDistribution{M, T} <: AssociationMeasure
+Base.@kwdef struct JointDistanceDistribution{M, T} <: ClosenessMeasure
     metric::M = Euclidean()
     B::Int = 5
     D::Int = 3

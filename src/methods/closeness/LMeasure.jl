@@ -7,7 +7,7 @@ using Distances: pairwise, evaluate
 export LMeasure
 
 """
-    LMeasure <: AssociationMeasure
+    LMeasure <: ClosenessMeasure
     LMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
 The `LMeasure` [Chicharro2009](@cite) is a pairwise association
@@ -49,8 +49,10 @@ G_i^{(k)}(x|y) = \\dfrac{1}{K}\\sum_{j=1}^{K} g_{i,w_{i, j}},
 ```
 
 where ``w_{i,j}`` is the index of the ``j``-th nearest neighbor of ``\\bf{y_i}``.
+
+See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
+Base.@kwdef struct LMeasure{M, TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = Euclidean()
     tree_metric::TM = Euclidean()
