@@ -12,7 +12,7 @@ Use [`JointDistanceDistributionTest`](@ref) to perform a formal indepencence tes
 function jdd(source, target; kw...)
     @warn(
         "Convenience function `jdd` is deprecated. " *
-        "Use `association(JointDistanceDistribution(; kwargs...), source, target) instead."
+        "Use `association(JointDistanceDistribution(; kwargs...), x, y)` instead."
     )
     association(JointDistanceDistribution(; kw...), source, target)
 end
@@ -20,19 +20,16 @@ end
 function jdd(measure::JointDistanceDistribution, source, target)
     @warn(
         "Convenience function `jdd` is deprecated. " *
-        "Use `association(JointDistanceDistribution(; kwargs...), source, target) instead."
+        "Use `association(JointDistanceDistribution(; kwargs...), x, y)` instead."
     )
     return association(measure, source, target)
 end
 
 function jdd(::Type{OneSampleTTest}, x, y; kwargs...)
     @warn(
-        "jdd(::OneSampleTTest, x, y; kwargs...) is deprecated. " *
-        "Instead, do\n" *
-        "  measure = JointDistanceDistribution()\n" *
-        "  independence(JointDistanceDistributionTest(measure), x, y)\n"
+        "jdd(::OneSampleTTest, x, y; kwargs...) is deprecated. Instead, do `measure = JointDistanceDistribution(); independence(JointDistanceDistributionTest(measure), x, y)`."
     )
     measure = JointDistanceDistribution(; kwargs...)
-    Δjdd = jdd(measure, x, y)
+    Δjdd = association(measure, x, y)
     return OneSampleTTest(Δjdd, measure.μ)
 end
