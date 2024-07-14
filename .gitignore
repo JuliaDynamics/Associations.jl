@@ -12,3 +12,4 @@ Manifest.toml
 *.scss
 *.css
 vscode/*
+*.cov
