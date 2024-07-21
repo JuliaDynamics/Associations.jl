@@ -195,6 +195,5 @@ end
 function counts(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
     o = first(discretization.outcome_spaces)
     x̂ = (codify(o, xₖ) for xₖ in x)
-    @show x̂
     return counts(x̂...)
 end
