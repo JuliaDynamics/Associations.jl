@@ -79,7 +79,8 @@ test = SurrogateAssociationTest(est)
 independence(test, x, z) # Should indicate dependence
 independence(test, x, z, y) # Should indicate independence
 
-est = JointProbabilities(PartialMutualInformation(), OrdinalPatterns(m=3))
+d = CodifyVariables(OrdinalPatterns(m=3))
+est = JointProbabilities(PartialMutualInformation(), d)
 test = SurrogateAssociationTest(est)
 independence(test, x, z, y)
 ```
