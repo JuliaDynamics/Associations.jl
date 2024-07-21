@@ -1,5 +1,4 @@
 include("logs.jl")
-include("cov.jl")
 include("kde.jl")
 include("cca.jl")
 include("multidimensional_surrogates.jl")
