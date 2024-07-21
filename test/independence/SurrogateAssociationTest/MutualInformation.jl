@@ -6,16 +6,20 @@ n = 100
 likeit = rand(rng, ["yes", "no"], n)
 food = rand(rng, ["veggies", "meat", "fish"], n)
 service = rand(rng, ["netflix", "hbo"], n)
-est = Contingency()
+est = 
 nshuffles = 3
+d = CodifyVariables(UniqueElements())
+test_mi_s = SurrogateAssociationTest(JointProbabilities(MIShannon(), d); nshuffles, rng)
+test_mi_rj = SurrogateAssociationTest(JointProbabilities(MIRenyiJizba(), d); nshuffles, rng)
+test_mi_rs = SurrogateAssociationTest(JointProbabilities(MIRenyiSarbu(), d); nshuffles, rng)
+test_mi_tf = SurrogateAssociationTest(JointProbabilities(MITsallisFuruichi(), d); nshuffles, rng)
+test_mi_tm = SurrogateAssociationTest(JointProbabilities(MITsallisMartin(), d); nshuffles, rng)
 
-@test_throws ArgumentError SurrogateAssociationTest(MIShannon())
-
-@test independence(SurrogateAssociationTest(MIShannon(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
-@test independence(SurrogateAssociationTest(MIRenyiJizba(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
-@test independence(SurrogateAssociationTest(MIRenyiSarbu(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
-@test independence(SurrogateAssociationTest(MITsallisFuruichi(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
-@test independence(SurrogateAssociationTest(MITsallisMartin(), est; nshuffles, rng), food, likeit) isa SurrogateAssociationTestResult
+@test independence(test_mi_s, food, likeit) isa SurrogateAssociationTestResult
+@test independence(test_mi_rj, food, likeit) isa SurrogateAssociationTestResult
+@test independence(test_mi_rs, food, likeit) isa SurrogateAssociationTestResult
+@test independence(test_mi_tf, food, likeit) isa SurrogateAssociationTestResult
+@test independence(test_mi_tm, food, likeit) isa SurrogateAssociationTestResult
 
 # Analytical tests, in the limit.
 # -------------------------------

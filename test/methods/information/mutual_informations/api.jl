@@ -13,7 +13,8 @@ definitions = [MIShannon(), MIRenyiJizba(), MIRenyiSarbu(), MITsallisFuruichi(),
     x, y = rand(rng, 100), rand(rng, 100)
     X, Y = StateSpaceSet(rand(rng, 100, 2)), StateSpaceSet(rand(rng, 100, 2))
     
-    est = JointProbabilities(def, ValueBinning(2), RelativeAmount())
+    d = CodifyVariables(ValueBinning(2))
+    est = JointProbabilities(def, d, RelativeAmount())
     # The estimation of probabilities is decoupled from the estimation of the mutual info.
     # We could in principle use any probabilities estimator here, but we default to `RelativeAmount`.
     @test association(est, x, Y) isa Real;
@@ -28,12 +29,11 @@ end
 
 # The following measures can be estimated using an entropy decomposition
 defs = [MIShannon(), MITsallisMartin(), MITsallisFuruichi()]
-ests = [PlugIn(Shannon()), PlugIn(Tsallis(q = 1.5)), PlugIn(Tsallis(q = 1.5))]
-@testset "EntropyDecomposition with $(typeof(def).name.name)" for (def, est) in zip(defs, ests)
+hests = [PlugIn(Shannon()), PlugIn(Tsallis(q = 1.5)), PlugIn(Tsallis(q = 1.5))]
+@testset "EntropyDecomposition with $(typeof(def).name.name)" for (def, hest) in zip(defs, hests)
     x, y = rand(rng, 100), rand(rng, 100)
     X, Y = StateSpaceSet(rand(rng, 100, 2)), StateSpaceSet(rand(rng, 100, 2))
-    est = EntropyDecomposition(def, est, OrdinalPatterns(m=2), RelativeAmount())
-    #@show est
+    est = EntropyDecomposition(def, hest, OrdinalPatterns(m=2), RelativeAmount())
     # The estimation of probabilities is decoupled from the estimation of the mutual info.
     # We could in principle use any probabilities estimator here, but we default to `RelativeAmount`.
     @test association(est, x, Y) isa Real

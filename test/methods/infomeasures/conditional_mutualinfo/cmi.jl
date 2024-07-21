@@ -1,5 +1,0 @@
-include("CMIShannon.jl")
-include("CMIRenyiSarbu.jl")
-include("CMIRenyiJizba.jl")
-include("CMIRenyiPoczos.jl")
-include("CMITsallisPapapetrou.jl")

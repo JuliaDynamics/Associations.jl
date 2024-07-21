@@ -2,7 +2,8 @@
 # API
 # ------------------------------------------------------------------------
 # Error for wrong number of input datasets.
-test = SurrogateAssociationTest(MIShannon(), KSG1())
+est = JointProbabilities(MIShannon(), OrdinalPatterns(m=3))
+test = SurrogateAssociationTest(est)
 x, y, z = rand(30), rand(30), rand(30)
 @test_throws ArgumentError independence(test, x)
 @test_throws ArgumentError independence(test, x, y, z)
