@@ -6,14 +6,17 @@ n = 200
 likeit = rand(rng, ["yes", "no"], n)
 food = rand(rng, ["veggies", "meat", "fish"], n)
 service = rand(rng, ["netflix", "hbo"], n)
-est = Contingency()
 nshuffles = 3
 
 @test_throws ArgumentError SurrogateAssociationTest(PMI())
 
-@test independence(SurrogateAssociationTest(PMI(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
-@test independence(SurrogateAssociationTest(CMIRenyiSarbu(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
-@test independence(SurrogateAssociationTest(CMIRenyiJizba(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
+# estimator 
+d = CodifyVariables(UniqueElements())
+est_pmi = JointProbabilities(PMI(), d)
+
+# Tests 
+test = SurrogateAssociationTest(est_pmi; nshuffles, rng)
+@test independence(test, food, likeit, service) isa SurrogateAssociationTestResult
 
 
 # Analytical tests, in the limit.

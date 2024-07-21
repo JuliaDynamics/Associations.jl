@@ -16,7 +16,7 @@ PMI(X; Y | Z) = D(p(x, y, z) || p^{*}(x|z) p^{*}(y|z) p(z)),
 
 where ``p(x, y, z)`` is the joint distribution for ``X``, ``Y`` and ``Z``, and
 ``D(\\cdot, \\cdot)`` is the extended Kullback-Leibler divergence from
-``p(x, y, z)`` to ``p^{*}(x|z) p^{*}(y|z) p(z)``. See Zhao et al. (2016) for details.
+``p(x, y, z)`` to ``p^{*}(x|z) p^{*}(y|z) p(z)``. See [Zhao2016](@citet) for details.
 
 ## Estimation
 
@@ -41,6 +41,10 @@ end
 min_inputs_vars(::PartialMutualInformation) = 3
 max_inputs_vars(::PartialMutualInformation) = 3
 
+
+# ----------------------------------------------------------------
+# Estimation methods
+# ----------------------------------------------------------------
 function association(definition::PartialMutualInformation, pxyz::Probabilities{T, 3}) where T
     dx, dy, dz = size(pxyz)
     px = marginal(pxyz, dims = [1])
@@ -70,4 +74,9 @@ function association(definition::PartialMutualInformation, pxyz::Probabilities{T
         end
     end
     return pmi
+end
+
+function association(est::JointProbabilities{PartialMutualInformation}, x, y, z)
+    pxyz = probabilities(est.discretization, x, y, z)
+    return association(est.definition, pxyz)
 end
