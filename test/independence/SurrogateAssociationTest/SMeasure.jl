@@ -2,7 +2,8 @@
 # ------------------------------------------------------------
 using Random
 rng = MersenneTwister(1234)
-x, y = rand(rng, 300), rand(rng, 300)
+n = 100
+x, y = rand(rng, 100), rand(rng, 100)
 z = x .+ y
 test = SurrogateAssociationTest(SMeasure(); rng)
 α = 0.04 # Some arbitrary significance level.
