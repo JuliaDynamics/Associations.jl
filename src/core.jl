@@ -5,6 +5,7 @@ export AssociationMeasure
 export AssociationMeasureEstimator
 export association
 
+const VectorOr1DDataset{T} = Union{AbstractVector{T}, AbstractStateSpaceSet{1, T}} where T
 const VectorOrStateSpaceSet{D, T} = Union{AbstractVector{T}, AbstractStateSpaceSet{D, T}} where {D, T}
 const ArrayOrStateSpaceSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSpaceSet{D, T}} where {D, T, N}
 const INFO_ESTS = Union{DifferentialInfoEstimator, DiscreteInfoEstimator}
