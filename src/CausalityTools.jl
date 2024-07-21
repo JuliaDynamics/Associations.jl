@@ -19,6 +19,7 @@ module CausalityTools
     @reexport using ComplexityMeasures
     @reexport using TimeseriesSurrogates
 
+    include("utils/utils.jl")
     include("core.jl")
 
     include("methods/information/information.jl")

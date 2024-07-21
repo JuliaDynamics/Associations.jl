@@ -6,7 +6,7 @@ testfile(file, testname=defaultname(file)) = @testset "$testname" begin; include
 @testset "CausalityTools.jl" begin
     testfile("deprecations.jl")
     testfile("methods/methods.jl")
-    #testfile("utils.jl")
+    testfile("independence/independence.jl")
     #testfile("independence/independence.jl")
     #testfile("causal_graphs/oce.jl")
     
