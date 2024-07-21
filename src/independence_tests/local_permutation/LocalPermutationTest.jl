@@ -96,7 +96,7 @@ The nearest-neighbor approach in Runge (2018) can be reproduced by using the
 - [Example using `TEShannon`](@ref example_localpermtest_teshannon).
 """
 struct LocalPermutationTest{M, C, R} <: IndependenceTest{M}
-    measure_or_est::M
+    est_or_measure::M
     rng::R
     kperm::Int
     nshuffles::Int
@@ -105,21 +105,21 @@ struct LocalPermutationTest{M, C, R} <: IndependenceTest{M}
     w::Int # Theiler window
     show_progress::Bool
 end
-function LocalPermutationTest(measure_or_est::M;
+function LocalPermutationTest(est_or_measure::M;
         rng::R = Random.default_rng(),
         kperm::Int = 10,
         replace::Bool = true,
         nshuffles::Int = 100,
         closeness_search::C = NeighborCloseness(),
         w::Int = 0, show_progress = false) where {M, C, R}
-    return LocalPermutationTest{M, C, R}(measure_or_est, rng, kperm, nshuffles, replace, closeness_search, w, show_progress)
+    return LocalPermutationTest{M, C, R}(est_or_measure, rng, kperm, nshuffles, replace, closeness_search, w, show_progress)
 end
 
 Base.show(io::IO, test::LocalPermutationTest) = print(io,
     """
     `LocalPermutationTest` independence test.
     -------------------------------------
-    measure/est:$(test.measure_or_est)
+    measure/est:$(test.est_or_measure)
     rng:        $(test.rng)
     # shuffles: $(test.nshuffles)
     k (perm)    $(test.kperm)
@@ -159,15 +159,15 @@ end
 # should be done for the NN-based CMI methods, so we don't have to reconstruct
 # KD-trees and do marginal searches for all marginals all the time.
 function independence(test::LocalPermutationTest, x, y, z)
-    measure_or_est, nshuffles = test.measure_or_est, test.nshuffles
+    est_or_measure, nshuffles = test.est_or_measure, test.nshuffles
 
     # Make sure that the measure is compatible with the input data.
-    verify_number_of_inputs_vars(measure_or_est, 3)
+    verify_number_of_inputs_vars(est_or_measure, 3)
 
     X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
     @assert length(X) == length(Y) == length(Z)
-    Î = association(measure_or_est, X, Y, Z)
-    Îs = permuted_Îs(X, Y, Z, measure_or_est, test)
+    Î = association(est_or_measure, X, Y, Z)
+    Îs = permuted_Îs(X, Y, Z, est_or_measure, test)
     p = count(Î .<= Îs) / nshuffles
     return LocalPermutationTestResult(3, Î, Îs, p, nshuffles)
 end
@@ -175,7 +175,7 @@ end
 # This method takes `measure` and `est` explicitly, because for some measures
 # like `TEShannon`, `test.measure` may be converted to some other measure before
 # computing the test statistic.
-function permuted_Îs(X, Y, Z, measure_or_est, test)
+function permuted_Îs(X, Y, Z, est_or_measure, test)
     rng, kperm, nshuffles, replace, w = test.rng, test.kperm, test.nshuffles, test.replace, test.w
     progress = ProgressMeter.Progress(nshuffles;
         desc = "LocalPermutationTest:",
@@ -196,7 +196,7 @@ function permuted_Îs(X, Y, Z, measure_or_est, test)
         else
             shuffle_without_replacement!(X̂, X, idxs_z, kperm, rng, Nᵢ, πs)
         end
-        Îs[n] = association(measure_or_est, X̂, Y, Z)
+        Îs[n] = association(est_or_measure, X̂, Y, Z)
         ProgressMeter.next!(progress)
     end
 

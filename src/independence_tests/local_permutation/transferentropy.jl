@@ -10,7 +10,7 @@ using Setfield
 # end
 
 function independence(test::LocalPermutationTest{<:TransferEntropyEstimator}, x::AbstractVector...)
-    measure_or_est, nshuffles = deepcopy(test.measure_or_est), test.nshuffles
+    est_or_measure, nshuffles = deepcopy(test.est_or_measure), test.nshuffles
 
     if !(length(x) == 3) && est isa TransferEntropyEstimator
         msg = "`LocalPermutationTest` is not defined for pairwise transfer entropy with " *
@@ -19,20 +19,20 @@ function independence(test::LocalPermutationTest{<:TransferEntropyEstimator}, x:
         throw(ArgumentError(msg))
     end
     # Below, the T variable also includes any conditional variables.
-    S, T, T⁺, C = individual_marginals_te(measure_or_est.definition.embedding, x...)
+    S, T, T⁺, C = individual_marginals_te(est_or_measure.definition.embedding, x...)
     TC = StateSpaceSet(T, C)
     @assert length(T⁺) == length(S) == length(TC)
     N = length(x)
 
-    if measure_or_est isa TransferEntropyEstimator
-        Î = association(measure_or_est, S, T, T⁺, C)
-        Îs = permuted_Îs_te(S, T, T⁺, C, measure_or_est, test)
+    if est_or_measure isa TransferEntropyEstimator
+        Î = association(est_or_measure, S, T, T⁺, C)
+        Îs = permuted_Îs_te(S, T, T⁺, C, est_or_measure, test)
     else
         X, Y = S, T⁺ # The source marginal `S` is the one being shuffled.
         Z = TC # The conditional variable
-        est = convert_to_cmi_estimator(measure_or_est)
-        Î = association(measure_or_est, X, Y, Z)
-        Îs = permuted_Îs(X, Y, Z, measure_or_est, test)
+        est = convert_to_cmi_estimator(est_or_measure)
+        Î = association(est_or_measure, X, Y, Z)
+        Îs = permuted_Îs(X, Y, Z, est_or_measure, test)
     end
 
     p = count(Î .<= Îs) / nshuffles
@@ -44,7 +44,7 @@ end
 # the source marginal `S` is shuffled according to local closeness in the 
 # conditional marginal `C`. The `T` and `T⁺` marginals (i.e. all information)
 # about the target variable is left untouched.
-function permuted_Îs_te(S, T, T⁺, C, measure_or_est, test)
+function permuted_Îs_te(S, T, T⁺, C, est_or_measure, test)
     rng, kperm, nshuffles, replace, w = test.rng, test.kperm, test.nshuffles, test.replace, test.w
     progress = ProgressMeter.Progress(nshuffles;
         desc = "LocalPermutationTest:",
