@@ -38,3 +38,12 @@ function independence(test::SurrogateAssociationTest{<:EntropyDecomposition{<:Tr
 
     return SurrogateAssociationTestResult(length(x), Î, Îs, p, nshuffles)
 end
+
+
+function SurrogateAssociationTest(est::T) where T <: TransferEntropy
+    str = "`SurrogateAssociationTest` can't be constructed using `$T` definition directly. " * 
+        "Give a valid estimator as the first argument instead and give the " * 
+        "definition to the estimator, e.g. " * 
+        "Lindner(TEShannon()), or CMIDecomposition(TEShannon())"
+    throw(ArgumentError(str))
+end
