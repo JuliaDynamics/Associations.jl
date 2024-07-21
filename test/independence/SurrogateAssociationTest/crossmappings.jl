@@ -1,3 +1,4 @@
+using Test
 using Random
 rng = MersenneTwister(1234)
 x, y = rand(rng, 500), rand(rng, 500)
@@ -7,8 +8,8 @@ d = 2
 τ = -1
 
 # Regular variant.
-test_ccm = SurrogateAssociationTest(CCM(; d, τ), RandomVectors(libsizes = 300; replace = true, rng))
-test_pai = SurrogateAssociationTest(PAI(; d, τ), RandomVectors(libsizes = 300; replace = true, rng))
+test_ccm = SurrogateAssociationTest(RandomVectors(CCM(; d, τ); libsizes = 300, replace = true, rng))
+test_pai = SurrogateAssociationTest(RandomVectors(PAI(; d, τ); libsizes = 300, replace = true, rng))
 @test_throws ArgumentError SurrogateAssociationTest(Ensemble(CCM(), RandomVectors(libsizes = 100:100:300)))
 @test_throws ArgumentError SurrogateAssociationTest(CCM(), RandomVectors(libsizes = 100:100:300))
 

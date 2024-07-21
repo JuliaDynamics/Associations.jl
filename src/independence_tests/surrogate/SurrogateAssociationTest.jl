@@ -177,6 +177,5 @@ end
 
 # Concrete implementations
 include("transferentropy.jl")
-
+include("crossmapping.jl")
 include("hlms_measure.jl")
-# include("crossmapping.jl")
