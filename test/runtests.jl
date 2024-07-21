@@ -8,7 +8,5 @@ testfile(file, testname=defaultname(file)) = @testset "$testname" begin; include
     testfile("deprecations.jl")
     testfile("methods/methods.jl")
     testfile("independence/independence.jl")
-    #testfile("independence/independence.jl")
     #testfile("causal_graphs/oce.jl")
-    
 end

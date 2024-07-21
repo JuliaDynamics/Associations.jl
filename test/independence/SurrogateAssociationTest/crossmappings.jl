@@ -20,8 +20,8 @@ test_pai = SurrogateAssociationTest(RandomVectors(PAI(; d, τ); libsizes = 300, 
 @test pvalue(independence(test_pai, x, y)) > α
 
 # Ensemble variant.
-eccm = Ensemble(CCM(; d, τ), RandomVectors(libsizes = 100; replace = true, rng))
-epai = Ensemble(PAI(; d, τ), RandomVectors(libsizes = 100; replace = true, rng))
+eccm = Ensemble(RandomVectors(CCM(; d, τ); libsizes = 100, replace = true, rng))
+epai = Ensemble(RandomVectors(PAI(; d, τ); libsizes = 100, replace = true, rng))
 test_ccm = SurrogateAssociationTest(eccm)
 test_pai = SurrogateAssociationTest(epai)
 @test pvalue(independence(test_ccm, x, y)) > α
