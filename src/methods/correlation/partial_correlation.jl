@@ -47,8 +47,8 @@ function association(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOr
         conds::ArrayOrStateSpaceSet...)
     X, Y, Z = construct_partialcor_datasets(x, y, conds...)
     D = StateSpaceSet(X, Y, Z)
-    cov = fastcov(D)
-    precision_matrix = invert_cov(cov)
+    cov_matrix = cov(D)
+    precision_matrix = invert_cov(cov_matrix)
     return partial_correlation_from_precision(precision_matrix, 1, 2)
 end
 
@@ -66,14 +66,14 @@ function association(measure::PartialCorrelation, est::Nothing, x, y, z)
 end
 
 
-function invert_cov(cov::AbstractMatrix)
-    if det(cov) ≈ 0.0
+function invert_cov(cov_matrix::AbstractMatrix)
+    if det(cov_matrix) ≈ 0.0
         # If the determinant of the covariance matrix is zero, then the
         # Moore-Penrose pseudo-inverse is used.
-        rtol = sqrt(eps(real(float(one(eltype(cov))))))
-        return pinv(cov; rtol)
+        rtol = sqrt(eps(real(float(one(eltype(cov_matrix))))))
+        return pinv(cov_matrix; rtol)
     else
-        return inv(cov)
+        return inv(cov_matrix)
     end
 end
 

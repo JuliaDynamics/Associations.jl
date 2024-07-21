@@ -6,9 +6,8 @@ n = 100
 likeit = rand(rng, ["yes", "no"], n)
 food = rand(rng, ["veggies", "meat", "fish"], n)
 service = rand(rng, ["netflix", "hbo"], n)
-est = 
-nshuffles = 3
 d = CodifyVariables(UniqueElements())
+nshuffles = 3
 test_mi_s = SurrogateAssociationTest(JointProbabilities(MIShannon(), d); nshuffles, rng)
 test_mi_rj = SurrogateAssociationTest(JointProbabilities(MIRenyiJizba(), d); nshuffles, rng)
 test_mi_rs = SurrogateAssociationTest(JointProbabilities(MIRenyiSarbu(), d); nshuffles, rng)
@@ -52,5 +51,7 @@ experience = map(preferred_equipment) do equipment
 end;
 
 # We should be able to reject the null hypothesis of `places ⫫ experience`.
-test_mi = independence(SurrogateAssociationTest(MIShannon(), est; nshuffles, rng), places, experience)
+d = CodifyVariables(UniqueElements())
+est = JointProbabilities(MIShannon(), d)
+test_mi = independence(SurrogateAssociationTest(est), places, experience)
 @test pvalue(test_mi) < α
