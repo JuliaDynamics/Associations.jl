@@ -28,28 +28,14 @@ module CausalityTools
     include("methods/correlation/correlation.jl")
     include("methods/recurrence/methods.jl")
 
-    include("utils/cov.jl")
-    include("utils/multidimensional_surrogates.jl")
 
-    # # Independence tests must be loaded after everything else has been defined.
+    # Independence tests must be loaded after everything else has been defined.
     include("independence_tests/independence.jl")
 
-    # # Causal graph API must be loaded after independence tests.
+    # Causal graph API must be loaded after independence tests.
     include("causal_graphs/causal_graphs.jl")
 
     include("deprecations/deprecations.jl")
-
-    #using Requires
-    #function __init__()
-        #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin
-        #   include("integrations/uncertaindata.jl")
-        #end
-
-        #@require Simplices="d5428e67-3037-59ba-9ab1-57a04f0a3b6a" begin
-        # #   import PerronFrobenius: SimplexExact, SimplexPoint
-        #    export SimplexExact, SimplexPoint
-        #end
-    #end
 
     # Update messages:
     using Scratch
