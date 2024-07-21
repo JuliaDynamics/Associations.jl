@@ -12,10 +12,23 @@ to only relate to "one way of thinking" about estimating association measures.
 
 ### Breaking changes 
 
+#### Association measures
+
+- The function `association(measure_or_est, input_data...)` is the central function that computes 
+    all association measures. The first argument is either a measure definition (if it has no 
+    estimator), or an estimator. This means that if `input_data` consists of two input datasets, 
+    then a pairwise association is estimated. If `input_data` consists of three input datasets, then typically a conditional association is estimated (but exceptions are possible).
+
+#### Independence testing 
+
 - `SurrogateTest` is now `SurrogateAssociationTest`
 - `SurrogateTestResult` is now `SurrogateAssociationTestResult`
-- All convenience functions are removed. Use `association(measure_or_est, input_data...)` instead.
+
+#### Example systems 
+
 - All example systems are removed.
+
+#### Crossmap API
 
 The crossmap API has been overhauled. 
 
@@ -27,6 +40,8 @@ The crossmap API has been overhauled.
     `crossmap(est::CrossmapEstimator, args...)`. For example, you must do 
     `crossmap(RandomSegment(CCM(); libsizes = 10:10:50), x, y)` instead of 
     `crossmap(CCM(), RandomSegment(; libsizes = 10:10:50), x, y)`.
+
+#### Information API
 
 The information API has been overhauled.
 
