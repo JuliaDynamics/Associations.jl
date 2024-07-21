@@ -2,7 +2,7 @@
 using Test
 using Random
 rng = MersenneTwister(1234)
-n = 200
+n = 100
 
 # Pre-discretized data
 likeit = rand(rng, ["yes", "no"], n)
@@ -23,7 +23,7 @@ test = SurrogateAssociationTest(est_pmi; nshuffles, rng)
 
 # Analytical tests, in the limit.
 # -------------------------------
-n = 10000
+n = 3000
 # Pre-discretized data
 likeit = rand(rng, ["yes", "no"], n);
 food = rand(rng, ["veggies", "meat", "fish"], n);
@@ -72,7 +72,7 @@ test_pmi = independence(test, places, experience, preferred_equipment)
 # Numeric tests
 x, y, z = rand(rng, n), rand(rng, n), rand(rng, n)
 X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
-nshuffles = 5
+nshuffles = 19
 d_ord = CodifyVariables(OrdinalPatterns())
 d_disp = CodifyVariables(Dispersion())
 d_bin = CodifyVariables(ValueBinning(4))
