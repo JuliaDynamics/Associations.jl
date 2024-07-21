@@ -70,16 +70,16 @@ struct Lindner{E} <: TransferEntropyEstimator{E}
     end
 end
 
-function association(est::Lindner{<:TEShannon}, x::AbstractVector...)
+function association(est::Lindner{<:TEShannon}, x::VectorOr1DDataset...)
     verify_number_of_inputs_vars(est.definition, length(x))
     S, T, T⁺, C = individual_marginals_te(est.definition.embedding, x...)
-    return estimate(est, S, T, T⁺, C)
+    return estimate_from_marginals(est, S, T, T⁺, C)
 end
 
 # This method is separate from the one above because when using `SurrogateAssociationTest`,
 # `S` is repeatedly shuffled, while the other marginals are not, so we avoid
 # allocating a bunch of new StateSpaceSets for every shuffle.
-function estimate(est::Lindner{<:TEShannon},
+function estimate_from_marginals(est::Lindner{<:TEShannon},
         S::AbstractStateSpaceSet,
         T::AbstractStateSpaceSet,
         T⁺::AbstractStateSpaceSet,

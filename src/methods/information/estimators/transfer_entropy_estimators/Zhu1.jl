@@ -81,16 +81,16 @@ function Zhu1(definition::M = TEShannon(); k::Int = 2, w::Int = 0) where M
     return Zhu1(definition, k, w)
 end
 
-function association(est::Zhu1{<:TEShannon}, x::AbstractVector...)
+function association(est::Zhu1{<:TEShannon}, x::VectorOr1DDataset...)
     # The Zhu1 estimator needs to keep track of the dimension of the individual
     # terms that goes into the implicit CMI computation. We could have just used
     # `h4_marginals` here, but then we wouldn't get the dimensions out of the box.
     embedding = est.definition.embedding
     S, T, T⁺, C = individual_marginals_te(embedding, x...)
-    return estimate(est, S, T, T⁺, C)
+    return estimate_from_marginals(est, S, T, T⁺, C)
 end
 
-function estimate(est::Zhu1, 
+function estimate_from_marginals(est::Zhu1, 
         S::AbstractStateSpaceSet, 
         T::AbstractStateSpaceSet, 
         T⁺::AbstractStateSpaceSet, 
