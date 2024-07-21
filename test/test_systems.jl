@@ -57,3 +57,31 @@ function eom_logistic4_chain(u, p::Logistic4Chain, t)
     dw = rw * (f_zw) * (1 - f_zw)
     return SVector{4}(dx, dy, dz, dw)
 end
+
+Base.@kwdef struct Logistic2Bidir{V, C1, C2, R1, R2, Σx, Σy, R}
+    xi::V = [0.5, 0.5]
+    c_xy::C1 = 0.1
+    c_yx::C2 = 0.1
+    r₁::R1 = 3.78
+    r₂::R2 = 3.66
+    σ_xy::Σx = 0.05
+    σ_yx::Σy = 0.05
+    rng::R = Random.default_rng()
+end
+
+function system(definition::Logistic2Bidir)
+    return DiscreteDynamicalSystem(eom_logistic2bidir, definition.xi, definition)
+end
+
+# Note: Until the `eom_logistic2_bidir` function is deprecated, this function must
+# be called something different; otherwise the DiscreteDynamicalSystem constructor
+# doesn't work.
+function eom_logistic2bidir(u, p::Logistic2Bidir, t)
+    (; xi, c_xy, c_yx, r₁, r₂, σ_xy, σ_yx, rng) = p
+    x, y = u
+    f_xy = (y +  c_xy*(x + σ_xy * rand(rng)) ) / (1 + c_xy*(1+σ_xy))
+    f_yx = (x +  c_yx*(y + σ_yx * rand(rng)) ) / (1 + c_yx*(1+σ_yx))
+    dx = r₁ * (f_yx) * (1 - f_yx)
+    dy = r₂ * (f_xy) * (1 - f_xy)
+    return SVector{2}(dx, dy)
+end

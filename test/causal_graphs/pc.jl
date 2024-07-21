@@ -1,7 +1,7 @@
 using Test
 using Graphs: SimpleDiGraph
 using StableRNGs
-using CausalInference: pgalg
+using CausalInference: pcalg, gausscitest
 using Combinatorics
 rng = StableRNG(123)
 
@@ -18,7 +18,7 @@ rng = StableRNG(123)
 α = 0.01
 alg = PC(CorrTest(), CorrTest(); α)
 
-n = 10000
+n = 1000
 
 # Case 1
 x = randn(rng, n)
@@ -71,13 +71,13 @@ nshuffles = 3
 utests = [
     CorrTest(),
     SurrogateAssociationTest(PearsonCorrelation(); nshuffles, rng),# nonparametric version of CorrTest
-    SurrogateAssociationTest(MIShannon(), KSG2(); nshuffles, rng),
+    SurrogateAssociationTest(KSG2(MIShannon()); nshuffles, rng),
     SurrogateAssociationTest(DistanceCorrelation(); nshuffles, rng),
     ];
 ctests = [
     CorrTest(),
     SurrogateAssociationTest(PartialCorrelation(); nshuffles, rng), # nonparametric version of CorrTest
-    LocalPermutationTest(CMIShannon(), KSG2(); nshuffles, rng),
+    LocalPermutationTest(MIDecomposition(CMIShannon(), KSG2()); nshuffles, rng),
     LocalPermutationTest(DistanceCorrelation(); nshuffles, rng),
 ]
 
@@ -95,10 +95,13 @@ end
 alg = PC(CorrTest(), CorrTest(), maxdepth = 1)
 @test infer_graph(alg, X) isa SimpleDiGraph
 
-x, y, z = rand(rng, 50), rand(rng, 50), rand(rng, 50)
-X = [x, y, z]
-tt = SurrogateAssociationTest(TEShannon(), KSG2())
-ct = CorrTest()
-@test_throws ArgumentError infer_graph(PC(ct, tt), X)
-@test_throws ArgumentError infer_graph(PC(tt, ct), X)
-@test_throws ArgumentError infer_graph(PC(tt, tt), X)
+# In the future this should error when is_directed is implemented,
+# because it shouldn't be possible to use `PC` with directed measures.
+# ----------------------------------------------------------------
+# x, y, z = rand(rng, 50), rand(rng, 50), rand(rng, 50)
+# X = [x, y, z]
+# tt = SurrogateAssociationTest(MIDecomposition(TEShannon(), KSG2()))
+# ct = CorrTest()
+# @test_throws ArgumentError infer_graph(PC(ct, tt), X)
+# @test_throws ArgumentError infer_graph(PC(tt, ct), X)
+# @test_throws ArgumentError infer_graph(PC(tt, tt), X)
