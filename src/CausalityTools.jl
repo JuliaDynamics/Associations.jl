@@ -58,8 +58,9 @@ module CausalityTools
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - Example systems have been removed from the package to avoid unnecessary package dependencies.
-    - Bivariate and multivariate nformation measure definitions and estimation is now based on the API in ComplexityMeasures.jl.
+    - Bivariate and multivariate information measure definitions and estimation is now based on the API in ComplexityMeasures.jl.
+    - Example systems have been removed from the package to avoid unnecessary package dependencies and improve compilation time.
+    - Convenience methods have been removed. Use `association` instead.
     """
 
     if display_update
