@@ -65,6 +65,10 @@ The information API has been overhauled.
     computes some multivariate information measure by rewriting the measure definition
     as a combination of some conditional mutual information measure.
 
+### Bux fixes
+
+- There was an error in the implementation of `PartMutualInformation`. It is now fixed using explicit loops for computing the measures from a probability distribution.
+
 
 ## 2.10
 

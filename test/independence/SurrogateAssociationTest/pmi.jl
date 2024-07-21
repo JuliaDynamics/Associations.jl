@@ -1,3 +1,5 @@
+
+using Test
 using Random
 rng = MersenneTwister(1234)
 n = 200
@@ -31,7 +33,7 @@ service = rand(rng, ["netflix", "hbo"], n);
 
 # We should not be able to reject the null hypothesis `food ⫫ likeit | service`, because
 # the variables are all independent.
-test_cmi = independence(SurrogateAssociationTest(PMI(), est; nshuffles = 200, rng), food, likeit, service)
+test_cmi = independence(test, food, likeit, service)
 @test pvalue(test_cmi) > α
 
 # Simulate a survey where the place a person grew up controls how many times they
@@ -63,20 +65,29 @@ end;
 # We should not be able to reject the null hypothesis `places ⫫ experience | preferred_equipment`, because
 # places → preferred_equipment → experience, so when conditioning on the intermediate variable,
 # the first and last variable in the chain should be independent.
-test = SurrogateAssociationTest(PMI(), est; nshuffles = 200, rng)
-test_cmi = independence(test, places, experience, preferred_equipment)
+test_pmi = independence(test, places, experience, preferred_equipment)
 @test pvalue(test_cmi) > α
 
 
+# Numeric tests
+x, y, z = rand(rng, n), rand(rng, n), rand(rng, n)
+X, Y, Z = StateSpaceSet(x), StateSpaceSet(y), StateSpaceSet(z)
 nshuffles = 5
-surrtest_sp = SurrogateAssociationTest(PMI(), OrdinalPatterns(); nshuffles, rng)
-surrtest_vh = SurrogateAssociationTest(PMI(), ValueBinning(4); nshuffles, rng)
-surrtest_dp = SurrogateAssociationTest(PMI(), Dispersion(); nshuffles, rng)
+d_ord = CodifyVariables(OrdinalPatterns())
+d_disp = CodifyVariables(Dispersion())
+d_bin = CodifyVariables(ValueBinning(4))
+est_ord = JointProbabilities(PMI(), d_ord)
+est_disp = JointProbabilities(PMI(), d_disp)
+est_bin = JointProbabilities(PMI(), d_bin)
 
-@test independence(surrtest_sp, x, y, z) isa SurrogateAssociationTestResult
-@test independence(surrtest_vh, x, y, z) isa SurrogateAssociationTestResult
-@test independence(surrtest_dp, x, y, z) isa SurrogateAssociationTestResult
+surrtest_ord = SurrogateAssociationTest(est_ord; nshuffles, rng)
+surrtest_disp = SurrogateAssociationTest(est_disp; nshuffles, rng)
+surrtest_bin = SurrogateAssociationTest(est_bin; nshuffles, rng)
 
-@test independence(surrtest_sp, X, Y, Z) isa SurrogateAssociationTestResult
-@test independence(surrtest_vh, X, Y, Z) isa SurrogateAssociationTestResult
-@test independence(surrtest_dp, X, Y, Z) isa SurrogateAssociationTestResult
+@test independence(surrtest_ord, x, y, z) isa SurrogateAssociationTestResult
+@test independence(surrtest_disp, x, y, z) isa SurrogateAssociationTestResult
+@test independence(surrtest_bin, x, y, z) isa SurrogateAssociationTestResult
+
+@test independence(surrtest_ord, X, Y, Z) isa SurrogateAssociationTestResult
+@test independence(surrtest_disp, X, Y, Z) isa SurrogateAssociationTestResult
+@test independence(surrtest_bin, X, Y, Z) isa SurrogateAssociationTestResult

@@ -50,25 +50,61 @@ function association(definition::PartialMutualInformation, pxyz::Probabilities{T
     px = marginal(pxyz, dims = [1])
     py = marginal(pxyz, dims = [2])
     pz = marginal(pxyz, dims = [3])
-    pyz = marginal(pxyz, dims = [2, 3])
     pxz = marginal(pxyz, dims = [1, 3])
+    pyz = marginal(pxyz, dims = [2, 3])
+    
+    # Precompute p⭐x⎸z and p⭐y⎸z sums
+    p⭐x⎸z = zeros(dx, dz)
+    p⭐y⎸z = zeros(dy, dz)
+    
+    for i in 1:dx
+        for k in 1:dz
+            sum_j = 0.0
+            for j in 1:dy
+                pyⱼ = py[j]
+                pyⱼzₖ = pyz[j, k]
+                if pyⱼzₖ > 0
+                    sum_j += (pxyz[i, j, k] / pyⱼzₖ) * pyⱼ
+                end
+            end
+            p⭐x⎸z[i, k] = sum_j
+        end
+    end
 
+    for j in 1:dy
+        for k in 1:dz
+            sum_i = 0.0
+            for i in 1:dx
+                pxᵢ = px[i]
+                pxᵢzₖ = pxz[i, k]
+                if pxᵢzₖ > 0
+                    sum_i += (pxyz[i, j, k] / pxᵢzₖ) * pxᵢ
+                end
+            end
+            p⭐y⎸z[j, k] = sum_i
+        end
+    end
+
+    # Compute PMI
     pmi = 0.0
     logb = log_with_base(definition.base)
-    for i in 1:dx
+    for k in 1:dz
+        pzₖ = pz[k]
         for j in 1:dy
-            for k in 1:dz
-                pzₖ = pz[k]
-                pyzⱼₖ = pyz[j, k]
-                pxzᵢₖ = pxz[i, k]
-                pxyzᵢⱼₖ = pxyz[i, j, k]
-                sy = sum(pyzⱼₖ > 0 ? py[j] * (pxyz[i, j, k]/ pyz[j, k]) : 0 for j = 1:dy)
-                sx = sum(pxzᵢₖ > 0 ? px[i] * (pxyz[i, j, k] / pxz[i, k]) : 0 for i = 1:dx)
-
-                sxy = sy * sx
-                pxy_z = pxyzᵢⱼₖ / pzₖ
-                if sxy > 0 && pxy_z > 0
-                    pmi += pxyzᵢⱼₖ * logb(pxy_z / (sy * sx))
+            p⭐yⱼ⎸zₖ = p⭐y⎸z[j, k]
+            if p⭐yⱼ⎸zₖ > 0
+                for i in 1:dx
+                    p⭐xᵢ⎸zₖ = p⭐x⎸z[i, k]
+                    if (p⭐xᵢ⎸zₖ > 0)
+                        pxᵢyⱼzₖ = pxyz[i, j, k]
+                        if pxᵢyⱼzₖ > 0
+                            pxᵢyⱼ⎸zₖ = pxᵢyⱼzₖ / pzₖ
+                            logratio = logb(pxᵢyⱼ⎸zₖ  / (p⭐xᵢ⎸zₖ * p⭐yⱼ⎸zₖ))
+                            if logratio > 0
+                                pmi += pxᵢyⱼzₖ * logratio
+                            end
+                        end
+                    end
                 end
             end
         end
