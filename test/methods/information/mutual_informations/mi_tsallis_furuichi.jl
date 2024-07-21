@@ -9,7 +9,13 @@ y = rand(["hello", "yoyo", "heyhey"], 200)
 # ---------------------------------------------------------------------------------------
 # Test all possible ways of estimating `MITsallisFuruichi`.
 # ---------------------------------------------------------------------------------------
-est = JointProbabilities(MITsallisFuruichi(), UniqueElements())
+def = MITsallisFuruichi()
+# Directly from probabilities
+p = probabilities(x, y)
+@test association(def, p) ≥ 0.0
+
+# `JointProbabilities` estimator
+est = JointProbabilities(def, UniqueElements())
 @test association(est, x, y) ≥ 0.0 # we don't have any better analytical numbers here.
 
 # ---------------

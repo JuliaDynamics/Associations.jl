@@ -83,7 +83,9 @@ end
 # Estimation methods
 # ----------------------------------------------------------------
 function association(est::JointProbabilities{<:MIShannon}, x, y)
+    cts = counts(est.discretization, x, y)
     probs = probabilities(est.discretization, x, y)
+
     return association(est.definition, probs)
 end
 

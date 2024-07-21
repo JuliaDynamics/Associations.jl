@@ -84,11 +84,11 @@ function association(est::GaussianMI{<:MIShannon}, x, y)
 
     XY = StateSpaceSet(X, Y)
     if est.normalize
-        Σ = fastcor(standardize(XY))
+        Σ = cor(standardize(XY))
         σ = eigvals(Σ)
         mi = -0.5 * sum(log(σᵢ) for σᵢ in σ)
     else
-        Σ = fastcor(XY)
+        Σ = cor(XY)
         Σx = Σ[1:DX, 1:DX]
         Σy = Σ[DX+1:end, DX+1:end]
         mi = 0.5 * log((det(Σx) * det(Σy)) / det(Σ))

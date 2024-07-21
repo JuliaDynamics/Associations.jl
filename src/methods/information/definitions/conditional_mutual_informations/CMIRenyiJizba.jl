@@ -99,7 +99,7 @@ end
 # ---------------------------------
 # Avoid some common errors
 # ---------------------------------
-function verify_decomposition_entropy_type(definition::CMIRenyiJizba, est::ENTROPY_ESTS)
+function verify_decomposition_entropy_type(definition::CMIRenyiJizba, est::INFO_ESTS)
     if !(est.definition isa Renyi)
         T = typeof(est.definition).name.name
         msg = "Can't decompose CMIRenyiJizba into a combination of $T entropies. Please provide a `Renyi` entropy estimator instead."

@@ -127,7 +127,7 @@ end
 # ---------------------------------
 # Avoid some common errors
 # ---------------------------------
-function verify_decomposition_entropy_type(definition::CMIShannon, est::ENTROPY_ESTS)
+function verify_decomposition_entropy_type(definition::CMIShannon, est::INFO_ESTS)
     if !(est.definition isa Shannon)
         T = typeof(est.definition).name.name
         msg = "Can't decompose CMIShannon into a combination of $T entropies. Please provide a `Shannon` entropy estimator instead."

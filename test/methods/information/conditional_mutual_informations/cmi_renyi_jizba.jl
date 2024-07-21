@@ -23,14 +23,18 @@ out_hdisc = repr(EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2)))
 x = randn(rng, 50)
 y = randn(rng, 50)
 z = randn(rng, 50)
+
+def = CMIRenyiJizba()
 est_diff = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k=3))
 @test association(est_diff, x, z, y) isa Real
+
+d = CodifyVariables(ValueBinning(2))
+est_joint = JointProbabilities(def, d)
+@test  association(est_joint, x, y, z) isa Real
 
 est_disc = EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2));
 @test association(est_disc, x, z, y) isa Real
 
-est_joint = JointProbabilities(def, ValueBinning(2))
-@test  association(est_joint, x, y, z) isa Real
 
 # ---------------
 # Pretty printing
