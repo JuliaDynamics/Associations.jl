@@ -179,3 +179,12 @@ end
 include("transferentropy.jl")
 include("crossmapping.jl")
 include("hlms_measure.jl")
+
+# Input checks
+function SurrogateAssociationTest(measure::T) where T <: MultivariateInformationMeasure
+    str = "`SurrogateAssociationTest` can't be constructed using the information measure `$T` definition directly. " * 
+        "Give a valid estimator as the first argument instead and give the " * 
+        "definition to the estimator, e.g. " * 
+        "FPVP(CMIShannon())"
+    throw(ArgumentError(str))
+end
