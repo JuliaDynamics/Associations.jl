@@ -30,11 +30,10 @@ function rc(x::Union{AbstractStateSpaceSet, AbstractVector{T}},
     # Multiple time series input
     if (x isa AbstractVector{T} where T <: AbstractVector{N} where N <: Number) || (x isa AbstractStateSpaceSet)
         if x isa AbstractStateSpaceSet
-            N = length(x)
+            N = dimension(x)
         elseif x isa AbstractVector
             N = size(x, 1)
         end
-
 
         if dim isa Int
             dim % N == 0 || throw(ArgumentError("If using multiple (`N` different) time series in a marginal, each time series is lagged `dim/N` times. Hence, `dim` must be a multiple of `N`."))
@@ -132,8 +131,8 @@ function get_delay_reconstruction_params(source, target, cond, p::EmbeddingTE)
 end
 
 """
-    te_embed(source::AbstractVector{T}, target::AbstractVector{T}, p::EmbeddingTE) → (points, vars, τs)
-    te_embed(source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}, p::EmbeddingTE) → (points, vars, τs)
+    te_embed(source::VectorOr1DDataset, target::VectorOr1DDataset, p::EmbeddingTE) → (points, vars, τs)
+    te_embed(source::VectorOr1DDataset, target::VectorOr1DDataset, cond::VectorOr1DDataset, p::EmbeddingTE) → (points, vars, τs)
 
 Generalised delay reconstruction of `source` and `target` (and `cond` if provided)
 for transfer entropy computation using embedding parameters provided by the [`EmbeddingTE`](@ref)
@@ -143,7 +142,7 @@ Returns a tuple of the embedded `points`, `vars` (a [`TEVars`](@ref) instance th
 variables of the embedding belong to which marginals of the reconstruction; indices are: source = 1,
 target = 2, cond = 3), and a tuple `τs`, which stores the lags for each variable of the reconstruction.
 """
-function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVector{T}) where T
+function te_embed(p::EmbeddingTE, source::VectorOr1DDataset{T}, target::VectorOr1DDataset{T}) where T
 
     #if (p.τS isa Int && p.τS > 0) || (length(p.τS) > 1 && any(p.τS[p.τS .> 0]))
     #    @warn("Backwards lag τS should be negative. You might be getting nonsensical results!")
@@ -180,7 +179,7 @@ function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVec
     return pts, vars, τs, js
 end
 
-function te_embed(p::EmbeddingTE, source::AbstractVector{T}, target::AbstractVector{T}, cond::AbstractVector{T}) where T
+function te_embed(p::EmbeddingTE, source::VectorOr1DDataset{T}, target::VectorOr1DDataset{T}, cond::VectorOr1DDataset{T}) where T
 
     #if (p.τS isa Int && p.τS > 0) || (length(p.τS) > 1 && any(p.τS[p.τS .> 0]))
     #    @warn("Backwards lag τS should be negative. You might be getting nonsensical results!")

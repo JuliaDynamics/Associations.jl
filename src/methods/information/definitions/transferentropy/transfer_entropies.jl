@@ -12,9 +12,12 @@ abstract type TransferEntropy <: MultivariateInformationMeasure end
 max_inputs_vars(::TransferEntropy) = 3
 is_directed(m::TransferEntropy) = true
 
+
+
 include("embedding.jl")
 include("utils/utils.jl")
 include("utils/OptimiseTraditional.jl")
+
 
 # If the estimator is not a dedicated `TransferEntropyEstimator`, then we need to 
 # convert the estimator to a conditional mutual information estimator.
@@ -33,7 +36,7 @@ function association(est::MultivariateInformationMeasureEstimator{<:TransferEntr
 end
 
 
-function individual_marginals_te(emb::EmbeddingTE, x::AbstractVector...)
+function individual_marginals_te(emb::EmbeddingTE, x::VectorOr1DDataset...)
     joint, vars, τs, js = te_embed(emb, x...)
     S = joint[:, vars.S]
     T = joint[:, vars.T]
@@ -42,14 +45,14 @@ function individual_marginals_te(emb::EmbeddingTE, x::AbstractVector...)
     return S, T, Tf, C
 end
 
-function h4_marginals(definition::TransferEntropy, x...)
-    S, T, T⁺, C = individual_marginals_te(definition.embedding, x...)
-    joint = StateSpaceSet(S, T, T⁺, C)
-    ST = StateSpaceSet(S, T, C)
-    TT⁺ = StateSpaceSet(T, T⁺, C)
-    T = StateSpaceSet(T, C)
-    return joint, ST, TT⁺, T
-end
+# function h4_marginals(definition::TransferEntropy, x...)
+#     S, T, T⁺, C = individual_marginals_te(definition.embedding, x...)
+#     joint = StateSpaceSet(S, T, T⁺, C)
+#     ST = StateSpaceSet(S, T, C)
+#     TT⁺ = StateSpaceSet(T, T⁺, C)
+#     T = StateSpaceSet(T, C)
+#     return joint, ST, TT⁺, T
+# end
 
 # Concrete implementations
 include("TEShannon.jl")
