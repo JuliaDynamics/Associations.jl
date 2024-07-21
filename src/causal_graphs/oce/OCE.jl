@@ -204,13 +204,15 @@ end
 # that `P` is always conditioned on when relevant. The two functions are returned.
 function rawmeasure_and_independencetest(alg, parents::OCESelectedParents)
     if pairwise_test(parents)
-        measure, est = alg.utest.measure, alg.utest.est
-        compute_raw_measure = (xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ)
+        #@show alg.utest
+        #@show alg.ctest
+        est_or_measure = alg.utest.est_or_measure
+        compute_raw_measure = (xᵢ, Pⱼ) -> association(est_or_measure, xᵢ, Pⱼ)
         test_independence = (xᵢ, Pix) -> independence(alg.utest, xᵢ, Pix)
     else
-        measure, est = alg.ctest.measure, alg.ctest.est
+        est_or_measure = alg.ctest.est_or_measure
         P = StateSpaceSet(parents.parents...)
-        compute_raw_measure = (xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ, P)
+        compute_raw_measure = (xᵢ, Pⱼ) -> association(est_or_measure, xᵢ, Pⱼ, P)
         test_independence = (xᵢ, Pix) -> independence(alg.ctest, xᵢ, Pix, P)
     end
     return compute_raw_measure, test_independence

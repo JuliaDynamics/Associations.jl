@@ -119,9 +119,10 @@ end
 function check_input(alg::PC)
     u = alg.pairwise_test
     c = alg.conditional_test
-    if u.measure isa DirectedAssociationMeasure || c.measure isa DirectedAssociationMeasure
-        s = "Directional measures will not give meaningful answers. See PC docstring"*
-            " for more information."
-        throw(ArgumentError(s))
-    end
+    # TODO: implement is_directed for all measures
+    # if u.measure isa DirectedAssociationMeasure || c.measure isa DirectedAssociationMeasure
+    #     s = "Directional measures will not give meaningful answers. See PC docstring"*
+    #         " for more information."
+    #     throw(ArgumentError(s))
+    # end
 end
