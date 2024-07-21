@@ -1,6 +1,7 @@
 export CorrTest
 export CorrTestResult
-
+using Distributions: Normal
+using StateSpaceSets
 import HypothesisTests: pvalue
 
 # Note: HypothesisTests already defines CorrelationTest.
@@ -108,8 +109,8 @@ function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrSt
         # redundant, but we need the dimension of Z, so some code duplication occurs here.
         X, Y, Z = construct_partialcor_datasets(x, y, z...)
         D = StateSpaceSet(X, Y, Z)
-        cov = fastcov(D)
-        precision_matrix = invert_cov(cov)
+        cov_matrix = cov(D)
+        precision_matrix = invert_cov(cov_matrix)
         ρ = partial_correlation_from_precision(precision_matrix, 1, 2)
         z = fishers_z(ρ)
         pval = pvalue(test, z, dimension(Z), length(x))
