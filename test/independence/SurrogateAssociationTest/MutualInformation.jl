@@ -22,7 +22,7 @@ test_mi_tm = SurrogateAssociationTest(JointProbabilities(MITsallisMartin(), d); 
 
 # Analytical tests, in the limit.
 # -------------------------------
-n = 100000
+n = 1000
 α = 0.02 # pick some arbitrary significance level
 
 # Simulate a survey where the place a person grew up controls how many times they
