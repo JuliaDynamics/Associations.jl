@@ -99,11 +99,13 @@ struct SurrogateAssociationTest{E, R, S} <: IndependenceTest{E}
     nshuffles::Int
     show_progress::Bool
 end
-function SurrogateAssociationTest(est_or_measure::E;
-    rng::R = Random.default_rng(),
-    surrogate::S = RandomShuffle(),
-    nshuffles::Int = 100, show_progress = false
-    ) where {E, R, S}
+function SurrogateAssociationTest(
+        est_or_measure::E;
+        rng::R = Random.default_rng(),
+        surrogate::S = RandomShuffle(),
+        nshuffles::Int = 100, 
+        show_progress = false
+        ) where {E, R, S}
     SurrogateAssociationTest{E, R, S}(est_or_measure, rng, surrogate, nshuffles, show_progress)
 end
 
@@ -156,12 +158,11 @@ function independence(test::SurrogateAssociationTest, x, args...)
     (; est_or_measure, rng, surrogate, nshuffles, show_progress) = test
     verify_number_of_inputs_vars(est_or_measure, 1+length(args))
     SSSets = map(w -> StateSpaceSet(w), args)
-    
     estimation = x -> association(est_or_measure, x, SSSets...)
     progress = ProgressMeter.Progress(nshuffles;
         desc="SurrogateAssociationTest:", enabled=show_progress
     )
-
+    
     # Estimate
     Î = estimation(StateSpaceSet(x))
     s = surrogenerator(x, surrogate, rng)
@@ -177,6 +178,5 @@ end
 # Concrete implementations
 include("transferentropy.jl")
 
-# include("contingency.jl")
 include("hlms_measure.jl")
 # include("crossmapping.jl")
