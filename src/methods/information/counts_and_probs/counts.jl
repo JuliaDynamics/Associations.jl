@@ -194,6 +194,12 @@ end
 # ----------------------------------------------------------------
 function counts(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
     o = first(discretization.outcome_spaces)
-    x̂ = (codify(o, xₖ) for xₖ in x)
+    # Treat 1D state space sets as vectors, so we can apply the outcome space sequentially.
+    # TODO: show warning or not? I think this can be silent, because I can't really think of a situation
+    # where the outcome space couldn't be applied to the raw values of a 1D dataset.
+    # @warn "`CodifyVariables` is meant for sequential application over vectors. You provided a 1D `StateSpaceSet`. Treating this 1D input dataset as a vector..."
+    x̂ = (codify(o, xₖ isa AbstractStateSpaceSet{1} ? as_vec(xₖ) : xₖ) for xₖ in x)
     return counts(x̂...)
 end
+
+as_vec(x::AbstractStateSpaceSet{1}) = [first(xᵢ) for xᵢ in vec(x)]
