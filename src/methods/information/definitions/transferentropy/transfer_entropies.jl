@@ -19,15 +19,17 @@ include("utils/utils.jl")
 include("utils/OptimiseTraditional.jl")
 
 
-# If the estimator is not a dedicated `TransferEntropyEstimator`, then we need to 
-# convert the estimator to a conditional mutual information estimator.
+# If the estimator is not a dedicated `TransferEntropyEstimator`, then we
+# convert the estimator to a conditional mutual information estimator which we apply
+# to appropriately constructed marginals.
 function association(est::MultivariateInformationMeasureEstimator{<:TransferEntropy}, x...)
-    definition = est.definition
+    te_definition = est.definition
+    
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
     # StateSpaceSet. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
     # cases.
-    S, T, T⁺, C = individual_marginals_te(definition.embedding, x...)
+    S, T, T⁺, C = individual_marginals_te(te_definition.embedding, x...)
 
     cmi_est = convert_to_cmi_estimator(est)
 
