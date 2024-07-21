@@ -1,24 +1,33 @@
 using Random
 rng = MersenneTwister(1234)
-n = 200
+n = 100
 
 # Pre-discretized data
 likeit = rand(rng, ["yes", "no"], n)
 food = rand(rng, ["veggies", "meat", "fish"], n)
 service = rand(rng, ["netflix", "hbo"], n)
-est = Contingency()
 nshuffles = 3
 
 @test_throws ArgumentError SurrogateAssociationTest(CMIShannon())
 
-@test independence(SurrogateAssociationTest(CMIShannon(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
-@test independence(SurrogateAssociationTest(CMIRenyiSarbu(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
-@test independence(SurrogateAssociationTest(CMIRenyiJizba(), est; nshuffles, rng), food, likeit, service) isa SurrogateAssociationTestResult
+# Estimators
+d = CodifyVariables(UniqueElements()) # discretization
+est_cmi_shannon = JointProbabilities(CMIShannon(), d)
+est_cmi_renyisarbu = JointProbabilities(CMIShannon(), d)
+est_cmi_renyijizba = JointProbabilities(CMIShannon(), d)
 
+# Independence tests
+test_cmi_shannon = SurrogateAssociationTest(est_cmi_shannon; nshuffles, rng)
+test_cmi_renyisarbu = SurrogateAssociationTest(est_cmi_renyisarbu; nshuffles, rng)
+test_cmi_renyijizba = SurrogateAssociationTest(est_cmi_renyijizba; nshuffles, rng)
 
-# Analytical tests, in the limit.
-# -------------------------------
-n = 10000
+@test independence(test_cmi_shannon, food, likeit, service) isa SurrogateAssociationTestResult
+@test independence(test_cmi_renyisarbu, food, likeit, service) isa SurrogateAssociationTestResult
+@test independence(test_cmi_renyijizba, food, likeit, service) isa SurrogateAssociationTestResult
+
+# Analytical tests, in the limit of many samples
+# ----------------------------------------------
+n = 1000
 # Pre-discretized data
 likeit = rand(rng, ["yes", "no"], n)
 food = rand(rng, ["veggies", "meat", "fish"], n)
@@ -28,7 +37,10 @@ service = rand(rng, ["netflix", "hbo"], n)
 
 # We should not be able to reject the null hypothesis `food ⫫ likeit | service`, because
 # the variables are all independent.
-test_cmi = independence(SurrogateAssociationTest(CMIShannon(), est; nshuffles = 200, rng), food, likeit, service)
+d = CodifyVariables(UniqueElements()) # outcome space
+est = JointProbabilities(CMIShannon(), d)
+test = SurrogateAssociationTest(est; nshuffles = 19, rng)
+test_cmi = independence(test, food, likeit, service)
 @test pvalue(test_cmi) > α
 
 # Simulate a survey where the place a person grew up controls how many times they
@@ -60,6 +72,8 @@ end;
 # We should not be able to reject the null hypothesis `places ⫫ experience | preferred_equipment`, because
 # places → preferred_equipment → experience, so when conditioning on the intermediate variable,
 # the first and last variable in the chain should be independent.
-test = SurrogateAssociationTest(CMIShannon(), est; nshuffles = 200, rng)
+d = CodifyVariables(UniqueElements())
+est = JointProbabilities(CMIShannon(), d)
+test = SurrogateAssociationTest(est; nshuffles = 19, rng)
 test_cmi = independence(test, places, experience, preferred_equipment)
 @test pvalue(test_cmi) > α
