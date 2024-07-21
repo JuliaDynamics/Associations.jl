@@ -31,10 +31,10 @@ assumed to represent independence between the variables. The null distribution i
 by repeatedly shuffling the input data in some way that is intended
 to break any dependence between the input variables.
 
-The test first estimates the desired statistic using `measure_or_est` on the input data. 
+The test first estimates the desired statistic using `est_or_measure` on the input data. 
 Then, the first input variable is shuffled `nshuffled` times according to the given 
 `surrogate` method (each type of `surrogate` represents a distinct null hypothesis).
-For each shuffle, `measure_or_est` is recomputed and the results are stored. 
+For each shuffle, `est_or_measure` is recomputed and the results are stored. 
 
 - If [`TransferEntropy`](@ref) measure such as [`TEShannon`](@ref),
     then the source variable is always shuffled, and the target and conditional
