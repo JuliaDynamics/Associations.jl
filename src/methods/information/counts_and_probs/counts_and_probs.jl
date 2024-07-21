@@ -19,9 +19,5 @@ include("encoding/codify_points.jl")
 include("encoding/codify_variables.jl")
 
 # Counting and probabilities (contingency tables and probabilities for multivariate data)
-include("counts/counts.jl")
-include("probabilities/probabilities.jl")
-
-# Estimating counts/probabilities from multiple input datasets.
-include("estimation_per_point.jl")
-include("estimation_per_variable.jl")
+include("counts.jl")
+include("probabilities.jl")

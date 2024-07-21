@@ -169,3 +169,32 @@ function marginal(c::Counts; dims = 1:ndims(c))
     new_dimlabels = c.dimlabels[include_idxs]
     return Counts(marginal, new_outcomes, new_dimlabels)
 end
+
+# ----------------------------------------------------------------
+# Estimation from data
+# ----------------------------------------------------------------
+
+# Per point/row
+# ----------------------------------------------------------------
+# If multiple encodings are given, the number of encodings must match the number of
+# input variables.
+function counts(encoding::CodifyPoints{N}, x::Vararg{Any, N}) where {N}
+    x̂ = codify(encoding, x...)
+    return counts(UniqueElements(), x̂...)
+end
+
+# If only one encoding is given, apply same encoding to all points
+function counts(encoding::CodifyPoints{1}, x::Vararg{Any, N}) where {Any, N}
+    e = first(encoding.encodings)
+    x̂ = ([encode(e, pt) for pt in xₖ] for xₖ in x)
+    return counts(UniqueElements(), x̂...)
+end
+
+# Per variable/column
+# ----------------------------------------------------------------
+function counts(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
+    o = first(discretization.outcome_spaces)
+    x̂ = (codify(o, xₖ) for xₖ in x)
+    @show x̂
+    return counts(x̂...)
+end

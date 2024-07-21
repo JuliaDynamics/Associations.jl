@@ -55,6 +55,9 @@ See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](
 """
 function probabilities(o::OutcomeSpace) end
 
+function probabilities(o::OutcomeSpace, x::Vararg{VectorOrStateSpaceSet, N}) where N # this extends ComplexityMeasures.jl definition
+    return Probabilities(counts(o, x...))
+end
 function probabilities(est::RelativeAmount, c::Counts{<:Integer, N}) where N
     probs = Probabilities(c)
     return Probabilities(probs.p, c.outcomes, c.dimlabels)
@@ -99,4 +102,29 @@ function marginal(p::Probabilities; dims = 1:ndims(p))
     end
     return Probabilities(marg)
    
+end
+
+
+
+# ----------------------------------------------------------------
+# Estimation from data
+# ----------------------------------------------------------------
+
+# Per point/row
+# ----------------------------------------------------------------
+function probabilities(encoding::CodifyPoints{1}, x::Vararg{Any, N}) where {N}
+    cts = counts(encoding, x...)
+    return Probabilities(cts)
+end
+
+function probabilities(encoding::CodifyPoints{N}, x::Vararg{Any, N}) where {N}
+    cts = counts(encoding, x...)
+    return Probabilities(cts)
+end
+
+# Per variable/column
+# ----------------------------------------------------------------
+function probabilities(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
+    cts = counts(discretization, x...)
+    return probabilities(RelativeAmount(), cts)
 end

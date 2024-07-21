@@ -6,9 +6,9 @@ using Random
 rng = Xoshiro(1234)
 n = 100000
 x, y = rand(rng, n), rand(rng, n)
-o = OrdinalPatterns(m=3)
+d = CodifyVariables(OrdinalPatterns(m = 3))
 
-@test div_r = association(JointProbabilities(RenyiDivergence(q = 0.5), o), x, y) ≤ 0.001
-@test div_r = association(JointProbabilities(RenyiDivergence(q = 2), o), x, y) ≤ 0.001
-@test div_r = association(JointProbabilities(RenyiDivergence(q = 4), o), x, y) ≤ 0.001
-@test association(JointProbabilities(RenyiDivergence(q = Inf), o), x, y) ≥ 0.0
+@test div_r = association(JointProbabilities(RenyiDivergence(q = 0.5), d), x, y) ≤ 0.001
+@test div_r = association(JointProbabilities(RenyiDivergence(q = 2), d), x, y) ≤ 0.001
+@test div_r = association(JointProbabilities(RenyiDivergence(q = 4), d), x, y) ≤ 0.001
+@test association(JointProbabilities(RenyiDivergence(q = Inf), d), x, y) ≥ 0.0

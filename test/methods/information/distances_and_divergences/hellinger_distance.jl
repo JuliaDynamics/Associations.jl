@@ -6,6 +6,6 @@ using Random
 rng = Xoshiro(1234)
 n = 100000
 x, y = rand(rng, n), rand(rng, n)
-o = OrdinalPatterns{3}()
-hel = association(JointProbabilities(HellingerDistance(), o), x, y)
+disc = CodifyVariables(OrdinalPatterns(m = 3))
+hel = association(JointProbabilities(HellingerDistance(), disc), x, y)
 @test abs(hel) ≤ 0.001
