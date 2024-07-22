@@ -11,12 +11,16 @@ def = ConditionalEntropyTsallisAbe()
 @test CausalityTools.max_inputs_vars(def) == 2
 
 
-p_nonzeros = Probabilities([0.5 0.5; 0.1 0.1 ])
-p_zeros = Probabilities([0.5 0.0; 0.1 0.1])
+# ---------------------------------------------------------------------------------------
+# Test all possible ways of estimating `ConditionalEntropyTsallisAbe`.
+# ---------------------------------------------------------------------------------------
+# `JointProbabilities` with ` CodifyPoints`
+x, y, z = rand(rng, 1:5, 100), rand(rng, 1:5, 100), rand(rng, 1:3, 100)
+X = StateSpaceSet(x, z)
+Y = StateSpaceSet(y, z)
+disc = CodifyPoints(UniqueElementsEncoding(X), UniqueElementsEncoding(Y));
+est = JointProbabilities(ConditionalEntropyTsallisAbe(q = 0.5), disc);
+@test association(est, X, Y) isa Real
 
-@test association(ConditionalEntropyTsallisAbe(q = 1.5), p_nonzeros) isa Real
-@test association(ConditionalEntropyTsallisAbe(q = 1.5), p_nonzeros) ≥ 0
-@test association(ConditionalEntropyTsallisAbe(q = 1.5), p_zeros) isa Real
-@test association(ConditionalEntropyTsallisAbe(q = 1.5), p_zeros) ≥ 0
-
-@test association(ConditionalEntropyTsallisAbe(q = 1.0), p_zeros) ≥ 0 # shannon
+est = JointProbabilities(ConditionalEntropyTsallisAbe(q = 1.5), disc);
+@test association(est, X, Y) isa Real

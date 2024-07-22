@@ -33,12 +33,9 @@ H_{q=1}^T(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} =
 p(x, y) \\log(p(x | y))
 ```
 
-!!! note "Implementation details"
+If any of the entries of the marginal distribution for `Y` are zero, or the q-logarithm 
+is undefined for a particular value, then the measure is undefined and `NaN` is returned.
 
-    If any of the entries of the marginal distribution for `Y` are zero, or if ``q > 1`` and 
-    the ratio inside the q-logarithm is zero, then the measure is undefined. We circumvent this 
-    by only including cases ``p(x, y) > 0`` in the sum.
-    
 ## Estimation
 
 - [Example 1](@ref example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements): 
@@ -72,14 +69,9 @@ function association(definition::ConditionalEntropyTsallisFuruichi, pxy::Probabi
     qlog = logq0(q)
     for j in 1:Ny
         pyⱼ = py[j]
-        if (pyⱼ > 0)
-            for i in 1:Nx
-                pxyᵢⱼ = pxy[i, j]
-                ratio = pxyᵢⱼ / pyⱼ
-                if ratio > 0.0
-                    ce += pxyᵢⱼ^q * qlog(pxyᵢⱼ / pyⱼ)
-                end
-            end
+        for i in 1:Nx
+            pxyᵢⱼ = pxy[i, j]
+            ce += pxyᵢⱼ^q * qlog(pxyᵢⱼ / pyⱼ)
         end
     end
     ce *= -1.0
