@@ -16,7 +16,7 @@ def = CMIShannon()
 # ---------------
 def = CMIShannon()
 @test_throws ArgumentError EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi()))
-@test_throws ArgumentError EntropyDecomposition(def, PlugIn(Renyi()), OrdinalPatterns(m=2), RelativeAmount())
+@test_throws ArgumentError EntropyDecomposition(def, PlugIn(Renyi()), CodifyVariables(OrdinalPatterns(m=2)), RelativeAmount())
 
 # ---------------------------------------------------------------------------------------
 # Test all possible ways of estimating `CMIShannon`.
@@ -40,7 +40,7 @@ z = randn(rng, 50)
 est_diff = EntropyDecomposition(def, Kraskov(k=3))
 @test association(est_diff, x, z, y) isa Real
 
-est_disc = EntropyDecomposition(def, PlugIn(Shannon()), ValueBinning(2));
+est_disc = EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(ValueBinning(2)));
 @test association(est_disc, x, z, y) isa Real
 
 est_mi = MIDecomposition(def, KSG1())
@@ -73,7 +73,7 @@ def = CMIShannon()
 # ---------------
 out_mi = repr(MIDecomposition(def, KSG1()))
 out_hdiff = repr(EntropyDecomposition(def, Kraskov()))
-out_hdisc = repr(EntropyDecomposition(def, PlugIn(Shannon()), ValueBinning(2)))
+out_hdisc = repr(EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(ValueBinning(2))))
 
 @test occursin("Iₛ(X, Y | Z) = Iₛ(X; Y, Z) + Iₛ(X; Z)", out_mi)
 @test occursin("Iₛ(X, Y | Z) = Hₛ(X,Z) + Hₛ(Y,Z) - Hₛ(X,Y,Z) - Hₛ(Z)", out_hdisc)

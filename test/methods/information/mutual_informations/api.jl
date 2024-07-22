@@ -33,7 +33,7 @@ hests = [PlugIn(Shannon()), PlugIn(Tsallis(q = 1.5)), PlugIn(Tsallis(q = 1.5))]
 @testset "EntropyDecomposition with $(typeof(def).name.name)" for (def, hest) in zip(defs, hests)
     x, y = rand(rng, 100), rand(rng, 100)
     X, Y = StateSpaceSet(rand(rng, 100, 2)), StateSpaceSet(rand(rng, 100, 2))
-    est = EntropyDecomposition(def, hest, OrdinalPatterns(m=2), RelativeAmount())
+    est = EntropyDecomposition(def, hest, CodifyVariables(OrdinalPatterns(m=2)), RelativeAmount())
     # The estimation of probabilities is decoupled from the estimation of the mutual info.
     # We could in principle use any probabilities estimator here, but we default to `RelativeAmount`.
     @test association(est, x, Y) isa Real
@@ -49,7 +49,7 @@ definitions = [MIRenyiSarbu()]
     X, Y = StateSpaceSet(rand(rng, 100, 2)), StateSpaceSet(rand(rng, 100, 2))
     
     est_diff = EntropyDecomposition(def, Kraskov(k=3))
-    est_disc = EntropyDecomposition(def, PlugIn(Shannon()), OrdinalPatterns(m=2), RelativeAmount())
+    est_disc = EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(OrdinalPatterns(m=2)), RelativeAmount())
 
     @test_throws ArgumentError association(est_diff, x, Y)
     @test_throws ArgumentError association(est_diff, X, y)

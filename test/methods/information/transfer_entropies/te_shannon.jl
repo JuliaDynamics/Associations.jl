@@ -15,7 +15,7 @@ est_diff = EntropyDecomposition(def, Kraskov(k=3))
 @test association(est_diff, x, z) isa Real
 @test association(est_diff, x, z, y) isa Real
 
-est_disc = EntropyDecomposition(def, PlugIn(Shannon()), ValueBinning(2));
+est_disc = EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(ValueBinning(2)));
 @test association(est_disc, x, z) isa Real
 @test association(est_disc, x, z, y) isa Real
 
@@ -37,7 +37,7 @@ est_lindner = Lindner(def, k = 3)
 
 
 # Test `TransferOperator` explicitly
-discretization = TransferOperator(RectangularBinning(2, true))
+discretization = CodifyVariables(TransferOperator(RectangularBinning(2, true)))
 est_disc = EntropyDecomposition(def, PlugIn(Shannon()), discretization);
 @test association(est_disc, x, z) isa Real
 @test association(est_disc, x, z, y) isa Real
@@ -50,7 +50,7 @@ est_disc = EntropyDecomposition(def, PlugIn(Shannon()), discretization);
 out_cmi = repr(CMIDecomposition(def, FPVP()))
 out_mi = repr(MIDecomposition(def, KSG1()))
 out_hdiff = repr(EntropyDecomposition(def, Kraskov()))
-out_hdisc = repr(EntropyDecomposition(def, PlugIn(Shannon()), ValueBinning(2)))
+out_hdisc = repr(EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(ValueBinning(2))))
 
 @test occursin("TEₛ(s → t | c) = Iₛ(t⁺; s⁻ | t⁻, c⁻)", out_cmi)
 @test occursin("TEₛ(s → t | c) = Iₛ(t⁺; s⁻, t⁻, c⁻) - Iₛ(t⁺; t⁻, c⁻)", out_mi)
