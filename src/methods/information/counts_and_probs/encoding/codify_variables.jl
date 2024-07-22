@@ -49,7 +49,7 @@ d = CodifyVariables(OrdinalPatterns(m=2))
 cx, cy = codify(d, x, y)
 ```
 """
-struct CodifyVariables{N} <: Discretization{N}
+struct CodifyVariables{N, E} <: Discretization{N}
     outcome_spaces::NTuple{N, OutcomeSpace}
     function CodifyVariables(outcome_spaces::NTuple{N, OutcomeSpace}) where N
         if N > 1
@@ -57,7 +57,7 @@ struct CodifyVariables{N} <: Discretization{N}
                 "variables. Got $N different encodings"
             throw(ArgumentError(s))
         end
-        new{N}(outcome_spaces)
+        new{N, eltype(outcome_spaces)}(outcome_spaces)
     end
 end
 
