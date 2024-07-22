@@ -18,6 +18,7 @@ The Rényi mutual information ``I_q^{R_{J}}(X; Y)`` defined in [Jizba2012](@cite
 ## Compatible estimators
 
 - [`JointProbabilities`](@ref).
+- [`EntropyDecomposition`](@ref).
 
 ## Definition
 
