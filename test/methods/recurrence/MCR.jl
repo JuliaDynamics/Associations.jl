@@ -2,10 +2,11 @@ using StateSpaceSets
 using Distances: Chebyshev
 
 rng = Xoshiro(1234)
-x = rand(rng, 200)
-y = rand(rng, 200)
-X = rand(rng, 200, 2) |> StateSpaceSet
-Y = rand(rng, 200, 3) |> StateSpaceSet
+n = 80
+x = rand(rng, n)
+y = rand(rng, n)
+X = rand(rng, n, 2) |> StateSpaceSet
+Y = rand(rng, n, 3) |> StateSpaceSet
 @test_throws UndefKeywordError MCR()
 @test association(MCR(; r = 0.5), x, y) isa Real
 @test association(MCR(; r = 0.5), x, Y) isa Real

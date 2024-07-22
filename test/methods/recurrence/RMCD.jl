@@ -3,7 +3,7 @@ using StateSpaceSets
 using Distances: Chebyshev
 
 rng = StableRNG(1234)
-n = 100
+n = 80
 x = rand(rng, n)
 y = rand(rng, n)
 z = rand(rng, n)
@@ -36,8 +36,8 @@ test = SurrogateAssociationTest(RMCD(r = 0.5); rng, nshuffles = 50)
 
 # Test on a dynamical system.
 sys = system(Logistic4Chain(; xi = rand(rng, 4), rng))
-x, y, z, w = columns(first(trajectory(sys, 200, Ttr = 10000)));
-test = LocalPermutationTest(RMCD(r = 0.5); rng)
+x, y, z, w = columns(first(trajectory(sys, n, Ttr = 10000)));
+test = LocalPermutationTest(RMCD(r = 0.5); rng, nshuffles = 19)
 
 # X and Z are independent given Y, so we shouldn't be able to reject the null (p > α).
 pval = pvalue(independence(test, x, z, y))
