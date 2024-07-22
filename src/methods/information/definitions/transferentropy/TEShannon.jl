@@ -27,6 +27,10 @@ TE(S \\to T | C) &:= I^S(T^+; S^- | T^-, C^-)
 where ``I(T^+; S^- | T^-)`` is the Shannon conditional mutual information
 ([`CMIShannon`](@ref)). The variables ``T^+``, ``T^-``,
 ``S^-`` and ``C^-`` are described in the docstring for [`transferentropy`](@ref).
+
+## Estimation
+
+- [Example 1](@ref example_TEShannon_EntropyDecomposition_TransferOperator): [`EntropyDecomposition`](@ref) with [`TransferOperator`](@ref) outcome space.
 """
 struct TEShannon{B, EMB} <: TransferEntropy
     base::B

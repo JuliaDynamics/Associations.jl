@@ -27,32 +27,12 @@ I_q^{R_{J}}(X; Y) = H_q^{R}(X) + H_q^{R}(Y) - H_q^{R}(X, Y),
 
 where ``H_q^{R}(\\cdot)`` is the [`Rényi`](@ref) entropy.
 
-## 
 
-## Examples
+## Estimation
 
-For categorical data, we can use the `JointProbabilities` estimator.
-
-```julia
-using CausalityTools, Random; rng = MersenneTwister(1234)
-x = rand(rng, ["a", "b", "c"], 200);
-y = rand(rng, ["hello", "yoyo", "heyhey"], 200);
-est = JointProbabilities(MIRenyiJizba(), UniqueElements())
-association(est, x, y)
-```
-
-For numeric data, we can use the `EntropyDecomposition` estimator.
-
-```julia
-x = randn(rng, 50);
-y = randn(rng, 50);
-def = MIRenyiJizba()
-est_diff = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k=3))
-association(est_diff, x, y) 
-
-est_disc = EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2));
-association(est_disc, x, y)
-```
+- [Example 1](@ref example_MIRenyiJizba_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) outcome space.
+- [Example 2](@ref example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@ref).
+- [Example 3](@ref example_MIRenyiJizba_EntropyDecomposition_ValueBinning): [`EntropyDecomposition`](@ref) with [`ValueBinning`](@ref).
 """
 Base.@kwdef struct MIRenyiJizba{B, Q} <: MutualInformation
     base::B = 2

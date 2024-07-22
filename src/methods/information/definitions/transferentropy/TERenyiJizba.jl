@@ -42,25 +42,14 @@ estimator from the list below as its input.
 | [`EntropyDecomposition`](@ref) | [`Dispersion`](@ref)             | Four-entropies decomposition |
 | [`EntropyDecomposition`](@ref) | [`OrdinalPatterns`](@ref)        | Four-entropies decomposition |
 | [`EntropyDecomposition`](@ref) | [`UniqueElements`](@ref)         | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`TransferOperator`](@ref)       | Four-entropies decomposition |
 
 Any of these estimators must be given as input to a [`CMIDecomposition](@ref) estimator.
 
-## Example
+## Estimation
 
-```julia
-using CausalityTools, Random
-rng = MersenneTwister(1234)
-x, y, z = rand(rng, 1000), rand(rng, 1000), rand(rng, 1000)
-def = CMIRenyiJizba(q = 1.5)
+- [Example 1](@ref example_TERenyiJizba_EntropyDecomposition_TransferOperator): [`EntropyDecomposition`](@ref) with [`TransferOperator`](@ref) outcome space.
 
-# Using a differential Rényi entropy estimator
-est = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k = 10))
-association(est, x, y, z)
-
-# Using a plug-in Rényi entropy estimator, discretizing using ordinal patterns.
-est = EntropyDecomposition(def, PlugIn(Renyi()), OrdinalPatterns(m=2), RelativeAmount())
-association(est, x, y, z)
-```
 """
 struct TERenyiJizba{B, Q, EMB} <: TransferEntropy
     base::B

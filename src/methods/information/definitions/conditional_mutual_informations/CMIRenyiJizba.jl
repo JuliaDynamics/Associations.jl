@@ -29,22 +29,14 @@ I_q^{R_{J}}(X; Y | Z) = I_q^{R_{J}}(X; Y, Z) - I_q^{R_{J}}(X; Z),
 
 where ``I_q^{R_{J}}(X; Z)`` is the [`MIRenyiJizba`](@ref) mutual information.
 
-## Examples
+## Estimation
 
-```julia
-using CausalityTools, Random
-rng = MersenneTwister(1234)
-x, y, z = rand(rng, 1000), rand(rng, 1000), rand(rng, 1000)
-def = CMIRenyiJizba(q = 1.5)
-
-# Using a differential Rényi entropy estimator
-est = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k = 10))
-association(est, x, y, z)
-
-# Using a plug-in Rényi entropy estimator, discretizing using ordinal patterns.
-est = EntropyDecomposition(def, PlugIn(Renyi()), OrdinalPatterns(m=2), RelativeAmount())
-association(est, x, y, z)
-```
+- [Example 1](@ref example_CMIRenyiJizba_JointProbabilities_BubbleSortSwaps): 
+    [`JointProbabilities`](@ref) with [`BubbleSortSwaps`](@ref) outcome space.
+- [Example 2](@ref example_CMIRenyiJizba_EntropyDecomposition_OrdinalPatterns): 
+    [`EntropyDecomposition`](@ref) with [`OrdinalPatterns`](@ref) outcome space.
+- [Example 3](@ref example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani): 
+    [`EntropyDecomposition`](@ref) with differential entropy estimator [`LeonenkoProzantoSavani`](@ref).
 """
 Base.@kwdef struct CMIRenyiJizba{B, Q} <: ConditionalMutualInformation
     base::B = 2

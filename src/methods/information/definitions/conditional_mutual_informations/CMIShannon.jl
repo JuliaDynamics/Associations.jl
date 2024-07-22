@@ -46,6 +46,15 @@ and ``H^S(\\cdot)`` is the [`Shannon`](@ref) entropy.
 
 Differential Shannon CMI is obtained by replacing the entropies by
 differential entropies.
+
+## Estimation
+
+- [Example 1](@ref example_CMIShannon_EntropyDecomposition_Kraskov): 
+    [`EntropyDecomposition`](@ref) with [`Kraskov`](@ref) estimator.
+- [Example 2](@ref CMIShannon_EntropyDecomposition_ValueBinning):
+    [`EntropyDecomposition`](@ref) with [`ValueBinning`](@ref) estimator.
+- [Example 3](@ref example_CMIShannon_MIDecomposition_KSG1): 
+    [`MIDecomposition`](@ref) with [`KSG1`](@ref) estimator.
 """
 Base.@kwdef struct CMIShannon{B} <: ConditionalMutualInformation
     base::B = 2

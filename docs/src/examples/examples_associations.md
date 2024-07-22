@@ -69,78 +69,7 @@ association(est, x, y)
 
 ## [`MIShannon`](@ref)
 
-### [`MIShannon`](@ref) with [`GaussianMI`](@ref) estimator
-
-```@example mi_demonstration
-using CausalityTools
-using Distributions
-using Statistics
-
-n = 1000
-using CausalityTools
-x = randn(1000)
-y = rand(1000) .+ x
-association(GaussianMI(MIShannon()), x, y) # defaults to `MIShannon()`
-```
-
-### [`MIShannon`](@ref) with [`KraskovStögbauerGrassberger1`](@ref) estimator
-
-```@example mi_demonstration
-using CausalityTools
-x, y = rand(1000), rand(1000)
-association(KSG1(MIShannon(); k = 5), x, y)
-```
-
-### [`MIShannon`](@ref) with [`KraskovStögbauerGrassberger2`](@ref) estimator
-
-```@example mi_demonstration
-using CausalityTools
-x, y = rand(1000), rand(1000)
-association(KSG2(MIShannon(); k = 5), x, y)
-```
-
-### [`MIShannon`](@ref) with [`GaoKannanOhViswanath`](@ref) estimator
-
-```@example mi_demonstration
-using CausalityTools
-x, y = rand(1000), rand(1000)
-association(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
-```
-
-### [`MIShannon`](@ref) with [`GaoOhViswanath`](@ref) estimator
-
-```@example mi_demonstration
-using CausalityTools
-x, y = rand(1000), rand(1000)
-association(GaoOhViswanath(MIShannon(); k = 10), x, y)
-```
-
-### [`MIShannon`](@ref) with [`EntropyDecomposition`](@ref) and [`DifferentialEntropyEstimator`](@ref)
-
-We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialEntropyEstimator`](@ref).
-Note that this doesn't apply any bias correction.
-
-```@example mi_demonstration
-using CausalityTools
-x, y = rand(1000), rand(1000)
-association(EntropyDecomposition(MIShannon(), Kraskov(k = 3)), x, y)
-```
-
-
-### [`MIShannon`](@ref) with [`EntropyDecomposition`](@ref) and [`DifferentialEntropyEstimator`](@ref)
-
-We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialEntropyEstimator`](@ref).
-Note that this doesn't apply any bias correction.
-
-```@example mi_demonstration
-using CausalityTools
-x, y = rand(1000), rand(1000)
-disc = CodifyVariables(BubbleSortSwaps(m=5))
-hest = PlugIn(Shannon())
-association(EntropyDecomposition(MIShannon(), hest, disc), x, y)
-```
-
-### [`MIShannon`](@ref) with [`JointProbabilities`](@ref) and [`ValueBinning`](@ref)
+### [[`JointProbabilities`](@ref) + [`ValueBinning`](@ref)](@id example_MIShannon_JointProbabilities_ValueBinning)
 
 ```@example mi_demonstration
 using CausalityTools
@@ -152,27 +81,8 @@ est = JointProbabilities(MIShannon(), discretization)
 association(est, x, y)
 ```
 
-### Discrete [`MIShannon`](@ref) with [`EntropyDecomposition`](@ref) and [`Jackknife`](@ref)
 
-A [`ValueBinning`](@ref) estimator can be used to bin the data and compute
-discrete Shannon mutual information.
-
-```@example mi_demonstration
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x = rand(rng, 50)
-y = rand(rng, 50)
-
-# Use the H3-estimation method with a discrete visitation frequency based 
-# probabilities estimator over a fixed grid covering the range of the data,
-# which is on [0, 1].
-discretization = CodifyVariables(ValueBinning(FixedRectangularBinning(0, 1, 5)))
-hest = Jackknife(Shannon())
-est = EntropyDecomposition(MIShannon(), hest, discretization)
-association(est, x, y)
-```
-
-### [`MIShannon`](@ref) with [`JointProbabilities`](@ref) and [`UniqueElements`](@ref)
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIShannon_JointProbabilities_UniqueElements)
 
 The [`JointProbabilities`](@ref) estimator can also be used with categorical data.
 For example, let's compare the Shannon mutual information between the preferences
@@ -195,6 +105,131 @@ end
 
 est = JointProbabilities(MIShannon(), UniqueElements())
 association(est, preferences, biased_foods), association(est, preferences, random_foods)
+```
+
+### [Dedicated [`GaussianMI`](@ref) estimator](@id example_MIShannon_GaussianMI)
+
+```@example mi_demonstration
+using CausalityTools
+using Distributions
+using Statistics
+
+n = 1000
+using CausalityTools
+x = randn(1000)
+y = rand(1000) .+ x
+association(GaussianMI(MIShannon()), x, y) # defaults to `MIShannon()`
+```
+
+### [Dedicated [`KraskovStögbauerGrassberger1`](@ref) estimator](@id example_MIShannon_KSG1)
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+association(KSG1(MIShannon(); k = 5), x, y)
+```
+
+### [Dedicated [`KraskovStögbauerGrassberger2`](@ref) estimator](@id example_MIShannon_KSG2)
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+association(KSG2(MIShannon(); k = 5), x, y)
+```
+
+### [Dedicated [`GaoKannanOhViswanath`](@ref) estimator](@id example_MIShannon_GaoKannanOhViswanath)
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+association(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
+```
+
+### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@ref)](@id example_MIShannon_EntropyDecomposition_Kraskov)
+
+We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialEntropyEstimator`](@ref).
+Note that this doesn't apply any bias correction.
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+association(EntropyDecomposition(MIShannon(), Kraskov(k = 3)), x, y)
+```
+
+
+### [[`EntropyDecomposition`](@ref) + [`BubbleSortSwaps`](@ref)](@id example_MIShannon_EntropyDecomposition_BubbleSortSwaps)
+
+We can also compute [`MIShannon`](@ref) by naively applying a [`DiscreteEntropyEstimator`](@ref).
+Note that this doesn't apply any bias correction.
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+disc = CodifyVariables(BubbleSortSwaps(m=5))
+hest = PlugIn(Shannon())
+association(EntropyDecomposition(MIShannon(), hest, disc), x, y)
+```
+
+
+### [[`EntropyDecomposition`](@ref) + [`Jackknife`](@ref) + [`ValueBinning`](@ref)](@id example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning)
+
+A [`ValueBinning`](@ref) estimator can be used to bin the data and compute
+discrete Shannon mutual information.
+
+```@example mi_demonstration
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 50)
+y = rand(rng, 50)
+
+# Use the H3-estimation method with a discrete visitation frequency based 
+# probabilities estimator over a fixed grid covering the range of the data,
+# which is on [0, 1].
+discretization = CodifyVariables(ValueBinning(FixedRectangularBinning(0, 1, 5)))
+hest = Jackknife(Shannon())
+est = EntropyDecomposition(MIShannon(), hest, discretization)
+association(est, x, y)
+```
+
+## [`MIRenyiJizba`](@ref)
+
+## [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiJizba_JointProbabilities_UniqueElements)
+
+For categorical data, we can use the `JointProbabilities` estimator.
+
+```@example example_mirenyijizba
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, ["a", "b", "c"], 200);
+y = rand(rng, ["hello", "yoyo", "heyhey"], 200);
+est = JointProbabilities(MIRenyiJizba(), UniqueElements())
+association(est, x, y)
+```
+
+
+## [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani)
+
+```@example example_MIRenyiJizba
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = randn(rng, 50); y = randn(rng, 50);
+def = MIRenyiJizba()
+est_diff = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k=3))
+association(est_diff, x, y) 
+```
+
+
+## [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_EntropyDecomposition_ValueBinning)
+
+```@example example_MIRenyiJizba
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = randn(rng, 50); y = randn(rng, 50);
+def = MIRenyiJizba()
+
+disc = CodifyVariables(ValueBinning(2))
+est_disc = EntropyDecomposition(def, PlugIn(Renyi()), disc);
+association(est_disc, x, y)
 ```
 
 ## [`CMIShannon`](@ref)
@@ -500,7 +535,7 @@ association(est_disc_to, x, y), association(est_disc_to, y, x)
 
 ## [`ConvergentCrossMapping`](@ref)
 
-### [`ConvergentCrossMapping`](@ref) directly
+We can cross map directly between two datasets.
 
 ```@example
 using CausalityTools
@@ -508,7 +543,7 @@ x, y = rand(200), rand(100)
 crossmap(CCM(), x, y)
 ```
 
-### [`ConvergentCrossMapping`](@ref) with [`RandomVectors`](@ref)
+### Cross-map with [`RandomVectors`](@ref) estimator
 
 When cross-mapping with the [`RandomVectors`](@ref) estimator, a single random subsample
 of time indices (i.e. not in any particular order) of length `l` is drawn for each library
@@ -542,7 +577,7 @@ M = hcat(ρs...)
 Now, the `k`-th row of `M` contains `55` estimates of the correspondence measure `ρ`
 at library size `libsizes[k]`.
 
-### [`ConvergentCrossMapping`](@ref) with [`RandomSegments`](@ref)
+###  Cross-map with [`RandomSegments`](@ref) estimator
 
 When cross-mapping with the [`RandomSegments`](@ref) estimator, a single random subsample
 of continguous, ordered time indices of length `l` is drawn for each library

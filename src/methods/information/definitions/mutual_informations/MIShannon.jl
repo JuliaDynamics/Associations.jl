@@ -74,6 +74,18 @@ I^S(X; Y) = h^S(X) + h_q^S(Y) - h^S(X, Y),
 where ``h^S(\\cdot)`` and ``h^S(\\cdot, \\cdot)`` are the marginal and joint
 differential Shannon entropies. This definition is used by [`mutualinfo`](@ref) when
 called with a [`DifferentialEntropyEstimator`](@ref).
+
+## Estimation
+
+- [Example 1](@ref example_MIShannon_JointProbabilities_ValueBinning): [`JointProbabilities`](@ref) with [`ValueBinning`](@ref) outcome space.
+- [Example 2](@ref example_MIShannon_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) outcome space on string data.
+- [Example 3](@ref example_MIShannon_GaussianMI): Dedicated [`GaussianMI`](@ref) estimator.
+- [Example 4](@ref example_MIShannon_KSG1): Dedicated [`KSG1`](@ref) estimator.
+- [Example 5](@ref example_MIShannon_KSG2): Dedicated [`KSG2`](@ref) estimator.
+- [Example 6](@ref example_MIShannon_GaoKannanOhViswanath): Dedicated [`GaoKannanOhViswanath`](@ref) estimator.
+- [Example 7](@ref example_MIShannon_EntropyDecomposition_Kraskov): [`EntropyDecomposition`](@ref) with [`Kraskov`](@ref) estimator.
+- [Example 8](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps): [`EntropyDecomposition`](@ref) with [`BubbleSortSwaps`](@ref).
+- [Example 9](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning): [`EntropyDecomposition`](@ref) with [`Jackknife`](@ref) estimator and [`ValueBinning`](@ref) outcome space.
 """
 Base.@kwdef struct MIShannon{B} <: MutualInformation
     base::B = 2
