@@ -133,7 +133,7 @@ alg = PC(CorrTest(), CorrTest(); α = 0.05)
 est_cpdag_parametric = infer_graph(alg, X; verbose = false)
 
 # Plot the graph
-plotgraph(est_cpdag_parametric)
+plotgraph(est_cpdag_parametric; nlabels = ["x", "v", "w", "z", "s"])
 ```
 
 ### [Nonparametric tests](@id pc_examples_nonparametric)

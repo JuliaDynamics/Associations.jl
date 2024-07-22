@@ -1,8 +1,9 @@
 # Examples of association measure estimation
 
-## Information measures 
 
-### [`ConditionalEntropyShannon`](@ref): analytical example
+## [`ConditionalEntropyShannon`](@ref)
+
+### Analytical examples
 
 This is essentially example 2.2.1 in Cover & Thomas (2006), where they use the following
 relative frequency table as an example. Notethat Julia is column-major, so we need to
@@ -60,10 +61,13 @@ using CausalityTools, Random
 rng = MersenneTwister(1234)
 x = rand(rng, 1:3, 1000)
 y = rand(rng, ["The Witcher", "Lord of the Rings"], 1000)
-est = JointProbabilities(ConditionalEntropyShannon(), UniqueElements())
+disc = CodifyVariables(UniqueElements())
+est = JointProbabilities(ConditionalEntropyShannon(), disc)
 association(est, x, y)
 ```
 
+
+## [`MIShannon`](@ref)
 
 ### [`MIShannon`](@ref) with [`GaussianMI`](@ref) estimator
 
@@ -122,6 +126,20 @@ x, y = rand(1000), rand(1000)
 association(EntropyDecomposition(MIShannon(), Kraskov(k = 3)), x, y)
 ```
 
+
+### [`MIShannon`](@ref) with [`EntropyDecomposition`](@ref) and [`DifferentialEntropyEstimator`](@ref)
+
+We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialEntropyEstimator`](@ref).
+Note that this doesn't apply any bias correction.
+
+```@example mi_demonstration
+using CausalityTools
+x, y = rand(1000), rand(1000)
+disc = CodifyVariables(BubbleSortSwaps(m=5))
+hest = PlugIn(Shannon())
+association(EntropyDecomposition(MIShannon(), hest, disc), x, y)
+```
+
 ### [`MIShannon`](@ref) with [`JointProbabilities`](@ref) and [`ValueBinning`](@ref)
 
 ```@example mi_demonstration
@@ -129,7 +147,7 @@ using CausalityTools
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 1000)
 y = rand(rng, 1000)
-discretization = ValueBinning(FixedRectangularBinning(0, 1, 5))
+discretization = CodifyVariables(ValueBinning(FixedRectangularBinning(0, 1, 5)))
 est = JointProbabilities(MIShannon(), discretization)
 association(est, x, y)
 ```
@@ -148,7 +166,7 @@ y = rand(rng, 50)
 # Use the H3-estimation method with a discrete visitation frequency based 
 # probabilities estimator over a fixed grid covering the range of the data,
 # which is on [0, 1].
-discretization = ValueBinning(FixedRectangularBinning(0, 1, 5))
+discretization = CodifyVariables(ValueBinning(FixedRectangularBinning(0, 1, 5)))
 hest = Jackknife(Shannon())
 est = EntropyDecomposition(MIShannon(), hest, discretization)
 association(est, x, y)
@@ -179,6 +197,8 @@ est = JointProbabilities(MIShannon(), UniqueElements())
 association(est, preferences, biased_foods), association(est, preferences, random_foods)
 ```
 
+## [`CMIShannon`](@ref)
+
 ### [`CMIShannon`](@ref) with [`GaussianCMI`](@ref)
 
 ```@example mi_demonstration
@@ -194,7 +214,7 @@ z = randn(1000) .+ y
 association(GaussianCMI(), x, z, y) # defaults to `CMIShannon()`
 ```
 
-### [`CMIShannon`](@ref) with [`FPVP`](@ref)
+### [[`CMIShannon`](@ref) with [`FPVP`](@ref)](@id example_CMIShannon_FPVP)
 
 ```@example mi_demonstration
 using CausalityTools
@@ -254,18 +274,21 @@ z = (z ./ std(z)) .+ y
 association(Rahimzamani(CMIShannon(base = 10); k = 10), x, z, y)
 ```
 
-### [`CMIRenyiPoczos`](@ref) with [`PoczosSchneiderCMI`](@ref)
+## [`CMIRenyiPoczos`](@ref)
 
-```@example mi_demonstration
+### [[`PoczosSchneiderCMI`](@ref)](@id CMIRenyiPoczos_PoczosSchneiderCMI)
+
+```@example example_cmirenyipoczos
 using CausalityTools
 using Distributions
 using Statistics
+using Random; rng = Xoshiro(1234)
 
 n = 1000
 # A chain X → Y → Z
-x = rand(Normal(-1, 0.5), n)
-y = rand(BetaPrime(0.5, 1.5), n) .+ x
-z = rand(Chisq(100), n)
+x = rand(rng, Normal(-1, 0.5), n)
+y = rand(rng, BetaPrime(0.5, 1.5), n) .+ x
+z = rand(rng, Chisq(100), n)
 z = (z ./ std(z)) .+ y
 
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
@@ -280,7 +303,9 @@ mutual information using the chain rule of mutual information. However, the naiv
 application of these estimators don't perform any bias correction when
 taking the difference of mutual information terms.
 
-### [`CMIShannon`](@ref) with [`KSG1`](@ref)
+## [`CMIShannon`](@ref)
+
+### [[`MIDecomposition`](@ref) + [`KSG1`](@ref)](@id example_CMIShannon_MIDecomposition_KSG1)
 
 ```@example mi_demonstration
 using CausalityTools
@@ -301,12 +326,12 @@ est = MIDecomposition(CMIShannon(base = 2), KSG1(k = 10))
 association(est, x, z, y)
 ```
 
+### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@ref)](@id example_CMIShannon_EntropyDecomposition_Kraskov)
+
 Any [`DifferentialEntropyEstimator`](@ref) can also be used to compute conditional
 mutual information using a sum of entropies. For that, we 
 usethe [`EntropyDecomposition`](@ref) estimator. No bias correction is applied for 
 [`EntropyDecomposition`](@ref) either.
-
-### [`CMIShannon`](@ref) with [`Kraskov`](@ref)
 
 ```@example
 using CausalityTools
@@ -325,7 +350,7 @@ conditional mutual information using a sum of entropies. For that, we also
 use [`EntropyDecomposition`](@ref). In the discrete case, we also have to specify a
 discretization (an [`OutcomeSpace`](@ref)).
 
-### [`CMIShannon`](@ref) with [`ValueBinning`](@ref)
+### [[`EntropyDecomposition`](@ref) + [`ValueBinning`](@ref)](@id example_CMIShannon_EntropyDecomposition_ValueBinning)
 
 ```@example
 using CausalityTools
@@ -335,13 +360,145 @@ n = 1000
 x = rand(Epanechnikov(0.5, 1.0), n)
 y = rand(Erlang(1), n) .+ x
 z = rand(FDist(5, 2), n)
-discretization = ValueBinning(RectangularBinning(5))
+discretization = CodifyVariables(ValueBinning(RectangularBinning(5)))
 hest = PlugIn(Shannon())
 est = EntropyDecomposition(CMIShannon(), hest, discretization)
 association(est, x, y, z)
 ```
 
-## Cross-map measures
+## [`CMIRenyiJizba`](@ref)
+
+### [[`JointProbabilities`](@ref) + [`BubbleSortSwaps`](@ref)](@id example_CMIRenyiJizba_JointProbabilities_BubbleSortSwaps)
+
+```@example example_CMIRenyiJizba
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 100)
+y = x .+ rand(rng, 100)
+z = y .+ rand(rng, 100)
+disc = CodifyVariables(BubbleSortSwaps(m = 4))
+est = JointProbabilities(CMIRenyiJizba(), disc)
+association(est, x, z, y)
+```
+
+
+### [[`EntropyDecomposition`](@ref) + [`LeonenoProsantoSavani`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani)
+
+```@example example_CMIRenyiJizba
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y, z = rand(rng, 1000), rand(rng, 1000), rand(rng, 1000)
+def = CMIRenyiJizba(q = 1.5)
+
+# Using a differential Rényi entropy estimator
+est = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k = 10))
+association(est, x, y, z)
+```
+
+
+### [[`EntropyDecomposition`](@ref) + [`OrdinalPatterns`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_OrdinalPatterns)
+
+```@example example_CMIRenyiJizba
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y, z = rand(rng, 1000), rand(rng, 1000), rand(rng, 1000)
+def = CMIRenyiJizba(q = 1.5)
+
+# Using a plug-in Rényi entropy estimator, discretizing using ordinal patterns.
+est = EntropyDecomposition(def, PlugIn(Renyi()), CodifyVariables(OrdinalPatterns(m=2)), RelativeAmount())
+association(est, x, y, z)
+```
+
+## [`TEShannon`](@ref)
+
+### [[`EntropyDecomposition`](@ref) + [`TransferOperator`](@ref)](@id example_TEShannon_EntropyDecomposition_TransferOperator)
+
+For transfer entropy examples, we'll construct some time series for which 
+there is time-delayed forcing between variables.
+
+```@example transfer_entropy_examples
+
+using CausalityTools
+using DynamicalSystemsBase
+using StableRNGs
+rng = StableRNG(123)
+
+Base.@kwdef struct Logistic4Chain{V, RX, RY, RZ, RW, C1, C2, C3, Σ1, Σ2, Σ3, RNG}
+    xi::V = [0.1, 0.2, 0.3, 0.4]
+    rx::RX = 3.9
+    ry::RY = 3.6
+    rz::RZ = 3.6
+    rw::RW = 3.8
+    c_xy::C1 = 0.4
+    c_yz::C2 = 0.4
+    c_zw::C3 = 0.35
+    σ_xy::Σ1 = 0.05
+    σ_yz::Σ2 = 0.05
+    σ_zw::Σ3 = 0.05
+    rng::RNG = Random.default_rng()
+end
+
+function eom_logistic4_chain(u, p::Logistic4Chain, t)
+    (; xi, rx, ry, rz, rw, c_xy, c_yz, c_zw, σ_xy, σ_yz, σ_zw, rng) = p
+    x, y, z, w = u
+    f_xy = (y +  c_xy*(x + σ_xy * rand(rng)) ) / (1 + c_xy*(1+σ_xy))
+    f_yz = (z +  c_yz*(y + σ_yz * rand(rng)) ) / (1 + c_yz*(1+σ_yz))
+    f_zw = (w +  c_zw*(z + σ_zw * rand(rng)) ) / (1 + c_zw*(1+σ_zw))
+    dx = rx * x * (1 - x)
+    dy = ry * (f_xy) * (1 - f_xy)
+    dz = rz * (f_yz) * (1 - f_yz)
+    dw = rw * (f_zw) * (1 - f_zw)
+    return SVector{4}(dx, dy, dz, dw)
+end
+
+function system(definition::Logistic4Chain)
+    return DiscreteDynamicalSystem(eom_logistic4_chain, definition.xi, definition)
+end
+
+# An example system where `X → Y → Z → W`.
+sys = system(Logistic4Chain(; rng))
+x, y, z, w = columns(first(trajectory(sys, 300, Ttr = 10000)))
+
+precise = true # precise bin edges
+discretization = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
+est_disc_to = EntropyDecomposition(TEShannon(), PlugIn(Shannon()), discretization);
+association(est_disc_to, x, y), association(est_disc_to, y, x)
+```
+
+The Shannon-type transfer entropy from `x` to `y` is stronger than from `y` to `x`,
+which is what we expect if `x` drives `y`.
+
+```@example transfer_entropy_examples
+association(est_disc_to, x, z), association(est_disc_to, x, z, y)
+```
+
+The Shannon-type transfer entropy from `x` to `z` is stronger than the transfer entropy from `x` to `z` given `y`. This is expected, because `x` drives `z` *through*
+`y`, so "conditioning away" the effect of `y` should decrease the estimated 
+information transfer.
+
+## [`TERenyiJizba`](@ref)
+
+### [[`EntropyDecomposition`](@ref) + [`TransferOperator`](@ref)](@id example_TERenyiJizba_EntropyDecomposition_TransferOperator)
+
+We can perform the same type of analysis as above using [`TERenyiJizba`](@ref)
+instead of [`TEShannon`](@ref).
+
+```@example transfer_entropy_examples
+using CausalityTools
+using DynamicalSystemsBase
+using StableRNGs; rng = StableRNG(123)
+
+# An example system where `X → Y → Z → W`.
+sys = system(Logistic4Chain(; rng))
+x, y, z, w = columns(first(trajectory(sys, 300, Ttr = 10000)))
+
+precise = true # precise bin edges
+discretization = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
+est_disc_to = EntropyDecomposition(TERenyiJizba(), PlugIn(Renyi()), discretization);
+association(est_disc_to, x, y), association(est_disc_to, y, x)
+```
+
+## [`ConvergentCrossMapping`](@ref)
 
 ### [`ConvergentCrossMapping`](@ref) directly
 
