@@ -232,6 +232,73 @@ est_disc = EntropyDecomposition(def, PlugIn(Renyi()), disc);
 association(est_disc, x, y)
 ```
 
+## [`MiRenyiSarbu`](@ref)
+
+## [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_UniqueElements)
+
+```@example example_MIRenyiSarbu
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, ["a", "b", "c"], 200)
+y = rand(rng, ["hello", "yoyo", "heyhey"], 200)
+
+est = JointProbabilities(MIRenyiSarbu(), CodifyVariables(UniqueElements()))
+association(est, x, y)
+```
+
+## [[`JointProbabilities`](@ref) + [`CosineSimilarityBinning`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning)
+
+```@example example_MIRenyiSarbu
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 200)
+y = rand(rng, 200)
+
+est = JointProbabilities(MIRenyiSarbu(), CodifyVariables(CosineSimilarityBinning()))
+association(est, x, y)
+```
+## [`MITsallisFuruichi`](@ref)
+
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MITsallisFuruichi_JointProbabilities_UniqueElements)
+
+```@example example_MITsallisFuruichi
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 200)
+y = rand(rng, 200)
+
+est = JointProbabilities(MITsallisFuruichi(), UniqueElements())
+association(est, x, y) 
+```
+
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisFuruichi_EntropyDecomposition_LeonenkoProsantoSavani)
+
+```@example example_MITsallisFuruichi
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 200)
+y = rand(rng, 200)
+
+est_diff = EntropyDecomposition(MITsallisFuruichi(), LeonenkoProzantoSavani(Tsallis(q= 2)))
+association(est_diff, x, y)
+```
+
+
+### [[`EntropyDecomposition`](@ref) + [`Dispersion`](@ref)](@id example_MITsallisFuruichi_EntropyDecomposition_Dispersion)
+
+```@example example_MITsallisFuruichi
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 200)
+y = rand(rng, 200)
+disc = CodifyVariables(Dispersion())
+est_disc = EntropyDecomposition(MITsallisFuruichi(), PlugIn(Tsallis()), disc)
+
+association(est_disc, x, y)
+```
+
+
+
 ## [`CMIShannon`](@ref)
 
 ### [`CMIShannon`](@ref) with [`GaussianCMI`](@ref)

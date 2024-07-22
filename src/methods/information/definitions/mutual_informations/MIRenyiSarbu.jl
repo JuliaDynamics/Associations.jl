@@ -33,6 +33,11 @@ I(X, Y)^R_q =
     \\dfrac{p(x, y)^q}{\\left( p(x)\\cdot p(y) \\right)^{q-1}}
 \\right)
 ```
+
+## Estimation
+
+- [Example 1](@ref example_MIRenyiSarbu_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) for categorical data.
+- [Example 2](@ref example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning): [`JointProbabilities`](@ref) with [`CosineSimilarityBinning`](@ref) for numerical data.
 """
 Base.@kwdef struct MIRenyiSarbu{B, Q} <: MutualInformation
     base::B = 2
