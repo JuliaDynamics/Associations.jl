@@ -13,7 +13,6 @@ p_zeros = Probabilities([0.5 0.0; 0.1 0.1])
 
 @test association(ConditionalEntropyTsallisFuruichi(q = 1.5), p_nonzeros) isa Real
 @test association(ConditionalEntropyTsallisFuruichi(q = 1.5), p_nonzeros) ≥ 0
-@test association(ConditionalEntropyTsallisFuruichi(q = 1.5), p_zeros) |> isnan
-@test association(ConditionalEntropyTsallisFuruichi(q = 1.5), p_zeros) |> isnan
 
-@test association(ConditionalEntropyTsallisAbe(q = 1.0), p_zeros) ≥ 0 # shannon
+@test association(ConditionalEntropyTsallisAbe(q = 1.0), p_zeros) ≥ 0 
+@test association(ConditionalEntropyTsallisAbe(q = 1.0), p_zeros) == association(ConditionalEntropyShannon(), p_zeros)

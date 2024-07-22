@@ -25,7 +25,7 @@ H_q^T(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}}
 p(x, y)^q \\log_q(p(x | y)),
 ```
 
-when ``q \\neq 1``. For ``q = 1``, ``H_q^T(X | Y)`` reduces to the Shannon conditional
+``\\ln_q(x) = \\frac{x^{1-q} - 1}{1 - q}`` and ``q \\neq 1``. For ``q = 1``, ``H_q^T(X | Y)`` reduces to the Shannon conditional
 entropy:
 
 ```math
@@ -33,9 +33,12 @@ H_{q=1}^T(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} =
 p(x, y) \\log(p(x | y))
 ```
 
-If any of the entries of the marginal distribution for `Y` are zero, then the 
-measure is undefined and `NaN` is returned.
+!!! note "Implementation details"
 
+    If any of the entries of the marginal distribution for `Y` are zero, or if ``q > 1`` and 
+    the ratio inside the q-logarithm is zero, then the measure is undefined. We circumvent this 
+    by only including cases ``p(x, y) > 0`` in the sum.
+    
 ## Estimation
 
 - [Example 1](@ref example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements): 
@@ -64,7 +67,6 @@ function association(definition::ConditionalEntropyTsallisFuruichi, pxy::Probabi
     if q == 1
         return association(ConditionalEntropyShannon(; base), pxy)
     end
-    
     py = marginal(pxy, dims = 2)
     ce = 0.0
     qlog = logq0(q)
@@ -73,12 +75,14 @@ function association(definition::ConditionalEntropyTsallisFuruichi, pxy::Probabi
         if (pyⱼ > 0)
             for i in 1:Nx
                 pxyᵢⱼ = pxy[i, j]
-                ce += pxyᵢⱼ^q * qlog(pxyᵢⱼ / pyⱼ)
+                ratio = pxyᵢⱼ / pyⱼ
+                if ratio > 0.0
+                    ce += pxyᵢⱼ^q * qlog(pxyᵢⱼ / pyⱼ)
+                end
             end
         end
     end
     ce *= -1.0
-
     return ce
 end
 
