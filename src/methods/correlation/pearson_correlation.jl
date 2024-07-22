@@ -46,10 +46,6 @@ function association(measure::PearsonCorrelation,
     return ρ
 end
 
-function association(measure::PearsonCorrelation, est::Nothing, x, y)
-    return association(measure, x, y)
-end
-
 # Silly, but 1-dimensional StateSpaceSets needs special indexing (because each point is a vector,
 # not a value).
 pt_generator(x::AbstractStateSpaceSet{1}) = (x[1] for x in x)

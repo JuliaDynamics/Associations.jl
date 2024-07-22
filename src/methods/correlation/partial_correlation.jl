@@ -61,11 +61,6 @@ function construct_partialcor_datasets(x::VectorOrStateSpaceSet, y::VectorOrStat
     return X, Y, Z
 end
 
-function association(measure::PartialCorrelation, est::Nothing, x, y, z)
-    return association(measure, x, y, z)
-end
-
-
 function invert_cov(cov_matrix::AbstractMatrix)
     if det(cov_matrix) ≈ 0.0
         # If the determinant of the covariance matrix is zero, then the
