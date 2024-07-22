@@ -54,6 +54,12 @@ function codified_marginals(o::OutcomeSpace, x::VectorOrStateSpaceSet...)
     return codify_marginal.(Ref(o), x)
 end
 
+# Generic dispatch to ComplexityMeasures.jl. We override if something special
+# needs to happen. For example, for ValueBinning we override such that 
+# we bin in the joint space to reduce bias.
+function codify_marginal(o::OutcomeSpace, x::VectorOrStateSpaceSet)
+    return codify(o, x)
+end
 # Apply per column.
 function codify_marginal(o::OutcomeSpace, x::AbstractStateSpaceSet)
     return StateSpaceSet(codify_marginal.(Ref(o), columns(x))...)
@@ -62,21 +68,6 @@ end
 # ------------------------------------------------------------------------
 # Outcome space specific implementations
 # ------------------------------------------------------------------------
-function codify_marginal(o::UniqueElements, x::AbstractVector)
-    return x
-end
-
-function codify_marginal(o::OrdinalPatterns{m}, x::AbstractVector) where {m}
-    return codify(o, x)
-end
-
-function codify_marginal(o::Dispersion, x::AbstractVector)
-    return codify(o, x)
-end
-
-function codify_marginal(o::CosineSimilarityBinning, x::AbstractVector)
-    return codify(o, x)
-end
 
 # TODO: maybe construct a convenience wrapper where the user can avoid constructing the
 # joint space, for performance benefits (but increased bias).
