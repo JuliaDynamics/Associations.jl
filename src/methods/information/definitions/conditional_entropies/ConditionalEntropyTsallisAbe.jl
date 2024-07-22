@@ -28,6 +28,15 @@ H_q^{T_A}(X | Y) = \\dfrac{H_q^T(X, Y) - H_q^T(Y)}{1 + (1-q)H_q^T(Y)},
 
 where ``H_q^T(\\cdot)`` and ``H_q^T(\\cdot, \\cdot)`` is the [`Tsallis`](@ref)
 entropy and the joint Tsallis entropy.
+
+## Estimation
+
+- [Example 1](@ref example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyVariables_UniqueElements): 
+    [`JointProbabilities`](@ref) estimator with[`CodifyVariables`](@ref) discretization and 
+    [`UniqueElements`](@ref) outcome space on categorical data.
+- [Example 2](@ref example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyPoints_UniqueElementsEncoding): 
+    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@ref)
+    encoding of points on numerical data.
 """
 Base.@kwdef struct ConditionalEntropyTsallisAbe{B, Q} <: ConditionalEntropy
     base::B = 2

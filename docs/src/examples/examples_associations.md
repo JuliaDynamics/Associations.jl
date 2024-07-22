@@ -1,5 +1,107 @@
 # Examples of association measure estimation
 
+## [`HellingerDistance`](@ref)
+
+### [From precomputed probabilities](@id example_HellingerDistance_precomputed_probabilities)
+
+```@example example_HellingerDistance
+using CausalityTools
+# From pre-computed PMFs
+p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
+p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
+association(HellingerDistance(), p1, p2)
+```
+
+### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_HellingerDistance_JointProbabilities_OrdinalPatterns)
+
+We expect the Hellinger distance between two uncorrelated variables to be close to zero.
+
+```@example example_HellingerDistance
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+n = 100000
+x, y = rand(rng, n), rand(rng, n)
+est = JointProbabilities(HellingerDistance(), CodifyVariables(OrdinalPatterns(m=3)))
+div_hd = association(est, x, y) # pretty close to zero
+```
+
+## [`KLDivergence`](@ref)
+
+### [From precomputed probabilities](@id example_KLDivergence_precomputed_probabilities)
+
+```@example example_KLDivergence
+using CausalityTools
+# From pre-computed PMFs
+p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
+p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
+association(KLDivergence(), p1, p2)
+```
+
+### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_KLDivergence_JointProbabilities_OrdinalPatterns)
+
+We expect the [`KlDivergence`](@ref) between two uncorrelated variables to be close to zero.
+
+```@example example_KLDivergence
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+n = 100000
+x, y = rand(rng, n), rand(rng, n)
+est = JointProbabilities(KLDivergence(), CodifyVariables(OrdinalPatterns(m=3)))
+div_hd = association(est, x, y) # pretty close to zero
+```
+
+
+## [`RenyiDivergence`](@ref)
+
+### [From precomputed probabilities](@id example_RenyiDivergence_precomputed_probabilities)
+
+```@example example_RenyiDivergence
+using CausalityTools
+# From pre-computed PMFs
+p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
+p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
+association(RenyiDivergence(), p1, p2)
+```
+
+### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_RenyiDivergence_JointProbabilities_OrdinalPatterns)
+
+We expect the [`RenyiDivergence`](@ref) between two uncorrelated variables to be close to zero.
+
+```@example example_RenyiDivergence
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+n = 100000
+x, y = rand(rng, n), rand(rng, n)
+est = JointProbabilities(RenyiDivergence(), CodifyVariables(OrdinalPatterns(m=3)))
+div_hd = association(est, x, y) # pretty close to zero
+```
+
+
+## [`VariationDistance`](@ref)
+
+### [From precomputed probabilities](@id example_VariationDistance_precomputed_probabilities)
+
+```@example example_VariationDistance
+using CausalityTools
+# From pre-computed PMFs
+p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
+p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
+association(VariationDistance(), p1, p2)
+```
+
+### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_VariationDistance_JointProbabilities_OrdinalPatterns)
+
+We expect the [`VariationDistance`](@ref) between two uncorrelated variables to be close to zero.
+
+```@example example_VariationDistance
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+n = 100000
+x, y = rand(rng, n), rand(rng, n)
+est = JointProbabilities(VariationDistance(), CodifyVariables(OrdinalPatterns(m=3)))
+div_hd = association(est, x, y) # pretty close to zero
+```
+
 ## [`JointEntropyShannon`](@ref)
 
 ### [[`JointProbabilities`](@ref) with [`Dispersion`](@ref)](@id example_JointEntropyShannon_Dispersion)
@@ -45,7 +147,7 @@ association(est, x, y)
 
 ## [`ConditionalEntropyShannon`](@ref)
 
-### Analytical examples
+### [Analytical examples](@id example_ConditionalEntropyShannon_analytical)
 
 This is essentially example 2.2.1 in Cover & Thomas (2006), where they use the following
 relative frequency table as an example. Notethat Julia is column-major, so we need to
@@ -88,7 +190,7 @@ pyx = Probabilities(transpose(freqs_yx))
 ce_y_given_x = association(ConditionalEntropyShannon(), pyx) |> Rational
 ```
 
-### [`ConditionalEntropyShannon`](@ref) with [`JointProbabilities`](@ref) estimator
+### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@ref)](@id example_ConditionalEntropyShannon_JointProbabilities_CodifyVariables_UniqueElements)
 
 We can of course also estimate conditional entropy from data. To do so, we'll use the 
 [`JointProbabilities`](@ref) estimator, which constructs a multivariate PMF for us.
@@ -98,14 +200,92 @@ are estimated under the hood for us.
 Let's first demonstrate on some categorical data. For that, we must use
 [`UniqueElements`](@ref) as the discretization (i.e. just count unique elements).
 
-```@example
-using CausalityTools, Random
-rng = MersenneTwister(1234)
-x = rand(rng, 1:3, 1000)
-y = rand(rng, ["The Witcher", "Lord of the Rings"], 1000)
+```@example example_ConditionalEntropyShannon_JointProbabilities_CodifyVariables_UniqueElements
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+n = 1000
+rating = rand(rng, 1:6, n)
+movie = rand(rng, ["The Witcher: the movie", "Lord of the Rings"], n)
+
 disc = CodifyVariables(UniqueElements())
 est = JointProbabilities(ConditionalEntropyShannon(), disc)
-association(est, x, y)
+association(est, rating, movie)
+```
+
+### [[`JointProbabilities`](@ref) + [`CodifyPoints`](@ref) + [`UniqueElementsEncoding`](@ref)](@id example_ConditionalEntropyShannon_JointProbabilities_CodifyPoints_UniqueElementsEncoding)
+
+```@example example_ConditionalEntropyShannon_JointProbabilities_CodifyPoints_UniqueElementsEncoding
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y, z = rand(rng, 1:5, 100), rand(rng, 1:5, 100), rand(rng, 1:3, 100)
+X = StateSpaceSet(x, z)
+Y = StateSpaceSet(y, z)
+disc = CodifyPoints(UniqueElementsEncoding(X), UniqueElementsEncoding(Y));
+est = JointProbabilities(ConditionalEntropyShannon(), disc);
+association(est, X, Y)
+```
+
+## [`ConditionalEntropyTsallisAbe`](@ref)
+
+### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@ref)](@id example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyVariables_UniqueElements)
+
+We'll here repeat the analysis we did for [`ConditionalEntropyShannon`](@ref) above.
+
+```@example example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyVariables_UniqueElements
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+n = 1000
+rating = rand(rng, 1:6, n)
+movie = rand(rng, ["The Witcher: the movie", "Lord of the Rings"], n)
+
+disc = CodifyVariables(UniqueElements())
+est = JointProbabilities(ConditionalEntropyTsallisAbe(q =1.5), disc)
+association(est, rating, movie)
+```
+
+### [[`JointProbabilities`](@ref) + [`CodifyPoints`](@ref) + [`UniqueElementsEncoding`](@ref)](@id example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyPoints_UniqueElementsEncoding)
+
+```@example example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyPoints_UniqueElementsEncoding
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y, z = rand(rng, 1:5, 100), rand(rng, 1:5, 100), rand(rng, 1:3, 100)
+X = StateSpaceSet(x, z)
+Y = StateSpaceSet(y, z)
+disc = CodifyPoints(UniqueElementsEncoding(X), UniqueElementsEncoding(Y));
+est = JointProbabilities(ConditionalEntropyTsallisAbe(q = 1.5), disc);
+association(est, X, Y)
+```
+
+
+## [`ConditionalEntropyTsallisFuruichi`](@ref)
+
+### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@ref)](@id example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements)
+
+We'll here repeat the analysis we did for [`ConditionalEntropyShannon`](@ref) and [`ConditionalEntropyTsallisAbe`](@ref) above.
+
+```@example example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+n = 1000
+rating = rand(rng, 1:6, n)
+movie = rand(rng, ["The Witcher: the movie", "Lord of the Rings"], n)
+
+disc = CodifyVariables(UniqueElements())
+est = JointProbabilities(ConditionalEntropyTsallisFuruichi(q =0.5), disc)
+association(est, rating, movie)
+```
+
+### [[`JointProbabilities`](@ref) + [`CodifyPoints`](@ref) + [`UniqueElementsEncoding`](@ref)](@id example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyPoints_UniqueElementsEncoding)
+
+```@example example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyPoints_UniqueElementsEncoding
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y, z = rand(rng, 1:5, 100), rand(rng, 1:5, 100), rand(rng, 1:3, 100)
+X = StateSpaceSet(x, z)
+Y = StateSpaceSet(y, z)
+disc = CodifyPoints(UniqueElementsEncoding(X), UniqueElementsEncoding(Y));
+est = JointProbabilities(ConditionalEntropyTsallisFuruichi(q = 0.5), disc);
+association(est, X, Y)
 ```
 
 

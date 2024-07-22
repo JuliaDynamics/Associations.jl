@@ -43,22 +43,11 @@ D_{KL}(P_Y(\\Omega) || P_Y(\\Omega)) =
     Distances.jl also defines `KLDivergence`. Quality it if you're loading both 
     packages, i.e. do `association(CausalityTools.KLDivergence(), x, y)`.
 
-## Examples
+## Estimation
 
-```julia
-using CausalityTools
-using Random; rng = Xoshiro(1234)
-n = 100000
-x, y = rand(rng, n), rand(rng, n)
-est = JointProbabilities(KLDivergence(), CodifyVariables(OrdinalPatterns(m=3)))
-# There should be zero information gain from `x` over `y` for independent random variables.
-abs(div_kl) ≤ 0.001
-
-# From pre-computed PMFs
-p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
-p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
-association(KLDivergence(), p1, p2)
-```
+- [Example 1](@ref example_KLDivergence_precomputed_probabilities): From precomputed probabilities
+- [Example 2](@ref example_KLDivergence_JointProbabilities_OrdinalPatterns): 
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref) outcome space
 """
 struct KLDivergence{B} <: DivergenceOrDistance
     base::B

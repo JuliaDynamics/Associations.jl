@@ -30,20 +30,9 @@ D_{V}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 ## Examples
 
-```julia
-using CausalityTools
-# From raw data
-using Random; rng = Xoshiro(1234)
-n = 100000
-x, y = rand(rng, n), rand(rng, n)
-est = JointProbabilities(VariationDistance(), CodifyVariables(OrdinalPatterns(m=3)))
-div_hd = association(est, x, y) # pretty close to zero
-
-# From pre-computed PMFs
-p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
-p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
-association(VariationDistance(), p1, p2)
-```
+- [Example 1](@ref example_VariationDistance_precomputed_probabilities): From precomputed probabilities
+- [Example 2](@ref example_VariationDistance_JointProbabilities_OrdinalPatterns): 
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref) outcome space
 """
 struct VariationDistance <: DivergenceOrDistance end
 

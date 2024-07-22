@@ -56,6 +56,16 @@ where ``h^S(\\cdot)`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref)
 differential entropy and Shannon joint differential entropy, respectively. This is the
 definition used when calling [`entropy_conditional`](@ref) with a
 [`DifferentialEntropyEstimator`](@ref).
+
+## Estimation
+
+- [Example 1](@ref example_ConditionalEntropyShannon_analytical): Analytical example from Cover & Thomas's book.
+- [Example 2](@ref example_ConditionalEntropyShannon_JointProbabilities_CodifyVariables_UniqueElements): 
+    [`JointProbabilities`](@ref) estimator with[`CodifyVariables`](@ref) discretization and 
+    [`UniqueElements`](@ref) outcome space on categorical data.
+- [Example 3](@ref example_ConditionalEntropyShannon_JointProbabilities_CodifyPoints_UniqueElementsEncoding): 
+    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@ref)
+    encoding of points on numerical data.
 """
 Base.@kwdef struct ConditionalEntropyShannon{B} <: ConditionalEntropy
     base::B = 2

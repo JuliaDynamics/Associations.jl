@@ -35,6 +35,15 @@ p(x, y) \\log(p(x | y))
 
 If any of the entries of the marginal distribution for `Y` are zero, then the 
 measure is undefined and `NaN` is returned.
+
+## Estimation
+
+- [Example 1](@ref example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements): 
+    [`JointProbabilities`](@ref) estimator with[`CodifyVariables`](@ref) discretization and 
+    [`UniqueElements`](@ref) outcome space on categorical data.
+- [Example 2](@ref example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyPoints_UniqueElementsEncoding): 
+    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@ref)
+    encoding of points on numerical data.
 """
 Base.@kwdef struct ConditionalEntropyTsallisFuruichi{B, Q} <: ConditionalEntropy
     base::B = 2
@@ -61,9 +70,11 @@ function association(definition::ConditionalEntropyTsallisFuruichi, pxy::Probabi
     qlog = logq0(q)
     for j in 1:Ny
         pyⱼ = py[j]
-        for i in 1:Nx
-            pxyᵢⱼ = pxy[i, j]
-            ce += pxyᵢⱼ^q * qlog(pxyᵢⱼ / pyⱼ)
+        if (pyⱼ > 0)
+            for i in 1:Nx
+                pxyᵢⱼ = pxy[i, j]
+                ce += pxyᵢⱼ^q * qlog(pxyᵢⱼ / pyⱼ)
+            end
         end
     end
     ce *= -1.0
