@@ -1,11 +1,12 @@
 using Test
 using CausalityTools
 using StateSpaceSets
-
+using Random
+rng = Xoshiro(1234)
 # V2.x
 @testset "ConvergentCrossMapping" begin
     n = 600
-    x, y, z, w = rand(n), rand(n), StateSpaceSet(rand(n, 3)), StateSpaceSet(rand(n + 1, 3))
+    x, y, z, w = rand(rng, n), rand(rng, n), StateSpaceSet(rand(rng, n, 3)), StateSpaceSet(rand(rng, n + 1, 3))
     τ = -1
     def = CCM(; τ)
     @test ConvergentCrossMapping() isa ConvergentCrossMapping
@@ -35,7 +36,7 @@ using StateSpaceSets
     @test all(length.(crossmap(e, x, y)) .== 7)
 
     @testset "Embed using CCM" begin
-        x, y = rand(100), rand(100)
+        x, y = rand(rng, 100), rand(rng, 100)
         # Embedding
         d, colidx_target, colidxs_source = CausalityTools.embed(ConvergentCrossMapping(), x, y)
         @test d isa AbstractStateSpaceSet
@@ -65,7 +66,7 @@ end
     @test PAI() isa PairwiseAsymmetricInference
     τ = -1
     def = PAI(; τ)
-    x, y, z, w = rand(n), rand(n), StateSpaceSet(rand(n, 3)), StateSpaceSet(rand(n + 1, 3))
+    x, y, z, w = rand(rng, n), rand(rng, n), StateSpaceSet(rand(rng, n, 3)), StateSpaceSet(rand(rng, n + 1, 3))
     @test crossmap(ExpandingSegment(def; libsizes = 100), x, y) isa Real
     @test crossmap(RandomSegment(def; libsizes = 100), x, y) isa Real
     @test crossmap(RandomVectors(def; libsizes = 100, replace = false), x, y) isa Real
@@ -78,7 +79,7 @@ end
     @test_throws ArgumentError crossmap(RandomVectors(def; libsizes = 100), x, w) isa Real
 
     @testset "Embed using CCM" begin
-        x, y = rand(100), rand(100)
+        x, y = rand(rng, 100), rand(rng, 100)
         # Embedding
         d, colidx_target, colidxs_source = CausalityTools.embed(def, x, y)
         @test d isa AbstractStateSpaceSet
@@ -103,6 +104,7 @@ end
 
 @testset "Estimator specifics" begin
     x, y = rand(50), rand(50)
+    τ = -1
     def = CCM(; τ)
     @test ExpandingSegment(def; libsizes = 100) isa CrossmapEstimator
     @test RandomSegment(def; libsizes = 100) isa CrossmapEstimator
