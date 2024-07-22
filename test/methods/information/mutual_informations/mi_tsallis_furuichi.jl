@@ -18,7 +18,8 @@ p = probabilities(x, y)
 est = JointProbabilities(def, UniqueElements())
 @test association(est, x, y) ≥ 0.0 # we don't have any better analytical numbers here.
 
-# Discrete entropy decomposition
+# Discrete entropy decomposition (on numerical data)
+x, y = rand(rng, 100), rand(rng, 100)
 est_disc = EntropyDecomposition(def, PlugIn(Tsallis()), CodifyVariables(OrdinalPatterns()), AddConstant())
 @test association(est_disc, x, y) isa Real
 
