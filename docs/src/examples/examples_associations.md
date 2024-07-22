@@ -195,7 +195,8 @@ association(est, x, y)
 
 ### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiJizba_JointProbabilities_UniqueElements)
 
-For categorical data, we can use the `JointProbabilities` estimator.
+[`MIRenyiJizba`](@ref) can be estimated for categorical data using [`JointProbabilities`](@ref) estimator
+with the [`UniqueElements`](@ref) outcome space.
 
 ```@example example_mirenyijizba
 using CausalityTools
@@ -206,8 +207,11 @@ est = JointProbabilities(MIRenyiJizba(), UniqueElements())
 association(est, x, y)
 ```
 
-
 ### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani)
+
+[`MIRenyiJizba`](@ref) can also estimated for numerical data using [`EntropyDecomposition`](@ref)
+in combination with any [`DifferentialInfoEstimator`](@ref) capable of estimating differential 
+[`Renyi`](@ref) entropy.
 
 ```@example example_MIRenyiJizba
 using CausalityTools
@@ -218,8 +222,12 @@ est_diff = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k=3))
 association(est_diff, x, y) 
 ```
 
-
 ### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_EntropyDecomposition_ValueBinning)
+
+[`MIRenyiJizba`](@ref) can also estimated for numerical data using [`EntropyDecomposition`](@ref)
+in combination with any [`DiscreteInfoEstimator`](@ref) capable of estimating differential 
+[`Renyi`](@ref) entropy over some [`OutcomeSpace`](@ref), e.g. [`ValueBinning`](@ref).
+
 
 ```@example example_MIRenyiJizba
 using CausalityTools
@@ -233,6 +241,9 @@ association(est_disc, x, y)
 ```
 
 ## [`MIRenyiSarbu`](@ref)
+
+[`MIRenyiSarbu`](@ref) can be estimated using the [`JointProbabilities`](@ref) estimator 
+in combination with any [`CodifyVariables`](@ref) or [`CodifyPoints`](@ref) discretization scheme.
 
 ### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_UniqueElements)
 
@@ -257,9 +268,13 @@ y = rand(rng, 200)
 est = JointProbabilities(MIRenyiSarbu(), CodifyVariables(CosineSimilarityBinning()))
 association(est, x, y)
 ```
+
 ## [`MITsallisFuruichi`](@ref)
 
 ### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MITsallisFuruichi_JointProbabilities_UniqueElements)
+
+[`MITsallisFuruichi`](@ref) can be estimated using the [`JointProbabilities`](@ref) estimator 
+in combination with any [`CodifyVariables`](@ref) or [`CodifyPoints`](@ref) discretization scheme.
 
 ```@example example_MITsallisFuruichi
 using CausalityTools
@@ -267,7 +282,7 @@ using Random; rng = Xoshiro(1234)
 x = rand(rng, 200)
 y = rand(rng, 200)
 
-est = JointProbabilities(MITsallisFuruichi(), UniqueElements())
+est = JointProbabilities(MITsallisFuruichi(q = 0.3), UniqueElements())
 association(est, x, y) 
 ```
 
@@ -298,6 +313,50 @@ association(est_disc, x, y)
 ```
 
 
+## [`MITsallisMartin`](@ref)
+
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MITsallisMartin_JointProbabilities_UniqueElements)
+
+```@example example_MITsallisMartin
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 200)
+y = rand(rng, 200)
+
+est = JointProbabilities(MITsallisMartin(q = 1.5), UniqueElements())
+association(est, x, y) 
+```
+
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisMartin_EntropyDecomposition_LeonenkoProsantoSavani)
+
+[`MITsallisMartin`](@ref) can be estimated using a decomposition into entropy 
+terms using [`EntropyDecomposition`](@ref) with any compatible estimator 
+that can estimate differential [`Tsallis`](@ref) entropy. 
+
+
+```@example example_MITsallisMartin
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 500)
+y = rand(rng, 500)
+
+est_diff = EntropyDecomposition(MITsallisMartin(), LeonenkoProzantoSavani(Tsallis(q= 1.5)))
+association(est_diff, x, y)
+```
+
+### [[`EntropyDecomposition`](@ref) + [`OrdinalPatterns`](@ref)](@id example_MITsallisMartin_EntropyDecomposition_OrdinalPatterns)
+
+
+```@example 
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 200)
+y = rand(rng, 200)
+disc = CodifyVariables(OrdinalPatterns())
+est_disc = EntropyDecomposition(MITsallisMartin(), PlugIn(Tsallis()), disc)
+
+association(est_disc, x, y)
+```
 
 ## [`CMIShannon`](@ref)
 
