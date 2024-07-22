@@ -102,7 +102,6 @@ JointEntropyRenyi
 
 ```@docs
 MutualInformation
-mutualinfo
 MIShannon
 MITsallisFuruichi
 MITsallisMartin
