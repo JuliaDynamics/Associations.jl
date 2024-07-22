@@ -65,19 +65,23 @@ end
 # Only works for `RelativeAmount`, because probabilities are obtained from the 
 # transfer operator.
 function h4_marginal_probs(
-        est::EntropyDecomposition{
-            <:TransferEntropy, 
-            <:DiscreteInfoEstimator, 
-            <:TransferOperator, 
-            <:RelativeAmount
-        },
+    est::EntropyDecomposition{
+        <:TransferEntropy, 
+        <:DiscreteInfoEstimator, 
+        <:CodifyVariables{1, <:TransferOperator},
+        <:RelativeAmount
+    },
         x...
     )
-    if !est.discretization.binning.precise
+    # We never reach this point unless the outcome space is the same for all marginals,
+    # so we can safely pick the first outcome space.
+    d::TransferOperator = first(est.discretization.outcome_spaces)
+
+    if !d.binning.precise
         throw(ArgumentError("Please supply a binning with `precise == true`, otherwise points may end up outside the binning."))
     end
     joint_pts, vars, τs, js = te_embed(est.definition.embedding, x...)
-    iv = invariantmeasure(joint_pts, est.discretization.binning)
+    iv = invariantmeasure(joint_pts, d.binning)
 
     # TODO: this needs to be done more cleverly in ComplexityMeasures.jl, so we don't
     # need to do the conversion twice. We should explicitly store the bin indices for all
@@ -110,7 +114,7 @@ function association(
         est::EntropyDecomposition{
             <:TransferEntropy, 
             <:DiscreteInfoEstimator, 
-            <:TransferOperator, 
+            <:CodifyVariables{1, <:TransferOperator},
             <:RelativeAmount
         },
         x...)

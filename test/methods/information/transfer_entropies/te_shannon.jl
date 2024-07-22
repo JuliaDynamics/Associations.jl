@@ -35,13 +35,13 @@ est_lindner = Lindner(def, k = 3)
 @test association(est_lindner, x, z) isa Real
 @test association(est_lindner, x, z, y) isa Real
 
-# # TODO: how to incorporate TransferOperator estimation explicitly? 
-# # We probabily need a dedicated estimator.
-# # Test `TransferOperator` explicitly
-# discretization = CodifyVariables(TransferOperator(RectangularBinning(2, true)))
-# est_disc = EntropyDecomposition(def, PlugIn(Shannon()), discretization);
-# @test association(est_disc, x, z) isa Real
-# @test association(est_disc, x, z, y) isa Real
+
+# Test `TransferOperator` decomposition explicitly, because it has a special implementation
+precise = true # precise bin edge
+discretization = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
+est_disc = EntropyDecomposition(TEShannon(), PlugIn(Shannon()), discretization);
+@test association(est_disc, x, z) isa Real
+@test association(est_disc, x, z, y) isa Real
 
 # ---------------
 # Pretty printing
