@@ -64,6 +64,9 @@ The information API has been overhauled.
 - New generic decomposition-based estimator `CMIDecomposition`. This estimator
     computes some multivariate information measure by rewriting the measure definition
     as a combination of some conditional mutual information measure.
+- Estimation of transfer entropies using the `TransferOperator` outcome space 
+    no longer is supported. It will be re-introduced as a dedicated estimator in a
+    a future release.
 
 ### Bux fixes
 

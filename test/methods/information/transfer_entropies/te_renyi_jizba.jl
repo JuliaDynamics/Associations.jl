@@ -19,11 +19,13 @@ est_disc = EntropyDecomposition(def, PlugIn(Renyi()), CodifyVariables(ValueBinni
 @test association(est_disc, x, z) isa Real
 @test association(est_disc, x, z, y) isa Real
 
-# Test `TransferOperator` explicitly
-discretization = CodifyVariables(TransferOperator(RectangularBinning(2, true)))
-est_disc = EntropyDecomposition(def, PlugIn(Renyi()), discretization)
-@test association(est_disc, x, z) isa Real
-@test association(est_disc, x, z, y) isa Real
+# TODO: how to incorporate TransferOperator estimation explicitly? 
+# We probabily need a dedicated estimator.
+# # Test `TransferOperator` explicitly
+# discretization = CodifyVariables(TransferOperator(RectangularBinning(2, true)))
+# est_disc = EntropyDecomposition(def, PlugIn(Renyi()), discretization)
+# @test association(est_disc, x, z) isa Real
+# @test association(est_disc, x, z, y) isa Real
 
 
 
