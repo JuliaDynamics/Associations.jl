@@ -16,15 +16,17 @@ pages = [
     "Network/graph inference" => "causal_graphs.md",
     "Examples" => [
         "Association measures" => "examples/examples_associations.md",
+        "Graph inference" => "examples/examples_infer_graphs.md",
+        "Extended examples" => [
+            "extended_examples/cross_mapping.md",
+            "extended_examples/pairwise_asymmetric_inference.md",
+            "extended_examples/mutual_information.md",
+        ],
         #"Correlation examples" => "examples/examples_correlation.md",
         #"Closeness examples" => "examples/examples_closeness.md",
         #"Crossmap examples" => "examples/examples_cross_mappings.md",
     ],
-    "Extended examples" => [
-        "extended_examples/cross_mapping.md",
-        "extended_examples/pairwise_asymmetric_inference.md",
-        "extended_examples/mutual_information.md",
-    ],
+    
     "Basics and tutorials" => [
         "Encoding elements" => "encoding_tutorial.md",
         "Encoding input datasets" => "discretization_tutorial.md",
