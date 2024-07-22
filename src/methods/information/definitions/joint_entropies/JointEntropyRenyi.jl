@@ -28,15 +28,10 @@ H_q^R(X, Y) = \\dfrac{1}{1-\\alpha} \\log \\sum_{i = 1}^N p_i^q,
 
 where ``q > 0`` and ``q != 1``.
 
-## Examples
+## Estimation
 
-```julia
-using CausalityTools
-x, y = rand(100), rand(100)
-measure = JointEntropyRenyi()
-discretization = CodifyVariables(OrdinalPatterns(m=3))
-association(JointProbabilities(measure, discretization), x, y)
-```
+- [Example 1](@ref example_JointEntropyRenyi_ValueBinning): 
+    [`JointProbabilities`](@ref) with [`ValueBinning`](@ref) outcome space
 """
 Base.@kwdef struct JointEntropyRenyi{B, Q} <: JointEntropy
     base::B = 2

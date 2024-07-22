@@ -28,16 +28,10 @@ H^S(X, Y) = -\\sum_{x\\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y) \\log p(x, 
 
 where we define ``log(p(x, y)) := 0`` if ``p(x, y) = 0``.
 
-## Examples
+## Estimation
 
-```julia
-using CausalityTools
-x, y = rand(100), rand(100)
-measure = JointEntropyShannon()
-discretization = CodifyVariables(Dispersion(m=2, c = 3))
-est = JointProbabilities(measure, discretization)
-association(est, x, y)
-```
+- [Example 1](@ref example_JointEntropyShannon_Dispersion): 
+    [`JointProbabilities`](@ref) with [`Dispersion`](@ref) outcome space
 """
 Base.@kwdef struct JointEntropyShannon{B} <: JointEntropy
     base::B = 2

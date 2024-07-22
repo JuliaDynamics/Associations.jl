@@ -1,5 +1,47 @@
 # Examples of association measure estimation
 
+## [`JointEntropyShannon`](@ref)
+
+### [[`JointProbabilities`](@ref) with [`Dispersion`](@ref)](@id example_JointEntropyShannon_Dispersion)
+
+```@example example_JointEntropyShannon
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y = rand(rng, 100), rand(rng, 100)
+measure = JointEntropyShannon()
+discretization = CodifyVariables(Dispersion(m = 2, c = 3))
+est = JointProbabilities(measure, discretization)
+association(est, x, y)
+```
+
+## [`JointEntropyTsallis`](@ref)
+
+### [[`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref)](@id example_JointEntropyTsallis_OrdinalPatterns)
+
+```@example example_JointEntropyTsallis
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y = rand(rng, 100), rand(rng, 100)
+measure = JointEntropyTsallis()
+discretization = CodifyVariables(OrdinalPatterns(m = 3))
+est = JointProbabilities(measure, discretization)
+association(est, x, y)
+```
+
+
+## [`JointEntropyRenyi`](@ref)
+
+### [[`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref)](@id example_JointEntropyRenyi_ValueBinning)
+
+```@example example_JointEntropyRenyi
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y = rand(rng, 100), rand(rng, 100)
+measure = JointEntropyRenyi(q = 0.5)
+discretization = CodifyVariables(ValueBinning(2))
+est = JointProbabilities(measure, discretization)
+association(est, x, y)
+```
 
 ## [`ConditionalEntropyShannon`](@ref)
 
