@@ -24,7 +24,7 @@ y = randn(rng, 50);
 est_diff = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k=3))
 @test association(est_diff, x, y) isa Real
 
-est_disc = EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2));
+est_disc = EntropyDecomposition(def, PlugIn(Renyi()), CodifyVariables(ValueBinning(2)));
 @test association(est_disc, x, y) isa Real
 
 # ---------------
@@ -32,6 +32,6 @@ est_disc = EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2));
 # ---------------
 def = MIRenyiJizba()
 out_hdiff = repr(EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi())))
-out_hdisc = repr(EntropyDecomposition(def, PlugIn(Renyi()), ValueBinning(2)))
+out_hdisc = repr(EntropyDecomposition(def, PlugIn(Renyi()), CodifyVariables(ValueBinning(2))))
 @test occursin("Iᵣⱼ(X, Y) = Hᵣ(X) + Hᵣ(Y) - Hᵣ(X, Y)", out_hdisc)
 @test occursin("Iᵣⱼ(X, Y) = hᵣ(X) + hᵣ(Y) - hᵣ(X, Y)", out_hdiff)

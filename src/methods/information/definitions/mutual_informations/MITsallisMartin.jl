@@ -67,7 +67,7 @@ function association(definition::MITsallisMartin, pxy::Probabilities{T, 2}) wher
 end
 
 function association(est::EntropyDecomposition{<:MITsallisMartin, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
-    HX, HY, HXY = marginal_entropies_mi3h(est, x, y)
+    HX, HY, HXY = marginal_entropies_mi3h_differential(est, x, y)
     q = est.definition.q
     mi = HX + HY - (1 - q) * HX * HY - HXY
     return mi

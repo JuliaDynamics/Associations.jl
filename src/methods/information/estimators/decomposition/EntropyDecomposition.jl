@@ -6,16 +6,20 @@ export EntropyDecomposition
         est::DifferentialInfoEstimator)
     EntropyDecomposition(definition::MultivariateInformationMeasure,
         est::DiscreteInfoEstimator,
-        discretization::OutcomeSpace,
+        discretization::CodifyVariables{<:OutcomeSpace},
         pest::ProbabilitiesEstimator = RelativeAmount())
 
 Estimate the multivariate information measure specified by `definition` by rewriting
 its formula into some combination of entropy terms. 
 
+If calling the second method (discrete variant), then discretization is always done 
+per variable/column and each column is encoded into integers using [`codify`](@ref).
+
 ## Usage
 
 - Use with [`association`](@ref) to compute a [`MultivariateInformationMeasure`](@ref)
     from input data.
+- Use with [`independence`](@ref) to test for independence between variables.
 
 ## Description
 
@@ -129,7 +133,12 @@ association(est, x, z, y) # should be near 0 (and can be negative)
 
 See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).
 """
-struct EntropyDecomposition{M <: MultivariateInformationMeasure, E <: InformationMeasureEstimator, D, P} <: DecompositionEstimator{M}
+struct EntropyDecomposition{
+        M <: MultivariateInformationMeasure, 
+        E <: InformationMeasureEstimator, 
+        D <: Union{Discretization, Nothing}, 
+        P <: Union{ProbabilitiesEstimator, Nothing}
+        } <: DecompositionEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.
     est::E # The estimator + measure which `definition` is decomposed into.
     discretization::D # `Nothing` if `est` is a `DifferentialInfoEstimator`.

@@ -66,7 +66,7 @@ end
 
 
 function association(est::EntropyDecomposition{<:MITsallisFuruichi, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
-    HX, HY, HXY = marginal_entropies_mi3h(est, x, y)
+    HX, HY, HXY = marginal_entropies_mi3h_differential(est, x, y)
     mi = HX + HY - HXY
     return mi
 end

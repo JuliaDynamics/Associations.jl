@@ -37,19 +37,31 @@ to handle discretization.
 - [`UniqueElements`](@ref). Each timeseries is [`codify`](@ref)-ed according to 
     its unique values (i.e. each unique element gets assigned a specific integer).
 
-Many more implementations are possible. Each new implementation gives one new
-way of estimating the [`ContingencyMatrix`](@ref)
+More implementations are possible.
 """
 function codified_marginals end
 
-function codified_marginals(est, x::VectorOrStateSpaceSet...)
-    return codify_marginal.(Ref(est), x)
+function codified_marginals(d::CodifyVariables, x::VectorOrStateSpaceSet...)
+    T = eltype(d.outcome_spaces) # assume identical outcome spaces.
+    if !allequal(typeof.(d.outcome_spaces))
+        throw(ArgumentError("Outcome space for each marginal must be identical. Got outcome spaces of type $T"))
+    end
+    o = first(d.outcome_spaces) # we can do this because we assume all out come spaces are the same
+    return codified_marginals(o, x...)
 end
 
-function codify_marginal(est, x::AbstractStateSpaceSet)
-    return StateSpaceSet(codify_marginal.(Ref(est), columns(x))...)
+function codified_marginals(o::OutcomeSpace, x::VectorOrStateSpaceSet...)
+    return codify_marginal.(Ref(o), x)
 end
 
+# Apply per column.
+function codify_marginal(o::OutcomeSpace, x::AbstractStateSpaceSet)
+    return StateSpaceSet(codify_marginal.(Ref(o), columns(x))...)
+end
+
+# ------------------------------------------------------------------------
+# Outcome space specific implementations
+# ------------------------------------------------------------------------
 function codify_marginal(o::UniqueElements, x::AbstractVector)
     return x
 end
@@ -65,6 +77,7 @@ end
 function codify_marginal(o::CosineSimilarityBinning, x::AbstractVector)
     return codify(o, x)
 end
+
 # TODO: maybe construct a convenience wrapper where the user can avoid constructing the
 # joint space, for performance benefits (but increased bias).
 function codify_marginal(

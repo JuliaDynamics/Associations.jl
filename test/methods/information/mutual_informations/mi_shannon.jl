@@ -24,7 +24,7 @@ y = randn(rng, 50)
 est_diff = EntropyDecomposition(def, Kraskov(k=3))
 @test association(est_diff, x, y) isa Real
 
-est_disc = EntropyDecomposition(def, PlugIn(Shannon()), ValueBinning(2));
+est_disc = EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(ValueBinning(2)));
 @test association(est_disc, x, y) isa Real
 
 # ::::::::::::::::::::::::
@@ -55,7 +55,7 @@ def = MIShannon()
 # ---------------
 def = MIShannon()
 out_hdiff = repr(EntropyDecomposition(def, Kraskov()))
-out_hdisc = repr(EntropyDecomposition(def, PlugIn(Shannon()), ValueBinning(2)))
+out_hdisc = repr(EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(ValueBinning(2))))
 
 @test occursin("Iₛ(X, Y) = Hₛ(X) + Hₛ(Y) - Hₛ(X, Y)", out_hdisc)
 @test occursin("Iₛ(X, Y) = hₛ(X) + hₛ(Y) - hₛ(X, Y)", out_hdiff)
