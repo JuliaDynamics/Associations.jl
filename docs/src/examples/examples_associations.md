@@ -193,7 +193,7 @@ association(est, x, y)
 
 ## [`MIRenyiJizba`](@ref)
 
-## [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiJizba_JointProbabilities_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiJizba_JointProbabilities_UniqueElements)
 
 For categorical data, we can use the `JointProbabilities` estimator.
 
@@ -207,7 +207,7 @@ association(est, x, y)
 ```
 
 
-## [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani)
 
 ```@example example_MIRenyiJizba
 using CausalityTools
@@ -219,7 +219,7 @@ association(est_diff, x, y)
 ```
 
 
-## [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_EntropyDecomposition_ValueBinning)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_EntropyDecomposition_ValueBinning)
 
 ```@example example_MIRenyiJizba
 using CausalityTools
@@ -232,9 +232,9 @@ est_disc = EntropyDecomposition(def, PlugIn(Renyi()), disc);
 association(est_disc, x, y)
 ```
 
-## [`MiRenyiSarbu`](@ref)
+## [`MIRenyiSarbu`](@ref)
 
-## [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_UniqueElements)
 
 ```@example example_MIRenyiSarbu
 using CausalityTools
@@ -246,7 +246,7 @@ est = JointProbabilities(MIRenyiSarbu(), CodifyVariables(UniqueElements()))
 association(est, x, y)
 ```
 
-## [[`JointProbabilities`](@ref) + [`CosineSimilarityBinning`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning)
+### [[`JointProbabilities`](@ref) + [`CosineSimilarityBinning`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning)
 
 ```@example example_MIRenyiSarbu
 using CausalityTools
