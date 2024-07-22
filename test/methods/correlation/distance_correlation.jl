@@ -32,5 +32,5 @@ M = reshape([0.0, 0.2, 0.3, 0.2, 0.0, 0.6, 0.3, 0.6, 0.3], 3, 3)
 @test_logs (:warn, "Convenience function `distance_correlation` is deprecated. Use `association(DistanceCorrelation(), x, y)` instead.") distance_correlation(x, y)
 @test_logs (:warn, "Convenience function `distance_correlation` is deprecated. Use `association(DistanceCorrelation(), x, y, z)` instead.") distance_correlation(x, y, z)
 
-@test min_inputs_vars(DistanceCorrelation()) == 2
-@test max_inputs_vars(DistanceCorrelation()) == 3
+@test CausalityTools.min_inputs_vars(DistanceCorrelation()) == 2
+@test CausalityTools.max_inputs_vars(DistanceCorrelation()) == 3
