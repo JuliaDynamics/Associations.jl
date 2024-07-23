@@ -40,21 +40,21 @@ entropy is then estimated using the provided `est` on those phases/amplitudes (u
 
 See also: [`Phase`](@ref), [`Amplitude`](@ref).
 """
-struct Hilbert{E} <: TransferEntropyEstimator
+struct Hilbert{M} <: TransferEntropyEstimator{M}
+    est::M # the estimator of the transfer entropy to be applied *after* transformation of the time series.
     source::InstantaneousSignalProperty
     target::InstantaneousSignalProperty
     cond::InstantaneousSignalProperty
-    est::E
 
-    function Hilbert(est::E;
+    function Hilbert(est::M;
             source::InstantaneousSignalProperty = Phase(),
             target::InstantaneousSignalProperty = Phase(),
-            cond::InstantaneousSignalProperty = Phase()) where E
-        new{E}(source, target, cond, est)
+            cond::InstantaneousSignalProperty = Phase()) where M
+        new{M}(est, source, target, cond)
     end
 end
 
-function association(measure::TransferEntropy, est::Hilbert, source, target)
+function association(est::Hilbert, source, target)
     hil_s = DSP.hilbert(source)
     hil_t = DSP.hilbert(target)
 
@@ -74,11 +74,10 @@ function association(measure::TransferEntropy, est::Hilbert, source, target)
         error("est.target must be either Phase or Amplitude instance")
     end
 
-    # Now, estimate transfer entropy on the phases/amplitudes with the given estimator.
-    transferentropy(measure, est.est, s, t)
+    association(est.est, s, t)
 end
 
-function association(measure::TransferEntropy, est::Hilbert, source, target, cond)
+function association(est::Hilbert, source, target, cond)
     hil_s = DSP.hilbert(source)
     hil_t = DSP.hilbert(target)
     hil_c = DSP.hilbert(cond)
@@ -106,6 +105,6 @@ function association(measure::TransferEntropy, est::Hilbert, source, target, con
     else
         error("est.cond must be either Phase or Amplitude instance")
     end
-
-    transferentropy(measure, est.est, s, t, c)
+    
+    association(est.est, s, t, c)
 end

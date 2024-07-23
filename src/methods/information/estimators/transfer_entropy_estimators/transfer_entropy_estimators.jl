@@ -8,3 +8,6 @@ abstract type TransferEntropyEstimator{M} <: MultivariateInformationMeasureEstim
 # Concrete implementations
 include("Zhu1.jl")
 include("Lindner.jl")
+
+# convenience
+include("Hilbert.jl")
