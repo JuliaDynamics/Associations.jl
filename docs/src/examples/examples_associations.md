@@ -1047,5 +1047,3 @@ plot!(ax, libsizes, mean.(ρs))
 errorbars!(ax, libsizes, mean.(ρs), std.(ρs))
 f
 ```
-
-Now, the `k`-th element of `ρs` contains `50` estimates of the correspondence measure `ρ` at library size `libsizes[k]`.
