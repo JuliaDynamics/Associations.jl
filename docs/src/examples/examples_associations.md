@@ -863,6 +863,22 @@ The Shannon-type transfer entropy from `x` to `z` is stronger than the transfer 
 `y`, so "conditioning away" the effect of `y` should decrease the estimated 
 information transfer.
 
+### [[`SymbolicTransferEntropy`](@ref) estimator](@id example_TEShannon_SymbolicTransferEntropy)
+
+The [`SymbolicTransferEntropy`](@ref) estimator is just a convenience wrapper which utilizes
+[`CodifyVariables`](@ref)with the [`OrdinalPattern`](@ref) outcome space to 
+discretize the input time series before computing transfer entropy.
+
+We'll use coupled time series from the `logistic4` system above, where `x → y → z → w`.
+Thus, we expect that the association for the direction `x → y` is larger than for `y → x`. We also expect an association `x → z`, but the association should weaken when conditioning 
+on the intermediate value `y`.
+
+```@example transfer_entropy_examples
+x, y, z, w = columns(first(trajectory(sys, 300, Ttr = 10000)))
+est = SymbolicTransferEntropy(m = 5)
+association(est, x, y), association(est, y, x), association(est, x, z), association(est, x, z, y)
+```
+
 ## [`TERenyiJizba`](@ref)
 
 ### [[`EntropyDecomposition`](@ref) + [`TransferOperator`](@ref)](@id example_TERenyiJizba_EntropyDecomposition_TransferOperator)

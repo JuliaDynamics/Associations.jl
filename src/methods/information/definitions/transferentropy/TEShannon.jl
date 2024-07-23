@@ -30,7 +30,10 @@ where ``I(T^+; S^- | T^-)`` is the Shannon conditional mutual information
 
 ## Estimation
 
-- [Example 1](@ref example_TEShannon_EntropyDecomposition_TransferOperator): [`EntropyDecomposition`](@ref) with [`TransferOperator`](@ref) outcome space.
+- [Example 1](@ref example_TEShannon_EntropyDecomposition_TransferOperator): 
+    [`EntropyDecomposition`](@ref) with [`TransferOperator`](@ref) outcome space.
+- [Example 2](@ref example_TEShannon_SymbolicTransferEntropy): Estimation using the
+    [`SymbolicTransferEntropy`](@ref) estimator.
 """
 struct TEShannon{B, EMB} <: TransferEntropy
     base::B

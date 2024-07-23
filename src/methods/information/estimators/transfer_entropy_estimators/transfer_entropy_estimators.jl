@@ -11,3 +11,4 @@ include("Lindner.jl")
 
 # convenience
 include("Hilbert.jl")
+include("SymbolicTransferEntropy.jl")

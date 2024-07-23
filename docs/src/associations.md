@@ -124,6 +124,7 @@ TransferEntropyEstimator
 Zhu1
 Lindner
 Hilbert
+SymbolicTransferEntropy
 ```
 
 ##### Convenience
