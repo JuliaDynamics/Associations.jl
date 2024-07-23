@@ -286,3 +286,10 @@ MMeasure
 ```@docs
 LMeasure
 ```
+
+## Recurrence-based
+
+```@docs
+MCR
+RMCD
+```

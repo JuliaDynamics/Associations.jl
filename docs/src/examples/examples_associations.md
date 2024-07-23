@@ -1047,3 +1047,23 @@ plot!(ax, libsizes, mean.(ρs))
 errorbars!(ax, libsizes, mean.(ρs), std.(ρs))
 f
 ```
+
+## [Mean conditional recurrence probability ([`MCR`](@ref))](@id example_MCR)
+
+```@example example_mcr
+using CausalityTools
+using Random; rng = Xoshiro(1234);
+x = rand(rng, 300); y = rand(rng, 300) .* sin.(x); z = rand(rng, 300) .* y;
+est = MCR(r = 0.5)
+association(est, x, y), association(est, x, z), association(est, x, z, y)
+```
+
+## [Recurrence measure of conditional dependence ([`RMCD`](@ref))](@id example_RMCD)
+
+```@example example_mcr
+using CausalityTools
+using Random; rng = Xoshiro(1234);
+x = rand(rng, 300); y = rand(rng, 300) .* sin.(x); z = rand(rng, 300) .* y;
+est = RMCD(r = 0.5)
+association(est, x, y), association(est, x, z), association(est, x, z, y)
+```
