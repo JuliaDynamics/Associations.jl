@@ -1,49 +1,10 @@
 # Association measures
 
-The most basic components of CausalityTools.jl are a collection of statistics that in some manner quantify the "association" between input datasets. Precisely what is meant by "association" depends on the measure, and precisely what is meant by "quantify" depends on the *estimator* of that measure. 
+## API
 
-To compute any association between two or more variable, use the [`association`](@ref) function with 
-an [`AssociationMeasure`](@ref) (complete list in the table below) or an [`AssociationMeasureEstimator`](@ref).
+The most basic components of CausalityTools.jl are a collection of statistics that in some manner quantify the "association" between input datasets. Precisely what is meant by "association" depends on the measure, and precisely what is meant by "quantify" depends on the *estimator* of that measure. We formalize this notion below with the [`association`](@ref)
+function, which dispatches on [`AssociationMeasureEstimator`](@ref) and [`AssociationMeasure`](@ref).
 
-## [Overview](@id overview_association_measures)
-
-| Type                    | [`AssociationMeasure`](@ref)                | Pairwise | Conditional |
-|-------------------------|---------------------------------------------|:--------:|:-----------:|
-| Correlation             | [`PearsonCorrelation`](@ref)                |    ✓     |      ✖      |
-| Correlation             | [`DistanceCorrelation`](@ref)               |    ✓     |      ✓      |
-| Closeness               | [`SMeasure`](@ref)                          |    ✓     |      ✖      |
-| Closeness               | [`HMeasure`](@ref)                          |    ✓     |      ✖      |
-| Closeness               | [`MMeasure`](@ref)                          |    ✓     |      ✖      |
-| Closeness (ranks)       | [`LMeasure`](@ref)                          |    ✓     |      ✖      |
-| Closeness               | [`JointDistanceDistribution`](@ref)         |    ✓     |      ✖      |
-| Cross-mapping           | [`PairwiseAsymmetricInference`](@ref)       |    ✓     |      ✖      |
-| Cross-mapping           | [`ConvergentCrossMapping`](@ref)            |    ✓     |      ✖      |
-| Conditional recurrence  | [`MCR`](@ref)                               |    ✓     |      ✖      |
-| Conditional recurrence  | [`RMCD`](@ref)                              |    ✓     |      ✓      |
-| Shared information      | [`MIShannon`](@ref)                         |    ✓     |      ✖      |
-| Shared information      | [`MIRenyiJizba`](@ref)                      |    ✓     |      ✖      |
-| Shared information      | [`MIRenyiSarbu`](@ref)                      |    ✓     |      ✖      |
-| Shared information      | [`MITsallisFuruichi`](@ref)                 |    ✓     |      ✖      |
-| Shared information      | [`PartialCorrelation`](@ref)                |    ✖     |      ✓      |
-| Shared information      | [`CMIShannon`](@ref)                        |    ✖     |      ✓      |
-| Shared information      | [`CMIRenyiSarbu`](@ref)                     |    ✖     |      ✓      |
-| Shared information      | [`CMIRenyiJizba`](@ref)                     |    ✖     |      ✓      |
-| Shared information      | [`CMIRenyiPoczos`](@ref)                    |    ✖     |      ✓      |
-| Shared information      | [`CMITsallisPapapetrou`](@ref)                        |    ✖     |      ✓      |
-| Information transfer    | [`TEShannon`](@ref)                         |    ✓     |      ✓      |
-| Information transfer    | [`TERenyiJizba`](@ref)                      |    ✓     |      ✓      |
-| Part mutual information | [`PMI`](@ref)                               |    ✖     |      ✓      |
-| Information asymmetry   | [`PA`](@ref)                                |    ✓     |      ✓      |
-| Information measure     | [`JointEntropyShannon`](@ref)               |    ✓     |      ✖      |
-| Information measure     | [`JointEntropyRenyi`](@ref)                 |    ✓     |      ✖      |
-| Information measure     | [`JointEntropyTsallis`](@ref)               |    ✓     |      ✖      |
-| Information measure     | [`ConditionalEntropyShannon`](@ref)         |    ✓     |      ✖      |
-| Information measure     | [`ConditionalEntropyTsallisAbe`](@ref)      |    ✓     |      ✖      |
-| Information measure     | [`ConditionalEntropyTsallisFuruichi`](@ref) |    ✓     |      ✖      |
-| Divergence              | [`HellingerDistance`](@ref)                 |    ✓     |      ✖      |
-| Divergence              | [`KLDivergence`](@ref)                      |    ✓     |      ✖      |
-| Divergence              | [`RenyiDivergence`](@ref)                   |    ✓     |      ✖      |
-| Divergence              | [`VariationDistance`](@ref)                 |    ✓     |      ✖      |
 
 ```@docs
 association
