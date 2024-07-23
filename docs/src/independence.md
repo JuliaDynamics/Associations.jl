@@ -8,7 +8,7 @@ association measure, and perform some sort of randomization-based
 
 For example, to test the dependence between time series, [time series surrogates testing](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl) is used. Many other frameworks for independence exist too. Here, we've collected some independence testing frameworks, and made sure that they are compatible with as many of the implemented association measures as possible.
 
-## Overview
+## Independence testing API
 
 The independence test API is defined by
 
