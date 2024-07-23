@@ -29,8 +29,8 @@ or the conditional association between three variables, like so:
     association(DistanceCorrelation(), x, y, z) → pdcor
 
 With two variable, we comptue `dcor`, which is called the empirical/sample distance 
-correlation [Székely2007](@cite). With three variables, the 
-partial distance correlation `pdcor` is computed [Székely2014](@cite).
+correlation [Szekely2007](@cite). With three variables, the 
+partial distance correlation `pdcor` is computed [Szekely2014](@cite).
 
 !!! warn
     A partial distance correlation `distance_correlation(X, Y, Z) = 0` doesn't
