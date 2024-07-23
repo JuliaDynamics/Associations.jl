@@ -33,11 +33,13 @@ est_disc = EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(ValueBin
 # On vector-valued inputs
 def = MIShannon()
 x, y = rand(rng, 100), rand(rng, 100)
+X, Y = StateSpaceSet(x), StateSpaceSet(y)
 @test association(KSG1(def, k = 2), x, y) isa Real
 @test association(KSG2(def, k = 2), x, y) isa Real
 @test association(GaoOhViswanath(def, k = 2), x, y) isa Real
 @test association(GaoKannanOhViswanath(def, k = 2), x, y) isa Real
 @test association(GaussianMI(def), x, y) isa Real
+@test association(GaussianMI(def), X, Y) isa Real
 
 # On `StateSpaceSet`s
 data = [rand(rng, 50, 2) for i = 1:2]
