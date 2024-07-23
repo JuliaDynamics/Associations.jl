@@ -151,40 +151,6 @@ function verify_number_of_inputs_vars(est::MultivariateInformationMeasureEstimat
     return verify_number_of_inputs_vars(est.definition, n)
 end
 
-# ----------------------------------------------------------------
-# Compatibility with ComplexityMeasures.jl
-# ----------------------------------------------------------------
-"""
-    information(est::MultivariateInformationMeasureEstimator, x, y, [z, w, ...])
-
-Using the provided estimator `est`, estimate the information measure given by
-`est.definition` from input data `x, y, ...`, where the number of inputs depend on `est`.
-
-The docstring for [`MultivariateInformationMeasure`](@ref) lists all possible measures,
-and the docstring for [`MultivariateInformationMeasureEstimator`](@ref) lists possible
-estimators. You may also want to check out the
-[convenience wrappers](@ref convenience_info) in the online documentation.
-
-## Examples
-
-```julia
-using CausalityTools
-using Random; rng = MersenneTwister(12345)
-x, y, z = rand(rng, 100), rand(rng, 100), rand(rng, 100)
-
-
-# Mutual information
-# ------------------
-est = EntropyDecomposition(MIShannon(), PlugIn(Shannon()), OrdinalPatterns(m=3))
-association(est, x, y)
-
-est = JointProbabilities(MIShannon(), CodifyVariables(OrdinalPatterns(m=3)))
-association(est, x, y)
-
-# Conditional mutual information
-association(JointProbabilities(CMIShannon(), ValueBinning(3)), x, y, z)
-```
-"""
-#function information(est::MultivariateInformationMeasureEstimator, x...)
-#    return association(est, x...)
-#end
+function size_match(measure::BivariateInformationMeasure, px::Probabilities, py::Probabilities)
+    size(px) == size(py) || throw(DimensionMismatch("px and py must have the same size"))
+end
