@@ -17,6 +17,7 @@ on a point-by-point basis.
 
 ```@example
 using CausalityTools
+using StateSpaceSets
 using Random; rng = Xoshiro(1234)
 
 # The first variable is 2-dimensional and has 50 points
@@ -119,7 +120,7 @@ Discretization
 CodifyVariables
 ```
 
-The sliding-window discretization is formally done by applying some [`OutcomeSpace`](@ref) to each variable/column. Pick between the folloing outcome spaces
+The sliding-window discretization is formally done by applying some [`OutcomeSpace`](@ref) to each variable/column. Pick between the following outcome spaces
 
 ```@docs
 UniqueElements
