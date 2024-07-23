@@ -35,7 +35,6 @@ The crossmap API has been overhauled.
 - `CrossmapEstimator`s now take the `CrossmapMeasure` definition as their first argument.
     For example, you'll have to do `ExpandingSegment(CCM(); libsizes = 10:10:50)` instead
     of `ExpandingSegment(; libsizes = 10:10:50)`.
-- Methods `crossmap` and `predict` are *not exported* any longer. Use `association` instead. 
 
 #### Information API
 

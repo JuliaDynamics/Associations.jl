@@ -162,7 +162,7 @@ end
 reproduce_figure_3B()
 ```
 
-### Figures 3C and 3D
+### [Figures 3C and 3D](@id example_sugihara_figs3Cand3D)
 
 Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
 introduced the [`ConvergentCrossMapping`](@ref) measure.

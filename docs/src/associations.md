@@ -239,6 +239,21 @@ RandomSegment
 ExpandingSegment
 ```
 
+### Advanced utility methods
+
+For most use cases, it is sufficient to provide a [`CrossmapEstimator`](@ref) to 
+[`association`](@ref) to compute a cross map measure. However, in some cases it 
+can be useful to have more fine-grained controls. We offer a few utility functions
+for this purpose.
+
+In the example where we [reproduce Figures 3C and 3D](@ref example_sugihara_figs3Cand3D) of [Sugihara2012](@ref), these lower-level 
+functions are used.
+
+```@docs
+predict
+crossmap
+```
+
 ## [Closeness measures](@id closeness_api)
 
 ### Joint distance distribution

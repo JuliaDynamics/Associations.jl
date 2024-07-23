@@ -8,11 +8,12 @@ export ConvergentCrossMapping, CCM
     ConvergentCrossMapping(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The convergent [cross mapping](@ref cross_mapping_api) (CCM) measure [Sugihara2012](@cite)).
+The convergent cross mapping measure [Sugihara2012](@cite).
 
 ## Usage
 
-- Use with [`association`](@ref) to compute cross mappings between two datasets.
+- Use with [`association`](@ref) together with a [`CrossmapEstimator`](@ref) to compute the 
+    cross-map correlation between input variables.
 
 ## Compatible estimators
 
@@ -22,10 +23,8 @@ The convergent [cross mapping](@ref cross_mapping_api) (CCM) measure [Sugihara20
 
 ## Description
 
-Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
-with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
-temporal neighbors are excluded during neighbor searches (`w = 0` means that only the
-point itself is excluded).
+The Theiler window `w` controls how many temporal neighbors are excluded during neighbor 
+searches (`w = 0` means that only the point itself is excluded).
 `f` is a function that computes the agreement between observations and
 predictions (the default, `f = Statistics.cor`, gives the Pearson correlation
 coefficient).
@@ -47,6 +46,15 @@ With this convention, `τ < 0` implies "past/present values of source used to pr
 target", and `τ > 0` implies "future/present values of source used to predict target".
 The latter case may not be meaningful for many applications, so by default, a warning
 will be given if `τ > 0` (`embed_warn = false` turns off warnings).
+
+## Estimation
+
+- [Example 1](@ref example_ConvergentCrossMapping_RandomVectors). 
+    Estimation with [`RandomVectors`](@ref) estimator.
+- [Example 2](@ref example_ConvergentCrossMapping_RandomSegment). 
+    Estimation with [`RandomSegment`](@ref) estimator.
+- [Example 3](@ref example_ConvergentCrossMapping_reproducing_sugihara): Reproducing 
+    figures from [Sugihara2012](@citet).
 """
 Base.@kwdef struct ConvergentCrossMapping <: CrossmapMeasure
     d::Int = 2
