@@ -4,21 +4,22 @@ export RandomVectors
 
 """
     RandomVectors <: CrossmapEstimator
-    RandomVectors(definition::CrossmapMeasure; 
-        libsizes, replace = false, rng = Random.default_rng())
+    RandomVectors(definition::CrossmapMeasure; libsizes, replace = false, 
+        rng = Random.default_rng())
 
 Cross map *once* over  `N = length(libsizes)` different "point libraries", where 
-points are selected randomly (not considering time ordering). 
+point indices are selected randomly (not considering time ordering). 
 
-This is method 3 from [Luo2015](@citet).
+This is method 3 from [Luo2015](@citet). See [`CrossmapEstimator`](@ref) for an in-depth 
+explanation of what "library" means in this context.
 
 ## Description
 
 The cardinality of the point libraries are given by `libsizes`. One set of 
-random points are selected per `L ∈ libsizes`, and the `i`-th 
+random point indices is selected per `L ∈ libsizes`, and the `i`-th 
 library has cardinality `k = libsizes[i]`. 
 
-Points within each library are randomly selected, independently of other libraries.
+Point indices within each library are randomly selected, independently of other libraries.
 A user-specified `rng` may be specified for reproducibility. The `replace` argument
 controls whether sampling is done with or without replacement. If the time series
 you're cross mapping between have length `M`, and `Lᵢ < M` for any `Lᵢ ∈ libsizes`,

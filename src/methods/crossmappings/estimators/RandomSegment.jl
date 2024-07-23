@@ -4,19 +4,19 @@ export RandomSegment
 
 """
     RandomSegment <: CrossmapEstimator
-    RandomSegment(definition::CrossmapMeasure; 
-        libsizes::Int, rng = Random.default_rng())
+    RandomSegment(definition::CrossmapMeasure; libsizes::Int, rng = Random.default_rng())
 
 Cross map *once* over `N = length(libsizes)` different "point libraries", where 
-points are selected contiguous point segments/windows.
+point indices are selected as time-contiguous segments with random starting points.
 
-This is method 2 from [Luo2015](@cite).
+This is method 2 from [Luo2015](@cite). See [`CrossmapEstimator`](@ref) for an in-depth 
+explanation of what "library" means in this context.
 
 ## Description
 
-The cardinality of the point segments are given by `libsizes`. One segment 
+The cardinality of the point index segments are given by `libsizes`. One segment 
 with a randomly selected starting point is picked per `L ∈ libsizes`, and the `i`-th 
-point segment ("point library") has cardinality `k = libsizes[i]`. 
+point index segment has cardinality `k = libsizes[i]`. 
 
 The starting point for each library is selected independently of other libraries.
 A user-specified `rng` may be specified for reproducibility. If the time series

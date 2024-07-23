@@ -2,16 +2,18 @@ export ExpandingSegment
 
 """
     ExpandingSegment <: CrossmapEstimator
-    ExpandingSegment(definition::CrossmapMeasure; 
-        libsizes, rng = Random.default_rng())
+    ExpandingSegment(definition::CrossmapMeasure; libsizes, rng = Random.default_rng())
 
 Cross map *once* over `N = length(libsizes)` different "point libraries", where 
-points are selected as contiguous point segments/windows. 
+point indices are selected as time-contiguous segments/windows.
+
+This is the method from [Sugihara2012](@ref). See [`CrossmapEstimator`](@ref) for an in-depth 
+explanation of what "library" means in this context.
 
 ## Description
 
-Point segments are selected as first available data point, up to the `L`th data point.
-This results in one library of contiguous points per `L ∈ libsizes`.
+Point index segments are selected as first available data point index, up to the `L`th data point index.
+This results in one library of contiguous time indices per `L ∈ libsizes`.
 
 If used in an ensemble setting, the estimator is applied to time indices `Lmin:step:Lmax`
 of the joint embedding.

@@ -41,23 +41,23 @@ type parameters.
 For efficiency purposes, subtypes may contain mutable containers that can be re-used
 for ensemble analysis (see [`Ensemble`](@ref)).
 
-## Libraries
+!!! info "Libraries"
 
-A cross-map estimator uses the concept of "libraries". A library is essentially just
-a reference to a set of points, and usually, a library refers to *indices* of points,
-not the actual points themselves.
+    A cross-map estimator uses the concept of "libraries". A library is essentially just
+    a reference to a set of points, and usually, a library refers to *indices* of points,
+    not the actual points themselves.
 
-For example, for timeseries, `RandomVectors(libsizes = 50:25:100)` produces three
-separate libraries, where the first contains 50 randomly selected time indices,
-the second contains 75 randomly selected time indices, and the third contains
-100 randomly selected time indices. This of course assumes that all quantities involved
-can be indexed using the same time indices, meaning that the concept of "library"
-only makes sense *after* relevant quantities have been *jointly* embedded, so that they
-can be jointly indexed. For non-instantaneous prediction, the maximum possible library
-size shrinks with the magnitude of the index/time-offset for the prediction.
+    For example, for timeseries, `RandomVectors(libsizes = 50:25:100)` produces three
+    separate libraries, where the first contains 50 randomly selected time indices,
+    the second contains 75 randomly selected time indices, and the third contains
+    100 randomly selected time indices. This of course assumes that all quantities involved
+    can be indexed using the same time indices, meaning that the concept of "library"
+    only makes sense *after* relevant quantities have been *jointly* embedded, so that they
+    can be jointly indexed. For non-instantaneous prediction, the maximum possible library
+    size shrinks with the magnitude of the index/time-offset for the prediction.
 
-For spatial analyses (not yet implemented), indices could be more complex and involve
-multi-indices.
+    For spatial analyses (not yet implemented), indices could be more complex and involve
+    multi-indices.
 """
 abstract type CrossmapEstimator{M, LIBSIZES, RNG} end
 
