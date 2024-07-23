@@ -1012,8 +1012,7 @@ errorbars!(ax, libsizes, mean.(ρs), std.(ρs))
 f
 ```
 
-###  [[`RandomSegment`](@ref) estimator](@id example_PairwiseAsymmetricInference_RandomSegment)
-
+### [[`RandomSegment`](@ref) estimator](@id example_PairwiseAsymmetricInference_RandomSegment)
 
 ```@example example_PairwiseAsymmetricInference
 using CausalityTools
@@ -1048,9 +1047,10 @@ errorbars!(ax, libsizes, mean.(ρs), std.(ρs))
 f
 ```
 
-## [Mean conditional recurrence probability ([`MCR`](@ref))](@id example_MCR)
+## [[`MCR`](@ref)](@id example_MCR)
 
-We'll create a chain of variables where `X` drives `Y`, which in turn drives 
+To quantify association by the mean conditional probability of recurrence (MCR),
+we'll create a chain of variables where `X` drives `Y`, which in turn drives 
 `Z`. We then expect there to be significant detectable association between both
 `X` and `Y`, `Y` and `Z` and also `X` and `Z` (because `Y` transfers information
 from `X` to `Z`. We expect the association between `X` and `Z` to disappear when
@@ -1064,14 +1064,14 @@ est = MCR(r = 0.5)
 association(est, x, y), association(est, x, z), association(est, y, z), association(est, x, z, y)
 ```
 
-## [Recurrence measure of conditional dependence ([`RMCD`](@ref))](@id example_RMCD)
+## [[`RMCD`](@ref)](@id example_RMCD)
 
-We'll create a chain of variables where `X` drives `Y`, which in turn drives 
+To quantify association by the recurrence measure of conditional dependence (RMCD),
+we'll create a chain of variables where `X` drives `Y`, which in turn drives 
 `Z`. We then expect there to be significant detectable association between both
 `X` and `Y`, `Y` and `Z` and also `X` and `Z` (because `Y` transfers information
 from `X` to `Z`. We expect the association between `X` and `Z` to disappear when
 conditioning on `Y` (since we're then "removing the effect" of `Y`).
-
 
 ```@example example_mcr
 using CausalityTools
