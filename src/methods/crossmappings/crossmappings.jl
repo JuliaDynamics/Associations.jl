@@ -6,11 +6,8 @@ using Neighborhood: bulksearch
 using StaticArrays: MVector
 using StateSpaceSets: AbstractStateSpaceSet
 
-export predict
-export crossmap
 export CrossmapMeasure
 export CrossmapEstimator
-export Ensemble
 
 """
     CrossmapMeasure <: AssociationMeasure
@@ -94,9 +91,9 @@ This produces `emb`, a `D`-dimensional `StateSpaceSet` where
 function embed(measure::CrossmapMeasure, args...) end
 
 """
-    crossmap(measure::CrossmapMeasure, t::AbstractVector, s::AbstractVector) → ρ::Real
-    crossmap(measure::CrossmapMeasure, est, t::AbstractVector, s::AbstractVector) → ρ::Vector
-    crossmap(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → ρ
+    crossmap(measure::CrossmapEstimator, t::AbstractVector, s::AbstractVector) → ρ::Real
+    crossmap(measure::CrossmapEstimator, est, t::AbstractVector, s::AbstractVector) → ρ::Vector
+    crossmap(measure::CrossmapEstimator, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → ρ
 
 Compute the cross map estimates between between raw time series `t` and `s` (and return
 the real-valued cross-map statistic `ρ`). If a [`CrossmapEstimator`](@ref) `est` is provided,
@@ -116,8 +113,8 @@ function crossmap end
 # implementations go in a relevant `measures/CustomMeasure.jl` file.
 
 """
-    predict(measure::CrossmapMeasure, t::AbstractVector, s::AbstractVector) → t̂ₛ, t̄, ρ
-    predict(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → t̂ₛ
+    predict(measure::CrossmapEstimator, t::AbstractVector, s::AbstractVector) → t̂ₛ, t̄, ρ
+    predict(measure::CrossmapEstimator, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → t̂ₛ
 
 Perform point-wise cross mappings between source embeddings and target time series
 according to the algorithm specified by the given cross-map `measure` (e.g.
@@ -183,21 +180,6 @@ function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractState
         t̂ₛ[i] = sum(w .* t[nnidxsᵢ])
     end
     return t̂ₛ
-end
-
-"""
-    Ensemble(; measure::CrossmapMeasure, est::CrossmapEstimator, nreps::Int = 100)
-
-A directive to compute an ensemble analysis, where `measure` (e.g.
-[`ConvergentCrossMapping`](@ref)) is computed
-using the given estimator `est` (e.g. [`RandomVectors`](@ref))
-"""
-Base.@kwdef struct Ensemble{M <: CrossmapEstimator{<:CrossmapMeasure}} # todo: perhaps just use a more general Ensemble?
-    est::M
-    nreps::Int = 100
-    function Ensemble(est::M; nreps = 100) where {M}
-        new{M}(est, nreps)
-    end
 end
 
 include("estimators/estimators.jl")
