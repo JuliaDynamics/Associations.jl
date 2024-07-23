@@ -43,6 +43,30 @@ est_disc = EntropyDecomposition(TEShannon(), PlugIn(Shannon()), discretization);
 @test association(est_disc, x, z) isa Real
 @test association(est_disc, x, z, y) isa Real
 
+# `JointProbabilities`
+x, y, z = rand(rng, 30), rand(rng, 30), rand(rng, 30)
+est = JointProbabilities(TEShannon(), CodifyVariables(OrdinalPatterns()));
+@test association(est, x, y) >= 0.0
+@test association(est, x, y, z) >= 0.0
+
+# `Hilbert`
+est_te = JointProbabilities(TEShannon(), CodifyVariables(OrdinalPatterns()));
+est = Hilbert(est)
+@test association(Hilbert(est, source = Phase(), target = Amplitude()), x, y) >= 0.0
+@test association(Hilbert(est, source = Amplitude(), target = Phase()), x, y) >= 0.0
+@test association(Hilbert(est, source = Amplitude(), target = Amplitude()), x, y) >= 0.0
+@test association(Hilbert(est, source = Phase(), target = Phase()), x, y) >= 0.0
+
+@test association(Hilbert(est, source = Phase(), target = Amplitude(), cond = Phase() ), x, y, z) >= 0.0
+@test association(Hilbert(est, source = Amplitude(), target = Phase(), cond = Phase() ), x, y, z) >= 0.0
+@test association(Hilbert(est, source = Amplitude(), target = Amplitude(), cond = Phase() ), x, y, z) >= 0.0
+@test association(Hilbert(est, source = Phase(), target = Phase(), cond = Phase() ), x, y, z) >= 0.0
+@test association(Hilbert(est, source = Phase(), target = Amplitude(), cond = Amplitude() ), x, y, z) >= 0.0
+@test association(Hilbert(est, source = Amplitude(), target = Phase(), cond = Amplitude() ), x, y, z) >= 0.0
+@test association(Hilbert(est, source = Amplitude(), target = Amplitude(), cond = Amplitude() ), x, y, z) >= 0.0
+@test association(Hilbert(est, source = Phase(), target = Phase(), cond = Amplitude() ), x, y, z) >= 0.0
+
+
 # ---------------
 # Pretty printing
 # ---------------
