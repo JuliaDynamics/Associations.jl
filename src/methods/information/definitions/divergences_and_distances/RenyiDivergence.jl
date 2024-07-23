@@ -62,6 +62,7 @@ RenyiDivergence(; q = 0.5, base = 2) = RenyiDivergence(q, base)
 # Estimation methods
 # ----------------------------------------------------------------
 function association(est::JointProbabilities{<:RenyiDivergence}, x, y)
+    # Dispatch to generic method in `divergences_and_distances.jl` with 2D `Probabilities`
     probs = probabilities(est.discretization, x, y)
     return association(est.definition, probs)
 end
