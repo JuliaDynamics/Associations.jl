@@ -17,3 +17,8 @@ new_est_shannon = CausalityTools.estimator_with_overridden_parameters(def_shanno
 @test new_est_renyi == PlugIn(Renyi(; q = 5, base = 5)) 
 @test new_est_tsallis == PlugIn(Tsallis(; q = 5, base = 5)) 
 @test new_est_shannon == PlugIn(Shannon(; base = 5)) 
+
+
+p1 = Probabilities([0.1, 0.2, 0.3])
+p2 = Probabilities([0.1, 0.2, 0.3, 0.4])
+@test_throws DimensionMismatch CausalityTools.size_match(KLDivergence(), p1, p2)
