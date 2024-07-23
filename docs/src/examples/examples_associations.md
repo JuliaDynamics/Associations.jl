@@ -623,12 +623,13 @@ association(FPVP(k = 5), x, z, y) # defaults to `CMIShannon()`
 using CausalityTools
 using Distributions
 using Statistics
+using Random; rng = Xoshiro(1234)
 
 n = 1000
 # A chain X → Y → Z
-x = rand(Normal(-1, 0.5), n)
-y = rand(BetaPrime(0.5, 1.5), n) .+ x
-z = rand(Chisq(100), n)
+x = rand(rng, Normal(-1, 0.5), n)
+y = rand(rng, BetaPrime(0.5, 1.5), n) .+ x
+z = rand(rng, Chisq(100), n)
 z = (z ./ std(z)) .+ y
 
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
@@ -643,12 +644,13 @@ association(MesnerShalizi(; k = 10), x, z, y) # defaults to `CMIShannon()`
 using CausalityTools
 using Distributions
 using Statistics
+using Random; rng = Xoshiro(1234)
 
 n = 1000
 # A chain X → Y → Z
-x = rand(Normal(-1, 0.5), n)
-y = rand(BetaPrime(0.5, 1.5), n) .+ x
-z = rand(Chisq(100), n)
+x = rand(rng, Normal(-1, 0.5), n)
+y = rand(rng, BetaPrime(0.5, 1.5), n) .+ x
+z = rand(rng, Chisq(100), n)
 z = (z ./ std(z)) .+ y
 
 # We expect zero (in practice: very low) CMI when computing I(X; Z | Y), because
@@ -719,11 +721,12 @@ usethe [`EntropyDecomposition`](@ref) estimator. No bias correction is applied f
 ```@example
 using CausalityTools
 using Distributions
-n = 1000
+using Random; rng = Xoshiro(1234)
+n = 500
 # A chain X → Y → Z
-x = rand(Epanechnikov(0.5, 1.0), n)
-y = rand(Erlang(1), n) .+ x
-z = rand(FDist(5, 2), n)
+x = rand(rng, Epanechnikov(0.5, 1.0), n)
+y = rand(rng, Normal(0, 0.2), n) .+ x
+z = rand(rng, FDist(3, 2), n)
 est = EntropyDecomposition(CMIShannon(), Kraskov(k = 5))
 association(est, x, z, y)
 ```
@@ -738,11 +741,12 @@ discretization (an [`OutcomeSpace`](@ref)).
 ```@example
 using CausalityTools
 using Distributions
-n = 1000
+using Random; rng = Xoshiro(1234)
+n = 500
 # A chain X → Y → Z
-x = rand(Epanechnikov(0.5, 1.0), n)
-y = rand(Erlang(1), n) .+ x
-z = rand(FDist(5, 2), n)
+x = rand(rng, Epanechnikov(0.5, 1.0), n)
+y = rand(rng, Normal(0, 0.2), n) .+ x
+z = rand(rng, FDist(3, 2), n)
 discretization = CodifyVariables(ValueBinning(RectangularBinning(5)))
 hest = PlugIn(Shannon())
 est = EntropyDecomposition(CMIShannon(), hest, discretization)
