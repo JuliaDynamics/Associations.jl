@@ -1,5 +1,6 @@
 using Test
 using CausalityTools
+using DynamicalSystemsBase
 using Random
 rng = Xoshiro(1234)
 
@@ -66,6 +67,12 @@ est = Hilbert(est)
 @test association(Hilbert(est, source = Amplitude(), target = Amplitude(), cond = Amplitude() ), x, y, z) >= 0.0
 @test association(Hilbert(est, source = Phase(), target = Phase(), cond = Amplitude() ), x, y, z) >= 0.0
 
+# `SymbolicTransferEntropy`
+sys = system(Logistic4Chain(; rng))
+x, y, z, w = columns(first(trajectory(sys, 300, Ttr = 10000)))
+est = SymbolicTransferEntropy(m = 5)
+@test association(est, x, y) ≥ 0.0
+@test association(est, x, z) > association(est, x, z, y)
 
 # ---------------
 # Pretty printing
