@@ -10,7 +10,7 @@ using ComplexityMeasures
 using StateSpaceSets
 
 pages = [
-    "Overview" => "index.md",
+    "CausalityTools.jl" => "index.md",
     "Association measures" => "associations.md",
     "Independence" => "independence.md",
     "Network/graph inference" => "causal_graphs.md",

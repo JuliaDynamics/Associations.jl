@@ -14,8 +14,8 @@ find online or build locally by running the `docs/make.jl` file.
 
 ## Key features
 
-- **Association API** including measures and their estimators for pairwise, conditional and other forms of association from conventional statistics, from dynamical
-    systems theory, and from information theory: partial correlation, distance correlation, (conditional) mutual information, transfer entropy, convergent cross mapping and a lot more!
+- **Association API**: includes measures and their estimators for pairwise, conditional and other forms of 
+    association from conventional statistics, from dynamical systems theory, and from information theory: partial correlation, distance correlation, (conditional) mutual information, transfer entropy, convergent cross mapping and a lot more!
 - **Independence testing API**, which is automatically compatible with
     every association measure estimator implemented in the package. 
 - **Causal (network) inference API** integrating the association measures and independence testing framework.

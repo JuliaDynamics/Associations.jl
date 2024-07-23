@@ -14,7 +14,11 @@ This update includes a number of breaking changes, several of which are *not* ba
 These are done to ensure compatibility with 
 [ComplexityMeasures.jl v3](https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/), which provides discretization functionality that we use here.
 
-See the CHANGELOG.md for a complete list of changes.
+Important changes are:
+- Convenience methods have been removed completely. Use [`association`](@ref) instead.
+- Example systems have been removed.
+- The syntax for computing an association has changed. The first argument to [`association`](@ref) is always *either* definition ([`AssociationMeasure`](@ref)), or an estimator that *contains* the definition it estimates ([`AssociationMeasure`](@ref) estimator). For example, `association(MIShannon(), KSG1(), x, y)` now is `association(KSG1(MIShannon()), x, y)`. This unifies the estimation syntax with ComplexityMeasures.jl, where we also use the concept of "estimator contains its definition".
+- See the CHANGELOG.md for a complete list of changes.
 
 ## Documentation content 
 
