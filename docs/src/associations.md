@@ -221,6 +221,14 @@ Since their paper, several cross mapping methods and frameworks have emerged in 
 literature. In CausalityTools.jl, we provide a unified interface for using these cross
 mapping methods.
 
+```@docs
+CrossmapMeasure
+ConvergentCrossMapping
+PairwiseAsymmetricInference
+```
+
+### Utilities 
+
 To estimate a cross map measure, you simply input a [`CrossmapMeasure`](@ref) instance
 as the first argument to a [`CrossmapEstimator`](@ref), which is then fed to 
 the [`crossmap`](@ref) or [`predict`](@ref) functions. 
@@ -242,11 +250,6 @@ predict
 
 ### Measures
 
-```@docs
-CrossmapMeasure
-ConvergentCrossMapping
-PairwiseAsymmetricInference
-```
 
 ### Estimators
 

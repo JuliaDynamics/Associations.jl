@@ -7,12 +7,29 @@ export RandomVectors
     RandomVectors(definition::CrossmapMeasure; 
         libsizes, replace = false, rng = Random.default_rng())
 
-Cross-map over `N` different libraries, where `N = length(libsizes)`, and the `i`-th
-library has cardinality `k = libsizes[i]`. Points within each library are randomly
-selected, independently of other libraries, and `replace` controls whether or not to
-sample with replacement. A user-specified `rng` may be specified for reproducibility.
+Cross map *once* over  `N = length(libsizes)` different "point libraries", where 
+points are selected randomly (not considering time ordering). 
 
 This is method 3 from [Luo2015](@citet).
+
+## Description
+
+The cardinality of the point libraries are given by `libsizes`. One set of 
+random points are selected per `L ∈ libsizes`, and the `i`-th 
+library has cardinality `k = libsizes[i]`. 
+
+Points within each library are randomly selected, independently of other libraries.
+A user-specified `rng` may be specified for reproducibility. The `replace` argument
+controls whether sampling is done with or without replacement. If the time series
+you're cross mapping between have length `M`, and `Lᵢ < M` for any `Lᵢ ∈ libsizes`,
+then you must set `replace = true`.
+
+## Returns
+
+The return type when used with [`association`](@ref) depends on the type of `libsizes`.
+- If `libsizes` is an `Int` (a single library), then a single cross-map estimate is returned.
+- If `libsizes` is an `AbstractVector{Int}` (multiple libraries), then a vector of cross-map
+    estimates is returned --- one per library.
 
 See also: [`CrossmapEstimator`](@ref).
 """

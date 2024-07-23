@@ -1,6 +1,6 @@
 # [`ConvergentCrossMapping`](@ref)
 
-## Reproducing Sugihara et al. (2012)
+## [Reproducing Sugihara et al. (2012)](@id example_ConvergentCrossMapping_reproducing_sugihara)
 
 !!! note "Run blocks consecutively"
     If copying these examples and running them locally, make sure the relevant packages (given in the first block) are loaded first.
@@ -186,7 +186,6 @@ using StaticArrays
 using DynamicalSystemsBase
 using StateSpaceSets
 using CairoMakie, Printf
-
 
 # -----------------------------------------------------------------------------------------
 # Create 500-point long time series for Sugihara et al. (2012)'s example for figure 3.

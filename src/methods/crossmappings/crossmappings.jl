@@ -19,19 +19,21 @@ The supertype for all cross-map measures. Concrete subtypes are
 
 - [`ConvergentCrossMapping`](@ref), or [`CCM`](@ref) for short.
 - [`PairwiseAsymmetricInference`](@ref), or [`PAI`](@ref) for short.
+
+See also: [`CrossmapEstimator`](@ref).
 """
 abstract type CrossmapMeasure <: AssociationMeasure end
 
 """
     CrossmapEstimator{M<:CrossmapMeasure, LIBSIZES, RNG}
 
-A parametric supertype for all cross-map estimators, which are used with [`predict`](@ref) and
-[`crossmap`](@ref).
+The abstract supertype for all cross-map estimators.
 
 ## Concrete subtypes
 
-- [`ConvergentCrossMapping`](@ref)
-- [`PairwiseAsymmetricInference`](@ref)
+- [`RandomVectors`](@ref)
+- [`RandomSegment`](@ref)
+- [`ExpandingSegment`](@ref)
 
 ## Description
 

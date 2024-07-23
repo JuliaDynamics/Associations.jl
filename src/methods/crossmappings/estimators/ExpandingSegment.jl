@@ -3,13 +3,25 @@ export ExpandingSegment
 """
     ExpandingSegment <: CrossmapEstimator
     ExpandingSegment(definition::CrossmapMeasure; 
-        libsizes::Int, rng = Random.default_rng())
+        libsizes, rng = Random.default_rng())
 
-Indicatates that cross mapping is performed on a contiguous time series segment/window,
-starting from the first available data point up to the `L`th data point.
+Cross map *once* over `N = length(libsizes)` different "point libraries", where 
+points are selected as contiguous point segments/windows. 
+
+## Description
+
+Point segments are selected as first available data point, up to the `L`th data point.
+This results in one library of contiguous points per `L ∈ libsizes`.
 
 If used in an ensemble setting, the estimator is applied to time indices `Lmin:step:Lmax`
 of the joint embedding.
+
+## Returns
+
+The return type when used with [`association`](@ref) depends on the type of `libsizes`.
+- If `libsizes` is an `Int` (a single library), then a single cross-map estimate is returned.
+- If `libsizes` is an `AbstractVector{Int}` (multiple libraries), then a vector of cross-map
+    estimates is returned --- one per library.
 """
 struct ExpandingSegment{M <: CrossmapMeasure, I, R} <: CrossmapEstimator{M, I, R}
     definition::M
@@ -26,7 +38,6 @@ struct ExpandingSegment{M <: CrossmapMeasure, I, R} <: CrossmapEstimator{M, I, R
 end
 
 function library_indices(est::ExpandingSegment, i::Int, target, args...)
-    definition = est.definition
     Lmax = max_segmentlength(est.definition, target)
     L = est.libsizes[i]
     L <= Lmax || throw(ArgumentError("L ($L) > Lmax ($Lmax). Use a smaller segment length (some points are lost when embedding)."))

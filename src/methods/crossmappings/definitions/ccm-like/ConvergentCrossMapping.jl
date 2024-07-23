@@ -12,7 +12,21 @@ The convergent cross mapping measure [Sugihara2012](@cite).
 
 ## Usage
 
-- Use with [`association`](@ref) to compute the cross-map correlation between input variables.
+- Use with [`association`](@ref) together with a [`CrossmapEstimator`](@ref) to compute the 
+    cross-map correlation between input variables.
+
+```julia
+est_single_lib = RandomSegment(ConvergentCrossMapping(); libsizes = 100)
+est_multiple_libs = RandomSegment(ConvergentCrossMapping; libsizes = [100, 200, 300])
+association(est_single_lib, x, y) → ρ ∈ [-1, 1]
+association(est_multiple_libs, x, y) → Vector{ρᵢ} (ρᵢ ∈ [-1, 1])
+```
+
+## Compatible estimators
+
+- [`RandomSegment`](@ref)
+- [`RandomVectors`](@ref)
+- [`ExpandingSegment`](@ref)
 
 ## Description
 
@@ -41,6 +55,15 @@ With this convention, `τ < 0` implies "past/present values of source used to pr
 target", and `τ > 0` implies "future/present values of source used to predict target".
 The latter case may not be meaningful for many applications, so by default, a warning
 will be given if `τ > 0` (`embed_warn = false` turns off warnings).
+
+## Estimation
+
+- [Example 1](@ref example_ConvergentCrossMapping_RandomVectors). 
+    Estimation with [`RandomVectors`](@ref) estimator.
+- [Example 2](@ref example_ConvergentCrossMapping_RandomSegment). 
+    Estimation with [`RandomSegment`](@ref) estimator.
+- [Example 3](@ref example_ConvergentCrossMapping_reproducing_sugihara): Reproducing 
+    figures from [Sugihara2012](@citet).
 """
 Base.@kwdef struct ConvergentCrossMapping <: CrossmapMeasure
     d::Int = 2

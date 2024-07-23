@@ -1,6 +1,6 @@
 # [`PairwiseAsymmetricInference`](@ref)
 
-## Reproducing McCracken & Weigel (2014)
+## [Reproducing McCracken & Weigel (2014)](@id example_PairwiseAsymmetricInference_reproduce_mccracken)
 
 Let's try to reproduce figure 8 from [McCracken2014](@citet)'s
 paper on [`PairwiseAsymmetricInference`](@ref) (PAI). We'll start by defining the their example B (equations 6-7). This system consists of two

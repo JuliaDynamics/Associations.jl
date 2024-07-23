@@ -883,15 +883,8 @@ association(est_disc_to, x, y), association(est_disc_to, y, x)
 
 ## [`ConvergentCrossMapping`](@ref)
 
-We can cross map directly between two datasets.
 
-```@example
-using CausalityTools
-x, y = rand(200), rand(100)
-crossmap(CCM(), x, y)
-```
-
-### Cross-map with [`RandomVectors`](@ref) estimator
+### [[`RandomVectors`](@ref) estimator](@id example_ConvergentCrossMapping_RandomVectors)
 
 When cross-mapping with the [`RandomVectors`](@ref) estimator, a single random subsample
 of time indices (i.e. not in any particular order) of length `l` is drawn for each library
@@ -906,7 +899,7 @@ x, y = randn(rng, 200), randn(rng, 200)
 # We'll draw a single sample at each `l ∈ libsizes`. Sampling with replacement is then
 # necessary, because our 200-pt timeseries will result in embeddings with
 # less than 200 points.
-est = RandomVectors(CCM(); libsizes = 50:25:200, replace = true, rng)
+est = RandomVectors(ConvergentCrossMapping(d = 3); libsizes = 50:25:200, replace = true, rng)
 crossmap(est, x, y)
 ```
 
@@ -917,7 +910,7 @@ crossmap repeatedly, e.g.
 using CausalityTools
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 200), randn(rng, 200)
-est = RandomVectors(CCM(); libsizes = 50:25:200, replace = true, rng)
+est = RandomVectors(ConvergentCrossMapping(d = 3); libsizes = 50:25:200, replace = true, rng)
 ρs = [crossmap(est, x, y) for i = 1:55]
 M = hcat(ρs...)
 ```
@@ -925,9 +918,9 @@ M = hcat(ρs...)
 Now, the `k`-th row of `M` contains `55` estimates of the correspondence measure `ρ`
 at library size `libsizes[k]`.
 
-###  Cross-map with [`RandomSegments`](@ref) estimator
+###  [[`RandomSegment`](@ref) estimator](@id example_ConvergentCrossMapping_RandomSegment)
 
-When cross-mapping with the [`RandomSegments`](@ref) estimator, a single random subsample
+When cross-mapping with the [`RandomSegment`](@ref) estimator, a single random subsample
 of continguous, ordered time indices of length `l` is drawn for each library
 size `l`, and cross mapping is performed using the embedding vectors corresponding
 to those time indices.
@@ -940,7 +933,7 @@ x, y = randn(rng, 200), randn(rng, 200)
 # We'll draw a single sample at each `l ∈ libsizes`. We limit the library size to 100, 
 # because drawing segments of the data longer than half the available data doesn't make
 # much sense.
-est = RandomSegment(CCM(); libsizes = 50:25:100, rng)
+est = RandomSegment(ConvergentCrossMapping(d = 3); libsizes = 50:25:100, rng)
 crossmap(est, x, y)
 ```
 
@@ -951,7 +944,72 @@ crossmap repeatedly, e.g.
 using CausalityTools
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 200), randn(rng, 200)
-est = RandomSegment(CCM(); libsizes = 50:25:100, rng)
+est = RandomSegment(ConvergentCrossMapping(d = 3); libsizes = 50:25:100, rng)
+ρs = [crossmap(est, x, y) for i = 1:80]
+M = hcat(ρs...)
+```
+
+Now, the `k`-th row of `M` contains `80` estimates of the correspondence measure `ρ`
+at library size `libsizes[k]`.
+
+## [`PairwiseAsymmetricInference`](@ref)
+
+We repeat the analyses above, but here use the pairwise asymmetric inference algorithm
+instead of the convergent cross map algorithm.
+
+### [[`RandomVectors`](@ref) estimator](@id example_PairwiseAsymmetricInference_RandomVectors)
+
+
+```@example example_PairwiseAsymmetricInference
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+
+# We'll draw a single sample at each `l ∈ libsizes`. Sampling with replacement is then
+# necessary, because our 200-pt timeseries will result in embeddings with
+# less than 200 points.
+est = RandomVectors(PairwiseAsymmetricInference(d = 3); libsizes = 50:25:200, replace = true, rng)
+crossmap(est, x, y)
+```
+
+To generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
+crossmap repeatedly, e.g.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+est = RandomVectors(PairwiseAsymmetricInference(d = 3); libsizes = 50:25:200, replace = true, rng)
+ρs = [crossmap(est, x, y) for i = 1:55]
+M = hcat(ρs...)
+```
+
+Now, the `k`-th row of `M` contains `55` estimates of the correspondence measure `ρ`
+at library size `libsizes[k]`.
+
+###  [[`RandomSegment`](@ref) estimator](@id example_PairwiseAsymmetricInference_RandomSegment)
+
+
+```@example example_PairwiseAsymmetricInference
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+
+# We'll draw a single sample at each `l ∈ libsizes`. We limit the library size to 100, 
+# because drawing segments of the data longer than half the available data doesn't make
+# much sense.
+est = RandomSegment(PairwiseAsymmetricInference(d = 3); libsizes = 50:25:100, rng)
+crossmap(est, x, y)
+```
+
+As above, to generate a distribution of cross-map estimates for each `l ∈ libsizes`, just call
+crossmap repeatedly, e.g.
+
+```@example
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x, y = randn(rng, 200), randn(rng, 200)
+est = RandomSegment(PairwiseAsymmetricInference(d = 3); libsizes = 50:25:100, rng)
 ρs = [crossmap(est, x, y) for i = 1:80]
 M = hcat(ρs...)
 ```

@@ -7,10 +7,32 @@ export RandomSegment
     RandomSegment(definition::CrossmapMeasure; 
         libsizes::Int, rng = Random.default_rng())
 
-Indicatates that cross mapping is performed on contiguous time series
-segments/windows of length `L` with a randomly selected starting point.
+Cross map *once* over `N = length(libsizes)` different "point libraries", where 
+points are selected contiguous point segments/windows.
 
 This is method 2 from [Luo2015](@cite).
+
+## Description
+
+The cardinality of the point segments are given by `libsizes`. One segment 
+with a randomly selected starting point is picked per `L ∈ libsizes`, and the `i`-th 
+point segment ("point library") has cardinality `k = libsizes[i]`. 
+
+The starting point for each library is selected independently of other libraries.
+A user-specified `rng` may be specified for reproducibility. If the time series
+you're cross mapping between have length `M`, and `Lᵢ < M` for any `Lᵢ ∈ libsizes`,
+then an error will be thrown.
+
+A user-specified `rng` may be specified for reproducibility.
+
+## Returns
+
+The return type when used with [`association`](@ref) depends on the type of `libsizes`.
+- If `libsizes` is an `Int` (a single library), then a single cross-map estimate is returned.
+- If `libsizes` is an `AbstractVector{Int}` (multiple libraries), then a vector of cross-map
+    estimates is returned --- one per library.
+
+See also: [`CrossmapEstimator`](@ref).
 """
 struct RandomSegment{M <: CrossmapMeasure, I, R} <: CrossmapEstimator{M, I, R}
     definition::M

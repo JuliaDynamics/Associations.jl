@@ -17,6 +17,12 @@ algorithms are identical.
 - Use with [`association`](@ref) to compute the pairwise asymmetric inference measure 
     between variables.
 
+## Compatible estimators
+
+- [`RandomSegment`](@ref)
+- [`RandomVectors`](@ref)
+- [`ExpandingSegment`](@ref)
+
 ## Description
 
 Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
@@ -47,6 +53,15 @@ With this convention, `τ < 0` implies "past/present values of source used to pr
 target", and `τ > 0` implies "future/present values of source used to predict target".
 The latter case may not be meaningful for many applications, so by default, a warning
 will be given if `τ > 0` (`embed_warn = false` turns off warnings).
+
+## Estimation
+
+- [Example 1](@ref example_PairwiseAsymmetricInference_RandomVectors). 
+    Estimation with [`RandomVectors`](@ref) estimator.
+- [Example 2](@ref example_PairwiseAsymmetricInference_RandomSegment). 
+    Estimation with [`RandomSegment`](@ref) estimator.
+- [Example 3](@ref example_PairwiseAsymmetricInference_reproduce_mccracken). Reproducing 
+    McCracken & Weigel's results from the original paper.
 """
 Base.@kwdef struct PairwiseAsymmetricInference <: CrossmapMeasure
     d::Int = 2
