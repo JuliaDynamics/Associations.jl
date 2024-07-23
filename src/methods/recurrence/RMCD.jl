@@ -65,7 +65,6 @@ I_{RMCD}(X; Y) = \\dfrac{1}{N}
 ## Estimation
 
 - [Example 1](@ref example_RMCD). Pairwise versus conditional RMCD.
-```
 """
 Base.@kwdef struct RMCD{R, M, B} <: AssociationMeasure
     r::R
