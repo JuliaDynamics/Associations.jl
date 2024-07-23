@@ -111,5 +111,5 @@ function codify(encoding::CodifyVariables{1}, x::Vararg{Any, N}) where N
 end
 
 function codify(encoding::CodifyVariables{1}, x::AbstractStateSpaceSet)
-    return codify(encoding, columns(x))
+    return codify(encoding, columns(x)...)
 end
