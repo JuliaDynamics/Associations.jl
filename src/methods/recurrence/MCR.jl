@@ -69,7 +69,6 @@ function association(measure::MCR, x, y)
     return rp / N
 end
 
-# The
 function association(measure::MCR, x, y, z)
     (; r, metric) = measure
     N = length(x)
@@ -92,15 +91,3 @@ function association(measure::MCR, x, y, z)
     ΔMCR = -(rp_x_y - rp_x_yz)
     return ΔMCR
 end
-
-# For compatibility with causal graph and independence testing API
-association(r::MCR, est::Nothing, x, y) = association(r, x, y)
-
-"""
-    mcr(m::MCR, x, y)
-
-Compute the association between `x` and `y` based on conditional probabilities of
-recurrence using the given [`MCR`](@ref) `measure`, where `x` and `y` can be either
-univariate timeseries or multivariate [`StateSpaceSet`](@ref)s.
-"""
-mcr(args...) = association(args...)

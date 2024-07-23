@@ -1,6 +1,7 @@
 using StableRNGs
 using StateSpaceSets
 using Distances: Chebyshev
+using DynamicalSystemsBase
 
 rng = StableRNG(1234)
 n = 80

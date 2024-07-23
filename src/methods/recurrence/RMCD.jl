@@ -71,27 +71,6 @@ end
 
 max_inputs_vars(::RMCD{R, M, D}) where {R, M, D} = 3
 
-"""
-    rmcd(measure::RMCD, x, y)
-    rmcd(measure::RMCD, x, y, [z, ...])
-
-Estimate the recurrence-based `measure` of dependence between
-`x` and `y`, conditional on `z` if given.
-
-Parameters for recurrence matrix estimation are given as a [`RMCD`](@ref) instance.
-Inputs `x`, `y`, `z` can be either univariate timeseries or multivariate
-[`StateSpaceSet`](@ref)s.
-"""
-rmcd(measure::RMCD, args...) = association(measure, args...)
-
-# For compatibility with independence testing framework.
-function association(measure::RMCD, est::Nothing, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
-    return association(measure, x, y, z)
-end
-function association(measure::RMCD, est::Nothing, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return association(measure, x, y)
-end
-
 function association(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
     (; r, metric, base) = measure
     @assert length(x) == length(y) == length(z)

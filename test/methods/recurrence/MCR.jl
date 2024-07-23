@@ -1,13 +1,16 @@
+using Test
 using StateSpaceSets
 using Distances: Chebyshev
-
+using Random
 rng = Xoshiro(1234)
 n = 80
 x = rand(rng, n)
 y = rand(rng, n)
+z = rand(rng, n)
 X = rand(rng, n, 2) |> StateSpaceSet
 Y = rand(rng, n, 3) |> StateSpaceSet
 @test_throws UndefKeywordError MCR()
+@test association(MCR(; r = 0.5), x, y, z) isa Real
 @test association(MCR(; r = 0.5), x, y) isa Real
 @test association(MCR(; r = 0.5), x, Y) isa Real
 @test association(MCR(; r = 0.5), X, Y) isa Real
