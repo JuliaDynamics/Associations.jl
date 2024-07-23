@@ -866,7 +866,7 @@ information transfer.
 ### [[`SymbolicTransferEntropy`](@ref) estimator](@id example_TEShannon_SymbolicTransferEntropy)
 
 The [`SymbolicTransferEntropy`](@ref) estimator is just a convenience wrapper which utilizes
-[`CodifyVariables`](@ref)with the [`OrdinalPattern`](@ref) outcome space to 
+[`CodifyVariables`](@ref)with the [`OrdinalPatterns`](@ref) outcome space to 
 discretize the input time series before computing transfer entropy.
 
 We'll use coupled time series from the `logistic4` system above, where `x → y → z → w`.
@@ -874,6 +874,10 @@ Thus, we expect that the association for the direction `x → y` is larger than 
 on the intermediate value `y`.
 
 ```@example transfer_entropy_examples
+using CausalityTools
+using DynamicalSystemsBase
+using Random; rng = Xoshiro(1234)
+sys = system(Logistic4Chain(; rng))
 x, y, z, w = columns(first(trajectory(sys, 300, Ttr = 10000)))
 est = SymbolicTransferEntropy(m = 5)
 association(est, x, y), association(est, y, x), association(est, x, z), association(est, x, z, y)
