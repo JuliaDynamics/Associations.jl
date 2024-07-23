@@ -3,6 +3,7 @@ using StateSpaceSets: dimension
 using StateSpaceSets: AbstractStateSpaceSet
 
 CCMLike = Union{ConvergentCrossMapping, PairwiseAsymmetricInference}
+export predict, crossmap
 
 # -----------------------------------------------------------------------------------------
 # Generic methods that operates on the entire input. Useful for reconstructing figures
