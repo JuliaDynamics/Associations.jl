@@ -6,8 +6,7 @@
 [![codecov](https://codecov.io/gh/JuliaDynamics/CausalityTools.jl/branch/master/graph/badge.svg?token=0b71n6x6AP)](https://codecov.io/gh/JuliaDynamics/CausalityTools.jl)
 [![DOI](https://zenodo.org/badge/135443027.svg)](https://zenodo.org/badge/latestdoi/135443027)
 
-CausalityTools.jl is a package for quantifying associations and dynamical coupling
-between datasets, independence testing and causal inference.
+CausalityTools.jl is a package for quantifying associations, independence testing and causal inference.
 
 All further information is provided in the
 [documentation](https://juliadynamics.github.io/CausalityTools.jl/dev), which you can either
@@ -15,18 +14,17 @@ find online or build locally by running the `docs/make.jl` file.
 
 ## Key features
 
-- Association measures from conventional statistics, information theory and dynamical
-    systems theory, for example distance correlation, mutual information, transfer entropy,
-    convergent cross mapping and a lot more!
-- Generalization of the 1D discretization and probabilities estimation API from 
-    [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl) to 
-    multiple variables.
-- A dedicated API for independence testing, which comes with automatic compatibility with
-    every measure-estimator combination you can think of. For example, for conditional
-    indepencence testing, we offer the generic [`SurrogateAssociationTest`](@ref)
-    (which is fully compatible with [TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl)), and the [`LocalPermutationTest`](@ref).
-- A dedicated API for (causal) network inference based on these measures and independence
-    tests.
+- **Association API** including measures and their estimators for pairwise, conditional and other forms of association from conventional statistics, from dynamical
+    systems theory, and from information theory: partial correlation, distance correlation, (conditional) mutual information, transfer entropy, convergent cross mapping and a lot more!
+- **Independence testing API**, which is automatically compatible with
+    every association measure estimator implemented in the package. 
+- **Causal (network) inference API** integrating the association measures and independence testing framework.
+
+## Addititional features
+
+- Multivariate probabilities estimation, extending the API from 
+    [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl).
+
 
 ## Installation
 
