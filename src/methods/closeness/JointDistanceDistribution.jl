@@ -68,13 +68,6 @@ Base.@kwdef struct JointDistanceDistribution{M, T} <: ClosenessMeasure
     μ::T = 0.0
 end
 
-# The convenience wrapper `jdd`` is in deprecations folder for now.
-
-function association(measure::JointDistanceDistribution, est::Nothing, source, target)
-    return association(measure, source, target)
-end
-
-# Internal method for compatibility with independence tests.
 function association(measure::JointDistanceDistribution, source, target)
     (; metric, B, D, τ) = measure
     length(source) == length(target) || error("lengths of inputs must match")
