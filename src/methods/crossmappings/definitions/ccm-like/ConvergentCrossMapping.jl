@@ -15,13 +15,6 @@ The convergent cross mapping measure [Sugihara2012](@cite).
 - Use with [`association`](@ref) together with a [`CrossmapEstimator`](@ref) to compute the 
     cross-map correlation between input variables.
 
-```julia
-est_single_lib = RandomSegment(ConvergentCrossMapping(); libsizes = 100)
-est_multiple_libs = RandomSegment(ConvergentCrossMapping; libsizes = [100, 200, 300])
-association(est_single_lib, x, y) → ρ ∈ [-1, 1]
-association(est_multiple_libs, x, y) → Vector{ρᵢ} (ρᵢ ∈ [-1, 1])
-```
-
 ## Compatible estimators
 
 - [`RandomSegment`](@ref)
@@ -30,10 +23,8 @@ association(est_multiple_libs, x, y) → Vector{ρᵢ} (ρᵢ ∈ [-1, 1])
 
 ## Description
 
-Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
-with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
-temporal neighbors are excluded during neighbor searches (`w = 0` means that only the
-point itself is excluded).
+The Theiler window `w` controls how many temporal neighbors are excluded during neighbor 
+searches (`w = 0` means that only the point itself is excluded).
 `f` is a function that computes the agreement between observations and
 predictions (the default, `f = Statistics.cor`, gives the Pearson correlation
 coefficient).

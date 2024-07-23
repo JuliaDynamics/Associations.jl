@@ -7,7 +7,7 @@ export ExpandingSegment
 Cross map *once* over `N = length(libsizes)` different "point libraries", where 
 point indices are selected as time-contiguous segments/windows.
 
-This is the method from [Sugihara2012](@ref). See [`CrossmapEstimator`](@ref) for an in-depth 
+This is the method from [Sugihara2012](@cite). See [`CrossmapEstimator`](@ref) for an in-depth 
 explanation of what "library" means in this context.
 
 ## Description

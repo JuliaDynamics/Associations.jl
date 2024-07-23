@@ -9,7 +9,7 @@ export RandomSegment
 Cross map *once* over `N = length(libsizes)` different "point libraries", where 
 point indices are selected as time-contiguous segments with random starting points.
 
-This is method 2 from [Luo2015](@cite). See [`CrossmapEstimator`](@ref) for an in-depth 
+This is method 2 from [Luo2015](@citet). See [`CrossmapEstimator`](@ref) for an in-depth 
 explanation of what "library" means in this context.
 
 ## Description

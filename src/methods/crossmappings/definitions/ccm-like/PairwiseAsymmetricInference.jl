@@ -2,6 +2,7 @@ import DelayEmbeddings: embed
 using Statistics: cor
 
 export PairwiseAsymmetricInference, PAI
+
 """
     PairwiseAsymmetricInference <: CrossmapMeasure
     PairwiseAsymmetricInference(; d::Int = 2, τ::Int = -1, w::Int = 0,
@@ -25,10 +26,8 @@ algorithms are identical.
 
 ## Description
 
-Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
-with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
-temporal neighbors are excluded during neighbor searches (`w = 0` means that only the
-point itself is excluded).
+The Theiler window `w` controls how many temporal neighbors are excluded during neighbor 
+searches (`w = 0` means that only the point itself is excluded).
 `f` is a function that computes the agreement between observations and
 predictions (the default, `f = Statistics.cor`, gives the Pearson correlation
 coefficient).
