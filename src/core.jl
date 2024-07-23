@@ -162,7 +162,9 @@ association(JointProbabilities(PartialMutualInformation(), OrdinalPatterns(m=3))
 association(FPVP(CMIShannon(base = 2)), x, y, z)
 ```
 """
-function association(est, x...) end
+function association(est, x...)
+    throw(ArgumentError("`association` not implemented for `est = $est` for this input data"))
+end
 
 """
     min_inputs_vars(m::AssociationMeasure) → nmin::Int

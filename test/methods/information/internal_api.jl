@@ -22,3 +22,11 @@ new_est_shannon = CausalityTools.estimator_with_overridden_parameters(def_shanno
 p1 = Probabilities([0.1, 0.2, 0.3])
 p2 = Probabilities([0.1, 0.2, 0.3, 0.4])
 @test_throws DimensionMismatch CausalityTools.size_match(KLDivergence(), p1, p2)
+
+struct BogusMeasure2{M} <: MultivariateInformationMeasure
+    def::M
+end
+
+est = JointProbabilities(BogusMeasure2(2), CodifyVariables(OrdinalPatterns()))
+x, y = rand(100), rand(100)
+@test_throws ArgumentError association(est, x, y)

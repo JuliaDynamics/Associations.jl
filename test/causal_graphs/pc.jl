@@ -5,6 +5,8 @@ using CausalInference: pcalg, gausscitest
 using Combinatorics
 rng = StableRNG(123)
 
+@test_throws ArgumentError PC(CorrTest(), CorrTest(), α = -0.5)
+
 # -------------------------------------------------------------------------------
 # "Analytical" tests
 # -------------------------------------------------------------------------------
