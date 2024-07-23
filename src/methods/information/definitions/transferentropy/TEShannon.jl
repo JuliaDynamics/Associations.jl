@@ -61,6 +61,10 @@ function convert_to_cmi_estimator(est::CMIDecomposition{<:TEShannon})
     return CMIDecomposition(CMIShannon(; base), est.est)
 end
 
+function convert_to_cmi_estimator(est::JointProbabilities{<:TEShannon})
+    base = est.definition.base
+    return JointProbabilities(CMIShannon(; base), est.discretization, est.pest)
+end
 
 # ------------------------------------------------
 # Pretty printing for decomposition estimators.
