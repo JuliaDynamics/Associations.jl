@@ -123,18 +123,12 @@ TERenyiJizba
 TransferEntropyEstimator
 Zhu1
 Lindner
-Hilbert
-SymbolicTransferEntropy
-```
-
-##### Convenience
-
-```@docs
 SymbolicTransferEntropy
 Hilbert
 Phase
 Amplitude
 ```
+
 
 ##### Utilities
 
