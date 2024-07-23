@@ -13,9 +13,9 @@ An association measure based on mean conditional probabilities of recurrence
 
 ## Usage
 
-- Use with [`association`](@ref)/[`mcr`](@ref) to compute the raw MCR for pairwise association.
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
-    association.
+- Use with [`association`](@ref) to compute the raw MCR for pairwise or conditional association.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise or 
+    conditional association.
 
 ## Description
 
@@ -47,6 +47,11 @@ defined analogously.
 
 `X` and `Y` can be either both univariate timeseries, or both multivariate
 [`StateSpaceSet`](@ref)s.
+
+
+## Estimation
+
+- [Example 1](@ref example_MCR). Pairwise versus conditional MCR.
 """
 Base.@kwdef struct MCR{R, M} <: AssociationMeasure
     r::R

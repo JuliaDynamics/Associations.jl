@@ -53,7 +53,6 @@ case the following mutual information-like quantitity is computed (not
 discussed in [Ramos2017](@citet).
 
 ```math
-
 I_{RMCD}(X; Y) = \\dfrac{1}{N}
 \\sum_{i} \\left[
 \\dfrac{1}{N} \\sum_{j} R_{ij}^{X, Y}
@@ -61,6 +60,11 @@ I_{RMCD}(X; Y) = \\dfrac{1}{N}
     \\dfrac{\\sum_{j} R_{ij}^{X}  R_{ij}^{Y} }{\\sum_{j} R_{ij}^{X, Y}}
     \\right)
 \\right]
+```
+
+## Estimation
+
+- [Example 1](@ref example_RMCD). Pairwise versus conditional RMCD.
 ```
 """
 Base.@kwdef struct RMCD{R, M, B} <: AssociationMeasure
