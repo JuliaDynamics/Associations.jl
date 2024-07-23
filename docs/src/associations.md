@@ -123,6 +123,7 @@ TERenyiJizba
 TransferEntropyEstimator
 Zhu1
 Lindner
+Hilbert
 ```
 
 ##### Convenience
