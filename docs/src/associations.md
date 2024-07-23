@@ -287,7 +287,7 @@ MMeasure
 LMeasure
 ```
 
-## Recurrence-based
+## Recurrence measures
 
 ```@docs
 MCR
