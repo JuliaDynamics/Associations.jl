@@ -226,4 +226,9 @@ function shuffle_without_replacement!(X̂, X, idxs, kperm, rng, Nᵢ, πs)
     end
 end
 
+
+function LocalPermutationTest(m::MultivariateInformationMeasure; kwargs...)
+    throw(ArgumentError("You need to provide an estimator for the multivariate information measure $(typeof(m)), not only the definition."))
+end
+
 #include("transferentropy.jl")
