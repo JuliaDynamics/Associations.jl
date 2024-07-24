@@ -18,25 +18,20 @@ estimator from [Frenzel2007](@citet) and [Vejmelka2008](@citet).
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
 number of temporal neighbors that are excluded during neighbor searches.
 
+## Compatible definitions
+
+- [`CMIShannon`](@ref)
+
 ## Usage
 
 - Use with [`association`](@ref) to compute [`ConditionalMutualInformation`](@ref) measure
     from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
-## Example 
+## Examples
 
-```julia
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x = rand(rng, 10000)
-y = rand(rng, 10000) .+ x
-z = rand(rng, 10000) .+ y
-association(FPVP(; k = 10), x, z, y) # should be near 0 (and can be negative)
-```
+- [Example 1](@ref example_CMIShannon_FPVP): Estimating [`CMIShannon`](@ref)
 
-## Compatible definitions
-
-- [`CMIShannon`](@ref)
 """
 struct FPVP{M <: ConditionalMutualInformation, MJ, MM} <: ConditionalMutualInformationEstimator{M}
     definition::M

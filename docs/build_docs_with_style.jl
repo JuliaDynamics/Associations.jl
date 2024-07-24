@@ -34,6 +34,21 @@ CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== 
  Downloads.download("$download_path/style.jl", joinpath(@__DIR__, "style.jl"))
  include("style.jl")
 
+ using DocumenterInterLinks
+
+links = InterLinks(
+    "ComplexityMeasures" => (
+        "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/",
+        "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/objects.inv",
+        joinpath(@__DIR__, "inventories", "Documenter.toml")
+    ),
+    "StateSpaceSets" => (
+        "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/statespacesets/stable/",
+        "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/statespacesets/stable/objects.inv",
+        joinpath(@__DIR__, "inventories", "Documenter.toml")
+    ),
+);
+
  function build_docs_with_style(pages, modules...; bib = nothing, authors = "George Datseris", draft = false, kwargs...)
      settings = (
          modules = [modules...],
@@ -59,7 +74,7 @@ CI = get(ENV, "CI", nothing) == "true" || get(ENV, "GITHUB_TOKEN", nothing) !== 
      if isnothing(bib)
          makedocs(; settings...)
      else
-         makedocs(; plugins=[bib], settings...)
+         makedocs(; plugins=[bib, links], settings...)
      end
 
      if CI

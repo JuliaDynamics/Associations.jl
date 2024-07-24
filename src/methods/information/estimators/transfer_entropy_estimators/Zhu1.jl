@@ -14,9 +14,14 @@ export Zhu1
 The `Zhu1` transfer entropy estimator [Zhu2015](@cite) for normalized input data 
 (as described in [Zhu2015](@citet)) for both for pairwise and conditional transfer entropy.
 
+## Compatible definitions
+
+- [`TEShannon`](@ref)
+
 ## Usage
 
 - Use with [`association`](@ref) to compute [`TEShannon`](@ref) from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Description
 
@@ -49,11 +54,6 @@ where the index `k` references the three marginal subspaces `T`, `TTf` and `ST` 
 neighbor searches are performed. Here this estimator has been modified to allow for 
 conditioning too (a simple modification to [Lindner2011](@citet)'s equation 5 and 6). 
 
-
-## Usage
-
-- [`information`](@ref)`(est::Zhu1, x, y, z)`.
-
 ## Example 
 
 ```julia
@@ -65,10 +65,6 @@ z = rand(rng, 10000) .+ y
 est = Zhu1(TEShannon(), k = 10)
 association(est, x, z, y) # should be near 0 (and can be negative)
 ```
-
-## Compatible definitions
-
-- [`TEShannon`](@ref)
 """
 struct Zhu1{M} <: TransferEntropyEstimator{M}
     definition::M

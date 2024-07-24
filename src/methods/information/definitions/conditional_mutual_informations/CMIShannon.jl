@@ -54,7 +54,7 @@ differential entropies.
 - [Example 2](@ref CMIShannon_EntropyDecomposition_ValueBinning):
     [`EntropyDecomposition`](@ref) with [`ValueBinning`](@ref) estimator.
 - [Example 3](@ref example_CMIShannon_MIDecomposition_KSG1): 
-    [`MIDecomposition`](@ref) with [`KSG1`](@ref) estimator.
+    [`MIDecomposition`](@ref) with [`KraskovStögbauerGrassberger1`](@ref) estimator.
 """
 Base.@kwdef struct CMIShannon{B} <: ConditionalMutualInformation
     base::B = 2

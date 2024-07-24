@@ -13,11 +13,16 @@ computes conditional mutual informations using a `k`-th nearest neighbor approac
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
 number of temporal neighbors that are excluded during neighbor searches.
 
+## Compatible definitions
+
+- [`CMIRenyiPoczos`](@ref)
+
 ## Usage
 
 - Use with [`association`](@ref) to compute [`CMIRenyiPoczos`](@ref) from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
-## Example 
+## Examples 
 
 ```julia
 using CausalityTools
@@ -28,9 +33,6 @@ z = rand(rng, 10000) .+ y
 association(PoczosSchneiderCMI(CMIRenyiPoczos(), k = 10), x, z, y) # should be near 0 (and can be negative)
 ```
 
-## Compatible definitions
-
-- [`CMIRenyiPoczos`](@ref)
 """
 struct PoczosSchneiderCMI{M <: ConditionalMutualInformation, ME} <: ConditionalMutualInformationEstimator{M}
     definition::M

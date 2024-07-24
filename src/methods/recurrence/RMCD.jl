@@ -12,9 +12,9 @@ information, but uses recurrence probabilities.
 
 ## Usage
 
-- Use with [`association`](@ref)/[`rmcd`](@ref) to compute the raw RMCD for pairwise 
+- Use with [`association`](@ref) to compute the raw RMCD for pairwise 
     or conditional association.
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+- Use with [`IndependenceTest`](@ref) to perform a formal hypothesis test for pairwise
     or conditional association.
 
 ## Description

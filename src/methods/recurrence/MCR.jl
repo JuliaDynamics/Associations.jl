@@ -14,8 +14,9 @@ An association measure based on mean conditional probabilities of recurrence
 ## Usage
 
 - Use with [`association`](@ref) to compute the raw MCR for pairwise or conditional association.
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise or 
-    conditional association.
+- Use with [`IndependenceTest`](@ref) to perform a formal hypothesis test for pairwise
+    or conditional association.
+
 
 ## Description
 

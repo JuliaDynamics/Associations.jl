@@ -10,11 +10,16 @@ data that can be mixtures of discrete and continuous data [Mesner2020](@cite).
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
 number of temporal neighbors that are excluded during neighbor searches.
 
+## Compatible definitions
+
+- [`CMIShannon`](@ref)
+
 ## Usage
 
 - Use with [`association`](@ref) to compute [`CMIShannon`](@ref) from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
-## Example 
+## Examples 
 
 ```julia
 using CausalityTools
@@ -25,9 +30,6 @@ z = rand(rng, 10000) .+ y
 association(MesnerShalizi(; k = 10), x, z, y) # should be near 0 (and can be negative)
 ```
 
-## Compatible definitions
-
-- [`CMIShannon`](@ref)
 """
 struct MesnerShalizi{M <: ConditionalMutualInformation, ME} <: ConditionalMutualInformationEstimator{M}
     definition::M

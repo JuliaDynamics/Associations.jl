@@ -14,26 +14,16 @@ value of the measure.
 ## Usage
 
 - Use with [`association`](@ref) to compute a [`MultivariateInformationMeasure`](@ref)
-    from input data.
+    from input data: [`association`](@ref)`(est::MIDecomposition, x...)`.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Examples
 
-One common application is computing Shannon-type conditional mutual information.
-It can be decomposed as a sum of mutual information terms, which we can each 
-estimate with any dedicated [`MutualInformationEstimator`](@ref) estimator.
+- [Example 1](@ref example_CMIShannon_MIDecomposition): Estimating [`CMIShannon`](@ref)
+    using a decomposition into [`MIShannon`](@ref) terms using 
+    the [`KraskovStögbauerGrassberger1`](@ref) mutual information estimator.
 
-```julia
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x = rand(rng, 100000)
-y = rand(rng, 100000) .+ x
-z = rand(rng, 100000) .+ y
-
-est = MIDecomposition(CMIShannon(), KSG1(MIShannon(base = 2), k = 3))
-association(est, x, z, y) # should be near 0 (and can be negative)
-```
-
-See also: [`EntropyDecomposition`](@ref).
+See also: [`MultivariateInformationMeasureEstimator`](@ref).
 """
 struct MIDecomposition{M <: MultivariateInformationMeasure, E} <: DecompositionEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.

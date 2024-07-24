@@ -14,8 +14,8 @@ export CrossmapEstimator
 
 The supertype for all cross-map measures. Concrete subtypes are
 
-- [`ConvergentCrossMapping`](@ref), or [`CCM`](@ref) for short.
-- [`PairwiseAsymmetricInference`](@ref), or [`PAI`](@ref) for short.
+- [`ConvergentCrossMapping`](@ref), or `CCM` for short.
+- [`PairwiseAsymmetricInference`](@ref), or `PAI` for short.
 
 See also: [`CrossmapEstimator`](@ref).
 """
@@ -128,7 +128,7 @@ according to the algorithm specified by the given cross-map `measure` (e.g.
 - **Second method**: Returns a vector of predictions `t̂ₛ` (`t̂ₛ` := "predictions of `t̄` based
     on source embedding `S̄`"), where `t̂ₛ[i]` is the prediction for `t̄[i]`. It assumes
     pre-embedded data which have been correctly time-aligned using a joint embedding
-    (see [`embed`](@ref)), i.e. such that `t̄[i]` and `S̄[i]` correspond to the same time
+    (see [`CausalityTools.embed`](@ref)), i.e. such that `t̄[i]` and `S̄[i]` correspond to the same time
     index.
 
 ## Description

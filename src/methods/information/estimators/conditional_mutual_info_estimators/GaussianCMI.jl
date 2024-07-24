@@ -8,9 +8,14 @@ using StateSpaceSets: StateSpaceSet
 `GaussianCMI` is a parametric [`ConditionalMutualInformationEstimator`](@ref) 
 [Vejmelka2008](@cite).
 
+## Compatible definitions
+
+- [`CMIShannon`](@ref)
+
 ## Usage
 
 - Use with [`association`](@ref) to compute [`CMIShannon`](@ref) from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Description
 
@@ -22,20 +27,9 @@ for [`GaussianMI`](@ref)):
 \\hat{I}_{Gaussian}(X; Y | Z) = \\hat{I}_{Gaussian}(X; Y, Z) - \\hat{I}_{Gaussian}(X; Z)
 ```
 
-## Example 
+## Examples
 
-```julia
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x = rand(rng, 10000)
-y = rand(rng, 10000) .+ x
-z = rand(rng, 10000) .+ y
-association(GaussianCMI(CMIShannon(base = 2)), x, z, y)
-```
-
-## Compatible definitions
-
-- [`CMIShannon`](@ref)
+- [Example 1](@ref example_CMIShannon_GaussianCMI). Estimating [`CMIShannon`](@ref). 
 """
 struct GaussianCMI{M <: ConditionalMutualInformation} <: ConditionalMutualInformationEstimator{M}
     definition::M

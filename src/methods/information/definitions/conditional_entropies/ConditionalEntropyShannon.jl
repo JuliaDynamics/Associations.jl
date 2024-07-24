@@ -29,8 +29,8 @@ The conditional entropy between discrete random variables
 H^{S}(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y) \\log(p(x | y)).
 ```
 
-This is the definition used when calling [`entropy_conditional`](@ref) with a
-[`ContingencyMatrix`](@ref).
+This is the definition used when calling [`association`](@ref) with a
+[`JointProbababilities`](@ref) estimator.
 
 ### Two-entropies formulation
 
@@ -42,7 +42,7 @@ H^S(X | Y) = H^S(X, Y) - H^S(Y),
 
 where ``H^S(\\cdot)`` and ``H^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref) entropy and
 Shannon joint entropy, respectively. This is the definition used when calling
-[`entropy_conditional`](@ref) with a [`ProbabilitiesEstimator`](@ref).
+[`association`](@ref) with a [`ProbabilitiesEstimator`](@ref).
 
 ## Differential definition
 
@@ -54,8 +54,8 @@ H^S(X | Y) = h^S(X, Y) - h^S(Y),
 
 where ``h^S(\\cdot)`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref)
 differential entropy and Shannon joint differential entropy, respectively. This is the
-definition used when calling [`entropy_conditional`](@ref) with a
-[`DifferentialEntropyEstimator`](@ref).
+definition used when calling [`association`](@ref) with a
+[`DifferentialEntropyEstimator`](@extref).
 
 ## Estimation
 

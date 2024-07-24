@@ -39,7 +39,7 @@ association(KLDivergence(), p1, p2)
 
 ### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_KLDivergence_JointProbabilities_OrdinalPatterns)
 
-We expect the [`KlDivergence`](@ref) between two uncorrelated variables to be close to zero.
+We expect the [`KLDivergence`](@ref) between two uncorrelated variables to be close to zero.
 
 ```@example example_KLDivergence
 using CausalityTools
@@ -369,7 +369,7 @@ association(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
 
 ### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@ref)](@id example_MIShannon_EntropyDecomposition_Kraskov)
 
-We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialEntropyEstimator`](@ref).
+We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialEntropyEstimator`](@extref).
 Note that this doesn't apply any bias correction.
 
 ```@example mi_demonstration
@@ -381,7 +381,7 @@ association(EntropyDecomposition(MIShannon(), Kraskov(k = 3)), x, y)
 
 ### [[`EntropyDecomposition`](@ref) + [`BubbleSortSwaps`](@ref)](@id example_MIShannon_EntropyDecomposition_BubbleSortSwaps)
 
-We can also compute [`MIShannon`](@ref) by naively applying a [`DiscreteEntropyEstimator`](@ref).
+We can also compute [`MIShannon`](@ref) by naively applying a [`DiscreteInfoEstimator`](@ref).
 Note that this doesn't apply any bias correction.
 
 ```@example mi_demonstration
@@ -395,8 +395,9 @@ association(EntropyDecomposition(MIShannon(), hest, disc), x, y)
 
 ### [[`EntropyDecomposition`](@ref) + [`Jackknife`](@ref) + [`ValueBinning`](@ref)](@id example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning)
 
-A [`ValueBinning`](@ref) estimator can be used to bin the data and compute
-discrete Shannon mutual information.
+Shannon mutual information can be written as a sum of marginal entropy terms.
+Here, we use [`CodifyVariables`](@ref) with [`ValueBinning`](@ref) bin the data 
+and compute discrete Shannon mutual information.
 
 ```@example mi_demonstration
 using CausalityTools
@@ -420,7 +421,7 @@ Here, we'll reproduce Figure 4 from [Kraskov2004](@citet)'s seminal paper on the
 between marginals of a bivariate Gaussian for a fixed time series length of 1000,
 varying the number of neighbors. *Note: in the original paper, they show multiple
 curves corresponding to different time series length. We only show two single curves:
-one for the [`KSG1`](@ref) estimator and one for the [`KSG2`](@ref) estimator*.
+one for the [`KraskovStögbauerGrassberger1`](@ref) estimator and one for the [`KraskovStögbauerGrassberger2`](@ref) estimator*.
 
 ```@example ex_mutualinfo
 using CausalityTools
@@ -468,8 +469,8 @@ Most estimators suffer from significant bias when applied to discrete, finite da
 But instead of adding noise to your data, you can also consider using an
 estimator that is specifically designed to deal with continuous-discrete mixture data. 
 One example is the [`GaoKannanOhViswanath`](@ref) estimator. Below, we compare its
-performance to [`KSG1`](@ref) on uniformly distributed discrete multivariate data.
-The true mutual information is zero. While the "naive" [`KSG1`](@ref) estimator 
+performance to [`KraskovStögbauerGrassberger1`](@ref) on uniformly distributed discrete multivariate data.
+The true mutual information is zero. While the "naive" [`KraskovStögbauerGrassberger1`](@ref) estimator 
 diverges from the true value for these data, the [`GaoKannanOhViswanath`](@ref)
 converges to the true value.
 
@@ -547,7 +548,7 @@ axislegend(position = :rb)
 fig
 ```
 
-### Estimation using [`DifferentialEntropyEstimator`](@ref)s: a comparison
+### Estimation using [`DifferentialEntropyEstimator`](@extref)s: a comparison
 
 Let's compare the performance of a subset of the implemented mutual information estimators. We'll use example data from Lord et al., where the analytical mutual information is known.
 
@@ -946,7 +947,7 @@ association(est_disc, x, y)
 
 ## [`CMIShannon`](@ref)
 
-### [`CMIShannon`](@ref) with [`GaussianCMI`](@ref)
+### [[`CMIShannon`](@ref) with [`GaussianCMI`](@ref)](@id example_CMIShannon_GaussianCMI)
 
 ```@example mi_demonstration
 using CausalityTools
@@ -1023,6 +1024,23 @@ z = (z ./ std(z)) .+ y
 association(Rahimzamani(CMIShannon(base = 10); k = 10), x, z, y)
 ```
 
+### [[`MIDecomposition`](@ref)](@id example_CMIShannon_MIDecomposition)
+
+Shannon-type conditional mutual information can be decomposed as a sum of 
+mutual information terms, which we can each estimate with any dedicated [`MutualInformationEstimator`](@ref) estimator.
+
+```julia
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 300)
+y = rand(rng, 300) .+ x
+z = rand(rng, 300) .+ y
+
+est = MIDecomposition(CMIShannon(), KSG1(MIShannon(base = 2), k = 3))
+association(est, x, z, y) # should be near 0 (and can be negative)
+```
+
+
 ## [`CMIRenyiPoczos`](@ref)
 
 ### [[`PoczosSchneiderCMI`](@ref)](@id CMIRenyiPoczos_PoczosSchneiderCMI)
@@ -1054,7 +1072,7 @@ taking the difference of mutual information terms.
 
 ## [`CMIShannon`](@ref)
 
-### [[`MIDecomposition`](@ref) + [`KSG1`](@ref)](@id example_CMIShannon_MIDecomposition_KSG1)
+### [[`MIDecomposition`](@ref) + [`KraskovStögbauerGrassberger1`](@ref)](@id example_CMIShannon_MIDecomposition_KSG1)
 
 ```@example mi_demonstration
 using CausalityTools
@@ -1077,7 +1095,7 @@ association(est, x, z, y)
 
 ### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@ref)](@id example_CMIShannon_EntropyDecomposition_Kraskov)
 
-Any [`DifferentialEntropyEstimator`](@ref) can also be used to compute conditional
+Any [`DifferentialEntropyEstimator`](@extref) can also be used to compute conditional
 mutual information using a sum of entropies. For that, we 
 usethe [`EntropyDecomposition`](@ref) estimator. No bias correction is applied for 
 [`EntropyDecomposition`](@ref) either.
@@ -1133,7 +1151,7 @@ association(est, x, z, y)
 ```
 
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenoProsantoSavani`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProsantoSavani`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani)
 
 ```@example example_CMIRenyiJizba
 using CausalityTools
@@ -1227,6 +1245,20 @@ The Shannon-type transfer entropy from `x` to `z` is stronger than the transfer 
 `y`, so "conditioning away" the effect of `y` should decrease the estimated 
 information transfer.
 
+### [[`CMIDecomposition`](@ref)](@id example_TEShannon_CMIDecomposition)
+
+```@example 
+using CausalityTools
+using Random; rng = MersenneTwister(1234)
+x = rand(rng, 1000)
+y = rand(rng, 1000) .+ x
+z = rand(rng, 1000) .+ y
+
+# Estimate transfer entropy by representing it as a CMI and using the `FPVP` estimator.
+est = CMIDecomposition(TEShannon(base = 2), FPVP(k = 3))
+association(est, x, z, y) # should be near 0 (and can be negative)
+```
+
 ### [[`SymbolicTransferEntropy`](@ref) estimator](@id example_TEShannon_SymbolicTransferEntropy)
 
 The [`SymbolicTransferEntropy`](@ref) estimator is just a convenience wrapper which utilizes
@@ -1256,7 +1288,7 @@ We will test
 
 - The [`Lindner`](@ref) and [`Zhu1`](@ref) dedicated transfer entropy estimators,
     which try to eliminate bias.
-- The [`KSG1`](@ref) estimator, which computes TE naively as a sum of mutual information
+- The [`KraskovStögbauerGrassberger1`](@ref) estimator, which computes TE naively as a sum of mutual information
     terms (without guaranteed cancellation of biases for the total sum).
 - The [`Kraskov`](@ref) estimator, which computes TE naively as a sum of entropy 
     terms (without guaranteed cancellation of biases for the total sum).
@@ -1333,7 +1365,7 @@ fig
 Let's try to reproduce the results from Schreiber's original paper [Schreiber2000](@cite) where
 he introduced the transfer entropy. We'll here use the [`JointProbabilities`](@ref) estimator,
 discretizing per column of the input data using the [`CodifyVariables`](@ref) discretization
-scheme with the [`ValueHistogram`](@ref) outcome space.
+scheme with the [`ValueBinning`](@ref) outcome space.
 
 ```@example example_te_schreiber
 using CausalityTools
@@ -1382,7 +1414,7 @@ As expected, transfer entropy from `X1` to `X2` is higher than from `X2` to `X1`
 
 Computing transfer entropy from finite time series introduces bias, and so does any particular choice of entropy estimator used to calculate it. To determine whether a transfer entropy estimate should be trusted, we can employ surrogate testing. We'll generate surrogate using
 [TimeseriesSurrogates.jl](https://github.com/JuliaDynamics/TimeseriesSurrogates.jl).
-One possible way to do so is to use a [`SurrogateTest`](@ref) with [`independence`](@ref), but
+One possible way to do so is to use a [`SurrogateAssociationTest`](@ref) with [`independence`](@ref), but
 here we'll do the surrogate resampling manually, so we can plot and inspect the results.
 
 In the example below, we continue with the same time series generated above. However, at each value of `ε`, we also compute transfer entropy for `nsurr = 50` different randomly shuffled (permuted) versions of the source process. If the original transfer entropy exceeds that of some percentile the transfer entropy estimates of the surrogate ensemble, we will take that as "significant" transfer entropy.

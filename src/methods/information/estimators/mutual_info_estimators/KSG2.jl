@@ -21,6 +21,7 @@ short) is the ``I^{(2)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@
 ## Usage
 
 - Use with [`association`](@ref) to compute Shannon mutual information from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Keyword arguments
 

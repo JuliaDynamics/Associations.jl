@@ -7,9 +7,14 @@ export Rahimzamani
 The `Rahimzamani` [`ConditionalMutualInformationEstimator`](@ref) is designed
 for data that can be mixtures of discrete and continuous data [Rahimzamani2018](@cite).
 
+## Compatible definitions
+
+- [`CMIShannon`](@ref)
+
 ## Usage
 
 - Use with [`association`](@ref) to compute a [`CMIShannon`](@ref) from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Description
 
@@ -19,7 +24,7 @@ estimator, but has been expanded to the conditional mutual information case.
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
 number of temporal neighbors that are excluded during neighbor searches.
 
-## Example 
+## Examples
 
 ```julia
 using CausalityTools
@@ -30,9 +35,6 @@ z = rand(rng, 10000) .+ y
 association(Rahimzamani(; k = 10), x, z, y) # should be near 0 (and can be negative)
 ```
 
-## Compatible definitions
-
-- [`CMIShannon`](@ref)
 """
 struct Rahimzamani{M <: ConditionalMutualInformation, ME} <: ConditionalMutualInformationEstimator{M}
     definition::M

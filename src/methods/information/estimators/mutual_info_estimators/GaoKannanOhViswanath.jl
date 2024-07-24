@@ -17,6 +17,7 @@ a mixture of both [GaoKannanOhViswanath2017](@cite).
 ## Usage
 
 - Use with [`association`](@ref) to compute Shannon mutual information from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Description
 
@@ -37,7 +38,7 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
     for continuous data.
 
     Moreover, in their algorithm 1, it is clearly not the case that the method falls
-    back on the `KSG1` approach. The `KSG1` estimator uses `k`-th neighbor distances in
+    back on the `KraskovStögbauerGrassberger1` approach. The `KraskovStögbauerGrassberger1` estimator uses `k`-th neighbor distances in
     the *joint* space, while the `GaoKannanOhViswanath` algorithm selects the maximum
     `k`-th nearest distances among the two marginal spaces, which are in general not the
     same as the `k`-th neighbor distance in the joint space (unless both marginals are
@@ -112,7 +113,7 @@ function association(est::GaoKannanOhViswanath{<:MIShannon}, x, y)
 
         # They claim in the paper that the estimator reduces to the KSG1 estimator when
         # k̂ == k. However, it only does so when using `digamma`. Their estimator uses
-        # `log`, so `GaoKannanOhViswanath` != `KSG1`, but quite close in practice.
+        # `log`, so `GaoKannanOhViswanath` != `KraskovStögbauerGrassberger1`, but quite close in practice.
         # inrangecount includes the point itself, so we don't need to add 1 inside log
         nx = inrangecount(tree_x, X[i], dmax) - 1
         ny = inrangecount(tree_y, Y[i], dmax) - 1

@@ -56,8 +56,8 @@ The supertype for dedicated [`MutualInformation`](@ref) estimators.
 
 ## Concrete implementations
 
-- [`KSG1`](@ref)
-- [`KSG2`](@ref)
+- [`KraskovStögbauerGrassberger1`](@ref)
+- [`KraskovStögbauerGrassberger2`](@ref)
 - [`GaoOhViswanath`](@ref)
 - [`GaoKannanOhViswanath`](@ref)
 - [`GaussianMI`](@ref)

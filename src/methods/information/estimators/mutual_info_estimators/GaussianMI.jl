@@ -16,6 +16,7 @@ using LinearAlgebra: eigvals, det
 ## Usage
 
 - Use with [`association`](@ref) to compute Shannon mutual information from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Description
 

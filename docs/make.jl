@@ -2,6 +2,7 @@ cd(@__DIR__)
 # Doc-specific (remaining packages are imported  in `build_docs_with_style.jl`, which is
 # downloaded)
 using DocumenterCitations
+using DocumenterInterLinks
 import Downloads
 
 # Packages used in the doc build.

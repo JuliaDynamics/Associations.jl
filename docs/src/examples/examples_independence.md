@@ -358,7 +358,7 @@ is transferred through `Y`.
 using CausalityTools
 using Random; rng = Random.default_rng()
 n = 300
-sys = system(Logistic4Chain(; xi = rand(4)))
+sys = system(Logistic4Chain(; xi = rand(rng, 4), rng))
 x, y, z, w = columns(trajectory(sys, n) |> first)
 est = CMIDecomposition(TEShannon(), FPVP(k = 10))
 test = LocalPermutationTest(est, nshuffles = 19)

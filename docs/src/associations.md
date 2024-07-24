@@ -252,10 +252,6 @@ Correa
 
 ## [Correlation measures](@id correlation_api)
 
-This page lists all available [`CorrelationMeasure`](@ref)s, as 
-well as their convenience functions. The [examples](@ref correlation_examples)
-is also useful.
-
 ### Pearson correlation
 
 ```@docs
@@ -310,7 +306,7 @@ For most use cases, it is sufficient to provide a [`CrossmapEstimator`](@ref) to
 can be useful to have more fine-grained controls. We offer a few utility functions
 for this purpose.
 
-In the example where we [reproduce Figures 3C and 3D](@ref example_sugihara_figs3Cand3D) of [Sugihara2012](@ref), these lower-level 
+In the example where we [reproduce Figures 3C and 3D](@ref example_sugihara_figs3Cand3D) of [Sugihara2012](@citet), these lower-level 
 functions are used.
 
 ```@docs
@@ -319,6 +315,10 @@ crossmap
 ```
 
 ## [Closeness measures](@id closeness_api)
+
+```@docs
+ClosenessMeasure
+```
 
 ### Joint distance distribution
 

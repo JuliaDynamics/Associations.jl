@@ -19,8 +19,8 @@ The Shannon mutual information ``I_S(X; Y)``.
 
 - [`JointProbabilities`](@ref) (generic)
 - [`EntropyDecomposition`](@ref) (generic)
-- [`KSG1`](@ref)
-- [`KSG2`](@ref)
+- [`KraskovStögbauerGrassberger1`](@ref)
+- [`KraskovStögbauerGrassberger2`](@ref)
 - [`GaoOhViswanath`](@ref)
 - [`GaoKannanOhViswanath`](@ref)
 - [`GaussianMI`](@ref)
@@ -48,8 +48,8 @@ The double-sum estimate is obtained by replacing the double sum
 
 where  ``\\hat{p}(x_i) = \\frac{n(x_i)}{N_x}``, ``\\hat{p}(y_i) = \\frac{n(y_j)}{N_y}``,
 and ``\\hat{p}(x_i, x_j) = \\frac{n(x_i)}{N}``, and ``N = N_x N_y``.
-This definition is used by [`mutualinfo`](@ref) when called with a
-[`ContingencyMatrix`](@ref).
+This definition is used by [`association`](@ref) when called with a
+[`JointProbababilities`](@ref) estimator.
 
 ### Three-entropies formulation
 
@@ -60,8 +60,8 @@ I^S(X; Y) = H^S(X) + H_q^S(Y) - H^S(X, Y),
 ```
 
 where ``H^S(\\cdot)`` and ``H^S(\\cdot, \\cdot)`` are the marginal and joint discrete
-Shannon entropies. This definition is used by [`mutualinfo`](@ref) when called with a
-[`ProbabilitiesEstimator`](@ref).
+Shannon entropies. This definition is used by [`association`](@ref) when called with a
+[`EntropyDecomposition`](@ref) estimator and a discretization.
 
 ## Differential mutual information
 
@@ -72,16 +72,16 @@ I^S(X; Y) = h^S(X) + h_q^S(Y) - h^S(X, Y),
 ```
 
 where ``h^S(\\cdot)`` and ``h^S(\\cdot, \\cdot)`` are the marginal and joint
-differential Shannon entropies. This definition is used by [`mutualinfo`](@ref) when
-called with a [`DifferentialEntropyEstimator`](@ref).
+differential Shannon entropies. This definition is used by [`association`](@ref) when
+called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialEntropyEstimator`](@extref).
 
 ## Estimation
 
 - [Example 1](@ref example_MIShannon_JointProbabilities_ValueBinning): [`JointProbabilities`](@ref) with [`ValueBinning`](@ref) outcome space.
 - [Example 2](@ref example_MIShannon_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) outcome space on string data.
 - [Example 3](@ref example_MIShannon_GaussianMI): Dedicated [`GaussianMI`](@ref) estimator.
-- [Example 4](@ref example_MIShannon_KSG1): Dedicated [`KSG1`](@ref) estimator.
-- [Example 5](@ref example_MIShannon_KSG2): Dedicated [`KSG2`](@ref) estimator.
+- [Example 4](@ref example_MIShannon_KSG1): Dedicated [`KraskovStögbauerGrassberger1`](@ref) estimator.
+- [Example 5](@ref example_MIShannon_KSG2): Dedicated [`KraskovStögbauerGrassberger2`](@ref) estimator.
 - [Example 6](@ref example_MIShannon_GaoKannanOhViswanath): Dedicated [`GaoKannanOhViswanath`](@ref) estimator.
 - [Example 7](@ref example_MIShannon_EntropyDecomposition_Kraskov): [`EntropyDecomposition`](@ref) with [`Kraskov`](@ref) estimator.
 - [Example 8](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps): [`EntropyDecomposition`](@ref) with [`BubbleSortSwaps`](@ref).

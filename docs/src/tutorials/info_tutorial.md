@@ -114,7 +114,7 @@ Mutual informations, in particular [`MIShannon`](@ref) is an often-used symmetri
 measure for quantifing the (possibly nonlinear) association between variables. It appears
 in both  discrete and differential form, and can be estimated in a multitude of ways. For 
 example, one can use dedicated [`MutualInformationEstimator`](@ref)s such as 
-[`KSG2`](@ref) or [`GaussianMI`](@ref):
+[`KraskovStögbauerGrassberger2`](@ref) or [`GaussianMI`](@ref):
 
 ```@example INFO_TUTORIAL
 using CausalityTools

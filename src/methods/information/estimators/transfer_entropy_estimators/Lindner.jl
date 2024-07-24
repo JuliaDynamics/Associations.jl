@@ -11,9 +11,14 @@ export Lindner
 The `Lindner` transfer entropy estimator [Lindner2011](@cite), which is
 also used in the Trentool MATLAB toolbox, and is based on nearest neighbor searches.
 
+## Compatible definitions
+
+- [`TEShannon`](@ref)
+
 ## Usage
 
 - Use with [`association`](@ref) to compute [`TEShannon`](@ref) from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Keyword parameters
 
@@ -54,10 +59,6 @@ z = rand(rng, 10000) .+ y
 est = Lindner(TEShannon(), k = 10)
 association(est, x, z, y) # should be near 0 (and can be negative)
 ```
-
-## Compatible definitions
-
-- [`TEShannon`](@ref)
 """
 struct Lindner{E} <: TransferEntropyEstimator{E}
     definition::E

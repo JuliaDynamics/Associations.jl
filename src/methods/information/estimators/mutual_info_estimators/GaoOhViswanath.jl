@@ -14,6 +14,7 @@ and is also called the bias-improved-KSG estimator, or BI-KSG, by [Gao2018](@cit
 ## Usage
 
 - Use with [`association`](@ref) to compute Shannon mutual information from input data.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Description
 
