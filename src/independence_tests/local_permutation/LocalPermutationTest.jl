@@ -160,7 +160,6 @@ end
 # KD-trees and do marginal searches for all marginals all the time.
 function independence(test::LocalPermutationTest, x, y, z)
     est_or_measure, nshuffles = test.est_or_measure, test.nshuffles
-
     # Make sure that the measure is compatible with the input data.
     verify_number_of_inputs_vars(est_or_measure, 3)
 
@@ -230,5 +229,5 @@ end
 function LocalPermutationTest(m::MultivariateInformationMeasure; kwargs...)
     throw(ArgumentError("You need to provide an estimator for the multivariate information measure $(typeof(m)), not only the definition."))
 end
-
-#include("transferentropy.jl")
+# TODO: fix this
+include("transferentropy.jl")
