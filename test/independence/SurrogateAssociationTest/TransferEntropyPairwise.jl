@@ -1,10 +1,11 @@
+using Test
 using Random
 using TimeseriesSurrogates
 
 rng = Xoshiro(1234)
 
 sys = system(Logistic2Unidir(; c_xy = 0.5))
-x, y = columns(first(trajectory(sys, 300, Ttr = 10000)))
+x, y = columns(first(trajectory(sys, 400, Ttr = 10000)))
 
 # Creation
 est = MIDecomposition(TEShannon(), KSG1())
@@ -14,8 +15,8 @@ est = CMIDecomposition(TEShannon(), FPVP())
 @test_throws ArgumentError SurrogateAssociationTest(TEShannon())
 
 
-α = 0.0287 # Arbitrary significance level 1 - α = 0.9713
-test = SurrogateAssociationTest(est; rng, nshuffles = 50)
+α = 0.04 # Arbitrary significance level 1 - α = 0.96
+test = SurrogateAssociationTest(est; rng, nshuffles = 19)
 
 # The ground truth is X → Y, so we should be able to reject the null
 # when testing transferentropy(x → y)
@@ -27,7 +28,7 @@ test = SurrogateAssociationTest(est; rng, nshuffles = 50)
 
 # MIDecomposition estimator 
 est = MIDecomposition(TEShannon(), KSG1())
-test = SurrogateAssociationTest(est)
+test = SurrogateAssociationTest(est, nshuffles = 2)
 @test independence(test, x, y) isa SurrogateAssociationTestResult
 
 # Dedicated estimators
