@@ -28,7 +28,8 @@ to check mean of `Δ` is skewed towards positive value, i.e.
 * ``H_1 := \\mu(\\Delta) > 0``.
 
 When used with [`independence`](@ref), a `JDDTestResult` is returned, which contains
-the joint distance distribution and a p-value. If you only need `Δ`, use [`jdd`](@ref) directly.
+the joint distance distribution and a p-value. If you only need `Δ`, use [`association`](@ref) 
+with a [`JointDistanceDistribution`](@ref) instance directly.
 
 ## Examples
 

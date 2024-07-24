@@ -143,7 +143,7 @@ indices).
 - Bugfix for `OCE` for certain conditional variable cases.
 - Improve docstring for `OCE`.
 - Updated readme.
-- Fixed bug related to `DifferentialEntropyEstimator` "unit" conversion.
+- Fixed bug related to `DifferentialInfoEstimator` "unit" conversion.
 
 ## 2.0
 

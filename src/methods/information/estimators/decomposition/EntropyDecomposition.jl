@@ -18,8 +18,8 @@ per variable/column and each column is encoded into integers using [`codify`](@r
 ## Usage
 
 - Use with [`association`](@ref) to compute a [`MultivariateInformationMeasure`](@ref)
-    from input data.
-- Use with [`independence`](@ref) to test for independence between variables.
+    from input data: [`association`](@ref)`(est::EntropyDecomposition, x...)`.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
 
 ## Description
 
@@ -40,14 +40,14 @@ used.
 If using the second signature, the outcome spaces can be used for discretisation. 
 Note that not all outcome spaces will work with all measures.
 
-| Estimator                         | Principle                             | Note                             |
-| :-------------------------------- | :------------------------------------ | :------------------------------- |
-| [`UniqueElements`](@ref)          | Count of unique elements              |                                  |
-| [`ValueBinning`](@ref)            | Binning (histogram)                   |                                  |
-| [`OrdinalPatterns`](@ref)         | Ordinal patterns                      |                                  |
-| [`Dispersion`](@ref)              | Dispersion patterns                   |                                  |
-| [`CosineSimilarityBinning`](@ref) | Cosine similarities histogram         |                                  |
-| [`TransferOperator`](@ref)        | Transfer operator on rectangular bins | `binning.precise` must be `true` |
+| Estimator                         | Principle                     |
+| :-------------------------------- | :---------------------------- |
+| [`UniqueElements`](@ref)          | Count of unique elements      |
+| [`ValueBinning`](@ref)            | Binning (histogram)           |
+| [`OrdinalPatterns`](@ref)         | Ordinal patterns              |
+| [`Dispersion`](@ref)              | Dispersion patterns           |
+| [`BubbleSortSwaps`](@ref)         | Sorting complexity            |
+| [`CosineSimilarityBinning`](@ref) | Cosine similarities histogram |
 
 ## Bias 
 
@@ -83,7 +83,7 @@ for example [`PlugIn`](@ref). The given `discretization` scheme (typically an
 probabilities estimator `pest` controls how probabilities are estimated from counts.
 
 !!! note "Bias"
-    Like for [`DifferentialDecomposition`](@ref), using a dedicated estimator 
+    Like for [`DifferentialInfoEstimator`](@ref), using a dedicated estimator 
     for the measure in question will be more reliable than using a decomposition
     estimate. Here's how different `discretization`s are applied:
 
@@ -101,35 +101,15 @@ probabilities estimator `pest` controls how probabilities are estimated from cou
 
 ## Examples
 
-Both Shannon-type mutual information and conditional mutual information can be 
-written as a sum of marginal entropy terms. First a discrete example for mutual 
-information:
-
-```julia
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-
-x = StateSpaceSet(rand(rng, 1000000, 2))
-y = StateSpaceSet(rand(rng, 1000000, 2))
-# Compute Shannon mutual information by discretizing each marginal column-wise
-# (per variable) using length-`3` ordinal patterns.
-est = EntropyDecomposition(MIShannon(), PlugIn(Shannon()), OrdinalPatterns(m=3))
-association(est, x, y) # should be close to 0
-```
-
-Here, we estimate Shannon-type conditional mutual information using the `ZhuSingh`
-entropy estimator.
-
-```julia
-using CausalityTools
-using Random; rng = MersenneTwister(1234)
-x = rand(rng, 100000)
-y = rand(rng, 100000) .+ x
-z = rand(rng, 100000) .+ y
-
-est = EntropyDecomposition(CMIShannon(), ZhuSingh(k = 3))
-association(est, x, z, y) # should be near 0 (and can be negative)
-```
+- [Example 1](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning):
+    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@ref)
+    entropy estimated using [`CodifyVariables`](@ref) with [`ValueBinning`](@ref).
+- [Example 2](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps):
+    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@ref)
+    entropy estimated using [`CodifyVariables`](@ref) with [`BubbleSortSwaps`](@ref).
+- [Example 3](@ref example_MIShannon_EntropyDecomposition_Kraskov):
+    [`MIShannon`](@ref) estimation using decomposition into differental [`Shannon`](@ref)
+    entropy estimated using the [`Kraskov`](@ref) estimator.
 
 See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).
 """

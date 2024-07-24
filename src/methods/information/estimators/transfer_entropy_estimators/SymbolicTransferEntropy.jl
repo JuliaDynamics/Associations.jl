@@ -21,7 +21,7 @@ transforms the input time series into integer time series. Transfer entropy entr
 estimated from the encoded time series by applying  
 
 Transfer entropy is then estimated as usual on the encoded timeseries with the embedding
-dictated by `definition` and the [`JointProbababilities`](@ref) estimator.
+dictated by `definition` and the [`JointProbabilities`](@ref) estimator.
 
 ## Examples
 

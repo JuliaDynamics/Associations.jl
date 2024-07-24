@@ -49,7 +49,7 @@ The double-sum estimate is obtained by replacing the double sum
 where  ``\\hat{p}(x_i) = \\frac{n(x_i)}{N_x}``, ``\\hat{p}(y_i) = \\frac{n(y_j)}{N_y}``,
 and ``\\hat{p}(x_i, x_j) = \\frac{n(x_i)}{N}``, and ``N = N_x N_y``.
 This definition is used by [`association`](@ref) when called with a
-[`JointProbababilities`](@ref) estimator.
+[`JointProbabilities`](@ref) estimator.
 
 ### Three-entropies formulation
 
@@ -73,7 +73,7 @@ I^S(X; Y) = h^S(X) + h_q^S(Y) - h^S(X, Y),
 
 where ``h^S(\\cdot)`` and ``h^S(\\cdot, \\cdot)`` are the marginal and joint
 differential Shannon entropies. This definition is used by [`association`](@ref) when
-called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialEntropyEstimator`](@extref).
+called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialInfoEstimator`](@extref).
 
 ## Estimation
 

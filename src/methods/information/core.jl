@@ -18,7 +18,7 @@ The supertype for all estimators of multivariate information measures.
 
 ## Generic implementations
 
-- [`JointProbababilities`](@ref)
+- [`JointProbabilities`](@ref)
 - [`EntropyDecomposition`](@ref)
 - [`MIDecomposition`](@ref)
 - [`CMIDecomposition`](@ref)
@@ -114,9 +114,9 @@ of a multidimensional probability mass functions (PMFs) or multidimensional prob
 
 - [`MIShannon`](@ref)
 - [`MIRenyiJizba`](@ref)
-- [`MIRenyiMartin`](@ref)
-- [`MITsallisAbe`](@ref)
-- [`MITsallisFuruchi`](@ref)
+- [`MIRenyiSarbu`](@ref)
+- [`MITsallisMartin`](@ref)
+- [`MITsallisFuruichi`](@ref)
 
 [`ConditionalMutualInformation`](@ref) definitions:
 

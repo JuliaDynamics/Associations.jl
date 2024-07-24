@@ -29,7 +29,7 @@ For the discrete case, the following identities hold in theory (when estimating 
 may not).
 
 - `PMI(X, Y, Z) >= CMI(X, Y, Z)` (where CMI is the Shannon CMI). Holds in theory, but
-    when estimating PartialMutualInformation, the identity may not hold.
+    when estimating PMI, the identity may not hold.
 - `PMI(X, Y, Z) >= 0`. Holds both in theory and when estimating using discrete estimators.
 - `X ⫫ Y | Z => PMI(X, Y, Z) = CMI(X, Y, Z) = 0` (in theory, but not necessarily for
     estimation).

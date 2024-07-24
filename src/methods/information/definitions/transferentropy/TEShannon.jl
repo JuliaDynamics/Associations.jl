@@ -8,9 +8,9 @@ The Shannon-type transfer entropy measure.
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+- Use with [`association`](@ref) to compute the raw transfer entropy.
+- Use with an [`IndependenceTest`](@ref) to perform a formal hypothesis test for pairwise
     and conditional dependence.
-- Use with [`transferentropy`](@ref) to compute the raw transfer entropy.
 
 ## Description
 
@@ -25,8 +25,9 @@ TE(S \\to T | C) &:= I^S(T^+; S^- | T^-, C^-)
 ```
 
 where ``I(T^+; S^- | T^-)`` is the Shannon conditional mutual information
-([`CMIShannon`](@ref)). The variables ``T^+``, ``T^-``,
-``S^-`` and ``C^-`` are described in the docstring for [`transferentropy`](@ref).
+([`CMIShannon`](@ref)). The `-` and `+` subscripts on the marginal variables ``T^+``, ``T^-``,
+``S^-`` and ``C^-`` indicate that the embedding vectors for that marginal
+are constructed using present/past values and future values, respectively.
 
 ## Estimation
 

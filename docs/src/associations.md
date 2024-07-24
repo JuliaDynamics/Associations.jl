@@ -44,6 +44,7 @@ ConditionalEntropyTsallisAbe
 ### [Divergences and distances](@id divergences_and_distances)
 
 ```@docs
+DivergenceOrDistance
 HellingerDistance
 KLDivergence
 RenyiDivergence
@@ -252,21 +253,10 @@ Correa
 
 ## [Correlation measures](@id correlation_api)
 
-### Pearson correlation
-
 ```@docs
+CorrelationMeasure
 PearsonCorrelation
-```
-
-### Partial correlation
-
-```@docs
 PartialCorrelation
-```
-
-### Distance correlation
-
-```@docs
 DistanceCorrelation
 ```
 

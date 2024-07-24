@@ -33,7 +33,7 @@ I_q^{R_{P}}(X; Y | Z) &= \\dfrac{1}{q-1}
 
 ## Estimation
 
-- [Example 1](@ref @id CMIRenyiPoczos_PoczosSchneiderCMI): Dedicated [`PoczosSchneiderCMI`](@ref) estimator.
+- [Example 1](@ref CMIRenyiPoczos_PoczosSchneiderCMI): Dedicated [`PoczosSchneiderCMI`](@ref) estimator.
 """
 Base.@kwdef struct CMIRenyiPoczos{B, Q} <: ConditionalMutualInformation
     base::B = 2

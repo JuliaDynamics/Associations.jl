@@ -7,9 +7,9 @@ The Rényi transfer entropy from [Jizba2012](@citet).
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+- Use with [`association`](@ref) to compute the raw transfer entropy.
+- Use with an [`IndependenceTest`](@ref) to perform a formal hypothesis test for pairwise
     and conditional dependence.
-- Use with [`transferentropy`](@ref) to compute the raw transfer entropy.
 
 ## Description
 
@@ -24,8 +24,9 @@ TE(S \\to T | C) &:= I_q^{R_J}(T^+; S^- | T^-, C^-),
 ```
 where ``I_q^{R_J}(T^+; S^- | T^-)`` is Jizba et al. (2012)'s definition of
 conditional mutual information ([`CMIRenyiJizba`](@ref)).
-The variables ``T^+``, ``T^-``,
-``S^-`` and ``C^-`` are described in the docstring for [`transferentropy`](@ref).
+The `-` and `+` subscripts on the marginal variables ``T^+``, ``T^-``,
+``S^-`` and ``C^-`` indicate that the embedding vectors for that marginal
+are constructed using present/past values and future values, respectively.
 
 ## Estimation
 

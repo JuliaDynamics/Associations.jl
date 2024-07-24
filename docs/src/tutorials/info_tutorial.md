@@ -141,6 +141,10 @@ estimator.
 est_diff = EntropyDecomposition(MIShannon(base = 2), Kraskov(Shannon(), k=10))
 ```
 
+```@example INFO_TUTORIAL
+association(est_diff, x, y)
+```
+
 We can also construct a discrete entropy based estimator based on e.g. [`PlugIn`](@ref)
 estimator of [`Shannon`](@ref) entropy.
 
@@ -149,14 +153,5 @@ mini, maxi = minimum([X; Y]), maximum([X; Y])
 encoding = RelativeMeanEncoding(mini, maxi, 5)
 disc = CodifyPoints(encoding)
 est_disc = JointProbabilities(MIShannon(base = 2), disc)
-```
-
-These estimators use different estimation methods, so give different results:
-
-```@example INFO_TUTORIAL
-association(est_diff, x, y)
-```
-
-```@example INFO_TUTORIAL
 association(est_disc, x, y)
 ```

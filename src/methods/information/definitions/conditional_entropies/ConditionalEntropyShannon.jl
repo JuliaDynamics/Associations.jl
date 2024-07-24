@@ -30,7 +30,7 @@ H^{S}(X | Y) = -\\sum_{x \\in \\mathcal{X}, y \\in \\mathcal{Y}} p(x, y) \\log(p
 ```
 
 This is the definition used when calling [`association`](@ref) with a
-[`JointProbababilities`](@ref) estimator.
+[`JointProbabilities`](@ref) estimator.
 
 ### Two-entropies formulation
 
@@ -55,7 +55,7 @@ H^S(X | Y) = h^S(X, Y) - h^S(Y),
 where ``h^S(\\cdot)`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref)
 differential entropy and Shannon joint differential entropy, respectively. This is the
 definition used when calling [`association`](@ref) with a
-[`DifferentialEntropyEstimator`](@extref).
+[`DifferentialInfoEstimator`](@extref).
 
 ## Estimation
 

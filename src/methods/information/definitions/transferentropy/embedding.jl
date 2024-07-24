@@ -6,8 +6,7 @@ export EmbeddingTE
 
 `EmbeddingTE` provide embedding parameters for transfer entropy analysis
 using either [`TEShannon`](@ref), [`TERenyi`](@ref), or in general any subtype
-of [`TransferEntropy`](@ref), which in turns dictates the embedding used with
-[`transferentropy`](@ref).
+of [`TransferEntropy`](@ref).
 
 The second method finds parameters using the ["traditional"](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/traditional/)
 optimised embedding techniques from DynamicalSystems.jl
