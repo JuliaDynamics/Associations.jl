@@ -31,6 +31,7 @@ function rc(x::Union{AbstractStateSpaceSet, AbstractVector{T}},
     if (x isa AbstractVector{T} where T <: AbstractVector{N} where N <: Number) || (x isa AbstractStateSpaceSet)
         if x isa AbstractStateSpaceSet
             N = dimension(x)
+        # vector of vectors
         elseif x isa AbstractVector
             N = size(x, 1)
         end
@@ -215,9 +216,8 @@ Base.@kwdef struct TEVars
     T::Vector{Int} = Int[]
     S::Vector{Int} = Int[]
     C::Vector{Int} = Int[]
-    TEVars(𝒯, T, S, C) = new(𝒯, T, S, C)
-    TEVars(𝒯, T, S) = new(𝒯, T, S, Int[])
 end
+TEVars(𝒯, T, S) = TEVars(𝒯, T, S, Int[])
 
 function Base.show(io::IO, tv::TEVars)
     s = "$(typeof(tv))(Tf = $(tv.Tf), T = $(tv.T), S = $(tv.S), C = $(tv.C))"

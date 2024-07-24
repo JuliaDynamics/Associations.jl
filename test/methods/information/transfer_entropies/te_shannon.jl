@@ -52,7 +52,7 @@ est = JointProbabilities(TEShannon(), CodifyVariables(OrdinalPatterns()));
 
 # `Hilbert`
 est_te = JointProbabilities(TEShannon(), CodifyVariables(OrdinalPatterns()));
-est = Hilbert(est)
+est = Hilbert(est_te)
 @test association(Hilbert(est, source = Phase(), target = Amplitude()), x, y) >= 0.0
 @test association(Hilbert(est, source = Amplitude(), target = Phase()), x, y) >= 0.0
 @test association(Hilbert(est, source = Amplitude(), target = Amplitude()), x, y) >= 0.0
@@ -66,6 +66,15 @@ est = Hilbert(est)
 @test association(Hilbert(est, source = Amplitude(), target = Phase(), cond = Amplitude() ), x, y, z) >= 0.0
 @test association(Hilbert(est, source = Amplitude(), target = Amplitude(), cond = Amplitude() ), x, y, z) >= 0.0
 @test association(Hilbert(est, source = Phase(), target = Phase(), cond = Amplitude() ), x, y, z) >= 0.0
+
+struct SillySignalProperty <: CausalityTools.InstantaneousSignalProperty
+end
+@test_throws ArgumentError association(Hilbert(est, source = SillySignalProperty()), x, y)
+@test_throws ArgumentError association(Hilbert(est, target = SillySignalProperty()), x, y)
+@test_throws ArgumentError association(Hilbert(est, source = SillySignalProperty()), x, y, z)
+@test_throws ArgumentError association(Hilbert(est, target = SillySignalProperty()), x, y, z)
+@test_throws ArgumentError association(Hilbert(est, cond = SillySignalProperty()), x, y, z)
+
 
 # `SymbolicTransferEntropy`
 sys = system(Logistic4Chain(; rng))

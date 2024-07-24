@@ -63,7 +63,7 @@ function association(est::Hilbert, source, target)
     elseif est.source isa Amplitude
         s = abs.(hil_s)
     else
-        error("est.source must be either Phase or Amplitude instance")
+        throw(ArgumentError("est.source must be either Phase or Amplitude instance"))
     end
 
     if est.target isa Phase
@@ -71,7 +71,7 @@ function association(est::Hilbert, source, target)
     elseif est.target isa Amplitude
         t = abs.(hil_t)
     else
-        error("est.target must be either Phase or Amplitude instance")
+        throw(ArgumentError("est.target must be either Phase or Amplitude instance"))
     end
 
     association(est.est, s, t)
@@ -87,7 +87,7 @@ function association(est::Hilbert, source, target, cond)
     elseif est.source isa Amplitude
         s = abs.(hil_s)
     else
-        error("est.source must be either Phase or Amplitude instance")
+        throw(ArgumentError("est.source must be either Phase or Amplitude instance"))
     end
 
     if est.target isa Phase
@@ -95,7 +95,7 @@ function association(est::Hilbert, source, target, cond)
     elseif est.target isa Amplitude
         t = abs.(hil_t)
     else
-        error("est.target must be either Phase or Amplitude instance")
+        throw(ArgumentError("est.target must be either Phase or Amplitude instance"))
     end
 
     if est.cond isa Phase
@@ -103,7 +103,7 @@ function association(est::Hilbert, source, target, cond)
     elseif est.cond isa Amplitude
         c = abs.(hil_c)
     else
-        error("est.cond must be either Phase or Amplitude instance")
+        throw(ArgumentError("est.cond must be either Phase or Amplitude instance"))
     end
     
     association(est.est, s, t, c)
