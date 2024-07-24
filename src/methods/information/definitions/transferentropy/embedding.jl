@@ -176,4 +176,4 @@ function Base.show(io::IO, x::EmbeddingTE)
     print(io, s)
 end
 
-include("optimization/traditional_optimal_embedding.jl")
+#include("optimization/traditional_optimal_embedding.jl")
