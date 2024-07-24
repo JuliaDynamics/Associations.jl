@@ -92,17 +92,15 @@ struct PC{U, C, A, N, MO} <: GraphAlgorithm
     α::A
     maxdepth::N
     maxiters_orient::MO
+end
 
-    function PC(
-            pairwise_test,
-            conditional_test;
-            α::A = 0.05, maxdepth::N = Inf,
-            maxiters_orient::MO = Inf) where {A, N, MO}
-        0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
-        U = typeof(pairwise_test)
-        C = typeof(conditional_test)
-        new{U, C, A, N, MO}(pairwise_test, conditional_test, α, maxdepth, maxiters_orient)
-    end
+ function PC(
+        pairwise_test,
+        conditional_test;
+        α::A = 0.05, maxdepth::N = Inf,
+        maxiters_orient::MO = Inf) where {A, N, MO}
+    0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
+    PC(pairwise_test, conditional_test, α, maxdepth, maxiters_orient)
 end
 
 include("skeleton.jl")
