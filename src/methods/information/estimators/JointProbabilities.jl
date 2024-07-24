@@ -53,7 +53,3 @@ struct JointProbabilities{M <: MultivariateInformationMeasure, O, P} <: Multivar
         new{M, D, typeof(pest)}(def, disc, pest)
     end
 end
-
-function association(est::JointProbabilities{MultivariateInformationMeasure}, x...)
-    throw(ArgumentError("`JointProbabilities` not implemented for `$(typeof(est.definition).name.name)`"))
-end
