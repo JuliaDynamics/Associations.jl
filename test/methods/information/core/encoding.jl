@@ -3,6 +3,9 @@ using CausalityTools
 using Random
 rng = Xoshiro(1234)
 
+# Constructors
+@test_throws ArgumentError CodifyVariables((OrdinalPatterns(m=2), OrdinalPatterns(m=3)))
+
 x = StateSpaceSet(rand(rng, 50, 3))
 y = StateSpaceSet(rand(rng, 50, 3))
 z = StateSpaceSet(rand(rng, 50, 2))
