@@ -24,30 +24,54 @@ function Base.show(io::IO, est::DecompositionEstimator)
     strs = summary_strings(est)
     measurecolors = measure_colors(est)
     infocolors = info_colors(est)
-    n = maximum(length.(strs))
 
-    spaces_needed = [n - length(s) for s in strs] 
-    spaced_strs = [strs[i] * repeat(" ", spaces_needed[i]) for i in eachindex(strs)]
+    max_str_width = maximum(length.(strs))
+    max_type_width = maximum(length.(string.(types)))
+    formula = decomposition_string(est.definition, est)
+
+    max_content_width = maximum([
+        length("$(typeof(est).name.name) estimator"),
+        max_str_width + max_type_width + 2, 
+        length(formula) + 10  # +10 for " Formula: "
+    ])
+
     ctx = IOContext(io, :color => true)
-    printstyled(ctx,  "|------------------------------------\n", color=:bold)
-    printstyled(ctx,  "| $(typeof(est).name.name) estimator\n", color=:bold)
-    printstyled(ctx,  "|------------------------------------\n", color=:bold)
-   
-    indent = " "
-    for i in eachindex(strs)
-        printstyled(ctx, "|", color = :bold)
-        printstyled(ctx, "$(indent)$(spaced_strs[i]): ", color=:grey)
-        printstyled(ctx, string(types[i]), color=measurecolors[i])
-        if i < length(strs)
-            print(io, "\n")
-        end
-    end
-    d = decomposition_string(est.definition, est)
-    printstyled(ctx, "\n|", color = :bold)
-    printstyled(ctx, )
-    printstyled(ctx,  " Formula: $(d)\n", color=:light_grey)
-    printstyled(ctx,  "|------------------------------------\n", color=:bold)
 
+    function print_horizontal_line(char::Char)
+        printstyled(ctx, "+$(repeat(char, max_content_width + 2))+\n", color = :bold)
+    end
+
+    print_horizontal_line('-')
+    printstyled(ctx, "| $(center_str("$(typeof(est).name.name) estimator", max_content_width)) |\n", color = :bold)
+    print_horizontal_line('-')
+   
+    for i in eachindex(strs)
+        printstyled(ctx, "| ", color = :bold)
+        printstyled(ctx, "$(rpad(strs[i], max_str_width)): ", color = :grey)
+        type_str = string(types[i])
+        printstyled(ctx, type_str, color = measurecolors[i])
+        padding = max_content_width - max_str_width - length(type_str) - 2
+        printstyled(ctx, repeat(" ", padding), color = :bold)
+        printstyled(ctx, " |\n", color = :bold)
+    end
+
+    formula_line = "Formula: $(formula)"
+    printstyled(ctx, "| ", color = :bold)
+    printstyled(ctx, formula_line, color = :light_grey)
+    padding = max_content_width - length(formula_line)
+    printstyled(ctx, repeat(" ", padding), color = :bold)
+    printstyled(ctx, " |\n", color = :bold)
+    print_horizontal_line('-')
+end
+
+function center_str(s::String, width::Int)
+    if length(s) >= width
+        return s
+    else
+        lpad = (width - length(s)) ÷ 2
+        rpad = width - length(s) - lpad
+        return "$(repeat(" ", lpad))$(s)$(repeat(" ", rpad))"
+    end
 end
 
 function summary_strings(est::DecompositionEstimator)
