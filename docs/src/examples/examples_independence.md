@@ -243,3 +243,133 @@ independence(test, places, experience, preferred_equipment)
 
 Again, as expected, when conditioning on the mediating variable, the dependence disappears,
 and we can't reject the null hypothesis of independence.
+
+### [[`MCR`](@ref)](@id example_independence_MCR)
+
+```@example
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+
+x = rand(rng, 300)
+y = rand(rng, 300)
+test = SurrogateAssociationTest(MCR(r = 0.5); rng, nshuffles = 100, surrogate = RandomShuffle())
+independence(test, x, y)
+```
+
+As expected, we can't reject independence. What happens if two variables are coupled?
+
+```@example
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x = rand(rng, 300)
+z = x .+ rand(rng, 300)
+test = SurrogateAssociationTest(MCR(r = 0.5); rng, nshuffles = 100, surrogate = RandomShuffle())
+independence(test, x, z)
+```
+
+Now, because the variables are coupled, the evidence in the data support dependence.
+
+
+## [[`LocalPermutationTest`](@ref)](@id example_LocalPermutationTest)
+
+To demonstrate the local permutation test for independence, we'll again use the 
+chain of unidirectionally coupled logistic maps.
+
+We'll implement a set of chained logistic maps with unidirectional coupling.
+
+```@example example_LocalPermutationTest_CMIShannon
+using DynamicalSystemsBase
+Base.@kwdef struct Logistic4Chain{V, RX, RY, RZ, RW, C1, C2, C3, Σ1, Σ2, Σ3, RNG}
+    xi::V = [0.1, 0.2, 0.3, 0.4]
+    rx::RX = 3.9
+    ry::RY = 3.6
+    rz::RZ = 3.6
+    rw::RW = 3.8
+    c_xy::C1 = 0.4
+    c_yz::C2 = 0.4
+    c_zw::C3 = 0.35
+    σ_xy::Σ1 = 0.05
+    σ_yz::Σ2 = 0.05
+    σ_zw::Σ3 = 0.05
+    rng::RNG = Random.default_rng()
+end
+
+function eom_logistic4_chain(u, p::Logistic4Chain, t)
+    (; xi, rx, ry, rz, rw, c_xy, c_yz, c_zw, σ_xy, σ_yz, σ_zw, rng) = p
+    x, y, z, w = u
+    f_xy = (y +  c_xy*(x + σ_xy * rand(rng)) ) / (1 + c_xy*(1+σ_xy))
+    f_yz = (z +  c_yz*(y + σ_yz * rand(rng)) ) / (1 + c_yz*(1+σ_yz))
+    f_zw = (w +  c_zw*(z + σ_zw * rand(rng)) ) / (1 + c_zw*(1+σ_zw))
+    dx = rx * x * (1 - x)
+    dy = ry * (f_xy) * (1 - f_xy)
+    dz = rz * (f_yz) * (1 - f_yz)
+    dw = rw * (f_zw) * (1 - f_zw)
+    return SVector{4}(dx, dy, dz, dw)
+end
+
+
+function system(definition::Logistic4Chain)
+    return DiscreteDynamicalSystem(eom_logistic4_chain, definition.xi, definition)
+end
+```
+
+### [[`CMIShannon`](@ref)](@id example_LocalPermutationTest_CMIShannon)
+
+To estimate CMI, we'll use the [`Kraskov`](@ref) differential
+entropy estimator, which naively computes CMI as a sum of entropy terms without guaranteed
+bias cancellation.
+
+```@example example_LocalPermutationTest_CMIShannon
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+n = 100
+X = randn(rng, n)
+Y = X .+ randn(rng, n) .* 0.4
+Z = randn(rng, n) .+ Y
+x, y, z = StateSpaceSet.((X, Y, Z))
+test = LocalPermutationTest(FPVP(CMIShannon()), nshuffles = 19)
+independence(test, x, y, z)
+```
+
+We expect there to be a detectable influence from ``X`` to
+``Y``, if we condition on ``Z`` or not, because ``Z`` doesn't influence neither ``X`` nor ``Y``.
+The null hypothesis is that the first two variables are conditionally independent given the third, which we reject with a very low p-value. Hence, we accept the alternative
+hypothesis that the first two variables ``X`` and ``Y``. are conditionally *dependent* given ``Z``.
+
+```@example example_LocalPermutationTest_CMIShannon
+independence(test, x, z, y)
+```
+
+As expected, we cannot reject the null hypothesis that ``X`` and ``Z`` are conditionally independent given ``Y``, because ``Y`` is the variable that transmits information from
+``X`` to ``Z``.
+
+### [[`TEShannon`](@ref)](@id example_LocalPermutationTest_TEShannon)
+
+Here, we demonstrate [`LocalPermutationTest`](@ref) with the [`TEShannon`](@ref) measure
+with default parameters and the [`FPVP`](@ref) estimator. We'll use the system
+of four coupled logistic maps that are linked `X → Y → Z → W` defined
+[above](@ref example_LocalPermutationTest).
+
+We should expect the transfer entropy `X → Z`
+to be non-significant when conditioning on `Y`, because all information from `X` to `Z`
+is transferred through `Y`.
+
+```@example example_LocalPermutationTest_TEShannon
+using CausalityTools
+using Random; rng = Random.default_rng()
+n = 300
+sys = system(Logistic4Chain(; xi = rand(4)))
+x, y, z, w = columns(trajectory(sys, n) |> first)
+est = CMIDecomposition(TEShannon(), FPVP(k = 10))
+test = LocalPermutationTest(est, nshuffles = 19)
+independence(test, x, z, y)
+```
+
+As expected, we cannot reject the null hypothesis that `X` and `Z` are conditionally
+independent given `Y`.
+
+The same goes for variables one step up the chain:
+
+```@example example_LocalPermutationTest_TEShannon
+independence(test, y, w, z)
+```

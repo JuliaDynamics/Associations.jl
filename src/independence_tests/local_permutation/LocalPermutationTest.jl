@@ -92,8 +92,10 @@ The nearest-neighbor approach in Runge (2018) can be reproduced by using the
 
 ## Examples
 
-- [Example using `CMIShannon`](@ref example_localpermtest_cmishannon).
-- [Example using `TEShannon`](@ref example_localpermtest_teshannon).
+- [Example 1](@ref example_LocalPermutationTest_CMIShannon):
+    Conditional independence test using [`CMIShannon`](@ref)
+- [Example 2](@ref example_LocalPermutationTest_TEShannon)):
+     Conditional independence test using [`TEShannon`](@ref)
 """
 struct LocalPermutationTest{M, C, R} <: IndependenceTest{M}
     est_or_measure::M

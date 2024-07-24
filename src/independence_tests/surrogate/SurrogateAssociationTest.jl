@@ -49,7 +49,6 @@ Then, the first input variable is shuffled `nshuffled` times according to the gi
 `surrogate` method (each type of `surrogate` represents a distinct null hypothesis).
 For each shuffle, `est_or_measure` is recomputed and the results are stored. 
 
-
 ## Examples
 
 - [Example 1](@ref example_SurrogateAssociationTest_SMeasure):
@@ -61,7 +60,9 @@ For each shuffle, `est_or_measure` is recomputed and the results are stored.
 - [Example 4](@ref example_SurrogateAssociationTest_MIShannon_categorical):
     [`MIShannon`](@ref) test for pairwise independence on categorical data.
 - [Example 5](@ref example_SurrogateAssociationTest_CMIShannon_categorical):
-    [`CMIShannon`](@ref) test for conditional independence on categorical data.    
+    [`CMIShannon`](@ref) test for conditional independence on categorical data.  
+- [Example 6](@ref example_independence_MCR): [`MCR`](@ref) test for 
+    pairwise and conditional independence.  
 """
 struct SurrogateAssociationTest{E, R, S} <: IndependenceTest{E}
     est_or_measure::E
