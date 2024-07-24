@@ -63,3 +63,8 @@ constant_τ = [-3, -2]
 differing_d_per_var = [2, 3]
 @test rc(y, differing_d_per_var, constant_τ, false) isa Tuple # (pos, τ)
 @test rc(y, differing_d_per_var, constant_τ, true) isa Tuple # (pos, τ)
+
+@test rc(y, ds, .-(τs)) isa Tuple # (pos, τ)
+
+@test rc(y, 4, -1, true) isa Tuple
+@test rc(y, 4, -1, false) isa Tuple

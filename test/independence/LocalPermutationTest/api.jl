@@ -37,12 +37,17 @@ test_kperm_toolarge = LocalPermutationTest(FPVP(CMIShannon()); kperm = 200, rng)
 # --------------------------------
 rng = StableRNG(123)
 x, y, z = rand(rng, 30), rand(rng, 30), rand(rng, 30)
-independence_test = LocalPermutationTest(FPVP(CMIShannon()))
+independence_test = LocalPermutationTest(FPVP(CMIShannon()), nshuffles = 2)
 res = independence(independence_test, x, z, y)
 
 # Internals
 out_str_pval = repr( CausalityTools.pvalue_text_summary(res))
 @test occursin("p-value:", out_str_pval)
+
+# Internals
+out_str_pval = repr( CausalityTools.quantiles_text(res))
+@test occursin("Ensemble quantiles", out_str_pval)
+
 
 out_str_conclusion = repr( CausalityTools.null_hypothesis_text(res))
 @test occursin("The first two variables are independent, given the 3rd variable", out_str_conclusion)
