@@ -1,4 +1,4 @@
-using Accessors: @set
+using Accessors
 
 export estimator_with_overridden_parameters
 
@@ -46,11 +46,11 @@ function estimator_with_overridden_parameters(
     lowdef = est.definition
    
     # Update the low-level definition. Have to do this step-wise. Ugly, but works.
-    modified_lowdef = @set lowdef.base = definition.base # update `base` field
-    modified_lowdef = @set modified_lowdef.q = definition.q # update `q` field
+    modified_lowdef = Accessors.@set lowdef.base = definition.base # update `base` field
+    modified_lowdef = Accessors.@set modified_lowdef.q = definition.q # update `q` field
 
     # Set the definition for the low-level estimator to the updated definition.
-    modified_est = @set est.definition = modified_lowdef
+    modified_est = Accessors.@set est.definition = modified_lowdef
     
     return modified_est
 end
@@ -60,9 +60,9 @@ function estimator_with_overridden_parameters(
         est::InformationMeasureEstimator{<:Renyi}
     )
     lowdef = est.definition
-    modified_lowdef = @set lowdef.base = definition.base # update `base` field
-    modified_lowdef = @set modified_lowdef.q = definition.q # update `q` field
-    modified_est = @set est.definition = modified_lowdef
+    modified_lowdef = Accessors.@set lowdef.base = definition.base # update `base` field
+    modified_lowdef = Accessors.@set modified_lowdef.q = definition.q # update `q` field
+    modified_est = Accessors.@set est.definition = modified_lowdef
     return modified_est
 end
 
@@ -71,8 +71,8 @@ function estimator_with_overridden_parameters(
         est::InformationMeasureEstimator{<:Shannon}
     )
     lowdef = est.definition
-    modified_lowdef = @set lowdef.base = definition.base # update `base` field
-    modified_est = @set est.definition = modified_lowdef
+    modified_lowdef = Accessors.@set lowdef.base = definition.base # update `base` field
+    modified_est = Accessors.@set est.definition = modified_lowdef
     return modified_est
 end
 
@@ -81,7 +81,7 @@ function estimator_with_overridden_parameters(
         est::MutualInformationEstimator{<:MIShannon}
     )
     lowdef = est.definition
-    modified_lowdef = @set lowdef.base = definition.base # update `base` field
-    modified_est = @set est.definition = modified_lowdef
+    modified_lowdef = Accessors.@set lowdef.base = definition.base # update `base` field
+    modified_est = Accessors.@set est.definition = modified_lowdef
     return modified_est
 end
