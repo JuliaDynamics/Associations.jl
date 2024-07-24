@@ -10,11 +10,11 @@ food = rand(rng, ["veggies", "meat", "fish"], n)
 service = rand(rng, ["netflix", "hbo"], n)
 nshuffles = 3
 
-@test_throws ArgumentError SurrogateAssociationTest(PMI())
+@test_throws ArgumentError SurrogateAssociationTest(PartialMutualInformation())
 
 # estimator 
 d = CodifyVariables(UniqueElements())
-est_pmi = JointProbabilities(PMI(), d)
+est_pmi = JointProbabilities(PartialMutualInformation(), d)
 
 # Tests 
 test = SurrogateAssociationTest(est_pmi; nshuffles, rng)
@@ -76,9 +76,9 @@ nshuffles = 19
 d_ord = CodifyVariables(OrdinalPatterns())
 d_disp = CodifyVariables(Dispersion())
 d_bin = CodifyVariables(ValueBinning(4))
-est_ord = JointProbabilities(PMI(), d_ord)
-est_disp = JointProbabilities(PMI(), d_disp)
-est_bin = JointProbabilities(PMI(), d_bin)
+est_ord = JointProbabilities(PartialMutualInformation(), d_ord)
+est_disp = JointProbabilities(PartialMutualInformation(), d_disp)
+est_bin = JointProbabilities(PartialMutualInformation(), d_bin)
 
 surrtest_ord = SurrogateAssociationTest(est_ord; nshuffles, rng)
 surrtest_disp = SurrogateAssociationTest(est_disp; nshuffles, rng)
