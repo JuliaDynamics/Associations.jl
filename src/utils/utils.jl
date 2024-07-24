@@ -1,6 +1,3 @@
 include("logs.jl")
-include("kde.jl")
-include("cca.jl")
 include("multidimensional_surrogates.jl")
 include("extensions.jl")
-include("transformations.jl")
