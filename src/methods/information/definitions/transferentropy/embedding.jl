@@ -175,3 +175,5 @@ function Base.show(io::IO, x::EmbeddingTE)
     s = "EmbeddingTE(dS=$(x.dS), dT=$(x.dT), dC=$(x.dC), dTf=$(x.dTf), τS=$(x.τS), τT=$(x.τT), τC=$(x.τC), ηTf=$(x.ηTf))"
     print(io, s)
 end
+
+include("optimization/traditional_optimal_embedding.jl")

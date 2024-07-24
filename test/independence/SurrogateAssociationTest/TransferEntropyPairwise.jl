@@ -1,10 +1,13 @@
 using Random
+using TimeseriesSurrogates
+
 rng = Xoshiro(1234)
 
 sys = system(Logistic2Unidir(; c_xy = 0.5))
 x, y = columns(first(trajectory(sys, 300, Ttr = 10000)))
 
 # Creation
+est = MIDecomposition(TEShannon(), KSG1())
 @test SurrogateAssociationTest(est) isa SurrogateAssociationTest
 est = CMIDecomposition(TEShannon(), FPVP())
 # ArgumentError thrown if an estimator isn't provided.
@@ -22,11 +25,32 @@ test = SurrogateAssociationTest(est; rng, nshuffles = 50)
 # when testing transferentropy(y → x)
 @test pvalue(independence(test, y, x)) > α
 
-x, y = columns(first(trajectory(sys, 100, Ttr = 1000)))
+# MIDecomposition estimator 
+est = MIDecomposition(TEShannon(), KSG1())
+test = SurrogateAssociationTest(est)
+@test independence(test, x, y) isa SurrogateAssociationTestResult
+
+# Dedicated estimators
+x, y = columns(first(trajectory(sys, 200, Ttr = 1000)))
 est = Lindner()
-test = SurrogateAssociationTest(est, nshuffles = 19)
+test = SurrogateAssociationTest(est, nshuffles = 2)
 @test independence(test, x, y) isa SurrogateAssociationTestResult
 
 est = Zhu1()
-test = SurrogateAssociationTest(est; nshuffles = 19)
+test = SurrogateAssociationTest(est; nshuffles = 2)
+@test independence(test, x, y) isa SurrogateAssociationTestResult
+
+# `EntropyDecomposition`
+est = EntropyDecomposition(TEShannon(), Kraskov())
+test = SurrogateAssociationTest(est; nshuffles = 2);
+@test independence(test, x, y) isa SurrogateAssociationTestResult
+
+# Can't use single-variable surrogate methods when a dimension is higher than 1
+est = EntropyDecomposition(TEShannon(embedding = EmbeddingTE(dS = 2)), Kraskov())
+test = SurrogateAssociationTest(est; nshuffles = 2, surrogate = AAFT());
+@test_throws ArgumentError independence(test, x, y)
+
+# Optimising parameters using traditional methods
+est = EntropyDecomposition(TEShannon(embedding = OptimiseTraditional()), Kraskov())
+test = SurrogateAssociationTest(est; nshuffles = 2);
 @test independence(test, x, y) isa SurrogateAssociationTestResult
