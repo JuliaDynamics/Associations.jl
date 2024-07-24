@@ -42,7 +42,7 @@ res = independence(independence_test, x, z, y)
 
 # Internals
 out_str_pval = repr( CausalityTools.pvalue_text_summary(res))
-@test occursin("p-value:", out_str)
+@test occursin("p-value:", out_str_pval)
 
 out_str_conclusion = repr( CausalityTools.null_hypothesis_text(res))
 @test occursin("The first two variables are independent, given the 3rd variable", out_str_conclusion)
