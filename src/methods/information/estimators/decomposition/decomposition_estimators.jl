@@ -29,23 +29,31 @@ function Base.show(io::IO, est::DecompositionEstimator)
     spaces_needed = [n - length(s) for s in strs] 
     spaced_strs = [strs[i] * repeat(" ", spaces_needed[i]) for i in eachindex(strs)]
     ctx = IOContext(io, :color => true)
-    printstyled(ctx,  "$(typeof(est).name.name) estimator\n\n", color=:bold)
-    d = decomposition_string(est.definition, est)
-        printstyled(ctx,  "  Formula: $(d)\n\n", color=:light_grey)
+    printstyled(ctx,  "|------------------------------------\n", color=:bold)
+    printstyled(ctx,  "| $(typeof(est).name.name) estimator\n", color=:bold)
+    printstyled(ctx,  "|------------------------------------\n", color=:bold)
+   
     indent = " "
     for i in eachindex(strs)
-        printstyled(ctx, "$(indent)$(spaced_strs[i]): ", color=infocolors[i])
+        printstyled(ctx, "|", color = :bold)
+        printstyled(ctx, "$(indent)$(spaced_strs[i]): ", color=:grey)
         printstyled(ctx, string(types[i]), color=measurecolors[i])
         if i < length(strs)
             print(io, "\n")
         end
     end
+    d = decomposition_string(est.definition, est)
+    printstyled(ctx, "\n|", color = :bold)
+    printstyled(ctx, )
+    printstyled(ctx,  " Formula: $(d)\n", color=:light_grey)
+    printstyled(ctx,  "|------------------------------------\n", color=:bold)
+
 end
 
 function summary_strings(est::DecompositionEstimator)
     return [
-        "Measure to be decomposed",
-        "Estimator for components",
+        "Measure",
+        "Component estimator",
     ]
 end
 
