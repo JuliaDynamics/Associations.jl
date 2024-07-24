@@ -105,31 +105,6 @@ function rc(x::Union{AbstractStateSpaceSet, AbstractVector{T}},
     return pos, lags
 end
 
-
-function get_delay_reconstruction_params(source, target, p::EmbeddingTE)
-    pos_Tf, lags_Tf = rc(target, p.dTf, p.ηTf, true)
-    pos_T, lags_T = rc(target, p.dT, p.τT, false)
-    pos_S, lags_S = rc(source, p.dS, p.τS, false)
-    pos_C, lags_C = rc(source, p.dC, p.τC, false)
-
-    js = ([pos_Tf; pos_T; pos_S]...,)
-    τs = ([lags_Tf; lags_T; lags_S]...,)
-
-    return τs, js
-end
-
-function get_delay_reconstruction_params(source, target, cond, p::EmbeddingTE)
-    pos_Tf, lags_Tf = rc(target, p.dTf, p.ηTf, true)
-    pos_T, lags_T = rc(target, p.dT, p.τT, false)
-    pos_S, lags_S = rc(source, p.dS, p.τS, false)
-    pos_C, lags_C = rc(cond, p.dC, p.τC, false)
-
-    js = ([pos_Tf; pos_T; pos_S; pos_C]...,)
-    τs = ([lags_Tf; lags_T; lags_S; pos_C]...,)
-
-    return τs, js
-end
-
 """
     te_embed(source::VectorOr1DDataset, target::VectorOr1DDataset, p::EmbeddingTE) → (points, vars, τs)
     te_embed(source::VectorOr1DDataset, target::VectorOr1DDataset, cond::VectorOr1DDataset, p::EmbeddingTE) → (points, vars, τs)
