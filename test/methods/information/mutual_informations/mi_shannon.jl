@@ -16,6 +16,18 @@ y = rand(rng, ["hello", "yoyo", "heyhey"], 200)
 est = JointProbabilities(def, UniqueElements())
 @test association(est, x, y) ≥ 0
 
+
+# ::::::::::::::::::::::::
+# JointProbabilities
+# ::::::::::::::::::::::::
+x = StateSpaceSet(rand(rng, 10, 2)); 
+y = StateSpaceSet(rand(rng, 10, 2));
+d_row = CodifyPoints(OrdinalPatternEncoding{2}()); 
+@test association(JointProbabilities(MIShannon(), d_row), x, y) ≥ 0.0
+
+d_col = CodifyVariables(OrdinalPatterns(m = 2)); 
+@test association(JointProbabilities(MIShannon(), d_col), x, y) ≥ 0.0
+
 # ::::::::::::::::::::::::
 # Decomposition estimators
 # ::::::::::::::::::::::::
@@ -26,6 +38,12 @@ est_diff = EntropyDecomposition(def, Kraskov(k=3))
 
 est_disc = EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(ValueBinning(2)));
 @test association(est_disc, x, y) isa Real
+
+binning = FixedRectangularBinning(0, 1, 3)
+disc = CodifyVariables(ValueBinning(binning))
+est_bin = EntropyDecomposition(def, PlugIn(Shannon()), disc)
+@test association(est_bin, x, y) >= 0.0
+
 
 # ::::::::::::::::::::::::
 # Dedicated estimators
@@ -49,14 +67,8 @@ def = MIShannon()
 @test association(KSG2(def, k = 2), x, y) isa Real
 @test association(GaoOhViswanath(def, k = 2), x, y) isa Real
 @test association(GaoKannanOhViswanath(def, k = 2), x, y) isa Real
-@test association(GaussianMI(def), x, y) isa Real
+@test association(GaussianMI(def, normalize = false), x, y) isa Real
 @test association(GaussianMI(def; normalize = true), x, y) isa Real
-
-
-binning = FixedRectangularBinning(0, 1, 3)
-disc = CodifyVariables(ValueBinning(binning))
-est_bin = EntropyDecomposition(def, PlugIn(Shannon()), disc)
-@test association(est_bin, x, y) >= 0.0
 
 # ---------------
 # Pretty printing

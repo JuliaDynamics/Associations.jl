@@ -51,9 +51,15 @@ ds = 2
 y = [x, x]
 ds = 2
 τs =  [1, 2]
-rc(y, ds, τs) isa Tuple # (pos, τ)
+@test rc(y, ds, τs) isa Tuple # (pos, τ)
 
 # different maximum dimensions per input time series
 constant_τ = 3
 differing_d_per_var = [2, 3]
-rc(y, differing_d_per_var, constant_τ) isa Tuple # (pos, τ)
+@test rc(y, differing_d_per_var, constant_τ) isa Tuple # (pos, τ)
+@test rc(y, differing_d_per_var, -constant_τ) isa Tuple # (pos, τ)
+
+constant_τ = [-3, -2]
+differing_d_per_var = [2, 3]
+@test rc(y, differing_d_per_var, constant_τ, false) isa Tuple # (pos, τ)
+@test rc(y, differing_d_per_var, constant_τ, true) isa Tuple # (pos, τ)

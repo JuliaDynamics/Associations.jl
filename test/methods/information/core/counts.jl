@@ -3,6 +3,8 @@ using CausalityTools
 using Random
 rng = Xoshiro(1234)
 
+@test_throws ArgumentError CodifyPoints() # need at least one input encoding
+
 c = Counts([2 2; 3 3])
 @test marginal(c, dims = 1).cts == [4, 6]
 @test marginal(c, dims = 2).cts == [5, 5]
@@ -19,6 +21,7 @@ y = [1, 2, 1, 2, 1, 2, 1, 2, 1]
 
 @test counts(x, y) == counts(UniqueElements(), x, y)
 
+# ----------------------------
 # With `OutcomeSpaces` directly
 # ----------------------------
 
@@ -29,6 +32,10 @@ w = rand(rng, ['a', 'b'], 50)
 o2 = OrdinalPatternEncoding(2)
 o3 = OrdinalPatternEncoding(3)
 ow = UniqueElementsEncoding(w)
+
+# Number of encodings and input datasets must match
+d = CodifyPoints(o3, ow)
+@test_throws ArgumentError codify(d, x, y, z)
 
 # Using a single encoding should apply the encoding to all input datasets.
 @test counts(CodifyPoints(o3), x) isa Counts{<:Integer, 1}
@@ -47,3 +54,11 @@ ow = UniqueElementsEncoding(w)
 # When multiple encodings are provided, then the length of the encoding must match
 # the length of the points. Here, we accidentally mixed the order of the encodings.
 @test_throws ArgumentError counts(CodifyPoints(o3, o2, o3), z, x, y)
+
+# ----------------------------
+# With `Discretizations` directly
+# ----------------------------
+x = StateSpaceSet(rand(rng, 10, 2)); 
+y = StateSpaceSet(rand(rng, 10, 2));
+d_row = CodifyPoints(OrdinalPatternEncoding{2}()); 
+@test counts(d_row, x, y) isa Counts{Int, 2}
