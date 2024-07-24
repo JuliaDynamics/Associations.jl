@@ -13,8 +13,8 @@ import HypothesisTests: pvalue
     CorrTest()
 
 An independence test based correlation (for two variables) and partial
-correlation (for three variables) ([Levy1978](@citet)@; as described in
-[Schmidt2018](@citet)).
+correlation (for three variables) [Levy1978](@cite); as described in
+[Schmidt2018](@citet).
 
 Uses [`PearsonCorrelation`](@ref) and [`PartialCorrelation`](@ref) internally.
 
@@ -50,7 +50,8 @@ For the pairwise case, the procedure is identical, but set ``\\bf{Z} = \\emptyse
 
 ## Examples
 
-- [`CorrTest`for independence between normally distributed data](@ref examples_corrtest).
+- [Example 1](@ref example_CorrTest). Pairwise and conditional tests for independence
+    on coupled noise processes.
 """
 Base.@kwdef struct CorrTest{M} <: IndependenceTest{M}
     measure::M = nothing

@@ -1,33 +1,8 @@
-# [Counts and probabilities](@id counts_and_probabilities_api)
 
-For counting and probabilities, CausalityTools.jl extends the single-variable machinery
-in ComplexityMeasures.jl to multiple variables.
-
-## Counts
-
-```@docs
-CausalityTools.Counts
-CausalityTools.counts(::OutcomeSpace)
-```
-
-## Probabilities
-
-```@docs
-CausalityTools.Probabilities
-CausalityTools.probabilities(::OutcomeSpace)
-```
-
-## Utilities
-
-```@docs
-marginal
-```
-
-
-## Tutorial
+## [[`Counts`](@ref) and [`Probabilities`](@ref) tutorial](@id tutorial_probabilities)
 
 Estimating multivariate counts (contingency matrices) and PMFs is simple. If the data are pre-discretized, then
-we can use [`UniqueElements`](@ref) to 
+we can use [`UniqueElements`](@ref) to simply count the number of occurrences.
 
 ```@example counts_probs_tutorial
 using CausalityTools
@@ -43,4 +18,5 @@ Probabilities are computed analogously, except counts are normalized.
 ```@example counts_probs_tutorial
 probabilities(UniqueElements(), x, y, z)
 ```
+
 

@@ -86,6 +86,7 @@ called with a [`DifferentialEntropyEstimator`](@ref).
 - [Example 7](@ref example_MIShannon_EntropyDecomposition_Kraskov): [`EntropyDecomposition`](@ref) with [`Kraskov`](@ref) estimator.
 - [Example 8](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps): [`EntropyDecomposition`](@ref) with [`BubbleSortSwaps`](@ref).
 - [Example 9](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning): [`EntropyDecomposition`](@ref) with [`Jackknife`](@ref) estimator and [`ValueBinning`](@ref) outcome space.
+- [Example 10](@ref example_MIShannon_reproducing_Kraskov): Reproducing Kraskov et al. (2004).
 """
 Base.@kwdef struct MIShannon{B} <: MutualInformation
     base::B = 2

@@ -137,13 +137,80 @@ optimize_marginals_te
 EmbeddingTE
 ```
 
-### Single-variable information API (from ComplexityMeasures.jl)
+### Encoding API
+
+A fundamental operation when computing multivariate information measures from data is *discretization*.  The following functions and types are used by CausalityTools.jl to perform discretization of input data.
+
+```@docs
+codify
+Discretization
+```
+
+#### Encoding per variable/column
+
+```@docs
+CodifyVariables
+```
+
+The sliding-window discretization is formally done by applying some [`OutcomeSpace`](@ref) to each variable/column. Pick between the following outcome spaces
+
+```@docs
+OutcomeSpace
+UniqueElements
+CosineSimilarityBinning
+Dispersion
+OrdinalPatterns
+BubbleSortSwaps
+ValueBinning
+RectangularBinning
+FixedRectangularBinning
+```
+
+#### Encoding per sample/row
+
+```@docs
+CodifyPoints
+```
+
+```@docs
+Encoding
+GaussianCDFEncoding
+OrdinalPatternEncoding
+RelativeMeanEncoding
+RelativeFirstDifferenceEncoding
+UniqueElementsEncoding
+RectangularBinEncoding
+CombinationEncoding
+```
+
+### [Counts and probabilities](@id counts_and_probabilities_api)
+
+For counting and probabilities, CausalityTools.jl extends the single-variable machinery
+in ComplexityMeasures.jl to multiple variables.
+
+```@docs
+CausalityTools.Counts
+CausalityTools.counts(::OutcomeSpace)
+```
+
+```@docs
+CausalityTools.Probabilities
+CausalityTools.probabilities(::OutcomeSpace)
+```
+
+#### Utility functions
+
+```@docs
+marginal
+```
+
+### Single-variable information API
 
 Below we list some relevant types from
 [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl) that 
 are used for the [`EntropyDecomposition`](@ref) estimator.
 
-#### Entropies
+#### Single-variable information measures
 
 ```@docs
 Shannon
@@ -233,6 +300,7 @@ CrossmapEstimator
 RandomVectors
 RandomSegment
 ExpandingSegment
+Ensemble
 ```
 
 ### Advanced utility methods

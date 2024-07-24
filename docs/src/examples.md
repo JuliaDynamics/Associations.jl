@@ -82,7 +82,7 @@ at library size `libsizes[k]`.
 !!! note "Run blocks consecutively"
     If copying these examples and running them locally, make sure the relevant packages (given in the first block) are loaded first.
 
-#### Figure 3A
+#### [Figure 3A](@id example_ConvergentCrossMapping_reproducing_Sugihara_Fig3A)
 
 Let's reproduce figure 3A too, focusing only on [`ConvergentCrossMapping`](@ref) this time. In this figure, they compute the cross mapping for libraries of increasing size, always starting at time index 1. This approach - which we here call the [`ExpandingSegment`](@ref) estimator - is one of many ways of estimating the correspondence between observed and predicted value.
 
@@ -241,19 +241,12 @@ reproduce_figure_3B()
 
 #### Figures 3C and 3D
 
-Let's reproduce figures 3C and 3D in Sugihara et al. (2012)[^Sugihara2012], which
+Let's reproduce figures 3C and 3D in [Sugihara2012](@citet), which
 introduced the [`ConvergentCrossMapping`](@ref) measure.
 Equations and parameters can be found in their supplementary material.
 Simulatenously, we also compute the [`PairwiseAsymmetricInference`](@ref) measure
-from McCracken & Weigel (2014)[^McCracken2014], which is a related method, but uses a
+from [McCracken2014](@citet), which is a related method, but uses a
 slightly different embedding.
-
-[^Sugihara2012]:
-    Sugihara, G., May, R., Ye, H., Hsieh, C. H., Deyle, E., Fogarty, M., & Munch, S.
-    (2012). Detecting causality in complex ecosystems. science, 338(6106), 496-500.
-[^McCracken2014]:
-    McCracken, J. M., & Weigel, R. S. (2014). Convergent cross-mapping and pairwise
-    asymmetric inference. Physical Review E, 90(6), 062903.
 
 ```@example MAIN_CCM
 using CausalityTools

@@ -14,9 +14,22 @@ import Statistics: quantile
         show_progress = false,
     )
 
-A generic (conditional) independence test for assessing whether two variables `X` and `Y`
-are independendent, potentially conditioned on a third variable `Z`, based on
-surrogate data.
+A surrogate-data based generic (conditional) independence test for assessing whether the 
+association between variables `X` and `Y` are independent, potentially conditioned on a 
+third variable `Z`.
+
+## Compatible estimators and measures 
+
+- Compatible with [`AssociationMeasure`](@ref)s that measure some sort of pairwise or conditional association.
+
+!!! note 
+    You must yourself determine whether using a particular measure is *meaningful*, and what it
+    *means*.
+
+!!! note 
+    If used with a [`TransferEntropy`](@ref) measure such as [`TEShannon`](@ref),
+    then the source variable is always shuffled, and the target and conditional
+    variable are left unshuffled.
 
 ## Usage 
 
@@ -36,62 +49,19 @@ Then, the first input variable is shuffled `nshuffled` times according to the gi
 `surrogate` method (each type of `surrogate` represents a distinct null hypothesis).
 For each shuffle, `est_or_measure` is recomputed and the results are stored. 
 
-- If [`TransferEntropy`](@ref) measure such as [`TEShannon`](@ref),
-    then the source variable is always shuffled, and the target and conditional
-    variable are left unshuffled.
-
-## Compatible estimators/measures
-
-| Measure                       | Pairwise | Conditional |
-| ----------------------------- | :------: | :---------: |
-| [`PearsonCorrelation`](@ref)  |    ✓    |     ✖      |
-| [`DistanceCorrelation`](@ref) |    ✓    |     ✓      |
-| [`SMeasure`](@ref)            |    ✓    |     ✖      |
-| [`HMeasure`](@ref)            |    ✓    |     ✖      |
-| [`MMeasure`](@ref)            |    ✓    |     ✖      |
-| [`LMeasure`](@ref)            |    ✓    |     ✖      |
-| [`PairwiseAsymmetricInference`](@ref) |    ✓    |     ✖      |
-| [`ConvergentCrossMapping`](@ref)      |    ✓    |     ✖      |
-| [`MIShannon`](@ref)                   |    ✓    |     ✖      |
-| [`MIRenyiJizba`](@ref)                |    ✓    |     ✖      |
-| [`MIRenyiSarbu`](@ref)                |    ✓    |     ✖      |
-| [`MITsallisMartin`](@ref)             |    ✓    |     ✖      |
-| [`MITsallisFuruichi`](@ref)           |    ✓    |     ✖      |
-| [`PartialCorrelation`](@ref)          |    ✖    |     ✓      |
-| [`CMIShannon`](@ref)                  |    ✖    |     ✓      |
-| [`CMIRenyiJizba`](@ref)               |    ✖    |     ✓      |
-| [`PMI`](@ref)                         |    ✖    |     ✓      |
-| [`TEShannon`](@ref)                   |    ✓    |     ✓      |
-| [`TERenyiJizba`](@ref)                |    ✓    |     ✓      |
 
 ## Examples
 
-```julia
-using CausalityTools
-using Random
-rng = Xoshiro(1234)
-x = rand(rng, 3000);
-y = rand(rng, 3000) .* circshift(x, 1);
-z = rand(rng, 3000) .* circshift(y, 1);
-
-est = EntropyDecomposition(TEShannon(base = 2), Lord(k = 20))
-test = SurrogateAssociationTest(est)
-independence(test, x, z) # Should indicate dependence
-independence(test, x, z, y) # Should indicate independence
-
-d = CodifyVariables(OrdinalPatterns(m=3))
-est = JointProbabilities(PartialMutualInformation(), d)
-test = SurrogateAssociationTest(est)
-independence(test, x, z, y)
-```
-
-## Extended examples
-
-- [Pairwise test, `DistanceCorrelation`](@ref examples_SurrogateAssociationTest_distancecorrelation).
-- [Pairwise test, `TEShannon`](@ref examples_SurrogateAssociationTest_teshannon).
-- [Conditional test, `PartialCorrelation`](@ref examples_SurrogateAssociationTest_partialcorrelation).
-- [Pairwise test, `MIShannon`, categorical](@ref examples_SurrogateAssociationTest_mishannon_categorical).
-- [Conditional test, `CMIShannon`, categorical](@ref examples_SurrogateAssociationTest_cmishannon_categorical).
+- [Example 1](@ref example_SurrogateAssociationTest_SMeasure):
+     [`SMeasure`](@ref) test for pairwise independence.
+- [Example 2](@ref example_SurrogateAssociationTest_DistanceCorrelation): 
+    [`DistanceCorrelation`](@ref) test for pairwise independence.
+- [Example 3](@ref example_SurrogateAssociationTest_PartialCorrelation):
+    [`PartialCorrelation`](@ref) test for conditional independence.
+- [Example 4](@ref example_SurrogateAssociationTest_MIShannon_categorical):
+    [`MIShannon`](@ref) test for pairwise independence on categorical data.
+- [Example 5](@ref example_SurrogateAssociationTest_CMIShannon_categorical):
+    [`CMIShannon`](@ref) test for conditional independence on categorical data.    
 """
 struct SurrogateAssociationTest{E, R, S} <: IndependenceTest{E}
     est_or_measure::E

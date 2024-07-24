@@ -15,7 +15,7 @@ export codify
 
 ## Usage
 
-- Use with [`codify`](@ref)` to encode/discretize input variable on a point-by-point basis.
+- Use with [`codify`](@ref) to encode/discretize input variable on a point-by-point basis.
 
 ## Compatible encodings
 

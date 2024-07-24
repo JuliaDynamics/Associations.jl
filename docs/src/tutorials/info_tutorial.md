@@ -1,4 +1,4 @@
-# [Information measure tutorial](@id info_tutorial)
+# [Information measure tutorial](@id tutorial_infomeasures)
 
 CausalityTools.jl extends the single-variate information API in
 [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl)
@@ -15,8 +15,8 @@ level of meaningful terminology.
 ## Basic strategy
 
 To *estimate* a multivariate information measure in practice, you must first specify
-the [definition](@ref) of the measure, which is then used as input to an 
-[estimator](@ref). This estimator is then given to [`information`](@ref), or one 
+the *definition* of the measure, which is then used as input to an 
+*estimator* of that measure. This estimator is then given to [`information`](@ref), or one 
 of the [convenience methods](@ref convenience_info).
 
 !!! note "Naming convention: The same name for different things"
@@ -56,15 +56,20 @@ estimator.
 using CausalityTools
 using Random; rng = MersenneTwister(1234)
 x, y = rand(rng, 1000), rand(rng, 1000)
-est = JointProbabilities(KLDivergence(), OrdinalPatterns(m=2))
-information(est, x, y) # should be close to 0
+
+# Specify a discretization. We discretize per column.
+disc = CodifyVariables(OrdinalPatterns(m=2))
+
+def = KLDivergence()
+est = JointProbabilities(def, disc)
+association(est, x, y) # should be close to 0
 ```
 
 Divergences are examples of *asymmetric* information measures, which we can see by 
 flipping the order of the input data.
 
 ```@example INFO_TUTORIAL
-information(est, y, x)
+association(est, y, x)
 ```
 
 ## Conditional entropies
@@ -76,9 +81,14 @@ they are functions of a joint pmf, and can therefore also be estimated using the
 with 3 bins along each dimension to discretize the data.
 
 ```@example INFO_TUTORIAL
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+
 x, y = randn(rng, 1000), randn(rng, 1000)
-est = JointProbabilities(ConditionalEntropyShannon(base = 2), ValueBinning(3))
-information(est, x, y)
+disc = CodifyVariables(ValueBinning(3))
+def = ConditionalEntropyShannon(base = 2)
+est = JointProbabilities(def, disc)
+association(est, x, y)
 ```
 
 ## Joint entropies
@@ -89,9 +99,13 @@ entropies are functionals of a joint pmf, so we can still use the
 based discretization.
 
 ```@example INFO_TUTORIAL
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+
 x, y = randn(rng, 1000), randn(rng, 1000)
-est = JointProbabilities(JointEntropyShannon(base = 2), Dispersion())
-information(est, x, y) == information(est, y, x) # should be true
+disc = CodifyVariables(Dispersion())
+est = JointProbabilities(JointEntropyShannon(base = 2), disc)
+association(est, x, y) ≈ association(est, y, x) # should be true
 ```
 
 ## Mutual informations
@@ -103,15 +117,19 @@ example, one can use dedicated [`MutualInformationEstimator`](@ref)s such as
 [`KSG2`](@ref) or [`GaussianMI`](@ref):
 
 ```@example INFO_TUTORIAL
-x, y = randn(rng, 1000), randn(rng, 1000)
+using CausalityTools
+using StateSpaceSets
+# We'll construct two state space sets, to illustrate how we can discretize 
+# multidimensional inputs using `CodifyPoints`.
+x, y = StateSpaceSet(randn(rng, 1000, 2)), StateSpaceSet(randn(rng, 1000, 2))
 est = KSG1(MIShannon(base = 2), k = 10)
-information(est, x, y)
+association(est, x, y)
 ```
 
 The result should be symmetric:
 
-```@example INFO_TUTORIAl
-information(est, x, y) == information(est, y, x) # should be true
+```@example INFO_TUTORIAL
+association(est, x, y) ≈ association(est, y, x) # should be true
 ```
 
 One can also estimate mutual information using the [`EntropyDecomposition`](@ref) 
@@ -127,15 +145,18 @@ We can also construct a discrete entropy based estimator based on e.g. [`PlugIn`
 estimator of [`Shannon`](@ref) entropy.
 
 ```@example INFO_TUTORIAL
-est_disc = EntropyDecomposition(MIShannon(base = 2), PlugIn(Shannon()), ValueBinning(2))
+mini, maxi = minimum([X; Y]), maximum([X; Y])
+encoding = RelativeMeanEncoding(mini, maxi, 5)
+disc = CodifyPoints(encoding)
+est_disc = JointProbabilities(MIShannon(base = 2), disc)
 ```
 
 These estimators use different estimation methods, so give different results:
 
 ```@example INFO_TUTORIAL
-information(est_diff, x, y)
+association(est_diff, x, y)
 ```
 
 ```@example INFO_TUTORIAL
-information(est_disc, x, y)
+association(est_disc, x, y)
 ```

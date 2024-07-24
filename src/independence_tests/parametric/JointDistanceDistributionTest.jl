@@ -32,8 +32,8 @@ the joint distance distribution and a p-value. If you only need `Δ`, use [`jdd`
 
 ## Examples
 
-[This example](@ref quickstart_jddtest) shows how the `JointDistanceDistributionTest`
-can be used in practice.
+- [Example 1](@ref examples_independence_JointDistanceDistributionTest). Detecting (in)dependence
+    in bidirectionally coupled logistic maps.
 """
 struct JointDistanceDistributionTest{M <: JointDistanceDistribution, R} <: IndependenceTest{M}
     measure::M

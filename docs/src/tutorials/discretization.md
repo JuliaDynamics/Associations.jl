@@ -1,11 +1,25 @@
-# [Discretization tutorial](@id discretization_tutorial)
+# [Discretization tutorial](@id extended_example_discretization)
 
-There are two main ways of discretizing data in CausalityTools. They are implemented as 
-the [`CodifyPoints`](@ref) and [`CodifyVariables`](@ref) types, which are used as 
-input to the [`codify`](@ref) function (extended from ComplexityMeasures.jl to multiple 
-variables).
+When discretizing, what happens is that we "encode" input data into an intermediate representation indexed by the positive integers. This intermediate representation is called an "encoding". This is useful in several ways:
 
-## [Encoding *rows* (one *point* at a time)](@id tutorial_codify_points)
+- Once a dataset has been encoded into integers, we can estimate [`Counts`](@ref) or [`Probabilities`](@ref) ([tutorial](@ref tutorial_probabilities)).
+- Once probabilities have been estimated, one can use these to estimate [`MultivariateInformationMeasure`](@ref) ([tutorial](@ref tutorial_infomeasures)).
+
+## Two ways of encoding input data
+
+There are two main ways of discretizing data in CausalityTools. 
+- The [`CodifyPoints`](@ref) discretization scheme encodes input data on a point-by-point 
+    basis by applying some [`Encoding`](@ref) to each point.
+- The [`CodifyVariables`](@ref) discretization scheme encodes input data on a column-by-column
+    basis by applying a sliding window to each column, and encoding the data within the sliding window according to some [`OutcomeSpace`](@ref) (*Internally, this uses [`codify`](@ref)*).
+
+!!! note 
+    [`Encoding`](@ref), [`OutcomeSpace`](@ref) and [`codify`](@ref) are all from
+    [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl),
+    but is here used to discretize multiple input variables instead of just one input
+    variable.
+
+### [Encoding *rows* (one *point* at a time)](@id tutorial_codify_points)
 
 In some cases, it may be desireable to encode data on a row-wise basis. This 
 typically happens when working with pre-embedded time series. If we want to 
@@ -47,7 +61,7 @@ been encoded into integers in the range `1` to `3! = 6`, while the 4-dimensional
 encoded into an even larger range of integers, because the number of possible ordinal patterns
 is `4! = 24` for 4-dimensional embedding vectors.
 
-## Encoding *columns* (one variable at a time)
+### Encoding *columns* (one variable at a time)
 
 Sometimes, it may be desireable to encode input data one variable/column at a time.
 This typically happens when the input are either a single or multiple timeseries.
@@ -75,7 +89,7 @@ length(x) == length(cx)
 
 Other outcome spaces such as [`Dispersion`](@ref) or [`OrdinalPatterns`](@ref) do not 
 preserve the cardinality of the input dataset, because when applied in a sliding window,
-they compress embedding vectors into single integers. This means that some points at the 
+they compress sliding windows consisting of potentially multiple points into single integers. This means that some points at the 
 end of each input variable are lost.
 
 ```@example
@@ -101,41 +115,5 @@ o = OrdinalPatterns(m = 3)
 cx, cy = codify(CodifyVariables(o), StateSpaceSet(x, y)) 
 
 [cx cy]
-```
-
-## Codify API
-
-
-A fundamental operation when computing multivariate information measures from data is *discretization*.  The following
-functions and types are used by CausalityTools.jl to perform discretization of input data.
-
-```@docs
-codify
-Discretization
-```
-
-### Encoding per variable/column
-
-```@docs
-CodifyVariables
-```
-
-The sliding-window discretization is formally done by applying some [`OutcomeSpace`](@ref) to each variable/column. Pick between the following outcome spaces
-
-```@docs
-UniqueElements
-CosineSimilarityBinning
-Dispersion
-OrdinalPatterns
-BubbleSortSwaps
-ValueBinning
-RectangularBinning
-FixedRectangularBinning
-```
-
-### Encoding per sample/row
-
-```@docs
-CodifyPoints
 ```
 
