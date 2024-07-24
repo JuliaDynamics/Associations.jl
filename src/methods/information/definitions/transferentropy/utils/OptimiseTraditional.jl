@@ -1,6 +1,6 @@
 using DelayEmbeddings
 
-export OptimiseTraditional
+export OptimiseTraditional, OptimizeTraditional
 export optimize_marginals_te
 
 """
