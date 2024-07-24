@@ -50,7 +50,13 @@ def = MIShannon()
 @test association(GaoOhViswanath(def, k = 2), x, y) isa Real
 @test association(GaoKannanOhViswanath(def, k = 2), x, y) isa Real
 @test association(GaussianMI(def), x, y) isa Real
+@test association(GaussianMI(def; normalize = true), x, y) isa Real
 
+
+binning = FixedRectangularBinning(0, 1, 3)
+disc = CodifyVariables(ValueBinning(binning))
+est_bin = EntropyDecomposition(def, PlugIn(Shannon()), disc)
+@test association(est_bin, x, y) >= 0.0
 
 # ---------------
 # Pretty printing
