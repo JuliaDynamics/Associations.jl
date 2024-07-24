@@ -18,6 +18,7 @@ Base.@kwdef struct OptimiseTraditional{L}
     method::Function = delay_ifnn
     dmethod::AbstractString = "mi_min"
 end
+const OptimizeTraditional = OptimiseTraditional
 
 """
     optimize_marginals_te([scheme = OptimiseTraditional()], s, t, [c]) → EmbeddingTE
