@@ -26,11 +26,27 @@ end
 embedding = EmbeddingTE(; dS = 2, dT = 2, dC = 2, ηTf)
 measure = TEShannon(; embedding)
 
+# ----------------------------------------------------------------
+# Transfer entropy
+# ----------------------------------------------------------------
+sys = system(Logistic4Chain(; rng))
+x, y, z, w = columns(first(trajectory(sys, 50, Ttr = 10000)))
+est = Zhu1(TEShannon())
+test = LocalPermutationTest(est, nshuffles = 2)
+@test independence(test, x, z, y) isa LocalPermutationTestResult
+
+sys = system(Logistic4Chain(; rng))
+x, y, z, w = columns(first(trajectory(sys, 50, Ttr = 10000)))
+est = EntropyDecomposition(TEShannon(), Kraskov(k = 3))
+test = LocalPermutationTest(est, nshuffles = 19)
+@test independence(test, x, z, y) isa LocalPermutationTestResult
+
+
 # For the dedicated estimators, we actually test the outcome on longer timeseries.
 # This is because the transfer entropy based local permutation test implemented 
 # here doesn't appear in the literature. It is new, so we need to verify that it works.
 dedicated_estimators = [Lindner(measure, k=10), Zhu1(measure, k=10)]
-@testset "LocalPermutationTest with TEShannon + dedicated TE estimator $estimator" for estimator in dedicated_estimators
+@testset "LocalPermutationTest with TEShannon + dedicated TE estimator $(typeof(estimator).name.name)" for estimator in dedicated_estimators
     x, y, z = ar3(200, rng)
 
     independence_test = LocalPermutationTest(estimator; nshuffles = 19, rng = rng)
@@ -57,7 +73,7 @@ nondedicated_estimators = [FPVP(), GaussianCMI(),
     EntropyDecomposition(TEShannon(), Kraskov()), 
     EntropyDecomposition(TEShannon(), PlugIn(Shannon()), CodifyVariables(ValueHistogram(2)))
 ]
-@testset "LocalPermutationTest with TEShannon + non-dedicated estimator $estimator" for estimator in nondedicated_estimators
+@testset "LocalPermutationTest with TEShannon + non-dedicated estimator $(typeof(estimator).name.name)" for estimator in nondedicated_estimators
     x, y, z = ar3(50, rng)
 
     independence_test = LocalPermutationTest(estimator; nshuffles = 19, rng = rng)

@@ -30,3 +30,24 @@ test_cmi_nonreplace = LocalPermutationTest(FPVP(CMIShannon()), replace = false)
 # The number of local neighbors can't exceed the number of input datapoints
 test_kperm_toolarge = LocalPermutationTest(FPVP(CMIShannon()); kperm = 200, rng)
 @test_throws ArgumentError independence(test_kperm_toolarge, x, y, z)
+
+
+# --------------------------------
+# Output
+# --------------------------------
+rng = StableRNG(123)
+x, y, z = rand(rng, 30), rand(rng, 30), rand(rng, 30)
+independence_test = LocalPermutationTest(FPVP(CMIShannon()))
+res = independence(independence_test, x, z, y)
+
+# Internals
+out_str_pval = repr( CausalityTools.pvalue_text_summary(res))
+@test occursin("p-value:", out_str)
+
+out_str_conclusion = repr( CausalityTools.null_hypothesis_text(res))
+@test occursin("The first two variables are independent, given the 3rd variable", out_str_conclusion)
+
+independence_test = SurrogateAssociationTest(KSG1(MIShannon()))
+res = independence(independence_test, x, y)
+out_str_conclusion = repr( CausalityTools.null_hypothesis_text(res))
+@test occursin("The variables are independent", out_str_conclusion)
