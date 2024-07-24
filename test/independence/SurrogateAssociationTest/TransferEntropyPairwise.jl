@@ -4,7 +4,7 @@ using TimeseriesSurrogates
 
 rng = Xoshiro(1234)
 
-sys = system(Logistic2Unidir(; c_xy = 0.5))
+sys = system(Logistic2Unidir(; c_xy = 0.5, rng))
 x, y = columns(first(trajectory(sys, 400, Ttr = 10000)))
 
 # Creation
