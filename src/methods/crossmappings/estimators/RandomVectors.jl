@@ -45,12 +45,22 @@ struct RandomVectors{M <: CrossmapMeasure, I, R} <: CrossmapEstimator{M, I, R}
     end
 end
 
-function library_indices(est::RandomVectors, i::Int, target, args...)
+function library_indices(est::RandomVectors{<:CrossmapMeasure}, i::Int, target, args...)
     N = length(target)
     L = est.libsizes[i]
-    return library_indices(measure, est, N, L)
+    return library_indices(est, N, L)
 end
-
-function library_indices(est::RandomVectors, N::Int, L::Int)
+function library_indices(est::RandomVectors{<:CrossmapMeasure}, N::Int, L::Int)
     return sample(est.rng, 1:N, L; replace = est.replace)
 end
+
+
+# function library_indices(est::RandomVectors, i::Int, target, args...)
+#     N = length(target)
+#     L = est.libsizes[i]
+#     return library_indices(measure, est, N, L)
+# end
+
+# function library_indices(est::RandomVectors, N::Int, L::Int)
+#     return sample(est.rng, 1:N, L; replace = est.replace)
+# end

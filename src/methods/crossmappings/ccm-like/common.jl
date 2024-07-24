@@ -87,28 +87,6 @@ that is being applied to `target` and `source`.
 """
 function library_indices end
 
-function library_indices(est::RandomVectors{<:CCMLike}, i::Int, target, args...)
-    N = length(target)
-    L = est.libsizes[i]
-    return library_indices(est, N, L)
-end
-function library_indices(est::RandomVectors{<:CCMLike}, N::Int, L::Int)
-    return sample(est.rng, 1:N, L; replace = est.replace)
-end
-
-function library_indices(est::RandomSegment{<:CCMLike}, i::Int, target, args...)
-    N = length(target)
-    L = est.libsizes[i]
-    Lmax = max_segmentlength(est.definition, target)
-    L <= Lmax ||
-        throw(ArgumentError("L ($L) > Lmax ($Lmax). Use a smaller segment length (some points are lost when embedding)."))
-    return library_indices(est, N, L)
-end
-function library_indices(est::RandomSegment{<:CCMLike}, N::Int, L::Int)
-    startidx = sample(est.rng, 1:(N - L)) # random segment starting point
-    return startidx:startidx+L-1
-end
-
 function input_check(measure::CCMLike, args...)
     ns = length.(args)
     all(ns .== maximum(ns)) || throw(ArgumentError("""\

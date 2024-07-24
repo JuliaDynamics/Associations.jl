@@ -43,17 +43,30 @@ struct RandomSegment{M <: CrossmapMeasure, I, R} <: CrossmapEstimator{M, I, R}
     end
 end
 
-function library_indices(est::RandomSegment, i::Int, target, args...)
-    definition = est.definition
+function library_indices(est::RandomSegment{<:CrossmapMeasure}, i::Int, target, args...)
     N = length(target)
     L = est.libsizes[i]
-    Lmax = max_segmentlength(definition, target)
+    Lmax = max_segmentlength(est.definition, target)
     L <= Lmax ||
         throw(ArgumentError("L ($L) > Lmax ($Lmax). Use a smaller segment length (some points are lost when embedding)."))
-    return library_indices(definition, est, N, L)
+    return library_indices(est, N, L)
 end
-
-function library_indices(est::RandomSegment, N::Int, L::Int)
+function library_indices(est::RandomSegment{<:CrossmapMeasure}, N::Int, L::Int)
     startidx = sample(est.rng, 1:(N - L)) # random segment starting point
     return startidx:startidx+L-1
 end
+
+# function library_indices(est::RandomSegment, i::Int, target, args...)
+#     definition = est.definition
+#     N = length(target)
+#     L = est.libsizes[i]
+#     Lmax = max_segmentlength(definition, target)
+#     L <= Lmax ||
+#         throw(ArgumentError("L ($L) > Lmax ($Lmax). Use a smaller segment length (some points are lost when embedding)."))
+#     return library_indices(definition, est, N, L)
+# end
+
+# function library_indices(est::RandomSegment, N::Int, L::Int)
+#     startidx = sample(est.rng, 1:(N - L)) # random segment starting point
+#     return startidx:startidx+L-1
+# end
