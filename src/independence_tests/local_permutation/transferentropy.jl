@@ -73,7 +73,6 @@ function independence(test::LocalPermutationTest{<:MultivariateInformationMeasur
    
     Î = association(cmi_est, X, Y, Z)
     Îs = permuted_Îs_other(S, T, T⁺, C, cmi_est, test)
-    @show  Îs
     p = count(Î .<= Îs) / nshuffles
     return LocalPermutationTestResult(length(x), Î, Îs, p, nshuffles)
 end

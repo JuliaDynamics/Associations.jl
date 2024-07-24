@@ -204,8 +204,6 @@ end
 # that `P` is always conditioned on when relevant. The two functions are returned.
 function rawmeasure_and_independencetest(alg, parents::OCESelectedParents)
     if pairwise_test(parents)
-        #@show alg.utest
-        #@show alg.ctest
         est_or_measure = alg.utest.est_or_measure
         compute_raw_measure = (xᵢ, Pⱼ) -> association(est_or_measure, xᵢ, Pⱼ)
         test_independence = (xᵢ, Pix) -> independence(alg.utest, xᵢ, Pix)
