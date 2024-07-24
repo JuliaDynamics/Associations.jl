@@ -42,7 +42,7 @@ z = v + w + randn(rng, n)*0.25
 s = z + randn(rng, n)*0.25
 X = [x, v, w, z, s]
 df = (x=x, v=v, w=w, z=z, s=s)
-dg_ct = infer_graph(alg, X; verbose = true)
+dg_ct = infer_graph(alg, X; verbose = false)
 dg_ci = pcalg(df, α, gausscitest)
 @test dg_ct == dg_ci
 
@@ -56,7 +56,7 @@ r = w + 0.2*randn(rng, n)
 X = [x, y, z, w, q, r]
 df = (x=x, y=y, z=z, w=w, q=q, r=r)
 
-dg_ct = infer_graph(alg, X; verbose = true)
+dg_ct = infer_graph(alg, X; verbose = false)
 dg_ci = pcalg(df, α, gausscitest)
 @test dg_ct == dg_ci
 
@@ -65,10 +65,10 @@ dg_ci = pcalg(df, α, gausscitest)
 # we can use much shorter time series, because the purpose is just to rule
 # out implementation errors, not to check that the correct result is obtained.
 # -------------------------------------------------------------------------------
-x, y, z = rand(rng, 50), rand(rng, 50), rand(rng, 50)
+x, y, z = rand(rng, 20), rand(rng, 20), rand(rng, 20)
 α = 0.01
 X = [x, y, z]
-nshuffles = 3
+nshuffles = 2
 
 utests = [
     CorrTest(),
