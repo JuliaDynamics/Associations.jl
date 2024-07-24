@@ -3,6 +3,15 @@ using CausalityTools
 using Random
 rng = Xoshiro(1234)
 
+c = Counts([2 2; 3 3])
+@test marginal(c, dims = 1).cts == [4, 6]
+@test marginal(c, dims = 2).cts == [5, 5]
+@test marginal(c, dims = 1:2) == c
+
+# No discretization scheme == UniqueElements
+@test counts(rand(1:5, 10)) isa Counts{T, 1} where T
+# Must have equal lengths
+@test_throws ArgumentError c = counts(rand(1:5, 10), rand(1:3, 5))
 
 # Analytic test
 x = [1, 2, 3, 1, 2, 3, 1, 2, 3]

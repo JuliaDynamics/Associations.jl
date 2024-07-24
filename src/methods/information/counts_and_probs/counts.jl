@@ -66,7 +66,7 @@ end
 
 function counts(x::Vararg{VectorOrStateSpaceSet, N}) where N
     if N == 1
-        return ComplexityMeasures.counts(UniqueElements(), x)
+        return ComplexityMeasures.counts(UniqueElements(), x...)
     else
         return counts(UniqueElements(), x...)
     end
