@@ -42,5 +42,5 @@ See also: [`ConditionalMutualInformationEstimator`](@ref), [`MultivariateInforma
 """
 struct CMIDecomposition{M <: MultivariateInformationMeasure, E} <: DecompositionEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.
-    est::E # The MI estimator + measure which `definition` is decomposed into.
+    est::E # The CMI estimator + measure which `definition` is decomposed into.
 end
