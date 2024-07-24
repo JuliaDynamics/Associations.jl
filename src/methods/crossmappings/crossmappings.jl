@@ -186,10 +186,7 @@ include("estimators/estimators.jl")
 include("ccm-like/ccm-like.jl")
 
 
-# Internal methods for compatibility with `independence`
-function association(est::CrossmapEstimator{<:CrossmapMeasure}, args...)
-    return crossmap(est, args...)
-end
-
-# Experimental
-#include("predictive_distance_correlation/PredictiveDistanceCorrelation.jl")
+# # Internal methods for compatibility with `independence`
+# function association(est::CrossmapEstimator{<:CrossmapMeasure}, args...)
+#     return crossmap(est, args...)
+# end

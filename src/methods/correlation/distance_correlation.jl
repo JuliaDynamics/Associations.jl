@@ -41,10 +41,6 @@ struct DistanceCorrelation <: CorrelationMeasure end
 
 max_inputs_vars(::DistanceCorrelation) = 3
 
-function association(m::DistanceCorrelation, est::Nothing, args...)
-    return association(m, args...)
-end
-
 # Common interface for higher-level methods.
 function association(measure::DistanceCorrelation, X, Y)
     # TODO: Future optimization: this could be quicker if we only compute distances once
