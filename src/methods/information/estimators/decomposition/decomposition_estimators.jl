@@ -74,6 +74,16 @@ function center_str(s::String, width::Int)
     end
 end
 
+# short-form
+function Base.show(io::IO, ::MIME"text/plain", est::DecompositionEstimator)
+    print(io, typeof(est).name.name, "{")
+    T_est = typeof(est).name.name
+    print(io, join([string(fieldtype(typeof(est), f)) for f in fieldnames(typeof(est))], ", "))
+    print(io, "}(")
+    print(io, join([string(getfield(est, f)) for f in fieldnames(typeof(est))], ", "))
+    print(io, ")")
+end
+
 function summary_strings(est::DecompositionEstimator)
     return [
         "Measure",
