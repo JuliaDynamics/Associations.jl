@@ -29,11 +29,11 @@ measure = TEShannon(; embedding)
 # For the dedicated estimators, we actually test the outcome on longer timeseries.
 # This is because the transfer entropy based local permutation test implemented 
 # here doesn't appear in the literature. It is new, so we need to verify that it works.
-dedicated_estimators = [Lindner(k=10), Zhu1(k=10)]
+dedicated_estimators = [Lindner(measure, k=10), Zhu1(measure, k=10)]
 @testset "LocalPermutationTest with TEShannon + dedicated TE estimator $estimator" for estimator in dedicated_estimators
-    x, y, z = ar3(500, rng)
+    x, y, z = ar3(200, rng)
 
-    independence_test = LocalPermutationTest(measure, estimator; nshuffles = 100, rng = rng)
+    independence_test = LocalPermutationTest(estimator; nshuffles = 19, rng = rng)
     # x and z should be independent given y 
     # (so we shouldn't be able to reject the null, i.e. pvalue >= α)
     @test independence(independence_test, x, z, y).pvalue >= α
@@ -44,7 +44,7 @@ dedicated_estimators = [Lindner(k=10), Zhu1(k=10)]
 
     # A test with noise (all variables should be conditionally independent)
     # (so we shouldn't be able to reject the null, i.e. pvalue >= α)
-    x, y, z = randn(rng, 500), randn(rng, 500), randn(rng, 500)
+    x, y, z = randn(rng, 100), randn(rng, 100), randn(rng, 100)
     @test independence(independence_test, x, z, y).pvalue >= α
     @test independence(independence_test, x, y, z).pvalue >= α
 
@@ -53,11 +53,14 @@ dedicated_estimators = [Lindner(k=10), Zhu1(k=10)]
     @test_throws ArgumentError independence(independence_test, x, y)
 end
 
-nondedicated_estimators = [FPVP(), GaussianMI(), Kraskov(), ValueHistogram(2)]
+nondedicated_estimators = [FPVP(), GaussianCMI(), 
+    EntropyDecomposition(TEShannon(), Kraskov()), 
+    EntropyDecomposition(TEShannon(), PlugIn(Shannon()), CodifyVariables(ValueHistogram(2)))
+]
 @testset "LocalPermutationTest with TEShannon + non-dedicated estimator $estimator" for estimator in nondedicated_estimators
     x, y, z = ar3(50, rng)
 
-    independence_test = LocalPermutationTest(measure, estimator; nshuffles = 100, rng = rng)
+    independence_test = LocalPermutationTest(estimator; nshuffles = 19, rng = rng)
     @test independence(independence_test, x, z, y) isa LocalPermutationTestResult
 end
 

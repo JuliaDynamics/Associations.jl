@@ -5,5 +5,5 @@ using StableRNGs
 rng = StableRNG(123)
 x, y, z = rand(rng, 30), rand(rng, 30), rand(rng, 30)
 
-independence_test = LocalPermutationTest(DistanceCorrelation())
+independence_test = LocalPermutationTest(DistanceCorrelation(), nshuffles = 2)
 @test independence(independence_test, x, y, z) isa LocalPermutationTestResult

@@ -2,7 +2,7 @@ using Random
 rng = Xoshiro(1234)
 
 sys = system(Logistic2Unidir(; c_xy = 0.5))
-x, y = columns(first(trajectory(sys, 200, Ttr = 10000)))
+x, y = columns(first(trajectory(sys, 300, Ttr = 10000)))
 
 # Creation
 @test SurrogateAssociationTest(est) isa SurrogateAssociationTest
@@ -12,7 +12,7 @@ est = CMIDecomposition(TEShannon(), FPVP())
 
 
 α = 0.0287 # Arbitrary significance level 1 - α = 0.9713
-test = SurrogateAssociationTest(est; rng, nshuffles = 19)
+test = SurrogateAssociationTest(est; rng, nshuffles = 50)
 
 # The ground truth is X → Y, so we should be able to reject the null
 # when testing transferentropy(x → y)
