@@ -1,5 +1,6 @@
 using Test
 using CausalityTools
+using DynamicalSystemsBase
 using Random
 
 rng = MersenneTwister(1234)

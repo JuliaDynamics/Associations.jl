@@ -9,31 +9,43 @@ using Setfield
 #     throw(ArgumentError(txt))
 # end
 
-function independence(test::LocalPermutationTest{<:TransferEntropyEstimator}, x::AbstractVector...)
+function independence(test::LocalPermutationTest{<:MultivariateInformationMeasureEstimator{<:TransferEntropy}}, x::AbstractVector...)
     est_or_measure, nshuffles = deepcopy(test.est_or_measure), test.nshuffles
-
     if !(length(x) == 3) && est isa TransferEntropyEstimator
         msg = "`LocalPermutationTest` is not defined for pairwise transfer entropy with " *
         " `TransferEntropyEstimators`. " * 
             "Either provide a third timeseries to condition on, or use some other estimator."
         throw(ArgumentError(msg))
     end
+
+    def = est_or_measure.definition
     # Below, the T variable also includes any conditional variables.
-    S, T, T⁺, C = individual_marginals_te(est_or_measure.definition.embedding, x...)
+    S, T, T⁺, C = individual_marginals_te(def.embedding, x...)
     TC = StateSpaceSet(T, C)
     @assert length(T⁺) == length(S) == length(TC)
     N = length(x)
 
-    if est_or_measure isa TransferEntropyEstimator
-        Î = association(est_or_measure, S, T, T⁺, C)
-        Îs = permuted_Îs_te(S, T, T⁺, C, est_or_measure, test)
-    else
-        X, Y = S, T⁺ # The source marginal `S` is the one being shuffled.
-        Z = TC # The conditional variable
-        est = convert_to_cmi_estimator(est_or_measure)
-        Î = association(est_or_measure, X, Y, Z)
-        Îs = permuted_Îs(X, Y, Z, est_or_measure, test)
-    end
+    X, Y = S, T⁺ # The source marginal `S` is the one being shuffled.
+    Z = TC # The conditional variable
+    est = convert_to_cmi_estimator(est_or_measure)
+   
+    Î = association(est, X, Y, Z)
+    # works until here.
+
+    Îs = permuted_Îs_te(S, T, T⁺, C, est, test)
+    # TODO: make compatible with TransferEntropyEstimators.
+    # THis requires a new permuted_Îs_te dedicated for that.
+    # if est_or_measure isa TransferEntropyEstimator
+    #     # @show "lll"
+    #     # @show "heyo"
+    #     # Î = association(est_or_measure, S, T, T⁺, C)
+    #             #Îs = permuted_Îs_te(S, T, T⁺, C, est_or_measure, test)
+
+    #     X, Y = S, T⁺ # The source marginal `S` is the one being shuffled.
+    #     Z = TC # The conditional variable
+    #     Îs = permuted_Îs(X, Y, Z, est_or_measure, test)
+
+    # end
 
     p = count(Î .<= Îs) / nshuffles
     return LocalPermutationTestResult(length(x), Î, Îs, p, nshuffles)
@@ -68,7 +80,7 @@ function permuted_Îs_te(S, T, T⁺, C, est_or_measure, test)
         else
             shuffle_without_replacement!(Ŝ, S, idxs_C, kperm, rng, Nᵢ, πs)
         end
-        Îs[n] = estimate(measure, est, Ŝ, T, T⁺, C)
+        Îs[n] = association(est_or_measure, Ŝ, T, T⁺, C)
         ProgressMeter.next!(progress)
     end
     return Îs
