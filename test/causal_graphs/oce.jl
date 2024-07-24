@@ -3,12 +3,16 @@ using CausalityTools: OCESelectedParents
 using Test
 using StableRNGs
 using Graphs.SimpleGraphs: SimpleEdge
+using DynamicalSystemsBase
 
 rng = StableRNG(123)
 sys = system(Logistic4Chain(; rng))
 X = columns(first(trajectory(sys, 50, Ttr = 10000)))
-utest = SurrogateTest(MIShannon(), KSG1(k = 5, w = 1); rng, nshuffles = 30)
-ctest = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 5, w = 1); rng, nshuffles = 30)
+uest = KSG1(MIShannon(), k = 5, w = 1)
+utest = SurrogateAssociationTest(uest; rng, nshuffles = 19)
+
+cest = MesnerShalizi(CMIShannon(), k = 5, w = 1)
+ctest = LocalPermutationTest(cest; rng, nshuffles = 19)
 alg = OCE(; utest, ctest, τmax = 2)
 parents = infer_graph(alg, X; verbose = true)
 @test parents isa Vector{<:OCESelectedParents}
@@ -21,9 +25,12 @@ parents = infer_graph(alg, d; verbose = true)
 
 rng = StableRNG(123)
 sys = system(Logistic2Bidir(; rng))
-X = columns(first(trajectory(sys, 200, Ttr = 10000)))
-utest = SurrogateTest(MIShannon(), KSG1(k = 5, w = 1); rng, nshuffles = 100)
-ctest = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 5, w = 1); rng, nshuffles = 100)
+X = columns(first(trajectory(sys, 100, Ttr = 10000)))
+
+uest = KSG1(MIShannon(); k = 5, w = 1)
+cest = MesnerShalizi(CMIShannon(); k = 5, w = 1)
+utest = SurrogateAssociationTest(uest; rng, nshuffles = 19)
+ctest = LocalPermutationTest(cest; rng, nshuffles = 19)
 parents = infer_graph(OCE(; utest, ctest, τmax = 1), X; verbose = true)
 @test parents isa Vector{<:OCESelectedParents}
 g = SimpleDiGraph(parents)

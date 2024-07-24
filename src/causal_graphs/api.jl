@@ -9,6 +9,7 @@ The supertype of all causal graph inference algorithms.
 ## Concrete implementations
 
 - [`OCE`](@ref). The optimal causation entropy algorithm for time series graphs.
+- [`PA`](@ref).
 """
 abstract type GraphAlgorithm end
 

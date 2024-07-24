@@ -5,7 +5,7 @@ using StableRNGs
 rng = StableRNG(123)
 x, y, z = rand(rng, 30), rand(rng, 30), rand(rng, 30)
 
-independence_test = LocalPermutationTest(CMIShannon(), FPVP())
+independence_test = LocalPermutationTest(FPVP(CMIShannon()))
 # We should get back a convenience wrapper containing the result.
 res = independence(independence_test, x, z, y)
 @test res isa LocalPermutationTestResult
@@ -19,8 +19,8 @@ res = independence(independence_test, x, z, y)
 @test_throws ArgumentError independence(independence_test, x, y)
 
 # Sampling with/without replacement
-test_cmi_replace = LocalPermutationTest(CMIShannon(), FPVP(), replace = true)
-test_cmi_nonreplace = LocalPermutationTest(CMIShannon(), FPVP(), replace = false)
+test_cmi_replace = LocalPermutationTest(FPVP(CMIShannon()), replace = true)
+test_cmi_nonreplace = LocalPermutationTest(FPVP(CMIShannon()), replace = false)
 @test independence(test_cmi_replace, x, y, z) isa LocalPermutationTestResult
 @test independence(test_cmi_nonreplace, x, y, z) isa LocalPermutationTestResult
 
@@ -28,5 +28,5 @@ test_cmi_nonreplace = LocalPermutationTest(CMIShannon(), FPVP(), replace = false
 @test_throws ArgumentError LocalPermutationTest(TEShannon()) # estimator needed
 
 # The number of local neighbors can't exceed the number of input datapoints
-test_kperm_toolarge = LocalPermutationTest(CMIShannon(), FPVP(); kperm = 200, rng)
+test_kperm_toolarge = LocalPermutationTest(FPVP(CMIShannon()); kperm = 200, rng)
 @test_throws ArgumentError independence(test_kperm_toolarge, x, y, z)

@@ -1,44 +1,171 @@
-using DelayEmbeddings: AbstractStateSpaceSet
-using ComplexityMeasures: ProbabilitiesEstimator
-const VectorOrStateSpaceSet{D, T} = Union{AbstractVector{T}, AbstractStateSpaceSet{D, T}} where {D, T}
-const ArrayOrStateSpaceSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSpaceSet{D, T}} where {D, T, N}
+using ComplexityMeasures: DifferentialInfoEstimator, DiscreteInfoEstimator
+using StateSpaceSets: AbstractStateSpaceSet
 
 export AssociationMeasure
-export DirectedAssociationMeasure
+export AssociationMeasureEstimator
+export association
 
+const VectorOr1DDataset{T} = Union{AbstractVector{T}, AbstractStateSpaceSet{1, T}} where T
+const VectorOrStateSpaceSet{D, T} = Union{AbstractVector{T}, AbstractStateSpaceSet{D, T}} where {D, T}
+const ArrayOrStateSpaceSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSpaceSet{D, T}} where {D, T, N}
+const INFO_ESTS = Union{DifferentialInfoEstimator, DiscreteInfoEstimator}
 
-# Any non-bivariate association measures must implement:
-# - [`min_inputs_vars`](@ref).
-# - [`max_inputs_vars`](@ref).
 """
     AssociationMeasure
 
-The supertype of all association measures.
+The supertype of all association measures. 
+
+## Abstract implementations
+
+Currently, the association measures are classified by abstract classes listed below.
+These abstract classes offer common functionality among association measures that are 
+conceptually similar. This makes maintenance and framework extension easier than 
+if each measure was implemented "in isolation".
+
+- [`MultivariateInformationMeasure`](@ref)
+- [`CrossmapMeasure`](@ref)
+- [`ClosenessMeasure`](@ref)
+- [`CorrelationMeasure`](@ref)
+
+## Concrete implementations
+
+Concrete subtypes are given as input to [`association`](@ref).
+
+| Type                    | [`AssociationMeasure`](@ref)                | Pairwise | Conditional |
+| ----------------------- | ------------------------------------------- | :------: | :---------: |
+| Correlation             | [`PearsonCorrelation`](@ref)                |    ✓    |     ✖      |
+| Correlation             | [`DistanceCorrelation`](@ref)               |    ✓    |     ✓      |
+| Closeness               | [`SMeasure`](@ref)                          |    ✓    |     ✖      |
+| Closeness               | [`HMeasure`](@ref)                          |    ✓    |     ✖      |
+| Closeness               | [`MMeasure`](@ref)                          |    ✓    |     ✖      |
+| Closeness (ranks)       | [`LMeasure`](@ref)                          |    ✓    |     ✖      |
+| Closeness               | [`JointDistanceDistribution`](@ref)         |    ✓    |     ✖      |
+| Cross-mapping           | [`PairwiseAsymmetricInference`](@ref)       |    ✓    |     ✖      |
+| Cross-mapping           | [`ConvergentCrossMapping`](@ref)            |    ✓    |     ✖      |
+| Conditional recurrence  | [`MCR`](@ref)                               |    ✓    |     ✖      |
+| Conditional recurrence  | [`RMCD`](@ref)                              |    ✓    |     ✓      |
+| Shared information      | [`MIShannon`](@ref)                         |    ✓    |     ✖      |
+| Shared information      | [`MIRenyiJizba`](@ref)                      |    ✓    |     ✖      |
+| Shared information      | [`MIRenyiSarbu`](@ref)                      |    ✓    |     ✖      |
+| Shared information      | [`MITsallisFuruichi`](@ref)                 |    ✓    |     ✖      |
+| Shared information      | [`PartialCorrelation`](@ref)                |    ✖    |     ✓      |
+| Shared information      | [`CMIShannon`](@ref)                        |    ✖    |     ✓      |
+| Shared information      | [`CMIRenyiSarbu`](@ref)                     |    ✖    |     ✓      |
+| Shared information      | [`CMIRenyiJizba`](@ref)                     |    ✖    |     ✓      |
+| Shared information      | [`CMIRenyiPoczos`](@ref)                    |    ✖    |     ✓      |
+| Shared information      | [`CMITsallisPapapetrou`](@ref)              |    ✖    |     ✓      |
+| Information transfer    | [`TEShannon`](@ref)                         |    ✓    |     ✓      |
+| Information transfer    | [`TERenyiJizba`](@ref)                      |    ✓    |     ✓      |
+| Part mutual information | [`PMI`](@ref)                               |    ✖    |     ✓      |
+| Information asymmetry   | [`PA`](@ref)                                |    ✓    |     ✓      |
+| Information measure     | [`JointEntropyShannon`](@ref)               |    ✓    |     ✖      |
+| Information measure     | [`JointEntropyRenyi`](@ref)                 |    ✓    |     ✖      |
+| Information measure     | [`JointEntropyTsallis`](@ref)               |    ✓    |     ✖      |
+| Information measure     | [`ConditionalEntropyShannon`](@ref)         |    ✓    |     ✖      |
+| Information measure     | [`ConditionalEntropyTsallisAbe`](@ref)      |    ✓    |     ✖      |
+| Information measure     | [`ConditionalEntropyTsallisFuruichi`](@ref) |    ✓    |     ✖      |
+| Divergence              | [`HellingerDistance`](@ref)                 |    ✓    |     ✖      |
+| Divergence              | [`KLDivergence`](@ref)                      |    ✓    |     ✖      |
+| Divergence              | [`RenyiDivergence`](@ref)                   |    ✓    |     ✖      |
+| Divergence              | [`VariationDistance`](@ref)                 |    ✓    |     ✖      |
+
+See also: [`AssociationMeasureEstimator`](@ref).
 """
 abstract type AssociationMeasure end
 
-abstract type DirectedAssociationMeasure <: AssociationMeasure end
+"""
+    AssociationMeasureEstimator
 
-# For measures without dedicated estimators, skip the estimator.
-function estimate(measure::M, est::Nothing, args...; kwargs...) where M
-    estimate(measure, args...; kwargs...)
+The supertype of all association measure estimators.
+
+Concrete subtypes are given as input to [`association`](@ref).
+
+## Abstract subtypes
+
+- [`MultivariateInformationMeasureEstimator`](@ref)
+- [`CrossmapEstimator`](@ref)
+
+## Concrete implementations
+
+| AssociationMeasure                          | Estimators                                                                                                                                                                     |
+| :------------------------------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`PearsonCorrelation`](@ref)                | Not required                                                                                                                                                                   |
+| [`DistanceCorrelation`](@ref)               | Not required                                                                                                                                                                   |
+| [`PartialCorrelation`](@ref)                | Not required                                                                                                                                                                   |
+| [`SMeasure`](@ref)                          | Not required                                                                                                                                                                   |
+| [`HMeasure`](@ref)                          | Not required                                                                                                                                                                   |
+| [`MMeasure`](@ref)                          | Not required                                                                                                                                                                   |
+| [`LMeasure`](@ref)                          | Not required                                                                                                                                                                   |
+| [`JointDistanceDistribution`](@ref)         | Not required                                                                                                                                                                   |
+| [`PairwiseAsymmetricInference`](@ref)       | [`RandomVectors`](@ref), [`RandomSegment`](@ref)                                                                                                                               |
+| [`ConvergentCrossMapping`](@ref)            | [`RandomVectors`](@ref), [`RandomSegment`](@ref)                                                                                                                               |
+| [`MCR`](@ref)                               | Not required                                                                                                                                                                   |
+| [`RMCD`](@ref)                              | Not required                                                                                                                                                                   |
+| [`MIShannon`](@ref)                         | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref), [`KSG1`](@ref), [`KSG2`](@ref), [`GaoOhViswanath`](@ref), [`GaoKannanOhViswanath`](@ref), [`GaussianMI`](@ref)   |
+| [`MIRenyiJizba`](@ref)                      | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref)                                                                                                                   |
+| [`MIRenyiSarbu`](@ref)                      | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`MITsallisFuruichi`](@ref)                 | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref)                                                                                                                   |
+| [`MITsallisMartin`](@ref)                   | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref)                                                                                                                   |
+| [`CMIShannon`](@ref)                        | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref), [`MIDecomposition`](@ref), [`GaussianCMI`](@ref), [`FPVP`](@ref), [`MesnerShalizi`](@ref), [`Rahimzamani`](@ref) |
+| [`CMIRenyiSarbu`](@ref)                     | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`CMIRenyiJizba`](@ref)                     | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref)                                                                                                                                                   |
+| [`CMIRenyiPoczos`](@ref)                    | [`PoczosSchneiderCMI`](@ref)                                                                                                                                                   |
+| [`CMITsallisPapapetrou`](@ref)              | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`TEShannon`](@ref)                         | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref), [`Zhu1`](@ref), [`Lindner`](@ref)                                                                                                                                                   |
+| [`TERenyiJizba`](@ref)                      | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`PMI`](@ref)                               | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`PA`](@ref)                                | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`JointEntropyShannon`](@ref)               | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`JointEntropyRenyi`](@ref)                 | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`JointEntropyTsallis`](@ref)               | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`ConditionalEntropyShannon`](@ref)         | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`ConditionalEntropyTsallisAbe`](@ref)      | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`ConditionalEntropyTsallisFuruichi`](@ref) | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`HellingerDistance`](@ref)                 | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`KLDivergence`](@ref)                      | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`RenyiDivergence`](@ref)                   | [`JointProbabilities`](@ref)                                                                                                                                                   |
+| [`VariationDistance`](@ref)                 | [`JointProbabilities`](@ref)                                                                                                                                                   |
+
+"""
+abstract type AssociationMeasureEstimator end
+
+"""
+    association(estimator::AssociationMeasureEstimator, x, y, [z, ...]) → r
+    association(definition::AssociationMeasure, x, y, [z, ...]) → r
+
+Estimate the (conditional) association between input variables `x, y, z, …` using 
+the given `estimator` (an [`AssociationMeasureEstimator`](@ref)) or `definition`
+(an [`AssociationMeasure`](@ref)).  
+
+The type of the return value `r` depends on the `measure`/`estimator`.
+
+## Examples
+
+Some [`AssociationMeasure`](@ref)s have no estimators and are given directly.
+For other association measures, you need to provide an [`AssociationMeasureEstimator`](@ref)
+ of some kind, which takes the definition as its first argument.
+
+```julia
+using CausalityTools
+x, y, z = rand(1000), rand(1000), rand(1000)
+
+# Pairwise association using different measures
+association(DistanceCorrelation(), x, y)
+association(PartialCorrelation(), x, y)
+association(JointProbabilities(ConditionalEntropyTsallisAbe(), ValueBinning(3)), x, y)
+association(JointProbabilities(JointEntropyShannon(), Dispersion(c = 3, m = 2)), x, y)
+association(EntropyDecomposition(MIShannon(), PlugIn(Shannon()), OrdinalPatterns(m=3)), x, y)
+association(KSG2(MIShannon(base = 2)), x, y)
+
+# Conditional association using different measures
+association(JointProbabilities(PartialMutualInformation(), OrdinalPatterns(m=3)), x, y, z)
+association(FPVP(CMIShannon(base = 2)), x, y, z)
+```
+"""
+function association(est, x...)
+    throw(ArgumentError("`association` not implemented for `est = $est` for this input data"))
 end
 
-include("contingency_matrices.jl")
-
-
-# Just use ComplexityMeasures.convert_logunit when it is released.
-"""
-    _convert_logunit(h_a::Real, , to) → h_b
-
-Convert a number `h_a` computed with logarithms to base `a` to an entropy `h_b` computed
-with logarithms to base `b`. This can be used to convert the "unit" of an entropy.
-"""
-function _convert_logunit(h::Real, base_from, base_to)
-    h / log(base_from, base_to)
-end
-
-# Default to bivariate measures. Other measures override it.
 """
     min_inputs_vars(m::AssociationMeasure) → nmin::Int
 

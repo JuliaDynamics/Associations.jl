@@ -6,11 +6,8 @@ using Neighborhood: bulksearch
 using StaticArrays: MVector
 using StateSpaceSets: AbstractStateSpaceSet
 
-export predict
-export crossmap
 export CrossmapMeasure
 export CrossmapEstimator
-export Ensemble
 
 """
     CrossmapMeasure <: AssociationMeasure
@@ -19,14 +16,23 @@ The supertype for all cross-map measures. Concrete subtypes are
 
 - [`ConvergentCrossMapping`](@ref), or [`CCM`](@ref) for short.
 - [`PairwiseAsymmetricInference`](@ref), or [`PAI`](@ref) for short.
+
+See also: [`CrossmapEstimator`](@ref).
 """
 abstract type CrossmapMeasure <: AssociationMeasure end
 
 """
-    CrossmapEstimator{LIBSIZES, RNG}
+    CrossmapEstimator{M<:CrossmapMeasure, LIBSIZES, RNG}
 
-A parametric supertype for all cross-map estimators, which are used with [`predict`](@ref) and
-[`crossmap`](@ref).
+The abstract supertype for all cross-map estimators.
+
+## Concrete subtypes
+
+- [`RandomVectors`](@ref)
+- [`RandomSegment`](@ref)
+- [`ExpandingSegment`](@ref)
+
+## Description
 
 Because the type of the library may differ between estimators, and because RNGs from
 different packages may be used, subtypes must implement the `LIBSIZES` and `RNG`
@@ -35,25 +41,25 @@ type parameters.
 For efficiency purposes, subtypes may contain mutable containers that can be re-used
 for ensemble analysis (see [`Ensemble`](@ref)).
 
-## Libraries
+!!! info "Libraries"
 
-A cross-map estimator uses the concept of "libraries". A library is essentially just
-a reference to a set of points, and usually, a library refers to *indices* of points,
-not the actual points themselves.
+    A cross-map estimator uses the concept of "libraries". A library is essentially just
+    a reference to a set of points, and usually, a library refers to *indices* of points,
+    not the actual points themselves.
 
-For example, for timeseries, `RandomVectors(libsizes = 50:25:100)` produces three
-separate libraries, where the first contains 50 randomly selected time indices,
-the second contains 75 randomly selected time indices, and the third contains
-100 randomly selected time indices. This of course assumes that all quantities involved
-can be indexed using the same time indices, meaning that the concept of "library"
-only makes sense *after* relevant quantities have been *jointly* embedded, so that they
-can be jointly indexed. For non-instantaneous prediction, the maximum possible library
-size shrinks with the magnitude of the index/time-offset for the prediction.
+    For example, for timeseries, `RandomVectors(libsizes = 50:25:100)` produces three
+    separate libraries, where the first contains 50 randomly selected time indices,
+    the second contains 75 randomly selected time indices, and the third contains
+    100 randomly selected time indices. This of course assumes that all quantities involved
+    can be indexed using the same time indices, meaning that the concept of "library"
+    only makes sense *after* relevant quantities have been *jointly* embedded, so that they
+    can be jointly indexed. For non-instantaneous prediction, the maximum possible library
+    size shrinks with the magnitude of the index/time-offset for the prediction.
 
-For spatial analyses (not yet implemented), indices could be more complex and involve
-multi-indices.
+    For spatial analyses (not yet implemented), indices could be more complex and involve
+    multi-indices.
 """
-abstract type CrossmapEstimator{LIBSIZES, RNG} end
+abstract type CrossmapEstimator{M, LIBSIZES, RNG} end
 
 segment_length_error() = "Segment lengths can be inferred only if both a cross-map " *
     "measure and an input time series is provided. " *
@@ -85,9 +91,9 @@ This produces `emb`, a `D`-dimensional `StateSpaceSet` where
 function embed(measure::CrossmapMeasure, args...) end
 
 """
-    crossmap(measure::CrossmapMeasure, t::AbstractVector, s::AbstractVector) → ρ::Real
-    crossmap(measure::CrossmapMeasure, est, t::AbstractVector, s::AbstractVector) → ρ::Vector
-    crossmap(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → ρ
+    crossmap(measure::CrossmapEstimator, t::AbstractVector, s::AbstractVector) → ρ::Real
+    crossmap(measure::CrossmapEstimator, est, t::AbstractVector, s::AbstractVector) → ρ::Vector
+    crossmap(measure::CrossmapEstimator, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → ρ
 
 Compute the cross map estimates between between raw time series `t` and `s` (and return
 the real-valued cross-map statistic `ρ`). If a [`CrossmapEstimator`](@ref) `est` is provided,
@@ -107,8 +113,8 @@ function crossmap end
 # implementations go in a relevant `measures/CustomMeasure.jl` file.
 
 """
-    predict(measure::CrossmapMeasure, t::AbstractVector, s::AbstractVector) → t̂ₛ, t̄, ρ
-    predict(measure::CrossmapMeasure, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → t̂ₛ
+    predict(measure::CrossmapEstimator, t::AbstractVector, s::AbstractVector) → t̂ₛ, t̄, ρ
+    predict(measure::CrossmapEstimator, t̄::AbstractVector, S̄::AbstractStateSpaceSet) → t̂ₛ
 
 Perform point-wise cross mappings between source embeddings and target time series
 according to the algorithm specified by the given cross-map `measure` (e.g.
@@ -176,29 +182,13 @@ function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractState
     return t̂ₛ
 end
 
-"""
-    Ensemble(; measure::CrossmapMeasure, est::CrossmapEstimator, nreps::Int = 100)
-
-A directive to compute an ensemble analysis, where `measure` (e.g.
-[`ConvergentCrossMapping`](@ref)) is computed
-using the given estimator `est` (e.g. [`RandomVectors`](@ref))
-"""
-Base.@kwdef struct Ensemble{M, E} # todo: perhaps just use a more general Ensemble?
-    measure::M
-    est::E
-    nreps::Int = 100
-    function Ensemble(measure::M, est::E; nreps = 100) where {M, E}
-        new{M, E}(measure, est, nreps)
-    end
-end
-
 include("estimators/estimators.jl")
 include("ccm-like/ccm-like.jl")
 
 
 # Internal methods for compatibility with `independence`
-function estimate(measure::CrossmapMeasure, args...)
-    return crossmap(measure, args...)
+function association(est::CrossmapEstimator{<:CrossmapMeasure}, args...)
+    return crossmap(est, args...)
 end
 
 # Experimental

@@ -11,6 +11,14 @@ export mcr
 An association measure based on mean conditional probabilities of recurrence
 (MCR) introduced by [Romano2007](@citet).
 
+## Usage
+
+- Use with [`association`](@ref) to compute the raw MCR for pairwise or conditional association.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise or 
+    conditional association.
+
+## Description
+
 `r` is  mandatory keyword which specifies the recurrence threshold when constructing
 recurrence matrices. It can be instance of
 any subtype of `AbstractRecurrenceType` from
@@ -18,14 +26,6 @@ any subtype of `AbstractRecurrenceType` from
 To use any `r` that is not a real number, you have to do `using RecurrenceAnalysis` first.
 The `metric` is any valid metric
 from [Distances.jl](https://github.com/JuliaStats/Distances.jl).
-
-## Usage
-
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
-    association.
-- Use with [`mcr`](@ref) to compute the raw MCR for pairwise association.
-
-## Description
 
 For input variables `X` and `Y`, the conditional probability of recurrence
 is defined as
@@ -47,6 +47,11 @@ defined analogously.
 
 `X` and `Y` can be either both univariate timeseries, or both multivariate
 [`StateSpaceSet`](@ref)s.
+
+
+## Estimation
+
+- [Example 1](@ref example_MCR). Pairwise versus conditional MCR.
 """
 Base.@kwdef struct MCR{R, M} <: AssociationMeasure
     r::R
@@ -55,7 +60,7 @@ end
 
 max_inputs_vars(::MCR) = 3
 
-function estimate(measure::MCR, x, y)
+function association(measure::MCR, x, y)
     (; r, metric) = measure
     N = length(x)
     @assert length(x) == length(y)
@@ -69,8 +74,7 @@ function estimate(measure::MCR, x, y)
     return rp / N
 end
 
-# The
-function estimate(measure::MCR, x, y, z)
+function association(measure::MCR, x, y, z)
     (; r, metric) = measure
     N = length(x)
     @assert length(x) == length(y)
@@ -92,15 +96,3 @@ function estimate(measure::MCR, x, y, z)
     ΔMCR = -(rp_x_y - rp_x_yz)
     return ΔMCR
 end
-
-# For compatibility with causal graph and independence testing API
-estimate(r::MCR, est::Nothing, x, y) = estimate(r, x, y)
-
-"""
-    mcr(m::MCR, x, y)
-
-Compute the association between `x` and `y` based on conditional probabilities of
-recurrence using the given [`MCR`](@ref) `measure`, where `x` and `y` can be either
-univariate timeseries or multivariate [`StateSpaceSet`](@ref)s.
-"""
-mcr(args...) = estimate(args...)

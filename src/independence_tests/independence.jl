@@ -1,6 +1,7 @@
 export independence, cit
 export IndependenceTest
 
+using Statistics: quantile
 
 """
     IndependenceTest <: IndependenceTest
@@ -23,9 +24,10 @@ Returns a test `summary`, whose type depends on `test`.
 
 ## Compatible independence tests
 
-- [`SurrogateTest`](@ref).
-- [`LocalPermutationTest`](@ref).
-- [`JointDistanceDistributionTest`](@ref).
+- [`SurrogateAssociationTest`](@ref)
+- [`LocalPermutationTest`](@ref)
+- [`JointDistanceDistributionTest`](@ref)
+- [`CorrTest`](@ref)
 """
 function independence(test::IndependenceTest, x...)
     L = length(x)
@@ -65,8 +67,8 @@ function null_hypothesis_text(test::IndependenceTestResult)
     if test.n_vars == 2
         return """\
         ---------------------------------------------------------------------
-        H₀: "The first two variables are independent"
-        Hₐ: "The first two variables are dependent"
+        H₀: "The variables are independent"
+        Hₐ: "The variables are dependent"
         ---------------------------------------------------------------------\
         """
     elseif test.n_vars == 3
@@ -81,7 +83,6 @@ function null_hypothesis_text(test::IndependenceTestResult)
     end
 end
 include("parametric/parametric.jl")
+include("surrogate/SurrogateAssociationTest.jl")
 include("local_permutation/LocalPermutationTest.jl")
-include("surrogate/SurrogateTest.jl")
-# TODO: rename/find suitable generic name before including
-# include("correlation/correlation.jl). Perhaps `ParametricTest`?
+#include("parametric/parametric.jl")

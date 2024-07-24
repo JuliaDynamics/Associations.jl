@@ -1,35 +1,37 @@
+# CausalityTools.jl
+
 ![CausalityTools.jl static logo](assets/logo-large.png)
 
 ```@docs
 CausalityTools
 ```
 
-## Goals
+## Latest news
 
-Causal inference, and quantification of association in general, is fundamental to
-most scientific disciplines. There exists a multitude of bivariate and multivariate
-association measures in the scientific literature. However, beyond the most basic measures,
-most methods aren't readily available for practical use. Most scientific papers don't
-provide code, which makes reproducing them difficult or impossible, without
-investing significant time and resources into deciphering and understanding the original
-papers to the point where an implementation is possible. To make reliable inferences,
-proper independence tests are also crucial.
+CausalityTools.jl has been updated to v3!
 
-Our main goal with this package is to provide an easily extendible library of
-association measures, a as-complete-as-possible set of their estimators.
-We also want to lower the entry-point to the field of association
-quantification, independence testing and causal inference, by providing well-documented
-implementations of literature methods with runnable code examples.
+This update includes a number of breaking changes, several of which are *not* backwards compatible.
+These are done to ensure compatibility with 
+[ComplexityMeasures.jl v3](https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/), which provides discretization functionality that we use here.
 
-The core function for quantifying associations is [`independence`](@ref),
-which performs either a parametric or nonparametric (conditional)
-[`IndependenceTest`](@ref) using some form of
-[association measure](@ref association_measure). These tests, in turn, can be
-used with some [`GraphAlgorithm`](@ref) and [`infer_graph`](@ref) to infer causal graphs.
+Important changes are:
+- Convenience methods have been removed completely. Use [`association`](@ref) instead.
+- Example systems have been removed.
+- The syntax for computing an association has changed. Estimators now always *contain the definition it estimates*. For example, `association(MIShannon(), KSG1(), x, y)` is now `association(KSG1(MIShannon()), x, y)`. 
+- See the CHANGELOG.md for a complete list of changes.
 
-## Input data
+## Documentation content 
 
-Input data for CausalityTools are given as:
+- [Association measures](@ref) lists all implemented association measures and their estimators.
+- [Independence testing](@ref independence_testing) lists all implemented ways of determining if an association between datasets is "significant".
+- [Causal inference](@ref causal_graphs) lists all methods of inferring association networks
+  (also called "network graphs" and "causal graphs") between multiple variables.
+- The [Examples](@ref) page contains numerous examples for association measure estimation, independence testing and network inference.
+
+
+## Input data for CausalityTools.jl
+
+Input data for CausalityTools.jl are given as:
 
 - Univariate *timeseries*, which are given as standard Julia `Vector`s.
 - Multivariate timeseries, *StateSpaceSets*, or *state space sets*, which are given as
@@ -43,13 +45,6 @@ Input data for CausalityTools are given as:
 ```@docs
 StateSpaceSet
 ```
-
-## Pull requests and issues
-
-This package has been and is under heavy development. Don't hesitate to submit an
-issue if you find something that doesn't work or doesn't make sense, or if there's
-some functionality that you're missing.
-Pull requests are also very welcome!
 
 ## Maintainers and contributors
 
@@ -77,9 +72,3 @@ important contributions are:
 Many individuals has contributed code to other packages
 in the [JuliaDynamics](https://juliadynamics.github.io/JuliaDynamics/) ecosystem which
 we use here. Contributors are listed in the respective GitHub repos and webpages.
-
-## Related packages
-
-- [TransferEntropy.jl](https://github.com/JuliaDynamics/TransferEntropy.jl) previously
-    provided mutual infromation and transfer entropy estimators. These have been
-    re-implemented from scratch and moved here.

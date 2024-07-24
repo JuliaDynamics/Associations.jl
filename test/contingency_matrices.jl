@@ -45,12 +45,12 @@ w = rand(1000)
 
 # These are the estimators that have implementations of `marginal_encodings`
 probests = [
-    SymbolicPermutation(m = 3),
+    OrdinalPatterns{3}(),
     Dispersion(),
-    ValueHistogram(3),
-    Contingency(SymbolicPermutation(m = 3)),
+    ValueBinning(3),
+    Contingency(OrdinalPatterns{3}()),
     Contingency(Dispersion()),
-    Contingency(ValueHistogram(3)),
+    Contingency(ValueBinning(3)),
 ]
 
 @testset "Contingency table: with $(probests[i]) discretization" for i in eachindex(probests)

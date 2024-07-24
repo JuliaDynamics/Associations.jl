@@ -9,10 +9,14 @@ X = StateSpaceSet(x)
 Y = StateSpaceSet(y)
 Z = StateSpaceSet(z)
 
-nshuffles = 5
-lptest_sp = LocalPermutationTest(PMI(), SymbolicPermutation(); nshuffles, rng)
-lptest_vh = LocalPermutationTest(PMI(), ValueHistogram(4); nshuffles, rng)
-lptest_dp = LocalPermutationTest(PMI(), Dispersion(); nshuffles, rng)
+nshuffles = 2
+est_ord = JointProbabilities(PMI(), CodifyVariables(OrdinalPatterns()))
+est_vh = JointProbabilities(PMI(), CodifyVariables(ValueHistogram(3)))
+est_dp = JointProbabilities(PMI(), CodifyVariables( Dispersion(m = 2)))
+
+lptest_sp = LocalPermutationTest(est_ord; nshuffles, rng)
+lptest_vh = LocalPermutationTest(est_vh; nshuffles, rng)
+lptest_dp = LocalPermutationTest(est_dp; nshuffles, rng)
 @test independence(lptest_sp, x, y, z) isa LocalPermutationTestResult
 @test independence(lptest_vh, x, y, z) isa LocalPermutationTestResult
 @test independence(lptest_dp, x, y, z) isa LocalPermutationTestResult
@@ -20,6 +24,7 @@ lptest_dp = LocalPermutationTest(PMI(), Dispersion(); nshuffles, rng)
 @test independence(lptest_vh, X, Y, Z) isa LocalPermutationTestResult
 @test independence(lptest_dp, X, Y, Z) isa LocalPermutationTestResult
 
+#
 
 α = 0.05
 n = 10000
@@ -50,9 +55,9 @@ z = z + rand(rng, n) * 1e-3
 # We should not be able to reject the null hypothesis `x ⫫ z | y`, because
 # x → y → z, so when conditioning on the intermediate variable,
 # the first and last variable in the chain should be independent.
-test_sp = LocalPermutationTest(PMI(), SymbolicPermutation(); nshuffles = 200, rng)
-test_dp = LocalPermutationTest(PMI(), Dispersion(); nshuffles = 200, rng)
-test_vh = LocalPermutationTest(PMI(), ValueHistogram(2); nshuffles = 200, rng)
-@test pvalue(independence(test_sp, x, y, z)) > α
+test_ord = LocalPermutationTest(est_ord; nshuffles = 19, rng)
+test_dp = LocalPermutationTest(est_dp; nshuffles = 19, rng)
+test_vh = LocalPermutationTest(est_vh; nshuffles = 19, rng)
+@test pvalue(independence(test_ord, x, y, z)) > α
 @test pvalue(independence(test_dp, x, y, z)) > α
 @test pvalue(independence(test_vh, x, y, z)) > α

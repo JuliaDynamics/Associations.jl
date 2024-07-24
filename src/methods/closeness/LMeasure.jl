@@ -5,10 +5,9 @@ using Distances: SqEuclidean, Euclidean
 using Distances: pairwise, evaluate
 
 export LMeasure
-export l_measure
 
 """
-    LMeasure <: AssociationMeasure
+    LMeasure <: ClosenessMeasure
     LMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
 The `LMeasure` [Chicharro2009](@cite) is a pairwise association
@@ -20,8 +19,8 @@ for an explanation.
 
 ## Usage
 
+- Use with [`association`](@ref) to compute the raw L-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
-- Use with [`l_measure`](@ref) to compute the raw l-measure statistic.
 
 ## Description
 
@@ -50,8 +49,10 @@ G_i^{(k)}(x|y) = \\dfrac{1}{K}\\sum_{j=1}^{K} g_{i,w_{i, j}},
 ```
 
 where ``w_{i,j}`` is the index of the ``j``-th nearest neighbor of ``\\bf{y_i}``.
+
+See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
+Base.@kwdef struct LMeasure{M, TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = Euclidean()
     tree_metric::TM = Euclidean()
@@ -62,21 +63,12 @@ Base.@kwdef struct LMeasure{M, TM} <: AssociationMeasure
     w::Int = 0
 end
 
-"""
-    l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`LMeasure`](@ref) from source `x` to target `y`.
-"""
-function l_measure(measure::LMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
-end
-
 function getrank(x, p)
     xmin, xmax = minimum(x), maximum
 end
 
 # Internal method for use with `independence`
-function estimate(measure::LMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
+function association(measure::LMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     # Match length of StateSpaceSets by excluding end points.

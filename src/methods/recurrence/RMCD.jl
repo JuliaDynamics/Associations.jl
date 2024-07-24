@@ -10,6 +10,15 @@ The recurrence measure of conditional dependence, or RMCD [Ramos2017](@cite),
 is a recurrence-based measure that mimics the conditional mutual
 information, but uses recurrence probabilities.
 
+## Usage
+
+- Use with [`association`](@ref)/[`rmcd`](@ref) to compute the raw RMCD for pairwise 
+    or conditional association.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
+    or conditional association.
+
+## Description
+
 `r` is a mandatory keyword which specifies the recurrence threshold when constructing
 recurrence matrices. It can be instance of
 any subtype of `AbstractRecurrenceType` from
@@ -20,12 +29,6 @@ from [Distances.jl](https://github.com/JuliaStats/Distances.jl).
 
 Both the pairwise and conditional RMCD is non-negative, but due to round-off error,
 negative values may occur. If that happens, an RMCD value of `0.0` is returned.
-
-## Usage
-
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise
-    or conditional association.
-- Use with [`rmcd`](@ref) to compute the raw RMCD for pairwise or conditional association.
 
 ## Description
 
@@ -50,7 +53,6 @@ case the following mutual information-like quantitity is computed (not
 discussed in [Ramos2017](@citet).
 
 ```math
-
 I_{RMCD}(X; Y) = \\dfrac{1}{N}
 \\sum_{i} \\left[
 \\dfrac{1}{N} \\sum_{j} R_{ij}^{X, Y}
@@ -59,6 +61,10 @@ I_{RMCD}(X; Y) = \\dfrac{1}{N}
     \\right)
 \\right]
 ```
+
+## Estimation
+
+- [Example 1](@ref example_RMCD). Pairwise versus conditional RMCD.
 """
 Base.@kwdef struct RMCD{R, M, B} <: AssociationMeasure
     r::R
@@ -68,28 +74,7 @@ end
 
 max_inputs_vars(::RMCD{R, M, D}) where {R, M, D} = 3
 
-"""
-    rmcd(measure::RMCD, x, y)
-    rmcd(measure::RMCD, x, y, [z, ...])
-
-Estimate the recurrence-based `measure` of dependence between
-`x` and `y`, conditional on `z` if given.
-
-Parameters for recurrence matrix estimation are given as a [`RMCD`](@ref) instance.
-Inputs `x`, `y`, `z` can be either univariate timeseries or multivariate
-[`StateSpaceSet`](@ref)s.
-"""
-rmcd(measure::RMCD, args...) = estimate(measure, args...)
-
-# For compatibility with independence testing framework.
-function estimate(measure::RMCD, est::Nothing, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
-    return estimate(measure, x, y, z)
-end
-function estimate(measure::RMCD, est::Nothing, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
-end
-
-function estimate(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
+function association(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::VectorOrStateSpaceSet)
     (; r, metric, base) = measure
     @assert length(x) == length(y) == length(z)
     N = length(x)
@@ -125,7 +110,7 @@ function estimate(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpace
 end
 
 # Similar, but analogous to mutual information
-function estimate(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
+function association(measure::RMCD, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
     (; r, metric, base) = measure
     @assert length(x) == length(y)
     N = length(x)

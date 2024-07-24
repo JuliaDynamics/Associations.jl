@@ -406,8 +406,8 @@
   pages={5130--5135},
   year={2016},
   publisher={National Acad Sciences},
-  doi={10.1016/j.ins.2009.03.002},
-  url={https://doi.org/10.1016/j.ins.2009.03.002},
+  doi={10.1073/pnas.1522586113},
+  url={https://www.pnas.org/doi/pdf/10.1073/pnas.1522586113},
 }
 
 @article{Jizba2012,
@@ -724,4 +724,552 @@ abstract = {Mutual information (MI) is a basic concept in information theory. Th
   publisher = {American Physical Society},
   doi = {10.1103/PhysRevLett.99.204101},
   url = {https://link.aps.org/doi/10.1103/PhysRevLett.99.204101}
+}
+
+@ARTICLE{vanErven2014,
+  author={van Erven, Tim and Harremos, Peter},
+  journal={IEEE Transactions on Information Theory}, 
+  title={Rényi Divergence and Kullback-Leibler Divergence}, 
+  year={2014},
+  volume={60},
+  number={7},
+  pages={3797-3820},
+  doi={10.1109/TIT.2014.2320500}}
+
+  @inproceedings{Poczos2012,
+  title={Nonparametric estimation of conditional information and divergences},
+  author={Póczos, Barnabás and Schneider, Jeff},
+  booktitle={Artificial Intelligence and Statistics},
+  pages={914--923},
+  year={2012},
+  organization={PMLR}
+}
+
+% For ComplexityMeasures.jl references
+
+@article{Zahl1977,
+  title={Jackknifing an index of diversity},
+  author={Zahl, Samuel},
+  journal={Ecology},
+  volume={58},
+  number={4},
+  pages={907--913},
+  year={1977},
+  publisher={Wiley Online Library},
+  doi={https://doi.org/10.2307/1936227}
+}
+
+
+@article{Shannon1948,
+  title={A mathematical theory of communication},
+  author={Shannon, Claude Elwood},
+  journal={The Bell system technical journal},
+  volume={27},
+  number={3},
+  pages={379--423},
+  year={1948},
+  publisher={Nokia Bell Labs},
+  doi={https://doi.org/10.1002/j.1538-7305.1948.tb01338.x},
+}
+
+@inproceedings{Rényi1961,
+  title={On measures of entropy and information},
+  author={Rényi, Alfréd},
+  booktitle={Proceedings of the Fourth Berkeley Symposium on Mathematical Statistics and Probability, Volume 1: Contributions to the Theory of Statistics},
+  volume={4},
+  pages={547--562},
+  year={1961},
+  organization={University of California Press},
+  url={https://projecteuclid.org/ebook/Download?urlid=bsmsp/1200512181&isFullBook=false}
+}
+
+
+@article{Tsallis1988,
+  title={Possible generalization of Boltzmann-Gibbs statistics},
+  author={Tsallis, Constantino},
+  journal={Journal of statistical physics},
+  volume={52},
+  pages={479--487},
+  year={1988},
+  publisher={Springer},
+  doi={https://doi.org/10.1007/BF01016429},
+}
+
+
+
+@article{Arora2022,
+  title={Estimating the Entropy of Linguistic Distributions}, 
+  author={Aryaman Arora and Clara Meister and Ryan Cotterell},
+  year={2022},
+  eprint={2204.01469},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2204.01469},
+  journal={arXiv}
+}
+
+
+@article{Miller1955,
+  title={Note on the bias of information estimates},
+  author={Miller, George},
+  journal={Information theory in psychology: Problems and methods},
+  year={1955},
+  publisher={Free Press}
+}
+
+
+@article{Schurmann2004,
+  title={Bias analysis in entropy estimation},
+  author={Schuermann, Thomas},
+  journal={Journal of Physics A: Mathematical and General},
+  volume={37},
+  number={27},
+  pages={L295},
+  year={2004},
+  publisher={IOP Publishing},
+  doi={https://doi.org/10.1088/0305-4470/37/27/L02},
+}
+
+
+@article{Grassberger2022,
+  AUTHOR = {Grassberger, Peter},
+  TITLE = {On Generalized Schuermann Entropy Estimators},
+  JOURNAL = {Entropy},
+  VOLUME = {24},
+  YEAR = {2022},
+  NUMBER = {5},
+  ARTICLE-NUMBER = {680},
+  URL = {https://www.mdpi.com/1099-4300/24/5/680},
+  PubMedID = {35626564},
+  ISSN = {1099-4300},
+  ABSTRACT = {We present a new class of estimators of Shannon entropy for severely undersampled discrete distributions. It is based on a generalization of an estimator proposed by T. Schuermann, which itself is a generalization of an estimator proposed by myself. For a special set of parameters, they are completely free of bias and have a finite variance, something which is widely believed to be impossible. We present also detailed numerical tests, where we compare them with other recent estimators and with exact results, and point out a clash with Bayesian estimators for mutual information.},
+  DOI = {10.3390/e24050680}
+}
+
+
+@article{Horvitz1952,
+  author = { D. G.   Horvitz  and  D. J.   Thompson },
+  title = {A Generalization of Sampling Without Replacement from a Finite Universe},
+  journal = {Journal of the American Statistical Association},
+  volume = {47},
+  number = {260},
+  pages = {663-685},
+  year  = {1952},
+  publisher = {Taylor & Francis},
+  doi = {https://doi.org/10.1080/01621459.1952.10483446},
+  URL = {https://www.tandfonline.com/doi/abs/10.1080/01621459.1952.10483446},
+  eprint = {https://www.tandfonline.com/doi/pdf/10.1080/01621459.1952.10483446},
+}
+
+@article{Chao2003,
+	abstract = {A biological community usually has a large number of species with relatively small abundances. When a random sample of individuals is selected and each individual is classified according to species identity, some rare species may not be discovered. This paper is concerned with the estimation of Shannon's index of diversity when the number of species and the species abundances are unknown. The traditional estimator that ignores the missing species underestimates when there is a non-negligible number of unseen species. We provide a different approach based on unequal probability sampling theory because species have different probabilities of being discovered in the sample. No parametric forms are assumed for the species abundances. The proposed estimation procedure combines the Horvitz--Thompson (1952) adjustment for missing species and the concept of sample coverage, which is used to properly estimate the relative abundances of species discovered in the sample. Simulation results show that the proposed estimator works well under various abundance models even when a relatively large fraction of the species is missing. Three real data sets, two from biology and the other one from numismatics, are given for illustration.},
+	author = {Chao, Anne and Shen, Tsung-Jen},
+	date = {2003/12/01},
+	doi = {10.1023/A:1026096204727},
+	id = {Chao2003},
+	isbn = {1573-3009},
+	journal = {Environmental and Ecological Statistics},
+	number = {4},
+	pages = {429--443},
+	title = {Nonparametric estimation of Shannon's index of diversity when there are unseen species in sample},
+	url = {https://doi.org/10.1023/A:1026096204727},
+	volume = {10},
+	year = {2003},
+}
+
+
+@article{BandtPompe2002,
+  title = {Permutation Entropy: A Natural Complexity Measure for Time Series},
+  author = {Bandt, Christoph and Pompe, Bernd},
+  journal = {Phys. Rev. Lett.},
+  volume = {88},
+  issue = {17},
+  pages = {174102},
+  numpages = {4},
+  year = {2002},
+  month = {Apr},
+  publisher = {American Physical Society},
+  doi = {10.1103/PhysRevLett.88.174102},
+  url = {https://link.aps.org/doi/10.1103/PhysRevLett.88.174102},
+}
+
+
+
+@article{He2016,
+  title = {Multivariate permutation entropy and its application for complexity analysis of chaotic systems},
+  journal = {Physica A: Statistical Mechanics and its Applications},
+  volume = {461},
+  pages = {812-823},
+  year = {2016},
+  issn = {0378-4371},
+  doi = {https://doi.org/10.1016/j.physa.2016.06.012},
+  url = {https://www.sciencedirect.com/science/article/pii/S0378437116302801},
+  author = {Shaobo He and Kehui Sun and Huihai Wang},
+  keywords = {Permutation entropy, Multivariate complexity, Simplified Lorenz system, Financial chaotic system},
+  abstract = {To measure the complexity of multivariate systems, the multivariate permutation entropy (MvPE) algorithm is proposed. It is employed to measure complexity of multivariate system in the phase space. As an application, MvPE is applied to analyze the complexity of chaotic systems, including hyperchaotic Hénon map, fractional-order simplified Lorenz system and financial chaotic system. Results show that MvPE algorithm is effective for analyzing the complexity of the multivariate systems. It also shows that fractional-order system does not become more complex with derivative order varying. Compared with PE, MvPE has better robustness for noise and sampling interval, and the results are not affected by different normalization methods.}
+}
+
+
+@article{Zunino2017,
+  title={Permutation entropy based time series analysis: Equalities in the input signal can lead to false conclusions},
+  author={Zunino, Luciano and Olivares, Felipe and Scholkmann, Felix and Rosso, Osvaldo A},
+  journal={Physics Letters A},
+  volume={381},
+  number={22},
+  pages={1883--1892},
+  year={2017},
+  publisher={Elsevier},
+  doi={https://doi.org/10.1016/j.physleta.2017.03.052}
+}
+
+
+@article{Li2018,
+  AUTHOR = {Li, Guohui and Guan, Qianru and Yang, Hong},
+  TITLE = {Noise Reduction Method of Underwater Acoustic Signals Based on CEEMDAN, Effort-To-Compress Complexity, Refined Composite Multiscale Dispersion Entropy and Wavelet Threshold Denoising},
+  JOURNAL = {Entropy},
+  VOLUME = {21},
+  YEAR = {2019},
+  NUMBER = {1},
+  ARTICLE-NUMBER = {11},
+  URL = {https://www.mdpi.com/1099-4300/21/1/11},
+  PubMedID = {33266727},
+  ISSN = {1099-4300},
+  ABSTRACT = {Owing to the problems that imperfect decomposition process of empirical mode decomposition (EMD) denoising algorithm and poor self-adaptability, it will be extremely difficult to reduce the noise of signal. In this paper, a noise reduction method of underwater acoustic signal denoising based on complete ensemble empirical mode decomposition with adaptive noise (CEEMDAN), effort-to-compress complexity (ETC), refined composite multiscale dispersion entropy (RCMDE) and wavelet threshold denoising is proposed. Firstly, the original signal is decomposed into several IMFs by CEEMDAN and noise IMFs can be identified according to the ETC of IMFs. Then, calculating the RCMDE of remaining IMFs, these IMFs are divided into three kinds of IMFs by RCMDE, namely noise-dominant IMFs, real signal-dominant IMFs, real IMFs. Finally, noise IMFs are removed, wavelet soft threshold denoising is applied to noise-dominant IMFs and real signal-dominant IMFs. The denoised signal can be obtained by combining the real IMFs with the denoised IMFs after wavelet soft threshold denoising. Chaotic signals with different signal-to-noise ratio (SNR) are used for denoising experiments by comparing with EMD_MSE_WSTD and EEMD_DE_WSTD, it shows that the proposed algorithm has higher SNR and smaller root mean square error (RMSE). In order to further verify the effectiveness of the proposed method, which is applied to noise reduction of real underwater acoustic signals. The results show that the denoised underwater acoustic signals not only eliminate noise interference also restore the topological structure of the chaotic attractors more clearly, which lays a foundation for the further processing of underwater acoustic signals.},
+  DOI = {10.3390/e21010011},
+}
+
+
+@article{Rostaghi2016,
+  title={Dispersion entropy: A measure for time-series analysis},
+  author={Rostaghi, Mostafa and Azami, Hamed},
+  journal={IEEE Signal Processing Letters},
+  volume={23},
+  number={5},
+  pages={610--614},
+  year={2016},
+  publisher={IEEE},
+  doi={https://doi.org/10.1109/LSP.2016.2542881},
+}
+
+
+@article{KozachenkoLeonenko1987,
+  title={Sample estimate of the entropy of a random vector},
+  author={Kozachenko, Lyudmyla F and Leonenko, Nikolai N},
+  journal={Problemy Peredachi Informatsii},
+  volume={23},
+  number={2},
+  pages={9--16},
+  year={1987},
+  publisher={Russian Academy of Sciences, Branch of Informatics, Computer Equipment and~…},
+  url={https://www.mathnet.ru/php/archive.phtml?wshow=paper&jrnid=ppi&paperid=797&option_lang=eng}
+}
+
+@article{Charzyńska2015,
+  AUTHOR = {Charzyńska, Agata and Gambin, Anna},
+  TITLE = {Improvement of the k-nn Entropy Estimator with Applications in Systems Biology},
+  JOURNAL = {Entropy},
+  VOLUME = {18},
+  YEAR = {2016},
+  NUMBER = {1},
+  ARTICLE-NUMBER = {13},
+  URL = {https://www.mdpi.com/1099-4300/18/1/13},
+  ISSN = {1099-4300},
+  ABSTRACT = {In this paper, we investigate efficient estimation of differential entropy for multivariate random variables. We propose bias correction for the nearest neighbor estimator, which yields more accurate results in higher dimensions. In order to demonstrate the accuracy of the improvement, we calculated the corrected estimator for several families of random variables. For multivariate distributions, we considered the case of independent marginals and the dependence structure between the marginal distributions described by Gaussian copula. The presented solution may be particularly useful for high dimensional data, like those analyzed in the systems biology field. To illustrate such an application, we exploit differential entropy to define the robustness of biochemical kinetic models.},
+  DOI = {10.3390/e18010013}
+}
+
+
+@inproceedings{Gao2015,
+  title = {Efficient Estimation of Mutual Information for Strongly Dependent Variables},
+  author = {Gao, Shuyang and Ver Steeg, Greg and Galstyan, Aram},
+  booktitle = {Proceedings of the Eighteenth International Conference on Artificial Intelligence and Statistics},
+  pages = {277--286},
+  year = {2015},
+  editor = {Lebanon, Guy and Vishwanathan, S. V. N.},
+  volume = {38},
+  series = {Proceedings of Machine Learning Research},
+  address = {San Diego, California, USA},
+  month = {09--12 May},
+  publisher =  {PMLR},
+  pdf = {http://proceedings.mlr.press/v38/gao15.pdf},
+  url = {https://proceedings.mlr.press/v38/gao15.html},
+  abstract = {We demonstrate that a popular class of non-parametric mutual information (MI) estimators based on k-nearest-neighbor graphs requires number of samples that scales exponentially with the true MI. Consequently, accurate estimation of MI between two strongly dependent variables is possible only for prohibitively large sample size. This important yet overlooked shortcoming of the existing estimators is due to their implicit reliance on  local uniformity of the underlying joint distribution. We introduce a new  estimator that is robust to local non-uniformity, works well with limited data, and is able to capture relationship strengths over many orders of magnitude. We demonstrate the superior performance of the proposed estimator on both synthetic and real-world data.}
+}
+
+
+@article{Goria2005,
+  author = { M. N. Goria  and  N. N. Leonenko  and  V. V. Mergel and P. L. Novi Inverardi},
+  title = {A new class of random vector entropy estimators and its applications in testing statistical hypotheses},
+  journal = {Journal of Nonparametric Statistics},
+  volume = {17},
+  number = {3},
+  pages = {277-297},
+  year  = {2005},
+  publisher = {Taylor & Francis},
+  doi = {https://doi.org/10.1080/104852504200026815},
+  URL = {https://doi.org/10.1080/104852504200026815},
+  eprint = {https://doi.org/10.1080/104852504200026815},
+}
+
+@article{Lord2018,
+  title={Geometric k-nearest neighbor estimation of entropy and mutual information},
+  author={Lord, Warren M and Sun, Jie and Bollt, Erik M},
+  journal={Chaos: An Interdisciplinary Journal of Nonlinear Science},
+  volume={28},
+  number={3},
+  year={2018},
+  publisher={AIP Publishing},
+  doi = {https://doi.org/10.1063/1.5011683},
+  url = {https://pubs.aip.org/aip/cha/article/28/3/033114/685022},
+}
+
+
+@article{LeonenkoProzantoSavani2008,
+  author = {Nikolai Leonenko and Luc Pronzato and Vippal Savani},
+  title = {A class of Rényi information estimators for multidimensional densities},
+  volume = {36},
+  journal = {The Annals of Statistics},
+  number = {5},
+  publisher = {Institute of Mathematical Statistics},
+  pages = {2153 -- 2182},
+  abstract = {A class of estimators of the Rényi and Tsallis entropies of an unknown distribution f in ℝm is presented. These estimators are based on the kth nearest-neighbor distances computed from a sample of N i.i.d. vectors with distribution f. We show that entropies of any order q, including Shannon’s entropy, can be estimated consistently with minimal assumptions on f. Moreover, we show that it is straightforward to extend the nearest-neighbor method to estimate the statistical distance between two distributions using one i.i.d. sample from each.},
+  keywords = {Entropy estimation, estimation of divergence, estimation of statistical distance, Havrda–Charvát entropy, nearest-neighbor distances, Rényi entropy, Tsallis entropy},
+  year = {2008},
+  doi = {https://doi.org/10.1214/07-AOS539},
+  URL = {https://doi.org/10.1214/07-AOS539}
+}
+
+
+@article{Vasicek1976,
+  title={A test for normality based on sample entropy},
+  author={Vasicek, Oldrich},
+  journal={Journal of the Royal Statistical Society Series B: Statistical Methodology},
+  volume={38},
+  number={1},
+  pages={54--59},
+  year={1976},
+  publisher={Oxford University Press},
+  doi={https://doi.org/10.1111/j.2517-6161.1976.tb01566.x}
+}
+
+
+@article{Alizadeh2010,
+  title={A new estimator of entropy},
+  author={Alizadeh, Noughabi Hadi and Arghami, Naser Reza},
+  year={2010},
+  journal={Journal of the Iranian Statistical Society (JIRSS)},
+  publisher={Journal of the Iranian Statistical Society (JIRSS)},
+  url={http://jirss.irstat.ir/article-1-81-en.pdf},
+}
+
+
+@article{Ebrahimi1994,
+  title = {Two measures of sample entropy},
+  journal = {Statistics \& Probability Letters},
+  volume = {20},
+  number = {3},
+  pages = {225-234},
+  year = {1994},
+  issn = {0167-7152},
+  doi = {10.1016/0167-7152(94)90046-9},
+  url = {https://www.sciencedirect.com/science/article/pii/0167715294900469},
+  author = {Nader Ebrahimi and Kurt Pflughoeft and Ehsan S. Soofi},
+  keywords = {Information theory, Entropy estimator, Exponential, Normal, Uniform},
+  abstract = {In many statistical studies the entropy of a distribution function is of prime interest. This paper proposes two estimators of the entropy. Both estimators are obtained by modifying the estimator proposed by Vasicek (1976). Consistency of both estimators is proved, and comparisons have been made with Vasicek's estimator and its generalization proposed by Dudewicz and Van der Meulen (1987). The results indicate that the proposed estimators have less bias and have less mean squared error than Vasicek's estimator and its generalization}
+}
+
+
+@article{Correa1995,
+  author = {Correa, Juan C.},
+  title = {A new estimator of entropy},
+  journal = {Communications in Statistics - Theory and Methods},
+  volume = {24},
+  number = {10},
+  pages = {2439-2449},
+  year  = {1995},
+  publisher = {Taylor & Francis},
+  doi = {10.1080/03610929508831626},
+  URL = {https://doi.org/10.1080/03610929508831626},
+  eprint = {https://doi.org/10.1080/03610929508831626}
+}
+
+@article{Berger2019,
+  publisher={MDPI},
+  author = {Berger, Sebastian and Kravtsiv, Andrii and Schneider, Gerhard and Jordan, Denis},
+  title = {Teaching Ordinal Patterns to a Computer: Efficient Encoding Algorithms Based on the Lehmer Code},
+  journal = {Entropy},
+  volume = {21},
+  year = {2019},
+  number = {10},
+  article-number = {1023},
+  url = {https://www.mdpi.com/1099-4300/21/10/1023},
+  issn = {1099-4300},
+  abstract = {Ordinal patterns are the common basis of various techniques used in the study of dynamical systems and nonlinear time series analysis. The present article focusses on the computational problem of turning time series into sequences of ordinal patterns. In a first step, a numerical encoding scheme for ordinal patterns is proposed. Utilising the classical Lehmer code, it enumerates ordinal patterns by consecutive non-negative integers, starting from zero. This compact representation considerably simplifies working with ordinal patterns in the digital domain. Subsequently, three algorithms for the efficient extraction of ordinal patterns from time series are discussed, including previously published approaches that can be adapted to the Lehmer code. The respective strengths and weaknesses of those algorithms are discussed, and further substantiated by benchmark results. One of the algorithms stands out in terms of scalability: its run-time increases linearly with both the pattern order and the sequence length, while its memory footprint is practically negligible. These properties enable the study of high-dimensional pattern spaces at low computational cost. In summary, the tools described herein may improve the efficiency of virtually any ordinal pattern-based analysis method, among them quantitative measures like permutation entropy and symbolic transfer entropy, but also techniques like forbidden pattern identification. Moreover, the concepts presented may allow for putting ideas into practice that up to now had been hindered by computational burden. To enable smooth evaluation, a function library written in the C programming language, as well as language bindings and native implementations for various numerical computation environments are provided in the supplements.},
+  doi = {10.3390/e21101023}
+}
+
+
+@article{Azami2016,
+title = {Amplitude-aware permutation entropy: Illustration in spike detection and signal segmentation},
+journal = {Computer Methods and Programs in Biomedicine},
+volume = {128},
+pages = {40-51},
+year = {2016},
+issn = {0169-2607},
+doi = {10.1016/j.cmpb.2016.02.008},
+url = {https://www.sciencedirect.com/science/article/pii/S0169260715301152},
+author = {Hamed Azami and Javier Escudero},
+keywords = {Signal irregularity, Amplitude-aware permutation entropy, Spike detection, Signal segmentation, Electroencephalogram, Extracellular neuronal data},
+abstract = {Background and objective
+Signal segmentation and spike detection are two important biomedical signal processing applications. Often, non-stationary signals must be segmented into piece-wise stationary epochs or spikes need to be found among a background of noise before being further analyzed. Permutation entropy (PE) has been proposed to evaluate the irregularity of a time series. PE is conceptually simple, structurally robust to artifacts, and computationally fast. It has been extensively used in many applications, but it has two key shortcomings. First, when a signal is symbolized using the Bandt–Pompe procedure, only the order of the amplitude values is considered and information regarding the amplitudes is discarded. Second, in the PE, the effect of equal amplitude values in each embedded vector is not addressed. To address these issues, we propose a new entropy measure based on PE: the amplitude-aware permutation entropy (AAPE).
+Methods
+AAPE is sensitive to the changes in the amplitude, in addition to the frequency, of the signals thanks to it being more flexible than the classical PE in the quantification of the signal motifs. To demonstrate how the AAPE method can enhance the quality of the signal segmentation and spike detection, a set of synthetic and realistic synthetic neuronal signals, electroencephalograms and neuronal data are processed. We compare the performance of AAPE in these problems against state-of-the-art approaches and evaluate the significance of the differences with a repeated ANOVA with post hoc Tukey's test.
+Results
+In signal segmentation, the accuracy of AAPE-based method is higher than conventional segmentation methods. AAPE also leads to more robust results in the presence of noise. The spike detection results show that AAPE can detect spikes well, even when presented with single-sample spikes, unlike PE. For multi-sample spikes, the changes in AAPE are larger than in PE.
+Conclusion
+We introduce a new entropy metric, AAPE, that enables us to consider amplitude information in the formulation of PE. The AAPE algorithm can be used in almost every irregularity-based application in various signal and image processing fields. We also made freely available the Matlab code of the AAPE.}
+}
+
+@article{Paninski2003,
+  title={Estimation of entropy and mutual information},
+  author={Paninski, Liam},
+  journal={Neural computation},
+  volume={15},
+  number={6},
+  pages={1191--1253},
+  year={2003},
+  publisher={MIT Press},
+  doi={10.1162/089976603321780272},
+  url={https://ieeexplore.ieee.org/abstract/document/6790247},
+}
+
+
+@article{PrichardTheiler1995,
+  title={Generalized redundancies for time series analysis},
+  author={Prichard, Dean and Theiler, James},
+  journal={Physica D: Nonlinear Phenomena},
+  volume={84},
+  number={3-4},
+  pages={476--493},
+  year={1995},
+  publisher={Elsevier},
+  doi={10.1016/0167-2789(95)00041-2},
+}
+
+
+@article{Rosso2001,
+  title = {Wavelet entropy: a new tool for analysis of short duration brain electrical signals},
+  journal = {Journal of Neuroscience Methods},
+  volume = {105},
+  number = {1},
+  pages = {65-75},
+  year = {2001},
+  issn = {0165-0270},
+  doi = {10.1016/S0165-0270(00)00356-3},
+  url = {https://www.sciencedirect.com/science/article/pii/S0165027000003563},
+  author = {Osvaldo A. Rosso and Susana Blanco and Juliana Yordanova and Vasil Kolev and Alejandra Figliola and Martin Schürmann and Erol Başar},
+  keywords = {EEG, event-related potentials (ERP), Visual evoked potential, Time–frequency signal analysis, Wavelet analysis, Signal entropy},
+  abstract = {Since traditional electrical brain signal analysis is mostly qualitative, the development of new quantitative methods is crucial for restricting the subjectivity in the study of brain signals. These methods are particularly fruitful when they are strongly correlated with intuitive physical concepts that allow a better understanding of brain dynamics. Here, new method based on orthogonal discrete wavelet transform (ODWT) is applied. It takes as a basic element the ODWT of the EEG signal, and defines the relative wavelet energy, the wavelet entropy (WE) and the relative wavelet entropy (RWE). The relative wavelet energy provides information about the relative energy associated with different frequency bands present in the EEG and their corresponding degree of importance. The WE carries information about the degree of order/disorder associated with a multi-frequency signal response, and the RWE measures the degree of similarity between different segments of the signal. In addition, the time evolution of the WE is calculated to give information about the dynamics in the EEG records. Within this framework, the major objective of the present work was to characterize in a quantitative way functional dynamics of order/disorder microstates in short duration EEG signals. For that aim, spontaneous EEG signals under different physiological conditions were analyzed. Further, specific quantifiers were derived to characterize how stimulus affects electrical events in terms of frequency synchronization (tuning) in the event related potentials.},
+}
+
+@article{Llanos2017,
+  title={Power spectral entropy as an information-theoretic correlate of manner of articulation in American English},
+  author={Llanos, Fernando and Alexander, Joshua M and Stilp, Christian E and Kluender, Keith R},
+  journal={The Journal of the Acoustical Society of America},
+  volume={141},
+  number={2},
+  pages={EL127--EL133},
+  year={2017},
+  publisher={AIP Publishing},
+  doi={10.1121/1.4976109},
+  url={https://pubmed.ncbi.nlm.nih.gov/28253693/}
+}
+
+@article{Tian2017,
+  title={Spectral entropy can predict changes of working memory performance reduced by short-time training in the delayed-match-to-sample task},
+  author={Tian, Yin and Zhang, Huiling and Xu, Wei and Zhang, Haiyong and Yang, Li and Zheng, Shuxing and Shi, Yupan},
+  journal={Frontiers in human neuroscience},
+  volume={11},
+  pages={437},
+  year={2017},
+  publisher={Frontiers Media SA},
+  doi={10.3389/fnhum.2017.00437},
+}
+
+@article{Datseris2024,
+  title={ComplexityMeasures. jl: scalable software to unify and accelerate entropy and complexity timeseries analysis},
+  author={Datseris, George and Haaga, Kristian Agas{\o}ster},
+  journal={arXiv preprint arXiv:2406.05011},
+  year={2024}
+}
+@article{Papapetrou2020,
+  title={Tsallis conditional mutual information in investigating long range correlation in symbol sequences},
+  author={Papapetrou, M and Kugiumtzis, D},
+  journal={Physica A: Statistical Mechanics and its Applications},
+  volume={540},
+  pages={123016},
+  year={2020},
+  publisher={Elsevier}
+}
+
+@article{Szekely2007,
+  author = {G{\'a}bor J. Sz{\'e}kely and Maria L. Rizzo and Nail K. Bakirov},
+  title = {{Measuring and testing dependence by correlation of distances}},
+  volume = {35},
+  journal = {The Annals of Statistics},
+  number = {6},
+  publisher = {Institute of Mathematical Statistics},
+  pages = {2769 -- 2794},
+  keywords = {Distance correlation, distance covariance, multivariate independence},
+  year = {2007},
+  doi = {10.1214/009053607000000505},
+  URL = {https://doi.org/10.1214/009053607000000505}
+}
+
+
+@article{Szekely2014,
+author = {G{\'a}bor J. Sz{\'e}kely and Maria L. Rizzo},
+title = {{Partial distance correlation with methods for dissimilarities}},
+volume = {42},
+journal = {The Annals of Statistics},
+number = {6},
+publisher = {Institute of Mathematical Statistics},
+pages = {2382 -- 2412},
+keywords = {dissimilarity, energy statistics, independence, multivariate, partial distance correlation},
+year = {2014},
+doi = {10.1214/14-AOS1255},
+URL = {https://doi.org/10.1214/14-AOS1255}
+}
+
+@article{Manis2017,
+  title={Bubble entropy: An entropy almost free of parameters},
+  author={Manis, George and Aktaruzzaman, MD and Sassi, Roberto},
+  journal={IEEE Transactions on Biomedical Engineering},
+  volume={64},
+  number={11},
+  pages={2711--2718},
+  year={2017},
+  publisher={IEEE}
+}
+
+@article{Wang2020,
+  title={Multiscale diversity entropy: A novel dynamical measure for fault diagnosis of rotating machinery},
+  author={Wang, Xianzhi and Si, Shubin and Li, Yongbo},
+  journal={IEEE Transactions on Industrial Informatics},
+  volume={17},
+  number={8},
+  pages={5419--5429},
+  year={2020},
+  publisher={IEEE},
+  doi={10.1109/TII.2020.3022369},
+}
+
+@book{Tsallis2009,
+  title={Introduction to nonextensive statistical mechanics: approaching a complex world},
+  author={Tsallis, Constantino},
+  volume={1},
+  number={1},
+  year={2009},
+  publisher={Springer},
+  url={https://link.springer.com/book/10.1007/978-0-387-85359-8}
 }

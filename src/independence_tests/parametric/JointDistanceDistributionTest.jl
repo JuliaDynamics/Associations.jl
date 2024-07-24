@@ -97,7 +97,7 @@ end
 
 
 function independence(test::JointDistanceDistributionTest, x, y)
-    Δjdd = jdd(test.measure, x, y)
+    Δjdd = association(test.measure, x, y)
 
     # Right-sided t-test
     t = t_statistic(Δjdd, hypothetical_μ = test.measure.μ)

@@ -1,4 +1,3 @@
-export partial_correlation
 export PartialCorrelation
 
 """
@@ -9,9 +8,9 @@ variables removed.
 
 ## Usage
 
+- Use with [`association`](@ref) to compute the raw partial correlation coefficient.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for
-    conditional dependence.
-- Use with [`partial_correlation`](@ref) to compute the raw correlation coefficient.
+    correlated-based conditional independence.
 
 ## Description
 
@@ -38,28 +37,18 @@ In practice, we compute the estimate
 
 where ``\\hat{P} = \\hat{\\Sigma}^{-1}`` is the sample precision matrix.
 """
-struct PartialCorrelation <: AssociationMeasure end
+struct PartialCorrelation <: CorrelationMeasure end
 
 min_inputs_vars(::PartialCorrelation) = 3
 max_inputs_vars(::PartialCorrelation) = Inf
 
-"""
-    partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
-        z::VectorOrStateSpaceSet...)
-
-Compute the [`PartialCorrelation`](@ref) between `x` and `y`, given `z`.
-"""
-function partial_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet, z::ArrayOrStateSpaceSet...)
-    return estimate(PartialCorrelation(), x, y, z...)
-end
-
 # Compatibility with `independence`
-function estimate(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
+function association(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
         conds::ArrayOrStateSpaceSet...)
     X, Y, Z = construct_partialcor_datasets(x, y, conds...)
     D = StateSpaceSet(X, Y, Z)
-    cov = fastcov(D)
-    precision_matrix = invert_cov(cov)
+    cov_matrix = cov(D)
+    precision_matrix = invert_cov(cov_matrix)
     return partial_correlation_from_precision(precision_matrix, 1, 2)
 end
 
@@ -72,19 +61,14 @@ function construct_partialcor_datasets(x::VectorOrStateSpaceSet, y::VectorOrStat
     return X, Y, Z
 end
 
-function estimate(measure::PartialCorrelation, est::Nothing, x, y, z)
-    return estimate(measure, x, y, z)
-end
-
-
-function invert_cov(cov::AbstractMatrix)
-    if det(cov) ≈ 0.0
+function invert_cov(cov_matrix::AbstractMatrix)
+    if det(cov_matrix) ≈ 0.0
         # If the determinant of the covariance matrix is zero, then the
         # Moore-Penrose pseudo-inverse is used.
-        rtol = sqrt(eps(real(float(one(eltype(cov))))))
-        return pinv(cov; rtol)
+        rtol = sqrt(eps(real(float(one(eltype(cov_matrix))))))
+        return pinv(cov_matrix; rtol)
     else
-        return inv(cov)
+        return inv(cov_matrix)
     end
 end
 

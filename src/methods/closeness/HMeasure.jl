@@ -4,7 +4,6 @@ using StateSpaceSets: AbstractStateSpaceSet
 using Distances: SqEuclidean, Euclidean
 using Distances: pairwise, evaluate
 
-export h_measure
 export HMeasure
 
 """
@@ -20,8 +19,8 @@ for an explanation.
 
 ## Usage
 
+- Use with [`association`](@ref) to compute the raw h-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
-- Use with [`h_measure`](@ref) to compute the raw h-measure statistic.
 
 ## Description
 
@@ -36,8 +35,10 @@ H^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N}
 ```
 
 Parameters are the same and ``R_i^{(k)}(x|y)`` is computed as for [`SMeasure`](@ref).
+
+See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct HMeasure{M, TM} <: AssociationMeasure
+Base.@kwdef struct HMeasure{M, TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = SqEuclidean()
     tree_metric::TM = Euclidean()
@@ -48,17 +49,8 @@ Base.@kwdef struct HMeasure{M, TM} <: AssociationMeasure
     w::Int = 0
 end
 
-"""
-    h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`HMeasure`](@ref) from source `x` to target `y`.
-"""
-function h_measure(measure::HMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
-end
-
 # Internal method for use with `independence`
-function estimate(measure::HMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
+function association(measure::HMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     # Match length of StateSpaceSets by excluding end points.

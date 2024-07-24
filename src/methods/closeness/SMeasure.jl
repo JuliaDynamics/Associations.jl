@@ -5,10 +5,9 @@ using Distances: SqEuclidean, Euclidean
 using Distances: pairwise, evaluate
 
 export SMeasure
-export s_measure
 
 """
-    SMeasure < AssociationMeasure
+    SMeasure < ClosenessMeasure
     SMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
 `SMeasure` is a bivariate association measure from [Arnhold1999](@citet)
@@ -19,8 +18,8 @@ Note that `τx` and `τy` are negative; see explanation below.
 
 ## Usage
 
+- Use with [`association`](@ref) to compute the raw s-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
-- Use with [`s_measure`](@ref) to compute the raw s-measure statistic.
 
 ## Description
 
@@ -78,8 +77,10 @@ The algorithm is slightly modified from [Grassberger1999](@cite) to allow univar
 
 In all three cases, input StateSpaceSets are length-matched by eliminating points at the end of
 the longest StateSpaceSet (after the embedding step, if relevant) before analysis.
+
+See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct SMeasure{M, TM} <: AssociationMeasure
+Base.@kwdef struct SMeasure{M, TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = SqEuclidean()
     tree_metric::TM = Euclidean()
@@ -90,17 +91,8 @@ Base.@kwdef struct SMeasure{M, TM} <: AssociationMeasure
     w::Int = 0
 end
 
-"""
-    s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`SMeasure`](@ref) from source `x` to target `y`.
-"""
-function s_measure(measure::SMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
-end
-
 # Internal method for use with `independence`
-function estimate(measure::SMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
+function association(measure::SMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     # Match length of StateSpaceSets by excluding end points.

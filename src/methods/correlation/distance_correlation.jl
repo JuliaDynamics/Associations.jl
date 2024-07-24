@@ -1,73 +1,52 @@
 using StateSpaceSets: AbstractStateSpaceSet
-using Distances
+using Distances: Euclidean
+using Distances: pairwise
 using LinearAlgebra
 
 export DistanceCorrelation
-export distance_correlation
 
 """
     DistanceCorrelation
 
-The distance correlation (Székely et al., 2007)[^Székely2007] measure quantifies
+The distance correlation [Szekely2007](@cite) measure quantifies
 potentially nonlinear associations between pairs of variables. If applied to
-three variables, the partial distance correlation (Székely and Rizzo, 2014)[^Székely2014]
+three variables, the partial distance correlation [Szekely2014](@cite)
 is computed.
 
 ## Usage
 
+- Use with [`association`](@ref) to compute the raw (partial) distance correlation
+    coefficient.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for
     pairwise dependence.
-- Use with [`distance_correlation`](@ref) to compute the raw distance correlation
-    coefficient.
+
+## Description 
+
+The distance correlation can be used to compute the association between two variables,
+or the conditional association between three variables, like so:
+
+    association(DistanceCorrelation(), x, y) → dcor ∈ [0, 1]
+    association(DistanceCorrelation(), x, y, z) → pdcor
+
+With two variable, we comptue `dcor`, which is called the empirical/sample distance 
+correlation [Szekely2007](@cite). With three variables, the 
+partial distance correlation `pdcor` is computed [Szekely2014](@cite).
 
 !!! warn
     A partial distance correlation `distance_correlation(X, Y, Z) = 0` doesn't
-    always guarantee conditional independence `X ⫫ Y | Z`. See Székely and Rizzo (2014)
-    for in-depth discussion.
-
-[^Székely2007]:
-    Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
-    dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
-[^Székely2014]:
-    Székely, G. J., & Rizzo, M. L. (2014). Partial distance correlation with methods for
-    dissimilarities.
+    always guarantee conditional independence `X ⫫ Y | Z`. [Szekely2014](@citet)
+    for an in-depth discussion.
 """
-struct DistanceCorrelation <: AssociationMeasure end
+struct DistanceCorrelation <: CorrelationMeasure end
 
 max_inputs_vars(::DistanceCorrelation) = 3
 
-"""
-    distance_correlation(x, y) → dcor ∈ [0, 1]
-    distance_correlation(x, y, z) → pdcor
-
-Compute the empirical/sample distance correlation (Székely et al., 2007)[^Székely2007],
-here called `dcor`, between StateSpaceSets `x` and `y`. Alternatively, compute the
-partial distance correlation `pdcor` (Székely and Rizzo, 2014)[^Székely2014].
-
-See also: [`DistanceCorrelation`](@ref).
-
-[^Székely2007]:
-    Székely, G. J., Rizzo, M. L., & Bakirov, N. K. (2007). Measuring and testing
-    dependence by correlation of distances. The annals of statistics, 35(6), 2769-2794.
-[^Székely2014]:
-    Székely, G. J., & Rizzo, M. L. (2014). Partial distance correlation with methods for
-    dissimilarities.
-"""
-function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet)
-    return estimate(DistanceCorrelation(), x, y)
-end
-
-function distance_correlation(x::ArrayOrStateSpaceSet, y::ArrayOrStateSpaceSet,
-        z::ArrayOrStateSpaceSet)
-    return estimate(DistanceCorrelation(), x, y, z)
-end
-
-function estimate(m::DistanceCorrelation, est::Nothing, args...)
-    return estimate(m, args...)
+function association(m::DistanceCorrelation, est::Nothing, args...)
+    return association(m, args...)
 end
 
 # Common interface for higher-level methods.
-function estimate(measure::DistanceCorrelation, X, Y)
+function association(measure::DistanceCorrelation, X, Y)
     # TODO: Future optimization: this could be quicker if we only compute distances once
     # for X and once for Y. Currently, they are computed twice each.
     𝒱ₙ²xy = distance_covariance(X, Y)
@@ -216,7 +195,7 @@ end
 
 
 # Common interface for higher-level methods.
-function estimate(measure::DistanceCorrelation, X, Y, Z)
+function association(measure::DistanceCorrelation, X, Y, Z)
     Lx, Ly, Lz = length(X), length(Y), length(Z)
     Lx == Ly == Lz || throw(ArgumentError("Input X, Y and Z must have same lengths."))
     N = Lx

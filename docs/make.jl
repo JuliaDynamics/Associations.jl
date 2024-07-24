@@ -10,21 +10,42 @@ using ComplexityMeasures
 using StateSpaceSets
 
 pages = [
-    "Overview" => "index.md",
-    "Association measures" => "measures.md",
-    "Independence testing" => "independence.md",
-    "Causal graphs" => "causal_graphs.md",
-    "APIs and estimators" => "api.md",
-    "Examples" => "examples.md",
-    "Predefined systems" => "coupled_systems.md",
-    "Experimental" => "experimental.md",
+    "CausalityTools.jl" => "index.md",
+    "Association measures" => "associations.md",
+    "Independence" => "independence.md",
+    "Network/graph inference" => "causal_graphs.md",
+    "Examples" => [
+        "Association measures" => "examples/examples_associations.md",
+        "Graph inference" => "examples/examples_infer_graphs.md",
+        "Extended examples" => [
+            "extended_examples/cross_mapping.md",
+            "extended_examples/pairwise_asymmetric_inference.md",
+            "extended_examples/mutual_information.md",
+        ],
+        #"Correlation examples" => "examples/examples_correlation.md",
+        #"Closeness examples" => "examples/examples_closeness.md",
+        #"Crossmap examples" => "examples/examples_cross_mappings.md",
+    ],
+    
+    "Basics and tutorials" => [
+        "Encoding elements" => "encoding_tutorial.md",
+        "Encoding input datasets" => "discretization_tutorial.md",
+        "Counts and probabilities" => "probabilities_tutorial.md",
+        "Information measures" => "info_tutorial.md",
+
+    ],
+    # "Independence testing" => "independence.md",
+    # "Causal graphs" => "causal_graphs.md",
+    # "Predefined systems" => "coupled_systems.md",
+    # "Experimental" => "experimental.md",
     "References" => "references.md",
 ]
 
-Downloads.download(
-    "https://raw.githubusercontent.com/JuliaDynamics/doctheme/master/build_docs_with_style.jl",
-    joinpath(@__DIR__, "build_docs_with_style.jl")
-)
+
+# Downloads.download(
+#     "https://raw.githubusercontent.com/JuliaDynamics/doctheme/master/build_docs_with_style.jl",
+#     joinpath(@__DIR__, "build_docs_with_style.jl")
+# )
 include("build_docs_with_style.jl")
 
 bibliography = CitationBibliography(

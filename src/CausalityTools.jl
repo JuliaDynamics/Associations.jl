@@ -13,23 +13,21 @@ module CausalityTools
     using DelayEmbeddings: embed, genembed
     export embed, genembed
 
-    import DynamicalSystemsBase: trajectory
-    import DynamicalSystemsBase: DiscreteDynamicalSystem, ContinuousDynamicalSystem
     import HypothesisTests: pvalue
     export trajectory
-    export DiscreteDynamicalSystem, ContinuousDynamicalSystem
     @reexport using StateSpaceSets
     @reexport using ComplexityMeasures
     @reexport using TimeseriesSurrogates
 
+    include("utils/utils.jl")
     include("core.jl")
-    include("methods/infomeasures/infomeasures.jl")
+
+    include("methods/information/information.jl")
     include("methods/crossmappings/crossmappings.jl")
     include("methods/closeness/closeness.jl")
     include("methods/correlation/correlation.jl")
     include("methods/recurrence/methods.jl")
 
-    include("utils/utils.jl")
 
     # Independence tests must be loaded after everything else has been defined.
     include("independence_tests/independence.jl")
@@ -37,31 +35,18 @@ module CausalityTools
     # Causal graph API must be loaded after independence tests.
     include("causal_graphs/causal_graphs.jl")
 
-    include("example_systems/example_systems.jl")
-
     include("deprecations/deprecations.jl")
-
-    #using Requires
-    #function __init__()
-        #@require UncertainData="dcd9ba68-c27b-5cea-ae21-829cd07325bf" begin
-        #   include("integrations/uncertaindata.jl")
-        #end
-
-        #@require Simplices="d5428e67-3037-59ba-9ab1-57a04f0a3b6a" begin
-        # #   import PerronFrobenius: SimplexExact, SimplexPoint
-        #    export SimplexExact, SimplexPoint
-        #end
-    #end
 
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "2.7.1"
+    version_number = "3.0.0"
     update_name = "update_v$(version_number)"
     update_message = """
     \nUpdate message: CausalityTools v$(version_number)\n
-    - New association measure: `PMI` (part mutual information).
-    - Fixed an import warning.
+    - Bivariate and multivariate information measure definitions and estimation is now based on the API in ComplexityMeasures.jl.
+    - Example systems have been removed from the package to avoid unnecessary package dependencies and improve compilation time.
+    - Convenience methods have been removed. Use `association` instead.
     """
 
     if display_update
