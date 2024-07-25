@@ -64,7 +64,7 @@ S^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N} \\dfrac{R_i^{(k)}(x)}{R_i^{(k)}(x|y
 
 ## Input data
 
-The algorithm is slightly modified from [Grassberger1999](@cite) to allow univariate timeseries as input.
+The algorithm is slightly modified from [Arnhold1999](@cite) to allow univariate timeseries as input.
 
 - If `x` and `y` are [`StateSpaceSet`](@ref)s then use `x` and `y` as is and ignore the parameters
     `dx`/`τx` and `dy`/`τy`.

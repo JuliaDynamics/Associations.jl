@@ -277,7 +277,7 @@ chain of unidirectionally coupled logistic maps.
 
 We'll implement a set of chained logistic maps with unidirectional coupling.
 
-```@example example_LocalPermutationTest_CMIShannon
+```@example example_LocalPermutationTest
 using DynamicalSystemsBase
 Base.@kwdef struct Logistic4Chain{V, RX, RY, RZ, RW, C1, C2, C3, Σ1, Σ2, Σ3, RNG}
     xi::V = [0.1, 0.2, 0.3, 0.4]
@@ -319,7 +319,7 @@ To estimate CMI, we'll use the [`Kraskov`](@ref) differential
 entropy estimator, which naively computes CMI as a sum of entropy terms without guaranteed
 bias cancellation.
 
-```@example example_LocalPermutationTest_CMIShannon
+```@example example_LocalPermutationTest
 using CausalityTools
 using Random; rng = Xoshiro(1234)
 n = 100
@@ -336,7 +336,7 @@ We expect there to be a detectable influence from ``X`` to
 The null hypothesis is that the first two variables are conditionally independent given the third, which we reject with a very low p-value. Hence, we accept the alternative
 hypothesis that the first two variables ``X`` and ``Y``. are conditionally *dependent* given ``Z``.
 
-```@example example_LocalPermutationTest_CMIShannon
+```@example example_LocalPermutationTest
 independence(test, x, z, y)
 ```
 
@@ -354,7 +354,7 @@ We should expect the transfer entropy `X → Z`
 to be non-significant when conditioning on `Y`, because all information from `X` to `Z`
 is transferred through `Y`.
 
-```@example example_LocalPermutationTest_TEShannon
+```@example example_LocalPermutationTest
 using CausalityTools
 using Random; rng = Random.default_rng()
 n = 300
@@ -370,6 +370,6 @@ independent given `Y`.
 
 The same goes for variables one step up the chain:
 
-```@example example_LocalPermutationTest_TEShannon
+```@example example_LocalPermutationTest
 independence(test, y, w, z)
 ```

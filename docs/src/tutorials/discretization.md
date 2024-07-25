@@ -29,7 +29,7 @@ respecting the fact that time ordering is already taken care of by the
 embedding procedure. [`CodifyPoints`](@ref) ensures input data are encoded 
 on a point-by-point basis.
 
-```@example
+```@example example_encode_points
 using CausalityTools
 using StateSpaceSets
 using Random; rng = Xoshiro(1234)
@@ -72,7 +72,7 @@ For example, using [`ValueBinning`](@ref) will encode `N` value into `N` discret
 values. [`CodifyVariables`](@ref) is used to enforce a sliding window encoding on a 
 per-variable basis.
 
-```@example
+```@example example_encode_vars
 using CausalityTools
 using Random; rng = Xoshiro(1234)
 
@@ -83,7 +83,7 @@ cx = codify(CodifyVariables(o), x)
 
 We can verify that [`ValueBinning`](@ref) preserves the cardinality of the input dataset.
 
-```@example
+```@example example_encode_vars
 length(x) == length(cx)
 ```
 
@@ -92,7 +92,7 @@ preserve the cardinality of the input dataset, because when applied in a sliding
 they compress sliding windows consisting of potentially multiple points into single integers. This means that some points at the 
 end of each input variable are lost.
 
-```@example
+```@example example_encode_vars
 using CausalityTools
 using Random; rng = Xoshiro(1234)
 
@@ -104,7 +104,7 @@ cx = codify(CodifyVariables(o), x)
 We can also simultaneously encode each variable/column of a [`StateSpaceSet`](@ref), as long 
 as we apply an encoding that results in the *same* number of encoded data points.
 
-```@example
+```@example example_encode_vars
 using CausalityTools
 using Random; rng = Xoshiro(1234)
 

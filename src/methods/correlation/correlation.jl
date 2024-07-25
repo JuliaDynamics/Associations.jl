@@ -1,3 +1,5 @@
+export CorrelationMeasure
+
 """
     CorrelationMeasure <: AssociationMeasure end
 

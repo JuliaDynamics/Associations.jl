@@ -1,3 +1,5 @@
+export DivergenceOrDistance
+
 """
     DivergenceOrDistance <: BivariateInformationMeasure
 

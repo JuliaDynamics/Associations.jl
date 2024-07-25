@@ -16,8 +16,7 @@ level of meaningful terminology.
 
 To *estimate* a multivariate information measure in practice, you must first specify
 the *definition* of the measure, which is then used as input to an 
-*estimator* of that measure. This estimator is then given to [`information`](@ref), or one 
-of the [convenience methods](@ref convenience_info).
+*estimator* of that measure. This estimator is then given to [`association`](@ref).
 
 !!! note "Naming convention: The same name for different things"
     Upon doing a literature review on the possible variants of information theoretic measures,
@@ -149,7 +148,7 @@ We can also construct a discrete entropy based estimator based on e.g. [`PlugIn`
 estimator of [`Shannon`](@ref) entropy.
 
 ```@example INFO_TUTORIAL
-mini, maxi = minimum([X; Y]), maximum([X; Y])
+mini, maxi = minimum([x; y]), maximum([x; y])
 encoding = RelativeMeanEncoding(mini, maxi, 5)
 disc = CodifyPoints(encoding)
 est_disc = JointProbabilities(MIShannon(base = 2), disc)

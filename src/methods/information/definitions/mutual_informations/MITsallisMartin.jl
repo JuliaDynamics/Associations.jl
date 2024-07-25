@@ -35,7 +35,7 @@ entropies, and `q` is the [`Tsallis`](@ref)-parameter.
 ## Estimation
 
 - [Example 1](@ref example_MITsallisMartin_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) outcome space.
-- [Example 2](@ref example_MITsallisMartin_EntropyDecomposition_LeonenkoProsantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProsantoSavani`](@ref) estimator.
+- [Example 2](@ref example_MITsallisMartin_EntropyDecomposition_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@ref) estimator.
 - [Example 3](@ref example_MITsallisMartin_EntropyDecomposition_OrdinalPatterns): [`EntropyDecomposition`](@ref) with [`OrdinalPatterns`](@ref) outcome space.
 """
 Base.@kwdef struct MITsallisMartin{B, Q} <: MutualInformation

@@ -57,8 +57,7 @@ of these embeddings, as described in [Amigo2018](@citet).
 
 ## Examples
 
-* [Computing the JDD](@ref quickstart_jdd)
-* [Independence testing using JDD](@ref examples_independence_jointdistancedistributiontest)
+- [Independence testing using JDD](@ref examples_independence_JointDistanceDistributionTest)
 """
 Base.@kwdef struct JointDistanceDistribution{M, T} <: ClosenessMeasure
     metric::M = Euclidean()

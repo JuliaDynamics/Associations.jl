@@ -873,7 +873,7 @@ est = JointProbabilities(MITsallisFuruichi(q = 0.3), UniqueElements())
 association(est, x, y) 
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisFuruichi_EntropyDecomposition_LeonenkoProsantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisFuruichi_EntropyDecomposition_LeonenkoProzantoSavani)
 
 ```@example example_MITsallisFuruichi
 using CausalityTools
@@ -914,7 +914,7 @@ est = JointProbabilities(MITsallisMartin(q = 1.5), UniqueElements())
 association(est, x, y) 
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisMartin_EntropyDecomposition_LeonenkoProsantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisMartin_EntropyDecomposition_LeonenkoProzantoSavani)
 
 [`MITsallisMartin`](@ref) can be estimated using a decomposition into entropy 
 terms using [`EntropyDecomposition`](@ref) with any compatible estimator 
@@ -1151,7 +1151,7 @@ association(est, x, z, y)
 ```
 
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenkoProsantoSavani`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani)
 
 ```@example example_CMIRenyiJizba
 using CausalityTools
