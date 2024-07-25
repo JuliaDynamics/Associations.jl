@@ -231,7 +231,10 @@ one type of encoding for the first variable, and another type of encoding for th
 using CausalityTools
 using Random; rng = Xoshiro(1234)
 x, y = rand(rng, 100), rand(rng, 100)
+
 # We must use outcome spaces with the same number of total outcomes.
+# This works becuase these outcome spaces construct embedding points
+# ("windows") in the same way/order; be careful if that isn't the case!
 ox = CosineSimilarityBinning(nbins = factorial(3))
 oy = OrdinalPatterns(m = 3)
 
