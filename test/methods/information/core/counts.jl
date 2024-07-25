@@ -22,7 +22,7 @@ y = [1, 2, 1, 2, 1, 2, 1, 2, 1]
 @test counts(x, y) == counts(UniqueElements(), x, y)
 
 # ----------------------------
-# With `OutcomeSpaces` directly
+# With `Encodings` directly
 # ----------------------------
 
 x = StateSpaceSet(rand(rng, 50, 3))
@@ -55,10 +55,25 @@ d = CodifyPoints(o3, ow)
 # the length of the points. Here, we accidentally mixed the order of the encodings.
 @test_throws ArgumentError counts(CodifyPoints(o3, o2, o3), z, x, y)
 
-# ----------------------------
-# With `Discretizations` directly
-# ----------------------------
 x = StateSpaceSet(rand(rng, 10, 2)); 
 y = StateSpaceSet(rand(rng, 10, 2));
 d_row = CodifyPoints(OrdinalPatternEncoding{2}()); 
 @test counts(d_row, x, y) isa Counts{Int, 2}
+
+
+
+# Multiple outcome spaces with the same cardinality with `CodifyVariables`
+using Test
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y = rand(rng, 100), rand(rng, 100)
+# We must use outcome spaces with the same number of total outcomes.
+ox = CosineSimilarityBinning(nbins = factorial(3))
+oy = OrdinalPatterns(m = 3)
+
+# Now estimate mutual information
+discretization = CodifyVariables((ox, oy))
+@test counts(discretization, x, y) isa Counts{Int, 2}
+
+# must have same number of outcomes
+@test_throws ArgumentError CodifyVariables(OrdinalPatterns(m = 3), OrdinalPatterns(m = 4))

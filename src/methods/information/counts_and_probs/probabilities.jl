@@ -104,8 +104,6 @@ function marginal(p::Probabilities; dims = 1:ndims(p))
    
 end
 
-
-
 # ----------------------------------------------------------------
 # Estimation from data
 # ----------------------------------------------------------------
@@ -124,7 +122,7 @@ end
 
 # Per variable/column
 # ----------------------------------------------------------------
-function probabilities(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
+function probabilities(discretization::CodifyVariables, x::Vararg{ArrayOrStateSpaceSet, N}) where N
     cts = counts(discretization, x...)
     return probabilities(RelativeAmount(), cts)
 end

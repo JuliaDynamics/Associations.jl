@@ -25,7 +25,9 @@ the first argument to directly construct the joint contingency table.
 
 If `x₁, x₂, ..., xₙ` need to be discretized, provide as the first argument
 - [`CodifyPoints`](@ref) (encodes every *point* in each of the input variables `xᵢ`s individually)
-- [`CodifyVariables`](@ref) (encodes every `xᵢ` individually using a sliding window encoding).
+- [`CodifyVariables`](@ref) (encodes every `xᵢ` individually using a sliding window encoding). NB: If 
+    using different [`OutcomeSpace`](@ref)s for the different `xᵢ`, then [`total_outcomes`](@ref) must 
+    be the same for every outcome space.
 
 ## Examples
 
@@ -203,3 +205,15 @@ function counts(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceS
 end
 
 as_vec(x::AbstractStateSpaceSet{1}) = [first(xᵢ) for xᵢ in vec(x)]
+
+
+# TODO: We should formalize this in ComplexityMeasures.jl by constructing 
+# an "EmbeddingBasedOutcomeSpace" that all construct the embedding vectors 
+# in the same way. This is a bit fragile as it is now, because it is not 
+# guaranteed API-wise that embedding vectors are constructed in the same way
+# (although *in practice* all `OutcomeSpace` that use embeddings do so 
+# per v3.6 of ComplexityMeasures.jl).
+function counts(discretization::CodifyVariables{N}, x::Vararg{Any, N}) where N
+    encoded_pts = codify(discretization, x...)
+    return counts(encoded_pts...)
+end

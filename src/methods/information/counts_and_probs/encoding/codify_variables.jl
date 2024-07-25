@@ -53,12 +53,18 @@ struct CodifyVariables{N, E} <: Discretization{N}
     outcome_spaces::NTuple{N, OutcomeSpace}
     function CodifyVariables(outcome_spaces::NTuple{N, OutcomeSpace}) where N
         if N > 1
-            s = "It is currently only possible to use the same `OutcomeSpace` for all " *
-                "variables. Got $N different encodings"
-            throw(ArgumentError(s))
+            n_outs = [total_outcomes(o) for o in outcome_spaces]
+            if !allequal(n_outs)
+                s = "It is currently only possible to use the same `OutcomeSpace` for all " *
+                    "variables. Got $N different encodings"
+                throw(ArgumentError(s))
+            end
         end
         new{N, eltype(outcome_spaces)}(outcome_spaces)
     end
+end
+function CodifyVariables(os...)
+    return CodifyVariables(os)
 end
 
 function CodifyVariables(o::OutcomeSpace)
@@ -112,4 +118,15 @@ end
 
 function codify(encoding::CodifyVariables{1}, x::AbstractStateSpaceSet)
     return codify(encoding, columns(x)...)
+end
+
+# TODO: We should formalize this in ComplexityMeasures.jl by constructing 
+# an "EmbeddingBasedOutcomeSpace" that all construct the embedding vectors 
+# in the same way. This is a bit fragile as it is now, because it is not 
+# guaranteed API-wise that embedding vectors are constructed in the same way
+# (although *in practice* all `OutcomeSpace` that use embeddings do so 
+# per v3.6 of ComplexityMeasures.jl).
+function codify(encoding::CodifyVariables{N}, x::Vararg{Any, N}) where N
+    os = encoding.outcome_spaces
+    return [codify(CodifyVariables(os[i]), x[i]) for i in 1:N]
 end

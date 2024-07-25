@@ -47,3 +47,13 @@ x, y = StateSpaceSet(rand(100, 3)), StateSpaceSet(rand(100, 3))
 cx, cy = codify(CodifyPoints(OrdinalPatternEncoding(3)), x, y)
 @test cx isa Vector{Int}
 @test cy isa Vector{Int}
+
+# Multiple outcome spaces.
+x, y = rand(rng, 100), rand(rng, 100)
+# We must use outcome spaces with the same number of total outcomes.
+ox = CosineSimilarityBinning(nbins = factorial(3))
+oy = OrdinalPatterns(m = 3)
+
+# Now estimate mutual information
+discretization = CodifyVariables((ox, oy))
+@test codify(discretization, x, y) isa Vector{Vector{Int}}

@@ -28,3 +28,16 @@ ow = UniqueElementsEncoding(w)
 # When multiple encodings are provided, then the length of the encoding must match
 # the length of the points. Here, we accidentally mixed the order of the encodings.
 @test_throws ArgumentError probabilities(CodifyPoints(o3, o2, o3), z, x, y)
+
+
+# ----------------------------------------------------------------
+# Multiple outcome spaces with CodifyVariables
+# ----------------------------------------------------------------
+x, y = rand(rng, 100), rand(rng, 100)
+# We must use outcome spaces with the same number of total outcomes.
+ox = CosineSimilarityBinning(nbins = factorial(3))
+oy = OrdinalPatterns(m = 3)
+
+# Now estimate mutual information
+discretization = CodifyVariables((ox, oy))
+@test probabilities(discretization, x, y) isa Probabilities{T, 2} where T

@@ -159,7 +159,7 @@ cx = codify(CodifyVariables(o), x)
 ```
 
 We can simultaneously encode multiple variable/columns of a [`StateSpaceSet`](@ref) using 
-the same outcome sapce, as long as the operation will result in the *same* number of encoded 
+the same outcome space, as long as the operation will result in the *same* number of encoded 
 data points for each column.
 
 ```@example example_encode_vars

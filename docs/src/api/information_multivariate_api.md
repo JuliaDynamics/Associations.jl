@@ -219,3 +219,45 @@ disc = CodifyPoints(encoding)
 est_disc = JointProbabilities(MIShannon(base = 2), disc)
 association(est_disc, x, y)
 ```
+
+### JointProbabilities: fine grained discretization control
+
+
+For numerical data, we can estimate both counts and probabilities using [`CodifyVariables`](@ref)
+with any count-based [`OutcomeSpace`](@ref). Here, we'll estimate [`MIShannon`](@ref) using 
+one type of encoding for the first variable, and another type of encoding for the second variable.
+
+```@example counts_probs_tutorial
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y = rand(rng, 100), rand(rng, 100)
+# We must use outcome spaces with the same number of total outcomes.
+ox = CosineSimilarityBinning(nbins = factorial(3))
+oy = OrdinalPatterns(m = 3)
+
+# Now estimate mutual information
+discretization = CodifyVariables((ox, oy))
+est = JointProbabilities(MIShannon(), discretization)
+association(est, x, y)
+```
+
+For more fine-grained control than [`CodifyVariables`](@ref) can offer, we can use [`CodifyPoints`](@ref) with one or several [`Encoding`](@ref)s. Here's how we can estimate [`MIShannon`](@ref) one multivariate input 
+data by discretizing each input variable in arbitrary ways.
+
+```@example counts_probs_tutorial
+using CausalityTools
+using Random; rng = Xoshiro(1234)
+x, y = StateSpaceSet(rand(rng, 1000, 2)), StateSpaceSet(rand(rng, 1000, 3))
+
+ # min/max of the `rand` call is 0 and 1
+precise = true # precise bin edges
+r = range(0, 1; length = 3)
+binning = FixedRectangularBinning(r, dimension(x), precise)
+encoding_x = RectangularBinEncoding(binning, x)
+encoding_y = CombinationEncoding(RelativeMeanEncoding(0.0, 1, n = 2), OrdinalPatternEncoding(3))
+discretization = CodifyPoints(encoding_x, encoding_y)
+
+# Now estimate mutual information
+est = JointProbabilities(MIShannon(), discretization)
+association(est, x, y)
+```
