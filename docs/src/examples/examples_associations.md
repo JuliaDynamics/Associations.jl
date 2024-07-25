@@ -1,4 +1,4 @@
-# Examples of association measure estimation
+# [Examples of association measure estimation](@id examples_associations)
 
 ## [`HellingerDistance`](@ref)
 
@@ -369,7 +369,7 @@ association(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
 
 ### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@ref)](@id example_MIShannon_EntropyDecomposition_Kraskov)
 
-We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialInfoEstimator`](@extref).
+We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialInfoEstimator`](@ref).
 Note that this doesn't apply any bias correction.
 
 ```@example mi_demonstration
@@ -548,7 +548,7 @@ axislegend(position = :rb)
 fig
 ```
 
-### Estimation using [`DifferentialInfoEstimator`](@extref)s: a comparison
+### Estimation using [`DifferentialInfoEstimator`](@ref)s: a comparison
 
 Let's compare the performance of a subset of the implemented mutual information estimators. We'll use example data from Lord et al., where the analytical mutual information is known.
 
@@ -1095,7 +1095,7 @@ association(est, x, z, y)
 
 ### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@ref)](@id example_CMIShannon_EntropyDecomposition_Kraskov)
 
-Any [`DifferentialInfoEstimator`](@extref) can also be used to compute conditional
+Any [`DifferentialInfoEstimator`](@ref) can also be used to compute conditional
 mutual information using a sum of entropies. For that, we 
 usethe [`EntropyDecomposition`](@ref) estimator. No bias correction is applied for 
 [`EntropyDecomposition`](@ref) either.

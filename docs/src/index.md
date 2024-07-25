@@ -26,7 +26,9 @@ Important changes are:
 - [Independence testing](@ref independence_testing) lists all implemented ways of determining if an association between datasets is "significant".
 - [Causal inference](@ref causal_graphs) lists all methods of inferring association networks
   (also called "network graphs" and "causal graphs") between multiple variables.
-- The [Examples](@ref) page contains numerous examples for association measure estimation, independence testing and network inference.
+- Numerous examples for [association measure estimation](@ref examples_associations), 
+  [independence testing](@ref examples_independence), and 
+  [network inference](@ref examples_network_inference).
 
 
 ## Input data for CausalityTools.jl
@@ -37,13 +39,13 @@ Input data for CausalityTools.jl are given as:
 - Multivariate timeseries, *StateSpaceSets*, or *state space sets*, which are given as
     [`StateSpaceSet`](@ref)s. Many methods convert *timeseries* inputs to [`StateSpaceSet`](@ref)
     for faster internal computations.
-- Categorical data can be used with [`ContingencyMatrix`](@ref) to compute various
+- Categorical data can be used with [`JointProbabilities`](@ref) to compute various
     information theoretic measures and is represented using any iterable whose elements
     can be any arbitrarily complex data type (as long as it's hashable), for example
     `Vector{String}`, `{Vector{Int}}`, or `Vector{Tuple{Int, String}}`.
 
 ```@docs
-StateSpaceSet
+StateSpaceSets.StateSpaceSet
 ```
 
 ## Maintainers and contributors

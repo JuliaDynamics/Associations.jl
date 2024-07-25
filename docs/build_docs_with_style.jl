@@ -58,8 +58,14 @@ links = InterLinks(
                  asset("https://fonts.googleapis.com/css?family=Montserrat|Source+Code+Pro&display=swap", class=:css),
              ],
              collapselevel = 3,
-             size_threshold = 1000 * 5^10, # 200 KiB
-             size_threshold_warn = true,
+             size_threshold = 1250 * 2^10, 
+             size_threshold_warn = 750 * 2^10,
+             example_size_threshold = 100 * 2^10,
+             size_threshold_ignore = [
+                "examples/examples_associations.md", 
+                "examples/examples_independence.md",
+                "examples/examples_infer_graphs.md",
+             ]
          ),
          sitename = "$(modules[1]).jl",
          authors,

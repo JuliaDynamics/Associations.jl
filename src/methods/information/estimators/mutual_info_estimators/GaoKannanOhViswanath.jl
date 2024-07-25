@@ -53,7 +53,7 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
     our implementation demands that all input data are `StateSpaceSet`s whose data points
     are floats. If you have discrete data, such as strings or symbols, encode them using
     integers and convert those integers to floats before passing them to
-    [`mutualinfo`](@ref).
+    [`association`](@ref).
 
 ## Examples
 

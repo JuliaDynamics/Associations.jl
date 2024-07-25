@@ -120,7 +120,7 @@ using CausalityTools
 using StateSpaceSets
 # We'll construct two state space sets, to illustrate how we can discretize 
 # multidimensional inputs using `CodifyPoints`.
-x, y = StateSpaceSet(randn(rng, 1000, 2)), StateSpaceSet(randn(rng, 1000, 2))
+x, y = StateSpaceSet(rand(rng, 1000, 2)), StateSpaceSet(rand(rng, 1000, 2))
 est = KSG1(MIShannon(base = 2), k = 10)
 association(est, x, y)
 ```
@@ -148,8 +148,10 @@ We can also construct a discrete entropy based estimator based on e.g. [`PlugIn`
 estimator of [`Shannon`](@ref) entropy.
 
 ```@example INFO_TUTORIAL
-mini, maxi = minimum([x; y]), maximum([x; y])
-encoding = RelativeMeanEncoding(mini, maxi, 5)
+# We know that `x` and `y` were generated from a uniform distribution above,
+# so we set the minimum and maximum values of the encoding to 0 and 1,
+# respectively.
+encoding = RelativeMeanEncoding(0.0, 1.0; n = 4)
 disc = CodifyPoints(encoding)
 est_disc = JointProbabilities(MIShannon(base = 2), disc)
 association(est_disc, x, y)

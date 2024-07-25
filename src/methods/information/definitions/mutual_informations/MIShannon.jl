@@ -73,7 +73,7 @@ I^S(X; Y) = h^S(X) + h_q^S(Y) - h^S(X, Y),
 
 where ``h^S(\\cdot)`` and ``h^S(\\cdot, \\cdot)`` are the marginal and joint
 differential Shannon entropies. This definition is used by [`association`](@ref) when
-called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialInfoEstimator`](@extref).
+called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialInfoEstimator`](@ref).
 
 ## Estimation
 

@@ -1,4 +1,4 @@
-# Causal graphs
+# [Causal graphs](@id examples_network_inference)
 
 Before introducing the causal graph examples, let's create a function that can plot
 directed graphs that we'll use below.

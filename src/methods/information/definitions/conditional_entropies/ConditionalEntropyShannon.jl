@@ -55,7 +55,7 @@ H^S(X | Y) = h^S(X, Y) - h^S(Y),
 where ``h^S(\\cdot)`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref)
 differential entropy and Shannon joint differential entropy, respectively. This is the
 definition used when calling [`association`](@ref) with a
-[`DifferentialInfoEstimator`](@extref).
+[`DifferentialInfoEstimator`](@ref).
 
 ## Estimation
 

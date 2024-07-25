@@ -127,9 +127,8 @@ according to the algorithm specified by the given cross-map `measure` (e.g.
     predictions `t̂ₛ`, observations `t̄` and their correspondence `ρ` according to `measure`.
 - **Second method**: Returns a vector of predictions `t̂ₛ` (`t̂ₛ` := "predictions of `t̄` based
     on source embedding `S̄`"), where `t̂ₛ[i]` is the prediction for `t̄[i]`. It assumes
-    pre-embedded data which have been correctly time-aligned using a joint embedding
-    (see [`embed`](@ref)), i.e. such that `t̄[i]` and `S̄[i]` correspond to the same time
-    index.
+    pre-embedded data which have been correctly time-aligned using a joint embedding, i.e. 
+    such that `t̄[i]` and `S̄[i]` correspond to the same time index.
 
 ## Description
 

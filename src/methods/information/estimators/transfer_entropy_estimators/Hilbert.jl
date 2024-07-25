@@ -17,7 +17,7 @@ struct Amplitude <: InstantaneousSignalProperty end
 Indicates that the instantaneous phases of a signal should be used. """
 struct Phase <: InstantaneousSignalProperty end
 
-# TODO: update to new syntax
+# TODO: This can be made into a completely generic estimator of any measure. 
 """
     Hilbert(est;
         source::InstantaneousSignalProperty = Phase(),
@@ -30,7 +30,7 @@ obtained by first applying the Hilbert transform to each signal, then extracting
 phases/amplitudes of the resulting complex numbers [Palus2014](@cite). Original time series are
 thus transformed to instantaneous phase/amplitude time series. Transfer
 entropy is then estimated using the provided `est` on those phases/amplitudes (use e.g.
-[`VisitationFrequency`](@ref), or [`OrdinalPatterns`](@ref)).
+[`ValueBinning`](@ref), or [`OrdinalPatterns`](@ref)).
 
 !!! info
     Details on estimation of the transfer entropy (conditional mutual information)

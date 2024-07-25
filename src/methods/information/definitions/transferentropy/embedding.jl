@@ -5,7 +5,7 @@ export EmbeddingTE
     EmbeddingTE(opt::OptimiseTraditional, s, t, [c])
 
 `EmbeddingTE` provide embedding parameters for transfer entropy analysis
-using either [`TEShannon`](@ref), [`TERenyi`](@ref), or in general any subtype
+using either [`TEShannon`](@ref), [`TERenyiJizba`](@ref), or in general any subtype
 of [`TransferEntropy`](@ref).
 
 The second method finds parameters using the ["traditional"](https://juliadynamics.github.io/DynamicalSystems.jl/dev/embedding/traditional/)

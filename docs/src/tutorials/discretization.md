@@ -24,7 +24,7 @@ There are two main ways of discretizing data in CausalityTools.
 In some cases, it may be desireable to encode data on a row-wise basis. This 
 typically happens when working with pre-embedded time series. If we want to 
 apply something like [`OrdinalPatternEncoding`](@ref) to a pre-embedded 
-[`StateSpaceSets.StateStateSpaceSet`](@extref), then we must encode each *point* individually,
+[`StateSpaceSet`](@ref), then we must encode each *point* individually,
 respecting the fact that time ordering is already taken care of by the 
 embedding procedure. [`CodifyPoints`](@ref) ensures input data are encoded 
 on a point-by-point basis.

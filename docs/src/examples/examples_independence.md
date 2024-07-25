@@ -1,11 +1,11 @@
-# Examples of independence testing
+# [Examples of independence testing](@id examples_independence)
 
 
 ## [[`CorrTest`](@ref)](@id example_CorrTest)
 
 ```@example corrtest_example
 using CausalityTools
-using Random; rng = StableRNG(1234)
+using Random; rng = Xoshiro(1234)
 
 # Some normally distributed data
 X = randn(rng, 1000) 
