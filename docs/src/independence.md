@@ -1,3 +1,6 @@
+```@meta
+CollapsedDocStrings = true
+```
 
 # [Independence testing](@id independence_testing)
 

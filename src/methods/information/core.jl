@@ -154,3 +154,15 @@ end
 function size_match(measure::BivariateInformationMeasure, px::Probabilities, py::Probabilities)
     size(px) == size(py) || throw(DimensionMismatch("px and py must have the same size"))
 end
+
+"""
+    information(est::MultivariateInformationMeasureEstimator, x...)
+
+Estimate some [`MultivariateInformationMeasure`](@ref) on input data `x...`,
+using the given [`MultivariateInformationMeasureEstimator`](@ref).
+
+This is just a convenience wrapper around [`association`](@ref)`(est, x...)`.
+"""
+function information(est::MultivariateInformationMeasureEstimator, x...)
+    return association(est, x...)
+end

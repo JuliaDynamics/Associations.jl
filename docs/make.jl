@@ -12,22 +12,28 @@ using StateSpaceSets
 
 pages = [
     "CausalityTools.jl" => "index.md",
-    "Association measures" => "associations.md",
-    "Independence" => "independence.md",
-    "Network/graph inference" => "causal_graphs.md",
+    "Core API reference" => [
+        "Association measures" => "associations.md",
+        "Independence" => "independence.md",
+        "Network/graph inference" => "causal_graphs.md",
+    ],
+    "Extended API reference" => [
+        "api/discretization_counts_probs_api.md",
+        "api/counts_and_probabilities_api.md",
+        "api/information_single_variable_api.md",
+        "api/information_multivariate_api.md",
+        "api/cross_map_api.md",
+    ],
     "Examples" => [
         "Associations" => "examples/examples_associations.md", 
         "Independence testing" => "examples/examples_independence.md",
         "Causal graph inference" => "examples/examples_infer_graphs.md",
     ],
    "Tutorials" => [
-        "Discretization" => "tutorials/discretization.md",
-        "Counts and probabilities" => "tutorials/probabilities_tutorial.md",
         "Information measures" => "tutorials/info_tutorial.md",
      ],
     "References" => "references.md",
 ]
-
 
 # Downloads.download(
 #     "https://raw.githubusercontent.com/JuliaDynamics/doctheme/master/build_docs_with_style.jl",

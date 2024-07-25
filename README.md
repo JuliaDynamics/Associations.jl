@@ -22,9 +22,12 @@ find online or build locally by running the `docs/make.jl` file.
 
 ## Addititional features
 
-- Multivariate probabilities estimation, extending the API from 
-    [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl).
+Extending on features from [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl),
+we also offer 
 
+- Discretization API for multiple (multivariate) input datasets.
+- Multivariate counting and probability estimation API.
+- Multivariate information measure API
 
 ## Installation
 

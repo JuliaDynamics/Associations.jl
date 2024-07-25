@@ -1,13 +1,28 @@
-# [Discretization tutorial](@id extended_example_discretization)
+```@meta
+CollapsedDocStrings = true
+```
 
+# Discretization API
+
+## Encoding multiple input datasets
+
+A fundamental operation when computing multivariate information measures from data is *discretization*. 
 When discretizing, what happens is that we "encode" input data into an intermediate representation indexed by the positive integers. This intermediate representation is called an "encoding". This is useful in several ways:
 
 - Once a dataset has been encoded into integers, we can estimate [`Counts`](@ref) or [`Probabilities`](@ref) ([tutorial](@ref tutorial_probabilities)).
 - Once probabilities have been estimated, one can use these to estimate [`MultivariateInformationMeasure`](@ref) ([tutorial](@ref tutorial_infomeasures)).
 
-## Two ways of encoding input data
+ The following functions and types are used by CausalityTools.jl to perform discretization of input data.
 
-There are two main ways of discretizing data in CausalityTools. 
+```@docs
+Discretization
+CodifyVariables
+CodifyPoints
+codify
+```
+
+In summary, the two main ways of discretizing data in CausalityTools are as follows.
+
 - The [`CodifyPoints`](@ref) discretization scheme encodes input data on a point-by-point 
     basis by applying some [`Encoding`](@ref) to each point.
 - The [`CodifyVariables`](@ref) discretization scheme encodes input data on a column-by-column
@@ -15,19 +30,40 @@ There are two main ways of discretizing data in CausalityTools.
 
 !!! note 
     [`Encoding`](@ref), [`OutcomeSpace`](@ref) and [`codify`](@ref) are all from
-    [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl),
-    but is here used to discretize multiple input variables instead of just one input
+    [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl).
+    In this package, they are used to discretize multiple input variables instead of just one input
     variable.
 
-### [Encoding *rows* (one *point* at a time)](@id tutorial_codify_points)
+
+### Encoding per point/row
 
 In some cases, it may be desireable to encode data on a row-wise basis. This 
-typically happens when working with pre-embedded time series. If we want to 
-apply something like [`OrdinalPatternEncoding`](@ref) to a pre-embedded 
-[`StateSpaceSet`](@ref), then we must encode each *point* individually,
-respecting the fact that time ordering is already taken care of by the 
-embedding procedure. [`CodifyPoints`](@ref) ensures input data are encoded 
-on a point-by-point basis.
+typically happens when working with pre-embedded time series or [`StateSpaceSet`](@ref)s 
+(respecting the fact that time ordering is already taken care of by the 
+embedding procedure). 
+If we want to apply something like [`OrdinalPatternEncoding`](@ref) to such data, then 
+we must encode each *point* individually, such that vectors like `[1.2, 2.4, 4.5]` or 
+`["howdy", "partner"]` gets mapped to an integer. The [`CodifyPoints`](@ref) discretization 
+intstruction ensures input data are encoded on a point-by-point basis.
+
+A point-by-point discretization using [`CodifyPoints`](@ref) is formally done by applying some [`Encoding`](@ref) to each input data point. You can pick between the following encodings, or combine 
+them in arbitrary ways using [`CombinationEncoding`](@ref).
+
+```@docs
+Encoding
+GaussianCDFEncoding
+OrdinalPatternEncoding
+RelativeMeanEncoding
+RelativeFirstDifferenceEncoding
+UniqueElementsEncoding
+RectangularBinEncoding
+CombinationEncoding
+```
+
+#### [Examples: encoding *rows* (one *point* at a time)](@id tutorial_codify_points)
+
+We'll here use the [`OrdinalPatternEncoding`](@ref) with differing parameter `m` to encode 
+multiple [`StateSpaceSet`](@ref) of differing dimensions.
 
 ```@example example_encode_points
 using CausalityTools
@@ -61,16 +97,35 @@ been encoded into integers in the range `1` to `3! = 6`, while the 4-dimensional
 encoded into an even larger range of integers, because the number of possible ordinal patterns
 is `4! = 24` for 4-dimensional embedding vectors.
 
-### Encoding *columns* (one variable at a time)
+### Encoding per variable/column
 
 Sometimes, it may be desireable to encode input data one variable/column at a time.
 This typically happens when the input are either a single or multiple timeseries.
 
-To encode columns, we apply an [`Encoding`](@ref) using a sliding window across each input variable. 
-The width of the window is determined by the chosen encoding.
-For example, using [`ValueBinning`](@ref) will encode `N` value into `N` discretized
-values. [`CodifyVariables`](@ref) is used to enforce a sliding window encoding on a 
-per-variable basis.
+To encode columns, we move a sliding window across each input variable/column and 
+encode points within that window. Formally, such a sliding-window discretization 
+is done by using the [`CodifyVariables`](@ref) discretization scheme, which takes
+as input some [`OutcomeSpace`](@ref) that dictates how each window is encoded, and 
+also dictates the width of the encoding windows. 
+
+For column/variable-wise encoding, you can pick between the following outcome spaces.
+
+```@docs
+OutcomeSpace
+UniqueElements
+CosineSimilarityBinning
+Dispersion
+OrdinalPatterns
+BubbleSortSwaps
+ValueBinning
+RectangularBinning
+FixedRectangularBinning
+```
+
+#### Example: encoding *columns* (one variable at a time)
+
+Some [`OutcomeSpace`](@ref)s dictate a sliding window which has the width of one element
+when used with [`CodifyVariables`](@ref). [`ValueBinning`](@ref) is such an outcome space.
 
 ```@example example_encode_vars
 using CausalityTools
@@ -88,9 +143,11 @@ length(x) == length(cx)
 ```
 
 Other outcome spaces such as [`Dispersion`](@ref) or [`OrdinalPatterns`](@ref) do not 
-preserve the cardinality of the input dataset, because when applied in a sliding window,
-they compress sliding windows consisting of potentially multiple points into single integers. This means that some points at the 
-end of each input variable are lost.
+preserve the cardinality of the input dataset when used with [`CodifyVariables`](@ref). This is 
+because when they are applied in a sliding window, they compress sliding windows consisting of 
+potentially multiple points into single integers. This means that some points at the 
+end of each input variable are lost. For example, with [`OrdinalPatterns`](@ref), the number 
+of encoded points decrease with the embedding parameter `m`.
 
 ```@example example_encode_vars
 using CausalityTools
@@ -101,8 +158,9 @@ o = OrdinalPatterns(m = 3)
 cx = codify(CodifyVariables(o), x)
 ```
 
-We can also simultaneously encode each variable/column of a [`StateSpaceSet`](@ref), as long 
-as we apply an encoding that results in the *same* number of encoded data points.
+We can simultaneously encode multiple variable/columns of a [`StateSpaceSet`](@ref) using 
+the same outcome sapce, as long as the operation will result in the *same* number of encoded 
+data points for each column.
 
 ```@example example_encode_vars
 using CausalityTools

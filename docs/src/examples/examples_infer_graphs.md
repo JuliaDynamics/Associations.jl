@@ -13,6 +13,7 @@ function plotgraph(g; nlabels = repr.(1:nv(g)))
         node_color = :blue,
         node_size = 80,
         arrow_size = 15,
+        figure_padding = 10
     )
     offsets = 0.02 * (p[:node_pos][] .- p[:node_pos][][1])
     offsets[1] = Point2f(0, 0.2)

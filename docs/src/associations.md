@@ -1,7 +1,10 @@
-# Association measures
+```@meta
+CollapsedDocStrings = true
+```
 
-## Associations API
+# Associations
 
+## Association API
 The most basic components of CausalityTools.jl are a collection of statistics that in some manner quantify the "association" between input datasets. Precisely what is meant by "association" depends on the measure, and precisely what is meant by "quantify" depends on the *estimator* of that measure. We formalize this notion below with the [`association`](@ref)
 function, which dispatches on [`AssociationMeasureEstimator`](@ref) and [`AssociationMeasure`](@ref).
 
@@ -12,25 +15,25 @@ AssociationMeasure
 AssociationMeasureEstimator
 ```
 
+Here are some examples of how to use [`association`](@ref).
+
+```@repl
+using CausalityTools
+x, y, z = rand(1000), rand(1000), rand(1000);
+association(LMeasure(), x, y)
+association(DistanceCorrelation(), x, y)
+association(JointProbabilities(JointEntropyShannon(), CodifyVariables(Dispersion(c = 3, m = 2))), x, y)
+association(EntropyDecomposition(MIShannon(), PlugIn(Shannon()), CodifyVariables(OrdinalPatterns(m=3))), x, y)
+association(KSG2(MIShannon(base = 2)), x, y)
+association(JointProbabilities(PartialMutualInformation(), CodifyVariables(OrdinalPatterns(m=3))), x, y, z)
+association(FPVP(CMIShannon(base = 2)), x, y, z)
+```
+
 ## [Information measures](@id information_api)
 
 ```@docs
 MultivariateInformationMeasure
-MultivariateInformationMeasureEstimator
 ```
-
-### Generic information estimators
-
-We provide a set of generic estimators that can be used to calculate 
-potentially several types of information measures.
-
-```@docs
-JointProbabilities
-EntropyDecomposition
-MIDecomposition
-CMIDecomposition
-```
-
 
 ### [Conditional entropies](@id conditional_entropies)
 
@@ -71,17 +74,6 @@ MIRenyiJizba
 MIRenyiSarbu
 ```
 
-### Mutual information estimators
-
-```@docs
-MutualInformationEstimator
-KraskovStögbauerGrassberger1
-KraskovStögbauerGrassberger2
-GaoKannanOhViswanath
-GaoOhViswanath
-GaussianMI
-```
-
 ### Conditional mutual informations
 
 ```@docs
@@ -93,23 +85,6 @@ CMIRenyiPoczos
 CMITsallisPapapetrou
 ```
 
-#### Conditional mutual information estimators
-
-```@docs
-ConditionalMutualInformationEstimator
-GaussianCMI
-FPVP
-MesnerShalizi
-Rahimzamani
-PoczosSchneiderCMI
-```
-
-### Partial mutual information
-
-```@docs
-PartialMutualInformation
-```
-
 ### Transfer entropy
 
 ```@docs
@@ -118,137 +93,18 @@ TEShannon
 TERenyiJizba
 ```
 
-#### Transfer entropy estimators
-
-```@docs
-TransferEntropyEstimator
-Zhu1
-Lindner
-SymbolicTransferEntropy
-Hilbert
-Phase
-Amplitude
-```
-
-
-##### Utilities
+The following utility functions and types are also useful for transfer entropy estimation.
 
 ```@docs
 optimize_marginals_te
 EmbeddingTE
 ```
 
-### Encoding API
 
-A fundamental operation when computing multivariate information measures from data is *discretization*.  The following functions and types are used by CausalityTools.jl to perform discretization of input data.
-
-```@docs
-codify
-Discretization
-```
-
-#### Encoding per variable/column
+### Partial mutual information
 
 ```@docs
-CodifyVariables
-```
-
-The sliding-window discretization is formally done by applying some [`OutcomeSpace`](@ref) to each variable/column. Pick between the following outcome spaces
-
-```@docs
-OutcomeSpace
-UniqueElements
-CosineSimilarityBinning
-Dispersion
-OrdinalPatterns
-BubbleSortSwaps
-ValueBinning
-RectangularBinning
-FixedRectangularBinning
-```
-
-#### Encoding per sample/row
-
-```@docs
-CodifyPoints
-```
-
-```@docs
-Encoding
-GaussianCDFEncoding
-OrdinalPatternEncoding
-RelativeMeanEncoding
-RelativeFirstDifferenceEncoding
-UniqueElementsEncoding
-RectangularBinEncoding
-CombinationEncoding
-```
-
-### [Counts and probabilities](@id counts_and_probabilities_api)
-
-For counting and probabilities, CausalityTools.jl extends the single-variable machinery
-in ComplexityMeasures.jl to multiple variables.
-
-```@docs
-CausalityTools.Counts
-CausalityTools.counts(::OutcomeSpace)
-```
-
-```@docs
-CausalityTools.Probabilities
-CausalityTools.probabilities(::OutcomeSpace)
-```
-
-#### Utility functions
-
-```@docs
-marginal
-```
-
-### Single-variable information API
-
-Below we list some relevant types from
-[ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl) that 
-are used for the [`EntropyDecomposition`](@ref) estimator.
-
-#### Single-variable information measures
-
-```@docs
-Shannon
-Renyi
-Tsallis
-Kaniadakis
-```
-
-#### Discrete information estimators
-
-```@docs
-DiscreteInfoEstimator
-PlugIn
-MillerMadow
-Schuermann
-GeneralizedSchuermann
-Jackknife
-HorvitzThompson
-ChaoShen
-```
-
-#### Differential information estimators
-
-```@docs
-DifferentialInfoEstimator
-Kraskov
-KozachenkoLeonenko
-Zhu
-ZhuSingh
-Gao
-Goria
-Lord
-LeonenkoProzantoSavani
-Vasicek
-AlizadehArghami
-Ebrahimi
-Correa
+PartialMutualInformation
 ```
 
 ## [Correlation measures](@id correlation_api)
@@ -270,73 +126,20 @@ Since their paper, several cross mapping methods and frameworks have emerged in 
 literature. In CausalityTools.jl, we provide a unified interface for using these cross
 mapping methods.
 
-
-### Measures
-
 ```@docs
 CrossmapMeasure
 ConvergentCrossMapping
 PairwiseAsymmetricInference
 ```
 
-### Estimators
-
-```@docs
-CrossmapEstimator
-RandomVectors
-RandomSegment
-ExpandingSegment
-Ensemble
-```
-
-### Advanced utility methods
-
-For most use cases, it is sufficient to provide a [`CrossmapEstimator`](@ref) to 
-[`association`](@ref) to compute a cross map measure. However, in some cases it 
-can be useful to have more fine-grained controls. We offer a few utility functions
-for this purpose.
-
-In the example where we [reproduce Figures 3C and 3D](@ref example_sugihara_figs3Cand3D) of [Sugihara2012](@citet), these lower-level 
-functions are used.
-
-```@docs
-predict
-crossmap
-```
-
 ## [Closeness measures](@id closeness_api)
 
 ```@docs
 ClosenessMeasure
-```
-
-### Joint distance distribution
-
-```@docs
 JointDistanceDistribution
-```
-
-### S-measure
-
-```@docs
 SMeasure
-```
-
-### H-measure
-
-```@docs
 HMeasure
-```
-
-### M-measure
-
-```@docs
 MMeasure
-```
-
-### L-measure
-
-```@docs
 LMeasure
 ```
 

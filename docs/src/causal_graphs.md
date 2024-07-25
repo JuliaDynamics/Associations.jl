@@ -1,3 +1,7 @@
+```@meta
+CollapsedDocStrings = true
+```
+
 # [Inferring causal graphs](@id causal_graphs)
 
 Directed causal graphical models, estimated on observed data, is an incredibly

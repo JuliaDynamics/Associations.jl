@@ -1,3 +1,8 @@
+
+```@meta
+CollapsedDocStrings = true
+```
+
 # CausalityTools.jl
 
 ![CausalityTools.jl static logo](assets/logo-large.png)
@@ -5,6 +10,15 @@
 ```@docs
 CausalityTools
 ```
+
+## Getting started
+
+The quickest way to get going with the package is to check out the examples in the left-hand menu.
+
+!!! info
+    To make it easier to navigate the extensive documentation, all documentation strings are 
+    collapsed by default. Click the arrow icon in 
+    the top toolbar to expand/collapse the docstrings in a page.
 
 ## Latest news
 
@@ -17,8 +31,10 @@ These are done to ensure compatibility with
 Important changes are:
 - Convenience methods have been removed completely. Use [`association`](@ref) instead.
 - Example systems have been removed.
-- The syntax for computing an association has changed. Estimators now always *contain the definition it estimates*. For example, `association(MIShannon(), KSG1(), x, y)` is now `association(KSG1(MIShannon()), x, y)`. 
+- The syntax for computing an association has changed. Estimators now always *contain the definition it estimates*. For example, `association(MIShannon(), KSG1(), x, y)` is now `association(KSG1(MIShannon()), x, y)`.
+- `SurrogateTest` has been renamed to [`SurrogateAssociationTest`](@ref). 
 - See the CHANGELOG.md for a complete list of changes.
+
 
 ## Documentation content 
 
@@ -29,7 +45,6 @@ Important changes are:
 - Numerous examples for [association measure estimation](@ref examples_associations), 
   [independence testing](@ref examples_independence), and 
   [network inference](@ref examples_network_inference).
-
 
 ## Input data for CausalityTools.jl
 

@@ -29,7 +29,8 @@ if each measure was implemented "in isolation".
 
 ## Concrete implementations
 
-Concrete subtypes are given as input to [`association`](@ref).
+Concrete subtypes are given as input to [`association`](@ref). Many of these types require
+an [`AssociationMeasureEstimator`](@ref) to compute.
 
 | Type                       | [`AssociationMeasure`](@ref)                | Pairwise | Conditional |
 | -------------------------- | ------------------------------------------- | :------: | :---------: |
@@ -67,8 +68,6 @@ Concrete subtypes are given as input to [`association`](@ref).
 | Divergence                 | [`KLDivergence`](@ref)                      |    ✓    |     ✖      |
 | Divergence                 | [`RenyiDivergence`](@ref)                   |    ✓    |     ✖      |
 | Divergence                 | [`VariationDistance`](@ref)                 |    ✓    |     ✖      |
-
-See also: [`AssociationMeasureEstimator`](@ref).
 """
 abstract type AssociationMeasure end
 
@@ -135,34 +134,15 @@ Estimate the (conditional) association between input variables `x, y, z, …` us
 the given `estimator` (an [`AssociationMeasureEstimator`](@ref)) or `definition`
 (an [`AssociationMeasure`](@ref)).  
 
-!!! note 
+!!! info
     The type of the return value `r` depends on the `measure`/`estimator`. The *interpretation*
     of the returned value also depends on the specific measure and estimator used.
 
 ## Examples
 
 The [examples](@ref examples_associations) section of the online documentation has numerous 
-using `association`. Below are some examples.
+using `association`.
 
-```julia
-using CausalityTools
-x, y, z = rand(1000), rand(1000), rand(1000)
-
-# Pairwise association with measures requiring no estimator
-association(LMeasure(), x, y)
-association(DistanceCorrelation(), x, y)
-
-# Pairwise association with discrete probabilities estimators
-association(JointProbabilities(JointEntropyShannon(), CodifyVariables(Dispersion(c = 3, m = 2))), x, y)
-association(EntropyDecomposition(MIShannon(), PlugIn(Shannon()), CodifyVariables(OrdinalPatterns(m=3))), x, y)
-
-# Pairwise association with differential probability density estimators
-association(KSG2(MIShannon(base = 2)), x, y)
-
-# Conditional association using different measures
-association(JointProbabilities(PartialMutualInformation(), CodifyVariables(OrdinalPatterns(m=3))), x, y, z)
-association(FPVP(CMIShannon(base = 2)), x, y, z)
-```
 """
 function association(est, x...)
     throw(ArgumentError("`association` not implemented for `est = $est` for this input data"))

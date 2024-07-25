@@ -1,5 +1,26 @@
 
-## [[`Counts`](@ref) and [`Probabilities`](@ref) tutorial](@id tutorial_probabilities)
+# [Multivariate counts and probabilities API](@id counts_and_probabilities_api)
+
+For counting and probabilities, CausalityTools.jl extends the single-variable machinery
+in ComplexityMeasures.jl to multiple variables.
+
+```@docs
+CausalityTools.Counts
+CausalityTools.counts(::OutcomeSpace)
+```
+
+```@docs
+CausalityTools.Probabilities
+CausalityTools.probabilities(::OutcomeSpace)
+```
+
+The utility function [`marginal`](@ref) is also useful.
+
+```@docs
+marginal
+```
+
+## [Example: estimating [`Counts`](@ref) and [`Probabilities`](@ref)](@id tutorial_probabilities)
 
 Estimating multivariate counts (contingency matrices) and PMFs is simple. If the data are pre-discretized, then
 we can use [`UniqueElements`](@ref) to simply count the number of occurrences.
