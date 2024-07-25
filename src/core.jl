@@ -135,28 +135,32 @@ Estimate the (conditional) association between input variables `x, y, z, …` us
 the given `estimator` (an [`AssociationMeasureEstimator`](@ref)) or `definition`
 (an [`AssociationMeasure`](@ref)).  
 
-The type of the return value `r` depends on the `measure`/`estimator`.
+!!! note 
+    The type of the return value `r` depends on the `measure`/`estimator`. The *interpretation*
+    of the returned value also depends on the specific measure and estimator used.
 
 ## Examples
 
-Some [`AssociationMeasure`](@ref)s have no estimators and are given directly.
-For other association measures, you need to provide an [`AssociationMeasureEstimator`](@ref)
- of some kind, which takes the definition as its first argument.
+The [examples](@ref examples_associations) section of the online documentation has numerous 
+using `association`. Below are some examples.
 
 ```julia
 using CausalityTools
 x, y, z = rand(1000), rand(1000), rand(1000)
 
-# Pairwise association using different measures
+# Pairwise association with measures requiring no estimator
+association(LMeasure(), x, y)
 association(DistanceCorrelation(), x, y)
-association(PartialCorrelation(), x, y)
-association(JointProbabilities(ConditionalEntropyTsallisAbe(), ValueBinning(3)), x, y)
-association(JointProbabilities(JointEntropyShannon(), Dispersion(c = 3, m = 2)), x, y)
-association(EntropyDecomposition(MIShannon(), PlugIn(Shannon()), OrdinalPatterns(m=3)), x, y)
+
+# Pairwise association with discrete probabilities estimators
+association(JointProbabilities(JointEntropyShannon(), CodifyVariables(Dispersion(c = 3, m = 2))), x, y)
+association(EntropyDecomposition(MIShannon(), PlugIn(Shannon()), CodifyVariables(OrdinalPatterns(m=3))), x, y)
+
+# Pairwise association with differential probability density estimators
 association(KSG2(MIShannon(base = 2)), x, y)
 
 # Conditional association using different measures
-association(JointProbabilities(PartialMutualInformation(), OrdinalPatterns(m=3)), x, y, z)
+association(JointProbabilities(PartialMutualInformation(), CodifyVariables(OrdinalPatterns(m=3))), x, y, z)
 association(FPVP(CMIShannon(base = 2)), x, y, z)
 ```
 """

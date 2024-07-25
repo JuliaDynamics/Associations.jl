@@ -16,7 +16,7 @@ information
 
 ```@docs
 OutcomeSpace
-DiscreteInfoEstimator
-DifferentialInfoEstimator
+RectangularBinning
+FixedRectangularBinning
 ```
 

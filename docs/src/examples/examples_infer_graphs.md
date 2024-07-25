@@ -24,9 +24,8 @@ function plotgraph(g; nlabels = repr.(1:nv(g)))
     return f
 end
 ```
-## Example data
 
-We'll implement a set of chained logistic maps with unidirectional coupling.
+We'll also implement a set of chained logistic maps with unidirectional coupling.
 
 ```@example graph_examples
 using DynamicalSystemsBase
@@ -150,6 +149,8 @@ with the Shannon mutual information [`MIShannon`](@ref) measure and the
 and the [`MesnerShalizi`](@ref).
 
 ```@example graph_examples
+using CausalityTools
+using StableRNGs
 rng = StableRNG(123)
 
 # Use fewer observations, because MI/CMI takes longer to estimate
