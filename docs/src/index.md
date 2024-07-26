@@ -38,7 +38,7 @@ Important changes are:
 
 ## Documentation content 
 
-- [Association measures](@ref) lists all implemented association measures and their estimators.
+- [Association measures](@ref association_measures) lists all implemented association measures and their estimators.
 - [Independence testing](@ref independence_testing) lists all implemented ways of determining if an association between datasets is "significant".
 - [Causal inference](@ref causal_graphs) lists all methods of inferring association networks
   (also called "network graphs" and "causal graphs") between multiple variables.
