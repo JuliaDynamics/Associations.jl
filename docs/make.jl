@@ -29,9 +29,6 @@ pages = [
         "Independence testing" => "examples/examples_independence.md",
         "Causal graph inference" => "examples/examples_infer_graphs.md",
     ],
-   "Tutorials" => [
-        "Information measures" => "tutorials/info_tutorial.md",
-     ],
     "References" => "references.md",
 ]
 
