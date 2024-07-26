@@ -1,6 +1,7 @@
 export CorrTest
 export CorrTestResult
-
+using Distributions: Normal
+using StateSpaceSets
 import HypothesisTests: pvalue
 
 # Note: HypothesisTests already defines CorrelationTest.
@@ -12,8 +13,8 @@ import HypothesisTests: pvalue
     CorrTest()
 
 An independence test based correlation (for two variables) and partial
-correlation (for three variables) ([Levy1978](@citet)@; as described in
-[Schmidt2018](@citet)).
+correlation (for three variables) [Levy1978](@cite); as described in
+[Schmidt2018](@citet).
 
 Uses [`PearsonCorrelation`](@ref) and [`PartialCorrelation`](@ref) internally.
 
@@ -49,7 +50,8 @@ For the pairwise case, the procedure is identical, but set ``\\bf{Z} = \\emptyse
 
 ## Examples
 
-- [`CorrTest`for independence between normally distributed data](@ref examples_corrtest).
+- [Example 1](@ref example_CorrTest). Pairwise and conditional tests for independence
+    on coupled noise processes.
 """
 Base.@kwdef struct CorrTest{M} <: IndependenceTest{M}
     measure::M = nothing
@@ -96,10 +98,10 @@ function Base.show(io::IO, test::CorrTestResult)
         )
 end
 
-const VectorOr1D{D} = Union{AbstractVector, AbstractDataset{D}} where D
-function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrStateSpaceSet...)
+const VectorOr1DStateSpaceSet = Union{AbstractVector, AbstractStateSpaceSet{1}}
+function independence(test::CorrTest, x::VectorOr1DStateSpaceSet, y::VectorOr1DStateSpaceSet, z::ArrayOrStateSpaceSet...)
     if isempty(z)
-        ρ = estimate(PearsonCorrelation(), x, y)
+        ρ = association(PearsonCorrelation(), x, y)
         z = fishers_z(ρ)
         pval = pvalue(test, z, 0, length(x))
         return CorrTestResult(ρ, z, pval)
@@ -108,8 +110,8 @@ function independence(test::CorrTest, x::VectorOr1D, y::VectorOr1D, z::ArrayOrSt
         # redundant, but we need the dimension of Z, so some code duplication occurs here.
         X, Y, Z = construct_partialcor_datasets(x, y, z...)
         D = StateSpaceSet(X, Y, Z)
-        cov = fastcov(D)
-        precision_matrix = invert_cov(cov)
+        cov_matrix = cov(D)
+        precision_matrix = invert_cov(cov_matrix)
         ρ = partial_correlation_from_precision(precision_matrix, 1, 2)
         z = fishers_z(ρ)
         pval = pvalue(test, z, dimension(Z), length(x))

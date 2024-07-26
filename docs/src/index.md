@@ -1,55 +1,67 @@
+
+```@meta
+CollapsedDocStrings = true
+```
+
+# CausalityTools.jl
+
 ![CausalityTools.jl static logo](assets/logo-large.png)
 
 ```@docs
 CausalityTools
 ```
 
-## Goals
+## Getting started
 
-Causal inference, and quantification of association in general, is fundamental to
-most scientific disciplines. There exists a multitude of bivariate and multivariate
-association measures in the scientific literature. However, beyond the most basic measures,
-most methods aren't readily available for practical use. Most scientific papers don't
-provide code, which makes reproducing them difficult or impossible, without
-investing significant time and resources into deciphering and understanding the original
-papers to the point where an implementation is possible. To make reliable inferences,
-proper independence tests are also crucial.
+The quickest way to get going with the package is to check out the examples in the left-hand menu.
 
-Our main goal with this package is to provide an easily extendible library of
-association measures, a as-complete-as-possible set of their estimators.
-We also want to lower the entry-point to the field of association
-quantification, independence testing and causal inference, by providing well-documented
-implementations of literature methods with runnable code examples.
+!!! info
+    To make it easier to navigate the extensive documentation, all documentation strings are 
+    collapsed by default. Click the arrow icon in 
+    the top toolbar to expand/collapse the docstrings in a page.
 
-The core function for quantifying associations is [`independence`](@ref),
-which performs either a parametric or nonparametric (conditional)
-[`IndependenceTest`](@ref) using some form of
-[association measure](@ref association_measure). These tests, in turn, can be
-used with some [`GraphAlgorithm`](@ref) and [`infer_graph`](@ref) to infer causal graphs.
+## Latest news
 
-## Input data
+CausalityTools.jl has been updated to v3!
 
-Input data for CausalityTools are given as:
+This update includes a number of breaking changes, several of which are *not* backwards compatible.
+These are done to ensure compatibility with 
+[ComplexityMeasures.jl v3](https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/), which provides discretization functionality that we use here.
+
+Important changes are:
+- Convenience methods have been removed completely. Use [`association`](@ref) instead.
+- Example systems have been removed.
+- The syntax for computing an association has changed. Estimators now always *contain the definition it estimates*. For example, `association(MIShannon(), KSG1(), x, y)` is now `association(KSG1(MIShannon()), x, y)`.
+- `SurrogateTest` has been renamed to [`SurrogateAssociationTest`](@ref). 
+- See the CHANGELOG.md for a complete list of changes.
+
+
+## Documentation content 
+
+- [Association measures](@ref association_measures) lists all implemented association measures and their estimators.
+- [Independence testing](@ref independence_testing) lists all implemented ways of determining if an association between datasets is "significant".
+- [Causal inference](@ref causal_graphs) lists all methods of inferring association networks
+  (also called "network graphs" and "causal graphs") between multiple variables.
+- Numerous examples for [association measure estimation](@ref examples_associations), 
+  [independence testing](@ref examples_independence), and 
+  [network inference](@ref examples_network_inference).
+
+## Input data for CausalityTools.jl
+
+Input data for CausalityTools.jl are given as:
 
 - Univariate *timeseries*, which are given as standard Julia `Vector`s.
 - Multivariate timeseries, *StateSpaceSets*, or *state space sets*, which are given as
     [`StateSpaceSet`](@ref)s. Many methods convert *timeseries* inputs to [`StateSpaceSet`](@ref)
     for faster internal computations.
-- Categorical data can be used with [`ContingencyMatrix`](@ref) to compute various
+- Categorical data can be used with [`JointProbabilities`](@ref) to compute various
     information theoretic measures and is represented using any iterable whose elements
     can be any arbitrarily complex data type (as long as it's hashable), for example
     `Vector{String}`, `{Vector{Int}}`, or `Vector{Tuple{Int, String}}`.
 
 ```@docs
-StateSpaceSet
+StateSpaceSets.StateSpaceSet
 ```
-
-## Pull requests and issues
-
-This package has been and is under heavy development. Don't hesitate to submit an
-issue if you find something that doesn't work or doesn't make sense, or if there's
-some functionality that you're missing.
-Pull requests are also very welcome!
 
 ## Maintainers and contributors
 
@@ -77,9 +89,3 @@ important contributions are:
 Many individuals has contributed code to other packages
 in the [JuliaDynamics](https://juliadynamics.github.io/JuliaDynamics/) ecosystem which
 we use here. Contributors are listed in the respective GitHub repos and webpages.
-
-## Related packages
-
-- [TransferEntropy.jl](https://github.com/JuliaDynamics/TransferEntropy.jl) previously
-    provided mutual infromation and transfer entropy estimators. These have been
-    re-implemented from scratch and moved here.

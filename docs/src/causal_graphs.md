@@ -1,3 +1,7 @@
+```@meta
+CollapsedDocStrings = true
+```
+
 # [Inferring causal graphs](@id causal_graphs)
 
 Directed causal graphical models, estimated on observed data, is an incredibly
@@ -26,7 +30,7 @@ infer_graph
 GraphAlgorithm
 ```
 
-## [Optimal causation entropy](@ref)
+## [Optimal causation entropy](@id docs_OCE)
 
 ```@docs
 OCE

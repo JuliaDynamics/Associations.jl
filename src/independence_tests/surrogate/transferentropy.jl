@@ -20,43 +20,30 @@ function marginals_and_surrogenerator(opt::OptimiseTraditional, surrogate::Surro
     return Ŝ, T⁺, S, T, C
 end
 
-function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingTypes}}, x::AbstractVector...) where {E}
-    (; measure, est, rng, surrogate, nshuffles) = test
+function independence(test::SurrogateAssociationTest{<:EntropyDecomposition{<:TransferEntropy}}, x, args...)
+    (; est_or_measure, rng, surrogate, nshuffles) = test
+    embedding = est_or_measure.definition.embedding
 
-    cmi = te_to_cmi(measure)
-    Ŝ, T⁺, S, T, C = marginals_and_surrogenerator(measure.embedding, surrogate, x...; rng)
+    cmi_est = convert_to_cmi_estimator(est_or_measure)
+    Ŝ, T⁺, S, T, C = marginals_and_surrogenerator(embedding, surrogate, x, args...; rng)
     TC = StateSpaceSet(T, C)
     @assert length(T⁺) == length(S) == length(TC)
-    Î = estimate(cmi, est, T⁺, S, TC)
+    Î = association(cmi_est, T⁺, S, TC)
     Îs = zeros(nshuffles)
     for b in 1:nshuffles
         # TE(ŝ -> t) := I(t⁺; ŝ⁻ | t⁻, c⁻)
-        Îs[b] = estimate(cmi, est, T⁺, Ŝ(), TC)
+        Îs[b] = association(cmi_est, T⁺, Ŝ(), TC)
     end
     p = count(Î .<= Îs) / nshuffles
 
-    return SurrogateTestResult(length(x), Î, Îs, p, nshuffles)
+    return SurrogateAssociationTestResult(length(x), Î, Îs, p, nshuffles)
 end
 
-function independence(test::SurrogateTest{<:TransferEntropy{<:E, <:EmbeddingTypes}, <:TransferEntropyEstimator}, x::AbstractVector...) where {E}
-    (; measure, est, rng, surrogate, nshuffles) = test
 
-    Ŝ, T⁺, S, T, C = marginals_and_surrogenerator(measure.embedding, surrogate, x...; rng)
-    @assert length(T⁺) == length(S) == length(T) == length(C)
-    Î = estimate(measure, est, S, T, T⁺, C)
-    Îs = zeros(nshuffles)
-    for b in 1:nshuffles
-        # TE(ŝ -> t) := I(t⁺; ŝ⁻ | t⁻, c⁻)
-        Îs[b] = estimate(measure, est, StateSpaceSet(Ŝ()), T, T⁺, C)
-    end
-    p = count(Î .<= Îs) / nshuffles
-
-    return SurrogateTestResult(length(x), Î, Îs, p, nshuffles)
-end
-
-function SurrogateTest(measure::TEShannon, est::Nothing, args...; kwargs...)
-    txt = "A valid estimator must be provided as second argument to `SurrogateTest` " *
-        "when using the `TEShannon` measure.\n" *
-        "Do e.g. SurrogateTest(TEShannon(), FPVP())"
-    throw(ArgumentError(txt))
+function SurrogateAssociationTest(est::T) where T <: TransferEntropy
+    str = "`SurrogateAssociationTest` can't be constructed using `$T` definition directly. " * 
+        "Give a valid estimator as the first argument instead and give the " * 
+        "definition to the estimator, e.g. " * 
+        "Lindner(TEShannon()), or CMIDecomposition(TEShannon())"
+    throw(ArgumentError(str))
 end

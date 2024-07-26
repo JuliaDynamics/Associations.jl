@@ -6,7 +6,7 @@ export OCESelectedParents
 
 """
     OCE <: GraphAlgorithm
-    OCE(; utest::IndependenceTest = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3)),
+    OCE(; utest::IndependenceTest = SurrogateAssociationTest(MIShannon(), KSG2(k = 3, w = 3)),
           ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3)),
           τmax::T = 1, α = 0.05)
 
@@ -44,7 +44,7 @@ Input data must either be a `Vector{Vector{<:Real}}`, or a `StateSpaceSet`.
 - [Inferring time series graph from a chain of logistic maps](@ref oce_example)
 """
 Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
-    utest::U = SurrogateTest(MIShannon(), KSG2(k = 3, w = 3), nshuffles = 100)
+    utest::U = SurrogateAssociationTest(MIShannon(), KSG2(k = 3, w = 3), nshuffles = 100)
     ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3), nshuffles = 100)
     τmax::T = 1
     α = 0.05
@@ -204,13 +204,13 @@ end
 # that `P` is always conditioned on when relevant. The two functions are returned.
 function rawmeasure_and_independencetest(alg, parents::OCESelectedParents)
     if pairwise_test(parents)
-        measure, est = alg.utest.measure, alg.utest.est
-        compute_raw_measure = (xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ)
+        est_or_measure = alg.utest.est_or_measure
+        compute_raw_measure = (xᵢ, Pⱼ) -> association(est_or_measure, xᵢ, Pⱼ)
         test_independence = (xᵢ, Pix) -> independence(alg.utest, xᵢ, Pix)
     else
-        measure, est = alg.ctest.measure, alg.ctest.est
+        est_or_measure = alg.ctest.est_or_measure
         P = StateSpaceSet(parents.parents...)
-        compute_raw_measure = (xᵢ, Pⱼ) -> estimate(measure, est, xᵢ, Pⱼ, P)
+        compute_raw_measure = (xᵢ, Pⱼ) -> association(est_or_measure, xᵢ, Pⱼ, P)
         test_independence = (xᵢ, Pix) -> independence(alg.ctest, xᵢ, Pix, P)
     end
     return compute_raw_measure, test_independence

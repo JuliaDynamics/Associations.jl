@@ -27,6 +27,6 @@ function fishers_z(p̂)
 end
 
 include("JointDistanceDistributionTest.jl")
-include("PredictiveAsymmetryTest.jl")
-include("PATest.jl")
+#include("PredictiveAsymmetryTest.jl")
+#include("PATest.jl")
 include("CorrTest.jl")

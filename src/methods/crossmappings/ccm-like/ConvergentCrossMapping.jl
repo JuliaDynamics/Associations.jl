@@ -8,12 +8,23 @@ export ConvergentCrossMapping, CCM
     ConvergentCrossMapping(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The convergent [cross mapping](@ref cross_mapping_api) (CCM) measure [Sugihara2012](@cite)).
+The convergent cross mapping measure [Sugihara2012](@cite).
 
-Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
-with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
-temporal neighbors are excluded during neighbor searches (`w = 0` means that only the
-point itself is excluded).
+## Usage
+
+- Use with [`association`](@ref) together with a [`CrossmapEstimator`](@ref) to compute the 
+    cross-map correlation between input variables.
+
+## Compatible estimators
+
+- [`RandomSegment`](@ref)
+- [`RandomVectors`](@ref)
+- [`ExpandingSegment`](@ref)
+
+## Description
+
+The Theiler window `w` controls how many temporal neighbors are excluded during neighbor 
+searches (`w = 0` means that only the point itself is excluded).
 `f` is a function that computes the agreement between observations and
 predictions (the default, `f = Statistics.cor`, gives the Pearson correlation
 coefficient).
@@ -35,6 +46,15 @@ With this convention, `τ < 0` implies "past/present values of source used to pr
 target", and `τ > 0` implies "future/present values of source used to predict target".
 The latter case may not be meaningful for many applications, so by default, a warning
 will be given if `τ > 0` (`embed_warn = false` turns off warnings).
+
+## Estimation
+
+- [Example 1](@ref example_ConvergentCrossMapping_RandomVectors). 
+    Estimation with [`RandomVectors`](@ref) estimator.
+- [Example 2](@ref example_ConvergentCrossMapping_RandomSegment). 
+    Estimation with [`RandomSegment`](@ref) estimator.
+- [Example 3](@ref example_ConvergentCrossMapping_reproducing_sugihara): Reproducing 
+    figures from [Sugihara2012](@citet).
 """
 Base.@kwdef struct ConvergentCrossMapping <: CrossmapMeasure
     d::Int = 2
@@ -45,14 +65,14 @@ Base.@kwdef struct ConvergentCrossMapping <: CrossmapMeasure
 end
 const CCM = ConvergentCrossMapping
 
-n_neighbors_simplex(measure::ConvergentCrossMapping) = measure.d + 1
-max_segmentlength(measure::ConvergentCrossMapping, x::AbstractVector) =
-    length(x) - measure.d + 1
+n_neighbors_simplex(definition::ConvergentCrossMapping) = definition.d + 1
+max_segmentlength(definition::ConvergentCrossMapping, x::AbstractVector) =
+    length(x) - definition.d + 1
 # TODO: version that takes into consideration prediction lag
 
-function embed(measure::ConvergentCrossMapping, t::AbstractVector, s::AbstractVector)
-    (; d, τ, w, f) = measure
-    if τ > 0 && measure.embed_warn
+function embed(definition::ConvergentCrossMapping, t::AbstractVector, s::AbstractVector)
+    (; d, τ, w, f) = definition
+    if τ > 0 && definition.embed_warn
         @warn """τ > 0. You're using future values of source to predict the target. Turn \
         off this warning by setting `embed_warn = false` in the \
         `PairwiseAsymmetricInference` constructor."""

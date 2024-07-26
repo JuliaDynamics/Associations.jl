@@ -2,21 +2,32 @@ import DelayEmbeddings: embed
 using Statistics: cor
 
 export PairwiseAsymmetricInference, PAI
+
 """
     PairwiseAsymmetricInference <: CrossmapMeasure
     PairwiseAsymmetricInference(; d::Int = 2, τ::Int = -1, w::Int = 0,
         f = Statistics.cor, embed_warn = true)
 
-The pairwise asymmetric inference (PAI) [cross mapping](@ref cross_mapping_api)
-measure [McCracken2014](@cite)) is a version of
-[`ConvergentCrossMapping`](@ref) that searches for neighbors in
+The pairwise asymmetric inference (PAI) measure [McCracken2014](@cite)
+is a version of [`ConvergentCrossMapping`](@ref) that searches for neighbors in
 *mixed* embeddings (i.e. both source and target variables included); otherwise, the
 algorithms are identical.
 
-Specifies embedding dimension `d`, embedding lag `τ` to be used, as described below,
-with [`predict`](@ref) or [`crossmap`](@ref). The Theiler window `w` controls how many
-temporal neighbors are excluded during neighbor searches (`w = 0` means that only the
-point itself is excluded).
+## Usage
+
+- Use with [`association`](@ref) to compute the pairwise asymmetric inference measure 
+    between variables.
+
+## Compatible estimators
+
+- [`RandomSegment`](@ref)
+- [`RandomVectors`](@ref)
+- [`ExpandingSegment`](@ref)
+
+## Description
+
+The Theiler window `w` controls how many temporal neighbors are excluded during neighbor 
+searches (`w = 0` means that only the point itself is excluded).
 `f` is a function that computes the agreement between observations and
 predictions (the default, `f = Statistics.cor`, gives the Pearson correlation
 coefficient).
@@ -41,6 +52,15 @@ With this convention, `τ < 0` implies "past/present values of source used to pr
 target", and `τ > 0` implies "future/present values of source used to predict target".
 The latter case may not be meaningful for many applications, so by default, a warning
 will be given if `τ > 0` (`embed_warn = false` turns off warnings).
+
+## Estimation
+
+- [Example 1](@ref example_PairwiseAsymmetricInference_RandomVectors). 
+    Estimation with [`RandomVectors`](@ref) estimator.
+- [Example 2](@ref example_PairwiseAsymmetricInference_RandomSegment). 
+    Estimation with [`RandomSegment`](@ref) estimator.
+- [Example 3](@ref example_PairwiseAsymmetricInference_reproduce_mccracken). Reproducing 
+    McCracken & Weigel's results from the original paper.
 """
 Base.@kwdef struct PairwiseAsymmetricInference <: CrossmapMeasure
     d::Int = 2
@@ -51,16 +71,16 @@ Base.@kwdef struct PairwiseAsymmetricInference <: CrossmapMeasure
 end
 const PAI = PairwiseAsymmetricInference
 
-n_neighbors_simplex(measure::PairwiseAsymmetricInference) =
-    (measure.d + 1) + 1 # one extra coordinate included, due to the inclusion of the target.
-max_segmentlength(measure::PairwiseAsymmetricInference, x::AbstractVector) =
-    length(x) - measure.d + 1
+n_neighbors_simplex(definition::PairwiseAsymmetricInference) =
+    (definition.d + 1) + 1 # one extra coordinate included, due to the inclusion of the target.
+max_segmentlength(definition::PairwiseAsymmetricInference, x::AbstractVector) =
+    length(x) - definition.d + 1
 # TODO: version that takes into consideration prediction lag
 
-function embed(measure::PairwiseAsymmetricInference, t::AbstractVector, s::AbstractVector)
-    (; d, τ, w) = measure
+function embed(definition::PairwiseAsymmetricInference, t::AbstractVector, s::AbstractVector)
+    (; d, τ, w) = definition
     @assert τ != 0
-    if τ > 0 && measure.embed_warn
+    if τ > 0 && definition.embed_warn
         @warn """τ > 0. You're using future values of source to predict the target. Turn \
         off this warning by setting `embed_warn = false` in the \
         `PairwiseAsymmetricInference` constructor."""
@@ -70,7 +90,7 @@ function embed(measure::PairwiseAsymmetricInference, t::AbstractVector, s::Abstr
     # - Positive τ := embedding vectors (s(i), t(i), t(i+1), ...), "future predicts present"
     τs = [0; reverse(range(start=0, step=τ, stop=(d-1)*τ))]
     js = [2; repeat([1], d)]
-    idxs_S̄ = 1:measure.d
-    idx_t̄ = measure.d + 1 # column index of time series to be predict
+    idxs_S̄ = 1:definition.d
+    idx_t̄ = definition.d + 1 # column index of time series to be predict
     return genembed(StateSpaceSet(t, s), τs, js), idx_t̄, idxs_S̄
 end

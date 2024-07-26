@@ -138,7 +138,6 @@ function rule2!(alg::PC, dg::SimpleDiGraph; verbose = false)
         # Find incoming neighbors `Xs` that form a chain `X → Y → Z`
         Xs_Zadjacent = filter(x -> is_directed(dg, x, Y) && adjacent(dg, x, Z), inneighbors(dg, Y))
         for X in Xs_Zadjacent
-            @show X, Y, Z
             rem_edge!(dg, Z, X)
             n_removed += 1
             verbose && println("  (Rule 2) Oriented X → Y → Z ↔ X as X → Y → Z ← X")

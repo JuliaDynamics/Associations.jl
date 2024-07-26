@@ -15,10 +15,10 @@ which is implemented as described in [Kalisch2008](@citet).
 
 - **`pairwise_test`**: An [`IndependenceTest`](@ref) that uses a pairwise,
     nondirectional [`AssociationMeasure`](@ref) measure (e.g. a parametric
-    [`CorrTest`](@ref), or [`SurrogateTest`](@ref) with the [`MIShannon`](@ref) measure).
+    [`CorrTest`](@ref), or [`SurrogateAssociationTest`](@ref) with the [`MIShannon`](@ref) measure).
 - **`conditional_test`**: An [`IndependenceTest`](@ref) that uses a conditional,
     nondirectional [`AssociationMeasure`](@ref) (e.g. [`CorrTest`](@ref),
-    or [`SurrogateTest`](@ref) with the [`CMIShannon`](@ref) measure).
+    or [`SurrogateAssociationTest`](@ref) with the [`CMIShannon`](@ref) measure).
 
 ## Keyword arguments
 
@@ -92,17 +92,15 @@ struct PC{U, C, A, N, MO} <: GraphAlgorithm
     α::A
     maxdepth::N
     maxiters_orient::MO
+end
 
-    function PC(
-            pairwise_test,
-            conditional_test;
-            α::A = 0.05, maxdepth::N = Inf,
-            maxiters_orient::MO = Inf) where {A, N, MO}
-        0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
-        U = typeof(pairwise_test)
-        C = typeof(conditional_test)
-        new{U, C, A, N, MO}(pairwise_test, conditional_test, α, maxdepth, maxiters_orient)
-    end
+ function PC(
+        pairwise_test,
+        conditional_test;
+        α::A = 0.05, maxdepth::N = Inf,
+        maxiters_orient::MO = Inf) where {A, N, MO}
+    0 < α < 1 || throw(ArgumentError("α must be on `(0, 1)`. α = 0.05 is commonly used"))
+    PC(pairwise_test, conditional_test, α, maxdepth, maxiters_orient)
 end
 
 include("skeleton.jl")
@@ -119,9 +117,10 @@ end
 function check_input(alg::PC)
     u = alg.pairwise_test
     c = alg.conditional_test
-    if u.measure isa DirectedAssociationMeasure || c.measure isa DirectedAssociationMeasure
-        s = "Directional measures will not give meaningful answers. See PC docstring"*
-            " for more information."
-        throw(ArgumentError(s))
-    end
+    # TODO: implement is_directed for all measures
+    # if u.measure isa DirectedAssociationMeasure || c.measure isa DirectedAssociationMeasure
+    #     s = "Directional measures will not give meaningful answers. See PC docstring"*
+    #         " for more information."
+    #     throw(ArgumentError(s))
+    # end
 end

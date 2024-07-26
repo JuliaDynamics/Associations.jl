@@ -1,5 +1,4 @@
 export PearsonCorrelation
-export pearson_correlation
 
 """
     PearsonCorrelation
@@ -8,8 +7,9 @@ The Pearson correlation of two variables.
 
 ## Usage
 
-- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence.
-- Use with [`pearson_correlation`](@ref) to compute the raw correlation coefficient.
+- Use with [`association`](@ref) to compute the raw Pearson correlation coefficient.
+- Use with [`independence`](@ref) to perform a formal hypothesis test for pairwise dependence
+    using the Pearson correlation coefficient.
 
 ## Description
 
@@ -24,20 +24,10 @@ for real-valued random variables ``X`` and ``Y`` with associated samples
 where ``\\bar{x}`` and ``\\bar{y}`` are the means of the observations ``x_k`` and ``y_k``,
 respectively.
 """
-struct PearsonCorrelation <: AssociationMeasure end
-
-"""
-    pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`PearsonCorrelation`](@ref) between `x` and `y`, which must each be
-1-dimensional.
-"""
-function pearson_correlation(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(PearsonCorrelation(), x, y)
-end
+struct PearsonCorrelation <: CorrelationMeasure end
 
 # Common interface for higher-level methods.
-function estimate(measure::PearsonCorrelation,
+function association(measure::PearsonCorrelation,
         x::VectorOrStateSpaceSet{1, T},
         y::VectorOrStateSpaceSet{1, T}) where T
     Lx, Ly = length(x), length(y)
@@ -54,10 +44,6 @@ function estimate(measure::PearsonCorrelation,
     )
     ρ = num / den
     return ρ
-end
-
-function estimate(measure::PearsonCorrelation, est::Nothing, x, y)
-    return estimate(measure, x, y)
 end
 
 # Silly, but 1-dimensional StateSpaceSets needs special indexing (because each point is a vector,

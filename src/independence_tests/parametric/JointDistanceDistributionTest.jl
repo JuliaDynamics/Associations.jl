@@ -28,12 +28,13 @@ to check mean of `Δ` is skewed towards positive value, i.e.
 * ``H_1 := \\mu(\\Delta) > 0``.
 
 When used with [`independence`](@ref), a `JDDTestResult` is returned, which contains
-the joint distance distribution and a p-value. If you only need `Δ`, use [`jdd`](@ref) directly.
+the joint distance distribution and a p-value. If you only need `Δ`, use [`association`](@ref) 
+with a [`JointDistanceDistribution`](@ref) instance directly.
 
 ## Examples
 
-[This example](@ref quickstart_jddtest) shows how the `JointDistanceDistributionTest`
-can be used in practice.
+- [Example 1](@ref examples_independence_JointDistanceDistributionTest). Detecting (in)dependence
+    in bidirectionally coupled logistic maps.
 """
 struct JointDistanceDistributionTest{M <: JointDistanceDistribution, R} <: IndependenceTest{M}
     measure::M
@@ -97,7 +98,7 @@ end
 
 
 function independence(test::JointDistanceDistributionTest, x, y)
-    Δjdd = jdd(test.measure, x, y)
+    Δjdd = association(test.measure, x, y)
 
     # Right-sided t-test
     t = t_statistic(Δjdd, hypothetical_μ = test.measure.μ)

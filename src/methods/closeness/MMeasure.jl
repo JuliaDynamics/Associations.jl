@@ -4,11 +4,10 @@ using StateSpaceSets: AbstractStateSpaceSet
 using Distances: SqEuclidean, Euclidean
 using Distances: pairwise, evaluate
 
-export m_measure
 export MMeasure
 
 """
-    MMeasure <: AssociationMeasure
+    MMeasure <: ClosenessMeasure
     MMeasure(; K::Int = 2, dx = 2, dy = 2, τx = - 1, τy = -1, w = 0)
 
 The `MMeasure` [Andrzejak2003](@cite) is a pairwise association
@@ -20,8 +19,8 @@ for an explanation.
 
 ## Usage
 
+- Use with [`association`](@ref) to compute the raw m-measure statistic.
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional dependence.
-- Use with [`m_measure`](@ref) to compute the raw m-measure statistic.
 
 ## Description
 
@@ -35,8 +34,10 @@ M^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N}
 where ``R_i(x)`` is computed as for [`HMeasure`](@ref), while ``R_i^k(x)`` and
 ``R_i^{(k)}(x|y)`` is computed as for [`SMeasure`](@ref).
 Parameters also have the same meaning as for [`SMeasure`](@ref)/[`HMeasure`](@ref).
+
+See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct MMeasure{M, TM} <: AssociationMeasure
+Base.@kwdef struct MMeasure{M, TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = SqEuclidean()
     tree_metric::TM = Euclidean()
@@ -47,17 +48,8 @@ Base.@kwdef struct MMeasure{M, TM} <: AssociationMeasure
     w::Int = 0
 end
 
-"""
-    m_measure(measure::MMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-
-Compute the [`MMeasure`](@ref) from source `x` to target `y`.
-"""
-function m_measure(measure::MMeasure, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet)
-    return estimate(measure, x, y)
-end
-
 # Internal method for use with `independence`
-function estimate(measure::MMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
+function association(measure::MMeasure, x::AbstractStateSpaceSet, y::AbstractStateSpaceSet)
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     # Match length of StateSpaceSets by excluding end points.

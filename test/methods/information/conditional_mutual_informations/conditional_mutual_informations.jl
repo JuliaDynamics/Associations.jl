@@ -1,0 +1,5 @@
+include("cmi_shannon.jl")
+include("cmi_tsallis_papetrou.jl")
+include("cmi_renyi_sarbu.jl")
+include("cmi_renyi_jizba.jl")
+include("cmi_renyi_poczos.jl")

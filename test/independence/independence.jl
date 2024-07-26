@@ -1,5 +1,5 @@
 include("LocalPermutationTest/local_permutation_test.jl")
-include("SurrogateTest/SurrogateTest.jl")
+include("SurrogateAssociationTest/SurrogateAssociationTest.jl")
 include("JointDistanceDistributionTest.jl")
-include("PATest.jl")
+#include("PATest.jl")
 include("CorrTest.jl")

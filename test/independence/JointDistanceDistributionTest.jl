@@ -13,3 +13,7 @@ test =  JointDistanceDistributionTest(m)
 # Reject null at significance level (1 - α) when there is coupling
 z = y .+ x
 @test pvalue(independence(test, z, x)) < α
+
+# Test summary outouts
+out_str = repr(independence(test, x, y))
+occursin("Independence cannot be rejected", out_str)

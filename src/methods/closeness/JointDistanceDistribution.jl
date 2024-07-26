@@ -6,7 +6,6 @@ using DelayEmbeddings: genembed
 import HypothesisTests: OneSampleTTest, pvalue
 export OneSampleTTest, pvalue
 export JointDistanceDistribution
-export jdd
 
 function normalise_minmax(x::T, vmin, vmax) where T
     if x == zero(T)
@@ -20,14 +19,14 @@ end
     JointDistanceDistribution <: AssociationMeasure end
     JointDistanceDistribution(; metric = Euclidean(), B = 10, D = 2, τ = -1, μ = 0.0)
 
-The joint distance distribution (JDD) measure [Amigo2018](@citet).
+The joint distance distribution (JDD) measure [Amigo2018](@cite).
 
 ## Usage
 
+- Use with [`association`](@ref) to compute the joint distance distribution measure `Δ` from
+    [Amigo2018](@citet).
 - Use with [`independence`](@ref) to perform a formal hypothesis test for directional
     dependence.
-- Use with [`jdd`](@ref) to compute the joint distance distribution `Δ` from
-    [Amigo2018](@citet)
 
 ## Keyword arguments
 
@@ -58,10 +57,9 @@ of these embeddings, as described in [Amigo2018](@citet).
 
 ## Examples
 
-* [Computing the JDD](@ref quickstart_jdd)
-* [Independence testing using JDD](@ref quickstart_jddtest)
+- [Independence testing using JDD](@ref examples_independence_JointDistanceDistributionTest)
 """
-Base.@kwdef struct JointDistanceDistribution{M, T} <: AssociationMeasure
+Base.@kwdef struct JointDistanceDistribution{M, T} <: ClosenessMeasure
     metric::M = Euclidean()
     B::Int = 5
     D::Int = 3
@@ -69,14 +67,7 @@ Base.@kwdef struct JointDistanceDistribution{M, T} <: AssociationMeasure
     μ::T = 0.0
 end
 
-# The convenience wrapper `jdd`` is in deprecations folder for now.
-
-function estimate(measure::JointDistanceDistribution, est::Nothing, source, target)
-    return estimate(measure, source, target)
-end
-
-# Internal method for compatibility with independence tests.
-function estimate(measure::JointDistanceDistribution, source, target)
+function association(measure::JointDistanceDistribution, source, target)
     (; metric, B, D, τ) = measure
     length(source) == length(target) || error("lengths of inputs must match")
     js = ([1 for i = 1:D]...,)
@@ -127,4 +118,55 @@ function jdd_step3(Dx, Dy, bmin, bmax)
     else
         return bmin
     end
+end
+
+"""
+    rank_transformation(x::AbstractVector)
+    rank_transformation(x::AbstractStateSpaceSet) → ranks::NTuple{D, Vector}
+
+Rank-transform each variable/column of the length-`n` `D`-dimensional StateSpaceSet `x` and return the
+rank-transformed variables as a `D`-tuple of length-`n` vectors.
+
+Returns the unscaled `ranks`. Divide by `n` to get an *approximation* to the
+empirical cumulative distribution function (ECDF)  `x`.
+
+## Description
+
+Modulo division by `n`, `rank_transformation` does *roughly* the same as naively computing the ECDF as
+```julia
+[count(xᵢ .<= x)  for xᵢ in x] / length(x)
+```
+
+but an order of magnitude faster and with roughly three orders of magnitude less
+allocations. The increased efficiency of this function relative to naively computing the
+ECDF is
+because it uses sorting of the input data to determine ranks,
+arbitrarily breaking ties according to the sorting algorithm. Rank ties can therefore
+never occur, and equal values are assigned different but close ranks. To preserve
+ties, which you might want to do for example when dealing with
+categorical or integer-valued data, use (the much slower) [`empcdf`](@ref).
+"""
+function rank_transformation(x::AbstractStateSpaceSet)
+    s = zeros(Int, length(x)) # re-use for each marginal
+    [rank_transformation!(s, xⱼ) for xⱼ in columns(x)]
+end
+
+function rank_transformation(x::AbstractVector{T}) where T
+    N = length(x)
+    s = zeros(Int, N)
+    return rank_transformation!(s, x)
+end
+
+function rank_transformation!(
+        s::AbstractVector{Int},
+        x::AbstractVector{T}) where T <: Real
+    N = length(x)
+    r = zeros(N)
+    # Break ties arbitrarily by sorting. This means that ties are broken according to the
+    # sorting algorithm used, and equal values are assigned different ranks.
+    sortperm!(s, x)
+    for j in 1:N
+        r[s[j]] = j
+    end
+    return r
 end
