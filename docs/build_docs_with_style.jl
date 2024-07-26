@@ -72,7 +72,7 @@ links = InterLinks(
          pages,
          draft,
          doctest = false,
-         warnonly = true,
+         warnonly = false,
          checkdocs = :exported,
          kwargs...
      )
