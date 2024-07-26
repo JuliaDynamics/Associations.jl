@@ -359,3 +359,287 @@ We haven't used as many parameter combinations as [McCracken2014](@citet) did,
 but we get a figure that looks roughly similar to theirs.
 
 As expected, ``\Delta < 0`` for all parameter combinations, implying that ``X`` "PAI drives" ``Y``.
+
+### Spatial cross mapping
+
+```@example example_spatial_cross_mapping
+using CausalityTools
+using DynamicalSystemsBase
+using CairoMakie
+
+
+function eom_tentmap(dx, x, p, n)
+    x = x[1]
+    μ = p[1]
+    dx[1] = x < 0.5 ? μ*x : μ*(1 - x)
+
+    return
+end
+
+function tentmap(u₀ = rand(); μ = 1.98)
+    DiscreteDynamicalSystem(eom_tentmap, [u₀], [μ])
+end 
+
+npts = 2000
+sys = tentmap(μ = 1.98)
+x, tinds = trajectory(sys, npts , Ttr = 1000)
+x = diff(first(columns(x)))
+
+n = length(x)
+k = 7 # number of time steps into the future to predict
+nmax = n - (d*τ +1) - k
+d, τ = 3, 1
+function train_and_pred(k, n, d, τ)
+    training = 1:(nmax ÷ 2)
+    prediction = ((nmax ÷ 2) + 1):nmax
+    return training, prediction
+end
+training, prediction = train_and_pred(1, n, d, τ)
+x_1, x̃_1 = simplex_predictions(x, 1, d = d, τ = τ, training = training, prediction = prediction)
+
+training, prediction = train_and_pred(7, n, d, τ)
+x_7, x̃_7 = simplex_predictions(x, 7, d = d, τ = τ, training = training, prediction = prediction)
+
+f = Figure(); ax = Axis(f[1, 1], xlabel = "Observed values", ylabel = "Predicted values")
+scatter!(ax, x_1, x̃_1, label = "k = 1", marker = :circle)
+scatter!(ax, x_7, x̃_7, label = "k = 7", marker = :circle)
+axislegend()
+f
+```
+
+
+There is high correlation between observed and predicted values when predicting only one time step (`k = 1`)
+into the future. As `k` increases, the performance drops off. Let's investigate this systematically.
+
+```@example example_spatial_cross_mapping
+kmax = 20
+cors = zeros(kmax)
+for k = 1:kmax
+    training, prediction = train_and_pred(k, n, d, τ)
+    X, X̃ = simplex_predictions(x, k, d = d, τ = τ, training = training, prediction = prediction)
+    cors[k] = cor(X, X̃)
+end
+
+f = Figure(); 
+ax = Axis(f[1, 1]; 
+    xlabel = "Prediction time (k)", ylabel = "Correlation coefficient (ρ)",
+     limits = ((0.5, kmax + 0.5), (-1.1, 1.1))
+)
+#hlines!(ax, [0], linestyle = :dash, label = "", color = :grey)
+scatter!(ax,  cors)
+f
+```
+
+
+The correlation between observed and predicted values is near perfect until `k = 3`, and then rapidly 
+drops off as `k` increases. At `k = 8`, there is virtually no correlation between observed and predicted values.
+This means that, for this particular system, for this particular choice of embedding and choice of training/prediction sets, the predictability of the system is limited to about 4 or 5 time steps into the future (if you want good predictions). 
+
+The main point of Sugihara & May's paper was that this drop-off of prediction accuracy with `k` is characteristic of chaotic systems, and can be used to distinguish chaos from regular behaviour in time series.
+
+Let's demonstrate this by also investigating how the correlation between observed and predicted values behaves as a function of `k` for a regular, non-chaotic time series. We'll use a sine wave with additive noise.
+
+```@example example_spatial_cross_mapping
+using Distributions
+𝒩 = Uniform(-0.5, 0.5)
+xs = 0.0:1.0:2000.0
+r = sin.(0.5 .* xs) .+ rand(𝒩, length(xs))
+plot(r[1:200])
+
+cors_sine = zeros(kmax)
+for k = 1:kmax
+    training, prediction = train_and_pred(k, n, d, τ)
+    X, X̃ = simplex_predictions(r, k, d = d, τ = τ, training = training, prediction = prediction)
+    cors_sine[k] = cor(X, X̃)
+end
+
+
+f = Figure(); 
+ax = Axis(f[1, 1]; 
+    xlabel = "Prediction time (k)", ylabel = "Correlation coefficient (ρ)",
+     limits = ((0.5, kmax + 0.5), (-1.1, 1.1))
+)
+scatter!(ax, 1:kmax, cors, label = "tent map", marker = :star6, markersize = 10)
+scatter!(ax, 1:kmax, cors_sine, label = "sine", marker = :hexagon, markersize = 8)
+axislegend()
+f
+```
+
+In contrast to the tent map, for which prediction accuracy drops off and stabilizes around zero for increasing `k`, the prediction accuracy is rather insensitive to the choice of `k` for the noisy sine time series. 
+
+
+### Example: determining optimal embedding dimension
+
+```@docs
+delay_simplex
+```
+
+The simplex projection method can also be used to determine the optimal embedding dimension for a time series.
+Given an embedding lag `τ`, we can embed a time series `x` for a range of embedding dimensions `d ∈ 2:dmax` and
+compute the average prediction power over multiple `ks` using the simplex projection method.
+
+Here, we compute the average prediction skills from `k=1` up to `k=10` time steps into the future, for 
+embedding dimensions `d = 2:10`. We'll use a coupled Lorenz attractor system.
+
+```@example example_spatial_cross_mapping
+using CausalityTools
+using CairoMakie
+using DynamicalSystemsBase
+using DelayEmbeddings
+
+Base.@kwdef struct LorenzBidir6{V, CXY, CYX, A1, A2, A3, B1, B2, B3}
+    xi::V = [0.1, 0.05, 0.2, 0.2, 0.25, 0.3]
+    c_xy::CXY = 0.2
+    c_yx::CYX = 0.2
+    a₁::A1 = 10
+    a₂::A2 = 28
+    a₃::A3 = 8/3
+    b₁::B1 = 10
+    b₂::B2 = 28
+    b₃::B3 = 9/3
+end
+
+function system(definition::LorenzBidir6)
+    return ContinuousDynamicalSystem(eom_lorenzlorenzbidir6, definition.xi, definition)
+end
+
+@inline @inbounds function eom_lorenzlorenzbidir6(u, p, t)
+    (; xi, c_xy, c_yx, a₁, a₂, a₃, b₁, b₂, b₃) = p
+    x1, x2, x3, y1, y2, y3 = u
+
+    dx1 = -a₁*(x1 - x2) + c_yx*(y1 - x1)
+    dx2 = -x1*x3 + a₂*x1 - x2
+    dx3 = x1*x2 - a₃*x3
+    dy1 = -b₁*(y1 - y2) + c_xy*(x1 - y1)
+    dy2 = -y1*y3 + b₂*y1 - y2
+    dy3 = y1*y2 - b₃*y3
+
+    return SVector{6}(dx1, dx2, dx3, dy1, dy2, dy3)
+end
+
+sys = system(LorenzBidir6())
+T, Δt = 150, 0.05
+lorenz, ts = trajectory(sys, T, Δt = Δt, Ttr = 100)
+x1, x2, x3 = columns(lorenz)[1:3]
+
+# Determine the optimal embedding delay
+τ = estimate_delay(x1, "ac_zero")
+
+# Compute average prediction skill for a range of dimensions. We'll average 
+# the prediction skill over time steps `k = 1:10` for each dimension.
+ds, ks = 2:10, 1:10
+ρs = delay_simplex(x1, τ, ds = ds, ks = ks)
+
+f = Figure(); ax = Axis(f[1,1]; xlabel = "Embedding dimension", ylabel = "ρ̄(observed, predicted")
+scatterlines!(ax, ds, ρs, label = "", color = :black, marker = :star)
+f
+```
+
+Based on the predictability criterion, the optimal embedding dimension, for this particular realization
+of the first variable of the Lorenz system, seems to be 2.
+
+## S-map
+
+```@docs
+smap
+```
+
+The s-map, or sequential locally weighted global map, was introduced in Sugihara (1994)[^Sugihara1994]. The s-map approximates the dynamics of a system as a locally weighted global map, with a tuning parameter ``\theta`` that controls the degree of nonlinearity in the model. For ``\theta = 0``, the model is the maximum likelihood global linear solution (of eq. 2 in Sugihara, 1994), and for increasing ``\theta > 0``, the model becomes increasingly nonlinear and localized (Sugihara, 1996)[^Sugihara1996].
+
+When such a model has been constructed, it be used as prediction tool for out-of-sample points, and can be used to characterize nonlinearity in a time series (Sugihara, 1994).  Let's demonstrate with an example.
+
+### Example: prediction power for the Lorenz system
+
+In our implementation of `smap`, the input is a multivariate dataset - which can be a `StateSpaceSet` of either 
+the raw variables of a multivariate dynamical system, or a `Dataset` containing an embedding of a single time series. 
+Here, we'll show an example of the former.
+
+Let's generate an example orbit from a the bidirectionally coupled set of Lorenz systems defined above. 
+We'll select the first three variables for analysis.
+
+```@example example_spatial_cross_mapping
+using CausalityTools
+using CairoMakie
+using DynamicalSystemsBase
+using Statistics
+
+
+sys = system(LorenzBidir6())
+T, Δt = 150, 0.05
+lorenz, ts = trajectory(sys, T, Δt = Δt, Ttr = 100)
+lorenz = lorenz[:, 1:3]
+x1, x2, x3 = columns(lorenz)
+
+f = Figure(); ax = Axis3(f[1,1]; xlabel = "x", ylabel = "y", zlabel = "z")
+scatterlines!(ax, x1, x2, x3, marker = :circle, label = "", markersize = 2, alpha = 0.5, linewidth = 1)
+f
+```
+
+Now, we compute the `k`-step forward predictions for `k` ranging from `1` to `15`. The tuning parameter `θ` 
+varies from `0.0` (linear model) to `2.0` (strongly nonlinear model). Our goal is to see which model 
+yields the best predictions across multiple `k`.
+
+We'll use the first 500 points of the orbit to train the model. Then, using that model, we try to
+predict the next 500 points (which are not part of the training set). 
+Finally, we compute the correlation between the predicted values and the observed values, which measures
+the model prediction skill. This procedure is repeated for each combination of `k` and `θ`.
+
+```@example smap_lorenz
+using CausalityTools
+using CairoMakie
+using DynamicalSystemsBase
+using Statistics
+
+function train_and_pred_smap(nmax)
+    training = 1:(nmax ÷ 2)
+    prediction = ((nmax ÷ 2) + 1):nmax
+    return training, prediction
+end
+
+T, Δt = 30, 0.05
+lorenz, ts = trajectory(sys, T, Δt = Δt, Ttr = 100)
+ks, θs = 1:10, 0.0:0.5:2.0
+n = length(lorenz)
+
+# Compute correlations between predicted values `preds` and actual values `truths` 
+# for all parameter combinations
+cors = zeros(length(ks), length(θs))
+for (i, k) in enumerate(ks)
+    println("k=$k")
+    for (j, θ) in enumerate(θs)
+        println("θ=$θ")
+        training, prediction = train_and_pred_smap(n)
+        preds, truths = smap(lorenz, θ = θ, k = k, trainees = training, predictees = prediction)
+        cors[i, j] = cor(preds, truths)
+    end
+end
+cors
+
+f = Figure(); 
+ax = Axis(f[1,1]; 
+    xlabel = "Prediction time (k)", ylabel = "cor(observed, predicted)",
+    limits = (nothing, (-1.1, 1.1)),
+)
+markers = [:star :circle :square :star5 :hexagon :circle :star]
+cols = [:black, :red, :blue, :green, :purple, :grey, :black]
+
+labels = ["θ = $θ" for θ in θs]
+for i = 1:length(θs)
+    scatterlines!(ks, cors[:, i], marker = markers[i], color = cols[i], markersize = 5, label = labels[i],
+        linewidth = i == 1 ? 5 : 2)
+end
+axislegend()
+f
+```
+
+The nonlinear models (colored lines and symbols) far outperform the linear model (black line + stars).
+
+Because the predictions for our system improves with increasingly nonlinear models, it indicates that our 
+system has some inherent nonlinearity. This is, of course, correct, since our Lorenz system is chaotic.
+
+A formal way to test the presence of nonlinearity is, for example, to define the null hypothesis 
+"H0: predictions do not improve when using an equivalent nonlinear versus a linear model" (equivalent in the sense  that the only parameter is `θ`) or, equivalently, "`H0: ρ_linear = ρ_nonlinear`". If predictions do in fact improve, we
+instead accept the alternative hypothesis that prediction *do* improve when using nonlinear models versus using linear models. This can be formally tested using a z-statistic [^Sugihara1994].
+
+[^Sugihara1994]: Sugihara, G. (1994). Nonlinear forecasting for the classification of natural time series. Philosophical Transactions of the Royal Society of London. Series A: Physical and Engineering Sciences, 348(1688), 477-495.
+[^Sugihara1996]: Sugihara, George, et al. "Nonlinear control of heart rate variability in human infants." Proceedings of the National Academy of Sciences 93.6 (1996): 2608-2613.
