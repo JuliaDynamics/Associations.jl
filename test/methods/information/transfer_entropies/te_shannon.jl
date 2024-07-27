@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 using DynamicalSystemsBase
 using Random
 rng = Xoshiro(1234)
@@ -67,7 +67,7 @@ est = Hilbert(est_te)
 @test association(Hilbert(est, source = Amplitude(), target = Amplitude(), cond = Amplitude() ), x, y, z) >= 0.0
 @test association(Hilbert(est, source = Phase(), target = Phase(), cond = Amplitude() ), x, y, z) >= 0.0
 
-struct SillySignalProperty <: CausalityTools.InstantaneousSignalProperty
+struct SillySignalProperty <: Associations.InstantaneousSignalProperty
 end
 @test_throws ArgumentError association(Hilbert(est, source = SillySignalProperty()), x, y)
 @test_throws ArgumentError association(Hilbert(est, target = SillySignalProperty()), x, y)

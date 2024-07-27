@@ -17,12 +17,12 @@ x, y, z = rand(100), rand(100), rand(100)
 # Internals that we may not necessarily hit using random input data.
 # ----------------------------------------------------------------
 emb = EmbeddingTE(OptimiseTraditional(), x, y, z)
-pts, vars, τs, js = CausalityTools.te_embed(emb, x, y)
+pts, vars, τs, js = Associations.te_embed(emb, x, y)
 @test occursin("Tf = ", repr(vars))
 
 # TEVars
-vars1 = CausalityTools.TEVars([1], [2], [3])
-vars2 = CausalityTools.TEVars([1], [2], [3], Int[])
+vars1 = Associations.TEVars([1], [2], [3])
+vars2 = Associations.TEVars([1], [2], [3], Int[])
 @test vars1.C == vars2.C
 
 # rc
@@ -30,7 +30,7 @@ vars2 = CausalityTools.TEVars([1], [2], [3], Int[])
 x = rand(100)
 X = StateSpaceSet(rand(100))
 
-rc = CausalityTools.rc
+rc = Associations.rc
 # If multiple lags are given, and the dimension is an integer, then the number of 
 # lags must match the dimension.
 ds = 4

@@ -1,28 +1,15 @@
-
-```@meta
-CollapsedDocStrings = true
-```
-
-# CausalityTools.jl
-
-![CausalityTools.jl static logo](assets/logo-large.png)
+# Associations.jl
 
 ```@docs
-CausalityTools
+Associations
 ```
-
-## Getting started
-
-The quickest way to get going with the package is to check out the examples in the left-hand menu.
-
-!!! info
-    To make it easier to navigate the extensive documentation, all documentation strings are 
-    collapsed by default. Click the arrow icon in 
-    the top toolbar to expand/collapse the docstrings in a page.
 
 ## Latest news
 
-CausalityTools.jl has been updated to v3!
+!!! info "Package rename"
+    The package has been *renamed* from CausalityTools.jl to Associations.jl.
+
+Associations.jl has been updated to v4! 
 
 This update includes a number of breaking changes, several of which are *not* backwards compatible.
 These are done to ensure compatibility with 
@@ -35,6 +22,15 @@ Important changes are:
 - `SurrogateTest` has been renamed to [`SurrogateAssociationTest`](@ref). 
 - See the CHANGELOG.md for a complete list of changes.
 
+## Getting started
+
+The quickest way to get going with the package is to check out the examples in the left-hand menu.
+
+!!! info
+    To make it easier to navigate the extensive documentation, all documentation strings are 
+    collapsed by default. Click the arrow icon in 
+    the top toolbar to expand/collapse the docstrings in a page.
+
 
 ## Documentation content 
 
@@ -46,9 +42,9 @@ Important changes are:
   [independence testing](@ref examples_independence), and 
   [network inference](@ref examples_network_inference).
 
-## Input data for CausalityTools.jl
+## Input data for Associations.jl
 
-Input data for CausalityTools.jl are given as:
+Input data for Associations.jl are given as:
 
 - Univariate *timeseries*, which are given as standard Julia `Vector`s.
 - Multivariate timeseries, *StateSpaceSets*, or *state space sets*, which are given as
@@ -65,7 +61,7 @@ StateSpaceSets.StateSpaceSet
 
 ## Maintainers and contributors
 
-The CausalityTools.jl software is maintained by
+The Associations.jl software is maintained by
 [Kristian Agasøster Haaga](https://github.com/kahaaga), who also curates and writes this
 documentation. Significant contributions to the API and documentation design has been
 made by [George Datseris](https://github.com/Datseris), which also co-authors

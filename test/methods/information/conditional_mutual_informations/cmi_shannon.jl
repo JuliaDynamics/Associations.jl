@@ -1,6 +1,6 @@
 
 using Test
-using CausalityTools
+using Associations
 using Random
 rng = MersenneTwister(1234)
 
@@ -8,8 +8,8 @@ rng = MersenneTwister(1234)
 # Internals
 # ---------------
 def = CMIShannon()
-@test CausalityTools.min_inputs_vars(def) == 3
-@test CausalityTools.max_inputs_vars(def) == 3
+@test Associations.min_inputs_vars(def) == 3
+@test Associations.max_inputs_vars(def) == 3
 
 # ---------------
 # Input checks

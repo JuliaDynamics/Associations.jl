@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 using StateSpaceSets
 using Random
 rng = Xoshiro(1234)
@@ -38,24 +38,24 @@ rng = Xoshiro(1234)
     @testset "Embed using CCM" begin
         x, y = rand(rng, 100), rand(rng, 100)
         # Embedding
-        d, colidx_target, colidxs_source = CausalityTools.embed(ConvergentCrossMapping(), x, y)
+        d, colidx_target, colidxs_source = Associations.embed(ConvergentCrossMapping(), x, y)
         @test d isa AbstractStateSpaceSet
         @test colidx_target isa Int
         @test colidxs_source isa AbstractVector{Int}
 
         # Segment length
-        @test CausalityTools.max_segmentlength(def, rand(10)) == 10 - 2 + 1
+        @test Associations.max_segmentlength(def, rand(10)) == 10 - 2 + 1
         def = ConvergentCrossMapping(d = 2)
 
         # Num of neighbors
         def = ConvergentCrossMapping(d = 2)
-        @test CausalityTools.n_neighbors_simplex(def) == 3
+        @test Associations.n_neighbors_simplex(def) == 3
 
         # If using forward embedding, warn.
         msg = """τ > 0. You're using future values of source to predict the target. Turn \
         off this warning by setting `embed_warn = false` in the \
         `PairwiseAsymmetricInference` constructor."""
-        @test_warn msg CausalityTools.embed(ConvergentCrossMapping(τ = 1), x, y)
+        @test_warn msg Associations.embed(ConvergentCrossMapping(τ = 1), x, y)
     end
 end
 
@@ -81,24 +81,24 @@ end
     @testset "Embed using CCM" begin
         x, y = rand(rng, 100), rand(rng, 100)
         # Embedding
-        d, colidx_target, colidxs_source = CausalityTools.embed(def, x, y)
+        d, colidx_target, colidxs_source = Associations.embed(def, x, y)
         @test d isa AbstractStateSpaceSet
         @test colidx_target isa Int
         @test colidxs_source isa AbstractVector{Int}
 
         # Segment length
-        @test CausalityTools.max_segmentlength(def, rand(10)) == 10 - 2 + 1
+        @test Associations.max_segmentlength(def, rand(10)) == 10 - 2 + 1
         def = ConvergentCrossMapping(d = 2)
 
         # Num of neighbors
         def = ConvergentCrossMapping(d = 2)
-        @test CausalityTools.n_neighbors_simplex(def) == 3
+        @test Associations.n_neighbors_simplex(def) == 3
 
         # If using forward embedding, warn.
         msg = """τ > 0. You're using future values of source to predict the target. Turn \
         off this warning by setting `embed_warn = false` in the \
         `PairwiseAsymmetricInference` constructor."""
-        @test_warn msg CausalityTools.embed(ConvergentCrossMapping(τ = 1), x, y)
+        @test_warn msg Associations.embed(ConvergentCrossMapping(τ = 1), x, y)
     end
 end
 

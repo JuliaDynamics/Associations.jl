@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 using Random
 
 
@@ -7,8 +7,8 @@ using Random
 # Internals
 # ---------------
 def = ConditionalEntropyTsallisAbe()
-@test CausalityTools.min_inputs_vars(def) == 2
-@test CausalityTools.max_inputs_vars(def) == 2
+@test Associations.min_inputs_vars(def) == 2
+@test Associations.max_inputs_vars(def) == 2
 
 
 # ---------------------------------------------------------------------------------------

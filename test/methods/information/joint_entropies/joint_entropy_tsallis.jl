@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 
 x = rand(["a", "b", "c"], 200)
 y = rand(["hello", "yoyo", "heyhey"], 200)

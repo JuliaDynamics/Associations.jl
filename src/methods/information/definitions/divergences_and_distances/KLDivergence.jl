@@ -41,7 +41,7 @@ D_{KL}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 !!! note 
     Distances.jl also defines `KLDivergence`. Quality it if you're loading both 
-    packages, i.e. do `association(CausalityTools.KLDivergence(), x, y)`.
+    packages, i.e. do `association(Associations.KLDivergence(), x, y)`.
 
 ## Estimation
 

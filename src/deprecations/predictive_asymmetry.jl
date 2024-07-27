@@ -67,7 +67,7 @@
 # ## Examples
 
 # ```julia
-# using CausalityTools
+# using Associations
 # # Some example time series
 # x, y = rand(100), rand(100)
 # # 𝔸(x → y) over prediction lags 1:5
@@ -138,7 +138,7 @@
 # function predictive_asymmetry(estimator::VALID_PA_ESTIMATORS, ηs, x::AbstractVector{<:Real}...;
 #         normalize = false, f::Real = 1.0,
 #         dTf = 1, dT = 1, dS = 1, dC = 1, τT = -1, τS = -1, τC = -1, base = 2)
-#     @warn """`predictive_asymmetry` will be deprecated in CausalityTools 2.0, \
+#     @warn """`predictive_asymmetry` will be deprecated in Associations 2.0, \
 #     and moved to the "Experimental" section until it appears in a peer-reviewed journal. \
 #     It will reappear with a new signature in a 2.X release."""
 #     check_ηs(ηs)

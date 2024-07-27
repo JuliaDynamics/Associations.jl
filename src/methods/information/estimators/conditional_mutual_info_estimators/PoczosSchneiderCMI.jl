@@ -25,7 +25,7 @@ number of temporal neighbors that are excluded during neighbor searches.
 ## Examples 
 
 ```julia
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 10000)
 y = rand(rng, 10000) .+ x

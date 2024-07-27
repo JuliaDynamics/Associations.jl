@@ -12,7 +12,7 @@ When discretizing, what happens is that we "encode" input data into an intermedi
 - Once a dataset has been encoded into integers, we can estimate [`Counts`](@ref) or [`Probabilities`](@ref) ([tutorial](@ref tutorial_probabilities)).
 - Once probabilities have been estimated, one can use these to estimate [`MultivariateInformationMeasure`](@ref) ([tutorial](@ref tutorial_infomeasures)).
 
- The following functions and types are used by CausalityTools.jl to perform discretization of input data.
+ The following functions and types are used by Associations.jl to perform discretization of input data.
 
 ```@docs
 Discretization
@@ -21,7 +21,7 @@ CodifyPoints
 codify
 ```
 
-In summary, the two main ways of discretizing data in CausalityTools are as follows.
+In summary, the two main ways of discretizing data in Associations are as follows.
 
 - The [`CodifyPoints`](@ref) discretization scheme encodes input data on a point-by-point 
     basis by applying some [`Encoding`](@ref) to each point.
@@ -66,7 +66,7 @@ We'll here use the [`OrdinalPatternEncoding`](@ref) with differing parameter `m`
 multiple [`StateSpaceSet`](@ref) of differing dimensions.
 
 ```@example example_encode_points
-using CausalityTools
+using Associations
 using StateSpaceSets
 using Random; rng = Xoshiro(1234)
 
@@ -128,7 +128,7 @@ Some [`OutcomeSpace`](@ref)s dictate a sliding window which has the width of one
 when used with [`CodifyVariables`](@ref). [`ValueBinning`](@ref) is such an outcome space.
 
 ```@example example_encode_vars
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 
 x = rand(rng, 100)
@@ -150,7 +150,7 @@ end of each input variable are lost. For example, with [`OrdinalPatterns`](@ref)
 of encoded points decrease with the embedding parameter `m`.
 
 ```@example example_encode_vars
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 
 x = rand(rng, 100)
@@ -163,7 +163,7 @@ the same outcome space, as long as the operation will result in the *same* numbe
 data points for each column.
 
 ```@example example_encode_vars
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 
 x = rand(rng, 100)

@@ -40,7 +40,7 @@ Let's reproduce figure 3A too, focusing only on [`ConvergentCrossMapping`](@ref)
 For this example, they use a bidirectional system with asymmetrical coupling strength.
 
 ```@example MAIN_CCM
-using CausalityTools
+using Associations
 using Statistics
 using LabelledArrays
 using StaticArrays
@@ -201,7 +201,7 @@ slightly different embedding.
 
 
 ```@example MAIN_CCM
-using CausalityTools
+using Associations
 using Statistics
 using LabelledArrays
 using StaticArrays
@@ -267,7 +267,7 @@ variables ``X`` and ``Y``, where ``X`` drives ``Y``.
 After we have computed the PAI in both directions, we define a measure of directionality as the difference between PAI in the ``X \to Y`` direction and in the ``Y \to X`` direction, so that if ``X`` drives ``Y``, then ``\Delta < 0``.
 
 ```@example MAIN_CCM
-using CausalityTools
+using Associations
 using LabelledArrays
 using StaticArrays
 using DynamicalSystemsBase

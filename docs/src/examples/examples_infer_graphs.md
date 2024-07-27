@@ -72,7 +72,7 @@ Here, we use the [`OCE`](@ref) algorithm to infer a time series graph. We use a
 for the conditional steps.
 
 ```@example graph_examples
-using CausalityTools
+using Associations
 using StableRNGs
 rng = StableRNG(123)
 
@@ -117,7 +117,7 @@ also use a parametric correlation test to infer the skeleton graph for some
 normally distributed data.
 
 ```@example graph_examples
-using CausalityTools
+using Associations
 using StableRNGs
 rng = StableRNG(123)
 n = 300
@@ -150,7 +150,7 @@ with the Shannon mutual information [`MIShannon`](@ref) measure and the
 and the [`MesnerShalizi`](@ref).
 
 ```@example graph_examples
-using CausalityTools
+using Associations
 using StableRNGs
 rng = StableRNG(123)
 

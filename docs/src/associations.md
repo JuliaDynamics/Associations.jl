@@ -5,7 +5,7 @@ CollapsedDocStrings = true
 # [Associations](@id association_measures)
 
 ## Association API
-The most basic components of CausalityTools.jl are a collection of statistics that in some manner quantify the "association" between input datasets. Precisely what is meant by "association" depends on the measure, and precisely what is meant by "quantify" depends on the *estimator* of that measure. We formalize this notion below with the [`association`](@ref)
+The most basic components of Associations.jl are a collection of statistics that in some manner quantify the "association" between input datasets. Precisely what is meant by "association" depends on the measure, and precisely what is meant by "quantify" depends on the *estimator* of that measure. We formalize this notion below with the [`association`](@ref)
 function, which dispatches on [`AssociationMeasureEstimator`](@ref) and [`AssociationMeasure`](@ref).
 
 
@@ -18,7 +18,7 @@ AssociationMeasureEstimator
 Here are some examples of how to use [`association`](@ref).
 
 ```@repl
-using CausalityTools
+using Associations
 x, y, z = rand(1000), rand(1000), rand(1000);
 association(LMeasure(), x, y)
 association(DistanceCorrelation(), x, y)
@@ -123,7 +123,7 @@ concept of "cross mapping", which has appeared in many contexts in the literatur
 and gained huge popularity with  [Sugihara2012](@citet)'s on *convergent cross mapping*.
 
 Since their paper, several cross mapping methods and frameworks have emerged in the
-literature. In CausalityTools.jl, we provide a unified interface for using these cross
+literature. In Associations.jl, we provide a unified interface for using these cross
 mapping methods.
 
 ```@docs

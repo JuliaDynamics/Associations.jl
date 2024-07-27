@@ -1,8 +1,8 @@
-name = "CausalityTools"
-uuid = "5520caf5-2dd7-5c5d-bfcb-a00e56ac49f7"
+name = "Associations"
+uuid = "614afb3a-e278-4863-8805-9959372b9ec2"
 authors = ["Kristian Agasøster Haaga <kahaaga@gmail.com>", "Tor Einar Møller <temolle@gmail.com>", "George Datseris <datseris.george@gmail.com>"]
-repo = "https://github.com/kahaaga/CausalityTools.jl.git"
-version = "3.0.0"
+repo = "https://github.com/kahaaga/Associations.jl.git"
+version = "4.0.0"
 
 [deps]
 Accessors = "7d9f7c33-5ae7-4f3b-8dc6-eff91059b697"

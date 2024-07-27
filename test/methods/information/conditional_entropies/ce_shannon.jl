@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 using Random
 rng = Xoshiro(1234)
 
@@ -7,8 +7,8 @@ rng = Xoshiro(1234)
 # Internals
 # ---------------
 def = ConditionalEntropyShannon()
-@test CausalityTools.min_inputs_vars(def) == 2
-@test CausalityTools.max_inputs_vars(def) == 2
+@test Associations.min_inputs_vars(def) == 2
+@test Associations.max_inputs_vars(def) == 2
 
 p_nonzeros = Probabilities([0.5 0.5; 0.1 0.1 ])
 p_zeros = Probabilities([0.5 0.0; 0.1 0.1])

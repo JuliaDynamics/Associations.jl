@@ -14,7 +14,7 @@ synchronization for `s = 1.0`.
 ## Example
 
 ```julia
-using CausalityTools
+using Associations
 
 x, y = rand(1000), rand(1000)
 

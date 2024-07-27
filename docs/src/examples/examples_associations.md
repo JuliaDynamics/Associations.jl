@@ -5,7 +5,7 @@
 ### [From precomputed probabilities](@id example_HellingerDistance_precomputed_probabilities)
 
 ```@example example_HellingerDistance
-using CausalityTools
+using Associations
 # From pre-computed PMFs
 p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
 p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
@@ -17,7 +17,7 @@ association(HellingerDistance(), p1, p2)
 We expect the Hellinger distance between two uncorrelated variables to be close to zero.
 
 ```@example example_HellingerDistance
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 100000
 x, y = rand(rng, n), rand(rng, n)
@@ -30,7 +30,7 @@ div_hd = association(est, x, y) # pretty close to zero
 ### [From precomputed probabilities](@id example_KLDivergence_precomputed_probabilities)
 
 ```@example example_KLDivergence
-using CausalityTools
+using Associations
 # From pre-computed PMFs
 p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
 p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
@@ -42,7 +42,7 @@ association(KLDivergence(), p1, p2)
 We expect the [`KLDivergence`](@ref) between two uncorrelated variables to be close to zero.
 
 ```@example example_KLDivergence
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 100000
 x, y = rand(rng, n), rand(rng, n)
@@ -56,7 +56,7 @@ div_hd = association(est, x, y) # pretty close to zero
 ### [From precomputed probabilities](@id example_RenyiDivergence_precomputed_probabilities)
 
 ```@example example_RenyiDivergence
-using CausalityTools
+using Associations
 # From pre-computed PMFs
 p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
 p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
@@ -68,7 +68,7 @@ association(RenyiDivergence(), p1, p2)
 We expect the [`RenyiDivergence`](@ref) between two uncorrelated variables to be close to zero.
 
 ```@example example_RenyiDivergence
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 100000
 x, y = rand(rng, n), rand(rng, n)
@@ -82,7 +82,7 @@ div_hd = association(est, x, y) # pretty close to zero
 ### [From precomputed probabilities](@id example_VariationDistance_precomputed_probabilities)
 
 ```@example example_VariationDistance
-using CausalityTools
+using Associations
 # From pre-computed PMFs
 p1 = Probabilities([0.1, 0.5, 0.2, 0.2])
 p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
@@ -94,7 +94,7 @@ association(VariationDistance(), p1, p2)
 We expect the [`VariationDistance`](@ref) between two uncorrelated variables to be close to zero.
 
 ```@example example_VariationDistance
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 100000
 x, y = rand(rng, n), rand(rng, n)
@@ -107,7 +107,7 @@ div_hd = association(est, x, y) # pretty close to zero
 ### [[`JointProbabilities`](@ref) with [`Dispersion`](@ref)](@id example_JointEntropyShannon_Dispersion)
 
 ```@example example_JointEntropyShannon
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y = rand(rng, 100), rand(rng, 100)
 measure = JointEntropyShannon()
@@ -121,7 +121,7 @@ association(est, x, y)
 ### [[`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref)](@id example_JointEntropyTsallis_OrdinalPatterns)
 
 ```@example example_JointEntropyTsallis
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y = rand(rng, 100), rand(rng, 100)
 measure = JointEntropyTsallis()
@@ -136,7 +136,7 @@ association(est, x, y)
 ### [[`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref)](@id example_JointEntropyRenyi_ValueBinning)
 
 ```@example example_JointEntropyRenyi
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y = rand(rng, 100), rand(rng, 100)
 measure = JointEntropyRenyi(q = 0.5)
@@ -155,7 +155,7 @@ transpose their example. Then their `X` is in the first dimension of our table (
 columns) and their `Y` is our second dimension (rows).
 
 ```@example ce_contingency_table
-using CausalityTools
+using Associations
 freqs_yx = [1//8 1//16 1//32 1//32; 
     1//16 1//8  1//32 1//32;
     1//16 1//16 1//16 1//16; 
@@ -201,7 +201,7 @@ Let's first demonstrate on some categorical data. For that, we must use
 [`UniqueElements`](@ref) as the discretization (i.e. just count unique elements).
 
 ```@example example_ConditionalEntropyShannon_JointProbabilities_CodifyVariables_UniqueElements
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 1000
 rating = rand(rng, 1:6, n)
@@ -215,7 +215,7 @@ association(est, rating, movie)
 ### [[`JointProbabilities`](@ref) + [`CodifyPoints`](@ref) + [`UniqueElementsEncoding`](@ref)](@id example_ConditionalEntropyShannon_JointProbabilities_CodifyPoints_UniqueElementsEncoding)
 
 ```@example example_ConditionalEntropyShannon_JointProbabilities_CodifyPoints_UniqueElementsEncoding
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y, z = rand(rng, 1:5, 100), rand(rng, 1:5, 100), rand(rng, 1:3, 100)
 X = StateSpaceSet(x, z)
@@ -232,7 +232,7 @@ association(est, X, Y)
 We'll here repeat the analysis we did for [`ConditionalEntropyShannon`](@ref) above.
 
 ```@example example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyVariables_UniqueElements
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 1000
 rating = rand(rng, 1:6, n)
@@ -246,7 +246,7 @@ association(est, rating, movie)
 ### [[`JointProbabilities`](@ref) + [`CodifyPoints`](@ref) + [`UniqueElementsEncoding`](@ref)](@id example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyPoints_UniqueElementsEncoding)
 
 ```@example example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyPoints_UniqueElementsEncoding
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y, z = rand(rng, 1:5, 100), rand(rng, 1:5, 100), rand(rng, 1:3, 100)
 X = StateSpaceSet(x, z)
@@ -264,7 +264,7 @@ association(est, X, Y)
 We'll here repeat the analysis we did for [`ConditionalEntropyShannon`](@ref) and [`ConditionalEntropyTsallisAbe`](@ref) above.
 
 ```@example example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 1000
 rating = rand(rng, 1:6, n)
@@ -278,7 +278,7 @@ association(est, rating, movie)
 ### [[`JointProbabilities`](@ref) + [`CodifyPoints`](@ref) + [`UniqueElementsEncoding`](@ref)](@id example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyPoints_UniqueElementsEncoding)
 
 ```@example example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyPoints_UniqueElementsEncoding
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y, z = rand(rng, 1:5, 100), rand(rng, 1:5, 100), rand(rng, 1:3, 100)
 X = StateSpaceSet(x, z)
@@ -294,7 +294,7 @@ association(est, X, Y)
 ### [[`JointProbabilities`](@ref) + [`ValueBinning`](@ref)](@id example_MIShannon_JointProbabilities_ValueBinning)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 1000)
 y = rand(rng, 1000)
@@ -311,7 +311,7 @@ For example, let's compare the Shannon mutual information between the preference
 of a population sample with regards to different foods.
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 n = 1000
 preferences = rand(["neutral", "like it", "hate it"], n);
 random_foods = rand(["water", "flour", "bananas", "booze", "potatoes", "beans", "soup"], n)
@@ -332,12 +332,12 @@ association(est, preferences, biased_foods), association(est, preferences, rando
 ### [Dedicated [`GaussianMI`](@ref) estimator](@id example_MIShannon_GaussianMI)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 using Distributions
 using Statistics
 
 n = 1000
-using CausalityTools
+using Associations
 x = randn(1000)
 y = rand(1000) .+ x
 association(GaussianMI(MIShannon()), x, y) # defaults to `MIShannon()`
@@ -346,7 +346,7 @@ association(GaussianMI(MIShannon()), x, y) # defaults to `MIShannon()`
 ### [Dedicated [`KraskovStögbauerGrassberger1`](@ref) estimator](@id example_MIShannon_KSG1)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 x, y = rand(1000), rand(1000)
 association(KSG1(MIShannon(); k = 5), x, y)
 ```
@@ -354,7 +354,7 @@ association(KSG1(MIShannon(); k = 5), x, y)
 ### [Dedicated [`KraskovStögbauerGrassberger2`](@ref) estimator](@id example_MIShannon_KSG2)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 x, y = rand(1000), rand(1000)
 association(KSG2(MIShannon(); k = 5), x, y)
 ```
@@ -362,7 +362,7 @@ association(KSG2(MIShannon(); k = 5), x, y)
 ### [Dedicated [`GaoKannanOhViswanath`](@ref) estimator](@id example_MIShannon_GaoKannanOhViswanath)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 x, y = rand(1000), rand(1000)
 association(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
 ```
@@ -373,7 +373,7 @@ We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialInfoEstim
 Note that this doesn't apply any bias correction.
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 x, y = rand(1000), rand(1000)
 association(EntropyDecomposition(MIShannon(), Kraskov(k = 3)), x, y)
 ```
@@ -385,7 +385,7 @@ We can also compute [`MIShannon`](@ref) by naively applying a [`DiscreteInfoEsti
 Note that this doesn't apply any bias correction.
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 x, y = rand(1000), rand(1000)
 disc = CodifyVariables(BubbleSortSwaps(m=5))
 hest = PlugIn(Shannon())
@@ -400,7 +400,7 @@ Here, we use [`CodifyVariables`](@ref) with [`ValueBinning`](@ref) bin the data
 and compute discrete Shannon mutual information.
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 50)
 y = rand(rng, 50)
@@ -424,7 +424,7 @@ curves corresponding to different time series length. We only show two single cu
 one for the [`KraskovStögbauerGrassberger1`](@ref) estimator and one for the [`KraskovStögbauerGrassberger2`](@ref) estimator*.
 
 ```@example ex_mutualinfo
-using CausalityTools
+using Associations
 using LinearAlgebra: det
 using Distributions: MvNormal
 using StateSpaceSets: StateSpaceSet
@@ -475,7 +475,7 @@ diverges from the true value for these data, the [`GaoKannanOhViswanath`](@ref)
 converges to the true value.
 
 ```@example ex_mutualinfo
-using CausalityTools
+using Associations
 using Statistics
 using StateSpaceSets: StateSpaceSet
 using Statistics: mean
@@ -553,7 +553,7 @@ fig
 Let's compare the performance of a subset of the implemented mutual information estimators. We'll use example data from Lord et al., where the analytical mutual information is known.
 
 ```@example ex_mutualinfo
-using CausalityTools
+using Associations
 using LinearAlgebra: det
 using StateSpaceSets: StateSpaceSet
 using Distributions: MvNormal
@@ -786,7 +786,7 @@ We see that the [`Lord`](@ref) estimator, which estimates local volume elements 
 with the [`UniqueElements`](@ref) outcome space.
 
 ```@example example_mirenyijizba
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, ["a", "b", "c"], 200);
 y = rand(rng, ["hello", "yoyo", "heyhey"], 200);
@@ -801,7 +801,7 @@ in combination with any [`DifferentialInfoEstimator`](@ref) capable of estimatin
 [`Renyi`](@ref) entropy.
 
 ```@example example_MIRenyiJizba
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = randn(rng, 50); y = randn(rng, 50);
 def = MIRenyiJizba()
@@ -817,7 +817,7 @@ in combination with any [`DiscreteInfoEstimator`](@ref) capable of estimating di
 
 
 ```@example example_MIRenyiJizba
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = randn(rng, 50); y = randn(rng, 50);
 def = MIRenyiJizba()
@@ -835,7 +835,7 @@ in combination with any [`CodifyVariables`](@ref) or [`CodifyPoints`](@ref) disc
 ### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_UniqueElements)
 
 ```@example example_MIRenyiSarbu
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, ["a", "b", "c"], 200)
 y = rand(rng, ["hello", "yoyo", "heyhey"], 200)
@@ -847,7 +847,7 @@ association(est, x, y)
 ### [[`JointProbabilities`](@ref) + [`CosineSimilarityBinning`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning)
 
 ```@example example_MIRenyiSarbu
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 200)
 y = rand(rng, 200)
@@ -864,7 +864,7 @@ association(est, x, y)
 in combination with any [`CodifyVariables`](@ref) or [`CodifyPoints`](@ref) discretization scheme.
 
 ```@example example_MITsallisFuruichi
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 200)
 y = rand(rng, 200)
@@ -876,7 +876,7 @@ association(est, x, y)
 ### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisFuruichi_EntropyDecomposition_LeonenkoProzantoSavani)
 
 ```@example example_MITsallisFuruichi
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 200)
 y = rand(rng, 200)
@@ -889,7 +889,7 @@ association(est_diff, x, y)
 ### [[`EntropyDecomposition`](@ref) + [`Dispersion`](@ref)](@id example_MITsallisFuruichi_EntropyDecomposition_Dispersion)
 
 ```@example example_MITsallisFuruichi
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 200)
 y = rand(rng, 200)
@@ -905,7 +905,7 @@ association(est_disc, x, y)
 ### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MITsallisMartin_JointProbabilities_UniqueElements)
 
 ```@example example_MITsallisMartin
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 200)
 y = rand(rng, 200)
@@ -922,7 +922,7 @@ that can estimate differential [`Tsallis`](@ref) entropy.
 
 
 ```@example example_MITsallisMartin
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 500)
 y = rand(rng, 500)
@@ -935,7 +935,7 @@ association(est_diff, x, y)
 
 
 ```@example 
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 200)
 y = rand(rng, 200)
@@ -950,7 +950,7 @@ association(est_disc, x, y)
 ### [[`CMIShannon`](@ref) with [`GaussianCMI`](@ref)](@id example_CMIShannon_GaussianCMI)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 using Distributions
 using Statistics
 
@@ -965,7 +965,7 @@ association(GaussianCMI(), x, z, y) # defaults to `CMIShannon()`
 ### [[`CMIShannon`](@ref) with [`FPVP`](@ref)](@id example_CMIShannon_FPVP)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 using Distributions
 using Statistics
 
@@ -985,7 +985,7 @@ association(FPVP(k = 5), x, z, y) # defaults to `CMIShannon()`
 ### [`CMIShannon`](@ref) with [`MesnerShalizi`](@ref)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 using Distributions
 using Statistics
 using Random; rng = Xoshiro(1234)
@@ -1006,7 +1006,7 @@ association(MesnerShalizi(; k = 10), x, z, y) # defaults to `CMIShannon()`
 ### [`CMIShannon`](@ref) with [`Rahimzamani`](@ref)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 using Distributions
 using Statistics
 using Random; rng = Xoshiro(1234)
@@ -1030,7 +1030,7 @@ Shannon-type conditional mutual information can be decomposed as a sum of
 mutual information terms, which we can each estimate with any dedicated [`MutualInformationEstimator`](@ref) estimator.
 
 ```julia
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 300)
 y = rand(rng, 300) .+ x
@@ -1046,7 +1046,7 @@ association(est, x, z, y) # should be near 0 (and can be negative)
 ### [[`PoczosSchneiderCMI`](@ref)](@id CMIRenyiPoczos_PoczosSchneiderCMI)
 
 ```@example example_cmirenyipoczos
-using CausalityTools
+using Associations
 using Distributions
 using Statistics
 using Random; rng = Xoshiro(1234)
@@ -1075,7 +1075,7 @@ taking the difference of mutual information terms.
 ### [[`MIDecomposition`](@ref) + [`KraskovStögbauerGrassberger1`](@ref)](@id example_CMIShannon_MIDecomposition_KSG1)
 
 ```@example mi_demonstration
-using CausalityTools
+using Associations
 using Distributions
 using Statistics
 
@@ -1101,7 +1101,7 @@ usethe [`EntropyDecomposition`](@ref) estimator. No bias correction is applied f
 [`EntropyDecomposition`](@ref) either.
 
 ```@example
-using CausalityTools
+using Associations
 using Distributions
 using Random; rng = Xoshiro(1234)
 n = 500
@@ -1121,7 +1121,7 @@ discretization (an [`OutcomeSpace`](@ref)).
 ### [[`EntropyDecomposition`](@ref) + [`ValueBinning`](@ref)](@id example_CMIShannon_EntropyDecomposition_ValueBinning)
 
 ```@example
-using CausalityTools
+using Associations
 using Distributions
 using Random; rng = Xoshiro(1234)
 n = 500
@@ -1140,7 +1140,7 @@ association(est, x, y, z)
 ### [[`JointProbabilities`](@ref) + [`BubbleSortSwaps`](@ref)](@id example_CMIRenyiJizba_JointProbabilities_BubbleSortSwaps)
 
 ```@example example_CMIRenyiJizba
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 100)
 y = x .+ rand(rng, 100)
@@ -1154,7 +1154,7 @@ association(est, x, z, y)
 ### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani)
 
 ```@example example_CMIRenyiJizba
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y, z = rand(rng, 1000), rand(rng, 1000), rand(rng, 1000)
 def = CMIRenyiJizba(q = 1.5)
@@ -1168,7 +1168,7 @@ association(est, x, y, z)
 ### [[`EntropyDecomposition`](@ref) + [`OrdinalPatterns`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_OrdinalPatterns)
 
 ```@example example_CMIRenyiJizba
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y, z = rand(rng, 1000), rand(rng, 1000), rand(rng, 1000)
 def = CMIRenyiJizba(q = 1.5)
@@ -1187,7 +1187,7 @@ there is time-delayed forcing between variables.
 
 ```@example transfer_entropy_examples
 
-using CausalityTools
+using Associations
 using DynamicalSystemsBase
 using StableRNGs
 rng = StableRNG(123)
@@ -1248,7 +1248,7 @@ information transfer.
 ### [[`CMIDecomposition`](@ref)](@id example_TEShannon_CMIDecomposition)
 
 ```@example 
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 1000)
 y = rand(rng, 1000) .+ x
@@ -1270,7 +1270,7 @@ Thus, we expect that the association for the direction `x → y` is larger than 
 on the intermediate value `y`.
 
 ```@example transfer_entropy_examples
-using CausalityTools
+using Associations
 using DynamicalSystemsBase
 using Random; rng = Xoshiro(1234)
 sys = system(Logistic4Chain(; rng))
@@ -1294,7 +1294,7 @@ We will test
     terms (without guaranteed cancellation of biases for the total sum).
 
 ```@example
-using CausalityTools
+using Associations
 using CairoMakie
 using Statistics
 using Distributions: Normal
@@ -1368,7 +1368,7 @@ discretizing per column of the input data using the [`CodifyVariables`](@ref) di
 scheme with the [`ValueBinning`](@ref) outcome space.
 
 ```@example example_te_schreiber
-using CausalityTools
+using Associations
 using DynamicalSystemsBase
 using CairoMakie
 using Statistics
@@ -1472,7 +1472,7 @@ We can perform the same type of analysis as above using [`TERenyiJizba`](@ref)
 instead of [`TEShannon`](@ref).
 
 ```@example transfer_entropy_examples
-using CausalityTools
+using Associations
 using DynamicalSystemsBase
 using StableRNGs; rng = StableRNG(123)
 
@@ -1496,7 +1496,7 @@ size `l`, and cross mapping is performed using the embedding vectors correspondi
 to those time indices.
 
 ```@example example_ConvergentCrossMapping
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 200), randn(rng, 200)
 
@@ -1511,7 +1511,7 @@ To generate a distribution of cross-map estimates for each `l ∈ libsizes`, jus
 crossmap repeatedly, e.g.
 
 ```@example example_ConvergentCrossMapping
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 using Statistics
 
@@ -1539,7 +1539,7 @@ size `l`, and cross mapping is performed using the embedding vectors correspondi
 to those time indices.
 
 ```@example example_ConvergentCrossMapping
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 200), randn(rng, 200)
 
@@ -1554,7 +1554,7 @@ As above, to generate a distribution of cross-map estimates for each `l ∈ libs
 crossmap repeatedly, e.g.
 
 ```@example example_ConvergentCrossMapping
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 using Statistics
 
@@ -1582,7 +1582,7 @@ instead of the convergent cross map algorithm.
 
 
 ```@example example_PairwiseAsymmetricInference
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 300), randn(rng, 300)
 
@@ -1597,7 +1597,7 @@ To generate a distribution of cross-map estimates for each `l ∈ libsizes`, jus
 crossmap repeatedly, e.g.
 
 ```@example example_PairwiseAsymmetricInference
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 using Statistics
 
@@ -1617,7 +1617,7 @@ f
 ### [[`RandomSegment`](@ref) estimator](@id example_PairwiseAsymmetricInference_RandomSegment)
 
 ```@example example_PairwiseAsymmetricInference
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x, y = randn(rng, 200), randn(rng, 200)
 
@@ -1632,7 +1632,7 @@ As above, to generate a distribution of cross-map estimates for each `l ∈ libs
 crossmap repeatedly, e.g.
 
 ```@example
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 using Statistics
 
@@ -1661,7 +1661,7 @@ from `X` to `Z`. We expect the association between `X` and `Z` to disappear when
 conditioning on `Y` (since we're then "removing the effect" of `Y`).
 
 ```@example example_mcr
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234);
 x = rand(rng, 300); y = rand(rng, 300) .* sin.(x); z = rand(rng, 300) .* y;
 est = MCR(r = 0.5)
@@ -1674,7 +1674,7 @@ Two variables that are uncoupled are symmetrically coupled (i.e. no coupling). W
 therefore expect the difference in conditional recurrence to be around zero.
 
 ```@example
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 300)
 y = rand(rng, 300)
@@ -1692,7 +1692,7 @@ from `X` to `Z`. We expect the association between `X` and `Z` to disappear when
 conditioning on `Y` (since we're then "removing the effect" of `Y`).
 
 ```@example example_mcr
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234);
 x = rand(rng, 300); y = rand(rng, 300) .* sin.(x); z = rand(rng, 300) .* y;
 est = RMCD(r = 0.5)

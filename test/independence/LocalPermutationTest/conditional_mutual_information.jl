@@ -1,5 +1,5 @@
 using Test
-using CausalityTools 
+using Associations 
 using StableRNGs
 
 rng = StableRNG(123)

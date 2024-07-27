@@ -58,7 +58,7 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
 ## Examples
 
 ```julia
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 10000); y = rand(rng, 10000)
 association(GaoKannanOhViswanath(; k = 10), x, y) # should be near 0 (and can be negative)

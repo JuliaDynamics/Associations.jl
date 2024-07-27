@@ -44,7 +44,7 @@ short) is the ``I^{(1)}`` `k`-th nearest neighbor estimator from [Kraskov2004](@
 ## Example 
 
 ```julia
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 10000); y = rand(rng, 10000)
 association(KSG1(; k = 10), x, y) # should be near 0 (and can be negative)

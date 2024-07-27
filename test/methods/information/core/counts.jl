@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 using Random
 rng = Xoshiro(1234)
 
@@ -64,7 +64,7 @@ d_row = CodifyPoints(OrdinalPatternEncoding{2}());
 
 # Multiple outcome spaces with the same cardinality with `CodifyVariables`
 using Test
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y = rand(rng, 100), rand(rng, 100)
 # We must use outcome spaces with the same number of total outcomes.

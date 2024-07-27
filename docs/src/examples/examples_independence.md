@@ -4,7 +4,7 @@
 ## [[`CorrTest`](@ref)](@id example_CorrTest)
 
 ```@example corrtest_example
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 
 # Some normally distributed data
@@ -48,7 +48,7 @@ to see if we can confirm from observed time series that these variables are
 bidirectionally coupled. We'll use a significance level of `1 - α = 0.99`, i.e. `α = 0.01`.
 
 ```@example examples_independence_JointDistanceDistributionTest
-using CausalityTools
+using Associations
 using DynamicalSystemsBase
 using Random; rng = Xoshiro(1234)
 Base.@kwdef struct Logistic2Bidir{V, C1, C2, R1, R2, Σx, Σy, R}
@@ -80,7 +80,7 @@ end
 We start by generating some time series and configuring the test.
 
 ```@example examples_independence_JointDistanceDistributionTest
-using CausalityTools
+using Associations
 sys = system(Logistic2Bidir(c_xy = 0.5, c_yx = 0.4))
 x, y = columns(first(trajectory(sys, 2000, Ttr = 10000)))
 measure = JointDistanceDistribution(D = 5, B = 5)
@@ -121,7 +121,7 @@ enough evidence in the data to suggest directional coupling.
 ### [Distance correlation](@id example_SurrogateAssociationTest_DistanceCorrelation)
 
 ```@example
-using CausalityTools
+using Associations
 x = randn(1000)
 y = randn(1000) .+ 0.5x
 independence(SurrogateAssociationTest(DistanceCorrelation()), x, y)
@@ -130,7 +130,7 @@ independence(SurrogateAssociationTest(DistanceCorrelation()), x, y)
 ### [Partial correlation](@id example_SurrogateAssociationTest_PartialCorrelation)
 
 ```@example
-using CausalityTools
+using Associations
 x = randn(1000)
 y = randn(1000) .+ 0.5x
 z = randn(1000) .+ 0.8y
@@ -141,7 +141,7 @@ independence(SurrogateAssociationTest(PartialCorrelation()), x, z, y)
 ### [[`SMeasure`](@ref)](@id example_SurrogateAssociationTest_SMeasure)
 
 ```@example example_SurrogateAssociationTest_SMeasure
-using CausalityTools
+using Associations
 x, y = randn(1000), randn(1000)
 measure = SMeasure(dx = 4, dy = 3)
 s = association(measure,     x, y)
@@ -175,7 +175,7 @@ evidence in the data to support directional dependence from `x` to `z`.
 In this example, we expect the `preference` and the `food` variables to be independent.
 
 ```@example example_SurrogateAssociationTest_MIShannon_categorical
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 # Simulate 
 n = 1000
@@ -204,7 +204,7 @@ We should be able to reject `places ⫫ experience`, but not reject
 relationships using (conditional) mutual information.
 
 ```@example indep_cmi
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 1000
 
@@ -247,7 +247,7 @@ and we can't reject the null hypothesis of independence.
 ### [[`MCR`](@ref)](@id example_independence_MCR)
 
 ```@example
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 
 x = rand(rng, 300)
@@ -259,7 +259,7 @@ independence(test, x, y)
 As expected, we can't reject independence. What happens if two variables are coupled?
 
 ```@example
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x = rand(rng, 300)
 z = x .+ rand(rng, 300)
@@ -320,7 +320,7 @@ entropy estimator, which naively computes CMI as a sum of entropy terms without 
 bias cancellation.
 
 ```@example example_LocalPermutationTest
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 n = 100
 X = randn(rng, n)
@@ -355,7 +355,7 @@ to be non-significant when conditioning on `Y`, because all information from `X`
 is transferred through `Y`.
 
 ```@example example_LocalPermutationTest
-using CausalityTools
+using Associations
 using Random; rng = Random.default_rng()
 n = 300
 sys = system(Logistic4Chain(; xi = rand(rng, 4), rng))

@@ -6,12 +6,12 @@ using DocumenterInterLinks
 import Downloads
 
 # Packages used in the doc build.
-using CausalityTools
+using Associations
 using ComplexityMeasures
 using StateSpaceSets
 
 pages = [
-    "CausalityTools.jl" => "index.md",
+    "Associations.jl" => "index.md",
     "Core API reference" => [
         "Association measures" => "associations.md",
         "Independence" => "independence.md",
@@ -43,7 +43,7 @@ bibliography = CitationBibliography(
     style=:authoryear
 )
 
-build_docs_with_style(pages, CausalityTools, ComplexityMeasures, StateSpaceSets;
+build_docs_with_style(pages, Associations, ComplexityMeasures, StateSpaceSets;
     expandfirst = ["index.md"],
     bib = bibliography,
     pages = pages,

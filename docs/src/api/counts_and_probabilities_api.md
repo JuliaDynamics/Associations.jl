@@ -1,17 +1,21 @@
 
+```@meta
+CollapsedDocStrings = true
+```
+
 # [Multivariate counts and probabilities API](@id counts_and_probabilities_api)
 
-For counting and probabilities, CausalityTools.jl extends the single-variable machinery
+For counting and probabilities, Associations.jl extends the single-variable machinery
 in ComplexityMeasures.jl to multiple variables.
 
 ```@docs
-CausalityTools.Counts
-CausalityTools.counts(::OutcomeSpace)
+Associations.Counts
+Associations.counts(::OutcomeSpace)
 ```
 
 ```@docs
-CausalityTools.Probabilities
-CausalityTools.probabilities(::OutcomeSpace)
+Associations.Probabilities
+Associations.probabilities(::OutcomeSpace)
 ```
 
 The utility function [`marginal`](@ref) is also useful.
@@ -26,7 +30,7 @@ Estimating multivariate counts (contingency matrices) and PMFs is simple. If the
 we can use [`UniqueElements`](@ref) to simply count the number of occurrences.
 
 ```@example counts_probs_tutorial
-using CausalityTools
+using Associations
 n = 50 # the number of samples must be the same for each input variable
 x = rand(["dog", "cat", "snake"], n)
 y = rand(1:4, n)
@@ -46,7 +50,7 @@ For numerical data, we can estimate both counts and probabilities using [`Codify
 with any count-based [`OutcomeSpace`](@ref).
 
 ```@example counts_probs_tutorial
-using CausalityTools
+using Associations
 x, y = rand(100), rand(100)
 discretization = CodifyVariables(BubbleSortSwaps(m = 4))
 probabilities(discretization, x, y)
@@ -55,7 +59,7 @@ probabilities(discretization, x, y)
 For more fine-grained control, we can use [`CodifyPoints`](@ref) with one or several [`Encoding`](@ref)s.
 
 ```@example counts_probs_tutorial
-using CausalityTools
+using Associations
 x, y = StateSpaceSet(rand(1000, 2)), StateSpaceSet(rand(1000, 3))
 
  # min/max of the `rand` call is 0 and 1

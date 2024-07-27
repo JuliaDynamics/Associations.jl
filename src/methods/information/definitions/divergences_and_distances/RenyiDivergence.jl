@@ -39,7 +39,7 @@ D_{q}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 !!! note 
     Distances.jl also defines `RenyiDivergence`. Quality it if you're loading both 
-    packages, i.e. do `association(CausalityTools.RenyiDivergence(), x, y)`.
+    packages, i.e. do `association(Associations.RenyiDivergence(), x, y)`.
 
 
 ## Estimation

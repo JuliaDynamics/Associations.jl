@@ -1,5 +1,5 @@
-using CausalityTools
-using CausalityTools: OCESelectedParents
+using Associations
+using Associations: OCESelectedParents
 using Test
 using StableRNGs
 using Graphs.SimpleGraphs: SimpleEdge
