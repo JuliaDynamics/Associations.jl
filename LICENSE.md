@@ -1,4 +1,4 @@
-The CausalityTools.jl package is licensed under the MIT "Expat" License:
+The Associations.jl package (previously called CausalityTools.jl) is licensed under the MIT "Expat" License:
 
 > Copyright (c) 2018: Kristian Agasøster Haaga.
 >

@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 using Random
 rng = Xoshiro(1234)
 

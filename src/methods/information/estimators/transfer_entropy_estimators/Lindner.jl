@@ -51,7 +51,7 @@ conditioning too (a simple modification to [Lindner2011](@citet)'s equation 5 an
 ## Example 
 
 ```julia
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 10000)
 y = rand(rng, 10000) .+ x

@@ -60,7 +60,7 @@ Amplitude
 ## [A small tutorial](@id tutorial_infomeasures)
 
 
-CausalityTools.jl extends the single-variate information API in
+Associations.jl extends the single-variate information API in
 [ComplexityMeasures.jl](https://github.com/JuliaDynamics/ComplexityMeasures.jl)
 to information measures of multiple variables. 
 
@@ -115,7 +115,7 @@ expressed as a function of a joint pmf, we can use the [`JointProbabilities`](@r
 estimator.
 
 ```@example INFO_TUTORIAL
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x, y = rand(rng, 1000), rand(rng, 1000)
 
@@ -143,7 +143,7 @@ they are functions of a joint pmf, and can therefore also be estimated using the
 with 3 bins along each dimension to discretize the data.
 
 ```@example INFO_TUTORIAL
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 
 x, y = randn(rng, 1000), randn(rng, 1000)
@@ -161,7 +161,7 @@ entropies are functionals of a joint pmf, so we can still use the
 based discretization.
 
 ```@example INFO_TUTORIAL
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 
 x, y = randn(rng, 1000), randn(rng, 1000)
@@ -179,7 +179,7 @@ example, one can use dedicated [`MutualInformationEstimator`](@ref)s such as
 [`KraskovStögbauerGrassberger2`](@ref) or [`GaussianMI`](@ref):
 
 ```@example INFO_TUTORIAL
-using CausalityTools
+using Associations
 using StateSpaceSets
 # We'll construct two state space sets, to illustrate how we can discretize 
 # multidimensional inputs using `CodifyPoints`.
@@ -228,7 +228,7 @@ with any count-based [`OutcomeSpace`](@ref). Here, we'll estimate [`MIShannon`](
 one type of encoding for the first variable, and another type of encoding for the second variable.
 
 ```@example counts_probs_tutorial
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y = rand(rng, 100), rand(rng, 100)
 
@@ -248,7 +248,7 @@ For more fine-grained control than [`CodifyVariables`](@ref) can offer, we can u
 data by discretizing each input variable in arbitrary ways.
 
 ```@example counts_probs_tutorial
-using CausalityTools
+using Associations
 using Random; rng = Xoshiro(1234)
 x, y = StateSpaceSet(rand(rng, 1000, 2)), StateSpaceSet(rand(rng, 1000, 3))
 

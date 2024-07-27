@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 
 # Double-sum estimation.
 x = rand(["a", "b", "c"], 200)

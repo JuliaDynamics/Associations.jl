@@ -8,5 +8,5 @@ z = rand(100, 2)
 
 @test_logs (:warn, "Convenience function `partial_correlation` is deprecated. Use `association(PartialCorrelation(), x, y, z)` instead.") partial_correlation(x, y, z)
 
-@test CausalityTools.min_inputs_vars(PartialCorrelation()) == 3
-@test CausalityTools.max_inputs_vars(PartialCorrelation()) == Inf
+@test Associations.min_inputs_vars(PartialCorrelation()) == 3
+@test Associations.max_inputs_vars(PartialCorrelation()) == Inf

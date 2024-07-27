@@ -1,15 +1,15 @@
-# CausalityTools
+# Associations
 
-[![CI](https://github.com/juliadynamics/CausalityTools.jl/workflows/CI/badge.svg)](https://github.com/JuliaDynamics/CausalityTools.jl/actions)
-[![](https://img.shields.io/badge/docs-latest_tagged-blue.svg)](https://juliadynamics.github.io/CausalityTools.jl/stable/)
-[![](https://img.shields.io/badge/docs-dev_(master)-blue.svg)](https://juliadynamics.github.io/CausalityTools.jl/dev/)
-[![codecov](https://codecov.io/gh/JuliaDynamics/CausalityTools.jl/branch/master/graph/badge.svg?token=0b71n6x6AP)](https://codecov.io/gh/JuliaDynamics/CausalityTools.jl)
+[![CI](https://github.com/juliadynamics/Associations.jl/workflows/CI/badge.svg)](https://github.com/JuliaDynamics/Associations.jl/actions)
+[![](https://img.shields.io/badge/docs-latest_tagged-blue.svg)](https://juliadynamics.github.io/Associations.jl/stable/)
+[![](https://img.shields.io/badge/docs-dev_(master)-blue.svg)](https://juliadynamics.github.io/Associations.jl/dev/)
+[![codecov](https://codecov.io/gh/JuliaDynamics/Associations.jl/branch/master/graph/badge.svg?token=0b71n6x6AP)](https://codecov.io/gh/JuliaDynamics/Associations.jl)
 [![DOI](https://zenodo.org/badge/135443027.svg)](https://zenodo.org/badge/latestdoi/135443027)
 
-CausalityTools.jl is a package for quantifying associations, independence testing and causal inference.
+Associations.jl is a package for quantifying associations, independence testing and causal inference.
 
 All further information is provided in the
-[documentation](https://juliadynamics.github.io/CausalityTools.jl/dev), which you can either
+[documentation](https://juliadynamics.github.io/Associations.jl/dev), which you can either
 find online or build locally by running the `docs/make.jl` file.
 
 ## Key features
@@ -31,4 +31,6 @@ we also offer
 
 ## Installation
 
-To install the package, run `import Pkg; Pkg.add("CausalityTools")`.
+To install the package, run `import Pkg; Pkg.add("Associations")`.
+
+*Previously, this package was called CausalityTools.jl*.

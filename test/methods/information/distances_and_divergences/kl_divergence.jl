@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 
 # There should be zero information gain from `x` over `y` for independent random variables.
 using Random

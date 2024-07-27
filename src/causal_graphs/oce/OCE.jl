@@ -492,7 +492,7 @@ end
 #########################################################################################
 # Compatibility with Graphs.jl
 #########################################################################################
-function SimpleDiGraph(v::Vector{<:CausalityTools.OCESelectedParents})
+function SimpleDiGraph(v::Vector{<:Associations.OCESelectedParents})
     N = length(v)
     g = SimpleDiGraph(N)
     for k = 1:N

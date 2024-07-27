@@ -104,7 +104,7 @@ The total embedding is then the set of embedding vectors
 this to code, we get:
 
 ```jldoctest
-using CausalityTools
+using Associations
 julia> EmbeddingTE(dT=3, τT=[0, -5, -8], dS=2, τS=[-1, -4], ηTf=1)
 
 # output

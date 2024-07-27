@@ -1,16 +1,16 @@
 using Test
-using CausalityTools
+using Associations
 
 def = CMIRenyiSarbu()
-@test CausalityTools.min_inputs_vars(def) == 3
-@test CausalityTools.max_inputs_vars(def) == 3
+@test Associations.min_inputs_vars(def) == 3
+@test Associations.max_inputs_vars(def) == 3
 
 # ---------------
 # Internals
 # ---------------
 def = CMIRenyiSarbu()
-@test CausalityTools.min_inputs_vars(def) == 3
-@test CausalityTools.max_inputs_vars(def) == 3
+@test Associations.min_inputs_vars(def) == 3
+@test Associations.max_inputs_vars(def) == 3
 
 # Double-sum estimation.
 x = rand(["a", "b", "c"], 50)

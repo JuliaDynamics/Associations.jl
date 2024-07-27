@@ -41,7 +41,7 @@ volume of a ``d``-dimensional unit ``\\mathcal{l}_2``-ball.
 ## Example 
 
 ```julia
-using CausalityTools
+using Associations
 using Random; rng = MersenneTwister(1234)
 x = rand(rng, 10000); y = rand(rng, 10000)
 association(GaoOhViswanath(; k = 10), x, y) # should be near 0 (and can be negative)

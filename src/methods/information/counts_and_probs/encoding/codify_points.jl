@@ -42,7 +42,7 @@ then that same encoding is applied to every `x[i]`.
 ## Examples
 
 ```julia
-using CausalityTools
+using Associations
 
 # The same encoding on two input datasets
 x = StateSpaceSet(rand(100, 3))

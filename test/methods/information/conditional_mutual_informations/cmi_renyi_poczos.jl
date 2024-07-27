@@ -1,6 +1,6 @@
 
 using Test
-using CausalityTools
+using Associations
 using Random
 rng = MersenneTwister(1234)
 
@@ -13,8 +13,8 @@ z = randn(rng, 50)
 # Internals
 # ---------------
 def = CMIRenyiPoczos()
-@test CausalityTools.min_inputs_vars(def) == 3
-@test CausalityTools.max_inputs_vars(def) == 3
+@test Associations.min_inputs_vars(def) == 3
+@test Associations.max_inputs_vars(def) == 3
 
 # ---------------------------------------------------------------------------------------
 # Test all possible ways of estimating `CMIRenyiPoczos`.

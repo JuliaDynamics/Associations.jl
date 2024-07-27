@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 using Random
 rng = MersenneTwister(1234)
 def = MIShannon()

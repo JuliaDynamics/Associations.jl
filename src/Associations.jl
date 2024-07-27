@@ -1,11 +1,11 @@
 
-module CausalityTools
+module Associations
     # Use the README as the module docs
     @doc let
         path = joinpath(dirname(@__DIR__), "README.md")
         include_dependency(path)
         read(path, String)
-    end CausalityTools
+    end Associations
 
     using Reexport
 
@@ -40,13 +40,11 @@ module CausalityTools
     # Update messages:
     using Scratch
     display_update = true
-    version_number = "3.0.0"
+    version_number = "4.0.0"
     update_name = "update_v$(version_number)"
     update_message = """
-    \nUpdate message: CausalityTools v$(version_number)\n
-    - Bivariate and multivariate information measure definitions and estimation is now based on the API in ComplexityMeasures.jl.
-    - Example systems have been removed from the package to avoid unnecessary package dependencies and improve compilation time.
-    - Convenience methods have been removed. Use `association` instead.
+    \nUpdate message: Associations v$(version_number)\n
+    - The package has been renamed from CausalityTools.jl to Associations.jl! As part of the renaming, Associations.jl has incremented its major version to v4, which is fully backwards compatible with CausalityTools v3.
     """
 
     if display_update

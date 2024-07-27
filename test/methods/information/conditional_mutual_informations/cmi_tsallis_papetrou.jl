@@ -1,11 +1,11 @@
 using Test
-using CausalityTools
+using Associations
 # ---------------
 # Internals
 # ---------------
 def = CMITsallisPapapetrou()
-@test CausalityTools.min_inputs_vars(def) == 3
-@test CausalityTools.max_inputs_vars(def) == 3
+@test Associations.min_inputs_vars(def) == 3
+@test Associations.max_inputs_vars(def) == 3
 
 # ---------------------------------------------------------------------------------------
 # Test all possible ways of estimating `CMIRenyiJizba`.

@@ -1,5 +1,5 @@
 using Test
-using CausalityTools
+using Associations
 using DynamicalSystemsBase
 using Random
 

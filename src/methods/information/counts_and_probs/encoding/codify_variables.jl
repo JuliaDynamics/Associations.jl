@@ -43,7 +43,7 @@ values within each window to an integer.
 ## Examples
 
 ```julia
-using CausalityTools
+using Associations
 x, y = rand(100), rand(100)
 d = CodifyVariables(OrdinalPatterns(m=2))
 cx, cy = codify(d, x, y)
@@ -85,7 +85,7 @@ Codify each timeseries `xᵢ ∈ x` according to the given encoding/discretizati
 ## Examples
 
 ```julia
-using CausalityTools
+using Associations
 
 # Sliding window encoding
 x = [0.1, 0.2, 0.3, 0.2, 0.1, 0.0, 0.5, 0.3, 0.5]

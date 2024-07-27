@@ -1,5 +1,5 @@
 using Test
-using CausalityTools 
+using Associations 
 using StableRNGs
 
 rng = StableRNG(123)
@@ -41,18 +41,18 @@ independence_test = LocalPermutationTest(FPVP(CMIShannon()), nshuffles = 2)
 res = independence(independence_test, x, z, y)
 
 # Internals
-out_str_pval = repr( CausalityTools.pvalue_text_summary(res))
+out_str_pval = repr( Associations.pvalue_text_summary(res))
 @test occursin("p-value:", out_str_pval)
 
 # Internals
-out_str_pval = repr( CausalityTools.quantiles_text(res))
+out_str_pval = repr( Associations.quantiles_text(res))
 @test occursin("Ensemble quantiles", out_str_pval)
 
 
-out_str_conclusion = repr( CausalityTools.null_hypothesis_text(res))
+out_str_conclusion = repr( Associations.null_hypothesis_text(res))
 @test occursin("The first two variables are independent, given the 3rd variable", out_str_conclusion)
 
 independence_test = SurrogateAssociationTest(KSG1(MIShannon()))
 res = independence(independence_test, x, y)
-out_str_conclusion = repr( CausalityTools.null_hypothesis_text(res))
+out_str_conclusion = repr( Associations.null_hypothesis_text(res))
 @test occursin("The variables are independent", out_str_conclusion)
