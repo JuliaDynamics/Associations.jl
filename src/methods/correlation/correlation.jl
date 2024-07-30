@@ -20,3 +20,4 @@ abstract type CorrelationMeasureEstimator{M} <: AssociationMeasure end
 include("pearson_correlation.jl")
 include("partial_correlation.jl")
 include("distance_correlation.jl")
+include("chatterjee/chatterjee_dette.jl")
