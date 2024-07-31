@@ -194,7 +194,7 @@ end
 function verify_inputs_chatterjee(x, y)
     if length(x) != length(y)
         msg = "`length(x)` must equal `length(y)` for `ChatterjeeCorrelation`. " * 
-            "Got length(x)=$(length(x)) and length(y)=$(length(x))".
+            "Got length(x)=$(length(x)) and length(y)=$(length(y))."
         throw(ArgumentError(msg))
     end
 end

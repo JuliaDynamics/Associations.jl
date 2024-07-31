@@ -3,6 +3,10 @@ using Associations
 using Random
 rng = Xoshiro(12345)
 
+x = rand(rng, 1:5, 100)
+y = rand(rng, 1:5, 101)
+m = ChatterjeeCorrelation()
+@test_throws ArgumentError association(m, x, y)
 # ----------------------------------------------------------------
 # Implementation tests
 # ----------------------------------------------------------------
@@ -38,8 +42,8 @@ y = [5.6, 6.6, 3.3, 4.4, 2.2, 15.0]
 # package, because there is no option to specify the random number seed
 # for splitting ties. We'll just use some data where the coefficient 
 # should be positive.
-x = [1.2, 5.3, 5.3, 2.4, 3.3, 7.7, 7.7, 6.5]
-y = [5.6, 6.6, 3.3, 4.4, 4.4, 2.2, 2.2, 15.0] .+ x
+x = [1.2, 5.3, 5.3, 2.4, 3.3, 7.7, 7.7, 6.5, 2.2]
+y = [5.6, 6.6, 3.3, 4.4, 4.4, 2.2, 2.2, 15.0, 2.3] .+ x
 @test round(association(ChatterjeeCorrelation(x, y, handle_ties = false), x, y), digits = 6) > 0
 @test round(association(ChatterjeeCorrelation(x, y, handle_ties = true), x, y), digits = 6) > 0
 @test round(association(ChatterjeeCorrelation(handle_ties = false), x, y), digits = 6) > 0
