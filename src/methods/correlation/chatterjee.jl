@@ -8,7 +8,7 @@ export ChatterjeeCorrelation
     ChatterjeeCorrelation <: CorrelationMeasure
     ChatterjeeCorrelation(; handle_ties = true, rng = Random.default_rng())
 
-The Chatterjee correlation measure is an asymmetric measure of dependence between
+The Chatterjee correlation measure [Chatterjee2021](@cite) is an asymmetric measure of dependence between
 two variables. 
 
 !!! info "Speeding up computations"
