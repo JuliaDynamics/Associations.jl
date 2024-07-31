@@ -131,7 +131,7 @@ independence(test, x, y)
 As expected, the test indicates that we can't reject independence. What happens if we introduce
 a third variable that depends on `y`?
 
-```@example
+```@example example_SurrogateAssociationTest_ChatterjeeCorrelation
 z = rand(1:20, n) .* y
 independence(test, y, z)
 ```
