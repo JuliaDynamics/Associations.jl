@@ -1,26 +1,39 @@
 using Random
 
-export ChatterjeeDetteCorrelation
-export Chatterjee
+export ChatterjeeCorrelation
 
 
 # Based on the description in https://arxiv.org/pdf/2008.11619
 """
-    ChatterjeeDetteCorrelation <: CorrelationMeasure
-    ChatterjeeDetteCorrelation(x::AbstractVector, y::AbstractVector; 
-        jitter = false, handle_ties = false,
-        rng = Random.default_rng(), 
-        lt = (a, b) -> isless_rand(rng, a, b))
+    ChatterjeeCorrelation <: CorrelationMeasure
+    ChatterjeeCorrelation(; handle_ties = true, rng = Random.default_rng())
 
-The Chatterjee-Dette correlation measure is an asymmetric measure of dependence between
-two variables.
+The Chatterjee correlation measure is an asymmetric measure of dependence between
+two variables. 
 
-The input data `x` and `y` are required, because they are used to pre-allocate container for 
-handle_tieser computations.
+!!! info "Speeding up computations"
+    If `handle_ties == true`, then the first formula below is used. If you know
+    for sure that there are no ties in your data, then set `handle_ties == false`, 
+    which will use the second (faster) formula below.
+
+!!! note "Randomization and reproducibility"
+    When rearranging the input datasets, the second variable `y` is sorted 
+    according to a sorting of the first variable `x`. If `x` has ties, then 
+    these ties are broken randomly and uniformly. For complete reproducibility in 
+    this step, you can specify `rng`. If `x` has no ties, then no randomization 
+    is performed.
+
+# Usage
+
+- Use with [`association`](@ref) to compute the raw Chatterjee correlation coefficient.
+- Use with [`SurrogateAssociationTest`](@ref) to perform a surrogate test for significance 
+    of a Chatterjee-type association ([example](@ref example_SurrogateAssociationTest_ChatterjeeCorrelation)). 
+    When using a surrogate test for significance, the *first* input variable is shuffled 
+    according to the given surrogate method.
 
 ## Description 
 
-The correlation measure is defined as
+The correlation statistic is defined as
 
 ```math
 \\epsilon_n(X, Y) = 
@@ -35,59 +48,18 @@ measure is
 1 - \\dfrac{3\\sum_{i=1}^{n-1} |r_{i+1} - r_i|}{n^2 - 1}.
 ```
 
-!!! info "Speeding up computations"
-    If `handle_ties == true`, then the first formula is used. Use this 
-    if you know for sure that the input data has no ties. If 
-    `handle_ties == false`, then the second formula is used (
-    which is faster).
-    
-    For numerical input data, `jitter == true` will set `handle_ties == true` and add a 
-    small amount of uniform noise to the data. This will almost almost surely break 
-    any ties before the second formula is applied.
+This statistic estimates a quantity proposed by [Dette2013](@citet), as indicated in 
+[Shi2022](@citet). It can therefore also be called the Chatterjee-Dette-Siburg-Stoimenov
+correlation coefficient.
+
+## Estimation
+
+- [Example 1](@ref example_ChatterjeeCorrelation). Estimating the Chatterjee correlation coefficient
+    for independent and for dependent variables. 
+- [Example 2](@ref example_SurrogateAssociationTest_ChatterjeeCorrelation). Testing the significance
+    of a Chatterjee-type association using a surrogate test.
 """
-struct ChatterjeeDetteCorrelation{
-        I <: Integer, 
-        J <: Integer, 
-        V <: Union{AbstractVector, Nothing}
-    } <: CorrelationMeasure
-
-    # A copy of the original data, to which we add noise.
-    xc::V
-
-    # A container holding the indices that would sort the *first* input vector (X).
-    x_sortidxs::Vector{I}
-
-    # The ranks. r[i] := sum_{j=1}^n I(Y_j ≤ Y_i), where Y is the *second* input variable.
-    rs::Vector{J}
-
-    jitter::Bool
-
-    handle_ties::Bool
-
-
-    function ChatterjeeDetteCorrelation(x, y; jitter = false, handle_ties = true)
-        @assert length(x) == length(y)
-        n = length(x)
-        x_sortidxs = zeros(Int, n)
-        rs = zeros(Int, n)
-
-        # If we jitter, we can almost surely guarantee that there are no ties and use
-        # the handle_ties version.
-        if jitter  && x isa AbstractVector{<:Number}
-            if x isa AbstractVector{<:Number}
-                xc = zeros(Float64, n)
-                new{Int, Int, Nothing}(xc, x_sortidxs, rs, jitter)
-            else
-                msg = "To add jitter to the input data, the input data must be a numeric vector"
-                throw(ArgumentError(msg))
-            end
-        else
-            new{Int, Int, Nothing}(nothing, x_sortidxs, rs, jitter)
-        end
-    end
-end
-
-struct Chatterjee{XS, R, L, DR, YR, YSI, YSS, RNG} <: CorrelationMeasure
+struct ChatterjeeCorrelation{XS, R, L, DR, YR, YSI, YSS, RNG} <: CorrelationMeasure
     # Pre-allocated containers (if input data are given).
     # If no input data are given, then these are all `nothing`.
     xs_inds::XS # indices that would sort `x`
@@ -103,13 +75,14 @@ struct Chatterjee{XS, R, L, DR, YR, YSI, YSS, RNG} <: CorrelationMeasure
 end
 
 # Non-preallocated version
-function Chatterjee(; handle_ties = true, rng = Random.default_rng(), lt = (a, b) -> isless_rand(rng, a, b))
-    return Chatterjee{Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(rng)}(
+function ChatterjeeCorrelation(; handle_ties = true, rng = Random.default_rng(), lt = (a, b) -> isless_rand(rng, a, b))
+    return ChatterjeeCorrelation{Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(rng)}(
         nothing, nothing, nothing, nothing, nothing, nothing, nothing, rng, handle_ties, lt)
 end
 
 # Preallocated version
-function Chatterjee(x, y; handle_ties = true, rng = Random.default_rng(), lt = (a, b) -> isless_rand(rng, a, b))
+function ChatterjeeCorrelation(x, y; 
+        handle_ties = true, rng = Random.default_rng(), lt = (a, b) -> isless_rand(rng, a, b))
     verify_inputs_chatterjee(x, y)
     n = length(x)
     xs_inds = zeros(Int, n)
@@ -120,30 +93,19 @@ function Chatterjee(x, y; handle_ties = true, rng = Random.default_rng(), lt = (
     𝓁 = zeros(Int, n)
     r = zeros(Int, n)
     Δr = zeros(n)
-    return Chatterjee(xs_inds, r, 𝓁, Δr, y_sortedbyx, y_sortedbyx_inds, y_sortedbyx_sorted, rng, handle_ties, lt)
+    return ChatterjeeCorrelation(xs_inds, r, 𝓁, Δr, y_sortedbyx, y_sortedbyx_inds, 
+        y_sortedbyx_sorted, rng, handle_ties, lt)
 end
 
-function association(m::Chatterjee{Nothing}, x, y)
-    verify_inputs_chatterjee(x, y)
-    n = length(x)
-
-    y_sortedbyx = y[sortperm(x, lt = m.lt)] # Rearranged `y`s
-    if m.handle_ties
-        r, 𝓁 = loopcount_rs_ℓs(y_sortedbyx)
-    else
-        r = loopcount_rs(y_sortedbyx)
-        𝓁 = nothing
-    end
-    
-    # Absolute values of the first differences for the ranks.
-    Δr = zeros(Int, n - 1)
-    Δr = absfirstdiffs!(Δr, r)
-
-    chatterjee_coefficient(Δr, 𝓁, n, m.handle_ties)
+# If the user provided a non-preallocated version, then we simply create a new version
+# of the measure that *is* pre-allocated and use that.
+function association(m::ChatterjeeCorrelation{Nothing}, x, y)
+    measure = ChatterjeeCorrelation(x, y, rng = m.rng, lt = m.lt, handle_ties = m.handle_ties)
+    return association(measure, x, y)
 end
 
 # Pre-allocated version
-function association(m::Chatterjee{<:AbstractVector}, x, y)
+function association(m::ChatterjeeCorrelation{<:AbstractVector}, x, y)
     verify_inputs_chatterjee(x, y)
     n = length(x)
 
@@ -170,13 +132,6 @@ function association(m::Chatterjee{<:AbstractVector}, x, y)
     return chatterjee_coefficient(m.Δr, m.𝓁, n, m.handle_ties)
 end
 
-function loopcount_rs(y_sortedbyx)
-    sorted_y_sortedbyx = sort(y_sortedbyx)
-    r = zeros(length(sorted_y_sortedbyx))
-    loopcount_rs!(r, sorted_y_sortedbyx, y_sortedbyx)
-    return r
-end
-
 function loopcount_rs!(r, sorted_y_sortedbyx, y_sortedbyx)    
     for (i, yᵢ) in enumerate(y_sortedbyx)
         # The position of the last (rightmost) occurrence of yᵢ in the 
@@ -184,15 +139,6 @@ function loopcount_rs!(r, sorted_y_sortedbyx, y_sortedbyx)
         rightmost_occurrence = searchsortedlast(sorted_y_sortedbyx, yᵢ)
         r[i] = rightmost_occurrence
     end
-end
-
-function loopcount_rs_ℓs(y_sortedbyx)
-    n = length(y_sortedbyx)
-    sorted_y_sortedbyx = sort(y_sortedbyx)
-    r = zeros(Int, n)
-    𝓁 = zeros(Int, n)
-    loopcount_rs_ℓs!(r, 𝓁, sorted_y_sortedbyx, y_sortedbyx)
-    return r, 𝓁
 end
 
 function loopcount_rs_ℓs!(r, ℓ, sorted_y_sortedbyx, y_sortedbyx)
@@ -216,7 +162,7 @@ end
 """
     chatterjee_coefficient(Δr, 𝓁, n::Integer, handle_ties::Bool)
 
-Compute the Chatterjee-Dette correlation coefficient given the length of the 
+Compute the Chatterjee correlation coefficient given the length of the 
 input `n`, pre-computed first differences of the ranks `Δr` and pre-computed
 `𝓁`.
 """
@@ -247,12 +193,13 @@ end
 
 function verify_inputs_chatterjee(x, y)
     if length(x) != length(y)
-        msg = "`length(x)` must equal `length(y)` for `ChatterjeeDetteCorrelation`. " * 
+        msg = "`length(x)` must equal `length(y)` for `ChatterjeeCorrelation`. " * 
             "Got length(x)=$(length(x)) and length(y)=$(length(x))".
         throw(ArgumentError(msg))
     end
 end
 
+# break ties randomly.
 function isless_rand(rng, a, b)
     if  a < b
         true

@@ -1,5 +1,15 @@
 # Changelog
 
+From version v4.0 onwards, this package has been renamed to to Associations.jl.
+
+# 4.1
+
+- New association measure: `ChatterjeeCorrelation`.
+
+# 4.0 (package rename)
+
+The package has been renamed from CausalityTools.jl to Associations.jl.
+
 ## 3.0 (new major release)
 
 This release contains several breaking changes. Any code from before v3.0 will need 

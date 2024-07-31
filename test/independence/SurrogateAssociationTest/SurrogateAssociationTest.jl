@@ -17,6 +17,7 @@ include("MMeasure.jl")
 include("LMeasure.jl")
 include("TransferEntropyPairwise.jl")
 include("crossmappings.jl")
+include("chatterjee_correlation.jl")
 
 # Conditional measures
 include("ConditionalMutualInformation.jl")

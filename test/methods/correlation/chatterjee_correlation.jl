@@ -15,8 +15,8 @@ for i = 1:10
 
     # We must initialize identical seeds to ensure reproducible results
     rng_seed = rand(rng, 1:100) 
-    m1 = Chatterjee(x, y, handle_ties = false, rng = Xoshiro(rng_seed))
-    m2 = Chatterjee(handle_ties = false, rng = Xoshiro(1234))
+    m1 = ChatterjeeCorrelation(x, y, handle_ties = false, rng = Xoshiro(rng_seed))
+    m2 = ChatterjeeCorrelation(handle_ties = false, rng = Xoshiro(1234))
     c1 = association(m1, x, y)
     c2 = association(m2, x, y)
     @test c1 == c2
@@ -29,10 +29,10 @@ end
 # Without repetitions
 x = [1.2, 5.3, 2.4, 3.3, 7.7, 6.5]
 y = [5.6, 6.6, 3.3, 4.4, 2.2, 15.0]
-@test round(association(Chatterjee(x, y, handle_ties = false), x, y), digits = 6) ≈ 0.057143
-@test round(association(Chatterjee(x, y, handle_ties = true), x, y), digits = 6) ≈ 0.057143
-@test round(association(Chatterjee(handle_ties = false), x, y), digits = 6) ≈ 0.057143
-@test round(association(Chatterjee(handle_ties = false), x, y), digits = 6) ≈ 0.057143
+@test round(association(ChatterjeeCorrelation(x, y, handle_ties = false), x, y), digits = 6) ≈ 0.057143
+@test round(association(ChatterjeeCorrelation(x, y, handle_ties = true), x, y), digits = 6) ≈ 0.057143
+@test round(association(ChatterjeeCorrelation(handle_ties = false), x, y), digits = 6) ≈ 0.057143
+@test round(association(ChatterjeeCorrelation(handle_ties = false), x, y), digits = 6) ≈ 0.057143
 
 # With repetitions. We have no way of comparing directly with the XICORE
 # package, because there is no option to specify the random number seed
@@ -40,7 +40,7 @@ y = [5.6, 6.6, 3.3, 4.4, 2.2, 15.0]
 # should be positive.
 x = [1.2, 5.3, 5.3, 2.4, 3.3, 7.7, 7.7, 6.5]
 y = [5.6, 6.6, 3.3, 4.4, 4.4, 2.2, 2.2, 15.0] .+ x
-@test round(association(Chatterjee(x, y, handle_ties = false), x, y), digits = 6) > 0
-@test round(association(Chatterjee(x, y, handle_ties = true), x, y), digits = 6) > 0
-@test round(association(Chatterjee(handle_ties = false), x, y), digits = 6) > 0
-@test round(association(Chatterjee(handle_ties = true), x, y), digits = 6) > 0
+@test round(association(ChatterjeeCorrelation(x, y, handle_ties = false), x, y), digits = 6) > 0
+@test round(association(ChatterjeeCorrelation(x, y, handle_ties = true), x, y), digits = 6) > 0
+@test round(association(ChatterjeeCorrelation(handle_ties = false), x, y), digits = 6) > 0
+@test round(association(ChatterjeeCorrelation(handle_ties = true), x, y), digits = 6) > 0
