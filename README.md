@@ -2,8 +2,8 @@
 
 [![CI](https://github.com/juliadynamics/Associations.jl/workflows/CI/badge.svg)](https://github.com/JuliaDynamics/Associations.jl/actions)
 [![](https://img.shields.io/badge/docs-latest_tagged-blue.svg)](https://juliadynamics.github.io/Associations.jl/stable/)
-[![](https://img.shields.io/badge/docs-dev_(master)-blue.svg)](https://juliadynamics.github.io/Associations.jl/dev/)
-[![codecov](https://codecov.io/gh/JuliaDynamics/Associations.jl/branch/master/graph/badge.svg?token=0b71n6x6AP)](https://codecov.io/gh/JuliaDynamics/Associations.jl)
+[![](https://img.shields.io/badge/docs-dev_(main)-blue.svg)](https://juliadynamics.github.io/Associations.jl/dev/)
+[[![codecov](https://codecov.io/gh/JuliaDynamics/Associations.jl/branch/master/graph/badge.svg?token=0b71n6x6AP)](https://codecov.io/gh/JuliaDynamics/Associations.jl)](https://img.shields.io/codecov/c/github/juliadynamics/Associations.jl/main)
 [![DOI](https://zenodo.org/badge/135443027.svg)](https://zenodo.org/badge/latestdoi/135443027)
 
 Associations.jl is a package for quantifying associations, independence testing and causal inference.
