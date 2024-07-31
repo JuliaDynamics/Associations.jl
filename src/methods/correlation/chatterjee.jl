@@ -110,12 +110,12 @@ function association(m::ChatterjeeCorrelation{<:AbstractVector}, x, y)
     n = length(x)
 
     # Rearrange input data according to paper.
-    m.xs_inds[:] = sortperm!(m.xs_inds, x, lt = m.lt) 
-    m.y_sortedbyx[:] = y[m.xs_inds]
+    m.xs_inds .= sortperm!(m.xs_inds, x, lt = m.lt) 
+    m.y_sortedbyx .= y[m.xs_inds]
 
     # Sort the rearranged `y`s so that we can more efficiently find the ranks.
-    m.y_sortedbyx_inds[:] = sortperm!(m.y_sortedbyx_inds, m.y_sortedbyx)
-    m.y_sortedbyx_sorted[:] = m.y_sortedbyx[m.y_sortedbyx_inds]
+    m.y_sortedbyx_inds .= sortperm!(m.y_sortedbyx_inds, m.y_sortedbyx)
+    m.y_sortedbyx_sorted .= m.y_sortedbyx[m.y_sortedbyx_inds]
     
     # If we explicitly deal with ties, then we need to find both the ranks `r`s and 
     # the `𝓁`s that go into the denominator of the final expression. If we don't deal 
@@ -126,7 +126,7 @@ function association(m::ChatterjeeCorrelation{<:AbstractVector}, x, y)
         loopcount_rs!(m.r, m.y_sortedbyx_sorted, m.y_sortedbyx)
     end
     
-    # First differences of the ranks, stored in  the pre-allocated `Δr`.`
+    # First differences of the ranks, stored in the pre-allocated `Δr`.
     absfirstdiffs!(m.Δr, m.r)
 
     return chatterjee_coefficient(m.Δr, m.𝓁, n, m.handle_ties)
