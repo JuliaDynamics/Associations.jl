@@ -151,6 +151,7 @@ end
 include("transferentropy.jl")
 include("crossmapping.jl")
 include("hlms_measure.jl")
+include("chatterjee_correlation.jl")
 
 # Input checks
 function SurrogateAssociationTest(measure::T) where T <: MultivariateInformationMeasure

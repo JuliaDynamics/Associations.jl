@@ -114,6 +114,7 @@ CorrelationMeasure
 PearsonCorrelation
 PartialCorrelation
 DistanceCorrelation
+ChatterjeeCorrelation
 ```
 
 ## [Cross-map measures](@id cross_map_api)

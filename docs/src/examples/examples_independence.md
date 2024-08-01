@@ -117,6 +117,26 @@ enough evidence in the data to suggest directional coupling.
 
 ## [[`SurrogateAssociationTest`](@ref)](@id examples_surrogatetest)
 
+### [Chatterjee correlation](@id example_SurrogateAssociationTest_ChatterjeeCorrelation)
+
+```@example example_SurrogateAssociationTest_ChatterjeeCorrelation
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 1000
+x, y = rand(1:50, n), rand(1:50, n)
+test = SurrogateAssociationTest(ChatterjeeCorrelation(), nshuffles = 19)
+independence(test, x, y)
+```
+
+As expected, the test indicates that we can't reject independence. What happens if we introduce
+a third variable that depends on `y`?
+
+```@example example_SurrogateAssociationTest_ChatterjeeCorrelation
+z = rand(1:20, n) .* y
+independence(test, y, z)
+```
+
+The test clearly picks up on the functional dependence.
 
 ### [Distance correlation](@id example_SurrogateAssociationTest_DistanceCorrelation)
 

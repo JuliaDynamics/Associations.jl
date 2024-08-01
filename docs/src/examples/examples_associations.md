@@ -1698,3 +1698,31 @@ x = rand(rng, 300); y = rand(rng, 300) .* sin.(x); z = rand(rng, 300) .* y;
 est = RMCD(r = 0.5)
 association(est, x, y), association(est, x, z), association(est, x, z, y)
 ```
+
+## [[`ChatterjeeCorrelation`](@ref)](@id example_ChatterjeeCorrelation)
+
+```@example example_ChatterjeeCorrelation
+using Associations
+using Random; rng = Xoshiro(1234);
+x = rand(rng, 120)
+y = rand(rng, 120) .* sin.(x)
+```
+
+By construction, there will almust surely be no ties in `x`, so we can use the 
+fast estimate by setting `handle_ties == false`. 
+
+```@example example_ChatterjeeCorrelation
+association(ChatterjeeCorrelation(handle_ties = false), x, y)
+```
+
+If we have data where we know there are ties in the data, then
+we should set `handle_ties == true`.
+
+```@example example_ChatterjeeCorrelation
+w = rand(rng, 1:10, 120) # there will be some ties
+z = rand(rng, 1:15, 120) .* sin.(w) # introduce some dependence
+association(ChatterjeeCorrelation(handle_ties = true), w, z)
+```
+
+
+
