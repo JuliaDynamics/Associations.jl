@@ -87,25 +87,26 @@ function AzadkiaChatterjeeCoefficient(inputs...; theiler::Integer = 0)
     @assert 2 ≤ length(inputs) ≤ 3
     ns = length.(inputs)
     @assert allequal(ns)
+    m = length(inputs)
     n = length(first(inputs))
     sorted_ys = sort(first(inputs))
 
     r = zeros(Int, n)
 
-    if n == 3
+    if m == 2
         r = zeros(Int, n)
         Mᵢs = zeros(Int, n)
         Nᵢs = nothing
         RMᵢs = zeros(Int, n)
         RNᵢs = nothing
-        𝓁 = nothing
-    else # n == 2
+        𝓁 =  zeros(Int, n)
+    else # m == 3
         r = zeros(Int, n)
         Mᵢs = zeros(Int, n)
         Nᵢs = zeros(Int, n)
         RMᵢs = zeros(Int, n)
         RNᵢs = zeros(Int, n)
-        𝓁 = zeros(Int, n)
+        𝓁 = nothing
     end
 
     return AzadkiaChatterjeeCoefficient(sorted_ys, 𝓁, r, Mᵢs, Nᵢs, RMᵢs, RNᵢs, theiler)
