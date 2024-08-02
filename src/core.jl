@@ -38,6 +38,7 @@ an [`AssociationMeasureEstimator`](@ref) to compute.
 | Correlation                | [`PartialCorrelation`](@ref)                |    ✓    |     ✓      |
 | Correlation                | [`DistanceCorrelation`](@ref)               |    ✓    |     ✓      |
 | Correlation                | [`ChatterjeeCorrelation`](@ref)             |    ✓    |     ✖      |
+| Correlation                | [`AzadkiaChatterjeeCoefficient`](@ref)      |    ✓    |     ✓      |
 | Closeness                  | [`SMeasure`](@ref)                          |    ✓    |     ✖      |
 | Closeness                  | [`HMeasure`](@ref)                          |    ✓    |     ✖      |
 | Closeness                  | [`MMeasure`](@ref)                          |    ✓    |     ✖      |
@@ -93,6 +94,7 @@ Concrete subtypes are given as input to [`association`](@ref).
 | [`DistanceCorrelation`](@ref)               | Not required                                                                                                                                                                                                                 |
 | [`PartialCorrelation`](@ref)                | Not required                                                                                                                                                                                                                 |
 | [`ChatterjeeCorrelation`](@ref)             | Not required                                                                                                                                                                                                                 |
+| [`AzadkiaChatterjeeCoefficient`](@ref)      | Not required                                                                                                                                                                                                                 |
 | [`SMeasure`](@ref)                          | Not required                                                                                                                                                                                                                 |
 | [`HMeasure`](@ref)                          | Not required                                                                                                                                                                                                                 |
 | [`MMeasure`](@ref)                          | Not required                                                                                                                                                                                                                 |
@@ -125,7 +127,6 @@ Concrete subtypes are given as input to [`association`](@ref).
 | [`KLDivergence`](@ref)                      | [`JointProbabilities`](@ref)                                                                                                                                                                                                 |
 | [`RenyiDivergence`](@ref)                   | [`JointProbabilities`](@ref)                                                                                                                                                                                                 |
 | [`VariationDistance`](@ref)                 | [`JointProbabilities`](@ref)                                                                                                                                                                                                 |
-
 """
 abstract type AssociationMeasureEstimator end
 

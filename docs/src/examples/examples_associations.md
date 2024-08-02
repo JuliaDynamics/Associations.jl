@@ -1724,5 +1724,22 @@ z = rand(rng, 1:15, 120) .* sin.(w) # introduce some dependence
 association(ChatterjeeCorrelation(handle_ties = true), w, z)
 ```
 
+## [[`AzadkiaChatterjeeCoefficient`](@ref)](@id example_AzadkiaChatterjeeCoefficient)
 
+
+```@example example_AzadkiaChatterjeeCoefficient
+using Associations
+using Random; rng = Xoshiro(1234);
+x = rand(rng, 120)
+y = rand(rng, 120) .* x
+z = rand(rng, 120) .+ y
+```
+
+For the variables above, where `x → y → z`, we expect stronger assocation between `x` and `y` than
+between `x` and `z`. We also expect the strength of the association between `x` and `z` to drop when conditioning on `y`, because `y` is the variable that connects `x` and `z`.
+
+```@example example_AzadkiaChatterjeeCoefficient
+m = AzadkiaChatterjeeCoefficient(theiler = 0) # only exclude self-neighbors
+association(m, x, y), association(m, x, z), association(m, x, z, y)
+```
 

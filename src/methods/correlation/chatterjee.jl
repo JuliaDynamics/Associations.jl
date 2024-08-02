@@ -74,6 +74,9 @@ struct ChatterjeeCorrelation{XS, R, L, DR, YR, YSI, YSS, RNG} <: CorrelationMeas
     lt::Function
 end
 
+min_inputs_vars(::ChatterjeeCorrelation) = 2
+max_inputs_vars(::ChatterjeeCorrelation) = 2
+
 # Non-preallocated version
 function ChatterjeeCorrelation(; handle_ties = true, rng = Random.default_rng(), lt = (a, b) -> isless_rand(rng, a, b))
     return ChatterjeeCorrelation{Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, Nothing, typeof(rng)}(

@@ -2,6 +2,10 @@
 
 From version v4.0 onwards, this package has been renamed to to Associations.jl.
 
+# 4.2
+
+- New association measure: `AzadkiaChatterjeeCoefficient`.
+
 # 4.1
 
 - New association measure: `ChatterjeeCorrelation`.

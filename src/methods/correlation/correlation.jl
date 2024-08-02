@@ -11,6 +11,7 @@ The supertype for correlation measures.
 - [`PartialCorrelation`](@ref)
 - [`DistanceCorrelation`](@ref)
 - [`ChatterjeeCorrelation`](@ref)
+- [`AzadkiaChatterjeeCoefficient`](@ref)
 """
 abstract type CorrelationMeasure <: AssociationMeasure end
 
@@ -22,3 +23,4 @@ include("pearson_correlation.jl")
 include("partial_correlation.jl")
 include("distance_correlation.jl")
 include("chatterjee.jl")
+include("azadkia_chatterjee_coefficient.jl.jl")

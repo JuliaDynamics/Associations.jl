@@ -96,6 +96,8 @@ The nearest-neighbor approach in Runge (2018) can be reproduced by using the
     Conditional independence test using [`CMIShannon`](@ref)
 - [Example 2](@ref example_LocalPermutationTest_TEShannon)):
      Conditional independence test using [`TEShannon`](@ref)
+- [Example 3](@ref example_LocalPermutationTest_AzadkiaChatterjeeCoefficient):
+    Conditional independence test using [`AzadkiaChatterjeeCoefficient`](@ref)
 """
 struct LocalPermutationTest{M, C, R} <: IndependenceTest{M}
     est_or_measure::M
@@ -231,5 +233,6 @@ end
 function LocalPermutationTest(m::MultivariateInformationMeasure; kwargs...)
     throw(ArgumentError("You need to provide an estimator for the multivariate information measure $(typeof(m)), not only the definition."))
 end
-# TODO: fix this
+
 include("transferentropy.jl")
+include("azadkia_chatterjee_coefficient.jl")
