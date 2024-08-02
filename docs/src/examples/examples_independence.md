@@ -447,7 +447,7 @@ independence(test, y, w, z)
 ```
 
 
-### [[`AzadkiaChatterjeeCoefficient`]](@id example_LocalPermutationTest_AzadkiaChatterjeeCoefficient)
+### [[`AzadkiaChatterjeeCoefficient`](@ref)](@id example_LocalPermutationTest_AzadkiaChatterjeeCoefficient)
 
 ```@example example_LocalPermutationTest_AzadkiaChatterjeeCoefficient
 using Associations
