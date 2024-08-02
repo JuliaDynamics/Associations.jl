@@ -4,7 +4,7 @@ rng = Xoshiro(1234)
 
 # We can use surrogate tests and p-values to further verify the correctness of the 
 # algorithm.
-test = SurrogateAssociationTest(ChatterjeeCorrelation(), nshuffles = 19)
+test = SurrogateAssociationTest(ChatterjeeCorrelation(), nshuffles = 19, rng)
 
 # We expect that we *cannot* reject the null hypothesis for independent variables
 x = rand(rng, 1:10, 100)
