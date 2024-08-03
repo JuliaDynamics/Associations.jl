@@ -8,3 +8,7 @@ z = rand(rng, n)
 m = AzadkiaChatterjeeCoefficient()
 @test association(m, x, y) isa Real
 @test association(m, x, y, z) isa Real
+# pretty printing
+out = repr(AzadkiaChatterjeeCoefficient())
+@test occursin("AzadkiaChatterjeeCoefficient", out)
+@test occursin("theiler = ", out)

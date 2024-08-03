@@ -74,6 +74,12 @@ struct AzadkiaChatterjeeCoefficient{V, L, R, MI, NI, RM, RN} <: AssociationMeasu
     theiler::Int
 end
 
+function Base.show(io::IO, m::AzadkiaChatterjeeCoefficient)
+    theiler = m.theiler
+    print(io, "AzadkiaChatterjeeCoefficient(; theiler = $theiler)")
+end
+
+
 min_inputs_vars(::AzadkiaChatterjeeCoefficient) = 2
 max_inputs_vars(::AzadkiaChatterjeeCoefficient) = 3
 
