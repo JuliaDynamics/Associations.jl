@@ -8,7 +8,7 @@ z = randn(rng, n) .* y
 
 # An estimator for estimating the SECMI measure
 est = JointProbabilities(SECMI(base = 2), CodifyVariables(ValueBinning(3)))
-test = SECMITest(est; nshuffles = 19)
+test = SECMITest(est; nshuffles = 19, rng = rng)
 
 # Do a test and check that we can reject null or not as expected
 α = 0.05
@@ -19,11 +19,13 @@ out = repr(independence(SECMITest(est; nshuffles = 2), x, y, z))
 @test occursin("D𝒳²", out)
 
 # Categorical
+rng = Xoshiro(1234)
 n = 12
 x = rand(rng, ["vegetables", "candy"], n)
-y = [xᵢ == "candy" && rand() > 0.3 ? "yummy" : "yuck" for xᵢ in x]
-z = [yᵢ == "yummy" && rand() > 0.6 ? "grown-up" : "child" for yᵢ in y]
+y = [xᵢ == "candy" && rand(rng) > 0.3 ? "yummy" : "yuck" for xᵢ in x]
+z = [yᵢ == "yummy" && rand(rng) > 0.6 ? "grown-up" : "child" for yᵢ in y]
 d = CodifyVariables(UniqueElements())
 est = JointProbabilities(SECMI(base = 2), d)
-
-independence(SECMITest(est; nshuffles = 19), x, z, y)
+test = SECMITest(est; nshuffles = 19, rng = rng)
+@test pvalue(independence(test, x, y, z)) < α
+@test pvalue(independence(test, x, z, y)) > α
