@@ -8,6 +8,20 @@ export ShortExpansionConditionalMutualInformation, SECMI
 """
     ShortExpansionConditionalMutualInformation <: MultivariateInformationMeasure
     ShortExpansionConditionalMutualInformation(; base = 2)
+    SECMI(; base = 2) # alias
+
+The short expansion of (Shannon) conditional mutual information association measure 
+from [Kubkowski2021](@citet).
+
+## Compatible estimators
+
+- [`JointProbabilities`](@ref).
+
+## Estimation
+
+- [Example 1](@ref example_ShortExpansionConditionalMutualInformation_JointProbabilities_CodifyVariables_ValueBinning):
+    Estimating [`ShortExpansionConditionalMutualInformation`](@ref) using the [`JointProbabilities`](@ref) estimator using a
+    [`CodifyVariables`](@ref) with [`ValueBinning`])(@ref) discretization.
 """
 Base.@kwdef struct ShortExpansionConditionalMutualInformation{B} <: MultivariateInformationMeasure
     base::B = 2
