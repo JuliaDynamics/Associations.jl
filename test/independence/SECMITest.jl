@@ -26,5 +26,4 @@ z = [yᵢ == "yummy" && rand() > 0.6 ? "grown-up" : "child" for yᵢ in y]
 d = CodifyVariables(UniqueElements())
 est = JointProbabilities(SECMI(base = 2), d)
 
-association(est, x, y, z)
 independence(SECMITest(est; nshuffles = 19), x, z, y)
