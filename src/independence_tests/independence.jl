@@ -85,3 +85,4 @@ end
 include("parametric/parametric.jl")
 include("surrogate/SurrogateAssociationTest.jl")
 include("local_permutation/LocalPermutationTest.jl")
+include("secmi/secmi_test.jl")
