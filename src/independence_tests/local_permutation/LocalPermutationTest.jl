@@ -74,13 +74,15 @@ instead of `Z` and we `I(X; Y)` and `Iₖ(X̂; Y)` instead of `I(X; Y | Z)` and
 
 ## Compatible measures
 
-| Measure                            | Pairwise | Conditional | Requires `est` |                                                               Note                                                                |
-| ---------------------------------- | :------: | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------: |
-| [`PartialCorrelation`](@ref)       |    ✖    |     ✓      |       No       |                                                                                                                                   |
-| [`DistanceCorrelation`](@ref)      |    ✖    |     ✓      |       No       |                                                                                                                                   |
-| [`CMIShannon`](@ref)               |    ✖    |     ✓      |      Yes       |                                                                                                                                   |
-| [`TEShannon`](@ref)                |    ✓    |     ✓      |      Yes       | Pairwise tests not possible with `TransferEntropyEstimator`s, only lower-level estimators, e.g. `FPVP`, `GaussianMI` or `Kraskov` |
-| [`PartialMutualInformation`](@ref) |    ✖    |     ✓      |      Yes       |                                                                                                                                   |
+| Measure                                | Pairwise | Conditional | Requires `est` |                                                               Note                                                                |
+| -------------------------------------- | :------: | :---------: | :------------: | :-------------------------------------------------------------------------------------------------------------------------------: |
+| [`PartialCorrelation`](@ref)           |    ✖    |     ✓      |       No       |                                                                                                                                   |
+| [`DistanceCorrelation`](@ref)          |    ✖    |     ✓      |       No       |                                                                                                                                   |
+| [`CMIShannon`](@ref)                   |    ✖    |     ✓      |      Yes       |                                                                                                                                   |
+| [`TEShannon`](@ref)                    |    ✓    |     ✓      |      Yes       | Pairwise tests not possible with `TransferEntropyEstimator`s, only lower-level estimators, e.g. `FPVP`, `GaussianMI` or `Kraskov` |
+| [`PartialMutualInformation`](@ref)     |    ✖    |     ✓      |      Yes       |                                                                                                                                   |
+| [`AzadkiaChatterjeeCoefficient`](@ref) |    ✖    |     ✓      |       No       |                                                                                                                                   |
+
 
 The `LocalPermutationTest` is only defined for conditional independence testing.
 Exceptions are for measures like [`TEShannon`](@ref), which use conditional
@@ -96,6 +98,8 @@ The nearest-neighbor approach in Runge (2018) can be reproduced by using the
     Conditional independence test using [`CMIShannon`](@ref)
 - [Example 2](@ref example_LocalPermutationTest_TEShannon)):
      Conditional independence test using [`TEShannon`](@ref)
+- [Example 3](@ref example_LocalPermutationTest_AzadkiaChatterjeeCoefficient):
+    Conditional independence test using [`AzadkiaChatterjeeCoefficient`](@ref)
 """
 struct LocalPermutationTest{M, C, R} <: IndependenceTest{M}
     est_or_measure::M
@@ -231,5 +235,6 @@ end
 function LocalPermutationTest(m::MultivariateInformationMeasure; kwargs...)
     throw(ArgumentError("You need to provide an estimator for the multivariate information measure $(typeof(m)), not only the definition."))
 end
-# TODO: fix this
+
 include("transferentropy.jl")
+include("azadkia_chatterjee_coefficient.jl")

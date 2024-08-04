@@ -63,6 +63,10 @@ For each shuffle, `est_or_measure` is recomputed and the results are stored.
     [`CMIShannon`](@ref) test for conditional independence on categorical data.  
 - [Example 6](@ref example_independence_MCR): [`MCR`](@ref) test for 
     pairwise and conditional independence.  
+- [Example 7](@ref example_SurrogateAssociationTest_ChatterjeeCorrelation).
+    [`ChatterjeeCorrelation`](@ref) test for pairwise independence.
+- [Example 8](@ref example_SurrogateAssociationTest_AzadkiaChatterjeeCoefficient).
+    [`AzadkiaChatterjeeCoefficient`](@ref) test for pairwise and conditional independence.
 """
 struct SurrogateAssociationTest{E, R, S} <: IndependenceTest{E}
     est_or_measure::E
@@ -152,6 +156,7 @@ include("transferentropy.jl")
 include("crossmapping.jl")
 include("hlms_measure.jl")
 include("chatterjee_correlation.jl")
+include("azadkia_chatterjee_coefficient.jl")
 
 # Input checks
 function SurrogateAssociationTest(measure::T) where T <: MultivariateInformationMeasure
