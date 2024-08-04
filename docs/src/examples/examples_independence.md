@@ -507,7 +507,10 @@ independence(test, x, z, y)
 Note that this also works for categorical variables. Just use [`UniqueElements`](@ref) to 
 discretize!
 
-```@example
+```@example example_SECMITest_categorical
+using Associations
+using Test
+using Random; rng = Xoshiro(1234)
 n = 12
 x = rand(rng, ["vegetables", "candy"], n)
 y = [xᵢ == "candy" && rand() > 0.3 ? "yummy" : "yuck" for xᵢ in x]
