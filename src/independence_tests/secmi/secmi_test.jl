@@ -1,10 +1,11 @@
 export SECMITest
+export SECMITestResult
 
 """
     SECMITest <: IndependenceTest
     SECMITest(est; nshuffles = 19, surrogate = RandomShuffle(), rng = Random.default_rng())
 
-A test for conditional independence based on the [`SECMI`](@ref) measure [Kubkowski2021](@cite).
+A test for conditional independence based on the [`ShortExpansionConditionalMutualInformation`](@ref) measure [Kubkowski2021](@cite).
 
 The first argument `est` must be a [`InformationMeasureEstimator`](@ref) that provides the 
 [`ShortExpansionConditionalMutualInformation`](@ref) instance. See examples below.
@@ -39,8 +40,8 @@ with [`independence`](@ref), as described in [Kubkowski2021](@cite).
 ## Parameters
 
 - `p`: The p-value for the test.
-- `secmi₀`: The value of the [`SECMI`](@ref) measure estimated on the original data.
-- `secmiₖ`: An ensemble of values for the [`SECMI`](@ref) measure estimated on triples 
+- `secmi₀`: The value of the [`ShortExpansionConditionalMutualInformation`](@ref) measure estimated on the original data.
+- `secmiₖ`: An ensemble of values for the [`ShortExpansionConditionalMutualInformation`](@ref) measure estimated on triples 
     `SECMI(X̂, Y, Z)`, where `X̂` indicates a shuffled version of the first variable `X` 
     and `length(secmiₖ) == nshuffles`.
 - `μ̂`: The estimated mean of the `secmiₖ`.
