@@ -472,6 +472,8 @@ independence(test, x, z, y)
 The test verifies our expectation.
 ## [[`SECMITest`](@ref)](@id example_SECMITEST)
 
+## [[`JointProbabilities`](@ref) estimation on numeric data](@id example_SECMITEST_JointProbabilities_CodifyVariables_ValueBinning)
+
 ```@example example_SECMITEst
 using Associations
 using Test
@@ -499,6 +501,8 @@ connected when "conditioning away" `y`.
 ```@example example_SECMITEst
 independence(test, x, z, y)
 ```
+
+## [[`JointProbabilities`](@ref) estimation on categorical data](@id example_SECMITEST_JointProbabilities_CodifyVariables_UniqueElements)
 
 Note that this also works for categorical variables. Just use [`UniqueElements`](@ref) to 
 discretize!
