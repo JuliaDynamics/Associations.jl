@@ -511,10 +511,10 @@ discretize!
 using Associations
 using Test
 using Random; rng = Xoshiro(1234)
-n = 12
+n = 24
 x = rand(rng, ["vegetables", "candy"], n)
-y = [xᵢ == "candy" && rand() > 0.3 ? "yummy" : "yuck" for xᵢ in x]
-z = [yᵢ == "yummy" && rand() > 0.6 ? "grown-up" : "child" for yᵢ in y]
+y = [xᵢ == "candy" && rand(rng) > 0.3 ? "yummy" : "yuck" for xᵢ in x]
+z = [yᵢ == "yummy" && rand(rng) > 0.6 ? "grown-up" : "child" for yᵢ in y]
 d = CodifyVariables(UniqueElements())
 est = JointProbabilities(SECMI(base = 2), d)
 
