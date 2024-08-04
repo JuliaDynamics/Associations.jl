@@ -45,6 +45,8 @@ function association(est::JointProbabilities{<:SECMI}, x, y, z...)
     return association(est.definition, probs)
 end
 
+# SECMI operates column-wise on the conditional variable, so if a statespace set 
+# is given, then we operate on columns
 function association(est::JointProbabilities{<:SECMI}, x, y, z::AbstractStateSpaceSet)
     probs = probabilities(est.discretization, x, y, columns(z)...)
     return association(est.definition, probs)

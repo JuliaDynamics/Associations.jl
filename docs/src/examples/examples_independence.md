@@ -393,3 +393,47 @@ The same goes for variables one step up the chain:
 ```@example example_LocalPermutationTest
 independence(test, y, w, z)
 ```
+
+## [[`SECMITest`](@ref)](@id example_SECMITEST)
+
+```@example example_SECMITEst
+using Associations
+using Test
+using Random; rng = Xoshiro(1234)
+n = 25
+x = rand(rng, n)
+y = randn(rng, n) .+ x .^ 2
+z = randn(rng, n) .* y
+
+# An estimator for estimating the SECMI measure
+est = JointProbabilities(SECMI(base = 2), CodifyVariables(ValueBinning(3)))
+test = SECMITest(est; nshuffles = 19)
+```
+
+When analyzing ``SECMI(x, y | z)``, the expectation is to reject the null hypothesis (independence), since `x` and `y` are connected, regardless of the effect of `z`.
+
+```@example example_SECMITEst
+independence(test, x, y, z)
+```
+
+We can detect this association, even for `n = 25`! When analyzing ``SECMI(x, z | y)``, we 
+expect that we can't reject the null (indepdendence), precisely since `x` and `z` are *not* 
+connected when "conditioning away" `y`.
+
+```@example example_SECMITEst
+independence(test, x, z, y)
+```
+
+Note that this also works for categorical variables. Just use [`UniqueElements`](@ref) to 
+discretize!
+
+```@example
+n = 12
+x = rand(rng, ["vegetables", "candy"], n)
+y = [xᵢ == "candy" && rand() > 0.3 ? "yummy" : "yuck" for xᵢ in x]
+z = [yᵢ == "yummy" && rand() > 0.6 ? "grown-up" : "child" for yᵢ in y]
+d = CodifyVariables(UniqueElements())
+est = JointProbabilities(SECMI(base = 2), d)
+
+independence(SECMITest(est; nshuffles = 19), x, z, y)
+```

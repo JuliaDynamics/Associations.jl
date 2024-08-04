@@ -50,3 +50,9 @@ JDDTestResult
 CorrTest
 CorrTestResult
 ```
+
+## [`SECMITest`](@ref)
+
+```@docs
+SECMITEst
+```
