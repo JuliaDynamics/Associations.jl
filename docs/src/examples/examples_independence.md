@@ -138,6 +138,58 @@ independence(test, y, z)
 
 The test clearly picks up on the functional dependence.
 
+
+### [Azadkia-Chatterjee coefficient](@id example_SurrogateAssociationTest_AzadkiaChatterjeeCoefficient)
+
+```@example example_SurrogateAssociationTest_AzadkiaChatterjeeCoefficient
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 1000
+# Some categorical variables (we add a small amount of noise to avoid duplicate points 
+# during neighbor searches)
+x = rand(rng, 1.0:50.0, n) .+ rand(n) .* 1e-8
+y = rand(rng, 1.0:50.0, n) .+ rand(n) .* 1e-8
+test = SurrogateAssociationTest(AzadkiaChatterjeeCoefficient(), nshuffles = 19)
+independence(test, x, y)
+```
+
+As expected, the test indicates that we can't reject independence. What happens if we introduce
+a third variable that depends on `y`?
+
+```@example example_SurrogateAssociationTest_AzadkiaChatterjeeCoefficient
+z = rand(rng, 1.0:20.0, n) .* y
+independence(test, y, z)
+```
+
+The test clearly picks up on the functional dependence. But what about conditioning?
+Let's define three variables where `x → y → z`. When then expect significant association between `x` and `y`, possibly between `x` and `z` (depending on how strong the intermediate connection is), and 
+non-significant association between `x` and `z` if conditioning on `y` (since `y` is the variable 
+connecting `x` and `z`.) The Azadkia-Chatterjee coefficient also should be able to verify these 
+claims.
+
+```@example example_SurrogateAssociationTest_AzadkiaChatterjeeCoefficient
+x = rand(rng, 120)
+y = rand(rng, 120) .* x
+z = rand(rng, 120) .+ y
+independence(test, x, y)
+```
+
+The direct association between `x` and `y` is detected.
+
+```@example example_SurrogateAssociationTest_AzadkiaChatterjeeCoefficient
+independence(test, x, z)
+```
+
+The indirect association between `x` and `z` is also detected.
+
+```@example example_SurrogateAssociationTest_AzadkiaChatterjeeCoefficient
+independence(test, x, z, y)
+```
+
+We can't reject independence between `x` and `z` when taking into consideration 
+`y`, as expected.
+
+
 ### [Distance correlation](@id example_SurrogateAssociationTest_DistanceCorrelation)
 
 ```@example
@@ -394,6 +446,30 @@ The same goes for variables one step up the chain:
 independence(test, y, w, z)
 ```
 
+
+### [[`AzadkiaChatterjeeCoefficient`](@ref)](@id example_LocalPermutationTest_AzadkiaChatterjeeCoefficient)
+
+```@example example_LocalPermutationTest_AzadkiaChatterjeeCoefficient
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 300
+# Some categorical variables (we add a small amount of noise to avoid duplicate points 
+# during neighbor searches)
+test = LocalPermutationTest(AzadkiaChatterjeeCoefficient(), nshuffles = 19)
+x = rand(rng, n)
+y = rand(rng, n) .* x
+z = rand(rng, n) .+ y
+```
+
+Let's define three variables where `x → y → z`. We expect a 
+non-significant association between `x` and `z` if conditioning on `y` (since `y` is the variable 
+connecting `x` and `z`.) 
+
+```@example example_LocalPermutationTest_AzadkiaChatterjeeCoefficient
+independence(test, x, z, y)
+```
+
+The test verifies our expectation.
 ## [[`SECMITest`](@ref)](@id example_SECMITEST)
 
 ```@example example_SECMITEst
