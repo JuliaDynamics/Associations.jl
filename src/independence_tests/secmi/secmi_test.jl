@@ -11,9 +11,10 @@ The first argument `est` must be a [`InformationMeasureEstimator`](@ref) that pr
 
 ## Examples
 
-- [Example 1](@ref example_SECMITest): Independence test for small sample sizes using [`CodifyVariables`](@ref) with 
+- [Example 1](@ref example_SECMITEST_JointProbabilities_CodifyVariables_ValueBinning): Independence test for small sample sizes using [`CodifyVariables`](@ref) with 
     [`ValueBinning`](@ref) discretization.
-
+- [Example 2](@ref example_SECMITEST_JointProbabilities_CodifyVariables_UniqueElements): Independence test for small sample
+    sizes with categorical data (using [`CodifyVariables`](@ref) with [`UniqueElements`](@ref) discretization).
 """
 struct SECMITest{E, S, I, RNG} <: IndependenceTest{E}
     # really, this can only be an estimator, but we name it `est_or_measure` for consistency 
@@ -28,6 +29,26 @@ function SECMITest(est; nshuffles = 19, surrogate = RandomShuffle(), rng = Rando
     return SECMITest(est, surrogate, nshuffles, rng)
 end
 
+"""
+    SECMITestResult <: IndependenceTestResult
+    SECMITestResult(secmi₀, secmiₖ, p, μ̂, σ̂, emp_cdf, D𝒩, D𝒳², nshuffles::Int)
+
+A simple struct that holds the computed parameters of a [`SECMITest`](@ref) when called 
+with [`independence`](@ref), as described in [Kubkowski2021](@cite).
+
+## Parameters
+
+- `p`: The p-value for the test.
+- `secmi₀`: The value of the [`SECMI`](@ref) measure estimated on the original data.
+- `secmiₖ`: An ensemble of values for the [`SECMI`](@ref) measure estimated on triples 
+    `SECMI(X̂, Y, Z)`, where `X̂` indicates a shuffled version of the first variable `X` 
+    and `length(secmiₖ) == nshuffles`.
+- `μ̂`: The estimated mean of the `secmiₖ`.
+- `σ̂`: The estimated standard deviation of the `secmiₖ`.
+- `emp_cdf`: The empirical cumulative distribution function (CDF) of the `secmiₖ`s.
+- `D𝒩`: The ``D_{N(\\hat{\\mu}, \\hat{\\sigma})}`` statistic.
+- `D𝒳²`: The ``D_{\\chi^2}`` statistic.
+"""
 struct SECMITestResult{S0, SK, P, MU, S, E, DN, DCHI} <: IndependenceTestResult
     n_vars::Int # 3 vars = conditional (always 3)
     secmi₀::S0 # the value of the measure, non-permuted
