@@ -54,5 +54,6 @@ CorrTestResult
 ## [`SECMITest`](@ref)
 
 ```@docs
-SECMITEst
+SECMITest
+SECMITestResult
 ```
