@@ -59,7 +59,6 @@ struct SECMITestResult{S0, SK, P, MU, S, E, DN, DCHI} <: IndependenceTestResult
     emp_cdf::E
     D𝒩::DN
     D𝒳²::DCHI
-    nshuffles::Int
 end
 pvalue(r::SECMITestResult) = r.pvalue
 
@@ -99,7 +98,7 @@ function independence(test::SECMITest, x, y, z)
         p = 1 - cdf(F𝒳², secmi₀)
     end
 
-    return SECMITestResult(3, secmi₀, secmiₖ, p, μ̂, σ̂, emp_cdf, D𝒩, D𝒳², test.nshuffles)
+    return SECMITestResult(3, secmi₀, secmiₖ, p, μ̂, σ̂, emp_cdf, D𝒩, D𝒳²)
 end
 
 
