@@ -10,8 +10,22 @@ export ShortExpansionConditionalMutualInformation, SECMI
     ShortExpansionConditionalMutualInformation(; base = 2)
     SECMI(; base = 2) # alias
 
-The short expansion of (Shannon) conditional mutual information association measure 
+The short expansion of (Shannon) conditional mutual information (SECMI) measure 
 from [Kubkowski2021](@citet).
+
+## Description
+
+The SECMI measure is defined as
+
+```math
+SECMI(X,Y|Z) = I(X,Y) + \\sum_{k=1}^{m} II(X,Z_k,Y) = (1 - m) I(X,Y) + \\sum_{k=1}^{m} I(X,Y|Z_k).
+```
+
+This quantity is estimated from data using one of the estimators below from the formula
+
+```math
+\\widehat{SECMI}(X,Y|Z) = \\widehat{I}(X,Y) + \\sum_{k=1}^{m} \\widehat{II}(X,Z_k,Y) = (1 - m) \\widehat{I}(X,Y) + \\sum_{k=1}^{m} \\widehat{I}(X,Y|Z_k).
+```
 
 ## Compatible estimators
 
@@ -21,7 +35,7 @@ from [Kubkowski2021](@citet).
 
 - [Example 1](@ref example_ShortExpansionConditionalMutualInformation_JointProbabilities_CodifyVariables_ValueBinning):
     Estimating [`ShortExpansionConditionalMutualInformation`](@ref) using the [`JointProbabilities`](@ref) estimator using a
-    [`CodifyVariables`](@ref) with [`ValueBinning`])(@ref) discretization.
+    [`CodifyVariables`](@ref) with [`ValueBinning`](@ref) discretization.
 """
 Base.@kwdef struct ShortExpansionConditionalMutualInformation{B} <: MultivariateInformationMeasure
     base::B = 2
