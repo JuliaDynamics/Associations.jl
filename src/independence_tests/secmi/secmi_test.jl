@@ -89,16 +89,26 @@ function independence(test::SECMITest, x, y, z)
     σ̂ = 1/(nshuffles - 1) * sum((sₖ - μ̂)^2 for sₖ in secmiₖ)
     emp_cdf = ecdf(secmiₖ) 
     F𝒩 = Normal(μ̂, σ̂)
-    # Degrees of freedom for Chi squared distribution estimated as the mean of the `secmiₖ`
-    # (page 18 in Kubkowski et al.).
-    F𝒳² = Chisq(μ̂)
-    D𝒩, D𝒳² = sup_values(emp_cdf, F𝒩, F𝒳², secmiₖ)
-    if  D𝒩 < D𝒳² || μ̂ ≤ 1.0
+
+    if μ̂ ≤ 0.0
         p = 1 - cdf(F𝒩, secmi₀)
+        return SECMITestResult(3, secmi₀, secmiₖ, p, μ̂, σ̂, emp_cdf, nothing, nothing)
     else
-        p = 1 - cdf(F𝒳², secmi₀)
+        # Degrees of freedom for Chi squared distribution estimated as the mean of the `secmiₖ`
+        # (page 18 in Kubkowski et al.). The `Chisq` distribution is only defined for μ̂ > 0,
+        # so we put μ̂ <= 0.0 in a separate criterion first to avoid errors.
+        F𝒳² = Chisq(μ̂)
+        D𝒩, D𝒳² = sup_values(emp_cdf, F𝒩, F𝒳², secmiₖ)
+        if  D𝒩 < D𝒳²
+            p = 1 - cdf(F𝒩, secmi₀)
+        else
+            p = 1 - cdf(F𝒳², secmi₀)
+        end
+        return SECMITestResult(3, secmi₀, secmiₖ, p, μ̂, σ̂, emp_cdf, D𝒩, D𝒳²)
+
     end
 
+   
     return SECMITestResult(3, secmi₀, secmiₖ, p, μ̂, σ̂, emp_cdf, D𝒩, D𝒳²)
 end
 
