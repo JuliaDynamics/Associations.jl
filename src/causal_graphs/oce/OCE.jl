@@ -89,7 +89,7 @@ function infer_graph(alg::OCE, x; verbose = true)
     return select_parents(alg, x; verbose)
 end
 
-function infer_graph(alg::OCE, x::AbstractDataset; verbose = true)
+function infer_graph(alg::OCE, x::AbstractStateSpaceSet; verbose = true)
     return infer_graph(alg, columns(x); verbose)
 end
 
