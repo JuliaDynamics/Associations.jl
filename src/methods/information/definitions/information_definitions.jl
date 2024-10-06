@@ -8,3 +8,5 @@ include("partial_mutual_information/partial_mutual_information.jl")
 include("transferentropy/transfer_entropies.jl")
 
 include("override_parameters.jl")
+
+include("dual_total_correlation/dual_total_correlation.jl")
