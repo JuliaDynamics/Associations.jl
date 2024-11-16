@@ -4,7 +4,7 @@ export GaoKannanOhViswanath
 
 """
     GaoKannanOhViswanath <: MutualInformationEstimator
-    GaoKannanOhViswanath(; k = 1, w = 0)
+    GaoKannanOhViswanath(definition = MIShannon(); k = 1, w = 0)
 
 The `GaoKannanOhViswanath` (Shannon) estimator is designed for estimating
 Shannon mutual information between variables that may be either discrete, continuous or
@@ -13,6 +13,14 @@ a mixture of both [GaoKannanOhViswanath2017](@cite).
 ## Compatible definitions
 
 - [`MIShannon`](@ref)
+
+## Keyword arguments
+
+- **`k::Int`**: The number of nearest neighbors to consider. Only information about the
+    `k`-th nearest neighbor is actually used.
+- **`w::Int`**: The Theiler window, which determines if temporal neighbors are excluded
+    during neighbor searches in the joint space. Defaults to `0`, meaning that only the
+    point itself is excluded.
 
 ## Usage
 

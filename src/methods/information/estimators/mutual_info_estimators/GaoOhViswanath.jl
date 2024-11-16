@@ -3,6 +3,7 @@ export GaoOhViswanath
 
 """
     GaoOhViswanath <: MutualInformationEstimator
+    GaoOhViswanath(definition = MIShannon(); k = 1, w = 0)
 
 The `GaoOhViswanath` is a mutual information estimator based on nearest neighbors,
 and is also called the bias-improved-KSG estimator, or BI-KSG, by [Gao2018](@cite).
@@ -10,6 +11,14 @@ and is also called the bias-improved-KSG estimator, or BI-KSG, by [Gao2018](@cit
 ## Compatible definitions
 
 - [`MIShannon`](@ref)
+
+## Keyword arguments
+
+- **`k::Int`**: The number of nearest neighbors to consider. Only information about the
+    `k`-th nearest neighbor is actually used.
+- **`w::Int`**: The Theiler window, which determines if temporal neighbors are excluded
+    during neighbor searches in the joint space. Defaults to `0`, meaning that only the
+    point itself is excluded.
 
 ## Usage
 
