@@ -70,6 +70,16 @@ def = MIShannon()
 @test association(GaussianMI(def, normalize = false), x, y) isa Real
 @test association(GaussianMI(def; normalize = true), x, y) isa Real
 
+# input is vector + dataset
+x = rand(rng, 30)
+Y = StateSpaceSet(rand(rng, 30))
+@test association(KSG1(def, k = 2), x, Y) isa Real
+@test association(KSG2(def, k = 2), x, Y) isa Real
+@test association(GaoOhViswanath(def, k = 2), x, Y) isa Real
+@test association(GaoKannanOhViswanath(def, k = 2), x, Y) isa Real
+@test association(GaussianMI(def, normalize = false), x, Y) isa Real
+@test association(GaussianMI(def; normalize = true), x, Y) isa Real
+
 # ---------------
 # Pretty printing
 # ---------------
