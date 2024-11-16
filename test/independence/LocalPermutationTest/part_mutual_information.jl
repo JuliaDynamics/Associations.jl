@@ -10,9 +10,9 @@ Y = StateSpaceSet(y)
 Z = StateSpaceSet(z)
 
 nshuffles = 2
-est_ord = JointProbabilities(PMI(), CodifyVariables(OrdinalPatterns()))
-est_vh = JointProbabilities(PMI(), CodifyVariables(ValueHistogram(3)))
-est_dp = JointProbabilities(PMI(), CodifyVariables( Dispersion(m = 2)))
+est_ord = JointProbabilities(PartialMutualInformation(), CodifyVariables(OrdinalPatterns()))
+est_vh = JointProbabilities(PartialMutualInformation(), CodifyVariables(ValueHistogram(3)))
+est_dp = JointProbabilities(PartialMutualInformation(), CodifyVariables( Dispersion(m = 2)))
 
 lptest_sp = LocalPermutationTest(est_ord; nshuffles, rng)
 lptest_vh = LocalPermutationTest(est_vh; nshuffles, rng)

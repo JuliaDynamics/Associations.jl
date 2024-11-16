@@ -2,6 +2,11 @@
 
 From version v4.0 onwards, this package has been renamed to to Associations.jl.
 
+# 4.3
+
+- Compatiblity with StateSpaceSets.jl v2.X
+- Improved documentation strings for `GaoOhViswanath` and `GaoKannanOhViswanath`
+
 # 4.3 
 
 - New association measure: `SECMI` (`ShortExpansionConditionalMutualInformation`)

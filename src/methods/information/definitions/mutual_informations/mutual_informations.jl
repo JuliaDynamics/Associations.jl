@@ -32,13 +32,12 @@ end
 
 function marginal_entropies_mi3h_discrete(est::EntropyDecomposition{<:MutualInformation, <:DiscreteInfoEstimator}, x, y)
     # Encode marginals to integers based on the outcome space.
-    eX, eY = codified_marginals(est.discretization, x, y)
-    eXY = StateSpaceSet(eX, eY)
+    eX::StateSpaceSet, eY::StateSpaceSet = StateSpaceSet.(codified_marginals(est.discretization, x, y))
+    eXY::StateSpaceSet = StateSpaceSet(eX, eY)
 
     # The outcome space is no longer relevant from this point on. We're done discretizing, 
     # so now we can just count (i.e. use `UniqueElements` as the outcome space).
     o = UniqueElements()
-
     modified_est = estimator_with_overridden_parameters(est.definition, est.est)
     HX = information(modified_est, est.pest, o, eX) # estimates entropy in the X marginal
     HY = information(modified_est, est.pest, o, eY) # estimates entropy in the Y marginal

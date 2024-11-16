@@ -14,8 +14,8 @@ m = ChatterjeeCorrelation()
 # We should get exactly the same results for preallocated measure 
 # as for non-preallocated measure.
 for i = 1:10
-    x = rand(rng, 15)
-    y = rand(rng, 15)
+    local x = rand(rng, 15)
+    local y = rand(rng, 15)
 
     # We must initialize identical seeds to ensure reproducible results
     rng_seed = rand(rng, 1:100) 

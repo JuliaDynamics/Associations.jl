@@ -10,17 +10,16 @@ module Associations
     using Reexport
 
     using StateSpaceSets
+
     using DelayEmbeddings: embed, genembed
     export embed, genembed
 
     import HypothesisTests: pvalue
     export trajectory
-    @reexport using StateSpaceSets
-    @reexport using ComplexityMeasures
-    @reexport using TimeseriesSurrogates
 
-    include("utils/utils.jl")
+
     include("core.jl")
+    include("utils/utils.jl")
 
     include("methods/information/information.jl")
     include("methods/crossmappings/crossmappings.jl")
@@ -37,6 +36,9 @@ module Associations
 
     include("deprecations/deprecations.jl")
 
+    @reexport using StateSpaceSets
+    @reexport using ComplexityMeasures
+    @reexport using TimeseriesSurrogates
     # Update messages:
     using Scratch
     display_update = true

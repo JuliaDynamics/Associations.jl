@@ -18,7 +18,10 @@ Tₙs_pairwise = zeros(10)
 
 m = AzadkiaChatterjeeCoefficient()
 for i = 1:10
-    n = 1000; x1, x2 = randn(n), randn(n); y = x1 .^2 .+ x2 .^ 2; z = atan.(x1 ./ x2)
+    n = 1000; 
+    local x1 = randn(n)
+    local x2 = randn(n); y = x1 .^2 .+ x2 .^ 2; 
+    local z = atan.(x1 ./ x2)
     Tₙs_cond[i] = association(m, y, z, x1)
     Tₙs_pairwise[i] = association(m, y, z)
 end
