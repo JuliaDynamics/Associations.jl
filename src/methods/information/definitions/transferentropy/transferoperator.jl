@@ -1,4 +1,3 @@
-
 import ComplexityMeasures: TransferOperator, invariantmeasure, InvariantMeasure, Probabilities
 using ComplexityMeasures.GroupSlices
 export TransferOperator
@@ -47,19 +46,9 @@ end
 
 function _marginal_encodings(encoder::RectangularBinEncoding, x::VectorOrStateSpaceSet...)
     X = StateSpaceSet(StateSpaceSet.(x)...)
-    bins = [vec(encode_as_tuple(encoder, pt))' for pt in X]
+    bins = [vec(encode_as_tuple(encoder, pt))' for pt in unique(X.data)]
     joint_bins = reduce(vcat, bins)
-    idxs = size.(x, 2) #each input can have different dimensions
-    s = 1
-    encodings = Vector{StateSpaceSet}(undef, length(idxs))
-    for (i, cidx) in enumerate(idxs)
-        variable_subset = s:(s + cidx - 1)
-        s += cidx
-        y = @views joint_bins[:, variable_subset]
-        encodings[i] = StateSpaceSet(y)
-    end
-
-    return encodings
+    return StateSpaceSet(joint_bins)
 end
 
 # Only works for `RelativeAmount`, because probabilities are obtained from the 
@@ -88,9 +77,11 @@ function h4_marginal_probs(
     # marginals, not a single encoding integer for each bin. Otherwise, we can't
     # properly subset marginals here and relate them to the approximated invariant measure.
     encoding = iv.to.encoding
+    # Visited bins (absolute coordinates)
     visited_bins_coordinates = StateSpaceSet(decode.(Ref(encoding), iv.to.bins))
-    unique_visited_bins = _marginal_encodings(iv.to.encoding, visited_bins_coordinates)[1]
 
+    # Visited bins (coordinates encoded to integers using rectangular encoding)
+    unique_visited_bins = _marginal_encodings(iv.to.encoding, visited_bins_coordinates)
     # # The subset of visited bins with nonzero measure
     inds_non0measure = findall(iv.ρ .> 0)
     positive_measure_bins = unique_visited_bins[inds_non0measure]
