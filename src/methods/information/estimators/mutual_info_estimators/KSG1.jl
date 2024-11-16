@@ -68,10 +68,13 @@ const KSG1 = KraskovStögbauerGrassberger1
 
 function association(est::KSG1{<:MIShannon}, x::VectorOrStateSpaceSet...)
     verify_number_of_inputs_vars(est.definition, length(x))
-
     (; definition, k, w, metric_joint, metric_marginals) = est
-    joint = StateSpaceSet(x...)
+   
     marginals = map(xᵢ -> StateSpaceSet(xᵢ), x)
+    # Note: this uses a StateSpaceSet constructor that is overloaded from StateSpaceSets.jl, because the native 
+    # one is extremely slow.
+    joint::StateSpaceSet = StateSpaceSet(marginals...)
+
     M = length(x)
     N = length(joint)
 
