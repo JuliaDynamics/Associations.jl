@@ -61,10 +61,11 @@ function association(definition::SECMI, probs::Probabilities{T, N}) where {T, N}
     mi_XY = association(def_mi, pXY)
     cmis = 0.0
     for k = 1:m
-        dims = (1, 2, 2 + k)
-        cmis += association(def_cmi, marginal(probs, dims = dims))
+        # association(definition::CMIShannon, pxyz::Probabilities{T, 3})
+        # is the call signature, so we simply replace the last variable
+        # with the marginal Zₖ for each Î(X, Y | Zₖ) in the sum
+        cmis += association(def_cmi, marginal(probs, dims = (1, 2, 2 + k)))
     end
-
     return (1 - m) * mi_XY + cmis
 end
 
