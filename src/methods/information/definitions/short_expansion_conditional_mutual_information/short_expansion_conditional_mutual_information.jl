@@ -46,6 +46,8 @@ function Base.show(io::IO, m::ShortExpansionConditionalMutualInformation)
     msg = "ShortExpansionConditionalMutualInformation(; base = $(m.base))"
     print(io, msg)
 end
+min_inputs_vars(::ShortExpansionConditionalMutualInformation) = 3
+max_inputs_vars(::ShortExpansionConditionalMutualInformation) = Inf
 
 # Assumes 1st dimension of `probs` corresponds to X, 2nd dimension of `probs`
 # corresponds to Y, and dimensions `3:ndims(probs)` correspond to marginals Zₖ, 
