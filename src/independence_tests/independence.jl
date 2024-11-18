@@ -7,6 +7,13 @@ using Statistics: quantile
     IndependenceTest <: IndependenceTest
 
 The supertype for all independence tests.
+
+## Concrete implementations
+
+- [`SurrogateAssociationTest`](@ref)
+- [`LocalPermutationTest`](@ref)
+- [`JointDistanceDistributionTest`](@ref)
+- [`CorrTest`](@ref)
 """
 abstract type IndependenceTest{M} end
 
@@ -21,18 +28,13 @@ If only `x` and `y` are given, `test` must provide a bivariate association measu
 If `z` is given too, then `test` must provide a conditional association measure.
 
 Returns a test `summary`, whose type depends on `test`.
-
-## Compatible independence tests
-
-- [`SurrogateAssociationTest`](@ref)
-- [`LocalPermutationTest`](@ref)
-- [`JointDistanceDistributionTest`](@ref)
-- [`CorrTest`](@ref)
 """
 function independence(test::IndependenceTest, x...)
     L = length(x)
     throw(ArgumentError("No concrete implementation for $(typeof(test)) test with $(L) input variables."))
 end
+
+function test_statistic end
 
 function pvalue_text_summary(test::IndependenceTestResult)
     α005 = pvalue(test) < 0.05 ?
