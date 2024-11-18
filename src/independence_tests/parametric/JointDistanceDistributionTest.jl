@@ -65,6 +65,7 @@ struct JDDTestResult{V, T, P} <: IndependenceTestResult
 end
 
 pvalue(x::JDDTestResult) = x.pvalue
+test_statistic(x::JDDTestResult) = x.Δjdd
 
 function Base.show(io::IO, r::JDDTestResult)
     # TODO: make a function to do this (a pairwise and a conditional version), so this

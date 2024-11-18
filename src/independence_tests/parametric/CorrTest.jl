@@ -70,6 +70,7 @@ struct CorrTestResult{R, Z, P}
     pvalue::P
 end
 pvalue(r::CorrTestResult) = r.pvalue
+test_statistic(r::CorrTestResult) = r.ρ
 
 function Base.show(io::IO, test::CorrTestResult)
     α005 = pvalue(test) < 0.05 ?
