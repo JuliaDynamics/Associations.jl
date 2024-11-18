@@ -129,7 +129,10 @@ end
 # todo: separate method for two variables
 # note: the input order follows the notation in AZADKIA & chatterjee.
 # The value of Tₙ is in the limit of n → ∞ guaranteed to be on [0, 1], but will not be so in practice.
-function association(m::AzadkiaChatterjeeCoefficient{<:AbstractVector}, y::AbstractVector{<:Real}, z::VectorOrStateSpaceSet, x::VectorOrStateSpaceSet) 
+function association(m::AzadkiaChatterjeeCoefficient{<:AbstractVector}, 
+        y::Union{AbstractVector{<:Real}, AbstractStateSpaceSet{1}}, 
+        z::VectorOrStateSpaceSet, 
+        x::VectorOrStateSpaceSet) 
     @assert length(y) == length(z) == length(x)
     n = length(x); @assert n ≥ 2
 
