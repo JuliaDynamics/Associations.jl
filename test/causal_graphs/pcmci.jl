@@ -9,7 +9,7 @@ using StableRNGs
 # (we don't expect this to be 100% successful in general, but this example works)
 rng = StableRNG(1234);
 sys = system(Logistic4Chain(; rng));
-X = first(trajectory(sys, 500, Ttr = 10000));
+X = first(trajectory(sys, 200, Ttr = 10000));
 utest = SurrogateAssociationTest(KSG1(k = 10), nshuffles = 19);
 ctest = SurrogateAssociationTest(Rahimzamani(k = 10), nshuffles = 19);
 alg = PCMCI(; utest, ctest, qmax = 1, pmax = 5, τmax = 1);
@@ -24,3 +24,7 @@ res = infer_graph(alg, X)
 @test first(res.parents[3]).i == 2 && first(res.parents[3]).τ == -1 # the driver for X2(0) is X2(-1)
 @test length(res.parents[4]) == 1 # only one driver for X4
 @test first(res.parents[4]).i == 3 && first(res.parents[4]).τ == -1 # the driver for X3(0) is X3(-1)
+
+alg = PCMCI(; utest, ctest, qmax = 1, pmax = 5, τmax = 1, fdr_adjust = false);
+res = infer_graph(alg, X)
+@test res isa PCMCIResult
