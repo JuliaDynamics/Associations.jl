@@ -1,7 +1,7 @@
 # Analytical tests (in the limit of a lot of samples)
 # ------------------------------------------------------------
 using Random
-rng = MersenneTwister(1234)
+rng = StableRNG(1234)
 n = 100
 x, y = rand(rng, n), rand(rng, n)
 z = x .+ y
