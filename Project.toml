@@ -31,7 +31,7 @@ TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
 [compat]
 Accessors = "^0.1.28"
 Combinatorics = "1"
-ComplexityMeasures = "~3.7"
+ComplexityMeasures = "3.8"
 DSP = "^0.7"
 DelayEmbeddings = "2.8"
 Distances = "^0.10"
