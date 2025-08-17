@@ -19,24 +19,24 @@ export codify
 
 ## Compatible encodings
 
-- [`GaussianCDFEncoding`](@ref)
-- [`OrdinalPatternEncoding`](@ref)
-- [`RelativeMeanEncoding`](@ref)
-- [`RelativeFirstDifferenceEncoding`](@ref)
-- [`UniqueElementsEncoding`](@ref)
-- [`RectangularBinEncoding`](@ref)
-- [`CombinationEncoding`](@ref)
+- [`GaussianCDFEncoding`](@extref ComplexityMeasures.GaussianCDFEncoding)
+- [`OrdinalPatternEncoding`](@extref ComplexityMeasures.OrdinalPatternEncoding)
+- [`RelativeMeanEncoding`](@extref ComplexityMeasures.RelativeMeanEncoding)
+- [`RelativeFirstDifferenceEncoding`](@extref ComplexityMeasures.RelativeFirstDifferenceEncoding)
+- [`UniqueElementsEncoding`](@extref ComplexityMeasures.UniqueElementsEncoding)
+- [`RectangularBinEncoding`](@extref ComplexityMeasures.RectangularBinEncoding)
+- [`CombinationEncoding`](@extref ComplexityMeasures.CombinationEncoding)
 
 ## Description
 
 Given `x::AbstractStateSpaceSet...`, where the `i`-th dataset is assumed to represent
 a single series of measurements, `CodifyPoints` encodes each point `pₖ ∈ x[i]` 
-using some [`Encoding`](@ref)(s), *without* applying any (sequential) transformation to
+using some [`Encoding`](@extref ComplexityMeasures.Encoding)(s), *without* applying any (sequential) transformation to
 the `x[i]` first. This behaviour is different to [`CodifyVariables`](@ref), which
 *does* apply a transformation to `x[i]` before encoding.
 
 If `length(x) == N` (i.e. there are `N` input dataset), then `encodings` must be a tuple
-of `N` [`Encoding`](@ref). Alternatively, if `encodings` is a single [`Encoding`](@ref),
+of `N` [`Encoding`](@extref ComplexityMeasures.Encoding). Alternatively, if `encodings` is a single [`Encoding`](@extref ComplexityMeasures.Encoding),
 then that same encoding is applied to every `x[i]`.
 
 ## Examples
@@ -58,8 +58,8 @@ cx, cy, cz = codify(d, x, y, z)
 ```
 """
 struct CodifyPoints{N} <: Discretization{N}
-    encodings::NTuple{N, Encoding}
-    function CodifyPoints(encodings::NTuple{N, Encoding}) where N
+    encodings::NTuple{N,Encoding}
+    function CodifyPoints(encodings::NTuple{N,Encoding}) where N
         if !(N ≥ 1)
             throw(ArgumentError("CodifyPoints requires at least 1 dimensions"))
         end
@@ -68,7 +68,7 @@ struct CodifyPoints{N} <: Discretization{N}
 end
 Base.getindex(e::CodifyPoints, i) = getindex(e.encodings, i)
 
-function CodifyPoints(encodings::Vararg{Encoding, N}) where N
+function CodifyPoints(encodings::Vararg{Encoding,N}) where N
     return CodifyPoints(tuple(encodings...))
 end
 
@@ -103,27 +103,27 @@ codify(CodifyPoints(ex, ey, ez), x, y, z)
 """
 function codify(encoding::CodifyPoints, x) end
 
-function codify(encoding::CodifyPoints{1}, x::Vararg{Any, 1})
+function codify(encoding::CodifyPoints{1}, x::Vararg{Any,1})
     e = first(encoding.encodings)
     x̂ = codify_individual_dataset(e, first(x))
     return x̂::Vector{<:Integer}
 end
 
 # Apply the same encoding to all input datasets.
-function codify(encoding::CodifyPoints{1}, x::Vararg{Any, M}) where {M}
+function codify(encoding::CodifyPoints{1}, x::Vararg{Any,M}) where {M}
     verify_input(encoding, x...)
     e = first(encoding.encodings)
     x̂ = map(k -> codify_individual_dataset(e, x[k]), tuple(1:M...))
 
-    return x̂::NTuple{M, Vector{<:Integer}}
+    return x̂::NTuple{M,Vector{<:Integer}}
 end
 
 
-function codify(encoding::CodifyPoints{N}, x::Vararg{Any, M}) where {N, M}
+function codify(encoding::CodifyPoints{N}, x::Vararg{Any,M}) where {N,M}
     verify_input(encoding, x...)
     x̂ = map(k -> codify_individual_dataset(encoding[k], x[k]), tuple(1:M...))
 
-    return x̂::NTuple{M, Vector{<:Integer}}
+    return x̂::NTuple{M,Vector{<:Integer}}
 end
 
 function verify_input(encoding::CodifyPoints{N}, x...) where N
@@ -153,9 +153,9 @@ function codify_individual_dataset(encoding::Encoding, x)
     return x̂
 end
 
- # The decoding step on the second-to-last line is not possible without actually providing
- # the encodings. Therefore, we need to override the Generic implementation of
- # `counts`.
+# The decoding step on the second-to-last line is not possible without actually providing
+# the encodings. Therefore, we need to override the Generic implementation of
+# `counts`.
 function counts(encoding::CodifyPoints, x...)
     # This converts each dataset `x[i]::StateSpaceSet` into `x̂[i]::Vector{Int}`,
     # where `length(x[i]) == length(x̂[i])`.

@@ -7,7 +7,7 @@ export ConditionalEntropyShannon
     ConditionalEntropyShannon <: ConditionalEntropy
     ConditionalEntropyShannon(; base = 2)
 
-The [`Shannon`](@ref) conditional entropy measure.
+The [`Shannon`](@extref ComplexityMeasures.Shannon) conditional entropy measure.
 
 ## Usage 
 
@@ -40,9 +40,9 @@ Equivalently, the following differenConditionalEntropy of entropies hold
 H^S(X | Y) = H^S(X, Y) - H^S(Y),
 ```
 
-where ``H^S(\\cdot)`` and ``H^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref) entropy and
+where ``H^S(\\cdot)`` and ``H^S(\\cdot | \\cdot)`` are the [`Shannon`](@extref ComplexityMeasures.Shannon) entropy and
 Shannon joint entropy, respectively. This is the definition used when calling
-[`association`](@ref) with a [`ProbabilitiesEstimator`](@ref).
+[`association`](@ref) with a [`ProbabilitiesEstimator`](@extref ComplexityMeasures.ProbabilitiesEstimator).
 
 ## Differential definition
 
@@ -52,19 +52,19 @@ The differential conditional Shannon entropy is analogously defined as
 H^S(X | Y) = h^S(X, Y) - h^S(Y),
 ```
 
-where ``h^S(\\cdot)`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref)
+where ``h^S(\\cdot)`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@extref ComplexityMeasures.Shannon)
 differential entropy and Shannon joint differential entropy, respectively. This is the
 definition used when calling [`association`](@ref) with a
-[`DifferentialInfoEstimator`](@ref).
+[`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator).
 
 ## Estimation
 
 - [Example 1](@ref example_ConditionalEntropyShannon_analytical): Analytical example from Cover & Thomas's book.
 - [Example 2](@ref example_ConditionalEntropyShannon_JointProbabilities_CodifyVariables_UniqueElements): 
     [`JointProbabilities`](@ref) estimator with[`CodifyVariables`](@ref) discretization and 
-    [`UniqueElements`](@ref) outcome space on categorical data.
+    [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) outcome space on categorical data.
 - [Example 3](@ref example_ConditionalEntropyShannon_JointProbabilities_CodifyPoints_UniqueElementsEncoding): 
-    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@ref)
+    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@extref ComplexityMeasures.UniqueElementsEncoding)
     encoding of points on numerical data.
 """
 Base.@kwdef struct ConditionalEntropyShannon{B} <: ConditionalEntropy
@@ -79,10 +79,10 @@ function association(est::JointProbabilities{<:ConditionalEntropyShannon}, input
     return association(est.definition, probs)
 end
 
-function association(definition::ConditionalEntropyShannon, pxy::Probabilities{T, 2}) where {T}
+function association(definition::ConditionalEntropyShannon, pxy::Probabilities{T,2}) where {T}
     base = definition.base
     Nx, Ny = size(pxy)
-    py = marginal(pxy, dims = 2)
+    py = marginal(pxy, dims=2)
 
     ce = 0.0
     log0 = log_with_base(base)

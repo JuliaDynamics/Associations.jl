@@ -47,14 +47,14 @@ defined analogously.
 ## Input data
 
 `X` and `Y` can be either both univariate timeseries, or both multivariate
-[`StateSpaceSet`](@ref)s.
+[`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)s.
 
 
 ## Estimation
 
 - [Example 1](@ref example_MCR). Pairwise versus conditional MCR.
 """
-Base.@kwdef struct MCR{R, M} <: AssociationMeasure
+Base.@kwdef struct MCR{R,M} <: AssociationMeasure
     r::R
     metric::M = Euclidean()
 end

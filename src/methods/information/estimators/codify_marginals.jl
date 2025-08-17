@@ -1,5 +1,5 @@
 using ComplexityMeasures
-export codified_marginals 
+export codified_marginals
 
 """
     codified_marginals(o::OutcomeSpace, x::VectorOrStateSpaceSet...)
@@ -8,7 +8,7 @@ Encode/discretize each input vector (e.g. timeseries) `xᵢ ∈ x` according to 
 determined by `o`. 
 
 For some outcome spaces, the encoding is sequential (i.e. time ordering matters). 
-Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@ref)s) will be encoded
+Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)s) will be encoded
 column-wise, i.e. each column of `xᵢ` is treated as a timeseries and is encoded separately.
 
 This is useful for discretizing input data when computing some 
@@ -18,23 +18,23 @@ to handle discretization.
 
 ## Supported estimators
 
-- [`ValueBinning`](@ref). Bin visitation frequencies are counted in the joint space `XY`,
+- [`ValueBinning`](@extref ComplexityMeasures.ValueBinning). Bin visitation frequencies are counted in the joint space `XY`,
     then marginal visitations are obtained from the joint bin visits.
-    This behaviour is the same for both [`FixedRectangularBinning`](@ref) and
-    [`RectangularBinning`](@ref) (which adapts the grid to the data).
-    When using [`FixedRectangularBinning`](@ref), the range along the first dimension
+    This behaviour is the same for both [`FixedRectangularBinning`](@extref ComplexityMeasures.FixedRectangularBinning) and
+    [`RectangularBinning`](@extref ComplexityMeasures.RectangularBinning) (which adapts the grid to the data).
+    When using [`FixedRectangularBinning`](@extref ComplexityMeasures.FixedRectangularBinning), the range along the first dimension
     is used as a template for all other dimensions.
-- [`OrdinalPatterns`](@ref). Each timeseries is separately [`codify`](@ref)-ed by 
+- [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns). Each timeseries is separately [`codify`](@ref)-ed by 
     embedding the timeseries, then sequentially encoding the ordinal patterns of 
     the embedding vectors.
-- [`Dispersion`](@ref). Each timeseries is separately [`codify`](@ref)-ed by 
+- [`Dispersion`](@extref ComplexityMeasures.Dispersion). Each timeseries is separately [`codify`](@ref)-ed by 
     embedding the timeseries, then sequentially encoding the embedding vectors
     according to their dispersion pattern (which for each embedding vector is computed
     relative to all other embedding vectors).
-- [`CosineSimilarityBinning`](@ref). Each timeseries is separately [`codify`](@ref)-ed
+- [`CosineSimilarityBinning`](@extref ComplexityMeasures.CosineSimilarityBinning). Each timeseries is separately [`codify`](@ref)-ed
     by embedding the timeseries, the encoding the embedding points in a 
     in a sequential manner according to the cosine similarity of the embedding vectors.
-- [`UniqueElements`](@ref). Each timeseries is [`codify`](@ref)-ed according to 
+- [`UniqueElements`](@extref ComplexityMeasures.UniqueElements). Each timeseries is [`codify`](@ref)-ed according to 
     its unique values (i.e. each unique element gets assigned a specific integer).
 
 More implementations are possible.
@@ -72,8 +72,8 @@ end
 # TODO: maybe construct a convenience wrapper where the user can avoid constructing the
 # joint space, for performance benefits (but increased bias).
 function codify_marginal(
-        o::ValueBinning{<:FixedRectangularBinning{D}},
-        x::AbstractVector) where D
+    o::ValueBinning{<:FixedRectangularBinning{D}},
+    x::AbstractVector) where D
     range = first(o.binning.ranges)
     ϵmin = minimum(range)
     ϵmax = maximum(range)
@@ -100,7 +100,7 @@ function codified_marginals(o::ValueBinning{<:RectangularBinning}, x::VectorOrSt
     s = 1
     encodings = Vector{Vector}(undef, 0)
     for (i, cidx) in enumerate(idxs)
-        variable_subset = s:(s + cidx - 1)
+        variable_subset = s:(s+cidx-1)
         s += cidx
         y = @views joint_bins[:, variable_subset]
         for j in size(y, 2)
@@ -113,7 +113,7 @@ end
 
 # A version of `cartesian_bin_index` that directly returns the joint bin encoding
 # instead of converting it to a cartesian index.
-function encode_as_tuple(e::RectangularBinEncoding, point::SVector{D, T}) where {D, T}
+function encode_as_tuple(e::RectangularBinEncoding, point::SVector{D,T}) where {D,T}
     ranges = e.ranges
     if e.precise
         # Don't know how to make this faster unfurtunately...

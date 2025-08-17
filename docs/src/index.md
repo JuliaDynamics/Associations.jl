@@ -48,16 +48,12 @@ Input data for Associations.jl are given as:
 
 - Univariate *timeseries*, which are given as standard Julia `Vector`s.
 - Multivariate timeseries, *StateSpaceSets*, or *state space sets*, which are given as
-    [`StateSpaceSet`](@ref)s. Many methods convert *timeseries* inputs to [`StateSpaceSet`](@ref)
+    [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)s. Many methods convert *timeseries* inputs to [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)
     for faster internal computations.
 - Categorical data can be used with [`JointProbabilities`](@ref) to compute various
     information theoretic measures and is represented using any iterable whose elements
     can be any arbitrarily complex data type (as long as it's hashable), for example
     `Vector{String}`, `{Vector{Int}}`, or `Vector{Tuple{Int, String}}`.
-
-```@docs
-StateSpaceSets.StateSpaceSet
-```
 
 ## Maintainers and contributors
 

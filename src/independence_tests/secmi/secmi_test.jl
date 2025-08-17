@@ -7,26 +7,26 @@ export SECMITestResult
 
 A test for conditional independence based on the [`ShortExpansionConditionalMutualInformation`](@ref) measure [Kubkowski2021](@cite).
 
-The first argument `est` must be a [`InformationMeasureEstimator`](@ref) that provides the 
+The first argument `est` must be a [`ComplexityMeasures.InformationMeasureEstimator`](@extref) that provides the 
 [`ShortExpansionConditionalMutualInformation`](@ref) instance. See examples below.
 
 ## Examples
 
 - [Example 1](@ref example_SECMITEST_JointProbabilities_CodifyVariables_ValueBinning): Independence test for small sample sizes using [`CodifyVariables`](@ref) with 
-    [`ValueBinning`](@ref) discretization.
+    [`ComplexityMeasures.ValueBinning`](@extref) discretization.
 - [Example 2](@ref example_SECMITEST_JointProbabilities_CodifyVariables_UniqueElements): Independence test for small sample
-    sizes with categorical data (using [`CodifyVariables`](@ref) with [`UniqueElements`](@ref) discretization).
+    sizes with categorical data (using [`CodifyVariables`](@ref) with [`ComplexityMeasures.UniqueElements`](@extref) discretization).
 """
-struct SECMITest{E, S, I, RNG} <: IndependenceTest{E}
+struct SECMITest{E,S,I,RNG} <: IndependenceTest{E}
     # really, this can only be an estimator, but we name it `est_or_measure` for consistency 
     # with the remaining tests, so we don't have to write custom code.
-    est_or_measure::E 
+    est_or_measure::E
     surrogate::S
     nshuffles::I
     rng::RNG
 end
 
-function SECMITest(est; nshuffles = 19, surrogate = RandomShuffle(), rng = Random.default_rng())
+function SECMITest(est; nshuffles=19, surrogate=RandomShuffle(), rng=Random.default_rng())
     return SECMITest(est, surrogate, nshuffles, rng)
 end
 
@@ -50,7 +50,7 @@ with [`independence`](@ref), as described in [Kubkowski2021](@cite).
 - `D𝒩`: The ``D_{N(\\hat{\\mu}, \\hat{\\sigma})}`` statistic.
 - `D𝒳²`: The ``D_{\\chi^2}`` statistic.
 """
-struct SECMITestResult{S0, SK, P, MU, S, E, DN, DCHI} <: IndependenceTestResult
+struct SECMITestResult{S0,SK,P,MU,S,E,DN,DCHI} <: IndependenceTestResult
     n_vars::Int # 3 vars = conditional (always 3)
     secmi₀::S0 # the value of the measure, non-permuted
     secmiₖ::SK # the values of the measure, permuted `nshuffles` times
@@ -74,7 +74,7 @@ function Base.show(io::IO, test::SECMITestResult)
 
         $(pvalue_text_summary(test))
         """
-        )
+    )
 end
 
 function independence(test::SECMITest, x, y, z)
@@ -85,9 +85,9 @@ function independence(test::SECMITest, x, y, z)
     for k = 1:nshuffles
         secmiₖ[k] = association(est_or_measure, sx(), y, z)
     end
-    μ̂ = 1/nshuffles * sum(secmiₖ)
-    σ̂ = 1/(nshuffles - 1) * sum((sₖ - μ̂)^2 for sₖ in secmiₖ)
-    emp_cdf = ecdf(secmiₖ) 
+    μ̂ = 1 / nshuffles * sum(secmiₖ)
+    σ̂ = 1 / (nshuffles - 1) * sum((sₖ - μ̂)^2 for sₖ in secmiₖ)
+    emp_cdf = ecdf(secmiₖ)
     F𝒩 = Normal(μ̂, σ̂)
 
     if μ̂ ≤ 0.0
@@ -99,7 +99,7 @@ function independence(test::SECMITest, x, y, z)
         # so we put μ̂ <= 0.0 in a separate criterion first to avoid errors.
         F𝒳² = Chisq(μ̂)
         D𝒩, D𝒳² = sup_values(emp_cdf, F𝒩, F𝒳², secmiₖ)
-        if  D𝒩 < D𝒳²
+        if D𝒩 < D𝒳²
             p = 1 - cdf(F𝒩, secmi₀)
         else
             p = 1 - cdf(F𝒳², secmi₀)
@@ -108,7 +108,7 @@ function independence(test::SECMITest, x, y, z)
 
     end
 
-   
+
     return SECMITestResult(3, secmi₀, secmiₖ, p, μ̂, σ̂, emp_cdf, D𝒩, D𝒳²)
 end
 
