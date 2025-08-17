@@ -21,7 +21,7 @@ using LinearAlgebra: eigvals, det
 ## Description
 
 Given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
-`GaussianMI` first constructs the ``d_x + d_y``-dimensional joint [`StateSpaceSet`](@ref) `XY`.
+`GaussianMI` first constructs the ``d_x + d_y``-dimensional joint [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet) `XY`.
 If `normalize == true`, then we follow the approach in Vejmelka & Palus
 (2008)[Vejmelka2008](@cite) and transform each column in `XY` to have zero mean and unit
 standard deviation. If `normalize == false`, then the algorithm proceeds without
@@ -31,7 +31,7 @@ Next, the `C_{XY}`, the correlation matrix for the (normalized) joint data `XY` 
 computed. The mutual information estimate `GaussianMI` assumes the input variables are distributed according to normal
 distributions with zero means and unit standard deviations.
 Therefore, given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
-`GaussianMI` first constructs the joint [`StateSpaceSet`](@ref) `XY`, then transforms each
+`GaussianMI` first constructs the joint [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet) `XY`, then transforms each
 column in `XY` to have zero mean and unit standard deviation, and finally computes
 the `\\Sigma`, the correlation matrix for `XY`.
 
@@ -68,12 +68,12 @@ x = rand(rng, 10000); y = rand(rng, 10000)
 association(GaussianMI(), x, y) # should be near 0 (and can be negative)
 ```
 """
-struct GaussianMI{M <: MutualInformation} <: MutualInformationEstimator{M}
+struct GaussianMI{M<:MutualInformation} <: MutualInformationEstimator{M}
     definition::M
     normalize::Bool
 end
 
-function GaussianMI(definition = MIShannon(); normalize = true)
+function GaussianMI(definition=MIShannon(); normalize=true)
     return GaussianMI(definition, normalize)
 end
 

@@ -8,7 +8,7 @@ Encode/discretize each input vector (e.g. timeseries) `xᵢ ∈ x` according to 
 determined by `o`. 
 
 For some outcome spaces, the encoding is sequential (i.e. time ordering matters). 
-Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@ref)s) will be encoded
+Any `xᵢ ∈ X` that are multidimensional ([`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)s) will be encoded
 column-wise, i.e. each column of `xᵢ` is treated as a timeseries and is encoded separately.
 
 This is useful for discretizing input data when computing some 

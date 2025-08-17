@@ -38,7 +38,7 @@ In summary, the two main ways of discretizing data in Associations are as follow
 ### Encoding per point/row
 
 In some cases, it may be desireable to encode data on a row-wise basis. This 
-typically happens when working with pre-embedded time series or [`StateSpaceSet`](@ref)s 
+typically happens when working with pre-embedded time series or [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)s 
 (respecting the fact that time ordering is already taken care of by the 
 embedding procedure). 
 If we want to apply something like [`OrdinalPatternEncoding`](@extref ComplexityMeasures.OrdinalPatternEncoding) to such data, then 
@@ -61,7 +61,7 @@ them in arbitrary ways using [`CombinationEncoding`](@extref ComplexityMeasures.
 #### [Examples: encoding *rows* (one *point* at a time)](@id tutorial_codify_points)
 
 We'll here use the [`OrdinalPatternEncoding`](@extref ComplexityMeasures.OrdinalPatternEncoding) with differing parameter `m` to encode 
-multiple [`StateSpaceSet`](@ref) of differing dimensions.
+multiple [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet) of differing dimensions.
 
 ```@example example_encode_points
 using Associations
@@ -155,7 +155,7 @@ o = OrdinalPatterns(m = 3)
 cx = codify(CodifyVariables(o), x)
 ```
 
-We can simultaneously encode multiple variable/columns of a [`StateSpaceSet`](@ref) using 
+We can simultaneously encode multiple variable/columns of a [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet) using 
 the same outcome space, as long as the operation will result in the *same* number of encoded 
 data points for each column.
 
