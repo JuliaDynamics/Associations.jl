@@ -207,8 +207,8 @@ est_diff = EntropyDecomposition(MIShannon(base = 2), Kraskov(Shannon(), k=10))
 association(est_diff, x, y)
 ```
 
-We can also construct a discrete entropy based estimator based on e.g. [`PlugIn`](@ref)
-estimator of [`Shannon`](@ref) entropy.
+We can also construct a discrete entropy based estimator based on e.g. [`PlugIn`](@extref ComplexityMeasures)
+estimator of [`Shannon`](@extref ComplexityMeasures) entropy.
 
 ```@example INFO_TUTORIAL
 # We know that `x` and `y` were generated from a uniform distribution above,
