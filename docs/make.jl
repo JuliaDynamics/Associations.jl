@@ -43,7 +43,7 @@ bibliography = CitationBibliography(
     style=:authoryear
 )
 
-build_docs_with_style(pages, Associations, StateSpaceSets;
+build_docs_with_style(pages, Associations;
     expandfirst=["index.md"],
     bib=bibliography,
     pages=pages,
