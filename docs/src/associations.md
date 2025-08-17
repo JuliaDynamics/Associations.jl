@@ -1,5 +1,5 @@
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # [Associations](@id association_measures)

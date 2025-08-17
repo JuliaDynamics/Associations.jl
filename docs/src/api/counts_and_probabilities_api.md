@@ -1,20 +1,18 @@
 
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # [Multivariate counts and probabilities API](@id counts_and_probabilities_api)
 
 For counting and probabilities, Associations.jl extends the single-variable machinery
-in ComplexityMeasures.jl to multiple variables.
+in ComplexityMeasures.jl to multiple variables. See the following types:
+
+- [`Counts`](@extref ComplexityMeasures.Counts)
+- [`Probabilities`](@extref ComplexityMeasures.Probabilities)
 
 ```@docs
-Associations.Counts
 Associations.counts(::OutcomeSpace)
-```
-
-```@docs
-Associations.Probabilities
 Associations.probabilities(::OutcomeSpace)
 ```
 

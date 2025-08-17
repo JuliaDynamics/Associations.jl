@@ -12,42 +12,15 @@ export EntropyDecomposition
 Estimate the multivariate information measure specified by `definition` by rewriting
 its formula into some combination of entropy terms. 
 
-If calling the second method (discrete variant), then discretization is always done 
-per variable/column and each column is encoded into integers using [`codify`](@ref).
+## Estimation 
 
-## Usage
+`EntropyDecomposition` allows using any 
+[`InformationMeasureEstimators`s](@extref ComplexityMeasures.InformationMeasureEstimator) from 
+[ComplexityMeasures.jl](https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/)
+to estimate multivariate information measures.
 
-- Use with [`association`](@ref) to compute a [`MultivariateInformationMeasure`](@ref)
-    from input data: [`association`](@ref)`(est::EntropyDecomposition, x...)`.
-- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
-
-## Description
-
-The entropy terms are estimated using `est`, and then combined to form the final 
-estimate of `definition`. No bias correction is applied.
-If `est` is a [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator), then `discretization` and `pest` 
-are ignored. If `est` is a [`DiscreteInfoEstimator`](@extref ComplexityMeasures.DiscreteInfoEstimator), then `discretization` and a
-probabilities estimator `pest` must also be provided (default to `RelativeAmount`, 
-which uses naive plug-in probabilities).
-
-## Compatible differential information estimators
-
-If using the first signature, any compatible [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator) can be 
-used.
-
-## Compatible outcome spaces for discrete estimation
-
-If using the second signature, the outcome spaces can be used for discretisation. 
-Note that not all outcome spaces will work with all measures.
-
-| Estimator                         | Principle                     |
-| :-------------------------------- | :---------------------------- |
-| [`UniqueElements`](@extref ComplexityMeasures.UniqueElements)          | Count of unique elements      |
-| [`ValueBinning`](@extref ComplexityMeasures.ValueBinning)            | Binning (histogram)           |
-| [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns)         | Ordinal patterns              |
-| [`Dispersion`](@extref ComplexityMeasures.Dispersion)              | Dispersion patterns           |
-| [`BubbleSortSwaps`](@extref ComplexityMeasures.BubbleSortSwaps)         | Sorting complexity            |
-| [`CosineSimilarityBinning`](@extref ComplexityMeasures.CosineSimilarityBinning) | Cosine similarities histogram |
+Computations are done by computing individual entropy terms using `est`, then combining them according to 
+`definition` to form the final estimate. 
 
 ## Bias 
 
@@ -59,6 +32,46 @@ estimators typically derive the marginal estimates by first considering the join
 space, and then does some clever trick to eliminate the bias that is introduced
 through a naive decomposition. Unless specified below, no bias correction is 
 applied for `EntropyDecomposition`.
+
+## Usage
+
+- Use with [`association`](@ref) to compute a [`MultivariateInformationMeasure`](@ref)
+    from input data: [`association`](@ref)`(est::EntropyDecomposition, x...)`.
+- Use with some [`IndependenceTest`](@ref) to test for independence between variables.
+
+## Description
+
+If `est` is a [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator), then `discretization` and `pest` 
+are ignored. 
+## Differential estimation
+
+If using the first signature, any compatible [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator) can be 
+used.
+[`MITsallisMartin`](@ref) can be estimated using a decomposition into entropy 
+terms using [`EntropyDecomposition`](@ref). This is done by using estimators from 
+[ComplexityMeasures.jl](https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/). We can use any compatible 
+[`InformationMeasureEstimator`](@extref ComplexityMeasures.InformationMeasureEstimator)
+that can estimate differential [`Tsallis`](@extref ComplexityMeasures.Tsallis) entropy from
+[ComplexityMeasures.jl](https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/).
+
+## Discrete estimation
+
+If `est` is a [`DiscreteInfoEstimator`](@extref ComplexityMeasures.DiscreteInfoEstimator), then 
+`discretization` and a probabilities estimator `pest` must also be provided (default to `RelativeAmount`, 
+which uses naive plug-in probabilities). This will always discretize the input data 
+per variable/column, and the encode the discretized column into integers using [`codify`](@ref).
+
+The following [`OutcomeSpace`s](@extref ComplexityMeasures.OutcomeSpace) can be used for discretisation. 
+Note that not all outcome spaces will work with all measures.
+
+| Estimator                                                                       | Principle                     |
+| :------------------------------------------------------------------------------ | :---------------------------- |
+| [`UniqueElements`](@extref ComplexityMeasures.UniqueElements)                   | Count of unique elements      |
+| [`ValueBinning`](@extref ComplexityMeasures.ValueBinning)                       | Binning (histogram)           |
+| [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns)                 | Ordinal patterns              |
+| [`Dispersion`](@extref ComplexityMeasures.Dispersion)                           | Dispersion patterns           |
+| [`BubbleSortSwaps`](@extref ComplexityMeasures.BubbleSortSwaps)                 | Sorting complexity            |
+| [`CosineSimilarityBinning`](@extref ComplexityMeasures.CosineSimilarityBinning) | Cosine similarities histogram |
 
 
 ## Handling of overlapping parameters

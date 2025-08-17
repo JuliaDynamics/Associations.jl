@@ -917,8 +917,11 @@ association(est, x, y)
 ### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@extref ComplexityMeasures.LeonenkoProzantoSavani)](@id example_MITsallisMartin_EntropyDecomposition_LeonenkoProzantoSavani)
 
 [`MITsallisMartin`](@ref) can be estimated using a decomposition into entropy 
-terms using [`EntropyDecomposition`](@ref) with any compatible estimator 
-that can estimate differential [`Tsallis`](@extref ComplexityMeasures.Tsallis) entropy. 
+terms using [`EntropyDecomposition`](@ref). This is done by using estimators from 
+[ComplexityMeasures.jl](https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/). We can use any compatible 
+[`InformationMeasureEstimator`](@extref ComplexityMeasures.InformationMeasureEstimator)
+that can estimate differential [`Tsallis`](@extref ComplexityMeasures.Tsallis) entropy from
+[ComplexityMeasures.jl](https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/).
 
 
 ```@example example_MITsallisMartin

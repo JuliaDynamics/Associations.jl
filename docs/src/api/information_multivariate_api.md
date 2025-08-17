@@ -1,5 +1,5 @@
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # [Multivariate information API](@id information_api)

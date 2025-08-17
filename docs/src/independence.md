@@ -1,5 +1,5 @@
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # [Independence testing](@id independence_testing)

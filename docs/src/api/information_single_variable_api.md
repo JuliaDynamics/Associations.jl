@@ -1,5 +1,5 @@
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # Single-variable information API
