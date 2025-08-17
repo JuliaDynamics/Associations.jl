@@ -42,7 +42,7 @@ I(X; Y | Z)
 ```
 
 where ``I^S(\\cdot; \\cdot)`` is the Shannon mutual information [`MIShannon`](@ref),
-and ``H^S(\\cdot)`` is the [`Shannon`](@ref) entropy.
+and ``H^S(\\cdot)`` is the [`Shannon`](@extref ComplexityMeasures.Shannon) entropy.
 
 Differential Shannon CMI is obtained by replacing the entropies by
 differential entropies.
@@ -50,11 +50,11 @@ differential entropies.
 ## Estimation
 
 - [Example 1](@ref example_CMIShannon_EntropyDecomposition_Kraskov): 
-    [`EntropyDecomposition`](@ref) with [`Kraskov`](@ref) estimator.
+    [`EntropyDecomposition`](@ref) with [`Kraskov`](@extref ComplexityMeasures.Kraskov) estimator.
 - [Example 2](@ref example_CMIShannon_EntropyDecomposition_ValueBinning):
-    [`EntropyDecomposition`](@ref) with [`ValueBinning`](@ref) estimator.
+    [`EntropyDecomposition`](@ref) with [`ValueBinning`](@extref ComplexityMeasures.ValueBinning) estimator.
 - [Example 3](@ref example_CMIShannon_MIDecomposition_KSG1): 
-    [`MIDecomposition`](@ref) with [`KraskovStögbauerGrassberger1`](@ref) estimator.
+    [`MIDecomposition`](@ref) with [`KraskovStögbauerGrassberger2`](@ref) estimator.
 """
 Base.@kwdef struct CMIShannon{B} <: ConditionalMutualInformation
     base::B = 2
@@ -68,11 +68,11 @@ function association(est::JointProbabilities{<:CMIShannon}, x, y, z)
     return association(est.definition, probs)
 end
 
-function association(definition::CMIShannon, pxyz::Probabilities{T, 3}) where T
+function association(definition::CMIShannon, pxyz::Probabilities{T,3}) where T
     dx, dy, dz = size(pxyz)
-    pxz = marginal(pxyz, dims = [1, 3])
-    pyz = marginal(pxyz, dims = [2, 3])
-    pz = marginal(pxyz, dims = 3)
+    pxz = marginal(pxyz, dims=[1, 3])
+    pyz = marginal(pxyz, dims=[2, 3])
+    pz = marginal(pxyz, dims=3)
     cmi = 0.0
     log0 = log_with_base(definition.base)
     for k in 1:dz
@@ -97,13 +97,13 @@ end
 # ------------------------------------------------
 # Four-entropies decompostion of CMIShannon
 # ------------------------------------------------
-function association(est::EntropyDecomposition{<:CMIShannon, <:DifferentialInfoEstimator{<:Shannon}}, x, y, z)
+function association(est::EntropyDecomposition{<:CMIShannon,<:DifferentialInfoEstimator{<:Shannon}}, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_differential(est, x, y, z)
     cmi = HXZ + HYZ - HXYZ - HZ
     return cmi
 end
 
-function association(est::EntropyDecomposition{<:CMIShannon, <:DiscreteInfoEstimator{<:Shannon}}, x, y, z)
+function association(est::EntropyDecomposition{<:CMIShannon,<:DiscreteInfoEstimator{<:Shannon}}, x, y, z)
     HXZ, HYZ, HXYZ, HZ = marginal_entropies_cmi4h_discrete(est, x, y, z)
     cmi = HXZ + HYZ - HXYZ - HZ
     return cmi
@@ -112,7 +112,7 @@ end
 # ---------------------------------------------------
 # Two-mutual-information decomposition of CMIShannon 
 # ---------------------------------------------------
-function association(est::MIDecomposition{<:ConditionalMutualInformation, <:MutualInformationEstimator{<:MIShannon}}, x, y, z)
+function association(est::MIDecomposition{<:ConditionalMutualInformation,<:MutualInformationEstimator{<:MIShannon}}, x, y, z)
     MI_X_YZ, MI_X_Z = marginal_mutual_informations(est, x, y, z)
     cmi = MI_X_YZ - MI_X_Z
     return cmi
@@ -120,7 +120,7 @@ end
 
 # We don't care if the estimated is mixed, discrete or handles both. The MI estimator 
 # handles that internally.
-function marginal_mutual_informations(est::MIDecomposition{<:ConditionalMutualInformation, <:MutualInformationEstimator{<:MIShannon}}, x, y, z)
+function marginal_mutual_informations(est::MIDecomposition{<:ConditionalMutualInformation,<:MutualInformationEstimator{<:MIShannon}}, x, y, z)
     X = StateSpaceSet(x)
     Y = StateSpaceSet(y)
     Z = StateSpaceSet(z)
@@ -149,22 +149,22 @@ end
 # Pretty printing for decomposition estimators.
 # ------------------------------------------------
 function decomposition_string(
-        definition::CMIShannon, 
-        est::EntropyDecomposition{<:CMIShannon, <:DiscreteInfoEstimator{<:Shannon}}
-    )
-    return "Iₛ(X, Y | Z) = Hₛ(X,Z) + Hₛ(Y,Z) - Hₛ(X,Y,Z) - Hₛ(Z)";
+    definition::CMIShannon,
+    est::EntropyDecomposition{<:CMIShannon,<:DiscreteInfoEstimator{<:Shannon}}
+)
+    return "Iₛ(X, Y | Z) = Hₛ(X,Z) + Hₛ(Y,Z) - Hₛ(X,Y,Z) - Hₛ(Z)"
 end
 
 function decomposition_string(
-        definition::CMIShannon, 
-        est::EntropyDecomposition{<:CMIShannon, <:DifferentialInfoEstimator{<:Shannon}}
-    )
-    return "Iₛ(X, Y | Z) = hₛ(X,Z) + hₛ(Y,Z) - hₛ(X,Y,Z) - hₛ(Z)";
+    definition::CMIShannon,
+    est::EntropyDecomposition{<:CMIShannon,<:DifferentialInfoEstimator{<:Shannon}}
+)
+    return "Iₛ(X, Y | Z) = hₛ(X,Z) + hₛ(Y,Z) - hₛ(X,Y,Z) - hₛ(Z)"
 end
 
 function decomposition_string(
-        definition::CMIShannon, 
-        est::MIDecomposition{<:CMIShannon, <:MutualInformationEstimator}
-    )
+    definition::CMIShannon,
+    est::MIDecomposition{<:CMIShannon,<:MutualInformationEstimator}
+)
     return "Iₛ(X, Y | Z) = Iₛ(X; Y, Z) + Iₛ(X; Z)"
 end

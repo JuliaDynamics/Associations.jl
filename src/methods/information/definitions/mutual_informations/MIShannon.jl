@@ -19,7 +19,7 @@ The Shannon mutual information ``I_S(X; Y)``.
 
 - [`JointProbabilities`](@ref) (generic)
 - [`EntropyDecomposition`](@ref) (generic)
-- [`KraskovStögbauerGrassberger1`](@ref)
+- [`KraskovStögbauerGrassberger2`](@ref)
 - [`KraskovStögbauerGrassberger2`](@ref)
 - [`GaoOhViswanath`](@ref)
 - [`GaoKannanOhViswanath`](@ref)
@@ -73,19 +73,19 @@ I^S(X; Y) = h^S(X) + h_q^S(Y) - h^S(X, Y),
 
 where ``h^S(\\cdot)`` and ``h^S(\\cdot, \\cdot)`` are the marginal and joint
 differential Shannon entropies. This definition is used by [`association`](@ref) when
-called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialInfoEstimator`](@ref).
+called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator).
 
 ## Estimation
 
-- [Example 1](@ref example_MIShannon_JointProbabilities_ValueBinning): [`JointProbabilities`](@ref) with [`ValueBinning`](@ref) outcome space.
-- [Example 2](@ref example_MIShannon_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) outcome space on string data.
+- [Example 1](@ref example_MIShannon_JointProbabilities_ValueBinning): [`JointProbabilities`](@ref) with [`ValueBinning`](@extref ComplexityMeasures.ValueBinning) outcome space.
+- [Example 2](@ref example_MIShannon_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) outcome space on string data.
 - [Example 3](@ref example_MIShannon_GaussianMI): Dedicated [`GaussianMI`](@ref) estimator.
-- [Example 4](@ref example_MIShannon_KSG1): Dedicated [`KraskovStögbauerGrassberger1`](@ref) estimator.
+- [Example 4](@ref example_MIShannon_KSG1): Dedicated [`KraskovStögbauerGrassberger2`](@ref) estimator.
 - [Example 5](@ref example_MIShannon_KSG2): Dedicated [`KraskovStögbauerGrassberger2`](@ref) estimator.
 - [Example 6](@ref example_MIShannon_GaoKannanOhViswanath): Dedicated [`GaoKannanOhViswanath`](@ref) estimator.
-- [Example 7](@ref example_MIShannon_EntropyDecomposition_Kraskov): [`EntropyDecomposition`](@ref) with [`Kraskov`](@ref) estimator.
-- [Example 8](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps): [`EntropyDecomposition`](@ref) with [`BubbleSortSwaps`](@ref).
-- [Example 9](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning): [`EntropyDecomposition`](@ref) with [`Jackknife`](@ref) estimator and [`ValueBinning`](@ref) outcome space.
+- [Example 7](@ref example_MIShannon_EntropyDecomposition_Kraskov): [`EntropyDecomposition`](@ref) with [`Kraskov`](@extref ComplexityMeasures.Kraskov) estimator.
+- [Example 8](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps): [`EntropyDecomposition`](@ref) with [`BubbleSortSwaps`](@extref ComplexityMeasures.BubbleSortSwaps).
+- [Example 9](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning): [`EntropyDecomposition`](@ref) with [`Jackknife`](@extref ComplexityMeasures.Jackknife) estimator and [`ValueBinning`](@extref ComplexityMeasures.ValueBinning) outcome space.
 - [Example 10](@ref example_MIShannon_reproducing_Kraskov): Reproducing Kraskov et al. (2004).
 """
 Base.@kwdef struct MIShannon{B} <: MutualInformation
@@ -102,11 +102,11 @@ function association(est::JointProbabilities{<:MIShannon}, x, y)
     return association(est.definition, probs)
 end
 
-function association(definition::MIShannon, pxy::Probabilities{T, 2}) where T
+function association(definition::MIShannon, pxy::Probabilities{T,2}) where T
     (; base) = definition
-    
-    px = marginal(pxy, dims = 1)
-    py = marginal(pxy, dims = 2)
+
+    px = marginal(pxy, dims=1)
+    py = marginal(pxy, dims=2)
     mi = 0.0
     logb = log_with_base(base)
     for i in eachindex(px.p)
@@ -126,15 +126,15 @@ end
 # ------------------------------------------------
 # Mutual information through entropy decomposition
 # ------------------------------------------------
-function association(est::EntropyDecomposition{<:MIShannon, <:DifferentialInfoEstimator{<:Shannon}}, x, y)
+function association(est::EntropyDecomposition{<:MIShannon,<:DifferentialInfoEstimator{<:Shannon}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_differential(est, x, y)
-    mi =  HX + HY - HXY
+    mi = HX + HY - HXY
     return mi
 end
 
-function association(est::EntropyDecomposition{<:MIShannon, <:DiscreteInfoEstimator{<:Shannon}, D, P}, x, y) where {D, P}
+function association(est::EntropyDecomposition{<:MIShannon,<:DiscreteInfoEstimator{<:Shannon},D,P}, x, y) where {D,P}
     HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
-    mi =  HX + HY - HXY
+    mi = HX + HY - HXY
     return mi
 end
 
@@ -142,15 +142,15 @@ end
 # Pretty printing for decomposition estimators.
 # ------------------------------------------------
 function decomposition_string(
-        definition::MIShannon, 
-        est::EntropyDecomposition{<:MIShannon, <:DifferentialInfoEstimator{<:Shannon}}
-    )
-    return "Iₛ(X, Y) = hₛ(X) + hₛ(Y) - hₛ(X, Y)";
+    definition::MIShannon,
+    est::EntropyDecomposition{<:MIShannon,<:DifferentialInfoEstimator{<:Shannon}}
+)
+    return "Iₛ(X, Y) = hₛ(X) + hₛ(Y) - hₛ(X, Y)"
 end
 
 function decomposition_string(
-        definition::MIShannon, 
-        est::EntropyDecomposition{<:MIShannon, <:DiscreteInfoEstimator{<:Shannon}}
-    )
-    return "Iₛ(X, Y) = Hₛ(X) + Hₛ(Y) - Hₛ(X, Y)";
+    definition::MIShannon,
+    est::EntropyDecomposition{<:MIShannon,<:DiscreteInfoEstimator{<:Shannon}}
+)
+    return "Iₛ(X, Y) = Hₛ(X) + Hₛ(Y) - Hₛ(X, Y)"
 end

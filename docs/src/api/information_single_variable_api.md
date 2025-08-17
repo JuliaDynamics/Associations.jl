@@ -1,5 +1,5 @@
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # Single-variable information API
@@ -14,40 +14,36 @@ information
 
 ## Single-variable information measures
 
-```@docs
-Shannon
-Renyi
-Tsallis
-Kaniadakis
-```
+- [`Shannon`](@extref ComplexityMeasures.Shannon)
+- [`Renyi`](@extref ComplexityMeasures.Renyi)
+- [`Tsallis`](@extref ComplexityMeasures.Tsallis)
+- [`Kaniadakis`](@extref ComplexityMeasures.Kaniadakis)
 
 ## Discrete information estimators
 
-```@docs
-DiscreteInfoEstimator
-PlugIn
-MillerMadow
-Schuermann
-GeneralizedSchuermann
-Jackknife
-HorvitzThompson
-ChaoShen
-```
+
+- [`DiscreteInfoEstimator`](@extref ComplexityMeasures.DiscreteInfoEstimator)
+- [`PlugIn`](@extref ComplexityMeasures.PlugIn)
+- [`MillerMadow`](@extref ComplexityMeasures.MillerMadow)
+- [`Schuermann`](@extref ComplexityMeasures.Schuermann)
+- [`GeneralizedSchuermann`](@extref ComplexityMeasures.GeneralizedSchuermann)
+- [`Jackknife`](@extref ComplexityMeasures.Jackknife)
+- [`HorvitzThompson`](@extref ComplexityMeasures.HorvitzThompson)
+- [`ChaoShen`](@extref ComplexityMeasures.ChaoShen)
+
 
 ## Differential information estimators
 
-```@docs
-DifferentialInfoEstimator
-Kraskov
-KozachenkoLeonenko
-Zhu
-ZhuSingh
-Gao
-Goria
-Lord
-LeonenkoProzantoSavani
-Vasicek
-AlizadehArghami
-Ebrahimi
-Correa
-```
+- [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator)
+- [`Kraskov`](@extref ComplexityMeasures.Kraskov)
+- [`KozachenkoLeonenko`](@extref ComplexityMeasures.KozachenkoLeonenko)
+- [`Zhu`](@extref ComplexityMeasures.Zhu)
+- [`ZhuSingh`](@extref ComplexityMeasures.ZhuSingh)
+- [`Gao`](@extref ComplexityMeasures.Gao)
+- [`Goria`](@extref ComplexityMeasures.Goria)
+- [`Lord`](@extref ComplexityMeasures.Lord)
+- [`LeonenkoProzantoSavani`](@extref ComplexityMeasures.LeonenkoProzantoSavani)
+- [`Vasicek`](@extref ComplexityMeasures.Vasicek)
+- [`AlizadehArghami`](@extref ComplexityMeasures.AlizadehArghami)
+- [`Ebrahimi`](@extref ComplexityMeasures.Ebrahimi)
+- [`Correa`](@extref ComplexityMeasures.Correa)

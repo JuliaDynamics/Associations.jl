@@ -66,13 +66,13 @@ S^{(k)}(x|y) = \\dfrac{1}{N} \\sum_{i=1}^{N} \\dfrac{R_i^{(k)}(x)}{R_i^{(k)}(x|y
 
 The algorithm is slightly modified from [Arnhold1999](@cite) to allow univariate timeseries as input.
 
-- If `x` and `y` are [`StateSpaceSet`](@ref)s then use `x` and `y` as is and ignore the parameters
+- If `x` and `y` are [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)s then use `x` and `y` as is and ignore the parameters
     `dx`/`τx` and `dy`/`τy`.
 - If `x` and `y` are scalar time series, then create `dx` and `dy` dimensional embeddings,
     respectively, of both `x` and `y`, resulting in `N` different `m`-dimensional embedding points
     ``X = \\{x_1, x_2, \\ldots, x_N \\}`` and ``Y = \\{y_1, y_2, \\ldots, y_N \\}``.
     `τx` and `τy` control the embedding lags for `x` and `y`.
-- If `x` is a scalar-valued vector and `y` is a [`StateSpaceSet`](@ref), or vice versa,
+- If `x` is a scalar-valued vector and `y` is a [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet), or vice versa,
     then create an embedding of the scalar timeseries using parameters `dx`/`τx` or `dy`/`τy`.
 
 In all three cases, input StateSpaceSets are length-matched by eliminating points at the end of
@@ -80,7 +80,7 @@ the longest StateSpaceSet (after the embedding step, if relevant) before analysi
 
 See also: [`ClosenessMeasure`](@ref).
 """
-Base.@kwdef struct SMeasure{M, TM} <: ClosenessMeasure
+Base.@kwdef struct SMeasure{M,TM} <: ClosenessMeasure
     K::Int = 2
     metric::M = SqEuclidean()
     tree_metric::TM = Euclidean()
@@ -96,13 +96,14 @@ function association(measure::SMeasure, x::AbstractStateSpaceSet, y::AbstractSta
     (; K, metric, tree_metric, τx, τy, dx, dy, w) = measure
 
     # Match length of StateSpaceSets by excluding end points.
-    lx = length(x); ly = length(y)
+    lx = length(x)
+    ly = length(y)
     lx > ly ? X = x[1:ly, :] : X = x
     ly > lx ? Y = y[1:lx, :] : Y = y
     N = length(X)
 
     T = eltype(1.0)
-     # Pre-allocate vectors to hold indices and distances during loops
+    # Pre-allocate vectors to hold indices and distances during loops
     dists_x = zeros(T, K)
     dists_x_cond_y = zeros(T, K)
 

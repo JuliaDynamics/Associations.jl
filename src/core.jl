@@ -5,10 +5,10 @@ export AssociationMeasure
 export AssociationMeasureEstimator
 export association
 
-const VectorOr1DDataset{T} = Union{AbstractVector{T}, AbstractStateSpaceSet{1, T}} where T
-const VectorOrStateSpaceSet{D, T} = Union{AbstractVector{T}, AbstractStateSpaceSet{D, T}} where {D, T}
-const ArrayOrStateSpaceSet{D, T, N} = Union{AbstractArray{T, N}, AbstractStateSpaceSet{D, T}} where {D, T, N}
-const INFO_ESTS = Union{DifferentialInfoEstimator, DiscreteInfoEstimator}
+const VectorOr1DDataset{T} = Union{AbstractVector{T},AbstractStateSpaceSet{1,T}} where T
+const VectorOrStateSpaceSet{D,T} = Union{AbstractVector{T},AbstractStateSpaceSet{D,T}} where {D,T}
+const ArrayOrStateSpaceSet{D,T,N} = Union{AbstractArray{T,N},AbstractStateSpaceSet{D,T}} where {D,T,N}
+const INFO_ESTS = Union{DifferentialInfoEstimator,DiscreteInfoEstimator}
 
 """
     AssociationMeasure
@@ -105,7 +105,7 @@ Concrete subtypes are given as input to [`association`](@ref).
 | [`ConvergentCrossMapping`](@ref)                     | [`RandomVectors`](@ref), [`RandomSegment`](@ref)                                                                                                                                                                             |
 | [`MCR`](@ref)                                        | Not required                                                                                                                                                                                                                 |
 | [`RMCD`](@ref)                                       | Not required                                                                                                                                                                                                                 |
-| [`MIShannon`](@ref)                                  | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref), [`KraskovStögbauerGrassberger1`](@ref), [`KraskovStögbauerGrassberger2`](@ref), [`GaoOhViswanath`](@ref), [`GaoKannanOhViswanath`](@ref), [`GaussianMI`](@ref) |
+| [`MIShannon`](@ref)                                  | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref), [`KraskovStögbauerGrassberger2`](@ref), [`KraskovStögbauerGrassberger2`](@ref), [`GaoOhViswanath`](@ref), [`GaoKannanOhViswanath`](@ref), [`GaussianMI`](@ref) |
 | [`MIRenyiJizba`](@ref)                               | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref)                                                                                                                                                                 |
 | [`MIRenyiSarbu`](@ref)                               | [`JointProbabilities`](@ref)                                                                                                                                                                                                 |
 | [`MITsallisFuruichi`](@ref)                          | [`JointProbabilities`](@ref), [`EntropyDecomposition`](@ref)                                                                                                                                                                 |

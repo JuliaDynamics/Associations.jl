@@ -32,9 +32,9 @@ we define ``log_q(x, q) := 0`` if ``q = 0``.
 ## Estimation
 
 - [Example 1](@ref example_JointEntropyTsallis_OrdinalPatterns): 
-    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref) outcome space
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns) outcome space
 """
-Base.@kwdef struct JointEntropyTsallis{B, Q} <: JointEntropy
+Base.@kwdef struct JointEntropyTsallis{B,Q} <: JointEntropy
     base::B = 2
     q::Q = 1.5
 end
@@ -47,9 +47,9 @@ function association(est::JointProbabilities{<:JointEntropyTsallis}, x, y)
     return association(est.definition, probs)
 end
 
-function association(definition::JointEntropyTsallis, pxy::Probabilities{T, 2}) where T
+function association(definition::JointEntropyTsallis, pxy::Probabilities{T,2}) where T
     (; base, q) = definition
-    
+
     h = 0.0
     for p in pxy
         if p != 0.0 # Define logq(0) = 0

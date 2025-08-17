@@ -25,7 +25,7 @@ pages = [
         "api/cross_map_api.md",
     ],
     "Examples" => [
-        "Associations" => "examples/examples_associations.md", 
+        "Associations" => "examples/examples_associations.md",
         "Independence testing" => "examples/examples_independence.md",
         "Causal graph inference" => "examples/examples_infer_graphs.md",
     ],
@@ -43,9 +43,9 @@ bibliography = CitationBibliography(
     style=:authoryear
 )
 
-build_docs_with_style(pages, Associations, ComplexityMeasures, StateSpaceSets;
-    expandfirst = ["index.md"],
-    bib = bibliography,
-    pages = pages,
-    authors = "Kristian Agasøster Haaga, David Diego, Tor Einar Møller, George Datseris",
+build_docs_with_style(pages, Associations;
+    expandfirst=["index.md"],
+    bib=bibliography,
+    pages=pages,
+    authors="Kristian Agasøster Haaga, David Diego, Tor Einar Møller, George Datseris",
 )
