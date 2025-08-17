@@ -12,7 +12,7 @@ p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
 association(HellingerDistance(), p1, p2)
 ```
 
-### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_HellingerDistance_JointProbabilities_OrdinalPatterns)
+### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@extref ComplexityMeasures)](@id example_HellingerDistance_JointProbabilities_OrdinalPatterns)
 
 We expect the Hellinger distance between two uncorrelated variables to be close to zero.
 
@@ -37,7 +37,7 @@ p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
 association(KLDivergence(), p1, p2)
 ```
 
-### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_KLDivergence_JointProbabilities_OrdinalPatterns)
+### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@extref ComplexityMeasures)](@id example_KLDivergence_JointProbabilities_OrdinalPatterns)
 
 We expect the [`KLDivergence`](@ref) between two uncorrelated variables to be close to zero.
 
@@ -63,7 +63,7 @@ p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
 association(RenyiDivergence(), p1, p2)
 ```
 
-### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_RenyiDivergence_JointProbabilities_OrdinalPatterns)
+### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@extref ComplexityMeasures)](@id example_RenyiDivergence_JointProbabilities_OrdinalPatterns)
 
 We expect the [`RenyiDivergence`](@ref) between two uncorrelated variables to be close to zero.
 
@@ -89,7 +89,7 @@ p2 = Probabilities([0.3, 0.3, 0.2, 0.2])
 association(VariationDistance(), p1, p2)
 ```
 
-### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@ref)](@id example_VariationDistance_JointProbabilities_OrdinalPatterns)
+### [[`JointProbabilities`](@ref) + [`OrdinalPatterns`](@extref ComplexityMeasures)](@id example_VariationDistance_JointProbabilities_OrdinalPatterns)
 
 We expect the [`VariationDistance`](@ref) between two uncorrelated variables to be close to zero.
 
@@ -104,7 +104,7 @@ div_hd = association(est, x, y) # pretty close to zero
 
 ## [`JointEntropyShannon`](@ref)
 
-### [[`JointProbabilities`](@ref) with [`Dispersion`](@ref)](@id example_JointEntropyShannon_Dispersion)
+### [[`JointProbabilities`](@ref) with [`Dispersion`](@extref ComplexityMeasures)](@id example_JointEntropyShannon_Dispersion)
 
 ```@example example_JointEntropyShannon
 using Associations
@@ -118,7 +118,7 @@ association(est, x, y)
 
 ## [`JointEntropyTsallis`](@ref)
 
-### [[`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref)](@id example_JointEntropyTsallis_OrdinalPatterns)
+### [[`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures)](@id example_JointEntropyTsallis_OrdinalPatterns)
 
 ```@example example_JointEntropyTsallis
 using Associations
@@ -133,7 +133,7 @@ association(est, x, y)
 
 ## [`JointEntropyRenyi`](@ref)
 
-### [[`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref)](@id example_JointEntropyRenyi_ValueBinning)
+### [[`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures)](@id example_JointEntropyRenyi_ValueBinning)
 
 ```@example example_JointEntropyRenyi
 using Associations
@@ -190,7 +190,7 @@ pyx = Probabilities(transpose(freqs_yx))
 ce_y_given_x = association(ConditionalEntropyShannon(), pyx) |> Rational
 ```
 
-### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@ref)](@id example_ConditionalEntropyShannon_JointProbabilities_CodifyVariables_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@extref ComplexityMeasures)](@id example_ConditionalEntropyShannon_JointProbabilities_CodifyVariables_UniqueElements)
 
 We can of course also estimate conditional entropy from data. To do so, we'll use the 
 [`JointProbabilities`](@ref) estimator, which constructs a multivariate PMF for us.
@@ -198,7 +198,7 @@ Thus, we don't explicitly need a set of counts, like in the example above, becau
 are estimated under the hood for us. 
 
 Let's first demonstrate on some categorical data. For that, we must use
-[`UniqueElements`](@ref) as the discretization (i.e. just count unique elements).
+[`UniqueElements`](@extref ComplexityMeasures) as the discretization (i.e. just count unique elements).
 
 ```@example example_ConditionalEntropyShannon_JointProbabilities_CodifyVariables_UniqueElements
 using Associations
@@ -227,7 +227,7 @@ association(est, X, Y)
 
 ## [`ConditionalEntropyTsallisAbe`](@ref)
 
-### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@ref)](@id example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyVariables_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@extref ComplexityMeasures)](@id example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyVariables_UniqueElements)
 
 We'll here repeat the analysis we did for [`ConditionalEntropyShannon`](@ref) above.
 
@@ -259,7 +259,7 @@ association(est, X, Y)
 
 ## [`ConditionalEntropyTsallisFuruichi`](@ref)
 
-### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@ref)](@id example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`CodifyVariables`](@ref) + [`UniqueElements`](@extref ComplexityMeasures)](@id example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements)
 
 We'll here repeat the analysis we did for [`ConditionalEntropyShannon`](@ref) and [`ConditionalEntropyTsallisAbe`](@ref) above.
 
@@ -291,7 +291,7 @@ association(est, X, Y)
 
 ## [`MIShannon`](@ref)
 
-### [[`JointProbabilities`](@ref) + [`ValueBinning`](@ref)](@id example_MIShannon_JointProbabilities_ValueBinning)
+### [[`JointProbabilities`](@ref) + [`ValueBinning`](@extref ComplexityMeasures)](@id example_MIShannon_JointProbabilities_ValueBinning)
 
 ```@example mi_demonstration
 using Associations
@@ -304,7 +304,7 @@ association(est, x, y)
 ```
 
 
-### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIShannon_JointProbabilities_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@extref ComplexityMeasures)](@id example_MIShannon_JointProbabilities_UniqueElements)
 
 The [`JointProbabilities`](@ref) estimator can also be used with categorical data.
 For example, let's compare the Shannon mutual information between the preferences
@@ -343,7 +343,7 @@ y = rand(1000) .+ x
 association(GaussianMI(MIShannon()), x, y) # defaults to `MIShannon()`
 ```
 
-### [Dedicated [`KraskovStögbauerGrassberger1`](@ref) estimator](@id example_MIShannon_KSG1)
+### [Dedicated [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator](@id example_MIShannon_KSG1)
 
 ```@example mi_demonstration
 using Associations
@@ -351,7 +351,7 @@ x, y = rand(1000), rand(1000)
 association(KSG1(MIShannon(); k = 5), x, y)
 ```
 
-### [Dedicated [`KraskovStögbauerGrassberger2`](@ref) estimator](@id example_MIShannon_KSG2)
+### [Dedicated [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator](@id example_MIShannon_KSG2)
 
 ```@example mi_demonstration
 using Associations
@@ -359,7 +359,7 @@ x, y = rand(1000), rand(1000)
 association(KSG2(MIShannon(); k = 5), x, y)
 ```
 
-### [Dedicated [`GaoKannanOhViswanath`](@ref) estimator](@id example_MIShannon_GaoKannanOhViswanath)
+### [Dedicated [`GaoKannanOhViswanath`](@extref ComplexityMeasures) estimator](@id example_MIShannon_GaoKannanOhViswanath)
 
 ```@example mi_demonstration
 using Associations
@@ -367,9 +367,9 @@ x, y = rand(1000), rand(1000)
 association(GaoKannanOhViswanath(MIShannon(); k = 10), x, y)
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@ref)](@id example_MIShannon_EntropyDecomposition_Kraskov)
+### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@extref ComplexityMeasures)](@id example_MIShannon_EntropyDecomposition_Kraskov)
 
-We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialInfoEstimator`](@ref).
+We can compute [`MIShannon`](@ref) by naively applying a [`DifferentialInfoEstimator`](@extref ComplexityMeasures).
 Note that this doesn't apply any bias correction.
 
 ```@example mi_demonstration
@@ -381,7 +381,7 @@ association(EntropyDecomposition(MIShannon(), Kraskov(k = 3)), x, y)
 
 ### [[`EntropyDecomposition`](@ref) + [`BubbleSortSwaps`](@ref)](@id example_MIShannon_EntropyDecomposition_BubbleSortSwaps)
 
-We can also compute [`MIShannon`](@ref) by naively applying a [`DiscreteInfoEstimator`](@ref).
+We can also compute [`MIShannon`](@ref) by naively applying a [`DiscreteInfoEstimator`](@extref ComplexityMeasures).
 Note that this doesn't apply any bias correction.
 
 ```@example mi_demonstration
@@ -393,10 +393,10 @@ association(EntropyDecomposition(MIShannon(), hest, disc), x, y)
 ```
 
 
-### [[`EntropyDecomposition`](@ref) + [`Jackknife`](@ref) + [`ValueBinning`](@ref)](@id example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning)
+### [[`EntropyDecomposition`](@ref) + [`Jackknife`](@extref ComplexityMeasures) + [`ValueBinning`](@extref ComplexityMeasures)](@id example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning)
 
 Shannon mutual information can be written as a sum of marginal entropy terms.
-Here, we use [`CodifyVariables`](@ref) with [`ValueBinning`](@ref) bin the data 
+Here, we use [`CodifyVariables`](@ref) with [`ValueBinning`](@extref ComplexityMeasures) bin the data 
 and compute discrete Shannon mutual information.
 
 ```@example mi_demonstration
@@ -421,7 +421,7 @@ Here, we'll reproduce Figure 4 from [Kraskov2004](@citet)'s seminal paper on the
 between marginals of a bivariate Gaussian for a fixed time series length of 1000,
 varying the number of neighbors. *Note: in the original paper, they show multiple
 curves corresponding to different time series length. We only show two single curves:
-one for the [`KraskovStögbauerGrassberger1`](@ref) estimator and one for the [`KraskovStögbauerGrassberger2`](@ref) estimator*.
+one for the [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator and one for the [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator*.
 
 ```@example ex_mutualinfo
 using Associations
@@ -468,10 +468,10 @@ Most estimators suffer from significant bias when applied to discrete, finite da
 
 But instead of adding noise to your data, you can also consider using an
 estimator that is specifically designed to deal with continuous-discrete mixture data. 
-One example is the [`GaoKannanOhViswanath`](@ref) estimator. Below, we compare its
-performance to [`KraskovStögbauerGrassberger1`](@ref) on uniformly distributed discrete multivariate data.
-The true mutual information is zero. While the "naive" [`KraskovStögbauerGrassberger1`](@ref) estimator 
-diverges from the true value for these data, the [`GaoKannanOhViswanath`](@ref)
+One example is the [`GaoKannanOhViswanath`](@extref ComplexityMeasures) estimator. Below, we compare its
+performance to [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) on uniformly distributed discrete multivariate data.
+The true mutual information is zero. While the "naive" [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator 
+diverges from the true value for these data, the [`GaoKannanOhViswanath`](@extref ComplexityMeasures)
 converges to the true value.
 
 ```@example ex_mutualinfo
@@ -548,7 +548,7 @@ axislegend(position = :rb)
 fig
 ```
 
-### Estimation using [`DifferentialInfoEstimator`](@ref)s: a comparison
+### Estimation using [`DifferentialInfoEstimator`](@extref ComplexityMeasures)s: a comparison
 
 Let's compare the performance of a subset of the implemented mutual information estimators. We'll use example data from Lord et al., where the analytical mutual information is known.
 
@@ -775,15 +775,15 @@ fig = plot_results(family3, ifamily3;
     estimators = estimators, base = base)
 ```
 
-We see that the [`Lord`](@ref) estimator, which estimates local volume elements using a singular-value decomposition (SVD) of local neighborhoods, outperforms the other estimators by a large margin.
+We see that the [`Lord`](@extref ComplexityMeasures) estimator, which estimates local volume elements using a singular-value decomposition (SVD) of local neighborhoods, outperforms the other estimators by a large margin.
 
 
 ## [`MIRenyiJizba`](@ref)
 
-### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiJizba_JointProbabilities_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@extref ComplexityMeasures)](@id example_MIRenyiJizba_JointProbabilities_UniqueElements)
 
 [`MIRenyiJizba`](@ref) can be estimated for categorical data using [`JointProbabilities`](@ref) estimator
-with the [`UniqueElements`](@ref) outcome space.
+with the [`UniqueElements`](@extref ComplexityMeasures) outcome space.
 
 ```@example example_mirenyijizba
 using Associations
@@ -794,11 +794,11 @@ est = JointProbabilities(MIRenyiJizba(), UniqueElements())
 association(est, x, y)
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@extref ComplexityMeasures)](@id example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani)
 
 [`MIRenyiJizba`](@ref) can also estimated for numerical data using [`EntropyDecomposition`](@ref)
-in combination with any [`DifferentialInfoEstimator`](@ref) capable of estimating differential 
-[`Renyi`](@ref) entropy.
+in combination with any [`DifferentialInfoEstimator`](@extref ComplexityMeasures) capable of estimating differential 
+[`Renyi`](@extref ComplexityMeasures) entropy.
 
 ```@example example_MIRenyiJizba
 using Associations
@@ -809,11 +809,11 @@ est_diff = EntropyDecomposition(def, LeonenkoProzantoSavani(Renyi(), k=3))
 association(est_diff, x, y) 
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MIRenyiJizba_EntropyDecomposition_ValueBinning)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@extref ComplexityMeasures)](@id example_MIRenyiJizba_EntropyDecomposition_ValueBinning)
 
 [`MIRenyiJizba`](@ref) can also estimated for numerical data using [`EntropyDecomposition`](@ref)
-in combination with any [`DiscreteInfoEstimator`](@ref) capable of estimating differential 
-[`Renyi`](@ref) entropy over some [`OutcomeSpace`](@ref), e.g. [`ValueBinning`](@ref).
+in combination with any [`DiscreteInfoEstimator`](@extref ComplexityMeasures) capable of estimating differential 
+[`Renyi`](@extref ComplexityMeasures) entropy over some [`OutcomeSpace`](@ref), e.g. [`ValueBinning`](@extref ComplexityMeasures).
 
 
 ```@example example_MIRenyiJizba
@@ -832,7 +832,7 @@ association(est_disc, x, y)
 [`MIRenyiSarbu`](@ref) can be estimated using the [`JointProbabilities`](@ref) estimator 
 in combination with any [`CodifyVariables`](@ref) or [`CodifyPoints`](@ref) discretization scheme.
 
-### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MIRenyiSarbu_JointProbabilities_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@extref ComplexityMeasures)](@id example_MIRenyiSarbu_JointProbabilities_UniqueElements)
 
 ```@example example_MIRenyiSarbu
 using Associations
@@ -858,7 +858,7 @@ association(est, x, y)
 
 ## [`MITsallisFuruichi`](@ref)
 
-### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MITsallisFuruichi_JointProbabilities_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@extref ComplexityMeasures)](@id example_MITsallisFuruichi_JointProbabilities_UniqueElements)
 
 [`MITsallisFuruichi`](@ref) can be estimated using the [`JointProbabilities`](@ref) estimator 
 in combination with any [`CodifyVariables`](@ref) or [`CodifyPoints`](@ref) discretization scheme.
@@ -873,7 +873,7 @@ est = JointProbabilities(MITsallisFuruichi(q = 0.3), UniqueElements())
 association(est, x, y) 
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisFuruichi_EntropyDecomposition_LeonenkoProzantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@extref ComplexityMeasures)](@id example_MITsallisFuruichi_EntropyDecomposition_LeonenkoProzantoSavani)
 
 ```@example example_MITsallisFuruichi
 using Associations
@@ -886,7 +886,7 @@ association(est_diff, x, y)
 ```
 
 
-### [[`EntropyDecomposition`](@ref) + [`Dispersion`](@ref)](@id example_MITsallisFuruichi_EntropyDecomposition_Dispersion)
+### [[`EntropyDecomposition`](@ref) + [`Dispersion`](@extref ComplexityMeasures)](@id example_MITsallisFuruichi_EntropyDecomposition_Dispersion)
 
 ```@example example_MITsallisFuruichi
 using Associations
@@ -902,7 +902,7 @@ association(est_disc, x, y)
 
 ## [`MITsallisMartin`](@ref)
 
-### [[`JointProbabilities`](@ref) + [`UniqueElements`](@ref)](@id example_MITsallisMartin_JointProbabilities_UniqueElements)
+### [[`JointProbabilities`](@ref) + [`UniqueElements`](@extref ComplexityMeasures)](@id example_MITsallisMartin_JointProbabilities_UniqueElements)
 
 ```@example example_MITsallisMartin
 using Associations
@@ -914,11 +914,11 @@ est = JointProbabilities(MITsallisMartin(q = 1.5), UniqueElements())
 association(est, x, y) 
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_MITsallisMartin_EntropyDecomposition_LeonenkoProzantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@extref ComplexityMeasures)](@id example_MITsallisMartin_EntropyDecomposition_LeonenkoProzantoSavani)
 
 [`MITsallisMartin`](@ref) can be estimated using a decomposition into entropy 
 terms using [`EntropyDecomposition`](@ref) with any compatible estimator 
-that can estimate differential [`Tsallis`](@ref) entropy. 
+that can estimate differential [`Tsallis`](@extref ComplexityMeasures) entropy. 
 
 
 ```@example example_MITsallisMartin
@@ -931,7 +931,7 @@ est_diff = EntropyDecomposition(MITsallisMartin(), LeonenkoProzantoSavani(Tsalli
 association(est_diff, x, y)
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`OrdinalPatterns`](@ref)](@id example_MITsallisMartin_EntropyDecomposition_OrdinalPatterns)
+### [[`EntropyDecomposition`](@ref) + [`OrdinalPatterns`](@extref ComplexityMeasures)](@id example_MITsallisMartin_EntropyDecomposition_OrdinalPatterns)
 
 
 ```@example 
@@ -1072,7 +1072,7 @@ taking the difference of mutual information terms.
 
 ## [`CMIShannon`](@ref)
 
-### [[`MIDecomposition`](@ref) + [`KraskovStögbauerGrassberger1`](@ref)](@id example_CMIShannon_MIDecomposition_KSG1)
+### [[`MIDecomposition`](@ref) + [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures)](@id example_CMIShannon_MIDecomposition_KSG1)
 
 ```@example mi_demonstration
 using Associations
@@ -1095,7 +1095,7 @@ association(est, x, z, y)
 
 ## [`ShortExpansionConditionalMutualInformation`](@ref)
 
-### [[`JointProbabilities`](@ref) with [`CodifyVariables`](@ref) and [`ValueBinning`](@ref)](@id example_ShortExpansionConditionalMutualInformation_JointProbabilities_CodifyVariables_ValueBinning)
+### [[`JointProbabilities`](@ref) with [`CodifyVariables`](@ref) and [`ValueBinning`](@extref ComplexityMeasures)](@id example_ShortExpansionConditionalMutualInformation_JointProbabilities_CodifyVariables_ValueBinning)
 
 ```@example
 using Associations
@@ -1111,9 +1111,9 @@ est = JointProbabilities(SECMI(base = 2), CodifyVariables(ValueBinning(3)))
 association(est, x, z, y)
 ```
 
-### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@ref)](@id example_CMIShannon_EntropyDecomposition_Kraskov)
+### [[`EntropyDecomposition`](@ref) + [`Kraskov`](@extref ComplexityMeasures)](@id example_CMIShannon_EntropyDecomposition_Kraskov)
 
-Any [`DifferentialInfoEstimator`](@ref) can also be used to compute conditional
+Any [`DifferentialInfoEstimator`](@extref ComplexityMeasures) can also be used to compute conditional
 mutual information using a sum of entropies. For that, we 
 usethe [`EntropyDecomposition`](@ref) estimator. No bias correction is applied for 
 [`EntropyDecomposition`](@ref) either.
@@ -1131,12 +1131,12 @@ est = EntropyDecomposition(CMIShannon(), Kraskov(k = 5))
 association(est, x, z, y)
 ```
 
-Any [`DiscreteInfoEstimator`](@ref) that computes entropy can also be used to compute
+Any [`DiscreteInfoEstimator`](@extref ComplexityMeasures) that computes entropy can also be used to compute
 conditional mutual information using a sum of entropies. For that, we also
 use [`EntropyDecomposition`](@ref). In the discrete case, we also have to specify a
 discretization (an [`OutcomeSpace`](@ref)).
 
-### [[`EntropyDecomposition`](@ref) + [`ValueBinning`](@ref)](@id example_CMIShannon_EntropyDecomposition_ValueBinning)
+### [[`EntropyDecomposition`](@ref) + [`ValueBinning`](@extref ComplexityMeasures)](@id example_CMIShannon_EntropyDecomposition_ValueBinning)
 
 ```@example
 using Associations
@@ -1169,7 +1169,7 @@ association(est, x, z, y)
 ```
 
 
-### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani)
+### [[`EntropyDecomposition`](@ref) + [`LeonenkoProzantoSavani`](@extref ComplexityMeasures)](@id example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani)
 
 ```@example example_CMIRenyiJizba
 using Associations
@@ -1183,7 +1183,7 @@ association(est, x, y, z)
 ```
 
 
-### [[`EntropyDecomposition`](@ref) + [`OrdinalPatterns`](@ref)](@id example_CMIRenyiJizba_EntropyDecomposition_OrdinalPatterns)
+### [[`EntropyDecomposition`](@ref) + [`OrdinalPatterns`](@extref ComplexityMeasures)](@id example_CMIRenyiJizba_EntropyDecomposition_OrdinalPatterns)
 
 ```@example example_CMIRenyiJizba
 using Associations
@@ -1198,7 +1198,7 @@ association(est, x, y, z)
 
 ## [`TEShannon`](@ref)
 
-### [[`EntropyDecomposition`](@ref) + [`TransferOperator`](@ref)](@id example_TEShannon_EntropyDecomposition_TransferOperator)
+### [[`EntropyDecomposition`](@extref ComplexityMeasures) + [`TransferOperator`](@extref ComplexityMeasures)](@id example_TEShannon_EntropyDecomposition_TransferOperator)
 
 For transfer entropy examples, we'll construct some time series for which 
 there is time-delayed forcing between variables.
@@ -1280,7 +1280,7 @@ association(est, x, z, y) # should be near 0 (and can be negative)
 ### [[`SymbolicTransferEntropy`](@ref) estimator](@id example_TEShannon_SymbolicTransferEntropy)
 
 The [`SymbolicTransferEntropy`](@ref) estimator is just a convenience wrapper which utilizes
-[`CodifyVariables`](@ref)with the [`OrdinalPatterns`](@ref) outcome space to 
+[`CodifyVariables`](@ref)with the [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space to 
 discretize the input time series before computing transfer entropy.
 
 We'll use coupled time series from the `logistic4` system above, where `x → y → z → w`.
@@ -1306,9 +1306,9 @@ We will test
 
 - The [`Lindner`](@ref) and [`Zhu1`](@ref) dedicated transfer entropy estimators,
     which try to eliminate bias.
-- The [`KraskovStögbauerGrassberger1`](@ref) estimator, which computes TE naively as a sum of mutual information
+- The [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator, which computes TE naively as a sum of mutual information
     terms (without guaranteed cancellation of biases for the total sum).
-- The [`Kraskov`](@ref) estimator, which computes TE naively as a sum of entropy 
+- The [`Kraskov`](@extref ComplexityMeasures) estimator, which computes TE naively as a sum of entropy 
     terms (without guaranteed cancellation of biases for the total sum).
 
 ```@example
@@ -1383,7 +1383,7 @@ fig
 Let's try to reproduce the results from Schreiber's original paper [Schreiber2000](@cite) where
 he introduced the transfer entropy. We'll here use the [`JointProbabilities`](@ref) estimator,
 discretizing per column of the input data using the [`CodifyVariables`](@ref) discretization
-scheme with the [`ValueBinning`](@ref) outcome space.
+scheme with the [`ValueBinning`](@extref ComplexityMeasures) outcome space.
 
 ```@example example_te_schreiber
 using Associations
@@ -1484,7 +1484,7 @@ The plot above shows the original transfer entropies (solid lines) and the 95th 
 
 ## [`TERenyiJizba`](@ref)
 
-### [[`EntropyDecomposition`](@ref) + [`TransferOperator`](@ref)](@id example_TERenyiJizba_EntropyDecomposition_TransferOperator)
+### [[`EntropyDecomposition`](@extref ComplexityMeasures) + [`TransferOperator`](@extref ComplexityMeasures)](@id example_TERenyiJizba_EntropyDecomposition_TransferOperator)
 
 We can perform the same type of analysis as above using [`TERenyiJizba`](@ref)
 instead of [`TEShannon`](@ref).

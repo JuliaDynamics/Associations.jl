@@ -32,7 +32,7 @@ D_{V}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 - [Example 1](@ref example_VariationDistance_precomputed_probabilities): From precomputed probabilities
 - [Example 2](@ref example_VariationDistance_JointProbabilities_OrdinalPatterns): 
-    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref) outcome space
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space
 """
 struct VariationDistance <: DivergenceOrDistance end
 
@@ -46,5 +46,5 @@ function association(est::JointProbabilities{<:VariationDistance}, x, y)
 end
 
 function association(measure::VariationDistance, px::Probabilities, py::Probabilities)
-    return 1/2 * sum(abs(pxᵢ - pyᵢ) for (pxᵢ, pyᵢ) in zip(px, py))
+    return 1 / 2 * sum(abs(pxᵢ - pyᵢ) for (pxᵢ, pyᵢ) in zip(px, py))
 end

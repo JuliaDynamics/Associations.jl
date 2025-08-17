@@ -30,15 +30,15 @@ I_q^T(X; Y) = H_q^T(X) - H_q^T(X | Y) = H_q^T(X) + H_q^T(Y) - H_q^T(X, Y),
 ```
 
 where ``H^T(\\cdot)`` and ``H^T(\\cdot, \\cdot)`` are the marginal and joint Tsallis
-entropies, and `q` is the [`Tsallis`](@ref)-parameter.
+entropies, and `q` is the [`Tsallis`](@extref ComplexityMeasures)-parameter.
 
 ## Estimation
 
-- [Example 1](@ref example_MITsallisFuruichi_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) outcome space.
-- [Example 2](@ref example_MITsallisFuruichi_EntropyDecomposition_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@ref) estimator.
-- [Example 3](@ref example_MITsallisFuruichi_EntropyDecomposition_Dispersion): [`EntropyDecomposition`](@ref) with [`Dispersion`](@ref)
+- [Example 1](@ref example_MITsallisFuruichi_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures) outcome space.
+- [Example 2](@ref example_MITsallisFuruichi_EntropyDecomposition_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@extref ComplexityMeasures) estimator.
+- [Example 3](@ref example_MITsallisFuruichi_EntropyDecomposition_Dispersion): [`EntropyDecomposition`](@ref) with [`Dispersion`](@extref ComplexityMeasures)
 """
-Base.@kwdef struct MITsallisFuruichi{B, Q} <: MutualInformation
+Base.@kwdef struct MITsallisFuruichi{B,Q} <: MutualInformation
     base::B = 2
     q::Q = 1.5
 end
@@ -51,11 +51,11 @@ function association(est::JointProbabilities{<:MITsallisFuruichi}, x, y)
     return association(est.definition, probs)
 end
 
-function association(definition::MITsallisFuruichi, pxy::Probabilities{T, 2}) where T
+function association(definition::MITsallisFuruichi, pxy::Probabilities{T,2}) where T
     (; base, q) = definition
 
-    px = marginal(pxy, dims = 1)
-    py = marginal(pxy, dims = 2)
+    px = marginal(pxy, dims=1)
+    py = marginal(pxy, dims=2)
 
     mi = 0.0
     for i in eachindex(px.p)
@@ -64,19 +64,19 @@ function association(definition::MITsallisFuruichi, pxy::Probabilities{T, 2}) wh
             mi += pxyᵢⱼ^q / (px[i]^(q - 1) * py[j]^(q - 1))
         end
     end
-    mi = (1 / (q - 1) * (1 - mi) / (1-q))
+    mi = (1 / (q - 1) * (1 - mi) / (1 - q))
     return _convert_logunit(mi, ℯ, base)
 end
 
 
 
-function association(est::EntropyDecomposition{<:MITsallisFuruichi, <:DifferentialInfoEstimator{<:Tsallis}}, x, y)
+function association(est::EntropyDecomposition{<:MITsallisFuruichi,<:DifferentialInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_differential(est, x, y)
     mi = HX + HY - HXY
     return mi
 end
 
-function association(est::EntropyDecomposition{<:MITsallisFuruichi, <:DiscreteInfoEstimator{<:Tsallis}}, x, y)
+function association(est::EntropyDecomposition{<:MITsallisFuruichi,<:DiscreteInfoEstimator{<:Tsallis}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
     mi = HX + HY - HXY
     return mi
@@ -87,9 +87,9 @@ end
 # Pretty printing for decomposition estimators.
 # ------------------------------------------------
 function decomposition_string(definition::MITsallisFuruichi, est::DiscreteInfoEstimator{<:Tsallis})
-    return "MI_TF(X, Y) = H_T(X) + H_T(Y) - H_T(X, Y)";
+    return "MI_TF(X, Y) = H_T(X) + H_T(Y) - H_T(X, Y)"
 end
 
 function decomposition_string(definition::MITsallisFuruichi, est::DifferentialInfoEstimator{<:Tsallis})
-    return "MI_TF(X, Y) = h_T(X) + h_T(Y) - h_T(X, Y)";
+    return "MI_TF(X, Y) = h_T(X) + h_T(Y) - h_T(X, Y)"
 end

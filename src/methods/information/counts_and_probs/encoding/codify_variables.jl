@@ -18,11 +18,11 @@ using the given `outcome_space`.
 
 ## Compatible outcome spaces
 
-- [`UniqueElements`](@ref) (for when data are pre-discretized)
+- [`UniqueElements`](@extref ComplexityMeasures) (for when data are pre-discretized)
 - [`BubbleSortSwaps`](@ref)
 - [`CosineSimilarityBinning`](@ref)
-- [`OrdinalPatterns`](@ref)
-- [`Dispersion`](@ref)
+- [`OrdinalPatterns`](@extref ComplexityMeasures)
+- [`Dispersion`](@extref ComplexityMeasures)
 
 # Description
 
@@ -49,9 +49,9 @@ d = CodifyVariables(OrdinalPatterns(m=2))
 cx, cy = codify(d, x, y)
 ```
 """
-struct CodifyVariables{N, E} <: Discretization{N}
-    outcome_spaces::NTuple{N, OutcomeSpace}
-    function CodifyVariables(outcome_spaces::NTuple{N, OutcomeSpace}) where N
+struct CodifyVariables{N,E} <: Discretization{N}
+    outcome_spaces::NTuple{N,OutcomeSpace}
+    function CodifyVariables(outcome_spaces::NTuple{N,OutcomeSpace}) where N
         if N > 1
             n_outs = [total_outcomes(o) for o in outcome_spaces]
             if !allequal(n_outs)
@@ -60,7 +60,7 @@ struct CodifyVariables{N, E} <: Discretization{N}
                 throw(ArgumentError(s))
             end
         end
-        new{N, eltype(outcome_spaces)}(outcome_spaces)
+        new{N,eltype(outcome_spaces)}(outcome_spaces)
     end
 end
 function CodifyVariables(os...)
@@ -100,20 +100,20 @@ cx, cy = codify(CodifyPoints(OrdinalPatternEncoding(3)), x, y)
 """
 function codify(encoding::CodifyVariables, x) end
 
-function codify(encoding::CodifyVariables{1}, x::Vararg{Any, 1})
+function codify(encoding::CodifyVariables{1}, x::Vararg{Any,1})
     e = first(encoding.outcome_spaces)
     x̂ = ComplexityMeasures.codify(e, first(x))
     return x̂::Vector{<:Integer}
 end
 
 function codify(encoding::CodifyVariables{1}, x::NTuple{1})
-    return (codify(encoding, x...), )
+    return (codify(encoding, x...),)
 end
 
-function codify(encoding::CodifyVariables{1}, x::Vararg{Any, N}) where N
+function codify(encoding::CodifyVariables{1}, x::Vararg{Any,N}) where N
     e = first(encoding.outcome_spaces)
     x̂ = map(xᵢ -> ComplexityMeasures.codify(e, xᵢ), x)
-    return x̂::NTuple{N, Vector{<:Integer}}
+    return x̂::NTuple{N,Vector{<:Integer}}
 end
 
 function codify(encoding::CodifyVariables{1}, x::AbstractStateSpaceSet)
@@ -126,7 +126,7 @@ end
 # guaranteed API-wise that embedding vectors are constructed in the same way
 # (although *in practice* all `OutcomeSpace` that use embeddings do so 
 # per v3.6 of ComplexityMeasures.jl).
-function codify(encoding::CodifyVariables{N}, x::Vararg{Any, N}) where N
+function codify(encoding::CodifyVariables{N}, x::Vararg{Any,N}) where N
     os = encoding.outcome_spaces
     return [codify(CodifyVariables(os[i]), x[i]) for i in 1:N]
 end

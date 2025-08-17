@@ -47,12 +47,12 @@ D_{KL}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 - [Example 1](@ref example_KLDivergence_precomputed_probabilities): From precomputed probabilities
 - [Example 2](@ref example_KLDivergence_JointProbabilities_OrdinalPatterns): 
-    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref) outcome space
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space
 """
 struct KLDivergence{B} <: DivergenceOrDistance
     base::B
 end
-KLDivergence(; base = 2) = KLDivergence(base)
+KLDivergence(; base=2) = KLDivergence(base)
 
 # ----------------------------------------------------------------
 # Estimation methods

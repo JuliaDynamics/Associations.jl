@@ -1,4 +1,4 @@
-import ComplexityMeasures: information 
+import ComplexityMeasures: information
 export information
 
 export MultivariateInformationMeasure
@@ -27,10 +27,10 @@ The supertype for all estimators of multivariate information measures.
 
 [`MutualInformationEstimator`](@ref)s:
 
-- [`KraskovStögbauerGrassberger1`](@ref)
-- [`KraskovStögbauerGrassberger2`](@ref)
+- [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures)
+- [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures)
 - [`GaoOhViswanath`](@ref)
-- [`GaoKannanOhViswanath`](@ref)
+- [`GaoKannanOhViswanath`](@extref ComplexityMeasures)
 - [`GaussianMI`](@ref)
 
 [`ConditionalMutualInformationEstimator`](@ref)s:
@@ -56,10 +56,10 @@ The supertype for dedicated [`MutualInformation`](@ref) estimators.
 
 ## Concrete implementations
 
-- [`KraskovStögbauerGrassberger1`](@ref)
-- [`KraskovStögbauerGrassberger2`](@ref)
+- [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures)
+- [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures)
 - [`GaoOhViswanath`](@ref)
-- [`GaoKannanOhViswanath`](@ref)
+- [`GaoKannanOhViswanath`](@extref ComplexityMeasures)
 - [`GaussianMI`](@ref)
 """
 abstract type MutualInformationEstimator{M} <: BivariateInformationMeasureEstimator{M} end

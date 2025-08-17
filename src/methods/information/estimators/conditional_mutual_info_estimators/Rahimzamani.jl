@@ -18,7 +18,7 @@ for data that can be mixtures of discrete and continuous data [Rahimzamani2018](
 
 ## Description
 
-This estimator is very similar to the [`GaoKannanOhViswanath`](@ref) mutual information
+This estimator is very similar to the [`GaoKannanOhViswanath`](@extref ComplexityMeasures) mutual information
 estimator, but has been expanded to the conditional mutual information case.
 
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
@@ -36,14 +36,14 @@ association(Rahimzamani(; k = 10), x, z, y) # should be near 0 (and can be negat
 ```
 
 """
-struct Rahimzamani{M <: ConditionalMutualInformation, ME} <: ConditionalMutualInformationEstimator{M}
+struct Rahimzamani{M<:ConditionalMutualInformation,ME} <: ConditionalMutualInformationEstimator{M}
     definition::M
     k::Int
     w::Int
     metric::ME
 end
 
-function Rahimzamani(definition = CMIShannon(); k = 1, w = 0)
+function Rahimzamani(definition=CMIShannon(); k=1, w=0)
     # Metric shouldn't be modified by the user.
     metric = Chebyshev()
     return Rahimzamani(definition, k, w, metric)
@@ -75,7 +75,7 @@ function association(est::Rahimzamani{<:CMIShannon}, x, y, z)
         # I assume ρ_{i, xy} is the distance in the *joint* space.
         # ... but isn't this just the FPVP estimator?
         dmax = ds_joint[i]
-        k̂ = dmax == 0 ? inrangecount(tree_joint, joint[i], 0.0) - 1  : k
+        k̂ = dmax == 0 ? inrangecount(tree_joint, joint[i], 0.0) - 1 : k
         condmi += digamma(k̂)
         condmi -= log(inrangecount(tree_xz, XZ[i], dmax))
         condmi -= log(inrangecount(tree_yz, YZ[i], dmax))

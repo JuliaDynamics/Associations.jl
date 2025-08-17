@@ -42,14 +42,14 @@ Works for any [`OutcomeSpace`](@ref) that implements [`codify`](@ref).
     Pick your estimator according to your needs.
 
 See also: [`Counts`](@ref), [`Probabilities`](@ref), [`ProbabilitiesEstimator`](@ref),
-[`OutcomeSpace`](@ref), [`DiscreteInfoEstimator`](@ref).
+[`OutcomeSpace`](@ref), [`DiscreteInfoEstimator`](@extref ComplexityMeasures).
 """
-struct JointProbabilities{M <: MultivariateInformationMeasure, O, P} <: MultivariateInformationMeasureEstimator{M}
+struct JointProbabilities{M<:MultivariateInformationMeasure,O,P} <: MultivariateInformationMeasureEstimator{M}
     definition::M # API from complexity measures: definition must be the first field of the infoestimator.
     discretization::O
     pest::P # Not exposed to user for now.
 
-    function JointProbabilities(def::M, disc::D, pest = RelativeAmount()) where {M, D}
-        new{M, D, typeof(pest)}(def, disc, pest)
+    function JointProbabilities(def::M, disc::D, pest=RelativeAmount()) where {M,D}
+        new{M,D,typeof(pest)}(def, disc, pest)
     end
 end

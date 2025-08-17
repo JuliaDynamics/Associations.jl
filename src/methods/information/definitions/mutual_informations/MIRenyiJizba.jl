@@ -31,11 +31,11 @@ where ``H_q^{R}(\\cdot)`` is the [`Rényi`](@ref) entropy.
 
 ## Estimation
 
-- [Example 1](@ref example_MIRenyiJizba_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) outcome space.
-- [Example 2](@ref example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@ref).
-- [Example 3](@ref example_MIRenyiJizba_EntropyDecomposition_ValueBinning): [`EntropyDecomposition`](@ref) with [`ValueBinning`](@ref).
+- [Example 1](@ref example_MIRenyiJizba_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures) outcome space.
+- [Example 2](@ref example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@extref ComplexityMeasures).
+- [Example 3](@ref example_MIRenyiJizba_EntropyDecomposition_ValueBinning): [`EntropyDecomposition`](@ref) with [`ValueBinning`](@extref ComplexityMeasures).
 """
-Base.@kwdef struct MIRenyiJizba{B, Q} <: MutualInformation
+Base.@kwdef struct MIRenyiJizba{B,Q} <: MutualInformation
     base::B = 2
     q::Q = 1.5
 end
@@ -48,12 +48,12 @@ function association(est::JointProbabilities{<:MIRenyiJizba}, x, y)
     return association(est.definition, probs)
 end
 
-function association(definition::MIRenyiJizba, pxy::Probabilities{T, 2}) where T
+function association(definition::MIRenyiJizba, pxy::Probabilities{T,2}) where T
     (; base, q) = definition
 
-    px = marginal(pxy, dims = 1)
-    py = marginal(pxy, dims = 2)
-    
+    px = marginal(pxy, dims=1)
+    py = marginal(pxy, dims=2)
+
     logb = log_with_base(base)
     num = 0.0
     den = 0.0
@@ -78,15 +78,15 @@ end
 # Jizba, P., Lavička, H., & Tabachová, Z. (2021). Rényi Transfer Entropy Estimators for
 # Financial Time Series. Engineering Proceedings, 5(1), 33.
 # --------------------------------------------------------------
-function association(est::EntropyDecomposition{<:MIRenyiJizba, <:DifferentialInfoEstimator{<:Renyi}}, x, y)
+function association(est::EntropyDecomposition{<:MIRenyiJizba,<:DifferentialInfoEstimator{<:Renyi}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_differential(est, x, y)
-    mi =  HX + HY - HXY
+    mi = HX + HY - HXY
     return mi
 end
 
-function association(est::EntropyDecomposition{<:MIRenyiJizba, <:DiscreteInfoEstimator{<:Renyi}}, x, y)
+function association(est::EntropyDecomposition{<:MIRenyiJizba,<:DiscreteInfoEstimator{<:Renyi}}, x, y)
     HX, HY, HXY = marginal_entropies_mi3h_discrete(est, x, y)
-    mi =  HX + HY - HXY
+    mi = HX + HY - HXY
     return mi
 end
 
@@ -94,15 +94,15 @@ end
 # Pretty printing for decomposition estimators.
 # ------------------------------------------------
 function decomposition_string(
-        definition::MIRenyiJizba, 
-        est::EntropyDecomposition{<:MIRenyiJizba, <:DifferentialInfoEstimator{<:Renyi}}
-    )
+    definition::MIRenyiJizba,
+    est::EntropyDecomposition{<:MIRenyiJizba,<:DifferentialInfoEstimator{<:Renyi}}
+)
     return "Iᵣⱼ(X, Y) = hᵣ(X) + hᵣ(Y) - hᵣ(X, Y)"
 end
 
 function decomposition_string(
-        definition::MIRenyiJizba, 
-        est::EntropyDecomposition{<:MIRenyiJizba, <:DiscreteInfoEstimator{<:Renyi}}
-    )
+    definition::MIRenyiJizba,
+    est::EntropyDecomposition{<:MIRenyiJizba,<:DiscreteInfoEstimator{<:Renyi}}
+)
     return "Iᵣⱼ(X, Y) = Hᵣ(X) + Hᵣ(Y) - Hᵣ(X, Y)"
 end

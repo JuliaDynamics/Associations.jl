@@ -40,8 +40,8 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
 
 !!! warn "Implementation note"
     In [GaoKannanOhViswanath2017](@citet), they claim (roughly speaking) that the estimator
-    reduces to the [`KraskovStögbauerGrassberger1`](@ref) estimator for continuous-valued data.
-    However, [`KraskovStögbauerGrassberger1`](@ref) uses the digamma function, while `GaoKannanOhViswanath`
+    reduces to the [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator for continuous-valued data.
+    However, [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) uses the digamma function, while `GaoKannanOhViswanath`
     uses the logarithm instead, so the estimators are not exactly equivalent
     for continuous data.
 
@@ -51,7 +51,7 @@ variables (by quantization) or making it continuous by adding a small Gaussian n
     `k`-th nearest distances among the two marginal spaces, which are in general not the
     same as the `k`-th neighbor distance in the joint space (unless both marginals are
     univariate). Therefore, our implementation here differs slightly from algorithm 1 in
-    `GaoKannanOhViswanath`. We have modified it in a way that mimics [`KraskovStögbauerGrassberger1`](@ref) for
+    `GaoKannanOhViswanath`. We have modified it in a way that mimics [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) for
     continous data. Note that because of using the `log` function instead of `digamma`,
     there will be slight differences between the methods. See the source code for more
     details.
@@ -72,13 +72,13 @@ x = rand(rng, 10000); y = rand(rng, 10000)
 association(GaoKannanOhViswanath(; k = 10), x, y) # should be near 0 (and can be negative)
 ```
 """
-struct GaoKannanOhViswanath{M <: MutualInformation} <: MutualInformationEstimator{M}
+struct GaoKannanOhViswanath{M<:MutualInformation} <: MutualInformationEstimator{M}
     definition::M
     k::Int
-    w::Int 
+    w::Int
 end
 
-function GaoKannanOhViswanath(definition = MIShannon(); k = 1, w = 0)
+function GaoKannanOhViswanath(definition=MIShannon(); k=1, w=0)
     return GaoKannanOhViswanath(definition, k, w)
 end
 # TODO: We here extend the estimator to multiple variables (i.e. the multi-information),

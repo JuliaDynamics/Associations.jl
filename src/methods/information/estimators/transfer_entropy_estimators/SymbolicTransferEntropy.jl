@@ -16,7 +16,7 @@ A convenience estimator for symbolic transfer entropy [Staniek2008](@cite).
 
 [Symbolic transfer entropy](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.100.158101)
 consists of two simple steps. First, the input time series are encoded using [`codify`](@ref) with
-the [`CodifyVariables`](@ref) discretization and the [`OrdinalPatterns`](@ref) outcome space. This 
+the [`CodifyVariables`](@ref) discretization and the [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space. This 
 transforms the input time series into integer time series. Transfer entropy entropy is then 
 estimated from the encoded time series by applying  
 
@@ -34,8 +34,8 @@ struct SymbolicTransferEntropy{M} <: TransferEntropyEstimator{M}
     lt::Function
 end
 
-function SymbolicTransferEntropy(definition::M = TEShannon(); 
-        m = 3, τ = 1, lt = ComplexityMeasures.isless_rand) where M
+function SymbolicTransferEntropy(definition::M=TEShannon();
+    m=3, τ=1, lt=ComplexityMeasures.isless_rand) where M
     return SymbolicTransferEntropy{M}(definition, m, τ, lt)
 end
 
@@ -43,7 +43,7 @@ function association(est::SymbolicTransferEntropy{<:TEShannon}, x::AbstractVecto
     (; m, τ, lt) = est
     discretization = CodifyVariables(OrdinalPatterns(; m, τ, lt))
 
-    x̂ = (codify(discretization, xᵢ) for xᵢ in x) 
+    x̂ = (codify(discretization, xᵢ) for xᵢ in x)
 
     te_definition = est.definition
     embedding = te_definition.embedding
@@ -55,9 +55,9 @@ function association(est::SymbolicTransferEntropy{<:TEShannon}, x::AbstractVecto
 
     # We have already encoded the marginals, so when computing CMI, we can 
     # simply use `UniqueElements`.
-    cmi_def = CMIShannon(; base = est.definition.base)
+    cmi_def = CMIShannon(; base=est.definition.base)
     disc = CodifyVariables(UniqueElements())
-    
+
     est_unique = JointProbabilities(cmi_def, disc)
-    return association(est_unique, T⁺, S,  StateSpaceSet(T, C))
+    return association(est_unique, T⁺, S, StateSpaceSet(T, C))
 end

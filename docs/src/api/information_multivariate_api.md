@@ -110,7 +110,7 @@ find those that we implement [here](@ref divergences_and_distances).
 
 As an example, let's quantify the [`KLDivergence`](@ref) between two probability 
 mass functions estimated by symbolizing two input vectors `x` and `y` using 
-[`OrdinalPatterns`](@ref). Since the discrete [`KLDivergence`](@ref) can be 
+[`OrdinalPatterns`](@extref ComplexityMeasures). Since the discrete [`KLDivergence`](@ref) can be 
 expressed as a function of a joint pmf, we can use the [`JointProbabilities`](@ref)
 estimator.
 
@@ -157,7 +157,7 @@ association(est, x, y)
 
 [Joint entropies](@ref joint_entropies), on the other hand, are *symmetric*. Joint
 entropies are functionals of a joint pmf, so we can still use the
-[`JointProbabilities`](@ref) estimator. This time, we use a [`Dispersion`](@ref)
+[`JointProbabilities`](@ref) estimator. This time, we use a [`Dispersion`](@extref ComplexityMeasures)
 based discretization.
 
 ```@example INFO_TUTORIAL
@@ -176,7 +176,7 @@ Mutual informations, in particular [`MIShannon`](@ref) is an often-used symmetri
 measure for quantifing the (possibly nonlinear) association between variables. It appears
 in both  discrete and differential form, and can be estimated in a multitude of ways. For 
 example, one can use dedicated [`MutualInformationEstimator`](@ref)s such as 
-[`KraskovStögbauerGrassberger2`](@ref) or [`GaussianMI`](@ref):
+[`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) or [`GaussianMI`](@ref):
 
 ```@example INFO_TUTORIAL
 using Associations
@@ -196,7 +196,7 @@ association(est, x, y) ≈ association(est, y, x) # should be true
 
 One can also estimate mutual information using the [`EntropyDecomposition`](@ref) 
 estimator, or (like above) using the [`JointProbabilities`](@ref) estimator.
-Let's construct a differential entropy based estimator based on the [`Kraskov`](@ref)
+Let's construct a differential entropy based estimator based on the [`Kraskov`](@extref ComplexityMeasures)
 estimator.
 
 ```@example INFO_TUTORIAL

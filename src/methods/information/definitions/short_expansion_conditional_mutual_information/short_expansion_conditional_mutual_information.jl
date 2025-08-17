@@ -35,7 +35,7 @@ This quantity is estimated from data using one of the estimators below from the 
 
 - [Example 1](@ref example_ShortExpansionConditionalMutualInformation_JointProbabilities_CodifyVariables_ValueBinning):
     Estimating [`ShortExpansionConditionalMutualInformation`](@ref) using the [`JointProbabilities`](@ref) estimator using a
-    [`CodifyVariables`](@ref) with [`ValueBinning`](@ref) discretization.
+    [`CodifyVariables`](@ref) with [`ValueBinning`](@extref ComplexityMeasures) discretization.
 """
 Base.@kwdef struct ShortExpansionConditionalMutualInformation{B} <: MultivariateInformationMeasure
     base::B = 2
@@ -51,22 +51,22 @@ max_inputs_vars(::ShortExpansionConditionalMutualInformation) = Inf
 
 # Assumes 1st dimension of `probs` corresponds to X, 2nd dimension of `probs`
 # corresponds to Y, and dimensions `3:ndims(probs)` correspond to marginals Zₖ, 
-function association(definition::SECMI, probs::Probabilities{T, N}) where {T, N}
+function association(definition::SECMI, probs::Probabilities{T,N}) where {T,N}
     @assert N >= 3
     (; base) = definition
 
-    def_mi = MIShannon(; base = base)
-    def_cmi = CMIShannon(; base = base)
+    def_mi = MIShannon(; base=base)
+    def_cmi = CMIShannon(; base=base)
 
     m = ndims(probs) - 2
-    pXY = marginal(probs, dims = 1:2)
+    pXY = marginal(probs, dims=1:2)
     mi_XY = association(def_mi, pXY)
     cmis = 0.0
     for k = 1:m
         # association(definition::CMIShannon, pxyz::Probabilities{T, 3})
         # is the call signature, so we simply replace the last variable
         # with the marginal Zₖ for each Î(X, Y | Zₖ) in the sum
-        cmis += association(def_cmi, marginal(probs, dims = (1, 2, 2 + k)))
+        cmis += association(def_cmi, marginal(probs, dims=(1, 2, 2 + k)))
     end
     return (1 - m) * mi_XY + cmis
 end

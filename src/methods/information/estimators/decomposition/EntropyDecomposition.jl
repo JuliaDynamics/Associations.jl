@@ -25,14 +25,14 @@ per variable/column and each column is encoded into integers using [`codify`](@r
 
 The entropy terms are estimated using `est`, and then combined to form the final 
 estimate of `definition`. No bias correction is applied.
-If `est` is a [`DifferentialInfoEstimator`](@ref), then `discretization` and `pest` 
-are ignored. If `est` is a [`DiscreteInfoEstimator`](@ref), then `discretization` and a
+If `est` is a [`DifferentialInfoEstimator`](@extref ComplexityMeasures), then `discretization` and `pest` 
+are ignored. If `est` is a [`DiscreteInfoEstimator`](@extref ComplexityMeasures), then `discretization` and a
 probabilities estimator `pest` must also be provided (default to `RelativeAmount`, 
 which uses naive plug-in probabilities).
 
 ## Compatible differential information estimators
 
-If using the first signature, any compatible [`DifferentialInfoEstimator`](@ref) can be 
+If using the first signature, any compatible [`DifferentialInfoEstimator`](@extref ComplexityMeasures) can be 
 used.
 
 ## Compatible outcome spaces for discrete estimation
@@ -42,10 +42,10 @@ Note that not all outcome spaces will work with all measures.
 
 | Estimator                         | Principle                     |
 | :-------------------------------- | :---------------------------- |
-| [`UniqueElements`](@ref)          | Count of unique elements      |
-| [`ValueBinning`](@ref)            | Binning (histogram)           |
-| [`OrdinalPatterns`](@ref)         | Ordinal patterns              |
-| [`Dispersion`](@ref)              | Dispersion patterns           |
+| [`UniqueElements`](@extref ComplexityMeasures)          | Count of unique elements      |
+| [`ValueBinning`](@extref ComplexityMeasures)            | Binning (histogram)           |
+| [`OrdinalPatterns`](@extref ComplexityMeasures)         | Ordinal patterns              |
+| [`Dispersion`](@extref ComplexityMeasures)              | Dispersion patterns           |
 | [`BubbleSortSwaps`](@ref)         | Sorting complexity            |
 | [`CosineSimilarityBinning`](@ref) | Cosine similarities histogram |
 
@@ -77,48 +77,48 @@ of entropies using the `Kraskov(Shannon(base = ℯ))` Shannon entropy estimator,
 
 ## Discrete entropy decomposition 
 
-The second signature is for discrete estimation using [`DiscreteInfoEstimator`](@ref)s,
+The second signature is for discrete estimation using [`DiscreteInfoEstimator`](@extref ComplexityMeasures)s,
 for example [`PlugIn`](@ref). The given `discretization` scheme (typically an 
 [`OutcomeSpace`](@ref)) controls how the joint/marginals are discretized, and the
 probabilities estimator `pest` controls how probabilities are estimated from counts.
 
 !!! note "Bias"
-    Like for [`DifferentialInfoEstimator`](@ref), using a dedicated estimator 
+    Like for [`DifferentialInfoEstimator`](@extref ComplexityMeasures), using a dedicated estimator 
     for the measure in question will be more reliable than using a decomposition
     estimate. Here's how different `discretization`s are applied:
 
-    - [`ValueBinning`](@ref). Bin visitation frequencies are counted in the joint space
+    - [`ValueBinning`](@extref ComplexityMeasures). Bin visitation frequencies are counted in the joint space
         `XY`, then marginal visitations are obtained from the joint bin visits.
         This behaviour is the same for both [`FixedRectangularBinning`](@ref) and
         [`RectangularBinning`](@ref) (which adapts the grid to the data).
         When using [`FixedRectangularBinning`](@ref), the range along the first dimension
         is used as a template for all other dimensions. This is a bit slower than naively 
         binning each marginal, but lessens bias.
-    - [`OrdinalPatterns`](@ref). Each timeseries is separately [`codify`](@ref)-ed
+    - [`OrdinalPatterns`](@extref ComplexityMeasures). Each timeseries is separately [`codify`](@ref)-ed
         according to its ordinal pattern (no bias correction).
-    - [`Dispersion`](@ref). Each timeseries is separately [`codify`](@ref)-ed according
+    - [`Dispersion`](@extref ComplexityMeasures). Each timeseries is separately [`codify`](@ref)-ed according
         to its dispersion pattern  (no bias correction).
 
 ## Examples
 
 - [Example 1](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning):
     [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@ref)
-    entropy estimated using [`CodifyVariables`](@ref) with [`ValueBinning`](@ref).
+    entropy estimated using [`CodifyVariables`](@ref) with [`ValueBinning`](@extref ComplexityMeasures).
 - [Example 2](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps):
     [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@ref)
     entropy estimated using [`CodifyVariables`](@ref) with [`BubbleSortSwaps`](@ref).
 - [Example 3](@ref example_MIShannon_EntropyDecomposition_Kraskov):
     [`MIShannon`](@ref) estimation using decomposition into differental [`Shannon`](@ref)
-    entropy estimated using the [`Kraskov`](@ref) estimator.
+    entropy estimated using the [`Kraskov`](@extref ComplexityMeasures) estimator.
 
 See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).
 """
 struct EntropyDecomposition{
-        M <: MultivariateInformationMeasure, 
-        E <: InformationMeasureEstimator, 
-        D <: Union{Discretization, Nothing}, 
-        P <: Union{ProbabilitiesEstimator, Nothing}
-        } <: DecompositionEstimator{M}
+    M<:MultivariateInformationMeasure,
+    E<:InformationMeasureEstimator,
+    D<:Union{Discretization,Nothing},
+    P<:Union{ProbabilitiesEstimator,Nothing}
+} <: DecompositionEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.
     est::E # The estimator + measure which `definition` is decomposed into.
     discretization::D # `Nothing` if `est` is a `DifferentialInfoEstimator`.
@@ -126,26 +126,26 @@ struct EntropyDecomposition{
 
 
     function EntropyDecomposition(
-        definition::MultivariateInformationMeasure, 
+        definition::MultivariateInformationMeasure,
         est::DifferentialInfoEstimator)
         M = typeof(definition)
         E = typeof(est)
         verify_decomposition_entropy_type(definition, est)
-        return new{M, E, Nothing, Nothing}(definition, est, nothing, nothing)
+        return new{M,E,Nothing,Nothing}(definition, est, nothing, nothing)
     end
 
     function EntropyDecomposition(
-            definition::MultivariateInformationMeasure, 
-            est::DiscreteInfoEstimator, 
-            discretization::D,
-            pest::ProbabilitiesEstimator = RelativeAmount(),
-        ) where {D}
+        definition::MultivariateInformationMeasure,
+        est::DiscreteInfoEstimator,
+        discretization::D,
+        pest::ProbabilitiesEstimator=RelativeAmount(),
+    ) where {D}
         M = typeof(definition)
         E = typeof(est)
         P = typeof(pest)
         verify_decomposition_entropy_type(definition, est)
 
-        return new{M, E, D, P}(definition, est, discretization, pest)
+        return new{M,E,D,P}(definition, est, discretization, pest)
     end
 end
 
@@ -160,15 +160,15 @@ Check that we can actually decompose the `definition` into `est.definition`. The
 default is to do nothing. Certain definitions  may override (e.g. `CMIRenyiJizba` does so).
 """
 function verify_decomposition_entropy_type(
-        definition::MultivariateInformationMeasure, 
-        est::Union{DiscreteInfoEstimator, DifferentialInfoEstimator})
+    definition::MultivariateInformationMeasure,
+    est::Union{DiscreteInfoEstimator,DifferentialInfoEstimator})
 end
 
 
 # ----------------------------------------------------------------------------------------
 # Custom pretty printing for discrete entropy estimators, since it has more field.
 # ----------------------------------------------------------------------------------------
-function summary_strings(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) where M
+function summary_strings(est::EntropyDecomposition{<:M,<:DiscreteInfoEstimator}) where M
     return [
         "Measure to be decomposed",
         "Estimator for decomposed components",
@@ -177,7 +177,7 @@ function summary_strings(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}
     ]
 end
 
-function summary_types(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) where M
+function summary_types(est::EntropyDecomposition{<:M,<:DiscreteInfoEstimator}) where M
     return [
         typeof(est.definition),
         typeof(est.est),
@@ -186,7 +186,7 @@ function summary_types(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) 
     ]
 end
 
-function measure_colors(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) where M
+function measure_colors(est::EntropyDecomposition{<:M,<:DiscreteInfoEstimator}) where M
     return [
         :light_red,
         :light_green,
@@ -195,7 +195,7 @@ function measure_colors(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator})
     ]
 end
 
-function info_colors(est::EntropyDecomposition{<:M, <:DiscreteInfoEstimator}) where M
+function info_colors(est::EntropyDecomposition{<:M,<:DiscreteInfoEstimator}) where M
     return [
         :red,
         :green,

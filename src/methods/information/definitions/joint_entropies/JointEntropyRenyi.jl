@@ -31,9 +31,9 @@ where ``q > 0`` and ``q != 1``.
 ## Estimation
 
 - [Example 1](@ref example_JointEntropyRenyi_ValueBinning): 
-    [`JointProbabilities`](@ref) with [`ValueBinning`](@ref) outcome space
+    [`JointProbabilities`](@ref) with [`ValueBinning`](@extref ComplexityMeasures) outcome space
 """
-Base.@kwdef struct JointEntropyRenyi{B, Q} <: JointEntropy
+Base.@kwdef struct JointEntropyRenyi{B,Q} <: JointEntropy
     base::B = 2
     q::Q = 1.5
 end
@@ -47,15 +47,15 @@ function association(est::JointProbabilities{<:JointEntropyRenyi}, x, y)
     return association(est.definition, probs)
 end
 
-function association(definition::JointEntropyRenyi, pxy::Probabilities{T, 2}) where T
+function association(definition::JointEntropyRenyi, pxy::Probabilities{T,2}) where T
     (; base, q) = definition
-    
+
     h = 0.0
     for p in pxy
         if p != 0
             h += p^q
         end
     end
-    h = 1 / (1 - q) * log(h) 
+    h = 1 / (1 - q) * log(h)
     return _convert_logunit(h, ℯ, base)
 end

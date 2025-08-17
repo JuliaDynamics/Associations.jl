@@ -46,17 +46,17 @@ D_{q}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 - [Example 1](@ref example_RenyiDivergence_precomputed_probabilities): From precomputed probabilities
 - [Example 2](@ref example_RenyiDivergence_JointProbabilities_OrdinalPatterns): 
-    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref) outcome space
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space
 """
-struct RenyiDivergence{Q, B} <: DivergenceOrDistance
+struct RenyiDivergence{Q,B} <: DivergenceOrDistance
     q::Q
     base::B
-    function RenyiDivergence(q::Q, base::B) where {Q, B}
+    function RenyiDivergence(q::Q, base::B) where {Q,B}
         q > 0 || throw(ArgumentError("`q` must be positive. Got $q"))
-        new{Q, B}(q, base)
+        new{Q,B}(q, base)
     end
 end
-RenyiDivergence(; q = 0.5, base = 2) = RenyiDivergence(q, base)
+RenyiDivergence(; q=0.5, base=2) = RenyiDivergence(q, base)
 
 # ----------------------------------------------------------------
 # Estimation methods

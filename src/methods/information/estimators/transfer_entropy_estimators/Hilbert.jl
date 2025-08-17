@@ -30,7 +30,7 @@ obtained by first applying the Hilbert transform to each signal, then extracting
 phases/amplitudes of the resulting complex numbers [Palus2014](@cite). Original time series are
 thus transformed to instantaneous phase/amplitude time series. Transfer
 entropy is then estimated using the provided `est` on those phases/amplitudes (use e.g.
-[`ValueBinning`](@ref), or [`OrdinalPatterns`](@ref)).
+[`ValueBinning`](@extref ComplexityMeasures), or [`OrdinalPatterns`](@extref ComplexityMeasures)).
 
 !!! info
     Details on estimation of the transfer entropy (conditional mutual information)
@@ -47,9 +47,9 @@ struct Hilbert{M} <: TransferEntropyEstimator{M}
     cond::InstantaneousSignalProperty
 
     function Hilbert(est::M;
-            source::InstantaneousSignalProperty = Phase(),
-            target::InstantaneousSignalProperty = Phase(),
-            cond::InstantaneousSignalProperty = Phase()) where M
+        source::InstantaneousSignalProperty=Phase(),
+        target::InstantaneousSignalProperty=Phase(),
+        cond::InstantaneousSignalProperty=Phase()) where M
         new{M}(est, source, target, cond)
     end
 end
@@ -105,6 +105,6 @@ function association(est::Hilbert, source, target, cond)
     else
         throw(ArgumentError("est.cond must be either Phase or Amplitude instance"))
     end
-    
+
     association(est.est, s, t, c)
 end

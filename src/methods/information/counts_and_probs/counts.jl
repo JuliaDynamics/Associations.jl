@@ -20,7 +20,7 @@ Construct an `N`-dimensional contingency table from the input iterables
 `x₁, x₂, ..., xₙ` which are such that 
 `length(x₁) == length(x₂) == ⋯ == length(xₙ)`.
 
-If `x₁, x₂, ..., xₙ` are already discrete, then use [`UniqueElements`](@ref) as 
+If `x₁, x₂, ..., xₙ` are already discrete, then use [`UniqueElements`](@extref ComplexityMeasures) as 
 the first argument to directly construct the joint contingency table.
 
 If `x₁, x₂, ..., xₙ` need to be discretized, provide as the first argument
@@ -52,10 +52,10 @@ z = rand([(1, 2), (2, 1)], n)
 counts(UniqueElements(), x, y, z)
 ```
 
-See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@ref), [`OutcomeSpace`](@ref),
+See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@extref ComplexityMeasures), [`OutcomeSpace`](@ref),
 [`probabilities`](@ref).
 """
-function counts(o::UniqueElements, x::Vararg{VectorOrStateSpaceSet, N}) where N # this extends ComplexityMeasures.jl definition
+function counts(o::UniqueElements, x::Vararg{VectorOrStateSpaceSet,N}) where N # this extends ComplexityMeasures.jl definition
     # Get marginal probabilities and outcomes
     L = length(x)
     cts, lmaps, encoded_outcomes = counts_table(x...)
@@ -66,7 +66,7 @@ function counts(o::UniqueElements, x::Vararg{VectorOrStateSpaceSet, N}) where N 
     return Counts(cts, actual_outcomes)
 end
 
-function counts(x::Vararg{VectorOrStateSpaceSet, N}) where N
+function counts(x::Vararg{VectorOrStateSpaceSet,N}) where N
     if N == 1
         return ComplexityMeasures.counts(UniqueElements(), x...)
     else
@@ -81,7 +81,7 @@ function to_outcomes(lmap::Dict, encoded_outcomes::Vector{<:Integer})
 end
 
 function counts_table(x...)
-    Ls = length.(x);
+    Ls = length.(x)
     if !allequal(Ls)
         throw(ArgumentError("Input data must have equal lengths. Got lengths $Ls."))
     end
@@ -96,7 +96,7 @@ function counts_table(x...)
 
     # Create the table with correct dimensions, assumming the outcome space is
     # fully determined by the elements that are present in `x`.
-    table_dims = length.(unique_elements.(x));
+    table_dims = length.(unique_elements.(x))
     cts = zeros(Int, table_dims)
 
     # Each element in `X` isa `SVector{m, Int}`, so can be treated as a cartesian index.
@@ -162,10 +162,10 @@ _levelsmap(x::AbstractStateSpaceSet) = levelsmap(x.data)
 unique_elements(x) = unique(x)
 unique_elements(x::AbstractStateSpaceSet) = unique(x.data)
 
-function marginal(c::Counts; dims = 1:ndims(c))
+function marginal(c::Counts; dims=1:ndims(c))
     alldims = 1:ndims(c)
     reduce_dims = (setdiff(alldims, dims)...,)
-    marginal = dropdims(sum(c.cts, dims = reduce_dims), dims = reduce_dims)
+    marginal = dropdims(sum(c.cts, dims=reduce_dims), dims=reduce_dims)
     include_idxs = setdiff(alldims, reduce_dims)
     new_outcomes = c.outcomes[include_idxs]
     new_dimlabels = c.dimlabels[include_idxs]
@@ -180,13 +180,13 @@ end
 # ----------------------------------------------------------------
 # If multiple encodings are given, the number of encodings must match the number of
 # input variables.
-function counts(encoding::CodifyPoints{N}, x::Vararg{Any, N}) where {N}
+function counts(encoding::CodifyPoints{N}, x::Vararg{Any,N}) where {N}
     x̂ = codify(encoding, x...)
     return counts(UniqueElements(), x̂...)
 end
 
 # If only one encoding is given, apply same encoding to all points
-function counts(encoding::CodifyPoints{1}, x::Vararg{Any, N}) where {Any, N}
+function counts(encoding::CodifyPoints{1}, x::Vararg{Any,N}) where {Any,N}
     e = first(encoding.encodings)
     x̂ = ([encode(e, pt) for pt in xₖ] for xₖ in x)
     return counts(UniqueElements(), x̂...)
@@ -194,7 +194,7 @@ end
 
 # Per variable/column
 # ----------------------------------------------------------------
-function counts(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
+function counts(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceSet,N}) where N
     o = first(discretization.outcome_spaces)
     # Treat 1D state space sets as vectors, so we can apply the outcome space sequentially.
     # TODO: show warning or not? I think this can be silent, because I can't really think of a situation
@@ -204,7 +204,7 @@ function counts(discretization::CodifyVariables{1}, x::Vararg{ArrayOrStateSpaceS
     return counts(x̂...)
 end
 
-function counts(d::CodifyVariables{1, UniqueElements}, x::Vararg{ArrayOrStateSpaceSet, N}) where N
+function counts(d::CodifyVariables{1,UniqueElements}, x::Vararg{ArrayOrStateSpaceSet,N}) where N
     o = first(d.outcome_spaces)
     return counts(o, x...)
 end
@@ -218,7 +218,7 @@ as_vec(x::AbstractStateSpaceSet{1}) = [first(xᵢ) for xᵢ in vec(x)]
 # guaranteed API-wise that embedding vectors are constructed in the same way
 # (although *in practice* all `OutcomeSpace` that use embeddings do so 
 # per v3.6 of ComplexityMeasures.jl).
-function counts(discretization::CodifyVariables{N}, x::Vararg{Any, N}) where N
+function counts(discretization::CodifyVariables{N}, x::Vararg{Any,N}) where N
     encoded_pts = codify(discretization, x...)
     return counts(encoded_pts...)
 end

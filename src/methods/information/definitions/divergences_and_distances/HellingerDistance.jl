@@ -31,7 +31,7 @@ D_{H}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 - [Example 1](@ref example_HellingerDistance_precomputed_probabilities): From precomputed probabilities
 - [Example 2](@ref example_HellingerDistance_JointProbabilities_OrdinalPatterns): 
-    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@ref) outcome space
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space
 """
 struct HellingerDistance <: DivergenceOrDistance end
 
@@ -45,5 +45,5 @@ function association(est::JointProbabilities{<:HellingerDistance}, x, y)
 end
 
 function association(measure::HellingerDistance, px::Probabilities, py::Probabilities)
-    return 1/sqrt(2) * sum((sqrt(pxᵢ) - sqrt(pyᵢ))^2 for (pxᵢ, pyᵢ) in zip(px, py))
+    return 1 / sqrt(2) * sum((sqrt(pxᵢ) - sqrt(pyᵢ))^2 for (pxᵢ, pyᵢ) in zip(px, py))
 end

@@ -125,7 +125,7 @@ FixedRectangularBinning
 #### Example: encoding *columns* (one variable at a time)
 
 Some [`OutcomeSpace`](@ref)s dictate a sliding window which has the width of one element
-when used with [`CodifyVariables`](@ref). [`ValueBinning`](@ref) is such an outcome space.
+when used with [`CodifyVariables`](@ref). [`ValueBinning`](@extref ComplexityMeasures) is such an outcome space.
 
 ```@example example_encode_vars
 using Associations
@@ -136,17 +136,17 @@ o = ValueBinning(3)
 cx = codify(CodifyVariables(o), x)
 ```
 
-We can verify that [`ValueBinning`](@ref) preserves the cardinality of the input dataset.
+We can verify that [`ValueBinning`](@extref ComplexityMeasures) preserves the cardinality of the input dataset.
 
 ```@example example_encode_vars
 length(x) == length(cx)
 ```
 
-Other outcome spaces such as [`Dispersion`](@ref) or [`OrdinalPatterns`](@ref) do not 
+Other outcome spaces such as [`Dispersion`](@extref ComplexityMeasures) or [`OrdinalPatterns`](@extref ComplexityMeasures) do not 
 preserve the cardinality of the input dataset when used with [`CodifyVariables`](@ref). This is 
 because when they are applied in a sliding window, they compress sliding windows consisting of 
 potentially multiple points into single integers. This means that some points at the 
-end of each input variable are lost. For example, with [`OrdinalPatterns`](@ref), the number 
+end of each input variable are lost. For example, with [`OrdinalPatterns`](@extref ComplexityMeasures), the number 
 of encoded points decrease with the embedding parameter `m`.
 
 ```@example example_encode_vars

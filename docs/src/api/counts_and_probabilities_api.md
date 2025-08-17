@@ -27,7 +27,7 @@ marginal
 ## [Example: estimating [`Counts`](@ref) and [`Probabilities`](@ref)](@id tutorial_probabilities)
 
 Estimating multivariate counts (contingency matrices) and PMFs is simple. If the data are pre-discretized, then
-we can use [`UniqueElements`](@ref) to simply count the number of occurrences.
+we can use [`UniqueElements`](@extref ComplexityMeasures) to simply count the number of occurrences.
 
 ```@example counts_probs_tutorial
 using Associations
