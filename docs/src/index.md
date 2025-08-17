@@ -55,10 +55,6 @@ Input data for Associations.jl are given as:
     can be any arbitrarily complex data type (as long as it's hashable), for example
     `Vector{String}`, `{Vector{Int}}`, or `Vector{Tuple{Int, String}}`.
 
-```@docs
-StateSpaceSets.StateSpaceSet
-```
-
 ## Maintainers and contributors
 
 The Associations.jl software is maintained by
