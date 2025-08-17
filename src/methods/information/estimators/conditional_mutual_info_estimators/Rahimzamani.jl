@@ -18,7 +18,7 @@ for data that can be mixtures of discrete and continuous data [Rahimzamani2018](
 
 ## Description
 
-This estimator is very similar to the [`GaoKannanOhViswanath`](@extref ComplexityMeasures) mutual information
+This estimator is very similar to the [`GaoKannanOhViswanath`](@ref) mutual information
 estimator, but has been expanded to the conditional mutual information case.
 
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the

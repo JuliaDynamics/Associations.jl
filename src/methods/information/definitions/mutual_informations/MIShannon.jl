@@ -19,10 +19,10 @@ The Shannon mutual information ``I_S(X; Y)``.
 
 - [`JointProbabilities`](@ref) (generic)
 - [`EntropyDecomposition`](@ref) (generic)
-- [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures)
-- [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures)
+- [`KraskovStögbauerGrassberger2`](@ref)
+- [`KraskovStögbauerGrassberger2`](@ref)
 - [`GaoOhViswanath`](@ref)
-- [`GaoKannanOhViswanath`](@extref ComplexityMeasures)
+- [`GaoKannanOhViswanath`](@ref)
 - [`GaussianMI`](@ref)
 
 ## Discrete definition
@@ -73,19 +73,19 @@ I^S(X; Y) = h^S(X) + h_q^S(Y) - h^S(X, Y),
 
 where ``h^S(\\cdot)`` and ``h^S(\\cdot, \\cdot)`` are the marginal and joint
 differential Shannon entropies. This definition is used by [`association`](@ref) when
-called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialInfoEstimator`](@extref ComplexityMeasures).
+called with [`EntropyDecomposition`](@ref) estimator and a [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator).
 
 ## Estimation
 
-- [Example 1](@ref example_MIShannon_JointProbabilities_ValueBinning): [`JointProbabilities`](@ref) with [`ValueBinning`](@extref ComplexityMeasures) outcome space.
-- [Example 2](@ref example_MIShannon_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures) outcome space on string data.
+- [Example 1](@ref example_MIShannon_JointProbabilities_ValueBinning): [`JointProbabilities`](@ref) with [`ValueBinning`](@extref ComplexityMeasures.ValueBinning) outcome space.
+- [Example 2](@ref example_MIShannon_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) outcome space on string data.
 - [Example 3](@ref example_MIShannon_GaussianMI): Dedicated [`GaussianMI`](@ref) estimator.
-- [Example 4](@ref example_MIShannon_KSG1): Dedicated [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator.
-- [Example 5](@ref example_MIShannon_KSG2): Dedicated [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator.
-- [Example 6](@ref example_MIShannon_GaoKannanOhViswanath): Dedicated [`GaoKannanOhViswanath`](@extref ComplexityMeasures) estimator.
-- [Example 7](@ref example_MIShannon_EntropyDecomposition_Kraskov): [`EntropyDecomposition`](@ref) with [`Kraskov`](@extref ComplexityMeasures) estimator.
-- [Example 8](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps): [`EntropyDecomposition`](@ref) with [`BubbleSortSwaps`](@ref).
-- [Example 9](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning): [`EntropyDecomposition`](@ref) with [`Jackknife`](@extref ComplexityMeasures) estimator and [`ValueBinning`](@extref ComplexityMeasures) outcome space.
+- [Example 4](@ref example_MIShannon_KSG1): Dedicated [`KraskovStögbauerGrassberger2`](@ref) estimator.
+- [Example 5](@ref example_MIShannon_KSG2): Dedicated [`KraskovStögbauerGrassberger2`](@ref) estimator.
+- [Example 6](@ref example_MIShannon_GaoKannanOhViswanath): Dedicated [`GaoKannanOhViswanath`](@ref) estimator.
+- [Example 7](@ref example_MIShannon_EntropyDecomposition_Kraskov): [`EntropyDecomposition`](@ref) with [`Kraskov`](@extref ComplexityMeasures.Kraskov) estimator.
+- [Example 8](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps): [`EntropyDecomposition`](@ref) with [`BubbleSortSwaps`](@extref ComplexityMeasures.BubbleSortSwaps).
+- [Example 9](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning): [`EntropyDecomposition`](@ref) with [`Jackknife`](@extref ComplexityMeasures.Jackknife) estimator and [`ValueBinning`](@extref ComplexityMeasures.ValueBinning) outcome space.
 - [Example 10](@ref example_MIShannon_reproducing_Kraskov): Reproducing Kraskov et al. (2004).
 """
 Base.@kwdef struct MIShannon{B} <: MutualInformation

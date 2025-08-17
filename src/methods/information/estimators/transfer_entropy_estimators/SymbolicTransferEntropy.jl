@@ -16,7 +16,7 @@ A convenience estimator for symbolic transfer entropy [Staniek2008](@cite).
 
 [Symbolic transfer entropy](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.100.158101)
 consists of two simple steps. First, the input time series are encoded using [`codify`](@ref) with
-the [`CodifyVariables`](@ref) discretization and the [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space. This 
+the [`CodifyVariables`](@ref) discretization and the [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns) outcome space. This 
 transforms the input time series into integer time series. Transfer entropy entropy is then 
 estimated from the encoded time series by applying  
 

@@ -38,18 +38,18 @@ estimator from the list below as its input.
 
 | Estimator                      | Sub-estimator                    | Principle                    |
 | :----------------------------- | :------------------------------- | :--------------------------- |
-| [`EntropyDecomposition`](@ref) | [`LeonenkoProzantoSavani`](@extref ComplexityMeasures) | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`ValueBinning`](@extref ComplexityMeasures)           | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`Dispersion`](@extref ComplexityMeasures)             | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`OrdinalPatterns`](@extref ComplexityMeasures)        | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`UniqueElements`](@extref ComplexityMeasures)         | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`TransferOperator`](@extref ComplexityMeasures)       | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`LeonenkoProzantoSavani`](@extref ComplexityMeasures.LeonenkoProzantoSavani) | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`ValueBinning`](@extref ComplexityMeasures.ValueBinning)           | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`Dispersion`](@extref ComplexityMeasures.Dispersion)             | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns)        | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`UniqueElements`](@extref ComplexityMeasures.UniqueElements)         | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`TransferOperator`](@extref ComplexityMeasures.TransferOperator)       | Four-entropies decomposition |
 
 Any of these estimators must be given as input to a [`CMIDecomposition](@ref) estimator.
 
 ## Estimation
 
-- [Example 1](@ref example_TERenyiJizba_EntropyDecomposition_TransferOperator): [`EntropyDecomposition`](@ref) with [`TransferOperator`](@extref ComplexityMeasures) outcome space.
+- [Example 1](@ref example_TERenyiJizba_EntropyDecomposition_TransferOperator): [`EntropyDecomposition`](@ref) with [`TransferOperator`](@extref ComplexityMeasures.TransferOperator) outcome space.
 
 """
 struct TERenyiJizba{B,Q,EMB} <: TransferEntropy

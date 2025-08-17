@@ -12,7 +12,7 @@ export FPVP
 The Frenzel-Pompe-Vejmelka-Paluš (or `FPVP` for short)
 [`ConditionalMutualInformationEstimator`](@ref) is used to estimate the
 conditional mutual information using a `k`-th nearest neighbor approach that is
-analogous to that of the [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) mutual information
+analogous to that of the [`KraskovStögbauerGrassberger2`](@ref) mutual information
 estimator from [Frenzel2007](@citet) and [Vejmelka2008](@citet).
 
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the

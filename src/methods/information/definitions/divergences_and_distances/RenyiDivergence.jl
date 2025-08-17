@@ -21,7 +21,7 @@ The Rényi divergence of positive order `q`.
 The Rényi divergence between two probability distributions
 ``P_X = (p_x(\\omega_1), \\ldots, p_x(\\omega_n))`` and
 ``P_Y = (p_y(\\omega_1), \\ldots, p_y(\\omega_m))``, both defined over the same
-[`OutcomeSpace`](@ref) ``\\Omega = \\{\\omega_1, \\ldots, \\omega_n \\}``, is defined as
+[`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace) ``\\Omega = \\{\\omega_1, \\ldots, \\omega_n \\}``, is defined as
 [vanErven2014](@citet).
 
 ```math
@@ -32,9 +32,9 @@ D_{q}(P_Y(\\Omega) || P_Y(\\Omega)) =
 ## Implements
 
 - [`information`](@ref). Used to compute the Rényi divergence between two pre-computed
-    probability distributions. If used with [`RelativeAmount`](@ref), the KL divergence may
+    probability distributions. If used with [`RelativeAmount`](@extref ComplexityMeasures.RelativeAmount), the KL divergence may
     be undefined to due some outcomes having zero counts. Use some other
-    [`ProbabilitiesEstimator`](@extref ComplexityMeasures) like [`BayesianRegularization`](@ref) to ensure
+    [`ProbabilitiesEstimator`](@extref ComplexityMeasures.ProbabilitiesEstimator) like [`BayesianRegularization`](@extref ComplexityMeasures.BayesianRegularization) to ensure
     all estimated probabilities are nonzero.
 
 !!! note 
@@ -46,7 +46,7 @@ D_{q}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 - [Example 1](@ref example_RenyiDivergence_precomputed_probabilities): From precomputed probabilities
 - [Example 2](@ref example_RenyiDivergence_JointProbabilities_OrdinalPatterns): 
-    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns) outcome space
 """
 struct RenyiDivergence{Q,B} <: DivergenceOrDistance
     q::Q

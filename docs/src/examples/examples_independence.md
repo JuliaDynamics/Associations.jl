@@ -387,7 +387,7 @@ end
 
 ### [[`CMIShannon`](@ref)](@id example_LocalPermutationTest_CMIShannon)
 
-To estimate CMI, we'll use the [`Kraskov`](@extref ComplexityMeasures) differential
+To estimate CMI, we'll use the [`Kraskov`](@extref ComplexityMeasures.Kraskov) differential
 entropy estimator, which naively computes CMI as a sum of entropy terms without guaranteed
 bias cancellation.
 
@@ -504,7 +504,7 @@ independence(test, x, z, y)
 
 ## [[`JointProbabilities`](@ref) estimation on categorical data](@id example_SECMITEST_JointProbabilities_CodifyVariables_UniqueElements)
 
-Note that this also works for categorical variables. Just use [`UniqueElements`](@extref ComplexityMeasures) to 
+Note that this also works for categorical variables. Just use [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) to 
 discretize!
 
 ```@example example_SECMITest_categorical

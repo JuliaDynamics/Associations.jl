@@ -42,7 +42,7 @@ I(X; Y | Z)
 ```
 
 where ``I^S(\\cdot; \\cdot)`` is the Shannon mutual information [`MIShannon`](@ref),
-and ``H^S(\\cdot)`` is the [`Shannon`](@extref ComplexityMeasures) entropy.
+and ``H^S(\\cdot)`` is the [`Shannon`](@extref ComplexityMeasures.Shannon) entropy.
 
 Differential Shannon CMI is obtained by replacing the entropies by
 differential entropies.
@@ -50,11 +50,11 @@ differential entropies.
 ## Estimation
 
 - [Example 1](@ref example_CMIShannon_EntropyDecomposition_Kraskov): 
-    [`EntropyDecomposition`](@ref) with [`Kraskov`](@extref ComplexityMeasures) estimator.
+    [`EntropyDecomposition`](@ref) with [`Kraskov`](@extref ComplexityMeasures.Kraskov) estimator.
 - [Example 2](@ref example_CMIShannon_EntropyDecomposition_ValueBinning):
-    [`EntropyDecomposition`](@ref) with [`ValueBinning`](@extref ComplexityMeasures) estimator.
+    [`EntropyDecomposition`](@ref) with [`ValueBinning`](@extref ComplexityMeasures.ValueBinning) estimator.
 - [Example 3](@ref example_CMIShannon_MIDecomposition_KSG1): 
-    [`MIDecomposition`](@ref) with [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) estimator.
+    [`MIDecomposition`](@ref) with [`KraskovStögbauerGrassberger2`](@ref) estimator.
 """
 Base.@kwdef struct CMIShannon{B} <: ConditionalMutualInformation
     base::B = 2

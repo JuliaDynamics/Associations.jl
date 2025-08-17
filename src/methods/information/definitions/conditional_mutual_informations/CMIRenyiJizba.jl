@@ -32,11 +32,11 @@ where ``I_q^{R_{J}}(X; Z)`` is the [`MIRenyiJizba`](@ref) mutual information.
 ## Estimation
 
 - [Example 1](@ref example_CMIRenyiJizba_JointProbabilities_BubbleSortSwaps): 
-    [`JointProbabilities`](@ref) with [`BubbleSortSwaps`](@ref) outcome space.
+    [`JointProbabilities`](@ref) with [`BubbleSortSwaps`](@extref ComplexityMeasures.BubbleSortSwaps) outcome space.
 - [Example 2](@ref example_CMIRenyiJizba_EntropyDecomposition_OrdinalPatterns): 
-    [`EntropyDecomposition`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space.
+    [`EntropyDecomposition`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns) outcome space.
 - [Example 3](@ref example_CMIRenyiJizba_EntropyDecomposition_LeonenkoProzantoSavani): 
-    [`EntropyDecomposition`](@ref) with differential entropy estimator [`LeonenkoProzantoSavani`](@extref ComplexityMeasures).
+    [`EntropyDecomposition`](@ref) with differential entropy estimator [`LeonenkoProzantoSavani`](@extref ComplexityMeasures.LeonenkoProzantoSavani).
 """
 Base.@kwdef struct CMIRenyiJizba{B,Q} <: ConditionalMutualInformation
     base::B = 2

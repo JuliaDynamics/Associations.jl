@@ -31,7 +31,7 @@ where ``q > 0`` and ``q != 1``.
 ## Estimation
 
 - [Example 1](@ref example_JointEntropyRenyi_ValueBinning): 
-    [`JointProbabilities`](@ref) with [`ValueBinning`](@extref ComplexityMeasures) outcome space
+    [`JointProbabilities`](@ref) with [`ValueBinning`](@extref ComplexityMeasures.ValueBinning) outcome space
 """
 Base.@kwdef struct JointEntropyRenyi{B,Q} <: JointEntropy
     base::B = 2

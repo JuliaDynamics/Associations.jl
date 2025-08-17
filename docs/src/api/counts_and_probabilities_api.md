@@ -24,10 +24,10 @@ The utility function [`marginal`](@ref) is also useful.
 marginal
 ```
 
-## [Example: estimating [`Counts`](@ref) and [`Probabilities`](@ref)](@id tutorial_probabilities)
+## [Example: estimating [`Counts`](@extref ComplexityMeasures.Counts) and [`Probabilities`](@extref ComplexityMeasures.Probabilities)](@id tutorial_probabilities)
 
 Estimating multivariate counts (contingency matrices) and PMFs is simple. If the data are pre-discretized, then
-we can use [`UniqueElements`](@extref ComplexityMeasures) to simply count the number of occurrences.
+we can use [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) to simply count the number of occurrences.
 
 ```@example counts_probs_tutorial
 using Associations
@@ -47,7 +47,7 @@ probabilities(discretization, x, y, z)
 ```
 
 For numerical data, we can estimate both counts and probabilities using [`CodifyVariables`](@ref)
-with any count-based [`OutcomeSpace`](@ref).
+with any count-based [`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace).
 
 ```@example counts_probs_tutorial
 using Associations
@@ -56,7 +56,7 @@ discretization = CodifyVariables(BubbleSortSwaps(m = 4))
 probabilities(discretization, x, y)
 ```
 
-For more fine-grained control, we can use [`CodifyPoints`](@ref) with one or several [`Encoding`](@ref)s.
+For more fine-grained control, we can use [`CodifyPoints`](@ref) with one or several [`Encoding`](@extref ComplexityMeasures.Encoding)s.
 
 ```@example counts_probs_tutorial
 using Associations

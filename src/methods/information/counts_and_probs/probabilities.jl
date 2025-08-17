@@ -12,16 +12,16 @@ export marginal
     probabilities(encoding::CodifyPoints, x₁, x₂, ..., xₙ) → Counts{N}
     probabilities(encoding::CodifyVariables, x₁, x₂, ..., xₙ) → Counts{N}
 
-Construct an `N`-dimensional [`Probabilities`](@ref) array from the input iterables
+Construct an `N`-dimensional [`Probabilities`](@extref ComplexityMeasures.Probabilities) array from the input iterables
 `x₁, x₂, ..., xₙ` which are such that 
 `length(x₁) == length(x₂) == ⋯ == length(xₙ)`.
 
 ## Description
 
 Probabilities are computed by first constructing a joint contingency matrix in the form 
-of a [`Counts`](@ref) instance. 
+of a [`Counts`](@extref ComplexityMeasures.Counts) instance. 
 
-If `x₁, x₂, ..., xₙ` are already discrete, then use [`UniqueElements`](@extref ComplexityMeasures) as 
+If `x₁, x₂, ..., xₙ` are already discrete, then use [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) as 
 the first argument to directly construct the joint contingency table.
 
 If `x₁, x₂, ..., xₙ` need to be discretized, provide as the first argument
@@ -51,7 +51,7 @@ z = rand([(1, 2), (2, 1)], n)
 probabilities(UniqueElements(), x, y, z)
 ```
 
-See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@extref ComplexityMeasures), [`OutcomeSpace`](@ref).
+See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@extref ComplexityMeasures.UniqueElements), [`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace).
 """
 function probabilities(o::OutcomeSpace) end
 

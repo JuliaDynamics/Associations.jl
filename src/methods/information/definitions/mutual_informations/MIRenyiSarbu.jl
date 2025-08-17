@@ -36,8 +36,8 @@ I(X, Y)^R_q =
 
 ## Estimation
 
-- [Example 1](@ref example_MIRenyiSarbu_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures) for categorical data.
-- [Example 2](@ref example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning): [`JointProbabilities`](@ref) with [`CosineSimilarityBinning`](@ref) for numerical data.
+- [Example 1](@ref example_MIRenyiSarbu_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) for categorical data.
+- [Example 2](@ref example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning): [`JointProbabilities`](@ref) with [`CosineSimilarityBinning`](@extref ComplexityMeasures.CosineSimilarityBinning) for numerical data.
 """
 Base.@kwdef struct MIRenyiSarbu{B,Q} <: MutualInformation
     base::B = 2

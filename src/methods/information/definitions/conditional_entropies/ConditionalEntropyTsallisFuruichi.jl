@@ -40,9 +40,9 @@ is undefined for a particular value, then the measure is undefined and `NaN` is 
 
 - [Example 1](@ref example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements): 
     [`JointProbabilities`](@ref) estimator with[`CodifyVariables`](@ref) discretization and 
-    [`UniqueElements`](@extref ComplexityMeasures) outcome space on categorical data.
+    [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) outcome space on categorical data.
 - [Example 2](@ref example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyPoints_UniqueElementsEncoding): 
-    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@ref)
+    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@extref ComplexityMeasures.UniqueElementsEncoding)
     encoding of points on numerical data.
 """
 Base.@kwdef struct ConditionalEntropyTsallisFuruichi{B,Q} <: ConditionalEntropy

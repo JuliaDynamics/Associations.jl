@@ -42,12 +42,22 @@ links = InterLinks(
         "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/complexitymeasures/stable/objects.inv",
         joinpath(@__DIR__, "inventories", "Documenter.toml")
     ),
-    "StateSpaceSets" => (
-        "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/statespacesets/stable/",
-        "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/statespacesets/stable/objects.inv",
+    "Documenter" => (
+        "https://documenter.juliadocs.org/stable/",
+        "https://documenter.juliadocs.org/stable/objects.inv",
         joinpath(@__DIR__, "inventories", "Documenter.toml")
     ),
+    # "StateSpaceSets" => (
+    #     "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/statespacesets/stable/",
+    #     "https://juliadynamics.github.io/DynamicalSystemsDocs.jl/statespacesets/stable/objects.inv",
+    #     joinpath(@__DIR__, "inventories", "Documenter.toml")
+    # ),
 );
+@show links["ComplexityMeasures"]
+@show links["Documenter"]
+for item in links["ComplexityMeasures"]
+    @show item
+end
 
 function build_docs_with_style(pages, modules...; bib=nothing,
     authors="Kristian Haaga, George Datseris and others", draft=false, kwargs...)
@@ -82,7 +92,7 @@ function build_docs_with_style(pages, modules...; bib=nothing,
     if isnothing(bib)
         makedocs(; plugins=[links], settings...)
     else
-        makedocs(; plugins=[bib, links], settings...)
+        makedocs(; plugins=[links, bib], settings...)
     end
 
     if CI

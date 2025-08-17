@@ -20,7 +20,7 @@ The variation distance.
 The variation distance between two probability distributions
 ``P_X = (p_x(\\omega_1), \\ldots, p_x(\\omega_n))`` and
 ``P_Y = (p_y(\\omega_1), \\ldots, p_y(\\omega_m))``, both defined over the same
-[`OutcomeSpace`](@ref) ``\\Omega = \\{\\omega_1, \\ldots, \\omega_n \\}``, is
+[`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace) ``\\Omega = \\{\\omega_1, \\ldots, \\omega_n \\}``, is
 [defined](https://en.wikipedia.org/wiki/Variation_distance) as
 
 ```math
@@ -32,7 +32,7 @@ D_{V}(P_Y(\\Omega) || P_Y(\\Omega)) =
 
 - [Example 1](@ref example_VariationDistance_precomputed_probabilities): From precomputed probabilities
 - [Example 2](@ref example_VariationDistance_JointProbabilities_OrdinalPatterns): 
-    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns) outcome space
 """
 struct VariationDistance <: DivergenceOrDistance end
 

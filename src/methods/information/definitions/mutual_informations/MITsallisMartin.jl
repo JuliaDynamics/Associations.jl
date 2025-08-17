@@ -30,13 +30,13 @@ I_{\\text{Martin}}^T(X, Y, q) := H_q^T(X) + H_q^T(Y) - (1 - q) H_q^T(X) H_q^T(Y)
 ```
 
 where ``H^S(\\cdot)`` and ``H^S(\\cdot, \\cdot)`` are the marginal and joint Shannon
-entropies, and `q` is the [`Tsallis`](@extref ComplexityMeasures)-parameter.
+entropies, and `q` is the [`Tsallis`](@extref ComplexityMeasures.Tsallis)-parameter.
 
 ## Estimation
 
-- [Example 1](@ref example_MITsallisMartin_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures) outcome space.
-- [Example 2](@ref example_MITsallisMartin_EntropyDecomposition_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@extref ComplexityMeasures) estimator.
-- [Example 3](@ref example_MITsallisMartin_EntropyDecomposition_OrdinalPatterns): [`EntropyDecomposition`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space.
+- [Example 1](@ref example_MITsallisMartin_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) outcome space.
+- [Example 2](@ref example_MITsallisMartin_EntropyDecomposition_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@extref ComplexityMeasures.LeonenkoProzantoSavani) estimator.
+- [Example 3](@ref example_MITsallisMartin_EntropyDecomposition_OrdinalPatterns): [`EntropyDecomposition`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns) outcome space.
 """
 Base.@kwdef struct MITsallisMartin{B,Q} <: MutualInformation
     base::B = 2

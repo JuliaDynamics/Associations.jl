@@ -18,23 +18,23 @@ to handle discretization.
 
 ## Supported estimators
 
-- [`ValueBinning`](@extref ComplexityMeasures). Bin visitation frequencies are counted in the joint space `XY`,
+- [`ValueBinning`](@extref ComplexityMeasures.ValueBinning). Bin visitation frequencies are counted in the joint space `XY`,
     then marginal visitations are obtained from the joint bin visits.
-    This behaviour is the same for both [`FixedRectangularBinning`](@ref) and
-    [`RectangularBinning`](@ref) (which adapts the grid to the data).
-    When using [`FixedRectangularBinning`](@ref), the range along the first dimension
+    This behaviour is the same for both [`FixedRectangularBinning`](@extref ComplexityMeasures.FixedRectangularBinning) and
+    [`RectangularBinning`](@extref ComplexityMeasures.RectangularBinning) (which adapts the grid to the data).
+    When using [`FixedRectangularBinning`](@extref ComplexityMeasures.FixedRectangularBinning), the range along the first dimension
     is used as a template for all other dimensions.
-- [`OrdinalPatterns`](@extref ComplexityMeasures). Each timeseries is separately [`codify`](@ref)-ed by 
+- [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns). Each timeseries is separately [`codify`](@ref)-ed by 
     embedding the timeseries, then sequentially encoding the ordinal patterns of 
     the embedding vectors.
-- [`Dispersion`](@extref ComplexityMeasures). Each timeseries is separately [`codify`](@ref)-ed by 
+- [`Dispersion`](@extref ComplexityMeasures.Dispersion). Each timeseries is separately [`codify`](@ref)-ed by 
     embedding the timeseries, then sequentially encoding the embedding vectors
     according to their dispersion pattern (which for each embedding vector is computed
     relative to all other embedding vectors).
-- [`CosineSimilarityBinning`](@ref). Each timeseries is separately [`codify`](@ref)-ed
+- [`CosineSimilarityBinning`](@extref ComplexityMeasures.CosineSimilarityBinning). Each timeseries is separately [`codify`](@ref)-ed
     by embedding the timeseries, the encoding the embedding points in a 
     in a sequential manner according to the cosine similarity of the embedding vectors.
-- [`UniqueElements`](@extref ComplexityMeasures). Each timeseries is [`codify`](@ref)-ed according to 
+- [`UniqueElements`](@extref ComplexityMeasures.UniqueElements). Each timeseries is [`codify`](@ref)-ed according to 
     its unique values (i.e. each unique element gets assigned a specific integer).
 
 More implementations are possible.

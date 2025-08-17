@@ -31,7 +31,7 @@ where we define ``log(p(x, y)) := 0`` if ``p(x, y) = 0``.
 ## Estimation
 
 - [Example 1](@ref example_JointEntropyShannon_Dispersion): 
-    [`JointProbabilities`](@ref) with [`Dispersion`](@extref ComplexityMeasures) outcome space
+    [`JointProbabilities`](@ref) with [`Dispersion`](@extref ComplexityMeasures.Dispersion) outcome space
 """
 Base.@kwdef struct JointEntropyShannon{B} <: JointEntropy
     base::B = 2

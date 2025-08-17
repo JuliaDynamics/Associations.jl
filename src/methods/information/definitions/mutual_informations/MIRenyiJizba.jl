@@ -26,14 +26,14 @@ The Rényi mutual information ``I_q^{R_{J}}(X; Y)`` defined in [Jizba2012](@cite
 I_q^{R_{J}}(X; Y) = H_q^{R}(X) + H_q^{R}(Y) - H_q^{R}(X, Y),
 ```
 
-where ``H_q^{R}(\\cdot)`` is the [`Rényi`](@ref) entropy.
+where ``H_q^{R}(\\cdot)`` is the [`Renyi`](@extref ComplexityMeasures.Renyi) entropy.
 
 
 ## Estimation
 
-- [Example 1](@ref example_MIRenyiJizba_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures) outcome space.
-- [Example 2](@ref example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@extref ComplexityMeasures).
-- [Example 3](@ref example_MIRenyiJizba_EntropyDecomposition_ValueBinning): [`EntropyDecomposition`](@ref) with [`ValueBinning`](@extref ComplexityMeasures).
+- [Example 1](@ref example_MIRenyiJizba_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) outcome space.
+- [Example 2](@ref example_MIRenyiJizba_JointProbabilities_LeonenkoProzantoSavani): [`EntropyDecomposition`](@ref) with [`LeonenkoProzantoSavani`](@extref ComplexityMeasures.LeonenkoProzantoSavani).
+- [Example 3](@ref example_MIRenyiJizba_EntropyDecomposition_ValueBinning): [`EntropyDecomposition`](@ref) with [`ValueBinning`](@extref ComplexityMeasures.ValueBinning).
 """
 Base.@kwdef struct MIRenyiJizba{B,Q} <: MutualInformation
     base::B = 2

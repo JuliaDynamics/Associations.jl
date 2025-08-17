@@ -35,7 +35,7 @@ This quantity is estimated from data using one of the estimators below from the 
 
 - [Example 1](@ref example_ShortExpansionConditionalMutualInformation_JointProbabilities_CodifyVariables_ValueBinning):
     Estimating [`ShortExpansionConditionalMutualInformation`](@ref) using the [`JointProbabilities`](@ref) estimator using a
-    [`CodifyVariables`](@ref) with [`ValueBinning`](@extref ComplexityMeasures) discretization.
+    [`CodifyVariables`](@ref) with [`ValueBinning`](@extref ComplexityMeasures.ValueBinning) discretization.
 """
 Base.@kwdef struct ShortExpansionConditionalMutualInformation{B} <: MultivariateInformationMeasure
     base::B = 2

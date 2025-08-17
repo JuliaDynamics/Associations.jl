@@ -32,7 +32,7 @@ we define ``log_q(x, q) := 0`` if ``q = 0``.
 ## Estimation
 
 - [Example 1](@ref example_JointEntropyTsallis_OrdinalPatterns): 
-    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures) outcome space
+    [`JointProbabilities`](@ref) with [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns) outcome space
 """
 Base.@kwdef struct JointEntropyTsallis{B,Q} <: JointEntropy
     base::B = 2

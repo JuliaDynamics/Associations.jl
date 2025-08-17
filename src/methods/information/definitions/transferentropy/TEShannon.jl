@@ -32,7 +32,7 @@ are constructed using present/past values and future values, respectively.
 ## Estimation
 
 - [Example 1](@ref example_TEShannon_EntropyDecomposition_TransferOperator): 
-    [`EntropyDecomposition`](@ref) with [`TransferOperator`](@extref ComplexityMeasures) outcome space.
+    [`EntropyDecomposition`](@ref) with [`TransferOperator`](@extref ComplexityMeasures.TransferOperator) outcome space.
 - [Example 2](@ref example_TEShannon_SymbolicTransferEntropy): Estimation using the
     [`SymbolicTransferEntropy`](@ref) estimator.
 """

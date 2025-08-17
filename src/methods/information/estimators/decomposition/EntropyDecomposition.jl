@@ -25,14 +25,14 @@ per variable/column and each column is encoded into integers using [`codify`](@r
 
 The entropy terms are estimated using `est`, and then combined to form the final 
 estimate of `definition`. No bias correction is applied.
-If `est` is a [`DifferentialInfoEstimator`](@extref ComplexityMeasures), then `discretization` and `pest` 
-are ignored. If `est` is a [`DiscreteInfoEstimator`](@extref ComplexityMeasures), then `discretization` and a
+If `est` is a [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator), then `discretization` and `pest` 
+are ignored. If `est` is a [`DiscreteInfoEstimator`](@extref ComplexityMeasures.DiscreteInfoEstimator), then `discretization` and a
 probabilities estimator `pest` must also be provided (default to `RelativeAmount`, 
 which uses naive plug-in probabilities).
 
 ## Compatible differential information estimators
 
-If using the first signature, any compatible [`DifferentialInfoEstimator`](@extref ComplexityMeasures) can be 
+If using the first signature, any compatible [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator) can be 
 used.
 
 ## Compatible outcome spaces for discrete estimation
@@ -42,12 +42,12 @@ Note that not all outcome spaces will work with all measures.
 
 | Estimator                         | Principle                     |
 | :-------------------------------- | :---------------------------- |
-| [`UniqueElements`](@extref ComplexityMeasures)          | Count of unique elements      |
-| [`ValueBinning`](@extref ComplexityMeasures)            | Binning (histogram)           |
-| [`OrdinalPatterns`](@extref ComplexityMeasures)         | Ordinal patterns              |
-| [`Dispersion`](@extref ComplexityMeasures)              | Dispersion patterns           |
-| [`BubbleSortSwaps`](@ref)         | Sorting complexity            |
-| [`CosineSimilarityBinning`](@ref) | Cosine similarities histogram |
+| [`UniqueElements`](@extref ComplexityMeasures.UniqueElements)          | Count of unique elements      |
+| [`ValueBinning`](@extref ComplexityMeasures.ValueBinning)            | Binning (histogram)           |
+| [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns)         | Ordinal patterns              |
+| [`Dispersion`](@extref ComplexityMeasures.Dispersion)              | Dispersion patterns           |
+| [`BubbleSortSwaps`](@extref ComplexityMeasures.BubbleSortSwaps)         | Sorting complexity            |
+| [`CosineSimilarityBinning`](@extref ComplexityMeasures.CosineSimilarityBinning) | Cosine similarities histogram |
 
 ## Bias 
 
@@ -77,39 +77,39 @@ of entropies using the `Kraskov(Shannon(base = ℯ))` Shannon entropy estimator,
 
 ## Discrete entropy decomposition 
 
-The second signature is for discrete estimation using [`DiscreteInfoEstimator`](@extref ComplexityMeasures)s,
-for example [`PlugIn`](@extref ComplexityMeasures). The given `discretization` scheme (typically an 
-[`OutcomeSpace`](@ref)) controls how the joint/marginals are discretized, and the
+The second signature is for discrete estimation using [`DiscreteInfoEstimator`](@extref ComplexityMeasures.DiscreteInfoEstimator)s,
+for example [`PlugIn`](@extref ComplexityMeasures.PlugIn). The given `discretization` scheme (typically an 
+[`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace)) controls how the joint/marginals are discretized, and the
 probabilities estimator `pest` controls how probabilities are estimated from counts.
 
 !!! note "Bias"
-    Like for [`DifferentialInfoEstimator`](@extref ComplexityMeasures), using a dedicated estimator 
+    Like for [`DifferentialInfoEstimator`](@extref ComplexityMeasures.DifferentialInfoEstimator), using a dedicated estimator 
     for the measure in question will be more reliable than using a decomposition
     estimate. Here's how different `discretization`s are applied:
 
-    - [`ValueBinning`](@extref ComplexityMeasures). Bin visitation frequencies are counted in the joint space
+    - [`ValueBinning`](@extref ComplexityMeasures.ValueBinning). Bin visitation frequencies are counted in the joint space
         `XY`, then marginal visitations are obtained from the joint bin visits.
-        This behaviour is the same for both [`FixedRectangularBinning`](@ref) and
-        [`RectangularBinning`](@ref) (which adapts the grid to the data).
-        When using [`FixedRectangularBinning`](@ref), the range along the first dimension
+        This behaviour is the same for both [`FixedRectangularBinning`](@extref ComplexityMeasures.FixedRectangularBinning) and
+        [`RectangularBinning`](@extref ComplexityMeasures.RectangularBinning) (which adapts the grid to the data).
+        When using [`FixedRectangularBinning`](@extref ComplexityMeasures.FixedRectangularBinning), the range along the first dimension
         is used as a template for all other dimensions. This is a bit slower than naively 
         binning each marginal, but lessens bias.
-    - [`OrdinalPatterns`](@extref ComplexityMeasures). Each timeseries is separately [`codify`](@ref)-ed
+    - [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns). Each timeseries is separately [`codify`](@ref)-ed
         according to its ordinal pattern (no bias correction).
-    - [`Dispersion`](@extref ComplexityMeasures). Each timeseries is separately [`codify`](@ref)-ed according
+    - [`Dispersion`](@extref ComplexityMeasures.Dispersion). Each timeseries is separately [`codify`](@ref)-ed according
         to its dispersion pattern  (no bias correction).
 
 ## Examples
 
 - [Example 1](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning):
-    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@extref ComplexityMeasures)
-    entropy estimated using [`CodifyVariables`](@ref) with [`ValueBinning`](@extref ComplexityMeasures).
+    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@extref ComplexityMeasures.Shannon)
+    entropy estimated using [`CodifyVariables`](@ref) with [`ValueBinning`](@extref ComplexityMeasures.ValueBinning).
 - [Example 2](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps):
-    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@extref ComplexityMeasures)
-    entropy estimated using [`CodifyVariables`](@ref) with [`BubbleSortSwaps`](@ref).
+    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@extref ComplexityMeasures.Shannon)
+    entropy estimated using [`CodifyVariables`](@ref) with [`BubbleSortSwaps`](@extref ComplexityMeasures.BubbleSortSwaps).
 - [Example 3](@ref example_MIShannon_EntropyDecomposition_Kraskov):
-    [`MIShannon`](@ref) estimation using decomposition into differental [`Shannon`](@extref ComplexityMeasures)
-    entropy estimated using the [`Kraskov`](@extref ComplexityMeasures) estimator.
+    [`MIShannon`](@ref) estimation using decomposition into differental [`Shannon`](@extref ComplexityMeasures.Shannon)
+    entropy estimated using the [`Kraskov`](@extref ComplexityMeasures.Kraskov) estimator.
 
 See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).
 """

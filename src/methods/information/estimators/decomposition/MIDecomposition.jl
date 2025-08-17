@@ -21,7 +21,7 @@ value of the measure.
 
 - [Example 1](@ref example_CMIShannon_MIDecomposition): Estimating [`CMIShannon`](@ref)
     using a decomposition into [`MIShannon`](@ref) terms using 
-    the [`KraskovStögbauerGrassberger2`](@extref ComplexityMeasures) mutual information estimator.
+    the [`KraskovStögbauerGrassberger2`](@ref) mutual information estimator.
 
 See also: [`MultivariateInformationMeasureEstimator`](@ref).
 """

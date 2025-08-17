@@ -26,16 +26,16 @@ Abe & Rajagopal's Tsallis conditional entropy between discrete random variables
 H_q^{T_A}(X | Y) = \\dfrac{H_q^T(X, Y) - H_q^T(Y)}{1 + (1-q)H_q^T(Y)},
 ```
 
-where ``H_q^T(\\cdot)`` and ``H_q^T(\\cdot, \\cdot)`` is the [`Tsallis`](@extref ComplexityMeasures)
+where ``H_q^T(\\cdot)`` and ``H_q^T(\\cdot, \\cdot)`` is the [`Tsallis`](@extref ComplexityMeasures.Tsallis)
 entropy and the joint Tsallis entropy.
 
 ## Estimation
 
 - [Example 1](@ref example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyVariables_UniqueElements): 
     [`JointProbabilities`](@ref) estimator with[`CodifyVariables`](@ref) discretization and 
-    [`UniqueElements`](@extref ComplexityMeasures) outcome space on categorical data.
+    [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) outcome space on categorical data.
 - [Example 2](@ref example_ConditionalEntropyTsallisAbe_JointProbabilities_CodifyPoints_UniqueElementsEncoding): 
-    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@ref)
+    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@extref ComplexityMeasures.UniqueElementsEncoding)
     encoding of points on numerical data.
 """
 Base.@kwdef struct ConditionalEntropyTsallisAbe{B,Q} <: ConditionalEntropy

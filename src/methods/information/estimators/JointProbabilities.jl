@@ -17,8 +17,8 @@ export JointProbabilities
 ## Description
 
 It first encodes the input data according to the given `discretization`, then constructs 
-`probs`, a multidimensional [`Probabilities`](@ref) instance. Finally, `probs` are 
-forwarded to a [`PlugIn`](@extref ComplexityMeasures) estimator, which computes the measure according to 
+`probs`, a multidimensional [`Probabilities`](@extref ComplexityMeasures.Probabilities) instance. Finally, `probs` are 
+forwarded to a [`PlugIn`](@extref ComplexityMeasures.PlugIn) estimator, which computes the measure according to 
 `definition`.
 
 # Compatible encoding schemes
@@ -27,7 +27,7 @@ forwarded to a [`PlugIn`](@extref ComplexityMeasures) estimator, which computes 
     applying an encoding in a sliding window over each input variable).  
 - [`CodifyPoints`](@ref) (encode each *point*/column of the input data)
 
-Works for any [`OutcomeSpace`](@ref) that implements [`codify`](@ref).
+Works for any [`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace) that implements [`codify`](@ref).
 
 !!! note "Joint probabilities vs decomposition methods"
 
@@ -41,8 +41,8 @@ Works for any [`OutcomeSpace`](@ref) that implements [`codify`](@ref).
     because it fails to fully take into consideration the joint relationships between the variables.
     Pick your estimator according to your needs.
 
-See also: [`Counts`](@ref), [`Probabilities`](@ref), [`ProbabilitiesEstimator`](@extref ComplexityMeasures),
-[`OutcomeSpace`](@ref), [`DiscreteInfoEstimator`](@extref ComplexityMeasures).
+See also: [`Counts`](@extref ComplexityMeasures.Counts), [`Probabilities`](@extref ComplexityMeasures.Probabilities), [`ProbabilitiesEstimator`](@extref ComplexityMeasures.ProbabilitiesEstimator),
+[`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace), [`DiscreteInfoEstimator`](@extref ComplexityMeasures.DiscreteInfoEstimator).
 """
 struct JointProbabilities{M<:MultivariateInformationMeasure,O,P} <: MultivariateInformationMeasureEstimator{M}
     definition::M # API from complexity measures: definition must be the first field of the infoestimator.

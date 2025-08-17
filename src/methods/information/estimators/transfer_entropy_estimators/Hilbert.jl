@@ -30,7 +30,7 @@ obtained by first applying the Hilbert transform to each signal, then extracting
 phases/amplitudes of the resulting complex numbers [Palus2014](@cite). Original time series are
 thus transformed to instantaneous phase/amplitude time series. Transfer
 entropy is then estimated using the provided `est` on those phases/amplitudes (use e.g.
-[`ValueBinning`](@extref ComplexityMeasures), or [`OrdinalPatterns`](@extref ComplexityMeasures)).
+[`ValueBinning`](@extref ComplexityMeasures.ValueBinning), or [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns)).
 
 !!! info
     Details on estimation of the transfer entropy (conditional mutual information)

@@ -20,13 +20,13 @@ Construct an `N`-dimensional contingency table from the input iterables
 `x₁, x₂, ..., xₙ` which are such that 
 `length(x₁) == length(x₂) == ⋯ == length(xₙ)`.
 
-If `x₁, x₂, ..., xₙ` are already discrete, then use [`UniqueElements`](@extref ComplexityMeasures) as 
+If `x₁, x₂, ..., xₙ` are already discrete, then use [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) as 
 the first argument to directly construct the joint contingency table.
 
 If `x₁, x₂, ..., xₙ` need to be discretized, provide as the first argument
 - [`CodifyPoints`](@ref) (encodes every *point* in each of the input variables `xᵢ`s individually)
 - [`CodifyVariables`](@ref) (encodes every `xᵢ` individually using a sliding window encoding). NB: If 
-    using different [`OutcomeSpace`](@ref)s for the different `xᵢ`, then [`total_outcomes`](@ref) must 
+    using different [`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace)s for the different `xᵢ`, then [`total_outcomes`](@extref ComplexityMeasures.total_outcomes) must 
     be the same for every outcome space.
 
 ## Examples
@@ -52,7 +52,7 @@ z = rand([(1, 2), (2, 1)], n)
 counts(UniqueElements(), x, y, z)
 ```
 
-See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@extref ComplexityMeasures), [`OutcomeSpace`](@ref),
+See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](@extref ComplexityMeasures.UniqueElements), [`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace),
 [`probabilities`](@ref).
 """
 function counts(o::UniqueElements, x::Vararg{VectorOrStateSpaceSet,N}) where N # this extends ComplexityMeasures.jl definition

@@ -18,16 +18,16 @@ using the given `outcome_space`.
 
 ## Compatible outcome spaces
 
-- [`UniqueElements`](@extref ComplexityMeasures) (for when data are pre-discretized)
-- [`BubbleSortSwaps`](@ref)
-- [`CosineSimilarityBinning`](@ref)
-- [`OrdinalPatterns`](@extref ComplexityMeasures)
-- [`Dispersion`](@extref ComplexityMeasures)
+- [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) (for when data are pre-discretized)
+- [`BubbleSortSwaps`](@extref ComplexityMeasures.BubbleSortSwaps)
+- [`CosineSimilarityBinning`](@extref ComplexityMeasures.CosineSimilarityBinning)
+- [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns)
+- [`Dispersion`](@extref ComplexityMeasures.Dispersion)
 
 # Description
 
 The main difference between `CodifyVariables` and [`CodifyPoints`] is that the former
-uses [`OutcomeSpace`](@ref)s for discretization. This usually means that some
+uses [`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace)s for discretization. This usually means that some
 transformation is applied to the data before discretizing. For example, some outcome
 constructs a delay embedding from the input (and thus encodes sequential information)
 before encoding the data.
@@ -35,7 +35,7 @@ before encoding the data.
 Specifically, given `x::AbstractStateSpaceSet...`, where the `i`-th dataset `x[i]` 
 is assumed to represent a single series of measurements, `CodifyVariables` encodes
  `x[i]` by [`codify`](@ref)-ing into a series of integers 
-using an appropriate  [`OutcomeSpace`](@ref). This is typically done by first 
+using an appropriate  [`OutcomeSpace`](@extref ComplexityMeasures.OutcomeSpace). This is typically done by first 
 sequentially transforming the data and then running sliding window (the width of 
 the window is controlled by `outcome_space`) across the data, and then encoding the 
 values within each window to an integer.
