@@ -26,12 +26,6 @@ Important changes are:
 
 The quickest way to get going with the package is to check out the examples in the left-hand menu.
 
-!!! info
-    To make it easier to navigate the extensive documentation, all documentation strings are 
-    collapsed by default. Click the arrow icon in 
-    the top toolbar to expand/collapse the docstrings in a page.
-
-
 ## Documentation content 
 
 - [Association measures](@ref association_measures) lists all implemented association measures and their estimators.
