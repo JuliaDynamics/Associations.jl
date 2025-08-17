@@ -1,5 +1,4 @@
 [deps]
-Associations = "614afb3a-e278-4863-8805-9959372b9ec2"
 CairoMakie = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 ComplexityMeasures = "ab4b797d-85ee-42ba-b621-05d793b346a2"
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
