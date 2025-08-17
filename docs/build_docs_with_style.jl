@@ -80,7 +80,7 @@ function build_docs_with_style(pages, modules...; bib=nothing,
     )
 
     if isnothing(bib)
-        makedocs(; settings...)
+        makedocs(; plugins=[links], settings...)
     else
         makedocs(; plugins=[bib, links], settings...)
     end
