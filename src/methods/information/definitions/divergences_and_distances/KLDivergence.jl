@@ -36,7 +36,7 @@ D_{KL}(P_Y(\\Omega) || P_Y(\\Omega)) =
 - [`association`](@ref). Used to compute the KL-divergence between two pre-computed
     probability distributions. If used with [`RelativeAmount`](@ref), the KL divergence may
     be undefined to due some outcomes having zero counts. Use some other
-    [`ProbabilitiesEstimator`](@ref) like [`BayesianRegularization`](@ref) to ensure
+    [`ProbabilitiesEstimator`](@extref ComplexityMeasures) like [`BayesianRegularization`](@ref) to ensure
     all estimated probabilities are nonzero.
 
 !!! note 

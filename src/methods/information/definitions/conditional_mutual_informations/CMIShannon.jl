@@ -42,7 +42,7 @@ I(X; Y | Z)
 ```
 
 where ``I^S(\\cdot; \\cdot)`` is the Shannon mutual information [`MIShannon`](@ref),
-and ``H^S(\\cdot)`` is the [`Shannon`](@ref) entropy.
+and ``H^S(\\cdot)`` is the [`Shannon`](@extref ComplexityMeasures) entropy.
 
 Differential Shannon CMI is obtained by replacing the entropies by
 differential entropies.

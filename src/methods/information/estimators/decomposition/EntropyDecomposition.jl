@@ -78,7 +78,7 @@ of entropies using the `Kraskov(Shannon(base = ℯ))` Shannon entropy estimator,
 ## Discrete entropy decomposition 
 
 The second signature is for discrete estimation using [`DiscreteInfoEstimator`](@extref ComplexityMeasures)s,
-for example [`PlugIn`](@ref). The given `discretization` scheme (typically an 
+for example [`PlugIn`](@extref ComplexityMeasures). The given `discretization` scheme (typically an 
 [`OutcomeSpace`](@ref)) controls how the joint/marginals are discretized, and the
 probabilities estimator `pest` controls how probabilities are estimated from counts.
 
@@ -102,13 +102,13 @@ probabilities estimator `pest` controls how probabilities are estimated from cou
 ## Examples
 
 - [Example 1](@ref example_MIShannon_EntropyDecomposition_Jackknife_ValueBinning):
-    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@ref)
+    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@extref ComplexityMeasures)
     entropy estimated using [`CodifyVariables`](@ref) with [`ValueBinning`](@extref ComplexityMeasures).
 - [Example 2](@ref example_MIShannon_EntropyDecomposition_BubbleSortSwaps):
-    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@ref)
+    [`MIShannon`](@ref) estimation using decomposition into discrete [`Shannon`](@extref ComplexityMeasures)
     entropy estimated using [`CodifyVariables`](@ref) with [`BubbleSortSwaps`](@ref).
 - [Example 3](@ref example_MIShannon_EntropyDecomposition_Kraskov):
-    [`MIShannon`](@ref) estimation using decomposition into differental [`Shannon`](@ref)
+    [`MIShannon`](@ref) estimation using decomposition into differental [`Shannon`](@extref ComplexityMeasures)
     entropy estimated using the [`Kraskov`](@extref ComplexityMeasures) estimator.
 
 See also: [`MutualInformationEstimator`](@ref), [`MultivariateInformationMeasure`](@ref).

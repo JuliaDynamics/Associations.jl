@@ -18,7 +18,7 @@ export JointProbabilities
 
 It first encodes the input data according to the given `discretization`, then constructs 
 `probs`, a multidimensional [`Probabilities`](@ref) instance. Finally, `probs` are 
-forwarded to a [`PlugIn`](@ref) estimator, which computes the measure according to 
+forwarded to a [`PlugIn`](@extref ComplexityMeasures) estimator, which computes the measure according to 
 `definition`.
 
 # Compatible encoding schemes
@@ -41,7 +41,7 @@ Works for any [`OutcomeSpace`](@ref) that implements [`codify`](@ref).
     because it fails to fully take into consideration the joint relationships between the variables.
     Pick your estimator according to your needs.
 
-See also: [`Counts`](@ref), [`Probabilities`](@ref), [`ProbabilitiesEstimator`](@ref),
+See also: [`Counts`](@ref), [`Probabilities`](@ref), [`ProbabilitiesEstimator`](@extref ComplexityMeasures),
 [`OutcomeSpace`](@ref), [`DiscreteInfoEstimator`](@extref ComplexityMeasures).
 """
 struct JointProbabilities{M<:MultivariateInformationMeasure,O,P} <: MultivariateInformationMeasureEstimator{M}

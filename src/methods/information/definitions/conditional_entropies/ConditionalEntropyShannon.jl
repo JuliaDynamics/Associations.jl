@@ -7,7 +7,7 @@ export ConditionalEntropyShannon
     ConditionalEntropyShannon <: ConditionalEntropy
     ConditionalEntropyShannon(; base = 2)
 
-The [`Shannon`](@ref) conditional entropy measure.
+The [`Shannon`](@extref ComplexityMeasures) conditional entropy measure.
 
 ## Usage 
 
@@ -40,9 +40,9 @@ Equivalently, the following differenConditionalEntropy of entropies hold
 H^S(X | Y) = H^S(X, Y) - H^S(Y),
 ```
 
-where ``H^S(\\cdot)`` and ``H^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref) entropy and
+where ``H^S(\\cdot)`` and ``H^S(\\cdot | \\cdot)`` are the [`Shannon`](@extref ComplexityMeasures) entropy and
 Shannon joint entropy, respectively. This is the definition used when calling
-[`association`](@ref) with a [`ProbabilitiesEstimator`](@ref).
+[`association`](@ref) with a [`ProbabilitiesEstimator`](@extref ComplexityMeasures).
 
 ## Differential definition
 
@@ -52,7 +52,7 @@ The differential conditional Shannon entropy is analogously defined as
 H^S(X | Y) = h^S(X, Y) - h^S(Y),
 ```
 
-where ``h^S(\\cdot)`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@ref)
+where ``h^S(\\cdot)`` and ``h^S(\\cdot | \\cdot)`` are the [`Shannon`](@extref ComplexityMeasures)
 differential entropy and Shannon joint differential entropy, respectively. This is the
 definition used when calling [`association`](@ref) with a
 [`DifferentialInfoEstimator`](@extref ComplexityMeasures).
