@@ -1,6 +1,7 @@
 export GraphAlgorithm
 export infer_graph
 
+
 """
     GraphAlgorithm
 

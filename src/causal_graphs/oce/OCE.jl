@@ -43,9 +43,9 @@ Input data must either be a `Vector{Vector{<:Real}}`, or a `StateSpaceSet`.
 
 - [Inferring time series graph from a chain of logistic maps](@ref oce_example)
 """
-Base.@kwdef struct OCE{U, C, T} <: GraphAlgorithm
-    utest::U = SurrogateAssociationTest(MIShannon(), KSG2(k = 3, w = 3), nshuffles = 100)
-    ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k = 3, w = 3), nshuffles = 100)
+Base.@kwdef struct OCE{U,C,T} <: GraphAlgorithm
+    utest::U = SurrogateAssociationTest(MIShannon(), KSG2(k=3, w=3), nshuffles=100)
+    ctest::C = LocalPermutationTest(CMIShannon(), MesnerShalizi(k=3, w=3), nshuffles=100)
     τmax::T = 1
     α = 0.05
 end
@@ -76,7 +76,7 @@ example, `x₂(-3)` is the variable `x[2]` lagged by 3 time steps.
     variables. Let `τ = parents_τs[k]` and `j = parents_js[k]`. Then `parents[k]` is
     the raw data for the variable `xⱼ(-τ)`.
 """
-Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT, A}
+Base.@kwdef mutable struct OCESelectedParents{P,PJ,PT,A}
     i::Int
     all_idxs::A
     parents::P = Vector{Vector{eltype(1.0)}}(undef, 0)
@@ -84,12 +84,12 @@ Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT, A}
     parents_τs::PT = Vector{Int}(undef, 0)
 end
 
-function infer_graph(alg::OCE, x; verbose = true)
+function infer_graph(alg::OCE, x; verbose=true)
     print_status(OCEInfoMessage(); verbose)
     return select_parents(alg, x; verbose)
 end
 
-function infer_graph(alg::OCE, x::AbstractStateSpaceSet; verbose = true)
+function infer_graph(alg::OCE, x::AbstractStateSpaceSet; verbose=true)
     return infer_graph(alg, columns(x); verbose)
 end
 
@@ -100,17 +100,17 @@ The parent selection step of the [`OCE`](@ref) algorithm, which identifies the
 parents of each `xᵢ ∈ x`, assuming that `x` must be integer-indexable, i.e.
 `x[i]` yields the `i`-th variable.
 """
-function select_parents(alg::OCE, x; verbose = false)
+function select_parents(alg::OCE, x; verbose=false)
     # Find the parents of each variable.
     parents = [select_parents(alg, x, k; verbose) for k in eachindex(x)]
     return parents
 end
 
-function select_parents(alg::OCE, x, i::Int; verbose = false)
+function select_parents(alg::OCE, x, i::Int; verbose=false)
     τs, js, 𝒫s = prepare_embeddings(alg, x, i)
 
-    verbose && printstyled("\nInferring parents for "; color = :default)
-    verbose && printstyled("x$i(0)\n"; color = TARGET_COLOR)
+    verbose && printstyled("\nInferring parents for "; color=:default)
+    verbose && printstyled("x$i(0)\n"; color=TARGET_COLOR)
     # Account for the fact that the `𝒫ⱼ ∈ 𝒫s` are embedded. This means that some points are
     # lost from the `xᵢ`s.
     xᵢ = @views x[i][alg.τmax+1:end]
@@ -118,18 +118,18 @@ function select_parents(alg::OCE, x, i::Int; verbose = false)
 
     # `x` is always a vector of input variables at this stage, so we can do `length(x)`
     # to get the number of variables
-    parents = OCESelectedParents(i = i, all_idxs = 1:length(x))
+    parents = OCESelectedParents(i=i, all_idxs=1:length(x))
 
     ###################################################################
     # Forward search
     ###################################################################
     # 1. Can we find a significant pairwise association?
-    verbose && printstyled("˧ Querying pairwise associations...\n"; color = SYMBOL_COLOR)
+    verbose && printstyled("˧ Querying pairwise associations...\n"; color=SYMBOL_COLOR)
 
     significant_pairwise = select_parent!(alg, parents, τs, js, 𝒫s, xᵢ, i; verbose)
 
     if significant_pairwise
-        verbose && printstyled("˧ Querying new variables conditioned on already selected variables...\n"; color = SYMBOL_COLOR)
+        verbose && printstyled("˧ Querying new variables conditioned on already selected variables...\n"; color=SYMBOL_COLOR)
         # 2. Continue until there are no more significant conditional pairwise associations
         significant_cond = true
         while significant_cond
@@ -157,7 +157,7 @@ function prepare_embeddings(alg::OCE, x, i)
     return τs, js, 𝒫s
 end
 
-function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i::Int; verbose = true)
+function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i::Int; verbose=true)
     # If there are no potential parents to pick from, return immediately.
     isempty(𝒫s) && return false
 
@@ -174,7 +174,7 @@ function select_parent!(alg::OCE, parents, τs, js, 𝒫s, xᵢ, i::Int; verbose
 
     # First sort variables according to maximal measure. Then, we select the first lagged
     # variable that gives significant association with the target variable.
-    idxs_that_maximize_measure = sortperm(Is, rev = true)
+    idxs_that_maximize_measure = sortperm(Is, rev=true)
 
     n_checked, n_potential_vars = 0, length(𝒫s)
     while n_checked < n_potential_vars
@@ -235,7 +235,7 @@ in `x`, given the previously inferred `parents`, which were deduced using parame
 function backwards_eliminate!(alg::OCE, parents::OCESelectedParents, xᵢ, i::Int; verbose)
     length(parents.parents) < 2 && return parents
 
-    verbose && printstyled("˧ Backwards elimination...\n", color = SYMBOL_COLOR)
+    verbose && printstyled("˧ Backwards elimination...\n", color=SYMBOL_COLOR)
     n_initial = length(parents.parents_js)
     q = 0
     variable_was_eliminated = true
@@ -252,7 +252,7 @@ end
 Inner portion of algorithm 2.2 in Sun et al. (2015). This method is called in an external
 while-loop that handles the variable elimination step in their line 3.
 """
-function eliminate_loop!(alg::OCE, parents::OCESelectedParents, xᵢ, i; verbose = false)
+function eliminate_loop!(alg::OCE, parents::OCESelectedParents, xᵢ, i; verbose=false)
     print_status(EliminationStartInfo(), parents, i; verbose)
     isempty(parents.parents) && return false
     M = length(parents.parents)
@@ -300,7 +300,7 @@ end
 # have a few more graph inference algorithms to see what the best way to do this is.
 #########################################################################################
 
-function print_status(args...; verbose = true, kwargs...)
+function print_status(args...; verbose=true, kwargs...)
     if verbose
         _print_status(args...; kwargs...)
     end
@@ -308,64 +308,64 @@ end
 
 struct OCEInfoMessage end
 function _print_status(::OCEInfoMessage)
-    printstyled("Inferring parents using optimal causation entropy (OCE)\n"; bold = true)
-    printstyled("Notation:\n"; underline = true, color = :default)
+    printstyled("Inferring parents using optimal causation entropy (OCE)\n"; bold=true)
+    printstyled("Notation:\n"; underline=true, color=:default)
     printstyled("  a ⫫ b | c  := `a` is conditionally independent of `b`, given `c`\n";
-        color = :default)
+        color=:default)
     printstyled("  a !⫫ b | c := `a` is conditionally dependent of `b`, given `c`\n";
-        color = :default)
+        color=:default)
 
     # Target variable.
-    print_lagged("* xᵢ", "τ"; color =  TARGET_COLOR)
-    printstyled(" := target variable at lag "; color = :default)
-    printstyled("τ\n", color = LAG_COLOR)
+    print_lagged("* xᵢ", "τ"; color=TARGET_COLOR)
+    printstyled(" := target variable at lag "; color=:default)
+    printstyled("τ\n", color=LAG_COLOR)
 
     # Candidate variable.
-    print_lagged("* pⱼ", "τ"; color = SOURCE_COLOR)
-    printstyled(" := candidate variable at lag "; color = :default)
-    printstyled("τ\n", color = LAG_COLOR)
+    print_lagged("* pⱼ", "τ"; color=SOURCE_COLOR)
+    printstyled(" := candidate variable at lag "; color=:default)
+    printstyled("τ\n", color=LAG_COLOR)
 
     # Parent set.
-    print_lagged("* 𝒫ᵢ", "τ"; color = CONDITIONAL_COLOR)
-    printstyled(" := parent set of "; color = :default)
-    print_lagged("xᵢ", "τ"; color = TARGET_COLOR)
+    print_lagged("* 𝒫ᵢ", "τ"; color=CONDITIONAL_COLOR)
+    printstyled(" := parent set of "; color=:default)
+    print_lagged("xᵢ", "τ"; color=TARGET_COLOR)
     print("\n")
 end
 
 struct NoVariablesSelected end
 function _print_status(::NoVariablesSelected, parents::OCESelectedParents,
-        τs, js, i::Int)
+    τs, js, i::Int)
 
     pairwise = pairwise_test(parents)
 
     for (τ, j) in zip(τs, js)
-        print_lagged("  $(add_subscript("x", i))", 0; color = TARGET_COLOR)
-        printstyled(" ⫫ "; color = SYMBOL_COLOR)
-        print_lagged("$(add_subscript("x", j))", τ; color = SOURCE_COLOR)
-        printstyled(" | "; color = SYMBOL_COLOR)
+        print_lagged("  $(add_subscript("x", i))", 0; color=TARGET_COLOR)
+        printstyled(" ⫫ "; color=SYMBOL_COLOR)
+        print_lagged("$(add_subscript("x", j))", τ; color=SOURCE_COLOR)
+        printstyled(" | "; color=SYMBOL_COLOR)
         if pairwise
-            printstyled("∅\n"; color = CONDITIONAL_COLOR)
+            printstyled("∅\n"; color=CONDITIONAL_COLOR)
         else
             # No more associations were found
-            print_parent_set(parents, i; indent = "", print_name = false, newline = true)
+            print_parent_set(parents, i; indent="", print_name=false, newline=true)
         end
     end
 end
 
 struct IndependenceStatus end
 function _print_status(::IndependenceStatus, parents::OCESelectedParents,
-        τs, js, ix::Int, i::Int)
+    τs, js, ix::Int, i::Int)
     pairwise = pairwise_test(parents)
-    print_lagged("  $(add_subscript("x", i))", 0; color = TARGET_COLOR)
-    printstyled(" !⫫ "; color = SYMBOL_COLOR)
+    print_lagged("  $(add_subscript("x", i))", 0; color=TARGET_COLOR)
+    printstyled(" !⫫ "; color=SYMBOL_COLOR)
     v = add_subscript("x", js[ix])
-    print_lagged(v, τs[ix]; color = SOURCE_COLOR)
+    print_lagged(v, τs[ix]; color=SOURCE_COLOR)
 
-    printstyled(" | "; color = SYMBOL_COLOR)
+    printstyled(" | "; color=SYMBOL_COLOR)
     if pairwise
-        printstyled("∅\n"; color = CONDITIONAL_COLOR)
+        printstyled("∅\n"; color=CONDITIONAL_COLOR)
     else # todo: fix subscripts
-        print_parent_set(parents, i; indent = "", print_name = false, newline = true)
+        print_parent_set(parents, i; indent="", print_name=false, newline=true)
     end
 end
 
@@ -374,32 +374,32 @@ end
 # --------------------------
 struct EliminationStartInfo end
 function _print_status(::EliminationStartInfo, parents::OCESelectedParents, i::Integer)
-    printstyled("  Before elimination, parents of "; color = SYMBOL_COLOR)
-    print_lagged(add_subscript("x", i), 0; color = TARGET_COLOR)
-    printstyled(" are\n"; color = SYMBOL_COLOR)
-    print_parent_set(parents, i; indent = "  ", print_name = true, newline = true)
-    printstyled("  Commencing with backward elimination...\n"; color = SYMBOL_COLOR)
+    printstyled("  Before elimination, parents of "; color=SYMBOL_COLOR)
+    print_lagged(add_subscript("x", i), 0; color=TARGET_COLOR)
+    printstyled(" are\n"; color=SYMBOL_COLOR)
+    print_parent_set(parents, i; indent="  ", print_name=true, newline=true)
+    printstyled("  Commencing with backward elimination...\n"; color=SYMBOL_COLOR)
 end
 
 struct EliminationEndInfo end
 function _print_status(::EliminationEndInfo, parents, i::Integer)
-    printstyled("  After elimination, parents of "; color = SYMBOL_COLOR)
-    print_lagged(add_subscript("x", i), 0; color = TARGET_COLOR)
-    printstyled(" are\n"; color = SYMBOL_COLOR)
-    print_parent_set(parents, i; indent = "  ", print_name = true, newline = true)
+    printstyled("  After elimination, parents of "; color=SYMBOL_COLOR)
+    print_lagged(add_subscript("x", i), 0; color=TARGET_COLOR)
+    printstyled(" are\n"; color=SYMBOL_COLOR)
+    print_parent_set(parents, i; indent="  ", print_name=true, newline=true)
 end
 
 function print_parent_set(parents::OCESelectedParents, i::Integer;
-        indent = "", print_name = false, newline = true)
-    print_name && print_lagged(indent*add_subscript("𝒫", i), 0; color = CONDITIONAL_COLOR)
-    print_name && printstyled(" = "; color = SYMBOL_COLOR)
+    indent="", print_name=false, newline=true)
+    print_name && print_lagged(indent * add_subscript("𝒫", i), 0; color=CONDITIONAL_COLOR)
+    print_name && printstyled(" = "; color=SYMBOL_COLOR)
     print_condvars(parents)
     newline && print("\n")
 end
 
 struct EliminationStep end
 function _print_status(::EliminationStep, test, alg, parents::OCESelectedParents, i::Integer,
-        remaining_idxs, k::Integer)
+    remaining_idxs, k::Integer)
 
     τ = parents.parents_τs[k]
     j = parents.parents_js[k] # Variable currently considered
@@ -413,38 +413,38 @@ function _print_status(::EliminationStep, test, alg, parents::OCESelectedParents
         action = "Keeping"
         tofrom = "in"
     end
-    print_lagged(add_subscript("  x", i), 0; color = TARGET_COLOR)
-    printstyled(depsymb; color = SYMBOL_COLOR)
-    print_lagged(add_subscript("x", j), τ; color = SOURCE_COLOR)
-    printstyled(" | "; color = SYMBOL_COLOR)
+    print_lagged(add_subscript("  x", i), 0; color=TARGET_COLOR)
+    printstyled(depsymb; color=SYMBOL_COLOR)
+    print_lagged(add_subscript("x", j), τ; color=SOURCE_COLOR)
+    printstyled(" | "; color=SYMBOL_COLOR)
     print_condvar_elimination(EliminationStep(), parents, remaining_idxs)
-    printstyled(" → $action "; color = SYMBOL_COLOR)
-    print_lagged(add_subscript("x", j), τ; color = SOURCE_COLOR)
-    printstyled(" $tofrom parent set\n"; color = SYMBOL_COLOR)
+    printstyled(" → $action "; color=SYMBOL_COLOR)
+    print_lagged(add_subscript("x", j), τ; color=SOURCE_COLOR)
+    printstyled(" $tofrom parent set\n"; color=SYMBOL_COLOR)
 end
 
 function print_condvar_elimination(::EliminationStep, parents::OCESelectedParents,
-        remaining_idxs)
+    remaining_idxs)
     τs = parents.parents_τs
     js = parents.parents_js
     n_remaining = length(remaining_idxs)
-    printstyled("{", color = SYMBOL_COLOR)
+    printstyled("{", color=SYMBOL_COLOR)
     for r in remaining_idxs
-        print_lagged(add_subscript("x", js[r]), τs[r]; color = CONDITIONAL_COLOR)
+        print_lagged(add_subscript("x", js[r]), τs[r]; color=CONDITIONAL_COLOR)
         if r < n_remaining
-            printstyled(", "; color = SYMBOL_COLOR)
+            printstyled(", "; color=SYMBOL_COLOR)
         end
     end
-    printstyled("}", color = SYMBOL_COLOR)
+    printstyled("}", color=SYMBOL_COLOR)
 end
 
 
 # Creating strings with integer subscripts: https://stackoverflow.com/a/46709534
 function subscript(i::Integer)
-    if i<0
+    if i < 0
         error("$i is negative")
     else
-        join('₀'+d for d in reverse(digits(i)))
+        join('₀' + d for d in reverse(digits(i)))
     end
 end
 
@@ -456,36 +456,36 @@ function print_condvars(parents::OCESelectedParents)
     τs = parents.parents_τs
     js = parents.parents_js
     n_selected = length(parents.parents)
-    printstyled("{", color = CONDITIONAL_COLOR)
+    printstyled("{", color=CONDITIONAL_COLOR)
     for r in 1:n_selected
-        print_lagged(add_subscript("x", js[r]), τs[r]; color = CONDITIONAL_COLOR)
-        r < n_selected && printstyled(", "; color = SYMBOL_COLOR)
+        print_lagged(add_subscript("x", js[r]), τs[r]; color=CONDITIONAL_COLOR)
+        r < n_selected && printstyled(", "; color=SYMBOL_COLOR)
     end
-    printstyled("}", color = CONDITIONAL_COLOR)
+    printstyled("}", color=CONDITIONAL_COLOR)
 end
 
 function print_lagged(varᵢ::AbstractString, τ;
-        color = :default,
-        lag_color = LAG_COLOR,
-        parentheses_color = SYMBOL_COLOR)
+    color=:default,
+    lag_color=LAG_COLOR,
+    parentheses_color=SYMBOL_COLOR)
     printstyled("$varᵢ"; color)
-    printstyled("("; color = parentheses_color)
-    printstyled("$τ"; color = lag_color)
-    printstyled(")"; color = parentheses_color)
+    printstyled("("; color=parentheses_color)
+    printstyled("$τ"; color=lag_color)
+    printstyled(")"; color=parentheses_color)
 end
 
 # --------------------------
 # Return type
 # --------------------------
 function Base.show(io::IO, ::MIME"text/plain", parents::OCESelectedParents)
-    print_lagged(add_subscript("x", parents.i), 0; color = TARGET_COLOR)
-    printstyled(" ← "; color = SYMBOL_COLOR)
+    print_lagged(add_subscript("x", parents.i), 0; color=TARGET_COLOR)
+    printstyled(" ← "; color=SYMBOL_COLOR)
     print_condvars(parents)
 end
 
 function Base.print(io::IO, ::MIME"text/plain", parents::OCESelectedParents)
-    print_lagged(add_subscript("x", parents.i), 0; color = TARGET_COLOR)
-    printstyled(" ← "; color = SYMBOL_COLOR)
+    print_lagged(add_subscript("x", parents.i), 0; color=TARGET_COLOR)
+    printstyled(" ← "; color=SYMBOL_COLOR)
     print_condvars(parents)
 end
 
