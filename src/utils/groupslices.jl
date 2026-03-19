@@ -43,7 +43,7 @@ export groupslices, groupinds, firstinds, lastinds
 struct Prehashed
     hash::UInt
 end
-hash(x::Prehashed) = x.hash
+hash(x::Prehashed, h::UInt) = hash(x.hash, h)
 
 """
     groupslices(V::AbstractVector)
