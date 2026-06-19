@@ -19,7 +19,7 @@ Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
 
 [compat]
-CausalInference = "=0.19.1" # pin to 19.1 bc current (0.19.2, 2025-11-24, 8e1e6d9) fails precompile
+CausalInference = "0.19.3" # v0.19.2 fails precompile
 ComplexityMeasures = "^3.8"
 DynamicalSystemsBase = "3"
 julia = "^1.10.10"
