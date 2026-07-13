@@ -109,7 +109,7 @@ function conditionaltest_and_remove_edge!(alg::PC, x, 𝐒, 𝓁, i, j, graph, s
     # If there's at least one available variable to condition on.
     ctr = 0
 
-    if length(𝐒) >= 𝓁
+    if !isempty(𝐒)
         src, trg = @views x[i], x[j]
         # For each subset of variables (not including i and j), perform a conditional
         # independence test `i ⫫ j | Sₖ`. If this holds for any variable(s) `Sₖ`,

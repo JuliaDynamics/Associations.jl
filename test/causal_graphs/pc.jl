@@ -73,6 +73,29 @@ dg_ci = pcalg(df, α, gausscitest)    # reference
 @test dg_ct == dg_ci
 
 
+# ------------------------------------------
+# Testing specifics steps of the algorithms 
+# ------------------------------------------
+
+# `skeleton_conditional!` at level 𝓁 must test a pair whose conditioning pool
+# (node i's neighbors, excluding j) has size exactly 𝓁 — the boundary case of
+# Algorithm 1, line 8 in Kalisch & Bühlmann (2008), |adj(C,i)\{j}| ≥ ℓ, where
+# the only available conditioning set is the full neighbor set. We call the level
+# directly so the pair is evaluated at 𝓁 itself, rather than being removed at a
+# lower level by the full `infer_graph` sweep.
+# Data: independent a, b; common effects i = a+b, j = a+b, so i ⫫ j | {a,b}.
+n = 1000
+a = randn(rng, n)
+b = randn(rng, n)
+i = a .+ b .+ 0.1 .* randn(rng, n)
+j = a .+ b .+ 0.1 .* randn(rng, n)
+X = [a, b, i, j]                        # nodes: 1=a, 2=b, 3=i, 4=j
+
+graph = complete_digraph(4)
+sepset = Dict{SimpleEdge,Vector{Int}}()
+Associations.skeleton_conditional!(alg, graph, sepset, X, 2)  # adj(i)\{j} = {a,b}, size 𝓁=2
+@test !has_edge(graph, SimpleEdge(3, 4))   # i–j removed via i ⫫ j | {a,b}
+@test !has_edge(graph, SimpleEdge(4, 3))
 
 # -------------------------------------------------------------------------------
 # Test that different combinations of independence tests work. For this,
