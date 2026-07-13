@@ -41,12 +41,15 @@ function cpdag(alg::PC, skeleton_graph::SimpleDiGraph,
     # Convert the skeleton to a directed graph.
     dg = orient_vstructures(alg, skeleton_graph, separating_sets; verbose)
 
+    # Apply the orientation rules repeatedly until no edge is redirected,
+    # or until `maxiters_orient` sweeps have been performed. 
     edge_was_redirected = trues(4)
-    i = 1
-    for i = 1:10
+    i = 0
+    while i < maxiters
+        i += 1
         verbose && println("Applying rules sequentially ... (#$i)")
-        # Each application of a rule returns the number of edges that were removed/added.
-        # If no edge was removed/added in any step, we're done.
+        # Each application of a rule reports whether it redirected any edge.
+        # If no edge was redirected in any step, we're done.
         edge_was_redirected[1] = rule1!(alg, dg; verbose)
         edge_was_redirected[2] = rule2!(alg, dg; verbose)
         edge_was_redirected[3] = rule3!(alg, dg; verbose)
@@ -55,7 +58,6 @@ function cpdag(alg::PC, skeleton_graph::SimpleDiGraph,
             verbose && println("No edge was redirected in this iteration. Stopping.")
             break
         end
-        i += 1
     end
     verbose && println("Finished orientiation!")
 
