@@ -97,6 +97,38 @@ Associations.skeleton_conditional!(alg, graph, sepset, X, 2)  # adj(i)\{j} = {a,
 @test !has_edge(graph, SimpleEdge(3, 4))   # i–j removed via i ⫫ j | {a,b}
 @test !has_edge(graph, SimpleEdge(4, 3))
 
+# Case 2: 
+# --------------------------------------------------------------------------------
+# `skeleton_conditional!` at level 𝓁 must test conditioning sets of size
+# exactly 𝓁 (Algorithm 1, line 10 in Kalisch & Bühlmann (2008): |k| = ℓ).
+# A pair separable only by a size-2 set must therefore survive 𝓁=1 and be
+# removed only at 𝓁=2.
+# Data: independent a, b; common effects i = a+b, j = a+b ⇒ i ⫫ j | {a,b},
+# but not given a or b alone.
+n = 1000
+a = randn(rng, n)
+b = randn(rng, n)
+i = a .+ b .+ 0.1 .* randn(rng, n)
+j = a .+ b .+ 0.1 .* randn(rng, n)
+X = [a, b, i, j]                        # nodes: 1=a, 2=b, 3=i, 4=j
+
+alg_wb = PC(CorrTest(), CorrTest(); α=0.01, maxdepth=Inf)   # explicit maxdepth = Inf
+
+# 𝓁=1: adj(i)\{j} = {a,b}, so only {a} and {b} are valid conditioning sets;
+# neither separates i and j, so the i–j edge must remain.
+graph = complete_digraph(4)
+sepset = Dict{SimpleEdge,Vector{Int}}()
+Associations.skeleton_conditional!(alg_wb, graph, sepset, X, 1)
+@test has_edge(graph, SimpleEdge(3, 4))
+@test has_edge(graph, SimpleEdge(4, 3))
+
+# 𝓁=2: the size-2 set {a,b} is now valid and separates i and j ⇒ edge removed.
+graph = complete_digraph(4)
+sepset = Dict{SimpleEdge,Vector{Int}}()
+Associations.skeleton_conditional!(alg_wb, graph, sepset, X, 2)
+@test !has_edge(graph, SimpleEdge(3, 4))
+@test !has_edge(graph, SimpleEdge(4, 3))
+
 # -------------------------------------------------------------------------------
 # Test that different combinations of independence tests work. For this,
 # we can use much shorter time series, because the purpose is just to rule

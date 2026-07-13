@@ -94,7 +94,7 @@ function skeleton_conditional!(alg::PC, graph, separating_set, x, 𝓁::Int;
         for j in aᵢ
             # The powerset of remaining variables (not including variable i or variable j),
             # limited to subsets of cardinality 𝓁 <= C <= 𝓁 + 1.
-            𝐒 = powerset(setdiff(aᵢ, j), 𝓁, 𝓁 + 1) |> collect
+            𝐒 = powerset(setdiff(aᵢ, j), 𝓁, 𝓁) |> collect
 
             # Perform independence tests and remove the edge between i and j if
             # they are found to be independent.
