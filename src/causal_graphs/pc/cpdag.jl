@@ -34,8 +34,9 @@ function cpdag(alg::PC, skeleton_graph::SimpleDiGraph,
     # Orientiation rules are described in a plethora of books and papers in the literature.
     # I found most of them, including the original paper on the PC algorithm, hard to
     # understand, due to either terse and/or ambiguous language. The best
-    # non-ambiguous description of the rules I found were in Kalisch & Bühlmann (2008).
-    # These are applied here. No effort has been done to make this as efficient as possible.
+    # non-ambiguous description of the rules I found were in Kalisch & Bühlmann (2008) and 
+    # Colombo & Maathuis (2014). These are applied here. No effort has been done to make 
+    # this as efficient as possible.
     verbose && println("Orienting v-structures...")
     # Convert the skeleton to a directed graph.
     dg = orient_vstructures(alg, skeleton_graph, separating_sets; verbose)

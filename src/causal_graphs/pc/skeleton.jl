@@ -93,7 +93,7 @@ function skeleton_conditional!(alg::PC, graph, separating_set, x, 𝓁::Int;
     for (i, aᵢ) in enumerate(a)
         for j in aᵢ
             # The powerset of remaining variables (not including variable i or variable j),
-            # limited to subsets of cardinality 𝓁 <= C <= 𝓁 + 1.
+            # limited to subsets of cardinality exactly 𝓁.
             𝐒 = powerset(setdiff(aᵢ, j), 𝓁, 𝓁) |> collect
 
             # Perform independence tests and remove the edge between i and j if
@@ -109,6 +109,7 @@ function conditionaltest_and_remove_edge!(alg::PC, x, 𝐒, 𝓁, i, j, graph, s
     # If there's at least one available variable to condition on.
     ctr = 0
 
+    # Is  there at least one candidate set of size ℓ?
     if !isempty(𝐒)
         src, trg = @views x[i], x[j]
         # For each subset of variables (not including i and j), perform a conditional
