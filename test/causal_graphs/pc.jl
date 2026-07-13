@@ -61,7 +61,7 @@ dg_ci = pcalg(df, α, gausscitest)
 @test dg_ct == dg_ci
 
 # Case 4: a collider with marginally independent parents
-# n = 1000
+n = 1000
 x = randn(rng, n)              # independent root
 z = randn(rng, n)              # independent root  (x ⫫ z)
 y = x + z + 0.2*randn(rng, n)  # collider:  x → y ← z
