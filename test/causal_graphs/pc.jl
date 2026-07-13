@@ -60,6 +60,20 @@ dg_ct = infer_graph(alg, X; verbose = false)
 dg_ci = pcalg(df, α, gausscitest)
 @test dg_ct == dg_ci
 
+# Case 4: a collider with marginally independent parents
+# n = 1000
+x = randn(rng, n)              # independent root
+z = randn(rng, n)              # independent root  (x ⫫ z)
+y = x + z + 0.2*randn(rng, n)  # collider:  x → y ← z
+X = [x, y, z]
+df = (x=x, y=y, z=z)
+
+dg_ct = infer_graph(alg, X)          # PC in this repo
+dg_ci = pcalg(df, α, gausscitest)    # reference
+@test dg_ct == dg_ci
+
+
+
 # -------------------------------------------------------------------------------
 # Test that different combinations of independence tests work. For this,
 # we can use much shorter time series, because the purpose is just to rule
