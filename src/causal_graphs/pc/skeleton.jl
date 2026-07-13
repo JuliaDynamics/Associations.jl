@@ -24,7 +24,7 @@ function skeleton(alg::PC, x; verbose = false)
     graph = complete_digraph(N)
     separating_set = Dict{SimpleEdge, Vector{Int}}()
 
-    skeleton_unconditional!(alg, graph, x; verbose) # only considers pairs
+    skeleton_unconditional!(alg, graph, separating_set, x; verbose) # only considers pairs
     for 𝓁 = 1:max_degree
         skeleton_conditional!(alg, graph, separating_set, x, 𝓁; verbose)
     end
@@ -49,7 +49,7 @@ If `alg.pairwise_test` is a directed test, then edges are considered one-by-one.
 If `alg.pairwise_test` is not a directed test, then edges (`X → Y, `Y → X`)
 are considered simultaneously.
 """
-function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, x; verbose = false)
+function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, separating_set, x; verbose=false)
     N = length(x)
     pairs = (Tuple(pair) for pair in combinations(1:N, 2))
     for pair in pairs
@@ -64,6 +64,8 @@ function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, x; verbose = fal
             verbose && println("Skeleton, pairwise: Removing $edge1 and $edge2 (p = $pval)")
             rem_edge!(graph, edge1)
             rem_edge!(graph, edge2)
+            separating_set[edge1] = Int[] # k = ∅
+            separating_set[edge2] = Int[]
         end
     end
     return graph
