@@ -95,22 +95,25 @@ function forms_unshielded_triple(g, i, j, k)
         !adjacent(g, i, k)
 end
 
-function is_undirected(g::AbstractGraph, e::AbstractEdge)
-    if has_edge(g, reverse(e))
-        return true
-    else
-        return false
-    end
+function is_undirected_edge(g::AbstractGraph, e::AbstractEdge)
+    return has_edge(g, e) && has_edge(g, reverse(e))
 end
-is_undirected(g::AbstractGraph, src::Int, targ::Int) = is_undirected(g, SimpleEdge(src, targ))
-is_directed(args...) = !is_undirected(args...)
+function is_undirected_edge(g::AbstractGraph, src::Int, targ::Int)
+    return is_undirected_edge(g, SimpleEdge(src, targ))
+end
+function is_directed_edge(g::AbstractGraph, e::AbstractEdge)
+    return has_edge(g, e.src, e.dst) && !has_edge(g, reverse(e))
+end
+function is_directed_edge(g::AbstractGraph, src::Int, targ::Int)
+    return is_directed_edge(g, SimpleEdge(src, targ))
+end
 
 # TODO: is the fact that we're directly modifying the graph a problem? Should we make a
 # copy?
 function rule1!(alg::PC, dg::SimpleDiGraph; verbose = false)
     n_removed = 0
 
-    directed_edges = filter(e -> is_directed(dg, e), collect(edges(dg)))
+    directed_edges = filter(e -> is_directed_edge(dg, e), collect(edges(dg)))
     for edge in directed_edges
         X::Int = edge.src
         Y::Int = edge.dst
@@ -118,7 +121,7 @@ function rule1!(alg::PC, dg::SimpleDiGraph; verbose = false)
         # Find the node numbers `Zs` of all incoming undirected edges to Y, except `X`,
         # which is already part of `edge`.
         undirected_Zs_nonadjacent_to_X = setdiff(inneighbors(dg, Y), X)
-        filter!(Z -> is_undirected(dg, Z, Y) && nonadjacent(dg, Z, X), undirected_Zs_nonadjacent_to_X)
+        filter!(Z -> is_undirected_edge(dg, Z, Y) && nonadjacent(dg, Z, X), undirected_Zs_nonadjacent_to_X)
 
         for Z in undirected_Zs_nonadjacent_to_X
             rem_edge!(dg, Z, Y) # Direct the undirected edge
@@ -132,11 +135,11 @@ end
 function rule2!(alg::PC, dg::SimpleDiGraph; verbose = false)
     n_removed = 0
 
-    directed_edges = filter(e -> is_directed(dg, e), collect(edges(dg)))
+    directed_edges = filter(e -> is_directed_edge(dg, e), collect(edges(dg)))
     for edge in directed_edges
         Y, Z = edge.src, edge.dst
         # Find incoming neighbors `Xs` that form a chain `X → Y → Z`
-        Xs_Zadjacent = filter(x -> is_directed(dg, x, Y) && adjacent(dg, x, Z), inneighbors(dg, Y))
+        Xs_Zadjacent = filter(x -> is_directed_edge(dg, x, Y) && is_undirected_edge(dg, x, Z), inneighbors(dg, Y))
         for X in Xs_Zadjacent
             rem_edge!(dg, Z, X)
             n_removed += 1
@@ -147,35 +150,56 @@ function rule2!(alg::PC, dg::SimpleDiGraph; verbose = false)
 end
 
 # Rule 3: (avoid creating cycles or new v-structures)
-#    X                 X
-#  / | \             / | \
-# Y  |  W  becomes  Y  |  W
-#  ↘ | ↙             ↘ ↓ ↙
-#    Z                 Z
-function rule3!(alg::PC, dg::SimpleDiGraph; verbose = false)
-    n_added = 0
+# Orient the undirected edge Xᵢ − Xⱼ into Xᵢ → Xⱼ whenever there are two chains 
+# Xᵢ − Xₖ → Xⱼ and Xᵢ − Xₗ → Xⱼ such that Xₖ and Xₗ are not adjacent
+#       Xᵢ                     Xᵢ
+#     /  |  \                /  |  \
+#   Xₖ   |   Xₗ    becomes   Xₖ   |  Xₗ
+#     ↘  |  ↙                ↘  ↓  ↙
+#       Xⱼ                     Xⱼ
+#
+# From Colombo and Maathuis (2014) page 3927. 
+function rule3!(alg::PC, dg::SimpleDiGraph; verbose=false)
+    n_oriented = 0
 
-    alledges = collect(edges(dg))
-    directed_edges = filter(e -> is_directed(dg, e), alledges)
-    for edge in directed_edges
-        Y, Z = edge.src, edge.dst
-        Ws = filter(e -> e.dst == Y && nonadjacent(dg, e.src, Y), directed_edges)
-        edges_nonadjacent_to_Z = filter(e -> nonadjacent(dg, e.src, Z), alledges)
+    # Every undirected edge Xᵢ − Xⱼ is a potential target to orient.
+    # The edge list is snapshotted up front because `dg` is mutated as we orient edges.
+    for e in filter(edge -> is_undirected_edge(dg, edge), collect(edges(dg)))
+        Xᵢ, Xⱼ = e.src, e.dst
 
-        for W in Ws
-            f = X -> adjacent_and_undirected(dg, X, Y) &&
-                adjacent_and_undirected(dg, X, W) &&
-                adjacent(X, Z) && is_bidirectional(dg, X, Z)
-            Xs = filter(f, edges_nonadjacent_to_Z)
-            for X in Xs
-                add_edge!(dg, X, Z)
-                n_added += 1
-                verbose && println("  (Rule 3) Added $X → $Z")
+        # Re-check that Xᵢ − Xⱼ is still undirected. An earlier iteration in
+        # this same sweep may already have oriented it (each undirected edge appears
+        # twice in the snapshot, once as (Xᵢ, Xⱼ) and once as (Xⱼ, Xᵢ)).
+        is_undirected_edge(dg, Xᵢ, Xⱼ) || continue
+
+        # Collect the middle nodes Xₖ that complete a chain Xᵢ − Xₖ → Xⱼ,
+        # i.e. Xₖ is joined to Xᵢ by an undirected edge and points into Xⱼ directedly.
+        ks = filter(k -> is_bidirectional(dg, Xᵢ, k) && is_directed_edge(dg, k, Xⱼ), all_neighbors(dg, Xᵢ))
+
+        # Look for two distinct middle nodes Xₖ, Xₗ that are nonadjacent to each other.
+        oriented = false
+        for a in eachindex(ks)
+            for b in (a+1):lastindex(ks)
+                if nonadjacent(dg, ks[a], ks[b])
+                    # Fire R3: orient Xᵢ → Xⱼ by dropping the reverse edge Xⱼ → Xᵢ,
+                    # leaving only Xᵢ → Xⱼ. One firing settles this edge, so stop.
+                    rem_edge!(dg, Xⱼ, Xᵢ)
+                    n_oriented += 1
+                    verbose && println("  (Rule 3) Oriented $Xᵢ → $Xⱼ")
+                    oriented = true
+                    break
+                end
             end
+            oriented && break
         end
+        oriented && continue
     end
-    return n_added > 0
+
+    # Report whether any edge was oriented, so we know whether another 
+    # sweep of the rules is needed.
+    return n_oriented > 0
 end
+
 
 # TODO: finish this
 # Rule 4: (avoid creating cycles or new v-structures)
