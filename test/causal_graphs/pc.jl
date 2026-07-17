@@ -1,5 +1,5 @@
 using Test
-using Graphs: SimpleDiGraph
+using Graphs: SimpleDiGraph, complete_digraph, has_edge, SimpleEdge, add_edge!
 using StableRNGs
 using CausalInference: pcalg, gausscitest
 using Combinatorics
@@ -72,11 +72,25 @@ dg_ct = infer_graph(alg, X)          # PC in this repo
 dg_ci = pcalg(df, α, gausscitest)    # reference
 @test dg_ct == dg_ci
 
+# Case 5: Two independent causes a, b; i and j are common effects.
+n = 1000
+a = randn(rng, n)
+b = randn(rng, n)
+i = a .+ b .+ 0.1 .* randn(rng, n)
+j = a .+ b .+ 0.1 .* randn(rng, n)
+X = [a, b, i, j]
+df = (a=a, b=b, i=i, j=j)
+
+dg_ct = infer_graph(alg, X)
+dg_ci = pcalg(df, α, gausscitest)
+@test dg_ct == dg_ci
 
 # ------------------------------------------
 # Testing specifics steps of the algorithms 
 # ------------------------------------------
 
+# Case 1:
+# --------------------------------------------------------------------------------
 # `skeleton_conditional!` at level 𝓁 must test a pair whose conditioning pool
 # (node i's neighbors, excluding j) has size exactly 𝓁 — the boundary case of
 # Algorithm 1, line 8 in Kalisch & Bühlmann (2008), |adj(C,i)\{j}| ≥ ℓ, where
@@ -128,6 +142,38 @@ sepset = Dict{SimpleEdge,Vector{Int}}()
 Associations.skeleton_conditional!(alg_wb, graph, sepset, X, 2)
 @test !has_edge(graph, SimpleEdge(3, 4))
 @test !has_edge(graph, SimpleEdge(4, 3))
+
+# -------------------------------------------------------------------------------
+# Orientation rule testing.
+# -------------------------------------------------------------------------------
+
+# Rule 3: orient X — Z into X → Z when X — Y → Z and X — W → Z
+# are two chains with Y and W nonadjacent.
+#   Nodes: X=1 (top), Y=2, W=3, Z=4 (bottom)
+#   X—Y, X—W, X—Z undirected;  Y→Z, W→Z directed;  Y and W nonadjacent
+# ---------------------------------------------------------------------------
+dg = SimpleDiGraph(4)
+add_edge!(dg, 1, 2);  # X — Y undirected
+add_edge!(dg, 2, 1)
+add_edge!(dg, 1, 3);  # X — W undirected
+add_edge!(dg, 3, 1)
+add_edge!(dg, 1, 4);  # X — Z undirected
+add_edge!(dg, 4, 1)
+add_edge!(dg, 2, 4)   # Y → Z directed
+add_edge!(dg, 3, 4)   # W → Z directed
+# no edge between Y=2 and W=3 ⇒ nonadjacent
+
+changed = Associations.rule3!(alg, dg)
+
+@test changed                                    # a rule fired
+@test has_edge(dg, 1, 4)                         # X → Z retained
+@test !has_edge(dg, 4, 1)                        # Z → X removed ⇒ oriented X → Z
+# everything else untouched:
+@test has_edge(dg, 1, 2) && has_edge(dg, 2, 1)   # X — Y still undirected
+@test has_edge(dg, 1, 3) && has_edge(dg, 3, 1)   # X — W still undirected
+@test has_edge(dg, 2, 4) && !has_edge(dg, 4, 2)  # Y → Z still directed
+@test has_edge(dg, 3, 4) && !has_edge(dg, 4, 3)  # W → Z still directed
+
 
 # -------------------------------------------------------------------------------
 # Test that different combinations of independence tests work. For this,
