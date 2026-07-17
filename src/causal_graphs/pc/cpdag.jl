@@ -215,10 +215,10 @@ end
 #     ┃  ╲ ▼                 ▼  ╲ ▼
 #     Xⱼ◄─ Xₗ    becomes     Xⱼ ◄─ Xₗ 
 #
-#   where  Xᵢ ┃ Xⱼ  (left) is the undirected candidate edge, oriented into Xᵢ → Xⱼ;
-#          Xᵢ ─ Xₖ  (top) is undirected;
-#          Xₖ → Xₗ  (right) and Xₗ → Xⱼ (bottom) form the directed chain;
-#          Xᵢ ╲ Xₗ  (diagonal) are adjacent; and
+#   where  Xᵢ ┃ Xⱼ (left) is the undirected candidate edge, oriented into Xᵢ → Xⱼ;
+#          Xᵢ ─ Xₖ (top) is undirected;
+#          Xₖ → Xₗ (right) and Xₗ → Xⱼ (bottom) form the directed chain;
+#          Xᵢ ╲ Xₗ (diagonal) are adjacent; and
 #          Xₖ and Xⱼ (the absent diagonal) are nonadjacent.
 #
 # The Xᵢ − Xₗ adjacency (the diagonal) is missed by the wording in in Kalisch & Bühlmann (2008),
