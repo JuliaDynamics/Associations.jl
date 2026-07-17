@@ -15,7 +15,7 @@ undirected edge `X - Y` in `skeleton` is replaced by the bidirectional edge `X �
 In practices, for each `X ↔ Y`, we construct two directional edges `X → Y` and `Y → X`.
 
 Orientiation rules 0-3 are then applied to `dg`. We use the rules as stated in
-Colombo & Maathuis, 2014.
+[Colombo2014](@citet) (originally by [Meek2005](@citet))
 
 - Rule 0 (orients v-structures): `X ↔ Y ↔ Z` becomes `X → Y ← Z` if `Y` is not in the
     separating set `S(X, Z)`.
