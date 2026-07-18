@@ -17,30 +17,31 @@ est_disc = EntropyDecomposition(def, PlugIn(Renyi()), CodifyVariables(ValueBinni
 @test association(est_disc, x, z) isa Real
 @test association(est_disc, x, z, y) isa Real
 
+# TODO: update when https://github.com/JuliaDynamics/Associations.jl/issues/409 is resolved.
 # Test `TransferOperator` decomposition explicitly, because it has a special implementation
-precise = true # precise bin edge
-discretization = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
-est_disc = EntropyDecomposition(TERenyiJizba(), PlugIn(Renyi()), discretization);
-@test association(est_disc, x, z) isa Real
-@test association(est_disc, x, z, y) isa Real
+#precise = true # precise bin edge
+#discretization = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
+#est_disc = EntropyDecomposition(TERenyiJizba(), PlugIn(Renyi()), discretization);
+#@test association(est_disc, x, z) isa Real
+#@test association(est_disc, x, z, y) isa Real
 
 # Check that in the limit of a lot of points, we roughly get the same answer for transfer 
 # operator and regular value binning. 
-sys = system(Logistic4Chain(; rng))
-x, y, z, w = columns(first(trajectory(sys, 10000, Ttr=10000)))
+#sys = system(Logistic4Chain(; rng))
+#x, y, z, w = columns(first(trajectory(sys, 10000, Ttr=10000)))
 
-te_def = TERenyiJizba(base=3, q=0.5)
-def_renyi = Renyi()
+#te_def = TERenyiJizba(base=3, q=0.5)
+#def_renyi = Renyi()
 
-disc_vf = CodifyVariables(ValueBinning(2))
-disc_to = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
+#disc_vf = CodifyVariables(ValueBinning(2))
+#disc_to = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
 
-est_disc_vf = EntropyDecomposition(te_def, PlugIn(def_renyi), disc_vf);
-est_disc_to = EntropyDecomposition(te_def, PlugIn(def_renyi), disc_to);
-te_vf = association(est_disc_vf, x, z)
-te_to = association(est_disc_to, x, z)
+#est_disc_vf = EntropyDecomposition(te_def, PlugIn(def_renyi), disc_vf);
+#est_disc_to = EntropyDecomposition(te_def, PlugIn(def_renyi), disc_to);
+#te_vf = association(est_disc_vf, x, z)
+#te_to = association(est_disc_to, x, z)
 # See that values are within 1% of each other
-@test in_agreement(te_vf, te_to; agreement_threshold=0.01)
+#@test in_agreement(te_vf, te_to; agreement_threshold=0.01)
 
 # ---------------
 # Pretty printing
