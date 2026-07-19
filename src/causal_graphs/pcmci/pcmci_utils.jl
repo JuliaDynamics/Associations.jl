@@ -47,7 +47,7 @@ function print_condvars(parents::Vector{PCMCIParent})
     printstyled("{", color=CONDITIONAL_COLOR)
     for r in 1:n_selected
         print_lagged(add_subscript("x", js[r]), τs[r]; color=CONDITIONAL_COLOR)
-        printstyled(" [p=$(ps[r]), I=$(Is[r])]", color=SYMBOL_COLOR)
+        printstyled(" [p=$(round(ps[r]; digits=4)), I=$(round(Is[r]; digits=4))]", color=SYMBOL_COLOR)
         r < n_selected && printstyled(", "; color=SYMBOL_COLOR)
     end
     printstyled("}", color=CONDITIONAL_COLOR)
