@@ -13,7 +13,7 @@ import HypothesisTests: pvalue
     CorrTest()
 
 An independence test based correlation (for two variables) and partial
-correlation (for three variables) [Levy1978](@cite); as described in
+correlation (for three or more variables) [Levy1978](@cite); as described in
 [Schmidt2018](@citet).
 
 Uses [`PearsonCorrelation`](@ref) and [`PartialCorrelation`](@ref) internally.
