@@ -191,8 +191,8 @@ cest = MesnerShalizi(CMIShannon(); k=3, w=1)
 ctest = LocalPermutationTest(cest; rng, nshuffles=19)
 
 # `τmax = 5` so the longest coupling (x4 → x5 at lag 5) can be detected.
-alg5 = PCMCI(; utest=uest5, ctest=ctest5, α=0.05, τmax=5)
-parents5 = infer_graph(alg5, X5)
+alg5 = PCMCI(; utest=utest, ctest=ctest, α=0.05, τmax=5)
+parents5 = infer_graph(alg5, X5, verbose=true)
 
 g5 = SimpleDiGraph(parents5)
 elabels5 = pcmci_edge_labels(parents5, g5)
