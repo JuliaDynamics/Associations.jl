@@ -71,6 +71,20 @@ function CodifyVariables(o::OutcomeSpace)
     return CodifyVariables((o,))
 end
 
+function CodifyVariables(os::NTuple{N}) where N
+    x = collect(os)
+    if any(isa.(x, TransferOperator))
+        s = "CodifyVariables does not support `ComplexityMeasures.TransferOperator`. " *
+            "Its type has changed from `TransferOperator <: OutcomeSpace` to " *
+            "`TransferOperator <: ProbabilitiesEstimator`. To use the old behaviour, please" *
+            " install/pin Associations v4.6."
+        throw(ArgumentError(s))
+    elseif any(isa.(x, ProbabilitiesEstimator))
+        s = "CodifyVariables does not support `ProbabilitiesEstimator`s. Use a `CountBasedOutcomeSpace` instead."
+    end
+    throw(ArgumentError(s))
+end
+
 """
     codify(d::CodifyVariables, x::Vararg{<:AbstractStateSpaceSet, N})
     codify(d::CodifyPoints, x::Vararg{<:AbstractStateSpaceSet, N})
