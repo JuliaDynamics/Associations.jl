@@ -26,6 +26,10 @@ conditional independence tests implemented in Associations.jl.
 - **`pmax`**: The maximum dimension of the condition.
 - **`qmax`**: The maximum number of combinations.
 - **`fdr_adjust`**: Adjust p-values for all links using the False Discovery Rate (FDR) approach?
+- **`use_abs`**: Whether to rank parents by the absolute value `|I|` of the test statistic (`true`), 
+    or by the raw value (`false`). Defaults to `true`, which is meaningful for signed measures
+    like partial correlation. For unsigned measures, like MI/CMI, some estimators may yield negative 
+    values; in these cases, set `use_abs = false` to compare the raw values directly.
 
 ## Used with 
 
@@ -44,6 +48,7 @@ Base.@kwdef struct PCMCI{U, C, T} <: GraphAlgorithm
     qmax::Int = 2 # maximum number of combinations
     α = 0.05
     fdr_adjust = true
+    use_abs::Bool = true
 end
 
 """
@@ -244,6 +249,9 @@ function select_parents(alg::PCMCI, x::AbstractStateSpaceSet, i::Int)
                 # most negative number.
                 if I < Imin[(i, 0)][(j, τ)]
                     Imin[(i, 0)][(j, τ)] = I
+                Iₘ = alg.use_abs ? abs(I) : I
+                if Iₘ < Imin[(i, 0)][(j, τ)]
+                    Imin[(i, 0)][(j, τ)] = Iₘ
                 end
                 if pval > alg.α
                     push!(marked_for_removal, (j, τ))
