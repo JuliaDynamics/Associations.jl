@@ -70,12 +70,166 @@ Base.@kwdef struct PCMCI{U,C,T} <: GraphAlgorithm
     use_abs_ctest::Bool = true
 end
 
-function infer_graph(alg::PCMCI, x::AbstractStateSpaceSet)
+function infer_graph(alg::PCMCI, x::AbstractStateSpaceSet; verbose=false)
+    D = dimension(x)
+    verbose && print_pcmci_info()
+
     # Find the parents of each variable in the dataset (algorithm S1)
-    𝒫 = [first(select_parents(alg, x, i))[(i, 0)] for i in 1:dimension(x)]
+    verbose && printstyled("˧ PC₁ condition-selection stage...\n"; color=SYMBOL_COLOR)
+    𝒫 = Vector{Vector{Tuple{Int,Int}}}(undef, D)
+    for i in 1:D
+        𝒫[i] = first(select_parents(alg, x, i; verbose))[(i, 0)]
+        verbose && print_preliminary_parents(i, 𝒫[i])
+    end
 
     # Perform the MCI routine on the variables inferred in the first step (algorithm S2)
-    return mci_causal_discovery(alg, x, 𝒫)
+    verbose && printstyled("˧ MCI causal-discovery stage...\n"; color=SYMBOL_COLOR)
+    if verbose && alg.fdr_adjust
+        printstyled("  (displayed p is the raw MCI p-value; final links use FDR-adjusted p, shown below)\n";
+            color=SYMBOL_COLOR)
+    end
+    res = mci_causal_discovery(alg, x, 𝒫; verbose)
+    if verbose
+        printstyled("˧ Inferred parents"; color=SYMBOL_COLOR)
+        alg.fdr_adjust && printstyled(" (p-values FDR-adjusted)"; color=SYMBOL_COLOR)
+        printstyled(":\n"; color=SYMBOL_COLOR)
+        show(stdout, MIME"text/plain"(), res)
+        println() # separate the verbose progress block from any caller/REPL echo of `res`
+        print_pcmci_summary(alg, res, D)
+    end
+    return res
+end
+
+# Print a one-line summary of the inferred graph: the number of links found (including
+# auto-dependencies) and the key parameters used.
+function print_pcmci_summary(alg::PCMCI, res::PCMCIResult, D::Int)
+    nlinks = sum(length, res.parents)
+    printstyled("˧ Found $nlinks link$(nlinks == 1 ? "" : "s") (incl. auto-dependencies) among $D variables "; color=SYMBOL_COLOR)
+    printstyled("(τmax=$(alg.τmax), α=$(alg.α)$(alg.fdr_adjust ? ", FDR-adjusted" : "")).\n"; color=SYMBOL_COLOR)
+end
+
+# Print a legend explaining the notation used in the verbose PCMCI output. This mirrors
+# the info message printed at the start of the OCE algorithm (see `OCEInfoMessage`).
+function print_pcmci_info()
+    printstyled("Inferring causal graph using PCMCI\n"; bold=true)
+    printstyled("Notation:\n"; underline=true, color=:default)
+    printstyled("  a ⫫ b | c  := `a` is conditionally independent of `b`, given `c`\n";
+        color=:default)
+    printstyled("  a !⫫ b | c := `a` is conditionally dependent of `b`, given `c`\n";
+        color=:default)
+
+    # Target variable.
+    print_lagged("* xᵢ", "τ"; color=TARGET_COLOR)
+    printstyled(" := target variable at lag "; color=:default)
+    printstyled("τ\n"; color=LAG_COLOR)
+
+    # Driver (candidate parent) variable.
+    print_lagged("* xⱼ", "τ"; color=SOURCE_COLOR)
+    printstyled(" := driver (candidate parent) variable at lag "; color=:default)
+    printstyled("τ\n"; color=LAG_COLOR)
+
+    # Conditioning set.
+    print_lagged("* 𝒫ᵢ", "τ"; color=CONDITIONAL_COLOR)
+    printstyled(" := conditioning set (selected parents) of "; color=:default)
+    print_lagged("xᵢ", "τ"; color=TARGET_COLOR)
+    print("\n")
+end
+
+# Print the preliminary parents `𝒫` (a vector of `(index, lag)` tuples) selected for
+# variable `Xⁱ` in the PC₁ condition-selection stage.
+function print_preliminary_parents(i::Int, 𝒫::Vector{Tuple{Int,Int}})
+    print_lagged("  " * add_subscript("x", i), 0; color=TARGET_COLOR)
+    printstyled(" ← "; color=SYMBOL_COLOR)
+    print_condset(𝒫)
+    println()
+end
+
+# Print a conditioning set given as a vector of `(index, lag)` tuples, formatted as
+# `{xⱼ(τ), ...}`. An empty set is printed as `∅`.
+function print_condset(𝒮::Vector{Tuple{Int,Int}})
+    if isempty(𝒮)
+        printstyled("∅"; color=CONDITIONAL_COLOR)
+        return
+    end
+    n = length(𝒮)
+    printstyled("{"; color=CONDITIONAL_COLOR)
+    for (r, (j, τ)) in enumerate(𝒮)
+        print_lagged(add_subscript("x", j), τ; color=CONDITIONAL_COLOR)
+        r < n && printstyled(", "; color=SYMBOL_COLOR)
+    end
+    printstyled("}"; color=CONDITIONAL_COLOR)
+end
+
+# Print the header for one PC₁ iteration of condition dimension `p`, over `ncandidates`
+# remaining candidate parents. `p = 0` tests unconditional (pairwise) associations; `p > 0`
+# conditions on `p` of the currently strongest candidates.
+function print_pc1_iteration_header(p::Int, ncandidates::Int)
+    printstyled("  ┌ p=$p: "; color=SYMBOL_COLOR)
+    if p == 0
+        printstyled("unconditional tests"; color=SYMBOL_COLOR)
+    else
+        printstyled("conditioning on $p variable$(p == 1 ? "" : "s")"; color=SYMBOL_COLOR)
+    end
+    printstyled(" ($ncandidates candidate$(ncandidates == 1 ? "" : "s"))\n"; color=SYMBOL_COLOR)
+end
+
+# Print the footer for one PC₁ iteration: the candidates `𝒫` that survived, sorted from
+# strongest to weakest dependence.
+function print_pc1_iteration_footer(𝒫::Vector{Tuple{Int,Int}})
+    n = length(𝒫)
+    printstyled("  └ $n candidate$(n == 1 ? " remains" : "s remain"): "; color=SYMBOL_COLOR)
+    print_condset(𝒫)
+    println()
+end
+
+# Print a single PC₁ removal decision: the candidate parent xⱼ(τ) was found conditionally
+# independent of the target xᵢ(0) given the tested subset `𝒮`, and is thus removed from the
+# preliminary parent set 𝒫(xᵢ).
+function print_pc1_removal(i::Int, j::Int, τ::Int, 𝒮::Vector{Tuple{Int,Int}})
+    print_lagged("  │   " * add_subscript("x", i), 0; color=TARGET_COLOR)
+    printstyled(" ⫫ "; color=SYMBOL_COLOR)
+    print_lagged(add_subscript("x", j), τ; color=SOURCE_COLOR)
+    printstyled(" | "; color=SYMBOL_COLOR)
+    print_condset(𝒮)
+    printstyled(" → removing "; color=SYMBOL_COLOR)
+    print_lagged(add_subscript("x", j), τ; color=SOURCE_COLOR)
+    printstyled("\n"; color=SYMBOL_COLOR)
+end
+
+# Print a single MCI test decision for the potential link xⁱ(-τ) → xʲ(0), conditioned on
+# the set `Z`, together with the p-value and test-statistic value.
+function print_mci_test(alg::PCMCI, i::Int, j::Int, τ::Int, Z::Vector{Tuple{Int,Int}}, pval, I)
+    significant = pval < alg.α
+    depsymb = significant ? " !⫫ " : " ⫫ "
+    print_lagged("    " * add_subscript("x", i), -τ; color=SOURCE_COLOR)
+    printstyled(depsymb; color=SYMBOL_COLOR)
+    print_lagged(add_subscript("x", j), 0; color=TARGET_COLOR)
+    printstyled(" | "; color=SYMBOL_COLOR)
+    print_condset(Z)
+    printstyled(" [p=$(round(pval; digits=4)), I=$(round(I; digits=4))]"; color=SYMBOL_COLOR)
+    significant && printstyled(" (candidate link)"; color=SOURCE_COLOR)
+    printstyled("\n"; color=SYMBOL_COLOR)
+end
+
+# Print a consolidated summary of all candidate links (raw MCI p-value < α) gathered during
+# the MCI stage, *before* any FDR adjustment. The final graph is a subset of these: FDR only
+# raises p-values, so some candidates may be dropped when `fdr_adjust = true`.
+function print_mci_candidate_summary(alg::PCMCI, p_values, test_statistics)
+    candidates = [key for key in keys(p_values) if p_values[key] < alg.α]
+    # Sort by target variable first (key[2]), then source (key[1]), then lag (key[3]).
+    sort!(candidates, by=key -> (key[2], key[1], key[3]))
+    n = length(candidates)
+    printstyled("˧ $n candidate link$(n == 1 ? "" : "s") (raw p < α"; color=SYMBOL_COLOR)
+    alg.fdr_adjust && printstyled(", before FDR adjustment"; color=SYMBOL_COLOR)
+    printstyled("):\n"; color=SYMBOL_COLOR)
+    for key in candidates
+        i, j, τ = key  # driver `i` at lag `τ` (≤ 0), target `j` at lag 0
+        print_lagged("    " * add_subscript("x", i), τ; color=SOURCE_COLOR)
+        printstyled(" → "; color=SYMBOL_COLOR)
+        print_lagged(add_subscript("x", j), 0; color=TARGET_COLOR)
+        printstyled(" [p=$(round(p_values[key]; digits=4)), I=$(round(test_statistics[key]; digits=4))]\n";
+            color=SYMBOL_COLOR)
+    end
 end
 
 """
@@ -89,7 +243,7 @@ Algorithm S2 in the original paper.
 - **`X`**: `StateSpaceSet` containing the multivariate time series data.
 - **`𝒫`**: Preliminary parents obtained from Algorithm S1 for all variables in `X`.
 """
-function mci_causal_discovery(alg::PCMCI, X::AbstractStateSpaceSet, 𝒫)
+function mci_causal_discovery(alg::PCMCI, X::AbstractStateSpaceSet, 𝒫; verbose=false)
     # Initialize dictionary to store p-values and test statistic values for causal links
     p_values = SortedDict{Tuple{Int,Int,Int},Float64}()
     test_statistics = SortedDict{Tuple{Int,Int,Int},Float64}()
@@ -133,10 +287,13 @@ function mci_causal_discovery(alg::PCMCI, X::AbstractStateSpaceSet, 𝒫)
                     pval, I = independence_test_on_subset(alg, embedding)
                     p_values[(i, j, -τ)] = pval
                     test_statistics[(i, j, -τ)] = I
+                    verbose && print_mci_test(alg, i, j, τ, Z, pval, I)
                 end
             end
         end
     end
+
+    verbose && print_mci_candidate_summary(alg, p_values, test_statistics)
 
     if alg.fdr_adjust
         p_values_adjusted = fdr_adjust(alg, p_values)
@@ -161,9 +318,14 @@ end
 Select the parents of the `i`-th variable in `x` according to the `PCMCI` algorithm.
 This is algorithm S1 in their supplementary material.
 """
-function select_parents(alg::PCMCI, x::AbstractStateSpaceSet, i::Int)
+function select_parents(alg::PCMCI, x::AbstractStateSpaceSet, i::Int; verbose=false)
+    if verbose
+        printstyled("  Selecting parents for "; color=SYMBOL_COLOR)
+        print_lagged(add_subscript("x", i), 0; color=TARGET_COLOR)
+        printstyled("...\n"; color=SYMBOL_COLOR)
+    end
 
-    # Preliminary parents for the `j`-th variable at lag `t-0`, limiting the 
+    # Preliminary parents for the `j`-th variable at lag `t-0`, limiting the
     # maximum lag to `alg.τmax`. This is a vector of integer tuple of the form `(i, τ)`.
     # Many of the elements of `𝒫ₜʲ` will be gradually eliminated in the loop below.
     𝒫ₜʲ = initialize_parents_for_variable(i, dimension(x), alg.τmax)
@@ -178,6 +340,7 @@ function select_parents(alg::PCMCI, x::AbstractStateSpaceSet, i::Int)
         if length(𝒫ₜʲ[(i, 0)]) - 1 < p
             break  # This will exit the entire loop
         end
+        verbose && print_pc1_iteration_header(p, length(𝒫ₜʲ[(i, 0)]))
         # Iterate over all potential parents.
         marked_for_removal = Vector{Tuple{Int,Int}}(undef, 0)
         for (j, τ) in 𝒫ₜʲ[(i, 0)]
@@ -225,6 +388,7 @@ function select_parents(alg::PCMCI, x::AbstractStateSpaceSet, i::Int)
                 end
                 if pval > alg.α
                     push!(marked_for_removal, (j, τ))
+                    verbose && print_pc1_removal(i, j, τ, variable_subset)
                     break
                 end
             end
@@ -233,8 +397,9 @@ function select_parents(alg::PCMCI, x::AbstractStateSpaceSet, i::Int)
 
         # Algorithm S1, line 22 / Materials and Methods: after every iteration, sort the
         # remaining preliminary parents by their `Imin` (minimum |I| across tested subsets),
-        # strongest dependence first. 
+        # strongest dependence first.
         sort!(𝒫ₜʲ[(i, 0)], by=parent -> Imin[(i, 0)][parent], rev=true)
+        verbose && print_pc1_iteration_footer(𝒫ₜʲ[(i, 0)])
     end
     return 𝒫ₜʲ, Imin
 end
