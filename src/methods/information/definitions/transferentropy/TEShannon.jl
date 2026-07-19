@@ -32,26 +32,26 @@ are constructed using present/past values and future values, respectively.
 ## Estimation
 
 - [Example 1](@ref example_TEShannon_EntropyDecomposition_TransferOperator): 
-    [`EntropyDecomposition`](@ref) with [`TransferOperator`](@ref) outcome space.
+    [`EntropyDecomposition`](@ref) with [`TransferOperator`](@extref ComplexityMeasures.TransferOperator) outcome space.
 - [Example 2](@ref example_TEShannon_SymbolicTransferEntropy): Estimation using the
     [`SymbolicTransferEntropy`](@ref) estimator.
 """
-struct TEShannon{B, EMB} <: TransferEntropy
+struct TEShannon{B,EMB} <: TransferEntropy
     base::B
     embedding::EMB
-    function TEShannon(; base::B = 2, embedding::EMB = EmbeddingTE()) where {B, EMB}
-        return new{B, EMB}(base, embedding)
+    function TEShannon(; base::B=2, embedding::EMB=EmbeddingTE()) where {B,EMB}
+        return new{B,EMB}(base, embedding)
     end
     # TODO: add constructor that automatically determines the embedding.
 end
 
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TEShannon, <:DiscreteInfoEstimator})
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TEShannon,<:DiscreteInfoEstimator})
     (; definition, est, discretization, pest) = est
     base = definition.base
     return EntropyDecomposition(CMIShannon(; base), est, discretization, pest)
 end
 
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TEShannon, <:DifferentialInfoEstimator})
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TEShannon,<:DifferentialInfoEstimator})
     return EntropyDecomposition(CMIShannon(; est.definition.base), est.est)
 end
 
@@ -81,30 +81,30 @@ end
 # = h(t⁺, t⁻,c⁻) - h(t⁻,c⁻) - h(t⁺,s⁻,t⁻,c⁻) + h(s⁻,t⁻,c⁻)"
 
 function decomposition_string(
-        definition::TEShannon, 
-        est::EntropyDecomposition{M, <:DiscreteInfoEstimator{<:Shannon}}
-    ) where M
+    definition::TEShannon,
+    est::EntropyDecomposition{M,<:DiscreteInfoEstimator{<:Shannon}}
+) where M
     return "TEₛ(s → t | c) = Hₛ(t⁺, t⁻,c⁻) - Hₛ(t⁻,c⁻) - Hₛ(t⁺,s⁻,t⁻,c⁻) + Hₛ(s⁻,t⁻,c⁻)"
 end
 
 function decomposition_string(
-    definition::TEShannon, 
-    est::EntropyDecomposition{M, <:DifferentialInfoEstimator{<:Shannon}}
-    ) where M
+    definition::TEShannon,
+    est::EntropyDecomposition{M,<:DifferentialInfoEstimator{<:Shannon}}
+) where M
     return "TEₛ(s → t | c) = hₛ(t⁺, t⁻,c⁻) - hₛ(t⁻,c⁻) - hₛ(t⁺,s⁻,t⁻,c⁻) + hₛ(s⁻,t⁻,c⁻)"
 end
 
 function decomposition_string(
-        definition::TEShannon, 
-        est::MIDecomposition{M, <:MutualInformationEstimator{<:MIShannon}}
-    ) where M
+    definition::TEShannon,
+    est::MIDecomposition{M,<:MutualInformationEstimator{<:MIShannon}}
+) where M
     return "TEₛ(s → t | c) = Iₛ(t⁺; s⁻, t⁻, c⁻) - Iₛ(t⁺; t⁻, c⁻)"
 end
 
 
 function decomposition_string(
-        definition::TEShannon, 
-        est::CMIDecomposition{M, <:ConditionalMutualInformationEstimator{<:CMIShannon}}
-    ) where M
+    definition::TEShannon,
+    est::CMIDecomposition{M,<:ConditionalMutualInformationEstimator{<:CMIShannon}}
+) where M
     return "TEₛ(s → t | c) = Iₛ(t⁺; s⁻ | t⁻, c⁻)"
 end

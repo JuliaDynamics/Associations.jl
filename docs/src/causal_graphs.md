@@ -1,5 +1,5 @@
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # [Inferring causal graphs](@id causal_graphs)

@@ -40,12 +40,12 @@ is undefined for a particular value, then the measure is undefined and `NaN` is 
 
 - [Example 1](@ref example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyVariables_UniqueElements): 
     [`JointProbabilities`](@ref) estimator with[`CodifyVariables`](@ref) discretization and 
-    [`UniqueElements`](@ref) outcome space on categorical data.
+    [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) outcome space on categorical data.
 - [Example 2](@ref example_ConditionalEntropyTsallisFuruichi_JointProbabilities_CodifyPoints_UniqueElementsEncoding): 
-    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@ref)
+    [`JointProbabilities`](@ref) estimator with [`CodifyPoints`](@ref) discretization and [`UniqueElementsEncoding`](@extref ComplexityMeasures.UniqueElementsEncoding)
     encoding of points on numerical data.
 """
-Base.@kwdef struct ConditionalEntropyTsallisFuruichi{B, Q} <: ConditionalEntropy
+Base.@kwdef struct ConditionalEntropyTsallisFuruichi{B,Q} <: ConditionalEntropy
     base::B = 2
     q::Q = 1.5
 end
@@ -58,13 +58,13 @@ function association(est::JointProbabilities{<:ConditionalEntropyTsallisFuruichi
     return association(est.definition, probs)
 end
 
-function association(definition::ConditionalEntropyTsallisFuruichi, pxy::Probabilities{T, 2}) where {T}
+function association(definition::ConditionalEntropyTsallisFuruichi, pxy::Probabilities{T,2}) where {T}
     (; base, q) = definition
     Nx, Ny = size(pxy)
     if q == 1
         return association(ConditionalEntropyShannon(; base), pxy)
     end
-    py = marginal(pxy, dims = 2)
+    py = marginal(pxy, dims=2)
     ce = 0.0
     qlog = logq0(q)
     for j in 1:Ny
@@ -83,7 +83,7 @@ function logq0(q)
     if q == 1.0
         return x -> zero(x)
     else
-        return x -> (x^(1 - q) - 1)/(1 - q)
+        return x -> (x^(1 - q) - 1) / (1 - q)
     end
 end
 

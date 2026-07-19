@@ -14,6 +14,7 @@ The supertype for all independence tests.
 - [`LocalPermutationTest`](@ref)
 - [`JointDistanceDistributionTest`](@ref)
 - [`CorrTest`](@ref)
+- [`SECMITest`](@ref)
 """
 abstract type IndependenceTest{M} end
 
@@ -28,6 +29,8 @@ If only `x` and `y` are given, `test` must provide a bivariate association measu
 If `z` is given too, then `test` must provide a conditional association measure.
 
 Returns a test `summary`, whose type depends on `test`.
+
+See [`IndependenceTest`](@ref) for a list of compatible tests.
 """
 function independence(test::IndependenceTest, x...)
     L = length(x)
@@ -87,3 +90,4 @@ end
 include("parametric/parametric.jl")
 include("surrogate/SurrogateAssociationTest.jl")
 include("local_permutation/LocalPermutationTest.jl")
+include("secmi/secmi_test.jl")

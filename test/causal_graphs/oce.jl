@@ -29,6 +29,7 @@ using DynamicalSystemsBase
         GaussianCMI(),
         AzadkiaChatterjeeCoefficient(),
         PartialCorrelation(),
+        JointProbabilities(SECMI(), CodifyVariables(OrdinalPatterns()))
     ]
     for mi_est in mi_ests
         utest = SurrogateAssociationTest(mi_est; rng, nshuffles = 2)
@@ -37,9 +38,21 @@ using DynamicalSystemsBase
             alg = OCE(; utest, ctest, τmax = 1)
             parents = infer_graph(alg, X; verbose = false)
             @test parents isa Vector{<:OCESelectedParents}
+
+            if (cmi_est isa JointProbabilities{<:SECMI})
+                ctest = SECMITest(cmi_est; nshuffles = 2)
+                alg = OCE(; utest, ctest, τmax = 1)
+                parents = infer_graph(alg, X; verbose = false)
+                @test parents isa Vector{<:OCESelectedParents}
+            end
         end
     end
 end
+# ----------------------------------------------------------------
+# Some more that don't fint easily inside the loop.
+# ----------------------------------------------------------------
+
+
 # ----------------------------------------------------------------
 # A few examples with more data and more iterations
 # ----------------------------------------------------------------

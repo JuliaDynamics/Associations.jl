@@ -169,7 +169,7 @@ pairwise_test = SurrogateAssociationTest(est_pairwise; rng, nshuffles = 50)
 cond_test = LocalPermutationTest(est_cond; rng, nshuffles = 50)
 alg = PC(pairwise_test, cond_test; α = 0.05)
 est_cpdag_nonparametric = infer_graph(alg, X; verbose = false)
-plotgraph(est_cpdag_nonparametric)
+plotgraph(est_cpdag_nonparametric; nlabels = ["x", "v", "w", "z", "s"])
 ```
 
 We get the same basic structure of the graph, but which directional associations 

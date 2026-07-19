@@ -38,36 +38,36 @@ estimator from the list below as its input.
 
 | Estimator                      | Sub-estimator                    | Principle                    |
 | :----------------------------- | :------------------------------- | :--------------------------- |
-| [`EntropyDecomposition`](@ref) | [`LeonenkoProzantoSavani`](@ref) | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`ValueBinning`](@ref)           | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`Dispersion`](@ref)             | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`OrdinalPatterns`](@ref)        | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`UniqueElements`](@ref)         | Four-entropies decomposition |
-| [`EntropyDecomposition`](@ref) | [`TransferOperator`](@ref)       | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`LeonenkoProzantoSavani`](@extref ComplexityMeasures.LeonenkoProzantoSavani) | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`ValueBinning`](@extref ComplexityMeasures.ValueBinning)           | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`Dispersion`](@extref ComplexityMeasures.Dispersion)             | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`OrdinalPatterns`](@extref ComplexityMeasures.OrdinalPatterns)        | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`UniqueElements`](@extref ComplexityMeasures.UniqueElements)         | Four-entropies decomposition |
+| [`EntropyDecomposition`](@ref) | [`TransferOperator`](@extref ComplexityMeasures.TransferOperator)       | Four-entropies decomposition |
 
 Any of these estimators must be given as input to a [`CMIDecomposition](@ref) estimator.
 
 ## Estimation
 
-- [Example 1](@ref example_TERenyiJizba_EntropyDecomposition_TransferOperator): [`EntropyDecomposition`](@ref) with [`TransferOperator`](@ref) outcome space.
+- [Example 1](@ref example_TERenyiJizba_EntropyDecomposition_TransferOperator): [`EntropyDecomposition`](@ref) with [`TransferOperator`](@extref ComplexityMeasures.TransferOperator) outcome space.
 
 """
-struct TERenyiJizba{B, Q, EMB} <: TransferEntropy
+struct TERenyiJizba{B,Q,EMB} <: TransferEntropy
     base::B
     q::Q
     embedding::EMB
-    function TERenyiJizba(; base::B = 2, q::Q = 1.5, embedding::EMB = EmbeddingTE()) where {B, Q, EMB}
-        return new{B, Q, EMB}(base, q, embedding)
+    function TERenyiJizba(; base::B=2, q::Q=1.5, embedding::EMB=EmbeddingTE()) where {B,Q,EMB}
+        return new{B,Q,EMB}(base, q, embedding)
     end
 end
 
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DiscreteInfoEstimator{<:Renyi}})
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba,<:DiscreteInfoEstimator{<:Renyi}})
     (; definition, est, discretization, pest) = est
     base = definition.base
     return EntropyDecomposition(CMIRenyiJizba(; base), est, discretization, pest)
 end
 
-function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba, <:DifferentialInfoEstimator{<:Renyi}})
+function convert_to_cmi_estimator(est::EntropyDecomposition{<:TERenyiJizba,<:DifferentialInfoEstimator{<:Renyi}})
     return EntropyDecomposition(CMIRenyiJizba(; est.definition.base), est.est)
 end
 
@@ -82,15 +82,15 @@ end
 # = h(t⁺, t⁻,c⁻) - h(t⁻,c⁻) - h(t⁺,s⁻,t⁻,c⁻) + h(s⁻,t⁻,c⁻)"
 
 function decomposition_string(
-        definition::TERenyiJizba, 
-        est::EntropyDecomposition{M, <:DiscreteInfoEstimator}
-    ) where M
+    definition::TERenyiJizba,
+    est::EntropyDecomposition{M,<:DiscreteInfoEstimator}
+) where M
     return "TEᵣⱼ(s → t | c) = Hᵣ(t⁺, t⁻,c⁻) - Hᵣ(t⁻,c⁻) - Hᵣ(t⁺,s⁻,t⁻,c⁻) + Hᵣ(s⁻,t⁻,c⁻)"
 end
 
 function decomposition_string(
-    definition::TERenyiJizba, 
-    est::EntropyDecomposition{M, <:DifferentialInfoEstimator}
-    ) where M
+    definition::TERenyiJizba,
+    est::EntropyDecomposition{M,<:DifferentialInfoEstimator}
+) where M
     return "TEᵣⱼ(s → t | c) = hᵣ(t⁺, t⁻,c⁻) - hᵣ(t⁻,c⁻) - hᵣ(t⁺,s⁻,t⁻,c⁻) + hᵣ(s⁻,t⁻,c⁻)"
 end

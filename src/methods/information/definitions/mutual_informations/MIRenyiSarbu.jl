@@ -1,6 +1,6 @@
 using ComplexityMeasures: Renyi
 
-export MIRenyiSarbu 
+export MIRenyiSarbu
 
 """
     MIRenyiSarbu <: BivariateInformationMeasure
@@ -36,10 +36,10 @@ I(X, Y)^R_q =
 
 ## Estimation
 
-- [Example 1](@ref example_MIRenyiSarbu_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@ref) for categorical data.
-- [Example 2](@ref example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning): [`JointProbabilities`](@ref) with [`CosineSimilarityBinning`](@ref) for numerical data.
+- [Example 1](@ref example_MIRenyiSarbu_JointProbabilities_UniqueElements): [`JointProbabilities`](@ref) with [`UniqueElements`](@extref ComplexityMeasures.UniqueElements) for categorical data.
+- [Example 2](@ref example_MIRenyiSarbu_JointProbabilities_CosineSimilarityBinning): [`JointProbabilities`](@ref) with [`CosineSimilarityBinning`](@extref ComplexityMeasures.CosineSimilarityBinning) for numerical data.
 """
-Base.@kwdef struct MIRenyiSarbu{B, Q} <: MutualInformation
+Base.@kwdef struct MIRenyiSarbu{B,Q} <: MutualInformation
     base::B = 2
     q::Q = 1.5
 end
@@ -52,11 +52,11 @@ function association(est::JointProbabilities{<:MIRenyiSarbu}, x, y)
     return association(est.definition, probs)
 end
 
-function association(definition::MIRenyiSarbu, pxy::Probabilities{T, 2}) where T
+function association(definition::MIRenyiSarbu, pxy::Probabilities{T,2}) where T
     (; base, q) = definition
 
-    px = marginal(pxy, dims = 1)
-    py = marginal(pxy, dims = 2)
+    px = marginal(pxy, dims=1)
+    py = marginal(pxy, dims=2)
 
     mi = 0.0
     for i in eachindex(px.p)

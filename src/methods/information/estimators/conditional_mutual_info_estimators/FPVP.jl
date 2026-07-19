@@ -12,7 +12,7 @@ export FPVP
 The Frenzel-Pompe-Vejmelka-Paluš (or `FPVP` for short)
 [`ConditionalMutualInformationEstimator`](@ref) is used to estimate the
 conditional mutual information using a `k`-th nearest neighbor approach that is
-analogous to that of the [`KraskovStögbauerGrassberger1`](@ref) mutual information
+analogous to that of the [`KraskovStögbauerGrassberger2`](@ref) mutual information
 estimator from [Frenzel2007](@citet) and [Vejmelka2008](@citet).
 
 `k` is the number of nearest neighbors. `w` is the Theiler window, which controls the
@@ -33,7 +33,7 @@ number of temporal neighbors that are excluded during neighbor searches.
 - [Example 1](@ref example_CMIShannon_FPVP): Estimating [`CMIShannon`](@ref)
 
 """
-struct FPVP{M <: ConditionalMutualInformation, MJ, MM} <: ConditionalMutualInformationEstimator{M}
+struct FPVP{M<:ConditionalMutualInformation,MJ,MM} <: ConditionalMutualInformationEstimator{M}
     definition::M
     k::Int
     w::Int
@@ -41,7 +41,7 @@ struct FPVP{M <: ConditionalMutualInformation, MJ, MM} <: ConditionalMutualInfor
     metric_marginals::MM
 end
 
-function FPVP(definition = CMIShannon(); k = 1, w = 0)
+function FPVP(definition=CMIShannon(); k=1, w=0)
     # Metrics shouldn't be modified by the user.
     metric_joint = Chebyshev()
     metric_marginals = Chebyshev()

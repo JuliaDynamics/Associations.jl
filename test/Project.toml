@@ -1,6 +1,7 @@
 [deps]
 CausalInference = "8e462317-f959-576b-b3c1-403f26cec956"
 Combinatorics = "861a8166-3701-5b0c-9a16-15d98fcdc6aa"
+ComplexityMeasures = "ab4b797d-85ee-42ba-b621-05d793b346a2"
 DelayEmbeddings = "5732040d-69e3-5649-938a-b6b4f237613f"
 Distances = "b4f34e82-e78d-54a5-968a-f98e89d6e8f7"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -16,3 +17,8 @@ Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TimeseriesSurrogates = "c804724b-8c18-5caa-8579-6025a0767c70"
+
+[compat]
+ComplexityMeasures = "^3.8"
+DynamicalSystemsBase = "3"
+julia = "^1.10.10"

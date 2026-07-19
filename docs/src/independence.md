@@ -1,5 +1,5 @@
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # [Independence testing](@id independence_testing)
@@ -49,4 +49,11 @@ JDDTestResult
 ```@docs
 CorrTest
 CorrTestResult
+```
+
+## [`SECMITest`](@ref)
+
+```@docs
+SECMITest
+SECMITestResult
 ```

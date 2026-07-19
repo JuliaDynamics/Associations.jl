@@ -1,5 +1,5 @@
 import ComplexityMeasures: TransferOperator, invariantmeasure, InvariantMeasure, Probabilities
-using ComplexityMeasures.GroupSlices
+using ..GroupSlices
 export TransferOperator
 
 using ComplexityMeasures: Probabilities
@@ -55,13 +55,13 @@ end
 # transfer operator.
 function h4_marginal_probs(
     est::EntropyDecomposition{
-        <:TransferEntropy, 
-        <:DiscreteInfoEstimator, 
-        <:CodifyVariables{1, <:TransferOperator},
+        <:TransferEntropy,
+        <:DiscreteInfoEstimator,
+        <:CodifyVariables{1,<:TransferOperator},
         <:RelativeAmount
     },
-        x...
-    )
+    x...
+)
     # We never reach this point unless the outcome space is the same for all marginals,
     # so we can safely pick the first outcome space.
     d::TransferOperator = first(est.discretization.outcome_spaces)
@@ -90,25 +90,25 @@ function h4_marginal_probs(
     cols_STC = [vars.S; vars.T; vars.C]
     cols_T⁺TC = [vars.Tf; vars.T; vars.C]
     cols_TC = [vars.T; vars.C]
-    pTC  = marginal_probs_from_μ(cols_TC, positive_measure_bins, iv, inds_non0measure)
+    pTC = marginal_probs_from_μ(cols_TC, positive_measure_bins, iv, inds_non0measure)
     pSTC = marginal_probs_from_μ(cols_STC, positive_measure_bins, iv, inds_non0measure)
     pT⁺TC = marginal_probs_from_μ(cols_T⁺TC, positive_measure_bins, iv, inds_non0measure)
     pST⁺TC = iv.ρ[inds_non0measure]
 
-    return Probabilities(pTC), 
-        Probabilities(pSTC), 
-        Probabilities(pT⁺TC), 
-        Probabilities(pST⁺TC)
+    return Probabilities(pTC),
+    Probabilities(pSTC),
+    Probabilities(pT⁺TC),
+    Probabilities(pST⁺TC)
 end
 
 function association(
-        est::EntropyDecomposition{
-            <:TransferEntropy, 
-            <:DiscreteInfoEstimator, 
-            <:CodifyVariables{1, <:TransferOperator},
-            <:RelativeAmount
-        },
-        x...)
+    est::EntropyDecomposition{
+        <:TransferEntropy,
+        <:DiscreteInfoEstimator,
+        <:CodifyVariables{1,<:TransferOperator},
+        <:RelativeAmount
+    },
+    x...)
     # If a conditional input (x[3]) is not provided, then C is just a 0-dimensional
     # StateSpaceSet. The horizontal concatenation of C with T then just returns T.
     # We therefore don't need separate methods for the conditional and non-conditional
@@ -118,10 +118,10 @@ function association(
     h_est = estimator_with_overridden_parameters(cmi_est.definition, cmi_est.est)
 
     # Estimate by letting TE(s -> t | c) := I(t⁺; s⁻ | t⁻, c⁻).
-    hSTC =  information(h_est, pSTC)
+    hSTC = information(h_est, pSTC)
     hT⁺TC = information(h_est, pT⁺TC)
     hTC = information(h_est, pTC)
     hST⁺TC = information(h_est, pST⁺TC)
     te = hT⁺TC - hTC - hST⁺TC + hSTC
-    return te 
+    return te
 end

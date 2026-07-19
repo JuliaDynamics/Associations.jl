@@ -24,7 +24,7 @@ function skeleton(alg::PC, x; verbose = false)
     graph = complete_digraph(N)
     separating_set = Dict{SimpleEdge, Vector{Int}}()
 
-    skeleton_unconditional!(alg, graph, x; verbose) # only considers pairs
+    skeleton_unconditional!(alg, graph, separating_set, x; verbose) # only considers pairs
     for 𝓁 = 1:max_degree
         skeleton_conditional!(alg, graph, separating_set, x, 𝓁; verbose)
     end
@@ -49,7 +49,7 @@ If `alg.pairwise_test` is a directed test, then edges are considered one-by-one.
 If `alg.pairwise_test` is not a directed test, then edges (`X → Y, `Y → X`)
 are considered simultaneously.
 """
-function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, x; verbose = false)
+function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, separating_set, x; verbose=false)
     N = length(x)
     pairs = (Tuple(pair) for pair in combinations(1:N, 2))
     for pair in pairs
@@ -64,6 +64,8 @@ function skeleton_unconditional!(alg::PC, graph::SimpleDiGraph, x; verbose = fal
             verbose && println("Skeleton, pairwise: Removing $edge1 and $edge2 (p = $pval)")
             rem_edge!(graph, edge1)
             rem_edge!(graph, edge2)
+            separating_set[edge1] = Int[] # k = ∅
+            separating_set[edge2] = Int[]
         end
     end
     return graph
@@ -91,8 +93,8 @@ function skeleton_conditional!(alg::PC, graph, separating_set, x, 𝓁::Int;
     for (i, aᵢ) in enumerate(a)
         for j in aᵢ
             # The powerset of remaining variables (not including variable i or variable j),
-            # limited to subsets of cardinality 𝓁 <= C <= 𝓁 + 1.
-            𝐒 = powerset(setdiff(aᵢ, j), 𝓁, 𝓁 + 1) |> collect
+            # limited to subsets of cardinality exactly 𝓁.
+            𝐒 = powerset(setdiff(aᵢ, j), 𝓁, 𝓁) |> collect
 
             # Perform independence tests and remove the edge between i and j if
             # they are found to be independent.
@@ -107,7 +109,8 @@ function conditionaltest_and_remove_edge!(alg::PC, x, 𝐒, 𝓁, i, j, graph, s
     # If there's at least one available variable to condition on.
     ctr = 0
 
-    if length(𝐒) >= 𝓁
+    # Is  there at least one candidate set of size ℓ?
+    if !isempty(𝐒)
         src, trg = @views x[i], x[j]
         # For each subset of variables (not including i and j), perform a conditional
         # independence test `i ⫫ j | Sₖ`. If this holds for any variable(s) `Sₖ`,

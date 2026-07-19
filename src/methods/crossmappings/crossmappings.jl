@@ -59,11 +59,11 @@ for ensemble analysis (see [`Ensemble`](@ref)).
     For spatial analyses (not yet implemented), indices could be more complex and involve
     multi-indices.
 """
-abstract type CrossmapEstimator{M, LIBSIZES, RNG} end
+abstract type CrossmapEstimator{M,LIBSIZES,RNG} end
 
 segment_length_error() = "Segment lengths can be inferred only if both a cross-map " *
-    "measure and an input time series is provided. " *
-    "Do e.g. `ExpandingSegment(CCM(), x)`, where `x` is some time series."
+                         "measure and an input time series is provided. " *
+                         "Do e.g. `ExpandingSegment(CCM(), x)`, where `x` is some time series."
 
 """
     max_segmentlength(x::AbstractVector, measure::CrossmapMeasure)
@@ -122,7 +122,7 @@ according to the algorithm specified by the given cross-map `measure` (e.g.
 
 - **First method**: Jointly embeds the target `t` and source `s` time series (according to
     `measure`) to obtain time-index aligned target timeseries `t̄` and source embedding
-    `S̄` (which is now a [`StateSpaceSet`](@ref)).
+    `S̄` (which is now a [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)).
     Then calls `predict(measure, t̄, S̄)` (the first method), and returns both the
     predictions `t̂ₛ`, observations `t̄` and their correspondence `ρ` according to `measure`.
 - **Second method**: Returns a vector of predictions `t̂ₛ` (`t̂ₛ` := "predictions of `t̄` based
@@ -170,7 +170,7 @@ function predict(measure::CrossmapMeasure, t::AbstractVector, S̄::AbstractState
         if !(first(dᵢ) > 0.0)
             for i = 1:nnd
                 # One order of magnitude higher than smallest possible float
-                dᵢ[i] += eps()*10
+                dᵢ[i] += eps() * 10
             end
         end
         u .= exp.(-dᵢ ./ dᵢ[1])

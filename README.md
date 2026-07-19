@@ -1,6 +1,6 @@
 # Associations
 
-[![CI](https://github.com/juliadynamics/Associations.jl/workflows/CI/badge.svg)](https://github.com/JuliaDynamics/Associations.jl/actions)
+[![CI (main)](https://github.com/juliadynamics/Associations.jl/workflows/CI/badge.svg?branch=main)](https://github.com/JuliaDynamics/Associations.jl/actions)
 [![](https://img.shields.io/badge/docs-latest_tagged-blue.svg)](https://juliadynamics.github.io/Associations.jl/stable/)
 [![](https://img.shields.io/badge/docs-dev_(main)-blue.svg)](https://juliadynamics.github.io/Associations.jl/dev/)
 [![codecov](https://codecov.io/gh/JuliaDynamics/Associations.jl/branch/main/graph/badge.svg?token=0b71n6x6AP)](https://codecov.io/gh/JuliaDynamics/Associations.jl)

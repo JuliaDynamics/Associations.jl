@@ -16,7 +16,7 @@ variables removed.
 
 There are several ways of estimating the partial correlation. We follow the
 [matrix inversion method](https://en.wikipedia.org/wiki/Partial_correlation), because
-for [`StateSpaceSet`](@ref)s, we can very efficiently compute the required
+for [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet)s, we can very efficiently compute the required
 joint covariance matrix ``\\Sigma`` for the random variables.
 
 Formally, let ``X_1, X_2, \\ldots, X_n`` be a set of ``n`` real-valued random variables.
@@ -44,7 +44,7 @@ max_inputs_vars(::PartialCorrelation) = Inf
 
 # Compatibility with `independence`
 function association(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
-        conds::ArrayOrStateSpaceSet...)
+    conds::ArrayOrStateSpaceSet...)
     X, Y, Z = construct_partialcor_datasets(x, y, conds...)
     D = StateSpaceSet(X, Y, Z)
     cov_matrix = cov(D)
@@ -53,7 +53,7 @@ function association(::PartialCorrelation, x::VectorOrStateSpaceSet, y::VectorOr
 end
 
 function construct_partialcor_datasets(x::VectorOrStateSpaceSet, y::VectorOrStateSpaceSet,
-        conds::ArrayOrStateSpaceSet...)
+    conds::ArrayOrStateSpaceSet...)
     dimension(x) == 1 || throw(ArgumentError("Input `x` must be 1-dimensional"))
     dimension(y) == 1 || throw(ArgumentError("Input `y` must be 1-dimensional"))
     X, Y = StateSpaceSet(x), StateSpaceSet(y)
@@ -79,5 +79,5 @@ Given a precision matrix `P`, compute the partial correlation of variables `i` a
 conditional on all other variables.
 """
 function partial_correlation_from_precision(P::AbstractMatrix, i::Int, j::Int)
-    return -P[i, j] / sqrt(P[i, i]*P[j, j])
+    return -P[i, j] / sqrt(P[i, i] * P[j, j])
 end

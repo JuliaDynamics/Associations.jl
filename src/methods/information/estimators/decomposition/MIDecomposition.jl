@@ -21,11 +21,11 @@ value of the measure.
 
 - [Example 1](@ref example_CMIShannon_MIDecomposition): Estimating [`CMIShannon`](@ref)
     using a decomposition into [`MIShannon`](@ref) terms using 
-    the [`KraskovStögbauerGrassberger1`](@ref) mutual information estimator.
+    the [`KraskovStögbauerGrassberger2`](@ref) mutual information estimator.
 
 See also: [`MultivariateInformationMeasureEstimator`](@ref).
 """
-struct MIDecomposition{M <: MultivariateInformationMeasure, E} <: DecompositionEstimator{M}
+struct MIDecomposition{M<:MultivariateInformationMeasure,E} <: DecompositionEstimator{M}
     definition::M # extend API from complexity measures: definition must be the first field of the info estimator.
     est::E # The MI estimator + measure which `definition` is decomposed into.
 end

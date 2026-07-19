@@ -41,3 +41,9 @@ oy = OrdinalPatterns(m = 3)
 # Now estimate mutual information
 discretization = CodifyVariables((ox, oy))
 @test probabilities(discretization, x, y) isa Probabilities{T, 2} where T
+
+
+# Temporary test while the TransferOperator <: ProbabilitiesEstimator issue is 
+# resolved (ref https://github.com/JuliaDynamics/Associations.jl/issues/409).
+@test_throws ArgumentError("CodifyVariables does not support `ComplexityMeasures.TransferOperator`. Its type has changed from `TransferOperator <: OutcomeSpace` to `TransferOperator <: ProbabilitiesEstimator`. To use the old behaviour, please install/pin Associations v4.6.") CodifyVariables(TransferOperator(RectangularBinning(2, true)))
+@test_throws ArgumentError("CodifyVariables does not support `ProbabilitiesEstimator`s. Use a `CountBasedOutcomeSpace` instead.") CodifyVariables(RelativeAmount())

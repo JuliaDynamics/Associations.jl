@@ -1,5 +1,5 @@
 ```@meta
-CollapsedDocStrings = true
+CollapsedDocStrings = false
 ```
 
 # [Associations](@id association_measures)
@@ -105,6 +105,12 @@ EmbeddingTE
 
 ```@docs
 PartialMutualInformation
+```
+
+### Short expansion of conditional mutual information
+
+```@docs
+ShortExpansionConditionalMutualInformation
 ```
 
 ## [Correlation measures](@id correlation_api)
