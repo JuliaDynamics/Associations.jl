@@ -7,7 +7,7 @@ export PCMCIParent
 
 """
     PCMCI <: GraphAlgorithm
-    PCMCI(; τmax::Int = 5, pmax::Int = -1, qmax::Int = 2, pX::Int = 3, α = 0.05,
+    PCMCI(; τmax::Int = 5, pmax::Int = -1, qmax::Int = 1, pX::Int = 3, α = 0.05,
         fdr_adjust = true,
         utest = SurrogateAssociationTest(KSG2(MIShannon(), k = 10), nshuffles = 19),
         ctest = LocalPermutationTest(MesnerShalizi(CMIShannon(), k=10, w=0), nshuffles = 19),
@@ -30,7 +30,10 @@ conditional independence tests implemented in Associations.jl.
     restriction, corresponding to the paper's `pmax = Nτmax`, where `N` is the number of
     variables (`dimension(input_dataset)`) and `τmax` is the maximum lag.
 - **`qmax`**: The maximum number of combinations.
-- **`pX`**: The maximum number of the driver variable's parents to condition on in the MCI stage.
+- **`pX`**: The maximum number of the driver variable's strongest parents to condition on in the MCI stage 
+    (last term of Eq. 3 in [Runge2019](@cite)). Conditioning on these accounts for autocorrelation. Too low 
+    risks `pX` inflated false positives, too high lowers test power and increases dimensionality (and hence 
+    increases computation time).
 - **`fdr_adjust`**: Adjust p-values for all links using the False Discovery Rate (FDR) approach?
 - **`use_abs_utest`**: Whether to rank parents by the absolute value `|I|` of the *pairwise*
     (`utest`) test statistic (`true`), or by the raw value (`false`). Defaults to `true`.
