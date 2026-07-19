@@ -176,3 +176,76 @@ We get the same basic structure of the graph, but which directional associations
 are correctly ruled out varies. In general, using different types of 
 association measures with different independence tests, applied to general 
 non-gaussian data, will not give the same results as the correlation-based tests.
+
+## [PCMCI-algorithm](@id pcmci_examples)
+
+```@example graph_examples_pcmci
+using Associations
+using StaticArrays: SVector
+using DynamicalSystemsBase: DiscreteDynamicalSystem, trajectory
+using Distributions: Normal
+using Random
+
+export Nonlinear3
+"""
+    Nonlinear3 <: DiscreteDefinition
+    Nonlinear3(; xi = rand(3),
+        σ₁ = 1.0, σ₂ = 1.0, σ₃ = 1.0,
+        a₁ = 3.4, a₂ = 3.4, a₃ = 3.4,
+        b₁ = 0.4, b₂ = 0.4, b₃ = 0.4,
+        c₁₂ = 0.5, c₂₃ = 0.3, c₁₃ = 0.5,
+        rng = Random.default_rng())
+
+A 3d nonlinear system with nonlinear couplings ``x_1 \\to x_2``,
+``x_2 \\to x_3`` and ``x_1 \\to x_3``. Modified from Gourévitch, B., Le Bouquin-Jeannès, R., & Faucon, G. (2006). Linear and nonlinear causality between signals: methods, examples and neurophysiological applications. Biological Cybernetics, 95(4), 349–369.
+"""
+Base.@kwdef struct Nonlinear3{V,Σx,Σy,Σz,AX,AY,AZ,BX,BY,BZ,C1,C2,C3,RNG}
+    xi::V = [0.1, 0.2, 0.3]
+    σx::Σx = Normal(0, 1.0)
+    σy::Σy = Normal(0, 1.0)
+    σz::Σz = Normal(0, 1.0)
+    ax::AX = 3.4
+    ay::AY = 3.4
+    az::AZ = 3.4
+    bx::BX = 0.4
+    by::BY = 0.4
+    bz::BZ = 0.4
+    c_xy::C1 = 0.5
+    c_xz::C2 = 0.3
+    c_yz::C3 = 0.5
+    rng::RNG = Random.default_rng()
+end
+
+function system(definition::Nonlinear3)
+    return DiscreteDynamicalSystem(eom_nonlinear3, definition.xi, definition)
+end
+
+function eom_nonlinear3(u, p, n)
+    x, y, z = u
+    (; xi, σx, σy, σz, ax, ay, az, bx, by, bz, c_xy, c_xz, c_yz, rng) = p
+    ξ₁ = rand(rng, σx)
+    ξ₂ = rand(rng, σy)
+    ξ₃ = rand(rng, σz)
+    dx = ax * x * (1-x)^2 * exp(-x^2) + bx*ξ₁
+    dy = ay * y * (1-y)^2 * exp(-y^2) + by*ξ₂ + c_xy*x*y
+    dz = az * z * (1-z)^2 * exp(-z^2) + bz*ξ₃ + c_yz*y + c_xz*x^2
+    return SVector{3}(dx, dy, dz)
+end
+
+rng = Xoshiro(1234)
+sys = system(Nonlinear3(; rng))
+npts = 100
+X, t = trajectory(sys, npts)
+
+# Independence tests for unconditional and conditional stages.
+uest = KSG2(MIShannon(); k=3, w=1)
+utest = SurrogateAssociationTest(uest; rng, nshuffles=19)
+cest = MesnerShalizi(CMIShannon(); k=3, w=1)
+ctest = LocalPermutationTest(cest; rng, nshuffles=19)
+
+# Infer graph
+alg = PCMCI(; utest, ctest, α=0.05, τmax=1)
+est = infer_graph(alg, X; verbose=true)
+
+plotgraph(est; nlabels = ["x", "y", "z"])
+```
