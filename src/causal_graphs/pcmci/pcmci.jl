@@ -62,7 +62,7 @@ Base.@kwdef struct PCMCI{U,C,T} <: GraphAlgorithm
     ctest::C = LocalPermutationTest(MesnerShalizi(CMIShannon(), k=10, w=0), nshuffles=19)
     τmax::T = 5
     pmax::Int = -1 # maximum condition dimension; -1 = unrestricted (N*τmax)
-    qmax::Int = 2 # maximum number of combinations
+    qmax::Int = 1 # maximum number of combinations
     pX::Int = 3
     α = 0.05
     fdr_adjust = true
