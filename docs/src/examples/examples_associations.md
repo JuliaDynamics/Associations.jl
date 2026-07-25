@@ -1250,7 +1250,7 @@ sys = system(Logistic4Chain(; rng))
 x, y, z, w = columns(first(trajectory(sys, 300, Ttr = 10000)))
 
 precise = true # precise bin edges
-discretization = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
+discretization = CodifyVariables(ValueBinning(RectangularBinning(2, precise))) #
 est_disc_to = EntropyDecomposition(TEShannon(), PlugIn(Shannon()), discretization);
 association(est_disc_to, x, y), association(est_disc_to, y, x)
 ```
@@ -1502,7 +1502,7 @@ sys = system(Logistic4Chain(; rng))
 x, y, z, w = columns(first(trajectory(sys, 300, Ttr = 10000)))
 
 precise = true # precise bin edges
-discretization = CodifyVariables(TransferOperator(RectangularBinning(2, precise))) #
+discretization = CodifyVariables(ValueBinning(RectangularBinning(2, precise))) #
 est_disc_to = EntropyDecomposition(TERenyiJizba(), PlugIn(Renyi()), discretization);
 association(est_disc_to, x, y), association(est_disc_to, y, x)
 ```
