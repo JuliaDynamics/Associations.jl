@@ -42,3 +42,9 @@ OCESelectedParents
 ```@docs
 PC
 ```
+
+## [PCMCI](@ref)
+
+```@docs
+PCMCI
+```
