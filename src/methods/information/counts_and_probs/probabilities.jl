@@ -55,9 +55,12 @@ See also: [`CodifyPoints`](@ref), [`CodifyVariables`](@ref), [`UniqueElements`](
 """
 function probabilities(o::OutcomeSpace) end
 
-function probabilities(o::OutcomeSpace, x::Vararg{VectorOrStateSpaceSet,N}) where N # this extends ComplexityMeasures.jl definition
-    return Probabilities(counts(o, x...))
+function probabilities(o::ComplexityMeasures.CountBasedOutcomeSpace, x1::VectorOrStateSpaceSet,
+    x2::VectorOrStateSpaceSet, x::Vararg{VectorOrStateSpaceSet,N}) where N # this extends ComplexityMeasures.jl definition
+
+    return Probabilities(counts(o, x1, x2, x...))
 end
+
 function probabilities(est::RelativeAmount, c::Counts{<:Integer,N}) where N
     probs = Probabilities(c)
     return Probabilities(probs.p, c.outcomes, c.dimlabels)
@@ -68,8 +71,10 @@ function probabilities(est::ProbabilitiesEstimator, c::Counts{<:Integer,N}) wher
 end
 
 # Not providing any discretization defaults to `RelativeAmount` estimation.
-function probabilities(x::Vararg{VectorOrStateSpaceSet,N}) where N
-    cts = counts(UniqueElements(), x...)
+function probabilities(x1::VectorOrStateSpaceSet, x2::VectorOrStateSpaceSet,
+    x::Vararg{VectorOrStateSpaceSet,N}) where N
+
+    cts = counts(UniqueElements(), x1, x2, x...)
     probs = probabilities(RelativeAmount(), cts)
     return Probabilities(probs.p, cts.outcomes, cts.dimlabels)
 end
