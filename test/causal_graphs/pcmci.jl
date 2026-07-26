@@ -33,9 +33,13 @@ X = linear5(800; rng=Xoshiro(1234));
 
 # `τmax = 7` so the longest coupling lag (5) can be detected.
 alg = PCMCI(; utest=CorrTest(), ctest=CorrTest(), α=0.05, τmax=7)
-parents = infer_graph(alg, X, verbose=false)
 
+# StateSpaceSet input
+parents = infer_graph(alg, X, verbose=false)
 @test parents isa Vector{<:PCMCISelectedParents}
+
+# vector inputs
+@test infer_graph(alg, [columns(X)...]) isa isa Vector{<:PCMCISelectedParents}
 
 # `has_link(parents, i, j, τ)` returns `true` if the driver `xⱼ(τ)` was selected as
 # a parent of the target `xᵢ(0)`, i.e. if the link `xⱼ(τ) → xᵢ(0)` was identified.
