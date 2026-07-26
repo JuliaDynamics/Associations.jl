@@ -47,4 +47,5 @@ PC
 
 ```@docs
 PCMCI
+PCMCISelectedParents
 ```
