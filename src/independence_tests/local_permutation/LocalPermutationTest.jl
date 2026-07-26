@@ -149,6 +149,7 @@ struct LocalPermutationTestResult{M, MS, P} <: IndependenceTestResult
 end
 pvalue(r::LocalPermutationTestResult) = r.pvalue
 quantile(r::LocalPermutationTestResult, q) = quantile(r.m_surr, q)
+test_statistic(r::LocalPermutationTestResult) = r.m
 
 function Base.show(io::IO, test::LocalPermutationTestResult)
     print(io,

@@ -176,3 +176,43 @@ We get the same basic structure of the graph, but which directional associations
 are correctly ruled out varies. In general, using different types of 
 association measures with different independence tests, applied to general 
 non-gaussian data, will not give the same results as the correlation-based tests.
+
+## [PCMCI-algorithm](@id pcmci_examples)
+
+```@example graph_examples_pcmci
+using Associations
+using StateSpaceSets: StateSpaceSet
+using Random
+rng = Xoshiro(1234)
+
+function linear5(npts::Int; rng=Random.default_rng(),
+    a=0.5,      # autoregressive strength
+    c=0.2,      # coupling strength
+    σ=0.05)      # noise strength
+    # `pad` extra transient points are generated (and later discarded) so that
+    # the longest lag (5) always has valid history.
+    pad = 100
+    N = npts + pad
+    x1 = zeros(N);
+    x2 = zeros(N);
+    x3 = zeros(N);
+    x4 = zeros(N);
+    x5 = zeros(N)
+    for t in 6:N
+        x1[t] = a*x1[t-1] + σ*randn(rng)
+        x2[t] = a*x2[t-1] + c*x1[t-2] + σ*randn(rng)
+        x3[t] = a*x3[t-1] + c*x2[t-3] + σ*randn(rng)
+        x4[t] = a*x4[t-1] + c*x1[t-4] + σ*randn(rng)
+        x5[t] = a*x5[t-1] + c*x3[t-1] + c*x4[t-5] + σ*randn(rng)
+    end
+    return StateSpaceSet(x1[(pad+1):end], x2[(pad+1):end], x3[(pad+1):end],
+        x4[(pad+1):end], x5[(pad+1):end])
+end
+
+# `τmax = 8` so the longest coupling lag can be detected.
+X = linear5(500);
+alg = PCMCI(; utest=CorrTest(), ctest=CorrTest(), α=0.05, τmax=8)
+parents = infer_graph(alg, X, verbose=false)
+```
+
+We nicely recover the true links.

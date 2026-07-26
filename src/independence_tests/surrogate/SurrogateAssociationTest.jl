@@ -114,6 +114,7 @@ struct SurrogateAssociationTestResult{M, MS, P} <: IndependenceTestResult
 end
 pvalue(r::SurrogateAssociationTestResult) = r.pvalue
 quantile(r::SurrogateAssociationTestResult, q) = quantile(r.m_surr, q)
+test_statistic(r::SurrogateAssociationTestResult) = r.m
 
 function Base.show(io::IO, test::SurrogateAssociationTestResult)
     print(io,

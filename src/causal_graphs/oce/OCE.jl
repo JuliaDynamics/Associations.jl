@@ -76,7 +76,7 @@ example, `x₂(-3)` is the variable `x[2]` lagged by 3 time steps.
     variables. Let `τ = parents_τs[k]` and `j = parents_js[k]`. Then `parents[k]` is
     the raw data for the variable `xⱼ(-τ)`.
 """
-Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT, A}
+Base.@kwdef mutable struct OCESelectedParents{P, PJ, PT, A} <: AbstractSelectedParents
     i::Int
     all_idxs::A
     parents::P = Vector{Vector{eltype(1.0)}}(undef, 0)

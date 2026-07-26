@@ -37,6 +37,8 @@ function independence(test::IndependenceTest, x...)
     throw(ArgumentError("No concrete implementation for $(typeof(test)) test with $(L) input variables."))
 end
 
+function test_statistic end
+
 function pvalue_text_summary(test::IndependenceTestResult)
     α005 = pvalue(test) < 0.05 ?
         "α = 0.05:  ✓ Evidence favors dependence" :
