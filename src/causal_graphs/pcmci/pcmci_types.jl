@@ -1,6 +1,6 @@
 
 export PCMCI
-export PCMCIResult
+export PCMCISelectedParents
 export PCMCIParent
 
 """
@@ -54,8 +54,8 @@ conditional independence tests implemented in Associations.jl.
     `Vector{Vector{<:Real}}`.
 ## Returns
 
-When used with [`infer_graph`](@ref), it returns a [`PCMCIResult`](@ref), where
-`p.parents[i]` are the parents for the variable `Xⁱₜ`. This result can be converted to a
+When used with [`infer_graph`](@ref), it returns a `Vector{`[`PCMCISelectedParents`](@ref)`}`,
+where `p[i]` are the parents for the variable `Xⁱₜ`. This result can be converted to a
 `SimpleDiGraph` from Graphs.jl by calling `SimpleDiGraph(res)`.
 """
 Base.@kwdef struct PCMCI{U,C,T} <: GraphAlgorithm
@@ -86,26 +86,43 @@ struct PCMCIParent
     test_statistic::Real
 end
 """
-    PCMCIResult
+    PCMCISelectedParents <: AbstractSelectedParents
 
-Stores the result of a [`PCMCI`](@ref) analysis. Each parent is represented as 
-a [`PCMCIParent`](@ref).
+Stores the parents of a single variable `xᵢ(0)` inferred by the [`PCMCI`](@ref) algorithm.
+When [`PCMCI`](@ref) is used with [`infer_graph`](@ref), a `Vector{PCMCISelectedParents}`
+is returned, i.e. one element per input variable, where `p[i]` holds the parents of `xᵢ(0)`.
 
-This is just a collection of `Vector{PCMCIParent}` - one per input variable.
-If `r` is a `PCMCIResult`, then the parents of ``X^i_t`` are `r[i]`.
+## Fields
 
-When printed in the console the `[pvalue, test_statistic]` are displayed for each
-parent variable.
+- `i`: index of the target variable (`xᵢ(0)` is the target).
+- `parents_js`: variable index of each selected parent.
+- `parents_τs`: lag of each selected parent.
+- `pvals`: the (possibly FDR-adjusted) p-value of each selected link.
+- `test_statistics`: the test-statistic value of each selected link.
+
+When printed in the console the `[p=…, I=…]` values are displayed for each parent.
 """
-struct PCMCIResult
-    parents::Vector{Vector{PCMCIParent}}
+struct PCMCISelectedParents{PJ,PT,PV,TS} <: AbstractSelectedParents
+    i::Int
+    parents_js::PJ
+    parents_τs::PT
+    pvals::PV
+    test_statistics::TS
 end
 
-function Base.show(io::IO, ::MIME"text/plain", r::PCMCIResult)
-    for (i, parents::Vector{PCMCIParent}) in enumerate(r.parents)
-        print_lagged(add_subscript("x", i), 0; color=TARGET_COLOR)
-        printstyled(" ← "; color=SYMBOL_COLOR)
-        print_condvars(parents)
-        println()
-    end
+# Convenience constructor from a vector of per-link `PCMCIParent`s.
+function PCMCISelectedParents(i::Int, links::AbstractVector{PCMCIParent})
+    return PCMCISelectedParents(
+        i,
+        [l.i for l in links],
+        [l.τ for l in links],
+        [l.pval for l in links],
+        [l.test_statistic for l in links],
+    )
+end
+
+# Include the p-value and test statistic after each parent when printing (see
+# `print_condvars(::AbstractSelectedParents)`).
+function parent_annotation(p::PCMCISelectedParents, k::Int)
+    return " [p=$(round(p.pvals[k]; digits=4)), I=$(round(p.test_statistics[k]; digits=4))]"
 end

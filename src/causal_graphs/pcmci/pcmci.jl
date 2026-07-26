@@ -100,15 +100,16 @@ function mci_causal_discovery(alg::PCMCI, X::AbstractStateSpaceSet, 𝒫; verbos
         p_values_adjusted = p_values
     end
 
-    # Format results.
+    # Format results: one `PCMCISelectedParents` per variable (`res[i]` are the parents of
+    # `xᵢ(0)`), matching the per-variable return convention of the OCE algorithm.
     D = dimension(X)
-    parents = Vector{Vector{PCMCIParent}}(undef, D)
+    res = Vector{PCMCISelectedParents}(undef, D)
     for i in 1:D
-        parents[i] = [
+        links = [
             PCMCIParent(key[1], key[3], p_values_adjusted[key], test_statistics[key]) for key in keys(p_values_adjusted) if key[2] == i && p_values_adjusted[key] < alg.α
         ]
+        res[i] = PCMCISelectedParents(i, links)
     end
-    res = PCMCIResult(parents)
     verbose && print_inferred_parents(alg, res, D)
     return res
 end

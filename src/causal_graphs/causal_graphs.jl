@@ -5,6 +5,7 @@ export edges
 
 include("api.jl")
 include("printing.jl")
+include("selected_parents.jl")
 
 # Concrete implementations
 include("pc/PC.jl")

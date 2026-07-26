@@ -6,8 +6,8 @@ const CONDITIONAL_DRIVER_COLOR = SOURCE_COLOR
 
 # Print a one-line summary of the inferred graph: the number of links found (including
 # auto-dependencies) and the key parameters used.
-function print_pcmci_summary(alg::PCMCI, res::PCMCIResult, D::Int)
-    nlinks = sum(length, res.parents)
+function print_pcmci_summary(alg::PCMCI, res::AbstractVector{<:PCMCISelectedParents}, D::Int)
+    nlinks = sum(nparents, res)
     printstyled("˧ Found $nlinks link$(nlinks == 1 ? "" : "s") (incl. auto-dependencies) among $D variables "; color=SYMBOL_COLOR)
     printstyled("(τmax=$(alg.τmax), α=$(alg.α)$(alg.fdr_adjust ? ", FDR-adjusted" : "")).\n"; color=SYMBOL_COLOR)
 end
@@ -195,14 +195,17 @@ function print_mci_stage_header(alg::PCMCI)
     end
 end
 
-# Print the final inferred-parents block for the MCI stage: the `PCMCIResult` itself (via its
-# `show` method) followed by a one-line summary. When FDR adjustment is enabled, the reported
-# p-values are the FDR-adjusted ones.
-function print_inferred_parents(alg::PCMCI, res::PCMCIResult, D::Int)
+# Print the final inferred-parents block for the MCI stage: one line per variable (via the
+# `AbstractSelectedParents` `show` method) followed by a one-line summary. When FDR adjustment
+# is enabled, the reported p-values are the FDR-adjusted ones.
+function print_inferred_parents(alg::PCMCI, res::AbstractVector{<:PCMCISelectedParents}, D::Int)
     printstyled("˧ Inferred parents"; color=SYMBOL_COLOR)
     alg.fdr_adjust && printstyled(" (p-values FDR-adjusted)"; color=SYMBOL_COLOR)
     printstyled(":\n"; color=SYMBOL_COLOR)
-    show(stdout, MIME"text/plain"(), res)
+    for p in res
+        show(stdout, MIME"text/plain"(), p)
+        println()
+    end
     println() # separate the verbose progress block from any caller/REPL echo of `res`
     print_pcmci_summary(alg, res, D)
 end
@@ -252,18 +255,3 @@ function print_mci_candidate_summary(alg::PCMCI, p_values, test_statistics)
     end
 end
 
-function print_condvars(parents::Vector{PCMCIParent})
-    τs = [p.τ for p in parents]
-    js = [p.i for p in parents]
-    ps = [p.pval for p in parents]
-    Is = [p.test_statistic for p in parents]
-
-    n_selected = length(parents)
-    printstyled("{", color=CONDITIONAL_COLOR)
-    for r in 1:n_selected
-        print_lagged(add_subscript("x", js[r]), τs[r]; color=CONDITIONAL_COLOR)
-        printstyled(" [p=$(round(ps[r]; digits=4)), I=$(round(Is[r]; digits=4))]", color=SYMBOL_COLOR)
-        r < n_selected && printstyled(", "; color=SYMBOL_COLOR)
-    end
-    printstyled("}", color=CONDITIONAL_COLOR)
-end
