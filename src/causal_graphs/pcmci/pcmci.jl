@@ -23,6 +23,9 @@ function infer_graph(alg::PCMCI, x::AbstractStateSpaceSet; verbose=false)
     res = mci_causal_discovery(alg, x, 𝒫; verbose)
     return res
 end
+function infer_graph(alg::PCMCI, x::Vector{Vector{T}}; kwargs...) where T
+    return infer_graph(alg, StateSpaceSet(x...); kwargs...)
+end
 
 """
     mci_causal_discovery(alg::PCMCI, X::AbstractStateSpaceSet, 𝒫)
