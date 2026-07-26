@@ -1,41 +1,4 @@
-export PCMCIResult
 
-"""
-    PCMCIParent(i, τ, pval, test_statistic)
-
-The index `i` and lag `τ` of a parent node, along with the p-value and 
-test statistic value for the link.
-"""
-struct PCMCIParent
-    i::Int
-    τ::Int
-    pval::Real
-    test_statistic::Real
-end
-"""
-    PCMCIResult
-
-Stores the result of a [`PCMCI`](@ref) analysis. Each parent is represented as 
-a [`PCMCIParent`](@ref).
-
-This is just a collection of `Vector{PCMCIParent}` - one per input variable.
-If `r` is a `PCMCIResult`, then the parents of ``X^i_t`` are `r[i]`.
-
-When printed in the console the `[pvalue, test_statistic]` are displayed for each
-parent variable.
-"""
-struct PCMCIResult
-    parents::Vector{Vector{PCMCIParent}}
-end
-
-function Base.show(io::IO, ::MIME"text/plain", r::PCMCIResult)
-    for (i, parents::Vector{PCMCIParent}) in enumerate(r.parents)
-        print_lagged(add_subscript("x", i), 0; color=TARGET_COLOR)
-        printstyled(" ← "; color=SYMBOL_COLOR)
-        print_condvars(parents)
-        println()
-    end
-end
 
 function print_condvars(parents::Vector{PCMCIParent})
     τs = [p.τ for p in parents]
