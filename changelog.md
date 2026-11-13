@@ -2,6 +2,14 @@
 
 From version v4.0 onwards, this package has been renamed to to Associations.jl.
 
+# 4.7.2
+
+- Fixed `codified_marginals` with `ValueBinning(::RectangularBinning)` for multi-column
+  (`StateSpaceSet`) inputs. Each input was given one column of the joint binning, so a
+  multi-column input kept only its first column and the inputs after it were given the
+  wrong columns. This affected discrete `EntropyDecomposition` estimates of mutual and
+  conditional mutual information with multi-column inputs.
+
 # 4.4
 
 - New association measure: `SECMI` (`ShortExpansionConditionalMutualInformation`)
