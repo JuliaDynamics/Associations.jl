@@ -113,6 +113,17 @@ PartialMutualInformation
 ShortExpansionConditionalMutualInformation
 ```
 
+### [Higher-order information measures](@id higher_order_information)
+
+```@docs
+HigherOrderInformationMeasure
+TotalCorrelation
+DualTotalCorrelation
+OInformation
+SInformation
+oinformation_gradients
+```
+
 ## [Correlation measures](@id correlation_api)
 
 ```@docs

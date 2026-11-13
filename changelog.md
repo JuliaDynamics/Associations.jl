@@ -2,6 +2,16 @@
 
 From version v4.0 onwards, this package has been renamed to to Associations.jl.
 
+# 4.8
+
+- New higher-order information measures for any number of variables: `TotalCorrelation`,
+  `DualTotalCorrelation`, `OInformation` and `SInformation`, estimated with
+  `JointProbabilities`, `EntropyDecomposition` or the new `GaussianDecomposition`.
+- New function `oinformation_gradients`, for the first- and second-order gradients of the
+  O-information.
+- New estimator `GaussianDecomposition`: closed-form Gaussian entropies, optionally after a
+  Gaussian copula transform.
+
 # 4.7.2
 
 - Fixed `codified_marginals` with `ValueBinning(::RectangularBinning)` for multi-column
