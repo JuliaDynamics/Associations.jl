@@ -8,5 +8,6 @@ include("partial_mutual_information/partial_mutual_information.jl")
 include("transferentropy/transfer_entropies.jl")
 include("short_expansion_conditional_mutual_information/short_expansion_conditional_mutual_information.jl")
 include("higher_order/higher_order.jl")
+include("pid/pid.jl")
 
 include("override_parameters.jl")

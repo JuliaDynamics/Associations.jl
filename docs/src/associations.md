@@ -124,6 +124,22 @@ SInformation
 oinformation_gradients
 ```
 
+### [Partial information decomposition](@id pid_api)
+
+```@docs
+PartialInformationDecomposition
+PIDAtom
+RedundancyFunction
+IMin
+IMMI
+PIDResult
+synergy
+redundancy
+unique_information
+atom
+atoms
+```
+
 ## [Correlation measures](@id correlation_api)
 
 ```@docs

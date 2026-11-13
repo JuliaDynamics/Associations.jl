@@ -11,6 +11,8 @@ export GaussianDecomposition
 
 A parametric estimator of [`HigherOrderInformationMeasure`](@ref)s that models the
 inputs as jointly Gaussian and computes every joint entropy in closed form.
+It also estimates a [`PartialInformationDecomposition`](@ref) with the [`IMMI`](@ref)
+redundancy function, through the mutual informations ``I(A; T) = H(A) + H(T) - H(A, T)``.
 
 ## Compatible definitions
 
@@ -18,6 +20,7 @@ inputs as jointly Gaussian and computes every joint entropy in closed form.
 - [`DualTotalCorrelation`](@ref)
 - [`OInformation`](@ref)
 - [`SInformation`](@ref)
+- [`PartialInformationDecomposition`](@ref) with [`IMMI`](@ref), and [`PIDAtom`](@ref)
 
 ## Description
 
@@ -53,6 +56,15 @@ end
 function association(est::GaussianDecomposition{<:HigherOrderInformationMeasure}, x...)
     return higher_order_association(est, x...)
 end
+
+# Partial information decomposition with the minimum mutual information redundancy.
+function association(est::GaussianDecomposition{<:PartialInformationDecomposition}, x...)
+    return pid_association(est, x...)
+end
+function association(est::GaussianDecomposition{<:PIDAtom}, x...)
+    return pid_atom_association(est, x...)
+end
+with_definition(est::GaussianDecomposition, def) = GaussianDecomposition(def, est.copula)
 
 function subset_entropies(est::GaussianDecomposition, x...)
     X = StateSpaceSet.(x)

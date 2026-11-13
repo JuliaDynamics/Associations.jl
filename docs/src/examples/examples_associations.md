@@ -1335,6 +1335,66 @@ est = JointProbabilities(SInformation(), CodifyVariables(UniqueElements()))
 association(est, x, x, x), association(est, x, y, x .⊻ y)
 ```
 
+## [`PartialInformationDecomposition`](@ref)
+
+### [[`JointProbabilities`](@ref) with [`IMin`](@ref)](@id example_PartialInformationDecomposition_JointProbabilities_IMin)
+
+The decomposition of the information that two inputs of a logic gate carry about its
+output. The last input is the target.
+
+```@example pid_demonstration
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 10_000
+x, y = rand(rng, 0:1, n), rand(rng, 0:1, n)
+est = JointProbabilities(PartialInformationDecomposition(IMin()), CodifyVariables(UniqueElements()))
+res = association(est, x, y, x .⊻ y) # XOR: pure synergy
+```
+
+```@example pid_demonstration
+res = association(est, x, y, x .& y) # AND: redundancy and synergy
+synergy(res), redundancy(res), unique_information(res, 1)
+```
+
+Every atom can be listed with [`atoms`](@ref):
+
+```@example pid_demonstration
+atoms(res)
+```
+
+### [[`GaussianDecomposition`](@ref) with [`IMMI`](@ref)](@id example_PartialInformationDecomposition_GaussianDecomposition_IMMI)
+
+For continuous data, use the minimum mutual information redundancy function. Here the
+target depends strongly on the first source and weakly on the second.
+
+```@example pid_demonstration
+s1, s2 = randn(rng, n), randn(rng, n)
+t = s1 .+ 0.5 .* s2 .+ 0.5 .* randn(rng, n)
+pid = PartialInformationDecomposition(IMMI())
+association(GaussianDecomposition(pid), s1, s2, t)
+```
+
+The same decomposition from a nearest-neighbour mutual information estimator:
+
+```@example pid_demonstration
+association(MIDecomposition(pid, KraskovStögbauerGrassberger1(MIShannon(); k = 5)), s1, s2, t)
+```
+
+### [Testing an atom for significance with [`PIDAtom`](@ref)](@id example_PIDAtom_SurrogateAssociationTest)
+
+[`PIDAtom`](@ref) turns one atom into a number, so it can be used with
+[`SurrogateAssociationTest`](@ref). The test shuffles the first input.
+
+```@example pid_demonstration
+pid = PartialInformationDecomposition(IMMI())
+est = JointProbabilities(PIDAtom(pid, :synergy), CodifyVariables(UniqueElements()))
+x, y = rand(rng, 0:1, 2000), rand(rng, 0:1, 2000)
+noise = rand(rng, 2000) .< 0.1
+t = (x .⊻ y) .⊻ noise # a noisy XOR gate
+test = SurrogateAssociationTest(est; nshuffles = 100, rng)
+independence(test, x, y, t)
+```
+
 ## [`TEShannon`](@ref)
 
 ### [[`EntropyDecomposition`](@ref) + [`TransferOperator`](@extref ComplexityMeasures.TransferOperator)](@id example_TEShannon_EntropyDecomposition_TransferOperator)

@@ -280,9 +280,14 @@ end
     # Column `a` of the group carries the dependence, so it must be seen.
     @test association(EntropyDecomposition(TotalCorrelation(), PlugIn(Shannon()), d), G, y) > 0.5
 
-    # The same encodings feed the discrete mutual information.
+    # The same encodings feed the discrete mutual information and the PID.
     @test association(EntropyDecomposition(MIShannon(), PlugIn(Shannon()), d), G, y) ≈
         association(JointProbabilities(MIShannon(), d), G, y)
+    pid = PartialInformationDecomposition(IMMI())
+    sep = association(EntropyDecomposition(pid, PlugIn(Shannon()), d), G, c, y)
+    joint = association(JointProbabilities(pid, d), G, c, y)
+    @test last.(atoms(sep)) ≈ last.(atoms(joint))
+    @test unique_information(sep, 1) > 0.5
 end
 
 # ---------------------------------------------------------------------------------------
