@@ -34,6 +34,12 @@ GaoOhViswanath
 GaussianMI
 ```
 
+### Higher-order information estimators
+
+```@docs
+GaussianDecomposition
+```
+
 ### Conditional mutual information estimators
 
 ```@docs

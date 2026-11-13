@@ -89,3 +89,21 @@ out_hdisc = repr(EntropyDecomposition(def, PlugIn(Shannon()), CodifyVariables(Va
 
 @test occursin("Iₛ(X, Y) = Hₛ(X) + Hₛ(Y) - Hₛ(X, Y)", out_hdisc)
 @test occursin("Iₛ(X, Y) = hₛ(X) + hₛ(Y) - hₛ(X, Y)", out_hdiff)
+# ---------------------------------------------------------------
+# `GaussianMI` against the exact value, with a multi-column input
+# ---------------------------------------------------------------
+# a and b are correlated (ρ = 0.8), and y = a + e. Then var(y) = 2 and var(y | a, b) = 1, so
+# I((a, b); y) = ½ log 2 nats. (-½ log det of the full correlation matrix would instead give
+# the total correlation I((a, b); y) + I(a; b) = ½ log 2 - ½ log(1 - 0.8²) ≈ 0.86 nats.)
+let rng = Xoshiro(1234), N = 100_000
+    a = randn(rng, N)
+    b = 0.8 .* a .+ 0.6 .* randn(rng, N)
+    y = a .+ randn(rng, N)
+    X = StateSpaceSet(a, b)
+    mi_true = 0.5 * log(2)
+    for normalize in (true, false)
+        est = GaussianMI(MIShannon(; base = ℯ); normalize)
+        @test association(est, X, y) ≈ mi_true atol = 0.01
+        @test association(est, y, X) ≈ mi_true atol = 0.01
+    end
+end

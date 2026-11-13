@@ -35,6 +35,7 @@ const SHANNON_MULTIVARIATE_MEASURES = Union{
     ConditionalEntropyShannon,
     JointEntropyShannon,
     TEShannon,
+    HigherOrderInformationMeasure,
 }
 
 

@@ -45,7 +45,7 @@ estimator from the list below as its input.
 | [`EntropyDecomposition`](@ref) | [`UniqueElements`](@extref ComplexityMeasures.UniqueElements)         | Four-entropies decomposition |
 | [`EntropyDecomposition`](@ref) | [`TransferOperator`](@extref ComplexityMeasures.TransferOperator)       | Four-entropies decomposition |
 
-Any of these estimators must be given as input to a [`CMIDecomposition](@ref) estimator.
+Any of these estimators must be given as input to a [`CMIDecomposition`](@ref) estimator.
 
 ## Estimation
 

@@ -2,6 +2,27 @@
 
 From version v4.0 onwards, this package has been renamed to to Associations.jl.
 
+# 4.8
+
+- New higher-order information measures for any number of variables: `TotalCorrelation`,
+  `DualTotalCorrelation`, `OInformation` and `SInformation`, estimated with
+  `JointProbabilities`, `EntropyDecomposition` or the new `GaussianDecomposition`.
+- New function `oinformation_gradients`, for the first- and second-order gradients of the
+  O-information.
+- New estimator `GaussianDecomposition`: closed-form Gaussian entropies, optionally after a
+  Gaussian copula transform.
+
+# 4.7.2
+
+- Fixed `codified_marginals` with `ValueBinning(::RectangularBinning)` for multi-column
+  (`StateSpaceSet`) inputs. Each input was given one column of the joint binning, so a
+  multi-column input kept only its first column and the inputs after it were given the
+  wrong columns. This affected discrete `EntropyDecomposition` estimates of mutual and
+  conditional mutual information with multi-column inputs.
+- Fixed `GaussianMI` with `normalize = true` (the default) for multi-column inputs. It
+  returned the total correlation of all the columns of `X` and `Y` instead of the mutual
+  information `I(X; Y)`. Results for one-column inputs are unchanged.
+
 # 4.4
 
 - New association measure: `SECMI` (`ShortExpansionConditionalMutualInformation`)

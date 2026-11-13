@@ -37,7 +37,7 @@ OCE
 OCESelectedParents
 ```
 
-## [PC](@ref)
+## [PC](@id docs_PC)
 
 ```@docs
 PC
