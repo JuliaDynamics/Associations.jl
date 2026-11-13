@@ -1,11 +1,11 @@
 export GaussianMI
 using StateSpaceSets: StateSpaceSet
 using StateSpaceSets: dimension, standardize
-using LinearAlgebra: eigvals, det
+using LinearAlgebra: det
 
 """
     GaussianMI <: MutualInformationEstimator
-    GaussianMI(; normalize::Bool = false)
+    GaussianMI(definition = MIShannon(); normalize::Bool = true)
 
 `GaussianMI` is a parametric estimator for Shannon mutual information.
 
@@ -20,44 +20,27 @@ using LinearAlgebra: eigvals, det
 
 ## Description
 
-Given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
-`GaussianMI` first constructs the ``d_x + d_y``-dimensional joint [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet) `XY`.
-If `normalize == true`, then we follow the approach in Vejmelka & Palus
-(2008)[Vejmelka2008](@cite) and transform each column in `XY` to have zero mean and unit
-standard deviation. If `normalize == false`, then the algorithm proceeds without
-normalization.
-
-Next, the `C_{XY}`, the correlation matrix for the (normalized) joint data `XY` is
-computed. The mutual information estimate `GaussianMI` assumes the input variables are distributed according to normal
-distributions with zero means and unit standard deviations.
-Therefore, given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`,
-`GaussianMI` first constructs the joint [`StateSpaceSet`](@extref StateSpaceSets.StateSpaceSet) `XY`, then transforms each
-column in `XY` to have zero mean and unit standard deviation, and finally computes
-the `\\Sigma`, the correlation matrix for `XY`.
-
-The mutual information estimated (for `normalize == false`) is then estimated as
-
-```math
-\\hat{I}^S_{Gaussian}(X; Y) = \\dfrac{1}{2}
-\\dfrac{ \\det(\\Sigma_X) \\det(\\Sigma_Y)) }{\\det(\\Sigma))},
-```
-
-where we ``\\Sigma_X`` and ``\\Sigma_Y`` appear in ``\\Sigma`` as
+Given ``d_x``-dimensional and ``d_y``-dimensional input data `X` and `Y`, `GaussianMI`
+models the joint data `XY` as Gaussian. It computes ``\\Sigma``, the correlation matrix of
+`XY`, with blocks
 
 ```math
 \\Sigma = \\begin{bmatrix}
 \\Sigma_{X} & \\Sigma^{'}\\\\
-\\Sigma^{'} & \\Sigma_{Y}
-\\end{bmatrix}.
+\\Sigma^{'T} & \\Sigma_{Y}
+\\end{bmatrix},
 ```
 
-If `normalize == true`, then the mutual information is estimated as
+and estimates the mutual information as
 
 ```math
-\\hat{I}^S_{Gaussian}(X; Y) = -\\dfrac{1}{2} \\sum_{i = 1}^{d_x + d_y} \\sigma_i,
+\\hat{I}^S_{Gaussian}(X; Y) = \\dfrac{1}{2}
+\\log \\dfrac{ \\det(\\Sigma_X) \\det(\\Sigma_Y) }{\\det(\\Sigma)}.
 ```
 
-where ``\\sigma_i`` are the eigenvalues for ``\\Sigma``.
+If `normalize == true`, then each column of `XY` is first transformed to have zero mean
+and unit standard deviation, following Vejmelka & Palus (2008)[Vejmelka2008](@cite).
+Since ``\\Sigma`` is a correlation matrix, this does not change the estimate.
 
 ## Example 
 
@@ -84,16 +67,11 @@ function association(est::GaussianMI{<:MIShannon}, x, y)
     DY = dimension(Y)
 
     XY = StateSpaceSet(X, Y)
-    if est.normalize
-        Σ = cor(standardize(XY))
-        σ = eigvals(Σ)
-        mi = -0.5 * sum(log(σᵢ) for σᵢ in σ)
-    else
-        Σ = cor(XY)
-        Σx = Σ[1:DX, 1:DX]
-        Σy = Σ[DX+1:end, DX+1:end]
-        mi = 0.5 * log((det(Σx) * det(Σy)) / det(Σ))
-    end
+    # `Σ` is a correlation matrix, so standardizing the columns first does not change it.
+    Σ = cor(est.normalize ? standardize(XY) : XY)
+    Σx = Σ[1:DX, 1:DX]
+    Σy = Σ[DX+1:end, DX+1:end]
+    mi = 0.5 * log((det(Σx) * det(Σy)) / det(Σ))
 
     return convert_logunit(mi, ℯ, est.definition.base)
 end
