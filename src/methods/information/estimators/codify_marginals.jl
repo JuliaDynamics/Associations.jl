@@ -96,16 +96,19 @@ function codified_marginals(o::ValueBinning{<:RectangularBinning}, x::VectorOrSt
 
     bins = [vec(encode_as_tuple(encoder, pt))' for pt in X]
     joint_bins = reduce(vcat, bins)
-    idxs = size.(x, 2) #each input can have different dimensions
+    # The number of columns of each input. (`size(x, 2)` is 1 for every `StateSpaceSet`,
+    # which is a vector of points.)
+    idxs = dimension.(StateSpaceSet.(x))
     s = 1
-    encodings = Vector{Vector}(undef, 0)
-    for (i, cidx) in enumerate(idxs)
+    # One encoding per input, as for the other outcome spaces: a vector for a
+    # one-column input, and a `StateSpaceSet` of the bin indices of every column for a
+    # multi-column input.
+    encodings = Union{Vector{Int}, StateSpaceSet}[]
+    for cidx in idxs
         variable_subset = s:(s+cidx-1)
         s += cidx
-        y = @views joint_bins[:, variable_subset]
-        for j in size(y, 2)
-            push!(encodings, y[:, j])
-        end
+        y = joint_bins[:, variable_subset]
+        push!(encodings, cidx == 1 ? vec(y) : StateSpaceSet(y))
     end
 
     return encodings

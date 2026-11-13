@@ -7,6 +7,8 @@ include("mutual_informations/mutual_informations.jl")
 include("conditional_mutual_informations/conditional_mutual_informations.jl")
 include("transfer_entropies/transfer_entropies.jl")
 include("secmi/secmi.jl")
+include("higher_order/higher_order.jl")
+include("pid/pid.jl")
 
 # Estimators of the information measures.
 include("estimators/estimators.jl")

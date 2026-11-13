@@ -1199,6 +1199,202 @@ est = EntropyDecomposition(def, PlugIn(Renyi()), CodifyVariables(OrdinalPatterns
 association(est, x, y, z)
 ```
 
+## [`TotalCorrelation`](@ref)
+
+### [[`JointProbabilities`](@ref) with categorical data](@id example_TotalCorrelation_JointProbabilities)
+
+Three copies of one fair bit share 2 bits of total correlation. Two independent fair bits
+and their parity share 1 bit.
+
+```@example tc_demonstration
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 10_000
+x, y = rand(rng, 0:1, n), rand(rng, 0:1, n)
+est = JointProbabilities(TotalCorrelation(), CodifyVariables(UniqueElements()))
+association(est, x, x, x), association(est, x, y, x .⊻ y)
+```
+
+### [[`EntropyDecomposition`](@ref) with [`Kraskov`](@extref ComplexityMeasures.Kraskov)](@id example_TotalCorrelation_EntropyDecomposition_Kraskov)
+
+For continuous data, each joint entropy can be estimated with a differential entropy
+estimator. Here we compare it with the exact value for three noisy copies of one Gaussian
+signal.
+
+```@example tc_demonstration
+using LinearAlgebra
+s = randn(rng, n)
+a, b, c = (s .+ 0.5 .* randn(rng, n) for _ in 1:3)
+Σ = fill(1.0, 3, 3) + 0.25I # the true covariance matrix
+tc_true = 0.5 * log2(prod(diag(Σ)) / det(Σ))
+tc_kraskov = association(EntropyDecomposition(TotalCorrelation(), Kraskov(Shannon(); k = 5)), a, b, c)
+tc_true, tc_kraskov
+```
+
+## [`DualTotalCorrelation`](@ref)
+
+### [[`JointProbabilities`](@ref) with categorical data](@id example_DualTotalCorrelation_JointProbabilities)
+
+The dual total correlation counts shared information once. Three copies of one fair bit
+give 1 bit, and two independent fair bits and their parity give 2 bits.
+
+```@example dtc_demonstration
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 10_000
+x, y = rand(rng, 0:1, n), rand(rng, 0:1, n)
+est = JointProbabilities(DualTotalCorrelation(), CodifyVariables(UniqueElements()))
+association(est, x, x, x), association(est, x, y, x .⊻ y)
+```
+
+### [[`EntropyDecomposition`](@ref) with a bias-corrected discrete estimator](@id example_DualTotalCorrelation_EntropyDecomposition_Jackknife)
+
+When there are few samples per joint outcome, plug-in estimates are biased upwards. Any
+discrete entropy estimator can be used instead, for example a bias-corrected one. Here
+three independent variables with four outcomes each, so the true value is zero:
+
+```@example dtc_demonstration
+x1, x2, x3 = (rand(rng, 1:4, 200) for _ in 1:3)
+disc = CodifyVariables(UniqueElements())
+plugin = association(JointProbabilities(DualTotalCorrelation(), disc), x1, x2, x3)
+jackknife = association(EntropyDecomposition(DualTotalCorrelation(), Jackknife(Shannon()), disc), x1, x2, x3)
+plugin, jackknife
+```
+
+## [`OInformation`](@ref)
+
+### [[`JointProbabilities`](@ref) with categorical data](@id example_OInformation_JointProbabilities)
+
+The O-information is positive when the shared information is mostly redundant and
+negative when it is mostly synergistic. Three copies of one fair bit give ``\Omega = 1``
+bit; two independent fair bits and their parity give ``\Omega = -1`` bit.
+
+```@example oinfo_demonstration
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 10_000
+x, y = rand(rng, 0:1, n), rand(rng, 0:1, n)
+est = JointProbabilities(OInformation(), CodifyVariables(UniqueElements()))
+association(est, x, x, x), association(est, x, y, x .⊻ y)
+```
+
+### [[`GaussianDecomposition`](@ref)](@id example_OInformation_GaussianDecomposition)
+
+For continuous data, [`GaussianDecomposition`](@ref) computes every joint entropy in
+closed form from the covariance matrix. Noisy copies of one signal are redundant; a sum of
+independent signals is synergistic.
+
+```@example oinfo_demonstration
+s = randn(rng, n)
+a, b, c = (s .+ 0.5 .* randn(rng, n) for _ in 1:3)
+u, v = randn(rng, n), randn(rng, n)
+w = u .+ v .+ 0.5 .* randn(rng, n)
+est = GaussianDecomposition(OInformation())
+association(est, a, b, c), association(est, u, v, w)
+```
+
+With `copula = true`, the estimate is unchanged by strictly monotonic transformations of
+each variable:
+
+```@example oinfo_demonstration
+est = GaussianDecomposition(OInformation(); copula = true)
+association(est, a, b, c), association(est, exp.(a), b .^ 3, c)
+```
+
+### [O-information gradients](@id example_oinformation_gradients)
+
+[`oinformation_gradients`](@ref) shows how much each variable contributes. Here variables
+1–3 are noisy copies of one signal (redundant), and variables 4–6 are two independent
+signals and their noisy sum (synergistic).
+
+```@example oinfo_demonstration
+X = (a, b, c, u, v, w)
+est = GaussianDecomposition(OInformation())
+oinformation_gradients(est, X...)
+```
+
+The second-order gradients show which pairs of variables interact:
+
+```@example oinfo_demonstration
+oinformation_gradients(est, X...; order = 2)
+```
+
+## [`SInformation`](@ref)
+
+### [[`JointProbabilities`](@ref) with categorical data](@id example_SInformation_JointProbabilities)
+
+The S-information is the sum of the total and the dual total correlation. Both the
+redundant and the synergistic system below share 3 bits in total.
+
+```@example sinfo_demonstration
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 10_000
+x, y = rand(rng, 0:1, n), rand(rng, 0:1, n)
+est = JointProbabilities(SInformation(), CodifyVariables(UniqueElements()))
+association(est, x, x, x), association(est, x, y, x .⊻ y)
+```
+
+## [`PartialInformationDecomposition`](@ref)
+
+### [[`JointProbabilities`](@ref) with [`IMin`](@ref)](@id example_PartialInformationDecomposition_JointProbabilities_IMin)
+
+The decomposition of the information that two inputs of a logic gate carry about its
+output. The last input is the target.
+
+```@example pid_demonstration
+using Associations
+using Random; rng = Xoshiro(1234)
+n = 10_000
+x, y = rand(rng, 0:1, n), rand(rng, 0:1, n)
+est = JointProbabilities(PartialInformationDecomposition(IMin()), CodifyVariables(UniqueElements()))
+res = association(est, x, y, x .⊻ y) # XOR: pure synergy
+```
+
+```@example pid_demonstration
+res = association(est, x, y, x .& y) # AND: redundancy and synergy
+synergy(res), redundancy(res), unique_information(res, 1)
+```
+
+Every atom can be listed with [`atoms`](@ref):
+
+```@example pid_demonstration
+atoms(res)
+```
+
+### [[`GaussianDecomposition`](@ref) with [`IMMI`](@ref)](@id example_PartialInformationDecomposition_GaussianDecomposition_IMMI)
+
+For continuous data, use the minimum mutual information redundancy function. Here the
+target depends strongly on the first source and weakly on the second.
+
+```@example pid_demonstration
+s1, s2 = randn(rng, n), randn(rng, n)
+t = s1 .+ 0.5 .* s2 .+ 0.5 .* randn(rng, n)
+pid = PartialInformationDecomposition(IMMI())
+association(GaussianDecomposition(pid), s1, s2, t)
+```
+
+The same decomposition from a nearest-neighbour mutual information estimator:
+
+```@example pid_demonstration
+association(MIDecomposition(pid, KraskovStögbauerGrassberger1(MIShannon(); k = 5)), s1, s2, t)
+```
+
+### [Testing an atom for significance with [`PIDAtom`](@ref)](@id example_PIDAtom_SurrogateAssociationTest)
+
+[`PIDAtom`](@ref) turns one atom into a number, so it can be used with
+[`SurrogateAssociationTest`](@ref). The test shuffles the first input.
+
+```@example pid_demonstration
+pid = PartialInformationDecomposition(IMMI())
+est = JointProbabilities(PIDAtom(pid, :synergy), CodifyVariables(UniqueElements()))
+x, y = rand(rng, 0:1, 2000), rand(rng, 0:1, 2000)
+noise = rand(rng, 2000) .< 0.1
+t = (x .⊻ y) .⊻ noise # a noisy XOR gate
+test = SurrogateAssociationTest(est; nshuffles = 100, rng)
+independence(test, x, y, t)
+```
+
 ## [`TEShannon`](@ref)
 
 ### [[`EntropyDecomposition`](@ref) + [`TransferOperator`](@extref ComplexityMeasures.TransferOperator)](@id example_TEShannon_EntropyDecomposition_TransferOperator)

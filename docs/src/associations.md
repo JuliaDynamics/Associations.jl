@@ -113,6 +113,33 @@ PartialMutualInformation
 ShortExpansionConditionalMutualInformation
 ```
 
+### [Higher-order information measures](@id higher_order_information)
+
+```@docs
+HigherOrderInformationMeasure
+TotalCorrelation
+DualTotalCorrelation
+OInformation
+SInformation
+oinformation_gradients
+```
+
+### [Partial information decomposition](@id pid_api)
+
+```@docs
+PartialInformationDecomposition
+PIDAtom
+RedundancyFunction
+IMin
+IMMI
+PIDResult
+synergy
+redundancy
+unique_information
+atom
+atoms
+```
+
 ## [Correlation measures](@id correlation_api)
 
 ```@docs

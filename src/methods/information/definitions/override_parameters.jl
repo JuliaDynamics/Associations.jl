@@ -35,6 +35,8 @@ const SHANNON_MULTIVARIATE_MEASURES = Union{
     ConditionalEntropyShannon,
     JointEntropyShannon,
     TEShannon,
+    HigherOrderInformationMeasure,
+    PartialInformationDecomposition,
 }
 
 
@@ -74,6 +76,16 @@ function estimator_with_overridden_parameters(
     modified_lowdef = Accessors.@set lowdef.base = definition.base # update `base` field
     modified_est = Accessors.@set est.definition = modified_lowdef
     return modified_est
+end
+
+# The PID's mutual informations I(A; T) use the PID's base.
+function estimator_with_overridden_parameters(
+        definition::PartialInformationDecomposition,
+        est::MutualInformationEstimator{<:MIShannon}
+    )
+    lowdef = est.definition
+    modified_lowdef = Accessors.@set lowdef.base = definition.base
+    return Accessors.@set est.definition = modified_lowdef
 end
 
 function estimator_with_overridden_parameters(
