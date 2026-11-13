@@ -9,6 +9,9 @@ From version v4.0 onwards, this package has been renamed to to Associations.jl.
   multi-column input kept only its first column and the inputs after it were given the
   wrong columns. This affected discrete `EntropyDecomposition` estimates of mutual and
   conditional mutual information with multi-column inputs.
+- Fixed `GaussianMI` with `normalize = true` (the default) for multi-column inputs. It
+  returned the total correlation of all the columns of `X` and `Y` instead of the mutual
+  information `I(X; Y)`. Results for one-column inputs are unchanged.
 
 # 4.4
 
